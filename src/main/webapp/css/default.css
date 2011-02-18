@@ -1,0 +1,160 @@
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{margin:0;padding:0}
+table{border-collapse:collapse;border-spacing:0}
+fieldset,img{border:0}
+address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal}
+ol,ul{list-style:none}
+caption,th{text-align:left}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
+q:before,q:after{content:''}
+abbr,acronym{border:0}
+
+SELECT, INPUT, PRE {
+	font-size: 1em;
+	font-family: Verdana, "Lucida Grande","Trebuchet MS",Verdana,sans-serif;
+}
+
+SELECT, INPUT {
+	border: 1px solid black;
+}
+
+BODY {
+	margin: 0;
+	font-size:0.7em;
+	font-family: Verdana, "Lucida Grande","Trebuchet MS",Verdana,sans-serif;
+	line-height:1.5em;
+	background-color: #FFFFFF;
+}
+
+HTML, BODY {
+	position: relative;
+	height: 100%;
+	width: 100%;
+}
+
+UL LI {
+	display:inline;
+}
+
+A {
+	text-decoration: none;
+}
+
+/**/
+
+#overlay {
+	height:100%;
+	left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 100;
+	opacity:0.75;
+	background-color:black;
+	display: none;
+}
+
+
+#error {
+	color:red;
+	font-weight:bold;
+}
+
+#type LI {
+/*	padding:0px 2px;*/
+}
+
+
+#header #type {
+	padding-top: 1px;
+	float:left
+}
+
+#header #type #editor {
+	border-left: 1px solid black;
+}
+#header #type #editor a {
+	font-weight: bold;
+}
+
+
+#header #userPart {
+	padding-top: 1px;
+	float:right
+}
+
+#header {
+	height:23px;
+	border-bottom:1px solid grey;
+}
+
+#header A, #header LI, #header UL {
+/*	line-height: 1em;*/
+}
+
+#error {
+	text-align:center;
+	margin-top:100px;
+}
+
+#bottom {
+	margin: 10px auto;
+	text-align: center;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+}
+
+
+#search {
+	margin: 5px 10px;
+	border-bottom: 1px solid grey;
+	padding-bottom: 5px;
+}
+
+#botList {
+	border-top: 1px solid black;
+	width: 300px;
+	margin: 0 auto;
+}
+
+#criteria {
+	margin-top: -1px;
+	padding-left: 10px;
+}
+
+#criteria LI {
+	border: 1px solid black;
+	border-top: 0;
+	padding: 1px 5px;
+}
+
+INPUT#q {
+	width: 300px;
+}
+
+#running {
+	border-collapse: separate;
+	border-spacing: 1px;
+	border: 1px solid black;
+	width: 50px;
+}
+
+#running TD {
+	margin: 1px;
+	border: 1px solid black;
+	height: 10px;
+}
+
+
+#engineList A.selected {
+	border: 1px solid red;
+}
+
+
+#loader {
+	border: 1px solid black;
+	background-color: green;
+	float: right;
+	width: 200px;
+}
