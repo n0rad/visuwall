@@ -35,109 +35,101 @@ public final class HudsonJob {
     private String artifactId;
     private TestResult testResult;
 
-    public final String getName() {
+    public String getName() {
         return name;
     }
 
-    public final void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public final boolean isSuccessful() {
+    public boolean isSuccessful() {
         return successful;
     }
 
-    public final void setSuccessful(boolean successful) {
+    public void setSuccessful(boolean successful) {
         this.successful = successful;
     }
 
-    public final String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public final void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public final boolean isBuilding() {
+    public boolean isBuilding() {
         return building;
     }
 
-    public final void setBuilding(boolean building) {
+    public void setBuilding(boolean building) {
         this.building = building;
     }
 
-    public final String[] getCommiters() {
+    public String[] getCommiters() {
         return commiters;
     }
 
-    public final void setCommiters(String[] commiters) {
+    public void setCommiters(String[] commiters) {
         this.commiters = commiters;
     }
 
-    public final long getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public final void setDuration(long duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
-    public final int[] getBuildNumbers() {
+    public int[] getBuildNumbers() {
         return buildNumbers;
     }
 
-    public final void setBuildNumbers(int[] buildNumbers) {
+    public void setBuildNumbers(int[] buildNumbers) {
         this.buildNumbers = buildNumbers;
     }
 
-    public final Date getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public final void setStartTime(Date startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public final int getLastBuildNumber() {
+    public int getLastBuildNumber() {
         return lastBuildNumber;
     }
 
-    public final void setLastBuildNumber(int lastBuildNumber) {
+    public void setLastBuildNumber(int lastBuildNumber) {
         this.lastBuildNumber = lastBuildNumber;
     }
 
-    public final String getArtifactId() {
+    public String getArtifactId() {
         return artifactId;
     }
 
-    public final void setArtifactId(String artifactId) {
+    public void setArtifactId(String artifactId) {
         this.artifactId = artifactId;
     }
 
-    public final TestResult getTestResult() {
+    public TestResult getTestResult() {
         return testResult;
     }
 
-    public final void setTestResult(TestResult testResult) {
+    public void setTestResult(TestResult testResult) {
         this.testResult = testResult;
     }
 
     @Override
-    public final String toString() {
-        return Objects.toStringHelper(this)
-        .add("name", name)
-        .add("description", description)
-        .add("status", successful)
-        .add("isBuilding", isBuilding())
-        .add("commiters", Arrays.toString(commiters))
-        .add("duration", duration)
-        .add("buildNumbers", Arrays.toString(buildNumbers))
-        .add("startTime", startTime)
-        .add("lastBuildNumber", lastBuildNumber)
-        .add("artifactId", artifactId)
-        .add("test result", testResult.toString())
-        .toString();
+    public String toString() {
+        return Objects.toStringHelper(this).add("name", name).add("description", description).add("status", successful)
+        .add("isBuilding", isBuilding()).add("commiters", Arrays.toString(commiters)).add("duration", duration)
+        .add("buildNumbers", Arrays.toString(buildNumbers)).add("startTime", startTime)
+        .add("lastBuildNumber", lastBuildNumber).add("artifactId", artifactId)
+        .add("test result", testResult.toString()).toString();
     }
 
 }
