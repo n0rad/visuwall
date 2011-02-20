@@ -30,14 +30,14 @@ public class SonarService {
     private final String sonarUrl;
     private final Sonar sonar;
 
-    private final static Logger LOG = LoggerFactory.getLogger(SonarService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SonarService.class);
 
     public SonarService(String sonarUrl) {
         this.sonarUrl = sonarUrl;
         sonar = Sonar.create(sonarUrl);
     }
 
-    public Double getCoverage(String projectId) throws ProjectNotFoundException {
+    public final Double getCoverage(String projectId) throws ProjectNotFoundException {
         Measure coverage = getMeasure(projectId, "coverage");
         if (LOG.isInfoEnabled()) {
             LOG.info("Coverage measure for project #"+projectId+" is "+coverage);
@@ -45,7 +45,7 @@ public class SonarService {
         return coverage.getValue();
     }
 
-    public Double getRulesCompliance(String projectId) throws ProjectNotFoundException {
+    public final Double getRulesCompliance(String projectId) throws ProjectNotFoundException {
         Measure rulesCompliance = getMeasure(projectId, "violations_density");
         if (LOG.isInfoEnabled()) {
             LOG.info("Rules compliance measure for project #"+projectId+" is "+rulesCompliance);

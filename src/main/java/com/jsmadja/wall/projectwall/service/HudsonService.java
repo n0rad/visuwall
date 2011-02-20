@@ -60,17 +60,20 @@ public class HudsonService {
         }
     }
 
+    /**
+     * @return List of all available jobs on Hudson
+     */
     public List<HudsonJob> findAllJobs() {
         String jobsUrl = hudsonUrlBuilder.getAllJobsUrl();
         if (LOG.isInfoEnabled()) {
-            LOG.info("Access to "+jobsUrl);
+            LOG.info("All jobs url : "+jobsUrl);
         }
         WebResource hudsonResource = client.resource(jobsUrl);
         HudsonModelHudson hudson = hudsonResource.get(HudsonModelHudson.class);
         List<HudsonJob> jobs = new ArrayList<HudsonJob>();
-        List<Object> _jobs = hudson.getJob();
-        for(Object _job:_jobs) {
-            ElementNSImpl element = (ElementNSImpl) _job;
+        List<Object> hudsonJobs = hudson.getJob();
+        for(Object job:hudsonJobs) {
+            ElementNSImpl element = (ElementNSImpl) job;
             String name = getJobName(element);
             HudsonJob hudsonJob = findJob(name);
             jobs.add(hudsonJob);
@@ -78,6 +81,11 @@ public class HudsonService {
         return jobs;
     }
 
+    /**
+     * @param jobName
+     * @param buildNumber
+     * @return HudsonJob found in Hudson with its name and build number
+     */
     public HudsonJob findJob(String jobName, int buildNumber) {
         if (LOG.isInfoEnabled()) {
             LOG.info("Find job name ["+jobName+"] buildNumber ["+buildNumber+"]");
@@ -87,15 +95,23 @@ public class HudsonService {
         return hudsonJob;
     }
 
+    /**
+     * @param jobName
+     * @return HudsonJob found with its name
+     */
     public HudsonJob findJob(String jobName) {
         String jobUrl = hudsonUrlBuilder.getJobUrl(jobName);
         if (LOG.isInfoEnabled()) {
-            LOG.info("Access to "+jobUrl);
+            LOG.info("Job url : "+jobUrl);
         }
         WebResource  jobResource = client.resource(jobUrl);
         return createHudsonJob(jobResource);
     }
 
+    /**
+     * @param jobName
+     * @return Average build duration time computed with old successful jobs
+     */
     public long getAverageBuildDurationTime(String jobName) {
         HudsonJob hudsonJob = findJob(jobName);
         float sumBuildDurationTime = 0;
@@ -115,7 +131,7 @@ public class HudsonService {
     private void addBuildInfoTo(HudsonJob hudsonJob, int buildNumber) {
         String jobUrl = hudsonUrlBuilder.getJobUrl(hudsonJob.getName(), buildNumber);
         if (LOG.isInfoEnabled()) {
-            LOG.info("Access to "+jobUrl);
+            LOG.info("Job url : "+jobUrl);
         }
         WebResource jobResource = client.resource(jobUrl);
         HudsonMavenMavenModuleSetBuild setBuild = jobResource.get(HudsonMavenMavenModuleSetBuild.class);
@@ -160,6 +176,10 @@ public class HudsonService {
         return hudsonJob;
     }
 
+    /**
+     * @param hudsonJob
+     * @return An array of successful build numbers
+     */
     public int[] getSuccessfulBuildNumbers(HudsonJob hudsonJob) {
         List<Integer> successfulBuildNumbers = new ArrayList<Integer>();
         for (Integer buildNumber:hudsonJob.getBuildNumbers()) {
@@ -193,6 +213,10 @@ public class HudsonService {
         return element.getFirstChild().getFirstChild().getNodeValue();
     }
 
+    /**
+     * @param jobName
+     * @return Date which we think the job will finish to build
+     */
     public Date getEstimatedFinishTime(String jobName) {
         HudsonJob job = findJob(jobName);
 
@@ -212,7 +236,7 @@ public class HudsonService {
     private TestResult getTestResult(HudsonJob hudsonJob, int buildNumber) {
         String testResultUrl = hudsonUrlBuilder.getTestResultUrl(hudsonJob.getName(), buildNumber);
         if (LOG.isInfoEnabled()) {
-            LOG.info("Access to "+testResultUrl);
+            LOG.info("Test result : "+testResultUrl);
         }
         WebResource testResultResource = client.resource(testResultUrl);
         TestResult testResult = new TestResult();

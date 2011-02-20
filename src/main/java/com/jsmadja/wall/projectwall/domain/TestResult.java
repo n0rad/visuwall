@@ -17,35 +17,35 @@
 package com.jsmadja.wall.projectwall.domain;
 
 
-public class TestResult {
+public final class TestResult {
 
     private int failCount;
     private int passCount;
     private int skipCount;
     private int totalCount;
 
-    public int getFailCount() {
+    public final int getFailCount() {
         return failCount;
     }
-    public void setFailCount(int failCount) {
+    public final void setFailCount(int failCount) {
         this.failCount = failCount;
     }
-    public int getPassCount() {
+    public final int getPassCount() {
         return passCount;
     }
-    public void setPassCount(int passCount) {
+    public final void setPassCount(int passCount) {
         this.passCount = passCount;
     }
-    public int getSkipCount() {
+    public final int getSkipCount() {
         return skipCount;
     }
-    public void setSkipCount(int skipCount) {
+    public final void setSkipCount(int skipCount) {
         this.skipCount = skipCount;
     }
-    public int getTotalCount() {
+    public final int getTotalCount() {
         return totalCount;
     }
-    public void setTotalCount(int totalCount) {
+    public final void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
     }
 }

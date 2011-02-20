@@ -21,7 +21,7 @@ import java.util.Date;
 
 import com.google.common.base.Objects;
 
-public class HudsonJob {
+public final class HudsonJob {
 
     private String name;
     private boolean successful;
@@ -35,96 +35,96 @@ public class HudsonJob {
     private String artifactId;
     private TestResult testResult;
 
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public final void setName(String name) {
         this.name = name;
     }
 
-    public boolean isSuccessful() {
+    public final boolean isSuccessful() {
         return successful;
     }
 
-    public void setSuccessful(boolean successful) {
+    public final void setSuccessful(boolean successful) {
         this.successful = successful;
     }
 
-    public String getDescription() {
+    public final String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public final void setDescription(String description) {
         this.description = description;
     }
 
-    public boolean isBuilding() {
+    public final boolean isBuilding() {
         return building;
     }
 
-    public void setBuilding(boolean building) {
+    public final void setBuilding(boolean building) {
         this.building = building;
     }
 
-    public String[] getCommiters() {
+    public final String[] getCommiters() {
         return commiters;
     }
 
-    public void setCommiters(String[] commiters) {
+    public final void setCommiters(String[] commiters) {
         this.commiters = commiters;
     }
 
-    public long getDuration() {
+    public final long getDuration() {
         return duration;
     }
 
-    public void setDuration(long duration) {
+    public final void setDuration(long duration) {
         this.duration = duration;
     }
 
-    public int[] getBuildNumbers() {
+    public final int[] getBuildNumbers() {
         return buildNumbers;
     }
 
-    public void setBuildNumbers(int[] buildNumbers) {
+    public final void setBuildNumbers(int[] buildNumbers) {
         this.buildNumbers = buildNumbers;
     }
 
-    public Date getStartTime() {
+    public final Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public final void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public int getLastBuildNumber() {
+    public final int getLastBuildNumber() {
         return lastBuildNumber;
     }
 
-    public void setLastBuildNumber(int lastBuildNumber) {
+    public final void setLastBuildNumber(int lastBuildNumber) {
         this.lastBuildNumber = lastBuildNumber;
     }
 
-    public String getArtifactId() {
+    public final String getArtifactId() {
         return artifactId;
     }
 
-    public void setArtifactId(String artifactId) {
+    public final void setArtifactId(String artifactId) {
         this.artifactId = artifactId;
     }
 
-    public TestResult getTestResult() {
+    public final TestResult getTestResult() {
         return testResult;
     }
 
-    public void setTestResult(TestResult testResult) {
+    public final void setTestResult(TestResult testResult) {
         this.testResult = testResult;
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return Objects.toStringHelper(this)
         .add("name", name)
         .add("description", description)

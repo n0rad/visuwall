@@ -28,19 +28,19 @@ public class HudsonUrlBuilder {
         this.hudsonUrl = hudsonUrl;
     }
 
-    public String getAllJobsUrl() {
+    public final String getAllJobsUrl() {
         return  hudsonUrl+ALL_JOBS_URI+API_XML;
     }
 
-    public String getJobUrl(String jobName) {
+    public final String getJobUrl(String jobName) {
         return hudsonUrl+JOB_URI+"/"+jobName+API_XML;
     }
 
-    public String getJobUrl(String jobName, int buildNumber) {
+    public final String getJobUrl(String jobName, int buildNumber) {
         return hudsonUrl+JOB_URI+"/"+jobName+"/"+buildNumber+API_XML;
     }
 
-    public String getTestResultUrl(String jobName, int buildNumber) {
+    public final String getTestResultUrl(String jobName, int buildNumber) {
         return hudsonUrl+JOB_URI+"/"+jobName+"/"+buildNumber+"/testReport"+API_XML;
 
     }

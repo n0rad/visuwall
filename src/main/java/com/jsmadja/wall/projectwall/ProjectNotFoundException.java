@@ -18,6 +18,8 @@ package com.jsmadja.wall.projectwall;
 
 public class ProjectNotFoundException extends Exception {
 
+    private static final long serialVersionUID = 1L;
+
     public ProjectNotFoundException(String cause) {
         super(cause);
     }
