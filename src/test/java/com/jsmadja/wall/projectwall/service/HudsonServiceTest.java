@@ -32,6 +32,7 @@ import com.jsmadja.wall.projectwall.FileClientHandlerBuilder;
 import com.jsmadja.wall.projectwall.HudsonUrlBuilder;
 import com.jsmadja.wall.projectwall.Integration;
 import com.jsmadja.wall.projectwall.domain.HudsonJob;
+import com.jsmadja.wall.projectwall.domain.TestResult;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandler;
 import com.sun.jersey.api.client.config.ClientConfig;
@@ -55,6 +56,8 @@ public class HudsonServiceTest {
             .withFile(hudsonUrlBuilder.getJobUrl("dev-radar", 108), "hudson/dev-radar_108.xml")
             .withFile(hudsonUrlBuilder.getJobUrl("dev-radar"), "hudson/dev-radar.xml")
             .withFile(hudsonUrlBuilder.getJobUrl("fluxx", FLUXX_BUILT_WITH_COMMITERS), "hudson/fluxx_built_with_commiters.xml")
+            .withFile(hudsonUrlBuilder.getJobUrl("dev-radar", 74), "hudson/dev-radar_74.xml")
+            .withFile(hudsonUrlBuilder.getTestResultUrl("dev-radar", 74), "hudson/dev-radar_74_surefire_aggregated_report.xml")
             .withHeader("Content-Type", "application/xml; charset=utf-8")
             .create();
             return new Client(clientHandler, clientConfig);
@@ -134,5 +137,15 @@ public class HudsonServiceTest {
     public void should_retrieve_estimated_remaining_time() {
         Date estimatedFinishTime = hudsonService.getEstimatedFinishTime("fluxx");
         assertNotNull(estimatedFinishTime);
+    }
+
+    @Test
+    public void should_retrieve_test_result() {
+        HudsonJob hudsonJob = hudsonService.findJob("dev-radar", 74);
+        TestResult testResult = hudsonJob.getTestResult();
+        assertEquals(1, testResult.getFailCount());
+        assertEquals(13, testResult.getPassCount());
+        assertEquals(2, testResult.getSkipCount());
+        assertEquals(16, testResult.getTotalCount());
     }
 }

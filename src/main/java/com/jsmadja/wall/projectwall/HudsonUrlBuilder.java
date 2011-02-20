@@ -22,7 +22,6 @@ public class HudsonUrlBuilder {
 
     private static final String API_XML = "/api/xml";
     private static final String ALL_JOBS_URI = "";
-    private static final String JOB_URI = "/job";
 
     public HudsonUrlBuilder(String hudsonUrl) {
         this.hudsonUrl = hudsonUrl;
@@ -33,11 +32,15 @@ public class HudsonUrlBuilder {
     }
 
     public String getJobUrl(String jobName) {
-        return hudsonUrl+JOB_URI+"/"+jobName+API_XML;
+        return hudsonUrl+"/job/"+jobName+API_XML;
     }
 
     public String getJobUrl(String jobName, int buildNumber) {
-        return hudsonUrl+JOB_URI+"/"+jobName+"/"+buildNumber+API_XML;
+        return hudsonUrl+"/job/"+jobName+"/"+buildNumber+API_XML;
+    }
+
+    public String getTestResultUrl(String jobName, int buildNumber) {
+        return hudsonUrl+"/job/"+jobName+"/"+buildNumber+"/testReport"+API_XML;
     }
 
 }
