@@ -33,6 +33,7 @@ public class HudsonJob {
     private Date startTime;
     private int lastBuildNumber;
     private String artifactId;
+    private TestResult testResult;
 
     public String getName() {
         return name;
@@ -114,6 +115,14 @@ public class HudsonJob {
         this.artifactId = artifactId;
     }
 
+    public TestResult getTestResult() {
+        return testResult;
+    }
+
+    public void setTestResult(TestResult testResult) {
+        this.testResult = testResult;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -127,6 +136,7 @@ public class HudsonJob {
         .add("startTime", startTime)
         .add("lastBuildNumber", lastBuildNumber)
         .add("artifactId", artifactId)
+        .add("test result", testResult.toString())
         .toString();
     }
 

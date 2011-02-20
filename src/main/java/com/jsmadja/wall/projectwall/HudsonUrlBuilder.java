@@ -40,4 +40,9 @@ public class HudsonUrlBuilder {
         return hudsonUrl+JOB_URI+"/"+jobName+"/"+buildNumber+API_XML;
     }
 
+    public String getTestResultUrl(String jobName, int buildNumber) {
+        return hudsonUrl+JOB_URI+"/"+jobName+"/"+buildNumber+"/testReport"+API_XML;
+
+    }
+
 }

@@ -26,13 +26,16 @@ import org.slf4j.LoggerFactory;
 
 import com.jsmadja.wall.projectwall.HudsonUrlBuilder;
 import com.jsmadja.wall.projectwall.domain.HudsonJob;
+import com.jsmadja.wall.projectwall.domain.TestResult;
 import com.jsmadja.wall.projectwall.generated.hudson.HudsonMavenMavenModuleSet;
 import com.jsmadja.wall.projectwall.generated.hudson.HudsonMavenMavenModuleSetBuild;
 import com.jsmadja.wall.projectwall.generated.hudson.HudsonModelHudson;
 import com.jsmadja.wall.projectwall.generated.hudson.HudsonModelJob;
 import com.jsmadja.wall.projectwall.generated.hudson.HudsonModelRun;
 import com.jsmadja.wall.projectwall.generated.hudson.HudsonModelUser;
+import com.jsmadja.wall.projectwall.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
@@ -42,9 +45,9 @@ public class HudsonService {
 
     private static final Logger LOG = LoggerFactory.getLogger(HudsonService.class);
 
-    private Client client;
-
     private HudsonUrlBuilder hudsonUrlBuilder;
+
+    private Client client;
 
     public HudsonService(String hudsonUrl) {
         hudsonUrlBuilder = new HudsonUrlBuilder(hudsonUrl);
@@ -124,6 +127,8 @@ public class HudsonService {
 
         String[] commiters = getCommiters(setBuild);
         hudsonJob.setCommiters(commiters);
+
+        hudsonJob.setTestResult(getTestResult(hudsonJob, buildNumber));
     }
 
     private String[] getCommiters(HudsonMavenMavenModuleSetBuild setBuild) {
@@ -202,6 +207,27 @@ public class HudsonService {
         }
 
         return estimatedFinishTime.toDate();
+    }
+
+    private TestResult getTestResult(HudsonJob hudsonJob, int buildNumber) {
+        String testResultUrl = hudsonUrlBuilder.getTestResultUrl(hudsonJob.getName(), buildNumber);
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Access to "+testResultUrl);
+        }
+        WebResource testResultResource = client.resource(testResultUrl);
+        TestResult testResult = new TestResult();
+        try {
+            HudsonMavenReportersSurefireAggregatedReport surefireReport = testResultResource.get(HudsonMavenReportersSurefireAggregatedReport.class);
+            testResult.setFailCount(surefireReport.getFailCount());
+            testResult.setPassCount(surefireReport.getTotalCount() - surefireReport.getFailCount() - surefireReport.getSkipCount());
+            testResult.setSkipCount(surefireReport.getSkipCount());
+            testResult.setTotalCount(surefireReport.getTotalCount());
+        } catch(ClientHandlerException e) {
+            if(LOG.isInfoEnabled()) {
+                LOG.info(hudsonJob.getName()+" has no test result");
+            }
+        }
+        return testResult;
     }
 
     Client buildJerseyClient(ClientConfig clientConfig) {
