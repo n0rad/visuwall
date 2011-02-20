@@ -38,7 +38,10 @@ public class ProjectWallService {
         sonarService = new SonarService(sonarUrl);
     }
 
-    public List<Project> getProjects() {
+    /**
+     * @return List of all available projects
+     */
+    public final List<Project> getProjects() {
         List<Project> projects = new ArrayList<Project>();
 
         List<HudsonJob> jobs = hudsonService.findAllJobs();

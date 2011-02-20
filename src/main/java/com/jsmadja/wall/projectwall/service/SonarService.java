@@ -37,6 +37,11 @@ public class SonarService {
         sonar = Sonar.create(sonarUrl);
     }
 
+    /**
+     * @param projectId
+     * @return
+     * @throws ProjectNotFoundException
+     */
     public final Double getCoverage(String projectId) throws ProjectNotFoundException {
         Measure coverage = getMeasure(projectId, "coverage");
         if (LOG.isInfoEnabled()) {
@@ -45,6 +50,11 @@ public class SonarService {
         return coverage.getValue();
     }
 
+    /**
+     * @param projectId
+     * @return
+     * @throws ProjectNotFoundException
+     */
     public final Double getRulesCompliance(String projectId) throws ProjectNotFoundException {
         Measure rulesCompliance = getMeasure(projectId, "violations_density");
         if (LOG.isInfoEnabled()) {

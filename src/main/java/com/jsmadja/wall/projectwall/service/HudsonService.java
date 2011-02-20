@@ -63,7 +63,7 @@ public class HudsonService {
     /**
      * @return List of all available jobs on Hudson
      */
-    public List<HudsonJob> findAllJobs() {
+    public final List<HudsonJob> findAllJobs() {
         String jobsUrl = hudsonUrlBuilder.getAllJobsUrl();
         if (LOG.isInfoEnabled()) {
             LOG.info("All jobs url : "+jobsUrl);
@@ -86,7 +86,7 @@ public class HudsonService {
      * @param buildNumber
      * @return HudsonJob found in Hudson with its name and build number
      */
-    public HudsonJob findJob(String jobName, int buildNumber) {
+    public final HudsonJob findJob(String jobName, int buildNumber) {
         if (LOG.isInfoEnabled()) {
             LOG.info("Find job name ["+jobName+"] buildNumber ["+buildNumber+"]");
         }
@@ -99,7 +99,7 @@ public class HudsonService {
      * @param jobName
      * @return HudsonJob found with its name
      */
-    public HudsonJob findJob(String jobName) {
+    public final HudsonJob findJob(String jobName) {
         String jobUrl = hudsonUrlBuilder.getJobUrl(jobName);
         if (LOG.isInfoEnabled()) {
             LOG.info("Job url : "+jobUrl);
@@ -112,7 +112,7 @@ public class HudsonService {
      * @param jobName
      * @return Average build duration time computed with old successful jobs
      */
-    public long getAverageBuildDurationTime(String jobName) {
+    public final long getAverageBuildDurationTime(String jobName) {
         HudsonJob hudsonJob = findJob(jobName);
         float sumBuildDurationTime = 0;
 
@@ -180,7 +180,7 @@ public class HudsonService {
      * @param hudsonJob
      * @return An array of successful build numbers
      */
-    public int[] getSuccessfulBuildNumbers(HudsonJob hudsonJob) {
+    public final int[] getSuccessfulBuildNumbers(HudsonJob hudsonJob) {
         List<Integer> successfulBuildNumbers = new ArrayList<Integer>();
         for (Integer buildNumber:hudsonJob.getBuildNumbers()) {
             HudsonJob job = findJob(hudsonJob.getName(), buildNumber);
@@ -217,7 +217,7 @@ public class HudsonService {
      * @param jobName
      * @return Date which we think the job will finish to build
      */
-    public Date getEstimatedFinishTime(String jobName) {
+    public final Date getEstimatedFinishTime(String jobName) {
         HudsonJob job = findJob(jobName);
 
         int lastBuildNumber = job.getLastBuildNumber();
