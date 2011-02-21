@@ -41,10 +41,6 @@ public class WallController {
 	@RequestMapping
 	public ModelAndView getWall() {
 		List<Project> projects = projectWallService.getProjects();
-		projects.add(new Project());
-		//projects.add(new Project());
-		//projects.add(new Project());
-		//projects.add(new Project());
 				
 		Map<String, Object> data = new HashMap<String, Object>(); 
 		data.put("projects", projects);

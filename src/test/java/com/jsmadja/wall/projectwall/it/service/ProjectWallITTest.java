@@ -28,7 +28,7 @@ import com.jsmadja.wall.projectwall.service.ProjectWallService;
 
 public class ProjectWallITTest {
 
-    ProjectWallService projectWall = new ProjectWallService(Integration.HUDSON_URL, Integration.SONAR_URL);
+    ProjectWallService projectWall = new ProjectWallService();
 
     @Test
     public void should_retrieve_all_data() {
