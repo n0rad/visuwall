@@ -55,7 +55,7 @@ public class ProjectWallService {
                 project.setDescription(job.getDescription());
                 project.setCoverage(sonarService.getCoverage(job.getArtifactId()));
                 project.setRulesCompliance(sonarService.getRulesCompliance(job.getArtifactId()));
-                project.setHudsonJob(job);
+                project.setHudsonProject(job);
                 projects.add(project);
             } catch(ProjectNotFoundException e) {
                 LOG.warn(e.getMessage());

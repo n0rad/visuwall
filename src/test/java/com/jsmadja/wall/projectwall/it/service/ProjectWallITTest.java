@@ -40,8 +40,8 @@ public class ProjectWallITTest {
     public void should_retrieve_all_data() {
         List<Project> projects = projectWall.getProjects();
         for (Project project:projects) {
-            assertNotNull(project.getHudsonJob());
-            System.err.println(project.getHudsonJob());
+            assertNotNull(project.getHudsonProject());
+            System.err.println(project.getHudsonProject());
         }
     }
 }

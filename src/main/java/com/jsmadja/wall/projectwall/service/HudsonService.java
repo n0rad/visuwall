@@ -177,13 +177,13 @@ public class HudsonService {
     }
 
     /**
-     * @param hudsonJob
+     * @param hudsonProject
      * @return An array of successful build numbers
      */
-    public final int[] getSuccessfulBuildNumbers(HudsonProject hudsonJob) {
+    public final int[] getSuccessfulBuildNumbers(HudsonProject hudsonProject) {
         List<Integer> successfulBuildNumbers = new ArrayList<Integer>();
-        for (Integer buildNumber:hudsonJob.getBuildNumbers()) {
-            HudsonBuild build = findBuild(hudsonJob.getName(), buildNumber);
+        for (Integer buildNumber:hudsonProject.getBuildNumbers()) {
+            HudsonBuild build = findBuild(hudsonProject.getName(), buildNumber);
             if(build.isSuccessful()) {
                 successfulBuildNumbers.add(buildNumber);
             }
