@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Julien SMADJA <julien.smadja@gmail.com> - Arnaud LEMAIRE
+ * Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import org.sonar.wsclient.services.ResourceQuery;
 import org.springframework.stereotype.Service;
 
 import com.jsmadja.wall.projectwall.ProjectNotFoundException;
+import com.jsmadja.wall.projectwall.domain.TechnicalDebt;
 
 public class SonarService {
 
@@ -70,6 +71,32 @@ public class SonarService {
             throw new ProjectNotFoundException("Project with id #"+projectId+" not found in sonar "+sonarUrl);
         }
         return project.getMeasure(measureKey);
+    }
+
+    /**
+     * @param projectId
+     * @return
+     * @throws ProjectNotFoundException
+     */
+    public TechnicalDebt getTechnicalDebt(String projectId) throws ProjectNotFoundException {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Fetch technical debt for project #"+projectId);
+        }
+
+        Measure ratio = getMeasure(projectId, "technical_debt_ratio");
+        Measure cost = getMeasure(projectId, "technical_debt");
+        Measure days = getMeasure(projectId, "technical_debt_days");
+
+        TechnicalDebt technicalDebt = new TechnicalDebt();
+        technicalDebt.setRatio(ratio.getValue());
+        technicalDebt.setCost(cost.getIntValue());
+        technicalDebt.setDays(days.getIntValue());
+
+        if (LOG.isInfoEnabled()) {
+            LOG.info(technicalDebt.toString());
+        }
+
+        return technicalDebt;
     }
 
 }

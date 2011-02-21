@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Julien SMADJA <julien.smadja@gmail.com> - Arnaud LEMAIRE
+ * Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,14 @@
 
 package com.jsmadja.wall.projectwall.it.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 import com.jsmadja.wall.projectwall.Integration;
 import com.jsmadja.wall.projectwall.ProjectNotFoundException;
+import com.jsmadja.wall.projectwall.domain.TechnicalDebt;
 import com.jsmadja.wall.projectwall.service.SonarService;
 
 public class SonarServiceITTest {
@@ -51,5 +53,13 @@ public class SonarServiceITTest {
     public void should_retrieve_rules_compliance() throws ProjectNotFoundException {
         Double rulesCompliance = sonarService.getRulesCompliance(FLUXX_ARTIFACT_ID);
         assertNotNull(rulesCompliance);
+    }
+
+    @Test
+    public void should_retrieve_technical_debt() throws ProjectNotFoundException {
+        TechnicalDebt technicalDebt = sonarService.getTechnicalDebt(FLUXX_ARTIFACT_ID);
+        assertEquals(8.9, technicalDebt.getRatio(), 0);
+        assertEquals(5037, technicalDebt.getCost());
+        assertEquals(10, technicalDebt.getDays());
     }
 }

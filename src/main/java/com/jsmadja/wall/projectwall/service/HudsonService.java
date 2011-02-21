@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Julien SMADJA <julien.smadja@gmail.com> - Arnaud LEMAIRE
+ * Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,12 +28,12 @@ import org.springframework.stereotype.Service;
 import com.jsmadja.wall.projectwall.HudsonUrlBuilder;
 import com.jsmadja.wall.projectwall.domain.HudsonJob;
 import com.jsmadja.wall.projectwall.domain.TestResult;
-import com.jsmadja.wall.projectwall.generated.hudson.HudsonMavenMavenModuleSet;
-import com.jsmadja.wall.projectwall.generated.hudson.HudsonMavenMavenModuleSetBuild;
-import com.jsmadja.wall.projectwall.generated.hudson.HudsonModelHudson;
-import com.jsmadja.wall.projectwall.generated.hudson.HudsonModelJob;
-import com.jsmadja.wall.projectwall.generated.hudson.HudsonModelRun;
-import com.jsmadja.wall.projectwall.generated.hudson.HudsonModelUser;
+import com.jsmadja.wall.projectwall.generated.hudson.hudsonmodel.HudsonModelHudson;
+import com.jsmadja.wall.projectwall.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
+import com.jsmadja.wall.projectwall.generated.hudson.mavenmoduleset.HudsonModelJob;
+import com.jsmadja.wall.projectwall.generated.hudson.mavenmoduleset.HudsonModelRun;
+import com.jsmadja.wall.projectwall.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
+import com.jsmadja.wall.projectwall.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
 import com.jsmadja.wall.projectwall.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Julien SMADJA <julien.smadja@gmail.com> - Arnaud LEMAIRE
+ * Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,24 +46,23 @@ public class ProjectWallService {
 	public final List<Project> getProjects() {
 		List<Project> projects = new ArrayList<Project>();
 
-		List<HudsonJob> jobs = hudsonService.findAllJobs();
-		for (HudsonJob job : jobs) {
-			if (LOG.isInfoEnabled()) {
-				LOG.info("Found " + job.getName());
-			}
-			try {
-				Project project = new Project();
-				project.setName(job.getName());
-				project.setDescription(job.getDescription());
-				project.setCoverage(sonarService.getCoverage(job
-						.getArtifactId()));
-				project.setRulesCompliance(sonarService.getRulesCompliance(job
-						.getArtifactId()));
-				projects.add(project);
-			} catch (ProjectNotFoundException e) {
-				LOG.warn(e.getMessage());
-			}
-		}
+        List<HudsonJob> jobs = hudsonService.findAllJobs();
+        for (HudsonJob job:jobs) {
+            if (LOG.isInfoEnabled()) {
+                LOG.info("Found "+job.getName());
+            }
+            try {
+                Project project = new Project();
+                project.setName(job.getName());
+                project.setDescription(job.getDescription());
+                project.setCoverage(sonarService.getCoverage(job.getArtifactId()));
+                project.setRulesCompliance(sonarService.getRulesCompliance(job.getArtifactId()));
+                project.setHudsonJob(job);
+                projects.add(project);
+            } catch(ProjectNotFoundException e) {
+                LOG.warn(e.getMessage());
+            }
+        }
 
 		return projects;
 	}
