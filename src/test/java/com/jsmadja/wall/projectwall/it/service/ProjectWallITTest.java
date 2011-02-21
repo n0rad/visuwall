@@ -41,6 +41,7 @@ public class ProjectWallITTest {
         List<Project> projects = projectWall.getProjects();
         for (Project project:projects) {
             assertNotNull(project.getHudsonJob());
+            System.err.println(project.getHudsonJob());
         }
     }
 }

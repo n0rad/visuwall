@@ -87,11 +87,9 @@ public class HudsonServiceTest {
     }
 
     @Test
-    public void should_retrieve_jobs_with_status() {
-        List<HudsonJob> jobs = hudsonService.findAllJobs();
-        for (HudsonJob job:jobs) {
-            assertNotNull(job.isSuccessful());
-        }
+    public void should_retrieve_job_with_status() {
+        HudsonJob job = hudsonService.findJob("dev-radar");
+        assertTrue(job.isSuccessful());
     }
 
     @Test

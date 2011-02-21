@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 
 public final class HudsonJob {
 
@@ -125,11 +126,16 @@ public final class HudsonJob {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).add("name", name).add("description", description).add("status", successful)
+        ToStringHelper toString = Objects.toStringHelper(this).add("name", name).add("description", description).add("status", successful)
         .add("isBuilding", isBuilding()).add("commiters", Arrays.toString(commiters)).add("duration", duration)
         .add("buildNumbers", Arrays.toString(buildNumbers)).add("startTime", startTime)
-        .add("lastBuildNumber", lastBuildNumber).add("artifactId", artifactId)
-        .add("test result", testResult.toString()).toString();
+        .add("lastBuildNumber", lastBuildNumber).add("artifactId", artifactId);
+
+        if (testResult != null) {
+            toString.add("test result", testResult.toString());
+        }
+
+        return toString.toString();
     }
 
 }
