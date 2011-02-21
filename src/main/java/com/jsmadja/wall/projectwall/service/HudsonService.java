@@ -23,6 +23,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.NodeList;
 
 import com.jsmadja.wall.projectwall.HudsonUrlBuilder;
 import com.jsmadja.wall.projectwall.domain.HudsonJob;
@@ -34,6 +35,7 @@ import com.jsmadja.wall.projectwall.generated.hudson.mavenmoduleset.HudsonModelR
 import com.jsmadja.wall.projectwall.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import com.jsmadja.wall.projectwall.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
 import com.jsmadja.wall.projectwall.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
+import com.jsmadja.wall.projectwall.generated.hudson.surefireaggregatedreport.HudsonTasksTestAggregatedTestResultActionChildReport;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.WebResource;
@@ -246,12 +248,45 @@ public class HudsonService {
             testResult.setPassCount(surefireReport.getTotalCount() - surefireReport.getFailCount() - surefireReport.getSkipCount());
             testResult.setSkipCount(surefireReport.getSkipCount());
             testResult.setTotalCount(surefireReport.getTotalCount());
+            int integrationTestCount = getIntegrationTestCount(surefireReport);
+            testResult.setIntegrationTestCount(integrationTestCount);
         } catch(ClientHandlerException e) {
             if(LOG.isInfoEnabled()) {
                 LOG.info(hudsonJob.getName()+" has no test result");
             }
         }
         return testResult;
+    }
+
+    private int getIntegrationTestCount(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+        int integrationTestCount = 0;
+        for (HudsonTasksTestAggregatedTestResultActionChildReport childReport:surefireReport.getChildReport()) {
+            ElementNSImpl result = (ElementNSImpl) childReport.getResult();
+            List<String> testNames = getTestNames(result);
+            for (String testName:testNames) {
+                if (isIntegrationTest(testName)) {
+                    integrationTestCount++;
+                }
+            }
+        }
+        return integrationTestCount;
+    }
+
+    private List<String> getTestNames(ElementNSImpl result) {
+
+        List<String> testNames = new ArrayList<String>();
+
+        NodeList cases = result.getElementsByTagName("className");
+        for (int i=0; i < cases.getLength(); i++) {
+            String testName = cases.item(i).getFirstChild().getNodeValue();
+            testNames.add(testName);
+        }
+
+        return testNames;
+    }
+
+    private boolean isIntegrationTest(String testName) {
+        return testName.endsWith("ITTest") || testName.contains(".it.");
     }
 
     Client buildJerseyClient(ClientConfig clientConfig) {

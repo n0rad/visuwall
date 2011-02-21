@@ -22,6 +22,7 @@ public final class TestResult {
     private int passCount;
     private int skipCount;
     private int totalCount;
+    private int integrationTestCount;
 
     public int getFailCount() {
         return failCount;
@@ -54,4 +55,13 @@ public final class TestResult {
     public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
     }
+
+    public int getIntegrationTestCount() {
+        return integrationTestCount;
+    }
+
+    public void setIntegrationTestCount(int integrationTestCount) {
+        this.integrationTestCount = integrationTestCount;
+    }
+
 }

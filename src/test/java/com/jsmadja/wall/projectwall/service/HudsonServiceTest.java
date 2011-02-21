@@ -147,5 +147,6 @@ public class HudsonServiceTest {
         assertEquals(13, testResult.getPassCount());
         assertEquals(2, testResult.getSkipCount());
         assertEquals(16, testResult.getTotalCount());
+        assertEquals(2, testResult.getIntegrationTestCount());
     }
 }

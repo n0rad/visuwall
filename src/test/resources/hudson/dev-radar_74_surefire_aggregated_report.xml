@@ -66,7 +66,7 @@
 				</case>
 				<case>
 					<age>0</age>
-					<className>com.xebia.devradar.GitHubFetcherBisTest</className>
+					<className>com.xebia.devradar.GitHubFetcherBisITTest</className>
 					<duration>0.338</duration>
 					<failedSince>0</failedSince>
 					<name>should_return_35_event_set_if_35_commits_exist</name>
@@ -79,7 +79,7 @@
 			<suite>
 				<case>
 					<age>2</age>
-					<className>com.xebia.devradar.GitHubFetcherTest</className>
+					<className>com.xebia.devradar.it.GitHubFetcherTest</className>
 					<duration>1.361</duration>
 					<failedSince>73</failedSince>
 					<name>should_throw_a_runtime_exception_if_cannot_get_commits</name>
