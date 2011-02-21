@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.jsmadja.wall.projectwall;
+package com.jsmadja.wall.projectwall.builder;
 
 public class HudsonUrlBuilder {
 

@@ -22,8 +22,8 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import com.jsmadja.wall.projectwall.Integration;
-import com.jsmadja.wall.projectwall.ProjectNotFoundException;
 import com.jsmadja.wall.projectwall.domain.TechnicalDebt;
+import com.jsmadja.wall.projectwall.service.ProjectNotFoundException;
 import com.jsmadja.wall.projectwall.service.SonarService;
 
 public class SonarServiceITTest {

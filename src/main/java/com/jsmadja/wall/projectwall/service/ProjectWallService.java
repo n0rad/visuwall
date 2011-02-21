@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jsmadja.wall.projectwall.ProjectNotFoundException;
 import com.jsmadja.wall.projectwall.domain.HudsonJob;
 import com.jsmadja.wall.projectwall.domain.Project;
 

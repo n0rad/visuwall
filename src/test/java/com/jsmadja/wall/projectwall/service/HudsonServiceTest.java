@@ -29,8 +29,8 @@ import javax.xml.bind.JAXBException;
 import org.junit.Test;
 
 import com.jsmadja.wall.projectwall.FileClientHandlerBuilder;
-import com.jsmadja.wall.projectwall.HudsonUrlBuilder;
 import com.jsmadja.wall.projectwall.Integration;
+import com.jsmadja.wall.projectwall.builder.HudsonUrlBuilder;
 import com.jsmadja.wall.projectwall.domain.HudsonJob;
 import com.jsmadja.wall.projectwall.domain.TestResult;
 import com.sun.jersey.api.client.Client;

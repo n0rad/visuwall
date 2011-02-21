@@ -22,9 +22,7 @@ import org.sonar.wsclient.Sonar;
 import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
-import org.springframework.stereotype.Service;
 
-import com.jsmadja.wall.projectwall.ProjectNotFoundException;
 import com.jsmadja.wall.projectwall.domain.TechnicalDebt;
 
 public class SonarService {

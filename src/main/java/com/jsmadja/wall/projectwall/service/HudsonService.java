@@ -23,21 +23,17 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.NodeList;
 
-import com.jsmadja.wall.projectwall.HudsonUrlBuilder;
+import com.jsmadja.wall.projectwall.builder.HudsonUrlBuilder;
+import com.jsmadja.wall.projectwall.builder.TestResultBuilder;
 import com.jsmadja.wall.projectwall.domain.HudsonJob;
-import com.jsmadja.wall.projectwall.domain.TestResult;
 import com.jsmadja.wall.projectwall.generated.hudson.hudsonmodel.HudsonModelHudson;
 import com.jsmadja.wall.projectwall.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
 import com.jsmadja.wall.projectwall.generated.hudson.mavenmoduleset.HudsonModelJob;
 import com.jsmadja.wall.projectwall.generated.hudson.mavenmoduleset.HudsonModelRun;
 import com.jsmadja.wall.projectwall.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import com.jsmadja.wall.projectwall.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
-import com.jsmadja.wall.projectwall.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
-import com.jsmadja.wall.projectwall.generated.hudson.surefireaggregatedreport.HudsonTasksTestAggregatedTestResultActionChildReport;
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
@@ -48,6 +44,7 @@ public class HudsonService {
     private static final Logger LOG = LoggerFactory.getLogger(HudsonService.class);
 
     private HudsonUrlBuilder hudsonUrlBuilder;
+    private TestResultBuilder hudsonTestService = new TestResultBuilder();
 
     private Client client;
 
@@ -137,16 +134,18 @@ public class HudsonService {
         }
         WebResource jobResource = client.resource(jobUrl);
         HudsonMavenMavenModuleSetBuild setBuild = jobResource.get(HudsonMavenMavenModuleSetBuild.class);
+
         hudsonJob.setDuration(setBuild.getDuration());
         hudsonJob.setStartTime(new Date(setBuild.getTimestamp()));
+        hudsonJob.setSuccessful(getJobStatus(setBuild));
+        hudsonJob.setCommiters(getCommiters(setBuild));
 
-        boolean successful = getJobStatus(setBuild);
-        hudsonJob.setSuccessful(successful);
-
-        String[] commiters = getCommiters(setBuild);
-        hudsonJob.setCommiters(commiters);
-
-        hudsonJob.setTestResult(getTestResult(hudsonJob, buildNumber));
+        String testResultUrl = hudsonUrlBuilder.getTestResultUrl(hudsonJob.getName(), buildNumber);
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Test result : "+testResultUrl);
+        }
+        WebResource testResultResource = client.resource(testResultUrl);
+        hudsonJob.setTestResult(hudsonTestService.build(testResultResource));
     }
 
     private String[] getCommiters(HudsonMavenMavenModuleSetBuild setBuild) {
@@ -165,15 +164,14 @@ public class HudsonService {
 
     private HudsonJob createHudsonJob(WebResource jobResource) {
         HudsonMavenMavenModuleSet modelJob = jobResource.get(HudsonMavenMavenModuleSet.class);
+
         HudsonJob hudsonJob = new HudsonJob();
         hudsonJob.setName(modelJob.getName());
         hudsonJob.setDescription(modelJob.getDescription());
         hudsonJob.setLastBuildNumber(modelJob.getLastBuild().getNumber());
         hudsonJob.setBuilding(getIsBuilding(modelJob));
         hudsonJob.setArtifactId(modelJob.getModule().get(0).getName());
-
-        int[] buildNumbers = getBuildNumbers(modelJob);
-        hudsonJob.setBuildNumbers(buildNumbers);
+        hudsonJob.setBuildNumbers(getBuildNumbers(modelJob));
 
         return hudsonJob;
     }
@@ -233,60 +231,6 @@ public class HudsonService {
         }
 
         return estimatedFinishTime.toDate();
-    }
-
-    private TestResult getTestResult(HudsonJob hudsonJob, int buildNumber) {
-        String testResultUrl = hudsonUrlBuilder.getTestResultUrl(hudsonJob.getName(), buildNumber);
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Test result : "+testResultUrl);
-        }
-        WebResource testResultResource = client.resource(testResultUrl);
-        TestResult testResult = new TestResult();
-        try {
-            HudsonMavenReportersSurefireAggregatedReport surefireReport = testResultResource.get(HudsonMavenReportersSurefireAggregatedReport.class);
-            testResult.setFailCount(surefireReport.getFailCount());
-            testResult.setPassCount(surefireReport.getTotalCount() - surefireReport.getFailCount() - surefireReport.getSkipCount());
-            testResult.setSkipCount(surefireReport.getSkipCount());
-            testResult.setTotalCount(surefireReport.getTotalCount());
-            int integrationTestCount = getIntegrationTestCount(surefireReport);
-            testResult.setIntegrationTestCount(integrationTestCount);
-        } catch(ClientHandlerException e) {
-            if(LOG.isInfoEnabled()) {
-                LOG.info(hudsonJob.getName()+" has no test result");
-            }
-        }
-        return testResult;
-    }
-
-    private int getIntegrationTestCount(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
-        int integrationTestCount = 0;
-        for (HudsonTasksTestAggregatedTestResultActionChildReport childReport:surefireReport.getChildReport()) {
-            ElementNSImpl result = (ElementNSImpl) childReport.getResult();
-            List<String> testNames = getTestNames(result);
-            for (String testName:testNames) {
-                if (isIntegrationTest(testName)) {
-                    integrationTestCount++;
-                }
-            }
-        }
-        return integrationTestCount;
-    }
-
-    private List<String> getTestNames(ElementNSImpl result) {
-
-        List<String> testNames = new ArrayList<String>();
-
-        NodeList cases = result.getElementsByTagName("className");
-        for (int i=0; i < cases.getLength(); i++) {
-            String testName = cases.item(i).getFirstChild().getNodeValue();
-            testNames.add(testName);
-        }
-
-        return testNames;
-    }
-
-    private boolean isIntegrationTest(String testName) {
-        return testName.endsWith("ITTest") || testName.contains(".it.");
     }
 
     Client buildJerseyClient(ClientConfig clientConfig) {
