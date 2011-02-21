@@ -16,42 +16,35 @@
 
 package com.jsmadja.wall.projectwall.domain;
 
-public final class TestResult {
+import com.google.common.base.Objects;
 
-    private int failCount;
-    private int passCount;
-    private int skipCount;
-    private int totalCount;
+public final class TechnicalDebt {
 
-    public int getFailCount() {
-        return failCount;
+    private int days;
+    private int cost;
+    private double ratio;
+
+    public int getDays() {
+        return days;
+    }
+    public void setDays(int days) {
+        this.days = days;
+    }
+    public int getCost() {
+        return cost;
+    }
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+    public double getRatio() {
+        return ratio;
+    }
+    public void setRatio(double ratio) {
+        this.ratio = ratio;
     }
 
-    public void setFailCount(int failCount) {
-        this.failCount = failCount;
-    }
-
-    public int getPassCount() {
-        return passCount;
-    }
-
-    public void setPassCount(int passCount) {
-        this.passCount = passCount;
-    }
-
-    public int getSkipCount() {
-        return skipCount;
-    }
-
-    public void setSkipCount(int skipCount) {
-        this.skipCount = skipCount;
-    }
-
-    public int getTotalCount() {
-        return totalCount;
-    }
-
-    public void setTotalCount(int totalCount) {
-        this.totalCount = totalCount;
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this).add("days", days).add("cost", cost).add("ratio", ratio).toString();
     }
 }

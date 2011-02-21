@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Julien SMADJA <julien.smadja@gmail.com> - Arnaud LEMAIRE
+ * Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,6 +55,7 @@ public class ProjectWallService {
                 project.setDescription(job.getDescription());
                 project.setCoverage(sonarService.getCoverage(job.getArtifactId()));
                 project.setRulesCompliance(sonarService.getRulesCompliance(job.getArtifactId()));
+                project.setHudsonJob(job);
                 projects.add(project);
             } catch(ProjectNotFoundException e) {
                 LOG.warn(e.getMessage());

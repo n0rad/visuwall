@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Julien SMADJA <julien.smadja@gmail.com> - Arnaud LEMAIRE
+ * Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ public final class Project {
     private String description;
     private double coverage;
     private double rulesCompliance;
+    private HudsonJob hudsonJob;
 
     public String getName() {
         return name;
@@ -55,6 +56,14 @@ public final class Project {
 
     public void setRulesCompliance(double rulesCompliance) {
         this.rulesCompliance = rulesCompliance;
+    }
+
+    public HudsonJob getHudsonJob() {
+        return hudsonJob;
+    }
+
+    public void setHudsonJob(HudsonJob hudsonJob) {
+        this.hudsonJob = hudsonJob;
     }
 
     @Override
