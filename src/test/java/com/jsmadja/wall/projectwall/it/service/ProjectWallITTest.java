@@ -21,14 +21,20 @@ import static org.junit.Assert.assertNotNull;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.jsmadja.wall.projectwall.Integration;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.service.ProjectWallService;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("/META-INF/spring/root-context.xml")
 public class ProjectWallITTest {
 
-    ProjectWallService projectWall = new ProjectWallService();
+    @Autowired
+    private ProjectWallService projectWall;
 
     @Test
     public void should_retrieve_all_data() {
