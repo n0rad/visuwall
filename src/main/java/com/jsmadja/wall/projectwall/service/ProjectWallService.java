@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jsmadja.wall.projectwall.domain.HudsonJob;
+import com.jsmadja.wall.projectwall.domain.HudsonProject;
 import com.jsmadja.wall.projectwall.domain.Project;
 
 @Service
@@ -44,8 +44,8 @@ public class ProjectWallService {
     public final List<Project> getProjects() {
         List<Project> projects = new ArrayList<Project>();
 
-        List<HudsonJob> jobs = hudsonService.findAllJobs();
-        for (HudsonJob job:jobs) {
+        List<HudsonProject> jobs = hudsonService.findAllProjects();
+        for (HudsonProject job:jobs) {
             if (LOG.isInfoEnabled()) {
                 LOG.info("Found "+job.getName());
             }

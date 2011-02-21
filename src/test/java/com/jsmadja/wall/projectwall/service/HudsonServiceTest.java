@@ -31,7 +31,8 @@ import org.junit.Test;
 import com.jsmadja.wall.projectwall.FileClientHandlerBuilder;
 import com.jsmadja.wall.projectwall.Integration;
 import com.jsmadja.wall.projectwall.builder.HudsonUrlBuilder;
-import com.jsmadja.wall.projectwall.domain.HudsonJob;
+import com.jsmadja.wall.projectwall.domain.HudsonBuild;
+import com.jsmadja.wall.projectwall.domain.HudsonProject;
 import com.jsmadja.wall.projectwall.domain.TestResult;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandler;
@@ -47,16 +48,16 @@ public class HudsonServiceTest {
         @Override
         Client buildJerseyClient(ClientConfig clientConfig) {
             ClientHandler clientHandler = FileClientHandlerBuilder.newFileClientHandler()
-            .withFile(hudsonUrlBuilder.getAllJobsUrl(), "hudson/all_jobs.xml")
-            .withFile(hudsonUrlBuilder.getJobUrl("fluxx"), "hudson/fluxx.xml")
+            .withFile(hudsonUrlBuilder.getAllProjectsUrl(), "hudson/all_jobs.xml")
+            .withFile(hudsonUrlBuilder.getProjectUrl("fluxx"), "hudson/fluxx.xml")
             .withFile(hudsonUrlBuilder.getJobUrl("fluxx", 101), "hudson/fluxx_101.xml")
             .withFile(hudsonUrlBuilder.getJobUrl("fluxx", 102), "hudson/fluxx_102.xml")
-            .withFile(hudsonUrlBuilder.getJobUrl("dev-radar"), "hudson/dev-radar.xml")
+            .withFile(hudsonUrlBuilder.getProjectUrl("dev-radar"), "hudson/dev-radar.xml")
             .withFile(hudsonUrlBuilder.getJobUrl("dev-radar", 107), "hudson/dev-radar_107.xml")
             .withFile(hudsonUrlBuilder.getJobUrl("dev-radar", 108), "hudson/dev-radar_108.xml")
             .withFile(hudsonUrlBuilder.getJobUrl("dev-radar", 74), "hudson/dev-radar_74.xml")
             .withFile(hudsonUrlBuilder.getTestResultUrl("dev-radar", 74), "hudson/dev-radar_74_surefire_aggregated_report.xml")
-            .withFile(hudsonUrlBuilder.getJobUrl("dev-radar"), "hudson/dev-radar.xml")
+            .withFile(hudsonUrlBuilder.getProjectUrl("dev-radar"), "hudson/dev-radar.xml")
             .withFile(hudsonUrlBuilder.getJobUrl("fluxx", FLUXX_BUILT_WITH_COMMITERS), "hudson/fluxx_built_with_commiters.xml")
             .withHeader("Content-Type", "application/xml; charset=utf-8")
             .create();
@@ -65,50 +66,50 @@ public class HudsonServiceTest {
     };
 
     @Test
-    public void should_retrieve_jobs_from_hudson() throws JAXBException {
-        List<HudsonJob> jobs = hudsonService.findAllJobs();
-        assertFalse(jobs.isEmpty());
-        assertEquals("dev-radar", jobs.get(0).getName());
-        assertEquals("fluxx", jobs.get(1).getName());
+    public void should_retrieve_projects_from_hudson() throws JAXBException {
+        List<HudsonProject> projects = hudsonService.findAllProjects();
+        assertFalse(projects.isEmpty());
+        assertEquals("dev-radar", projects.get(0).getName());
+        assertEquals("fluxx", projects.get(1).getName());
     }
 
     @Test
-    public void should_retrieve_jobs_with_building_status() {
-        List<HudsonJob> jobs = hudsonService.findAllJobs();
-        assertFalse(jobs.get(0).isBuilding());
-        assertTrue(jobs.get(1).isBuilding());
+    public void should_retrieve_projects_with_building_status() {
+        List<HudsonProject> projects = hudsonService.findAllProjects();
+        assertFalse(projects.get(0).isBuilding());
+        assertTrue(projects.get(1).isBuilding());
     }
 
     @Test
-    public void should_retrieve_job_with_last_commiters() {
-        HudsonJob job = hudsonService.findJob("fluxx", FLUXX_BUILT_WITH_COMMITERS);
-        assertEquals("Julien Smadja", job.getCommiters()[0]);
-        assertEquals("Arnaud Lemaire", job.getCommiters()[1]);
+    public void should_retrieve_build_with_last_commiters() {
+        HudsonBuild build = hudsonService.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
+        assertEquals("Julien Smadja", build.getCommiters()[0]);
+        assertEquals("Arnaud Lemaire", build.getCommiters()[1]);
     }
 
     @Test
-    public void should_retrieve_job_with_status() {
-        HudsonJob job = hudsonService.findJob("dev-radar");
-        assertTrue(job.isSuccessful());
+    public void should_retrieve_build_with_status() {
+        HudsonBuild build = hudsonService.findProject("dev-radar").getLastBuild();
+        assertTrue(build.isSuccessful());
     }
 
     @Test
     public void should_retrieve_build_start_time() {
-        HudsonJob job = hudsonService.findJob("fluxx", FLUXX_BUILT_WITH_COMMITERS);
-        assertEquals(1298022037803L ,job.getStartTime().getTime());
+        HudsonBuild build = hudsonService.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
+        assertEquals(1298022037803L, build.getStartTime().getTime());
     }
 
     @Test
     public void should_retrieve_artifact_id() {
-        String artifactId = hudsonService.findJob("fluxx").getArtifactId();
+        String artifactId = hudsonService.findProject("fluxx").getArtifactId();
         assertEquals("fr.fluxx:fluxx", artifactId);
     }
 
     @Test
-    public void should_retrieve_jobs_with_description() {
-        List<HudsonJob> jobs = hudsonService.findAllJobs();
-        assertEquals("Dev Radar, un mur d'informations", jobs.get(0).getDescription());
-        assertEquals("Fluxx, aggrégez vos flux RSS!", jobs.get(1).getDescription());
+    public void should_retrieve_projects_with_description() {
+        List<HudsonProject> projects = hudsonService.findAllProjects();
+        assertEquals("Dev Radar, un mur d'informations", projects.get(0).getDescription());
+        assertEquals("Fluxx, aggrégez vos flux RSS!", projects.get(1).getDescription());
     }
 
     @Test
@@ -125,8 +126,8 @@ public class HudsonServiceTest {
 
     @Test
     public void should_return_successful_build_numbers() {
-        HudsonJob hudsonJob = hudsonService.findJob("fluxx");
-        int[] successfullBuildNumbers = hudsonService.getSuccessfulBuildNumbers(hudsonJob);
+        HudsonProject projects = hudsonService.findProject("fluxx");
+        int[] successfullBuildNumbers = hudsonService.getSuccessfulBuildNumbers(projects);
         assertEquals(102, successfullBuildNumbers[0]);
         assertEquals(101, successfullBuildNumbers[1]);
     }
@@ -139,8 +140,8 @@ public class HudsonServiceTest {
 
     @Test
     public void should_retrieve_test_result() {
-        HudsonJob hudsonJob = hudsonService.findJob("dev-radar", 74);
-        TestResult testResult = hudsonJob.getTestResult();
+        HudsonBuild build = hudsonService.findBuild("dev-radar", 74);
+        TestResult testResult = build.getTestResult();
         assertEquals(1, testResult.getFailCount());
         assertEquals(13, testResult.getPassCount());
         assertEquals(2, testResult.getSkipCount());

@@ -24,7 +24,7 @@ public final class Project {
     private String description;
     private double coverage;
     private double rulesCompliance;
-    private HudsonJob hudsonJob;
+    private HudsonProject hudsonJob;
 
     public String getName() {
         return name;
@@ -58,11 +58,11 @@ public final class Project {
         this.rulesCompliance = rulesCompliance;
     }
 
-    public HudsonJob getHudsonJob() {
+    public HudsonProject getHudsonJob() {
         return hudsonJob;
     }
 
-    public void setHudsonJob(HudsonJob hudsonJob) {
+    public void setHudsonJob(HudsonProject hudsonJob) {
         this.hudsonJob = hudsonJob;
     }
 

@@ -17,24 +17,20 @@
 package com.jsmadja.wall.projectwall.domain;
 
 import java.util.Arrays;
-import java.util.Date;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
-public final class HudsonJob {
+public final class HudsonProject {
 
     private String name;
-    private boolean successful;
     private String description;
-    private boolean building;
-    private String[] commiters;
     private int[] buildNumbers;
-    private long duration;
-    private Date startTime;
     private int lastBuildNumber;
     private String artifactId;
-    private TestResult testResult;
+    private boolean building;
+
+    private HudsonBuild lastBuild;
 
     public String getName() {
         return name;
@@ -42,14 +38,6 @@ public final class HudsonJob {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isSuccessful() {
-        return successful;
-    }
-
-    public void setSuccessful(boolean successful) {
-        this.successful = successful;
     }
 
     public String getDescription() {
@@ -68,36 +56,12 @@ public final class HudsonJob {
         this.building = building;
     }
 
-    public String[] getCommiters() {
-        return commiters;
-    }
-
-    public void setCommiters(String[] commiters) {
-        this.commiters = commiters.clone();
-    }
-
-    public long getDuration() {
-        return duration;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
-
     public int[] getBuildNumbers() {
         return buildNumbers;
     }
 
     public void setBuildNumbers(int[] buildNumbers) {
         this.buildNumbers = buildNumbers.clone();
-    }
-
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
     }
 
     public int getLastBuildNumber() {
@@ -116,25 +80,21 @@ public final class HudsonJob {
         this.artifactId = artifactId;
     }
 
-    public TestResult getTestResult() {
-        return testResult;
+    public HudsonBuild getLastBuild() {
+        return lastBuild;
     }
 
-    public void setTestResult(TestResult testResult) {
-        this.testResult = testResult;
+    public void setLastBuild(HudsonBuild lastBuild) {
+        this.lastBuild = lastBuild;
     }
 
     @Override
     public String toString() {
-        ToStringHelper toString = Objects.toStringHelper(this).add("name", name).add("description", description).add("status", successful)
-        .add("isBuilding", isBuilding()).add("commiters", Arrays.toString(commiters)).add("duration", duration)
-        .add("buildNumbers", Arrays.toString(buildNumbers)).add("startTime", startTime)
+        ToStringHelper toString = Objects.toStringHelper(this)
+        .add("name", name).add("description", description)
+        .add("isBuilding", isBuilding())
+        .add("buildNumbers", Arrays.toString(buildNumbers))
         .add("lastBuildNumber", lastBuildNumber).add("artifactId", artifactId);
-
-        if (testResult != null) {
-            toString.add("test result", testResult.toString());
-        }
-
         return toString.toString();
     }
 

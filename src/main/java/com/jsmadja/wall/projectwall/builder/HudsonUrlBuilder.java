@@ -31,7 +31,7 @@ public class HudsonUrlBuilder {
     /**
      * @return Hudson Url to obtain all jobs
      */
-    public final String getAllJobsUrl() {
+    public final String getAllProjectsUrl() {
         return  hudsonUrl+ALL_JOBS_URI+API_XML;
     }
 
@@ -39,7 +39,7 @@ public class HudsonUrlBuilder {
      * @param jobName
      * @return Hudson Url to obtain informations of a job
      */
-    public final String getJobUrl(String jobName) {
+    public final String getProjectUrl(String jobName) {
         return hudsonUrl+JOB_URI+"/"+jobName+API_XML;
     }
 
