@@ -16,19 +16,39 @@
 
 package com.jsmadja.wall.projectwall.web.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.ws.rs.GET;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.jsmadja.wall.projectwall.domain.Project;
+import com.jsmadja.wall.projectwall.service.ProjectWallService;
 
 @Controller
 @RequestMapping("/wall")
 public class WallController {
 
+	@Autowired
+	ProjectWallService projectWallService;
+	
 	@GET
 	@RequestMapping
 	public ModelAndView getWall() {
-		return new ModelAndView("wall");
+		List<Project> projects = projectWallService.getProjects();
+				
+		Map<String, Object> data = new HashMap<String, Object>(); 
+		data.put("projects", projects);
+		
+		
+		int jobsPerRow = (int) Math.round(Math.sqrt(projects.size()));
+		data.put("jobsPerRow", jobsPerRow);
+		
+		return new ModelAndView("wall", data);
 	}
 }

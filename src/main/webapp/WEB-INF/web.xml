@@ -20,7 +20,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	id="ASEARCH" version="2.5">
+	id="WALL" version="2.5">
 
 	<display-name>Project Wall</display-name>
 
@@ -55,12 +55,30 @@
 
 	<servlet-mapping>
 		<servlet-name>app</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>/app/*</url-pattern>
 	</servlet-mapping>
 
+	
+	
+    <servlet>
+        <servlet-name>default</servlet-name>
+        <servlet-class>
+          org.apache.catalina.servlets.DefaultServlet
+        </servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>1</param-value>
+        </init-param>
+        <init-param>
+            <param-name>listings</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
-		<url-pattern>/res/*</url-pattern>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
     <jsp-config>

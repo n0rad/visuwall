@@ -15,7 +15,7 @@
     limitations under the License.
 
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>	
 <html>
 <!-- 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -23,18 +23,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+
+<jsp:include page="res/js.jsp"/>
+<jsp:include page="res/css.jsp"/>
 </head>
 <style>
-.mainTable {
+.projects {
 	height: 100%;
 	width: 100%;
 	border-collapse: separate;
+	border-spacing: 5px;
 }
 
-.mainTable tr td {
+.projects tr td {
+	padding: 5px;
 	vertical-align: middle;
 	margin: 1%;
-	background-color: red;
 	overflow: hidden;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
@@ -48,41 +52,67 @@
 	border-bottom-left-radius: 10px 10px;
 }
 
-.projectPart p.projectName {
+.project p.projectName {
 	font-size: 4em;
 	font-weight: bold;
 	text-align: center;
 }
 
-.projectPart p.time {
+.projects .success {
+	background-color: green;
+}
+
+
+.projects .failure {
+	background-color: red;
+}
+
+
+.project p.time {
 	font-size: 2em;
 }
 
+
+
+
 </style>
-<!-- 
-	filter: alpha(opacity = 60);
-	opacity: 0.6;
-	-moz-opacity: 0.6;
-	-webkit-opacity: 0.6;
- -->
-
-
 
 <body>
 
-<table class="mainTable" height="100%" width="100%">
+<table class="projects" height="100%" width="100%">
 	<tr>
-		<td class="projectPart">
-			<p class="projectName">synthesis</p>
-			<!-- <p class="time">3h</p> -->
-		</td>
-		<td>salut</td>
-	</tr>
-	<tr>
-		<td>salut</td>
-		<td>salut</td>
+	<c:forEach varStatus="status" var="project" items="${projects}">
+
+ 		<jsp:include page="domain/project.jsp"/>
+
+		<%-- new row --%>
+		<c:if test="${not status.last && status.count % jobsPerRow == 0}">
+			<c:if test="${status.count > 0}">
+				</tr>
+			</c:if>
+			<tr>
+		</c:if>
+	</c:forEach>
 	</tr>
 </table>
+
+
+
+
+
+<script type="text/javascript">
+// Infinite blink/fade 
+function effectFadeIn(classname) {
+	$("."+classname).fadeTo(1000, 0.4, effectFadeOut(classname));
+}
+function effectFadeOut(classname) {
+	$("."+classname).fadeTo(1000, 1, effectFadeIn(classname));
+}
+$(document).ready(function(){
+effectFadeIn('projectPart');
+});
+</script>
+
 
 </body>
 </html>

@@ -21,22 +21,23 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.jsmadja.wall.projectwall.ProjectNotFoundException;
 import com.jsmadja.wall.projectwall.domain.HudsonJob;
 import com.jsmadja.wall.projectwall.domain.Project;
 
+@Service
 public class ProjectWallService {
-
-    private final HudsonService hudsonService;
-    private final SonarService sonarService;
 
     private static final Logger LOG = LoggerFactory.getLogger(ProjectWallService.class);
 
-    public ProjectWallService(String hudsonUrl, String sonarUrl) {
-        hudsonService = new HudsonService(hudsonUrl);
-        sonarService = new SonarService(sonarUrl);
-    }
+    @Autowired
+    private HudsonService hudsonService;
+
+    @Autowired
+    private SonarService sonarService;
 
     /**
      * @return List of all available projects
