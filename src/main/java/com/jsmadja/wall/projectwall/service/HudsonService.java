@@ -1,3 +1,19 @@
+/**
+ * Copyright (C) 2010 Julien SMADJA <julien.smadja@gmail.com> - Arnaud LEMAIRE
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.jsmadja.wall.projectwall.service;
 
 import java.util.ArrayList;
@@ -7,16 +23,20 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.jsmadja.wall.projectwall.HudsonUrlBuilder;
 import com.jsmadja.wall.projectwall.domain.HudsonJob;
+import com.jsmadja.wall.projectwall.domain.TestResult;
 import com.jsmadja.wall.projectwall.generated.hudson.HudsonMavenMavenModuleSet;
 import com.jsmadja.wall.projectwall.generated.hudson.HudsonMavenMavenModuleSetBuild;
 import com.jsmadja.wall.projectwall.generated.hudson.HudsonModelHudson;
 import com.jsmadja.wall.projectwall.generated.hudson.HudsonModelJob;
 import com.jsmadja.wall.projectwall.generated.hudson.HudsonModelRun;
 import com.jsmadja.wall.projectwall.generated.hudson.HudsonModelUser;
+import com.jsmadja.wall.projectwall.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
@@ -26,9 +46,9 @@ public class HudsonService {
 
     private static final Logger LOG = LoggerFactory.getLogger(HudsonService.class);
 
-    private Client client;
-
     private HudsonUrlBuilder hudsonUrlBuilder;
+
+    private Client client;
 
     public HudsonService(String hudsonUrl) {
         hudsonUrlBuilder = new HudsonUrlBuilder(hudsonUrl);
@@ -41,17 +61,20 @@ public class HudsonService {
         }
     }
 
-    public List<HudsonJob> findAllJobs() {
+    /**
+     * @return List of all available jobs on Hudson
+     */
+    public final List<HudsonJob> findAllJobs() {
         String jobsUrl = hudsonUrlBuilder.getAllJobsUrl();
         if (LOG.isInfoEnabled()) {
-            LOG.info("Access to "+jobsUrl);
+            LOG.info("All jobs url : "+jobsUrl);
         }
         WebResource hudsonResource = client.resource(jobsUrl);
         HudsonModelHudson hudson = hudsonResource.get(HudsonModelHudson.class);
         List<HudsonJob> jobs = new ArrayList<HudsonJob>();
-        List<Object> _jobs = hudson.getJob();
-        for(Object _job:_jobs) {
-            ElementNSImpl element = (ElementNSImpl) _job;
+        List<Object> hudsonJobs = hudson.getJob();
+        for(Object job:hudsonJobs) {
+            ElementNSImpl element = (ElementNSImpl) job;
             String name = getJobName(element);
             HudsonJob hudsonJob = findJob(name);
             jobs.add(hudsonJob);
@@ -59,7 +82,12 @@ public class HudsonService {
         return jobs;
     }
 
-    public HudsonJob findJob(String jobName, int buildNumber) {
+    /**
+     * @param jobName
+     * @param buildNumber
+     * @return HudsonJob found in Hudson with its name and build number
+     */
+    public final HudsonJob findJob(String jobName, int buildNumber) {
         if (LOG.isInfoEnabled()) {
             LOG.info("Find job name ["+jobName+"] buildNumber ["+buildNumber+"]");
         }
@@ -68,16 +96,24 @@ public class HudsonService {
         return hudsonJob;
     }
 
-    public HudsonJob findJob(String jobName) {
+    /**
+     * @param jobName
+     * @return HudsonJob found with its name
+     */
+    public final HudsonJob findJob(String jobName) {
         String jobUrl = hudsonUrlBuilder.getJobUrl(jobName);
         if (LOG.isInfoEnabled()) {
-            LOG.info("Access to "+jobUrl);
+            LOG.info("Job url : "+jobUrl);
         }
         WebResource  jobResource = client.resource(jobUrl);
         return createHudsonJob(jobResource);
     }
 
-    public long getAverageBuildDurationTime(String jobName) {
+    /**
+     * @param jobName
+     * @return Average build duration time computed with old successful jobs
+     */
+    public final long getAverageBuildDurationTime(String jobName) {
         HudsonJob hudsonJob = findJob(jobName);
         float sumBuildDurationTime = 0;
 
@@ -96,7 +132,7 @@ public class HudsonService {
     private void addBuildInfoTo(HudsonJob hudsonJob, int buildNumber) {
         String jobUrl = hudsonUrlBuilder.getJobUrl(hudsonJob.getName(), buildNumber);
         if (LOG.isInfoEnabled()) {
-            LOG.info("Access to "+jobUrl);
+            LOG.info("Job url : "+jobUrl);
         }
         WebResource jobResource = client.resource(jobUrl);
         HudsonMavenMavenModuleSetBuild setBuild = jobResource.get(HudsonMavenMavenModuleSetBuild.class);
@@ -108,6 +144,8 @@ public class HudsonService {
 
         String[] commiters = getCommiters(setBuild);
         hudsonJob.setCommiters(commiters);
+
+        hudsonJob.setTestResult(getTestResult(hudsonJob, buildNumber));
     }
 
     private String[] getCommiters(HudsonMavenMavenModuleSetBuild setBuild) {
@@ -139,7 +177,11 @@ public class HudsonService {
         return hudsonJob;
     }
 
-    public int[] getSuccessfulBuildNumbers(HudsonJob hudsonJob) {
+    /**
+     * @param hudsonJob
+     * @return An array of successful build numbers
+     */
+    public final int[] getSuccessfulBuildNumbers(HudsonJob hudsonJob) {
         List<Integer> successfulBuildNumbers = new ArrayList<Integer>();
         for (Integer buildNumber:hudsonJob.getBuildNumbers()) {
             HudsonJob job = findJob(hudsonJob.getName(), buildNumber);
@@ -172,7 +214,11 @@ public class HudsonService {
         return element.getFirstChild().getFirstChild().getNodeValue();
     }
 
-    public Date getEstimatedFinishTime(String jobName) {
+    /**
+     * @param jobName
+     * @return Date which we think the job will finish to build
+     */
+    public final Date getEstimatedFinishTime(String jobName) {
         HudsonJob job = findJob(jobName);
 
         int lastBuildNumber = job.getLastBuildNumber();
@@ -186,6 +232,27 @@ public class HudsonService {
         }
 
         return estimatedFinishTime.toDate();
+    }
+
+    private TestResult getTestResult(HudsonJob hudsonJob, int buildNumber) {
+        String testResultUrl = hudsonUrlBuilder.getTestResultUrl(hudsonJob.getName(), buildNumber);
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Test result : "+testResultUrl);
+        }
+        WebResource testResultResource = client.resource(testResultUrl);
+        TestResult testResult = new TestResult();
+        try {
+            HudsonMavenReportersSurefireAggregatedReport surefireReport = testResultResource.get(HudsonMavenReportersSurefireAggregatedReport.class);
+            testResult.setFailCount(surefireReport.getFailCount());
+            testResult.setPassCount(surefireReport.getTotalCount() - surefireReport.getFailCount() - surefireReport.getSkipCount());
+            testResult.setSkipCount(surefireReport.getSkipCount());
+            testResult.setTotalCount(surefireReport.getTotalCount());
+        } catch(ClientHandlerException e) {
+            if(LOG.isInfoEnabled()) {
+                LOG.info(hudsonJob.getName()+" has no test result");
+            }
+        }
+        return testResult;
     }
 
     Client buildJerseyClient(ClientConfig clientConfig) {

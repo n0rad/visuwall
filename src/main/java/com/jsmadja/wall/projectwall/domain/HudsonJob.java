@@ -1,3 +1,19 @@
+/**
+ * Copyright (C) 2010 Julien SMADJA <julien.smadja@gmail.com> - Arnaud LEMAIRE
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.jsmadja.wall.projectwall.domain;
 
 import java.util.Arrays;
@@ -5,7 +21,7 @@ import java.util.Date;
 
 import com.google.common.base.Objects;
 
-public class HudsonJob {
+public final class HudsonJob {
 
     private String name;
     private boolean successful;
@@ -17,6 +33,7 @@ public class HudsonJob {
     private Date startTime;
     private int lastBuildNumber;
     private String artifactId;
+    private TestResult testResult;
 
     public String getName() {
         return name;
@@ -55,7 +72,7 @@ public class HudsonJob {
     }
 
     public void setCommiters(String[] commiters) {
-        this.commiters = commiters;
+        this.commiters = commiters.clone();
     }
 
     public long getDuration() {
@@ -71,7 +88,7 @@ public class HudsonJob {
     }
 
     public void setBuildNumbers(int[] buildNumbers) {
-        this.buildNumbers = buildNumbers;
+        this.buildNumbers = buildNumbers.clone();
     }
 
     public Date getStartTime() {
@@ -98,20 +115,21 @@ public class HudsonJob {
         this.artifactId = artifactId;
     }
 
+    public TestResult getTestResult() {
+        return testResult;
+    }
+
+    public void setTestResult(TestResult testResult) {
+        this.testResult = testResult;
+    }
+
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-        .add("name", name)
-        .add("description", description)
-        .add("status", successful)
-        .add("isBuilding", isBuilding())
-        .add("commiters", Arrays.toString(commiters))
-        .add("duration", duration)
-        .add("buildNumbers", Arrays.toString(buildNumbers))
-        .add("startTime", startTime)
-        .add("lastBuildNumber", lastBuildNumber)
-        .add("artifactId", artifactId)
-        .toString();
+        return Objects.toStringHelper(this).add("name", name).add("description", description).add("status", successful)
+        .add("isBuilding", isBuilding()).add("commiters", Arrays.toString(commiters)).add("duration", duration)
+        .add("buildNumbers", Arrays.toString(buildNumbers)).add("startTime", startTime)
+        .add("lastBuildNumber", lastBuildNumber).add("artifactId", artifactId)
+        .add("test result", testResult.toString()).toString();
     }
 
 }

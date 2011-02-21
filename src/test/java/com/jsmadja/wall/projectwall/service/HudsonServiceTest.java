@@ -1,3 +1,19 @@
+/**
+ * Copyright (C) 2010 Julien SMADJA <julien.smadja@gmail.com> - Arnaud LEMAIRE
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.jsmadja.wall.projectwall.service;
 
 import static org.junit.Assert.assertEquals;
@@ -16,6 +32,7 @@ import com.jsmadja.wall.projectwall.FileClientHandlerBuilder;
 import com.jsmadja.wall.projectwall.HudsonUrlBuilder;
 import com.jsmadja.wall.projectwall.Integration;
 import com.jsmadja.wall.projectwall.domain.HudsonJob;
+import com.jsmadja.wall.projectwall.domain.TestResult;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandler;
 import com.sun.jersey.api.client.config.ClientConfig;
@@ -37,6 +54,8 @@ public class HudsonServiceTest {
             .withFile(hudsonUrlBuilder.getJobUrl("dev-radar"), "hudson/dev-radar.xml")
             .withFile(hudsonUrlBuilder.getJobUrl("dev-radar", 107), "hudson/dev-radar_107.xml")
             .withFile(hudsonUrlBuilder.getJobUrl("dev-radar", 108), "hudson/dev-radar_108.xml")
+            .withFile(hudsonUrlBuilder.getJobUrl("dev-radar", 74), "hudson/dev-radar_74.xml")
+            .withFile(hudsonUrlBuilder.getTestResultUrl("dev-radar", 74), "hudson/dev-radar_74_surefire_aggregated_report.xml")
             .withFile(hudsonUrlBuilder.getJobUrl("dev-radar"), "hudson/dev-radar.xml")
             .withFile(hudsonUrlBuilder.getJobUrl("fluxx", FLUXX_BUILT_WITH_COMMITERS), "hudson/fluxx_built_with_commiters.xml")
             .withHeader("Content-Type", "application/xml; charset=utf-8")
@@ -118,5 +137,15 @@ public class HudsonServiceTest {
     public void should_retrieve_estimated_remaining_time() {
         Date estimatedFinishTime = hudsonService.getEstimatedFinishTime("fluxx");
         assertNotNull(estimatedFinishTime);
+    }
+
+    @Test
+    public void should_retrieve_test_result() {
+        HudsonJob hudsonJob = hudsonService.findJob("dev-radar", 74);
+        TestResult testResult = hudsonJob.getTestResult();
+        assertEquals(1, testResult.getFailCount());
+        assertEquals(13, testResult.getPassCount());
+        assertEquals(2, testResult.getSkipCount());
+        assertEquals(16, testResult.getTotalCount());
     }
 }
