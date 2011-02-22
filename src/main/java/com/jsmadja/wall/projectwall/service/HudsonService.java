@@ -207,11 +207,15 @@ public class HudsonService {
 
     private boolean isSuccessful(HudsonMavenMavenModuleSetBuild job) {
         ElementNSImpl element = (ElementNSImpl) job.getResult();
+
+        if (element == null)
+            return false;
+
         Node result = element.getFirstChild();
-        if (result != null) {
-            return "SUCCESS".equals(result.getNodeValue());
-        }
-        return false;
+        if (result == null)
+            return false;
+
+        return "SUCCESS".equals(result.getNodeValue());
     }
 
     private String getProjectName(ElementNSImpl element) {
