@@ -23,6 +23,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Node;
 
 import com.jsmadja.wall.projectwall.builder.HudsonUrlBuilder;
 import com.jsmadja.wall.projectwall.builder.TestResultBuilder;
@@ -101,7 +102,7 @@ public class HudsonService {
         HudsonBuild hudsonBuild = new HudsonBuild();
         hudsonBuild.setDuration(setBuild.getDuration());
         hudsonBuild.setStartTime(new Date(setBuild.getTimestamp()));
-        hudsonBuild.setSuccessful(getJobStatus(setBuild));
+        hudsonBuild.setSuccessful(isSuccessful(setBuild));
         hudsonBuild.setCommiters(getCommiters(setBuild));
 
         String testResultUrl = hudsonUrlBuilder.getTestResultUrl(projectName, buildNumber);
@@ -121,7 +122,7 @@ public class HudsonService {
     public final HudsonProject findProject(String projectName) {
         String projectUrl = hudsonUrlBuilder.getProjectUrl(projectName);
         if (LOG.isInfoEnabled()) {
-            LOG.info("Job url : "+projectUrl);
+            LOG.info("Project url : "+projectUrl);
         }
         WebResource  projectResource = client.resource(projectUrl);
         return createHudsonProject(projectResource);
@@ -204,9 +205,13 @@ public class HudsonService {
         return buildNumbers;
     }
 
-    private boolean getJobStatus(HudsonMavenMavenModuleSetBuild job) {
+    private boolean isSuccessful(HudsonMavenMavenModuleSetBuild job) {
         ElementNSImpl element = (ElementNSImpl) job.getResult();
-        return "SUCCESS".equals(element.getFirstChild().getNodeValue());
+        Node result = element.getFirstChild();
+        if (result != null) {
+            return "SUCCESS".equals(result.getNodeValue());
+        }
+        return false;
     }
 
     private String getProjectName(ElementNSImpl element) {
