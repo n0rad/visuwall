@@ -40,7 +40,7 @@ public class WallController {
 	@GET
 	@RequestMapping
 	public ModelAndView getWall() {
-		List<Project> projects = projectWallService.getProjects();
+		List<Project> projects = projectWallService.findAllProjects();
 				
 		Map<String, Object> data = new HashMap<String, Object>(); 
 		data.put("projects", projects);

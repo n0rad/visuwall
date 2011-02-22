@@ -36,6 +36,7 @@ import com.jsmadja.wall.projectwall.generated.hudson.mavenmoduleset.HudsonModelR
 import com.jsmadja.wall.projectwall.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import com.jsmadja.wall.projectwall.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
@@ -76,8 +77,12 @@ public class HudsonService {
         for(Object project:hudsonProjects) {
             ElementNSImpl element = (ElementNSImpl) project;
             String name = getProjectName(element);
-            HudsonProject hudsonProject = findProject(name);
-            projects.add(hudsonProject);
+            try {
+                HudsonProject hudsonProject = findProject(name);
+                projects.add(hudsonProject);
+            } catch(HudsonProjectNotFoundException e) {
+                LOG.warn("Can't find project with name ["+name+"] but should be because the list comes from Hudson itself", e);
+            }
         }
         return projects;
     }
@@ -118,21 +123,27 @@ public class HudsonService {
     /**
      * @param projectName
      * @return HudsonProject found with its name
+     * @throws HudsonProjectNotFoundException
      */
-    public final HudsonProject findProject(String projectName) {
+    public final HudsonProject findProject(String projectName) throws HudsonProjectNotFoundException {
         String projectUrl = hudsonUrlBuilder.getProjectUrl(projectName);
         if (LOG.isInfoEnabled()) {
             LOG.info("Project url : "+projectUrl);
         }
         WebResource  projectResource = client.resource(projectUrl);
-        return createHudsonProject(projectResource);
+        try {
+            return createHudsonProject(projectResource);
+        } catch (HudsonProjectNotCreatedException e) {
+            throw new HudsonProjectNotFoundException(e);
+        }
     }
 
     /**
      * @param projectName
      * @return Average build duration time computed with old successful jobs
+     * @throws HudsonProjectNotFoundException
      */
-    public final long getAverageBuildDurationTime(String projectName) {
+    public final long getAverageBuildDurationTime(String projectName) throws HudsonProjectNotFoundException {
         HudsonProject hudsonProject = findProject(projectName);
         float sumBuildDurationTime = 0;
 
@@ -162,19 +173,24 @@ public class HudsonService {
         return color.endsWith("_anime");
     }
 
-    private HudsonProject createHudsonProject(WebResource projectResource) {
-        HudsonMavenMavenModuleSet modelJob = projectResource.get(HudsonMavenMavenModuleSet.class);
+    private HudsonProject createHudsonProject(WebResource projectResource) throws HudsonProjectNotCreatedException {
+        try {
+            HudsonMavenMavenModuleSet modelJob = projectResource.get(HudsonMavenMavenModuleSet.class);
 
-        HudsonProject hudsonProject = new HudsonProject();
-        hudsonProject.setName(modelJob.getName());
-        hudsonProject.setDescription(modelJob.getDescription());
-        hudsonProject.setLastBuildNumber(modelJob.getLastBuild().getNumber());
-        hudsonProject.setBuilding(getIsBuilding(modelJob));
-        hudsonProject.setArtifactId(modelJob.getModule().get(0).getName());
-        hudsonProject.setBuildNumbers(getBuildNumbers(modelJob));
-        hudsonProject.setLastBuild(findBuild(hudsonProject.getName(), hudsonProject.getLastBuildNumber()));
+            HudsonProject hudsonProject = new HudsonProject();
+            hudsonProject.setName(modelJob.getName());
+            hudsonProject.setDescription(modelJob.getDescription());
+            hudsonProject.setLastBuildNumber(modelJob.getLastBuild().getNumber());
+            hudsonProject.setBuilding(getIsBuilding(modelJob));
+            hudsonProject.setArtifactId(modelJob.getModule().get(0).getName());
+            hudsonProject.setBuildNumbers(getBuildNumbers(modelJob));
+            hudsonProject.setLastBuild(findBuild(hudsonProject.getName(), hudsonProject.getLastBuildNumber()));
 
-        return hudsonProject;
+            return hudsonProject;
+        } catch (UniformInterfaceException e) {
+            LOG.error("Error when calling createHudsonProject with projectResource:"+projectResource, e);
+            throw new HudsonProjectNotCreatedException(e);
+        }
     }
 
     /**
@@ -225,8 +241,9 @@ public class HudsonService {
     /**
      * @param projectName
      * @return Date which we think the project will finish to build
+     * @throws HudsonProjectNotFoundException
      */
-    public final Date getEstimatedFinishTime(String projectName) {
+    public final Date getEstimatedFinishTime(String projectName) throws HudsonProjectNotFoundException {
         HudsonProject project = findProject(projectName);
         HudsonBuild lastBuild = project.getLastBuild();
         Date startTime = lastBuild.getStartTime();

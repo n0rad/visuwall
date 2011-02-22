@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import com.jsmadja.wall.projectwall.Integration;
 import com.jsmadja.wall.projectwall.domain.TechnicalDebt;
-import com.jsmadja.wall.projectwall.service.ProjectNotFoundException;
+import com.jsmadja.wall.projectwall.service.HudsonProjectNotFoundException;
 import com.jsmadja.wall.projectwall.service.SonarService;
 
 public class SonarServiceITTest {
@@ -34,29 +34,29 @@ public class SonarServiceITTest {
     private static SonarService sonarService = new SonarService(Integration.SONAR_URL);
 
     @Test
-    public void should_retrieve_coverage() throws ProjectNotFoundException {
+    public void should_retrieve_coverage() throws HudsonProjectNotFoundException {
         Double coverage = sonarService.getCoverage(DEV_RADAR_PROJECT_ID);
         assertNotNull(coverage);
     }
 
     @Test
-    public void should_retrieve_project_by_artifact_id() throws ProjectNotFoundException {
+    public void should_retrieve_project_by_artifact_id() throws HudsonProjectNotFoundException {
         sonarService.getCoverage(FLUXX_ARTIFACT_ID);
     }
 
-    @Test(expected = ProjectNotFoundException.class)
-    public void should_throw_exception_when_project_does_not_exist() throws ProjectNotFoundException {
+    @Test(expected = HudsonProjectNotFoundException.class)
+    public void should_throw_exception_when_project_does_not_exist() throws HudsonProjectNotFoundException {
         sonarService.getCoverage("does.not.exist");
     }
 
     @Test
-    public void should_retrieve_rules_compliance() throws ProjectNotFoundException {
+    public void should_retrieve_rules_compliance() throws HudsonProjectNotFoundException {
         Double rulesCompliance = sonarService.getRulesCompliance(FLUXX_ARTIFACT_ID);
         assertNotNull(rulesCompliance);
     }
 
     @Test
-    public void should_retrieve_technical_debt() throws ProjectNotFoundException {
+    public void should_retrieve_technical_debt() throws HudsonProjectNotFoundException {
         TechnicalDebt technicalDebt = sonarService.getTechnicalDebt(FLUXX_ARTIFACT_ID);
         assertEquals(8.9, technicalDebt.getRatio(), 0);
         assertEquals(5037, technicalDebt.getCost());

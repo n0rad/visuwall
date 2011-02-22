@@ -16,11 +16,15 @@
 
 package com.jsmadja.wall.projectwall.service;
 
-public class ProjectNotFoundException extends Exception {
+public class HudsonProjectNotFoundException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
-    public ProjectNotFoundException(String cause) {
+    public HudsonProjectNotFoundException(Throwable cause) {
+        super(cause);
+    }
+
+    public HudsonProjectNotFoundException(String cause) {
         super(cause);
     }
 }

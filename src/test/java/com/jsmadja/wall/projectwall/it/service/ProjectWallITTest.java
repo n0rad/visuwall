@@ -16,10 +16,12 @@
 
 package com.jsmadja.wall.projectwall.it.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.jsmadja.wall.projectwall.domain.Project;
+import com.jsmadja.wall.projectwall.service.ProjectNotFoundException;
 import com.jsmadja.wall.projectwall.service.ProjectWallService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -37,11 +40,23 @@ public class ProjectWallITTest {
     private ProjectWallService projectWall;
 
     @Test
+    @Ignore
     public void should_retrieve_all_data() {
-        List<Project> projects = projectWall.getProjects();
+        List<Project> projects = projectWall.findAllProjects();
         for (Project project:projects) {
             assertNotNull(project.getHudsonProject());
             System.err.println(project.getHudsonProject());
         }
+    }
+
+    @Test
+    public void should_retrieve_data_of_one_project() throws ProjectNotFoundException {
+        Project project = projectWall.findProject("fluxx");
+        assertEquals("fluxx", project.getName());
+    }
+
+    @Test(expected=ProjectNotFoundException.class)
+    public void should_throw_exception_when_search_non_existant_project() throws ProjectNotFoundException {
+        projectWall.findProject("does.not.exist");
     }
 }
