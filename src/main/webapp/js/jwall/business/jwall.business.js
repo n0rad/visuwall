@@ -1,0 +1,3 @@
+jwall.business = {
+	service : {}
+};

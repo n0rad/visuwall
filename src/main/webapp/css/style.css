@@ -1,0 +1,47 @@
+#projectsTable {
+	height: 100%;
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 5px;
+}
+
+#projectsTable tr td {
+	padding: 5px;
+	vertical-align: middle;
+	margin: 1%;
+	overflow: hidden;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-border-radius: 10px;
+	color: white;
+	font-size: medium;
+	white-space: nowrap;
+	border-top-left-radius: 10px 10px;
+	border-top-right-radius: 10px 10px;
+	border-bottom-right-radius: 10px 10px;
+	border-bottom-left-radius: 10px 10px;
+}
+
+#projectsTable .success {
+	background-color: green;
+}
+
+#projectsTable .failure {
+	background-color: red;
+}
+
+
+.project p.projectName {
+	font-size: 4em;
+	font-weight: bold;
+	text-align: center;
+}
+
+
+.project span.when {
+	font-size: 0.3em;
+}
+
+.project .projectMetrics li {
+	display: block;
+}
