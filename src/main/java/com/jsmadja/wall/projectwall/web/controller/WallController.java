@@ -24,11 +24,14 @@ import javax.ws.rs.GET;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.service.ProjectWallService;
+import com.jsmadja.wall.projectwall.service.interfaces.CssService;
+import com.jsmadja.wall.projectwall.service.interfaces.JsService;
 
 @Controller
 @RequestMapping("/wall")
@@ -36,19 +39,27 @@ public class WallController {
 
 	@Autowired
 	ProjectWallService projectWallService;
-	
+
+	@Autowired
+	CssService cssService;
+
+	@Autowired
+	JsService jsService;
+
 	@GET
 	@RequestMapping
-	public ModelAndView getWall() {
+	public ModelAndView getWall() throws Exception {
 		List<Project> projects = projectWallService.getProjects();
-				
-		Map<String, Object> data = new HashMap<String, Object>(); 
-		data.put("projects", projects);
-		
-		
+
+		ModelMap modelMap = new ModelMap();
+
+		modelMap.put("projects", projects);
+		modelMap.put("jsLinks", jsService.getJsLinks("../"));
+		modelMap.put("cssLinks", cssService.getCssLinks("../"));
+
 		int jobsPerRow = (int) Math.round(Math.sqrt(projects.size()));
-		data.put("jobsPerRow", jobsPerRow);
-		
-		return new ModelAndView("wall", data);
+		modelMap.put("jobsPerRow", jobsPerRow);
+
+		return new ModelAndView("wall", modelMap);
 	}
 }

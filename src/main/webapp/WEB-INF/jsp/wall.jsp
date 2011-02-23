@@ -15,77 +15,25 @@
     limitations under the License.
 
 --%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>	
-<html>
-<!-- 
+<%@ page language="java" contentType="text/html; charset=utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
- -->
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-
-<jsp:include page="res/js.jsp"/>
-<jsp:include page="res/css.jsp"/>
+${cssLinks}
+${jsLinks}
 </head>
-<style>
-.projects {
-	height: 100%;
-	width: 100%;
-	border-collapse: separate;
-	border-spacing: 5px;
-}
-
-.projects tr td {
-	padding: 5px;
-	vertical-align: middle;
-	margin: 1%;
-	overflow: hidden;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	-border-radius: 10px;
-	color: white;
-	font-size: medium;
-	white-space: nowrap;
-	border-top-left-radius: 10px 10px;
-	border-top-right-radius: 10px 10px;
-	border-bottom-right-radius: 10px 10px;
-	border-bottom-left-radius: 10px 10px;
-}
-
-.project p.projectName {
-	font-size: 4em;
-	font-weight: bold;
-	text-align: center;
-}
-
-.projects .success {
-	background-color: green;
-}
-
-
-.projects .failure {
-	background-color: red;
-}
-
-
-.project p.time {
-	font-size: 2em;
-}
-
-
-
-
-</style>
 
 <body>
 
-<table class="projects" height="100%" width="100%">
-	<tr>
+<table id="projectsTable" height="100%" width="100%">
+</table>
+<%-- 	<tr>
 	<c:forEach varStatus="status" var="project" items="${projects}">
-
- 		<jsp:include page="domain/project.jsp"/>
-
-		<%-- new row --%>
+	<c:set var="project" value="${project}" scope="request"/>
+	<c:import url="domain/project.jsp"></c:import>
 		<c:if test="${not status.last && status.count % jobsPerRow == 0}">
 			<c:if test="${status.count > 0}">
 				</tr>
@@ -93,26 +41,8 @@
 			<tr>
 		</c:if>
 	</c:forEach>
-	</tr>
-</table>
+	</tr>  --%>
 
-
-
-
-
-<script type="text/javascript">
-// Infinite blink/fade 
-function effectFadeIn(classname) {
-	$("."+classname).fadeTo(1000, 0.4, effectFadeOut(classname));
-}
-function effectFadeOut(classname) {
-	$("."+classname).fadeTo(1000, 1, effectFadeIn(classname));
-}
-$(document).ready(function(){
-effectFadeIn('projectPart');
-});
-</script>
-
-
+<div id="overlay"></div>
 </body>
 </html>

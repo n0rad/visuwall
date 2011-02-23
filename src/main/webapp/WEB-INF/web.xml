@@ -84,7 +84,7 @@
     <jsp-config>
       <jsp-property-group>
         <url-pattern>*.jsp</url-pattern>
-      	 <scripting-invalid>true</scripting-invalid> 
+<!--       	 <scripting-invalid>true</scripting-invalid> --> 
 <!--         <trim-directive-whitespaces>true</trim-directive-whitespaces>-->
       </jsp-property-group>
     </jsp-config>

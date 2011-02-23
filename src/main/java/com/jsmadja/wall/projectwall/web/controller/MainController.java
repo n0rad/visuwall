@@ -26,8 +26,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/")
-public class MainController {
-
+public class MainController {	
+	
     @GET
     @RequestMapping
     protected ModelAndView handleRequestInternal(HttpServletRequest request,
