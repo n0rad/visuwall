@@ -49,15 +49,15 @@ public class WallController {
 	@GET
 	@RequestMapping
 	public ModelAndView getWall() throws Exception {
-		List<Project> projects = projectWallService.getProjects();
-
+		List<Project> projects = projectWallService.findAllProjects();
+				
 		ModelMap modelMap = new ModelMap();
 
 		modelMap.put("projects", projects);
 		modelMap.put("jsLinks", jsService.getJsLinks("../"));
 		modelMap.put("cssLinks", cssService.getCssLinks("../"));
-
-		int jobsPerRow = (int) Math.round(Math.sqrt(projects.size()));
+		
+				int jobsPerRow = (int) Math.round(Math.sqrt(projects.size()));
 		modelMap.put("jobsPerRow", jobsPerRow);
 
 		return new ModelAndView("wall", modelMap);

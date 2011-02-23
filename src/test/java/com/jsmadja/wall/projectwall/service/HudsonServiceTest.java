@@ -88,7 +88,7 @@ public class HudsonServiceTest {
     }
 
     @Test
-    public void should_retrieve_build_with_status() {
+    public void should_retrieve_build_with_status() throws HudsonProjectNotFoundException {
         HudsonBuild build = hudsonService.findProject("dev-radar").getLastBuild();
         assertTrue(build.isSuccessful());
     }
@@ -100,7 +100,7 @@ public class HudsonServiceTest {
     }
 
     @Test
-    public void should_retrieve_artifact_id() {
+    public void should_retrieve_artifact_id() throws HudsonProjectNotFoundException {
         String artifactId = hudsonService.findProject("fluxx").getArtifactId();
         assertEquals("fr.fluxx:fluxx", artifactId);
     }
@@ -113,7 +113,7 @@ public class HudsonServiceTest {
     }
 
     @Test
-    public void should_retrieve_average_build_duration_time() {
+    public void should_retrieve_average_build_duration_time() throws HudsonProjectNotFoundException {
         long duration108 = 31953;
         long duration107 = 29261;
 
@@ -125,7 +125,7 @@ public class HudsonServiceTest {
     }
 
     @Test
-    public void should_return_successful_build_numbers() {
+    public void should_return_successful_build_numbers() throws HudsonProjectNotFoundException {
         HudsonProject projects = hudsonService.findProject("fluxx");
         int[] successfullBuildNumbers = hudsonService.getSuccessfulBuildNumbers(projects);
         assertEquals(102, successfullBuildNumbers[0]);
@@ -133,7 +133,7 @@ public class HudsonServiceTest {
     }
 
     @Test
-    public void should_retrieve_estimated_remaining_time() {
+    public void should_retrieve_estimated_remaining_time() throws HudsonProjectNotFoundException {
         Date estimatedFinishTime = hudsonService.getEstimatedFinishTime("fluxx");
         assertNotNull(estimatedFinishTime);
     }

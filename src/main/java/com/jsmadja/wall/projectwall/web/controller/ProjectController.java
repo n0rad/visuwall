@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jsmadja.wall.projectwall.domain.Project;
+import com.jsmadja.wall.projectwall.domain.ProjectStatus;
 import com.jsmadja.wall.projectwall.service.ProjectWallService;
 
 @Controller
@@ -23,7 +24,12 @@ public class ProjectController {
 	
 	@RequestMapping
 	public @ResponseBody List<Project> getProjects() {
-		return projectWallService.getProjects();
+		return projectWallService.findAllProjects();
+	}
+	
+	@RequestMapping(value="status")
+	public @ResponseBody List<ProjectStatus> getStatus() {
+		return projectWallService.getStatus();
 	}
 
 //	@RequestMapping

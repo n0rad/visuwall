@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import com.jsmadja.wall.projectwall.domain.HudsonProject;
 import com.jsmadja.wall.projectwall.domain.Project;
+import com.jsmadja.wall.projectwall.domain.ProjectStatus;
 
 @Service
 public class ProjectWallService {
@@ -38,31 +39,56 @@ public class ProjectWallService {
     @Autowired
     private SonarService sonarService;
 
+    public List<ProjectStatus> getStatus() {
+    	return null;
+    }
+    
     /**
      * @return List of all available projects
      */
-    public final List<Project> getProjects() {
+    public final List<Project> findAllProjects() {
         List<Project> projects = new ArrayList<Project>();
 
-        List<HudsonProject> jobs = hudsonService.findAllProjects();
-        for (HudsonProject job:jobs) {
+        List<HudsonProject> hudsonProjects = hudsonService.findAllProjects();
+        for (HudsonProject hudsonProject:hudsonProjects) {
             if (LOG.isInfoEnabled()) {
-                LOG.info("Found "+job.getName());
+                LOG.info("Found "+hudsonProject.getName());
             }
             try {
-                Project project = new Project();
-                project.setName(job.getName());
-                project.setDescription(job.getDescription());
-                project.setCoverage(sonarService.getCoverage(job.getArtifactId()));
-                project.setRulesCompliance(sonarService.getRulesCompliance(job.getArtifactId()));
-                project.setHudsonProject(job);
+                Project project = createProject(hudsonProject);
                 projects.add(project);
-            } catch(ProjectNotFoundException e) {
+            } catch(HudsonProjectNotFoundException e) {
                 LOG.warn(e.getMessage());
             }
         }
 
         return projects;
+    }
+
+    /**
+     * Find project among available projects
+     * @param projectName
+     * @return
+     * @throws HudsonProjectNotFoundException
+     */
+    public Project findProject(String projectName) throws ProjectNotFoundException {
+        try {
+            HudsonProject hudsonProject = hudsonService.findProject(projectName);
+            return createProject(hudsonProject);
+        } catch(HudsonProjectNotFoundException e) {
+            LOG.error("Project with name ["+projectName+"] not found", e);
+            throw new ProjectNotFoundException(e);
+        }
+    }
+
+    private Project createProject(HudsonProject hudsonProject) throws HudsonProjectNotFoundException {
+        Project project = new Project();
+        project.setName(hudsonProject.getName());
+        project.setDescription(hudsonProject.getDescription());
+        project.setCoverage(sonarService.getCoverage(hudsonProject.getArtifactId()));
+        project.setRulesCompliance(sonarService.getRulesCompliance(hudsonProject.getArtifactId()));
+        project.setHudsonProject(hudsonProject);
+        return project;
     }
 
 }

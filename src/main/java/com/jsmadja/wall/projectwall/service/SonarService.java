@@ -40,9 +40,9 @@ public class SonarService {
     /**
      * @param projectId
      * @return
-     * @throws ProjectNotFoundException
+     * @throws HudsonProjectNotFoundException
      */
-    public final Double getCoverage(String projectId) throws ProjectNotFoundException {
+    public final Double getCoverage(String projectId) throws HudsonProjectNotFoundException {
         Measure coverage = getMeasure(projectId, "coverage");
         if (LOG.isInfoEnabled()) {
             LOG.info("Coverage measure for project #"+projectId+" is "+coverage);
@@ -53,9 +53,9 @@ public class SonarService {
     /**
      * @param projectId
      * @return
-     * @throws ProjectNotFoundException
+     * @throws HudsonProjectNotFoundException
      */
-    public final Double getRulesCompliance(String projectId) throws ProjectNotFoundException {
+    public final Double getRulesCompliance(String projectId) throws HudsonProjectNotFoundException {
         Measure rulesCompliance = getMeasure(projectId, "violations_density");
         if (LOG.isInfoEnabled()) {
             LOG.info("Rules compliance measure for project #"+projectId+" is "+rulesCompliance);
@@ -63,10 +63,10 @@ public class SonarService {
         return rulesCompliance.getValue();
     }
 
-    private Measure getMeasure(String projectId, String measureKey) throws ProjectNotFoundException {
+    private Measure getMeasure(String projectId, String measureKey) throws HudsonProjectNotFoundException {
         Resource project = sonar.find(ResourceQuery.createForMetrics(projectId, measureKey));
         if (project == null) {
-            throw new ProjectNotFoundException("Project with id #"+projectId+" not found in sonar "+sonarUrl);
+            throw new HudsonProjectNotFoundException("Project with id #"+projectId+" not found in sonar "+sonarUrl);
         }
         return project.getMeasure(measureKey);
     }
@@ -74,9 +74,9 @@ public class SonarService {
     /**
      * @param projectId
      * @return
-     * @throws ProjectNotFoundException
+     * @throws HudsonProjectNotFoundException
      */
-    public TechnicalDebt getTechnicalDebt(String projectId) throws ProjectNotFoundException {
+    public TechnicalDebt getTechnicalDebt(String projectId) throws HudsonProjectNotFoundException {
         if (LOG.isInfoEnabled()) {
             LOG.info("Fetch technical debt for project #"+projectId);
         }
