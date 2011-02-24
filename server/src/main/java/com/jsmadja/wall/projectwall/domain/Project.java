@@ -17,6 +17,7 @@
 package com.jsmadja.wall.projectwall.domain;
 
 import com.google.common.base.Objects;
+import com.jsmadja.wall.hudsonclient.domain.HudsonProject;
 
 public final class Project {
 

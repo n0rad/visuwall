@@ -21,9 +21,9 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import com.jsmadja.wall.hudsonclient.HudsonProjectNotFoundException;
 import com.jsmadja.wall.projectwall.Integration;
 import com.jsmadja.wall.projectwall.domain.TechnicalDebt;
-import com.jsmadja.wall.projectwall.service.HudsonProjectNotFoundException;
 import com.jsmadja.wall.projectwall.service.SonarService;
 
 public class SonarServiceITTest {

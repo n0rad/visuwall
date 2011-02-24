@@ -6,7 +6,7 @@ import java.util.Date;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
-public class HudsonBuild {
+public final class HudsonBuild {
 
     private boolean successful;
     private String[] commiters;

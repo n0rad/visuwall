@@ -223,12 +223,14 @@ public class Hudson {
     private boolean isSuccessful(HudsonMavenMavenModuleSetBuild job) {
         ElementNSImpl element = (ElementNSImpl) job.getResult();
 
-        if (element == null)
+        if (element == null) {
             return false;
+        }
 
         Node result = element.getFirstChild();
-        if (result == null)
+        if (result == null) {
             return false;
+        }
 
         return "SUCCESS".equals(result.getNodeValue());
     }

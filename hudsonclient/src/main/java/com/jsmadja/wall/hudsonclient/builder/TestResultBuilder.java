@@ -17,7 +17,7 @@ import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 /**
  * TestResultBuilder is used to manipulate Hudson Test data
  */
-public class TestResultBuilder {
+public final class TestResultBuilder {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestResultBuilder.class);
 
