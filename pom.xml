@@ -12,11 +12,17 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.jsmadja.wall</groupId>
-	<artifactId>project-wall</artifactId>
+	<artifactId>wall</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>pom</packaging>
 
-	<name>project-wall Web App</name>
+	<name>wall</name>
+
+
+	<modules>
+		<module>server</module>
+		<module>hudsonclient</module>
+	</modules>
 
 	<properties>
 		<spring.version>3.0.5.RELEASE</spring.version>
@@ -45,145 +51,22 @@
 		</developer>
 	</developers>
 
-	<dependencies>
-		<!-- Test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
-			<scope>test</scope>
-		</dependency>
 
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>1.4</version>
-		</dependency>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.jsmadja.wall</groupId>
+				<artifactId>wall-server</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jsmadja.wall</groupId>
+				<artifactId>wall-hudsonclient</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
-		<dependency>
-			<groupId>net.awired.ajsl</groupId>
-			<artifactId>ajsl-core</artifactId>
-			<version>1.0-ALPHA5</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-			<version>1.4</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>r07</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.sli4j</groupId>
-			<artifactId>sli4j-slf4j-logback</artifactId>
-			<version>2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>1.6.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.sonar</groupId>
-			<artifactId>sonar-ws-client</artifactId>
-			<version>2.4</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<!-- servlet/jsp -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.mycila.maven-license-plugin</groupId>
-				<artifactId>maven-license-plugin</artifactId>
-				<version>1.8.0</version>
-				<configuration>
-					<header>src/main/licence.txt</header>
-					<strictCheck>true</strictCheck>
-					<useDefaultExcludes>false</useDefaultExcludes>
-					<excludes>
-						<exclude>.gitignore</exclude>
-						<exclude>.git/**</exclude>
-						<exclude>target/**</exclude>
-						<exclude>.settings/**</exclude>
-						<exclude>.project</exclude>
-						<exclude>.classpath</exclude>
-						<exclude>LICENCE</exclude>
-						<exclude>README</exclude>
-						<exclude>**/MANIFEST.MF</exclude>
-						<exclude>src/main/webapp/WEB-INF/lib/**</exclude>
-						<exclude>src/main/webapp/WEB-INF/classes/**</exclude>
-						<exclude>src/main/webapp/images/**</exclude>
-						<exclude>.externalToolBuilders/**</exclude>
-						<exclude>.pmd/**</exclude>
-						<exclude>src/test/resources/**</exclude>
-						<exclude>src/main/webapp/js/jquery/**</exclude>
-						<exclude>src/main/xsd/**</exclude>
-						<exclude>infinitest.filters</exclude>
-						<exclude>src/main/java/com/jsmadja/wall/projectwall/generated/**</exclude>
-					</excludes>
-					<executions>
-						<execution>
-							<goals>
-								<goal>check</goal>
-							</goals>
-						</execution>
-					</executions>
-				</configuration>
-			</plugin>
-		</plugins>
-		<finalName>project-wall</finalName>
-	</build>
 
 	<repositories>
 		<repository>
@@ -191,8 +74,6 @@
 			<name>Java.net Repository</name>
 			<url>http://download.java.net/maven/glassfish</url>
 		</repository>
-
-
 
 		<repository>
 			<id>awired-repo</id>
