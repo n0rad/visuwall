@@ -2,20 +2,22 @@ jwall.view.projectTable = {
 		
 		table : 'projectsTable',
 		
-		addProjects : function(projects) {
+		initProjects : function(projects) {
+			var projectsPerLine = Math.round(Math.sqrt(projects.length));
 			
+			alert(projectsPerLine);
 		},
 		
 		addProject : function(project) {
-			var projectNumb = this.projectCount() + 1;
-			var projectsPerLine = Math.round(Math.sqrt(projectNumb));
+			//TODO manage adding a project to table, for the moment we reload the page
+			 location.reload();
 		},
 		
 		removeProject : function(project) {
 			alert("removeProject" + project);
 		},
 
-		projectCount : function() {
+		projectsCount : function() {
 			var td = $(this.table + " td");
 			alert(td);
 		},

@@ -1,29 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-            http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
+<!-- Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> 
+	- Arnaud LEMAIRE <alemaire at norad dot fr> Licensed under the Apache License, 
+	Version 2.0 (the "License"); you may not use this file except in compliance 
+	with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 						http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-3.0.xsd
 						http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
@@ -31,18 +19,23 @@
 						http://www.springframework.org/schema/mvc  http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"
 	default-autowire="byName">
 
-	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	<!-- DispatcherServlet Context: defines this servlet's request-processing 
+		infrastructure -->
 
 	<context:component-scan base-package="com.jsmadja.wall.projectwall.web" />
 
-	
+
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<mvc:annotation-driven />
-	
-<!--	 Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+
+	<mvc:resources mapping="/res/**" location="/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
+		in the /WEB-INF/views directory -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/jsp/" />
-		<property name="suffix" value=".jsp" />		
+		<property name="suffix" value=".jsp" />
 	</bean>
 
 
@@ -56,121 +49,125 @@
 
 
 
-<!--	<bean>-->
-<!--		<property name="mediaTypes">-->
-<!--			<map>-->
-<!--				<entry key="html" value="text/html"/>-->
-<!--				<entry key="json" value="application/json"/>-->
-<!--			</map>-->
-<!--		</property>-->
-<!--		<property name="viewResolvers">-->
-<!--			<list>-->
-<!--				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>-->
-<!--				<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
-<!--					<property name="prefix" value="/WEB-INF/jsp/"/>-->
-<!--					<property name="suffix" value=".jsp"/>-->
-<!--				</bean>-->
-<!--			</list>-->
-<!--		</property>-->
-<!--	</bean>-->
-<!--	-->
-<!--	<bean name="jsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/>-->
-<!--	-->
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-<!--	-->
-<!--	-->
-<!--	-->
-<!--	   1. <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">  -->
-<!--   2.   <property name="mediaTypes">  -->
-<!--   3.     <map>  -->
-<!--   4.       <entry key="html" value="text/html"/>  -->
-<!--   5.       <entry key="json" value="application/json"/>  -->
-<!--   6.     </map>  -->
-<!--   7.   </property>  -->
-<!--   8.   <property name="viewResolvers">  -->
-<!--   9.     <list>  -->
-<!--  10.       <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">  -->
-<!--  11.         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>  -->
-<!--  12.         <property name="prefix" value="/WEB-INF/jsp/"/>  -->
-<!--  13.         <property name="suffix" value=".jsp"/>  -->
-<!--  14.       </bean>  -->
-<!--  15.     </list>  -->
-<!--  16.   </property>  -->
-<!--  17.   <property name="defaultViews">  -->
-<!--  18.     <list>  -->
-<!--  19.       <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">  -->
-<!--  20.         <property name="prefixJson" value="true"/>  -->
-<!--  21.       </bean>  -->
-<!--  22.     </list>  -->
-<!--  23.   </property>  -->
-<!--  24. </bean>  -->
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-  <property name="order" value="1" />
-  <property name="mediaTypes">
-    <map>
-      <entry key="json" value="application/json" />
-<!--      <entry key="xml" value="application/xml" />-->
-    </map>
-  </property>
-  <property name="defaultViews">
-    <list>
-      <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
-<!--      <bean class="org.springframework.web.servlet.view.xml.MarshallingView">-->
-<!--        <constructor-arg>-->
-<!--          <bean class="org.springframework.oxm.xstream.XStreamMarshaller" />-->
-<!--        </constructor-arg>-->
-<!--      </bean>-->
-    </list>
-  </property>
-  <property name="ignoreAcceptHeader" value="true" />
-</bean>
+	<!-- <bean> -->
+	<!-- <property name="mediaTypes"> -->
+	<!-- <map> -->
+	<!-- <entry key="html" value="text/html"/> -->
+	<!-- <entry key="json" value="application/json"/> -->
+	<!-- </map> -->
+	<!-- </property> -->
+	<!-- <property name="viewResolvers"> -->
+	<!-- <list> -->
+	<!-- <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/> -->
+	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> -->
+	<!-- <property name="prefix" value="/WEB-INF/jsp/"/> -->
+	<!-- <property name="suffix" value=".jsp"/> -->
+	<!-- </bean> -->
+	<!-- </list> -->
+	<!-- </property> -->
+	<!-- </bean> -->
+	<!-- -->
+	<!-- <bean name="jsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/> -->
+	<!-- -->
 
-<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-  <property name="order" value="2" />
-  <property name="prefix" value="/WEB-INF/jsp/"/>
-  <property name="suffix" value=".jsp"/>
-</bean>
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- -->
+	<!-- -->
+	<!-- -->
+	<!-- 1. <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"> -->
+	<!-- 2. <property name="mediaTypes"> -->
+	<!-- 3. <map> -->
+	<!-- 4. <entry key="html" value="text/html"/> -->
+	<!-- 5. <entry key="json" value="application/json"/> -->
+	<!-- 6. </map> -->
+	<!-- 7. </property> -->
+	<!-- 8. <property name="viewResolvers"> -->
+	<!-- 9. <list> -->
+	<!-- 10. <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver"> -->
+	<!-- 11. <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/> -->
+	<!-- 12. <property name="prefix" value="/WEB-INF/jsp/"/> -->
+	<!-- 13. <property name="suffix" value=".jsp"/> -->
+	<!-- 14. </bean> -->
+	<!-- 15. </list> -->
+	<!-- 16. </property> -->
+	<!-- 17. <property name="defaultViews"> -->
+	<!-- 18. <list> -->
+	<!-- 19. <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"> -->
+	<!-- 20. <property name="prefixJson" value="true"/> -->
+	<!-- 21. </bean> -->
+	<!-- 22. </list> -->
+	<!-- 23. </property> -->
+	<!-- 24. </bean> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+				<!-- <entry key="xml" value="application/xml" /> -->
+			</map>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+				<!-- <bean class="org.springframework.web.servlet.view.xml.MarshallingView"> -->
+				<!-- <constructor-arg> -->
+				<!-- <bean class="org.springframework.oxm.xstream.XStreamMarshaller" 
+					/> -->
+				<!-- </constructor-arg> -->
+				<!-- </bean> -->
+			</list>
+		</property>
+		<property name="ignoreAcceptHeader" value="true" />
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="2" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
 
 </beans>

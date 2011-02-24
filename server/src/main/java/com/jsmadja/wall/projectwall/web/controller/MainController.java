@@ -16,23 +16,50 @@
 
 package com.jsmadja.wall.projectwall.web.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.jsmadja.wall.projectwall.domain.Project;
+import com.jsmadja.wall.projectwall.service.ProjectWallService;
+import com.jsmadja.wall.projectwall.service.interfaces.CssService;
+import com.jsmadja.wall.projectwall.service.interfaces.JsService;
+
 @Controller
 @RequestMapping("/")
-public class MainController {	
-	
-    @GET
-    @RequestMapping
-    protected ModelAndView handleRequestInternal(HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
-        return new ModelAndView("index", "from", "from  spring MVC !");
-    }
+public class MainController {
 
+	@Autowired
+	ProjectWallService projectWallService;
+
+	@Autowired
+	CssService cssService;
+
+	@Autowired
+	JsService jsService;
+
+	@RequestMapping
+	public ModelAndView getWall() throws Exception {
+		List<Project> projects = projectWallService.findAllProjects();
+				
+		ModelMap modelMap = new ModelMap();
+
+		modelMap.put("projects", projects);
+		modelMap.put("jsLinks", jsService.getJsLinks("res/"));
+		modelMap.put("cssLinks", cssService.getCssLinks("res/"));
+		
+				int jobsPerRow = (int) Math.round(Math.sqrt(projects.size()));
+		modelMap.put("jobsPerRow", jobsPerRow);
+
+		throw new Exception("salut l'exception");
+		
+		//return new ModelAndView("index", modelMap);
+	}
 }

@@ -38,6 +38,20 @@
 			<version>4.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		
+		
+		<!-- json -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		
 
 		<dependency>
 			<groupId>net.awired.ajsl</groupId>
