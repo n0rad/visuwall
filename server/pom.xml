@@ -25,7 +25,6 @@
 		<relativePath>../</relativePath>
 	</parent>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>com.jsmadja.wall</groupId>

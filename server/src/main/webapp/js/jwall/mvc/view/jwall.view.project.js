@@ -1,6 +1,13 @@
 jwall.view.project = {
+
 		
-		displayProject : function(project, htmlElement) {
+		changeColor : function() {
+			 b.hover(function() {
+				$(this).animate({ backgroundColor: "#00aadd"});
+			 });
+		},
+		
+		buildProject : function(project, htmlElement) {
 			LOG.info("display project", project);
 			var projectTR = $('<tr></tr>');
 			var projectTD = $('<td class="project success"></td>');
@@ -26,17 +33,18 @@ jwall.view.project = {
 			
 			
 			$('#projectsTable').append(projectTR);
+			
 		}
 
 //
-//function effectFadeIn(classname) {
-//	$("."+classname).fadeTo(3000, 0.4, effectFadeOut(classname));
-//}
-//function effectFadeOut(classname) {
-//	$("."+classname).fadeTo(3000, 1, effectFadeIn(classname));
-//}
-//$(document).ready(function(){
-//	effectFadeIn('testt');
-//});
+// function effectFadeIn(classname) {
+// $("."+classname).fadeTo(3000, 0.4, effectFadeOut(classname));
+// }
+// function effectFadeOut(classname) {
+// $("."+classname).fadeTo(3000, 1, effectFadeIn(classname));
+// }
+// $(document).ready(function(){
+// effectFadeIn('testt');
+// });
 
 };
