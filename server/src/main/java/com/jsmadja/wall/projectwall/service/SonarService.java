@@ -23,6 +23,7 @@ import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
+import com.jsmadja.wall.hudsonclient.HudsonProjectNotFoundException;
 import com.jsmadja.wall.projectwall.domain.TechnicalDebt;
 
 public class SonarService {

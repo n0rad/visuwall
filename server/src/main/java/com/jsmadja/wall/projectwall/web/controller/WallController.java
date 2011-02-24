@@ -16,9 +16,7 @@
 
 package com.jsmadja.wall.projectwall.web.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.ws.rs.GET;
 

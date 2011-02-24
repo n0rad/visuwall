@@ -1,0 +1,38 @@
+<mavenModuleSetBuild>
+	<action>
+		<cause>
+			<shortDescription>Démarré par l'utilisateur anonymous
+			</shortDescription>
+			<userName>anonymous</userName>
+		</cause>
+	</action>
+	<action>
+		<lastBuiltRevision>
+			<SHA1>eeb7ae36b031dae65eb063399429e3f268809dec</SHA1>
+			<branch>
+				<SHA1>eeb7ae36b031dae65eb063399429e3f268809dec</SHA1>
+				<name>origin/master</name>
+			</branch>
+		</lastBuiltRevision>
+	</action>
+	<action></action>
+	<action>
+		<failCount>0</failCount>
+		<skipCount>0</skipCount>
+		<totalCount>27</totalCount>
+		<urlName>testReport</urlName>
+	</action>
+	<action></action>
+	<action></action>
+	<building>false</building>
+	<duration>31953</duration>
+	<fullDisplayName>dev-radar #107</fullDisplayName>
+	<id>2011-02-11_11-35-40</id>
+	<keepLog>false</keepLog>
+	<number>107</number>
+	<result>SUCCESS</result>
+	<timestamp>1297420540000</timestamp>
+	<url>http://fluxx.fr.cr:8080/hudson/job/dev-radar/107/</url>
+	<builtOn></builtOn>
+	<changeSet></changeSet>
+</mavenModuleSetBuild>

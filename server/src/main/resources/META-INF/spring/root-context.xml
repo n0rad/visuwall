@@ -33,7 +33,7 @@
 	<!-- <context:annotation-config /> -->
 
 
-	<bean class="com.jsmadja.wall.projectwall.service.HudsonService">
+	<bean class="com.jsmadja.wall.hudsonclient.Hudson">
 		<constructor-arg index="0" type="java.lang.String">
 			<value>http://fluxx.fr.cr:8080/hudson</value>
 		</constructor-arg>

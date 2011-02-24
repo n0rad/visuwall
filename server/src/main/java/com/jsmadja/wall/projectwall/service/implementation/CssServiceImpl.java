@@ -2,10 +2,6 @@ package com.jsmadja.wall.projectwall.service.implementation;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileReader;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +13,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import com.jsmadja.wall.projectwall.application.tools.StringUtils;
 import com.jsmadja.wall.projectwall.service.interfaces.CssService;
 
 @Service

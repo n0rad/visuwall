@@ -24,7 +24,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jsmadja.wall.projectwall.domain.HudsonProject;
+import com.jsmadja.wall.hudsonclient.Hudson;
+import com.jsmadja.wall.hudsonclient.HudsonProjectNotFoundException;
+import com.jsmadja.wall.hudsonclient.domain.HudsonProject;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.ProjectStatus;
 
@@ -34,22 +36,22 @@ public class ProjectWallService {
     private static final Logger LOG = LoggerFactory.getLogger(ProjectWallService.class);
 
     @Autowired
-    private HudsonService hudsonService;
+    private Hudson hudson;
 
     @Autowired
     private SonarService sonarService;
 
     public List<ProjectStatus> getStatus() {
-    	return null;
+        return null;
     }
-    
+
     /**
      * @return List of all available projects
      */
     public final List<Project> findAllProjects() {
         List<Project> projects = new ArrayList<Project>();
 
-        List<HudsonProject> hudsonProjects = hudsonService.findAllProjects();
+        List<HudsonProject> hudsonProjects = hudson.findAllProjects();
         for (HudsonProject hudsonProject:hudsonProjects) {
             if (LOG.isInfoEnabled()) {
                 LOG.info("Found "+hudsonProject.getName());
@@ -73,7 +75,7 @@ public class ProjectWallService {
      */
     public Project findProject(String projectName) throws ProjectNotFoundException {
         try {
-            HudsonProject hudsonProject = hudsonService.findProject(projectName);
+            HudsonProject hudsonProject = hudson.findProject(projectName);
             return createProject(hudsonProject);
         } catch(HudsonProjectNotFoundException e) {
             LOG.error("Project with name ["+projectName+"] not found", e);
