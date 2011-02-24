@@ -57,9 +57,6 @@ public class MainController {
 		
 				int jobsPerRow = (int) Math.round(Math.sqrt(projects.size()));
 		modelMap.put("jobsPerRow", jobsPerRow);
-
-		throw new Exception("salut l'exception");
-		
-		//return new ModelAndView("index", modelMap);
+		return new ModelAndView("index", modelMap);
 	}
 }
