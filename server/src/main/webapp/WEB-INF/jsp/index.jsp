@@ -25,6 +25,11 @@
 	${jsLinks}
 </head>
 <body>
+
+	<div id="loader"><ul></ul></div>
+	<div id="loader1">loader1</div>
+	<div id="loader2">loader2</div>
+	
 	<table id="projectsTable" height="100%" width="100%"><tbody></tbody></table>
 	<div id="overlay"></div>
 </body>

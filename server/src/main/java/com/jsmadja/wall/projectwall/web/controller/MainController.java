@@ -47,16 +47,12 @@ public class MainController {
 
 	@RequestMapping
 	public ModelAndView getWall() throws Exception {
-		List<Project> projects = projectWallService.findAllProjects();
 				
 		ModelMap modelMap = new ModelMap();
 
-		modelMap.put("projects", projects);
 		modelMap.put("jsLinks", jsService.getJsLinks("res/"));
 		modelMap.put("cssLinks", cssService.getCssLinks("res/"));
 		
-				int jobsPerRow = (int) Math.round(Math.sqrt(projects.size()));
-		modelMap.put("jobsPerRow", jobsPerRow);
 		return new ModelAndView("index", modelMap);
 	}
 }
