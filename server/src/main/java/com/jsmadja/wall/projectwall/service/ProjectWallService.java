@@ -53,6 +53,7 @@ public class ProjectWallService {
             status.setBuilding(project.getHudsonProject().isBuilding());
             status.setLastBuildId(project.getHudsonProject().getLastBuildNumber());
             status.setName(project.getName());
+            statusList.add(status);
         }
         return statusList;
     }
