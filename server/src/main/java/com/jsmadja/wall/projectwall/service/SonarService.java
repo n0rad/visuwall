@@ -23,7 +23,6 @@ import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
-import com.jsmadja.wall.hudsonclient.HudsonProjectNotFoundException;
 import com.jsmadja.wall.projectwall.domain.TechnicalDebt;
 
 public class SonarService {
@@ -41,9 +40,9 @@ public class SonarService {
     /**
      * @param projectId
      * @return
-     * @throws HudsonProjectNotFoundException
+     * @throws SonarProjectNotFoundException
      */
-    public final Double getCoverage(String projectId) throws HudsonProjectNotFoundException {
+    public final Double getCoverage(String projectId) throws SonarProjectNotFoundException {
         Measure coverage = getMeasure(projectId, "coverage");
         if (LOG.isInfoEnabled()) {
             LOG.info("Coverage measure for project #"+projectId+" is "+coverage);
@@ -54,9 +53,9 @@ public class SonarService {
     /**
      * @param projectId
      * @return
-     * @throws HudsonProjectNotFoundException
+     * @throws SonarProjectNotFoundException
      */
-    public final Double getRulesCompliance(String projectId) throws HudsonProjectNotFoundException {
+    public final Double getRulesCompliance(String projectId) throws SonarProjectNotFoundException {
         Measure rulesCompliance = getMeasure(projectId, "violations_density");
         if (LOG.isInfoEnabled()) {
             LOG.info("Rules compliance measure for project #"+projectId+" is "+rulesCompliance);
@@ -64,10 +63,10 @@ public class SonarService {
         return rulesCompliance.getValue();
     }
 
-    private Measure getMeasure(String projectId, String measureKey) throws HudsonProjectNotFoundException {
+    private Measure getMeasure(String projectId, String measureKey) throws SonarProjectNotFoundException {
         Resource project = sonar.find(ResourceQuery.createForMetrics(projectId, measureKey));
         if (project == null) {
-            throw new HudsonProjectNotFoundException("Project with id #"+projectId+" not found in sonar "+sonarUrl);
+            throw new SonarProjectNotFoundException("Project with id #"+projectId+" not found in sonar "+sonarUrl);
         }
         return project.getMeasure(measureKey);
     }
@@ -75,9 +74,9 @@ public class SonarService {
     /**
      * @param projectId
      * @return
-     * @throws HudsonProjectNotFoundException
+     * @throws SonarProjectNotFoundException
      */
-    public TechnicalDebt getTechnicalDebt(String projectId) throws HudsonProjectNotFoundException {
+    public TechnicalDebt getTechnicalDebt(String projectId) throws SonarProjectNotFoundException {
         if (LOG.isInfoEnabled()) {
             LOG.info("Fetch technical debt for project #"+projectId);
         }
