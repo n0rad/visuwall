@@ -16,10 +16,7 @@
 
 package com.jsmadja.wall.projectwall.web.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,27 +33,27 @@ import com.jsmadja.wall.projectwall.service.interfaces.JsService;
 @RequestMapping("/")
 public class MainController {
 
-	@Autowired
-	ProjectWallService projectWallService;
+    @Autowired
+    ProjectWallService projectWallService;
 
-	@Autowired
-	CssService cssService;
+    @Autowired
+    CssService cssService;
 
-	@Autowired
-	JsService jsService;
+    @Autowired
+    JsService jsService;
 
-	@RequestMapping
-	public ModelAndView getWall() throws Exception {
-		List<Project> projects = projectWallService.findAllProjects();
-				
-		ModelMap modelMap = new ModelMap();
+    @RequestMapping
+    public ModelAndView getWall() throws Exception {
+        Collection<Project> projects = projectWallService.findAllProjects();
 
-		modelMap.put("projects", projects);
-		modelMap.put("jsLinks", jsService.getJsLinks("res/"));
-		modelMap.put("cssLinks", cssService.getCssLinks("res/"));
-		
-				int jobsPerRow = (int) Math.round(Math.sqrt(projects.size()));
-		modelMap.put("jobsPerRow", jobsPerRow);
-		return new ModelAndView("index", modelMap);
-	}
+        ModelMap modelMap = new ModelMap();
+
+        modelMap.put("projects", projects);
+        modelMap.put("jsLinks", jsService.getJsLinks("res/"));
+        modelMap.put("cssLinks", cssService.getCssLinks("res/"));
+
+        int jobsPerRow = (int) Math.round(Math.sqrt(projects.size()));
+        modelMap.put("jobsPerRow", jobsPerRow);
+        return new ModelAndView("index", modelMap);
+    }
 }

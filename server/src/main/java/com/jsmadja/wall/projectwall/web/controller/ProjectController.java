@@ -1,5 +1,6 @@
 package com.jsmadja.wall.projectwall.web.controller;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,27 +16,27 @@ import com.jsmadja.wall.projectwall.service.ProjectWallService;
 @RequestMapping("/project")
 public class ProjectController {
 
-	@Autowired
-	private ProjectWallService projectWallService;
+    @Autowired
+    private ProjectWallService projectWallService;
 
-	
-	@RequestMapping
-	public @ResponseBody List<Project> getProjects() {
-		return projectWallService.findAllProjects();
-	}
-	
-	@RequestMapping(value="status")
-	public @ResponseBody List<ProjectStatus> getStatus() {
-		return projectWallService.getStatus();
-	}
 
-//	@RequestMapping
-//	public @ResponseBody
-//	Project getProject(@RequestParam String name) {
-//		Project proj = new Project();
-//		proj.setName("projectName");
-//		proj.setDescription("this is the project description");
-//
-//		return proj;
-//	}
+    @RequestMapping
+    public @ResponseBody Collection<Project> getProjects() {
+        return projectWallService.findAllProjects();
+    }
+
+    @RequestMapping(value="status")
+    public @ResponseBody List<ProjectStatus> getStatus() {
+        return projectWallService.getStatus();
+    }
+
+    //	@RequestMapping
+    //	public @ResponseBody
+    //	Project getProject(@RequestParam String name) {
+    //		Project proj = new Project();
+    //		proj.setName("projectName");
+    //		proj.setDescription("this is the project description");
+    //
+    //		return proj;
+    //	}
 }
