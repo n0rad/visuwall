@@ -48,7 +48,7 @@ public class ProjectWallService {
 
     public List<ProjectStatus> getStatus() {
         List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
-        for (Project project: findAllProjects()) {
+        for (Project project:findAllProjects()) {
             ProjectStatus status = new ProjectStatus();
             status.setBuilding(project.getHudsonProject().isBuilding());
             status.setLastBuildId(project.getHudsonProject().getLastBuildNumber());
