@@ -11,6 +11,7 @@ import com.jsmadja.wall.hudsonclient.domain.TestResult;
 import com.jsmadja.wall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import com.jsmadja.wall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonTasksTestAggregatedTestResultActionChildReport;
 import com.sun.jersey.api.client.ClientHandlerException;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 
@@ -35,6 +36,10 @@ public final class TestResultBuilder {
             testResult.setTotalCount(surefireReport.getTotalCount());
             int integrationTestCount = countIntegrationTestsIn(surefireReport);
             testResult.setIntegrationTestCount(integrationTestCount);
+        } catch(UniformInterfaceException e) {
+            if(LOG.isInfoEnabled()) {
+                LOG.info("no test result");
+            }
         } catch(ClientHandlerException e) {
             if(LOG.isInfoEnabled()) {
                 LOG.info("no test result");
