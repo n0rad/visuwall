@@ -19,7 +19,7 @@ package com.jsmadja.wall.projectwall.it.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class ProjectWallITTest {
     @Test
     @Ignore
     public void should_retrieve_all_data() {
-        List<Project> projects = projectWall.findAllProjects();
+        Collection<Project> projects = projectWall.findAllProjects();
         for (Project project:projects) {
             assertNotNull(project.getHudsonProject());
             System.err.println(project.getHudsonProject());

@@ -1,6 +1,6 @@
 jwall = {
 		business : {service : {}},
-		mvc : {view: {}},
+		mvc : {controller : {}, view: {}, event: {}},
 		
 		/**
 		 * init on ready
@@ -8,8 +8,19 @@ jwall = {
 		init : function() {
 			$(function (){
 
+				// register controllers
+				ajsl.dispatcher.registerAll(jwall.mvc.controller);
+				
+				// register main controller
+				ajsl.dispatcher.registerMain(jwall.mvc.mainController);
+				
+				// register events
+				ajsl.event.registerAll(jwall.mvc.event);
+				
+				// init loader view
 				jwall.mvc.view.loader.init();
 				
+				// init loader
 				ajsl.loader.init(jwall.mvc.view.loader);
 				
 				
@@ -36,16 +47,16 @@ jwall = {
 						});
 					}
 				});
-				// Initialize history plugin.
-				// The callback is called at once by present location.hash.
-				//$.historyInit(ajsl.dispatcher.dispatch);
-				
-				
-				
-//				
+								
 				jwall.business.service.project.getProjects(function(projects) {
 					jwall.mvc.view.projectTable.initProjects(projects);
 				});
+				
+				// Initialize history plugin.
+				$.historyInit(ajsl.dispatcher.dispatch);
+				
+				// create updater
+				var updater = setInterval(jwall.mvc.event.updater['input#updater|click'], 10000);
 				
 			});
 		}

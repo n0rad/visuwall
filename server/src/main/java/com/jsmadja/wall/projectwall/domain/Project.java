@@ -68,6 +68,14 @@ public final class Project {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Project)) {
+            return false;
+        }
+        return name.equals(((Project)obj).name);
+    }
+
+    @Override
     public String toString() {
         return Objects.toStringHelper(this).add("name", name).add("description", description).add("coverage", coverage)
         .add("rules compliance", rulesCompliance).toString();
