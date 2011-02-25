@@ -17,7 +17,10 @@
 package com.jsmadja.wall.projectwall.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,15 +44,24 @@ public class ProjectWallService {
     @Autowired
     private SonarService sonarService;
 
+    private Set<Project> projects = new HashSet<Project>();
+
     public List<ProjectStatus> getStatus() {
-        return null;
+        List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
+        for (Project project:projects) {
+            ProjectStatus status = new ProjectStatus();
+            status.setBuilding(project.getHudsonProject().isBuilding());
+            status.setLastBuildId(project.getHudsonProject().getLastBuildNumber());
+            status.setName(project.getName());
+        }
+        return statusList;
     }
 
     /**
      * @return List of all available projects
      */
-    public final List<Project> findAllProjects() {
-        List<Project> projects = new ArrayList<Project>();
+    public final Collection<Project> findAllProjects() {
+        projects = new HashSet<Project>();
 
         List<HudsonProject> hudsonProjects = hudson.findAllProjects();
         for (HudsonProject hudsonProject:hudsonProjects) {
@@ -76,7 +88,10 @@ public class ProjectWallService {
     public Project findProject(String projectName) throws ProjectNotFoundException {
         try {
             HudsonProject hudsonProject = hudson.findProject(projectName);
-            return createProject(hudsonProject);
+            Project project = createProject(hudsonProject);
+            projects.remove(project);
+            projects.add(project);
+            return project;
         } catch(HudsonProjectNotFoundException e) {
             LOG.error("Project with name ["+projectName+"] not found", e);
             throw new ProjectNotFoundException(e);
