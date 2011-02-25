@@ -73,7 +73,7 @@ public class ProjectWallService {
                 Project project = createProject(hudsonProject);
                 projects.add(project);
             } catch(HudsonProjectNotFoundException e) {
-                LOG.warn(e.getMessage());
+                LOG.warn(e.getMessage(), e);
             }
         }
 
@@ -103,8 +103,12 @@ public class ProjectWallService {
         Project project = new Project();
         project.setName(hudsonProject.getName());
         project.setDescription(hudsonProject.getDescription());
-        project.setCoverage(sonarService.getCoverage(hudsonProject.getArtifactId()));
-        project.setRulesCompliance(sonarService.getRulesCompliance(hudsonProject.getArtifactId()));
+        try {
+            project.setCoverage(sonarService.getCoverage(hudsonProject.getArtifactId()));
+            project.setRulesCompliance(sonarService.getRulesCompliance(hudsonProject.getArtifactId()));
+        } catch(SonarProjectNotFoundException e) {
+            LOG.warn(e.getMessage());
+        }
         project.setHudsonProject(hudsonProject);
         return project;
     }
