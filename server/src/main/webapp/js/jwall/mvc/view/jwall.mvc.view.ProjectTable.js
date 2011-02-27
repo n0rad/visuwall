@@ -1,6 +1,6 @@
-jwall.mvc.view.projectTable = {
+jwall.mvc.view.ProjectTable = {
 		
-		table : 'projectsTable',
+		table : $('table#projectsTable'),
 		
 		initProjects : function(projects) {
 			var projectsPerLine = Math.round(Math.sqrt(projects.length));
@@ -12,9 +12,24 @@ jwall.mvc.view.projectTable = {
 					projectTR = $('<tr></tr>');
 					$('#projectsTable').append(projectTR);
 				}
-				var projectTD = jwall.mvc.view.project.buildProject(projects[i]);
+				var projectTD = jwall.mvc.view.Project.buildProject(projects[i], projectsPerLine);
 				projectTR.append(projectTD);
 			}
+		},
+		
+		updateStatus : function(projectsStatus) {
+			LOG.debug("Update projects status");
+			$("td", this.table).each(function() {
+				for (var i = 0; i < projectsStatus.length; i++) {
+					if (this.id == projectsStatus[i].name) {
+						jwall.mvc.view.Project.updateStatus($(this), projectsStatus[i]);
+					}
+				}
+			});
+			
+			//TODO find new projects
+			//TODO find removed projects
+			
 		},
 		
 		addProject : function(project) {

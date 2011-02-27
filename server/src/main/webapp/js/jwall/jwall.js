@@ -7,22 +7,20 @@ jwall = {
 		 */
 		init : function() {
 			$(function (){
-
+				
 				// register controllers
 				ajsl.dispatcher.registerAll(jwall.mvc.controller);
 				
 				// register main controller
-				ajsl.dispatcher.registerMain(jwall.mvc.mainController);
+				ajsl.dispatcher.registerMain(jwall.mvc.MainController);
 				
 				// register events
 				ajsl.event.registerAll(jwall.mvc.event);
-				
-				// init loader view
-				jwall.mvc.view.loader.init();
+		
+				jwall.mvc.view.Loader.init();
 				
 				// init loader
-				ajsl.loader.init(jwall.mvc.view.loader);
-				
+				ajsl.loader.init(jwall.mvc.view.Loader);
 				
 				// loader test
 				$("#loader1").bind('click', function() {
@@ -48,15 +46,14 @@ jwall = {
 					}
 				});
 								
-				jwall.business.service.project.getProjects(function(projects) {
-					jwall.mvc.view.projectTable.initProjects(projects);
-				});
+				// get projects and send to init
+				jwall.business.service.Project.projects(jwall.mvc.view.ProjectTable.initProjects);
 				
+				// create updater event
+				var updater = setInterval(jwall.mvc.event.Updater['input#updater|click'], 10000);
+
 				// Initialize history plugin.
 				$.historyInit(ajsl.dispatcher.dispatch);
-				
-				// create updater
-				var updater = setInterval(jwall.mvc.event.updater['input#updater|click'], 10000);
 				
 			});
 		}

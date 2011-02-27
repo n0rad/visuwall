@@ -12,7 +12,7 @@ ajsl.dispatcher = {
 	},
 
 	registerMain : function(ctlr) {
-		if (ctlr.run == undefined) {
+		if (typeof (ctlr.run) == undefined) {
 			LOG.error('main controller is not a simple controller');
 			return;
 		}
@@ -21,11 +21,11 @@ ajsl.dispatcher = {
 
 	registerAll : function(obj) {
 		// TODO check double ?
-	// if (this._controllers[name] != undefined) {
-	// LOG.warn("controller with name ", name, "is already registered");
-	// }
-	$.extend(this._ctlrs, obj);
-},
+		// if (this._controllers[name] != undefined) {
+		// LOG.warn("controller with name ", name, "is already registered");
+		// }
+		$.extend(this._ctlrs, obj);
+	},
 
 // function init() {
 	// $(window).history(function(e, ui) {
