@@ -32,6 +32,9 @@
 
         return this.each(function() {
             var obj = $(this);
+        	if (obj.hasClass(options.highlightClass)) {
+        		return;
+        	}
             var blinkCount = 0;
 
             obj.addClass(options.highlightClass);

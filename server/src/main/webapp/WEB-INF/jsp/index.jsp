@@ -32,6 +32,7 @@
 	<input id="updater" type="button" value="update"/>
 	
 	<table id="projectsTable" height="100%" width="100%"><tbody></tbody></table>
+	
 	<div id="overlay"></div>
 </body>
 </html>

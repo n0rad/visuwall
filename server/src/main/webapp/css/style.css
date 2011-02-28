@@ -7,7 +7,7 @@
 
 #projectsTable tr td {
 	padding: 5px;
-	vertical-align: middle;
+	vertical-align: top;
 	margin: 1%;
 	overflow: hidden;
 	-moz-border-radius: 10px;
@@ -30,11 +30,26 @@
 	background-color: red;
 }
 
+#projectsTable .commiters {
+	overflow: hidden;
+}
 
 .project p.projectName {
 	font-size: 4em;
 	font-weight: bold;
-	text-align: center;
+/*	text-align: center;*/
+}
+
+.project .unitTest {
+	float:left;
+/*	position: absolute;
+	bottom: 0px;*/
+}
+
+.project .iTest {
+	float:left;
+/*	position: absolute;
+	bottom: 25px;*/
 }
 
 
