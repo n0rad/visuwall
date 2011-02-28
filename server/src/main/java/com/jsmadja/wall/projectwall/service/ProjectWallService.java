@@ -18,6 +18,7 @@ package com.jsmadja.wall.projectwall.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,6 +57,15 @@ public class ProjectWallService {
             statusList.add(status);
         }
         return statusList;
+    }
+
+    public Date getEstimatedFinishTime(String projectName) throws ProjectNotFoundException {
+        try {
+            return hudson.getEstimatedFinishTime(projectName);
+        } catch (HudsonProjectNotFoundException e) {
+            LOG.error("Project with name ["+projectName+"] not found", e);
+            throw new ProjectNotFoundException(e);
+        }
     }
 
     /**
