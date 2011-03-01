@@ -3,6 +3,7 @@ package com.jsmadja.wall.hudsonclient.builder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.xerces.dom.ElementNSImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NodeList;
@@ -13,7 +14,6 @@ import com.jsmadja.wall.hudsonclient.generated.hudson.surefireaggregatedreport.H
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 
 /**
  * TestResultBuilder is used to manipulate Hudson Test data
