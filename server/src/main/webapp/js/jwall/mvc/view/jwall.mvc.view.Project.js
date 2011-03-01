@@ -9,16 +9,16 @@ jwall.mvc.view.Project = {
 		buildProject : function(project, projectsByRow) {
 			var width = 100 / projectsByRow;
 			LOG.info("Display project", project);
-			var projectTD = $('<td style="width:' + width + '%" id="' + project.name + '" class="project"></td>');
-			projectTD.append($('<p class="projectName">' + project.name + '<span id="when"></span></p>'));
-			projectTD.append($('<p>alemaire, jsmadja</p>'));
+			var projectTD = $('<td style="width:' + width + '%" id="' + project.name + '" class="project success"><div id="content"></div></td>');
+			projectTD.append($('<div class="projectName">' + project.name + '<span id="when"></span></div>'));
+			projectTD.append($('<p class="commiters"></p>'));
 			projectTD.append($('<p class="timeleft"></p>'));
 			projectTD.append($('<div class="unitTest"></div>'));
 			projectTD.append($('<div class="iTest"></div>'));
 			
 			
-			jwall.mvc.view.Stats.TestStatus([[30.2], [20.5], [10.4]], $(".unitTest", projectTD)[0]);
-			jwall.mvc.view.Stats.TestStatus([[20.2], [10.5], [40.4]], $(".iTest", projectTD)[0]);
+			//jwall.mvc.view.Stats.TestStatus([[30.2], [20.5], [10.4]], $(".unitTest", projectTD)[0]);
+			//jwall.mvc.view.Stats.TestStatus([[20.2], [10.5], [40.4]], $(".iTest", projectTD)[0]);
 			
 			
 			//$(".commiters", projectTD).marquee({});
@@ -99,17 +99,38 @@ jwall.mvc.view.Project = {
 			var statusClass;
 			if (project.hudsonProject.lastBuild.successful == true) {
 				statusClass = 'success';
+				$('p.commiters').hide().html('');
 			} else {
 				statusClass = 'failure';
+				var commiters = this._buildCommiters(project);
+				$('p.commiters').html(commiters).show();
 			}
 			projectTD.switchClasses(this.statusClasses, statusClass, 3000);	
 		},
 		
 		_updateBuilding : function(projectTD, isBuilding) {
 			if (isBuilding) {
-				projectTD.blink({fadeDownSpeed : 3000, fadeUpSpeed : 3000, blinkCount : -1});
+				jwall.business.service.Project.finishTime(projectTD.attr('id'), function(data) {
+					$('p.timeleft', projectTD).countdown({until: new Date(data), compact: true, format: 'dHMS', onExpiry : function() {
+						$('p.timeleft', projectTD).html('N/A');
+					}}).show();
+				});
+				projectTD.blink({fadeDownSpeed : 2000, fadeUpSpeed : 2000, blinkCount : -1, fadeToOpacity : 0.6});
 			} else {
 				projectTD.stopBlink();
+				$('p.timeleft', projectTD).hide().html('');
 			}
+		},
+		
+		_buildCommiters : function(project) {
+			var commiterString = "";
+			for (var i = 0; i < project.hudsonProject.lastBuild.commiters.length; i++) {
+				var commiter =  project.hudsonProject.lastBuild.commiters[i];
+				if (i > 0) {
+					commiterString += ", ";
+				}
+				commiterString += commiter; 
+			}
+			return commiterString;
 		}
 };

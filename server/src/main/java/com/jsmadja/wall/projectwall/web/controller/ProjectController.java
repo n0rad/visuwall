@@ -1,6 +1,7 @@
 package com.jsmadja.wall.projectwall.web.controller;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +37,11 @@ public class ProjectController {
         return projectWallService.findProject(projectName);
     }
     
+    @RequestMapping("finishTime")
+    public @ResponseBody Date getFinishTime(@RequestParam("projectName") String projectName) throws Exception {
+    	return projectWallService.getEstimatedFinishTime(projectName);
+    }
+    
+    
 
-    //	@RequestMapping
-    //	public @ResponseBody
-    //	Project getProject(@RequestParam String name) {
-    //		Project proj = new Project();
-    //		proj.setName("projectName");
-    //		proj.setDescription("this is the project description");
-    //
-    //		return proj;
-    //	}
 }

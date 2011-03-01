@@ -19,20 +19,38 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>JWall</title>
-	${cssLinks}
-	${jsLinks}
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>JWall</title>
+${cssLinks} ${jsLinks}
 </head>
 <body>
 
-	<div id="loader"><ul></ul></div>
-	<div id="loader1">loader1</div>
-	<div id="loader2">loader2</div>
-	<input id="updater" type="button" value="update"/>
-	
-	<table id="projectsTable" height="100%" width="100%"><tbody></tbody></table>
-	
-	<div id="overlay"></div>
+<table id="projectsTable" height="100%" width="100%">
+	<tbody>
+		<!-- <tr>
+			<td class="project success" width="50%">
+			<div class="content">
+			<div class="projectName">Project-Test</div>
+			<div class="commiters">
+			<p style="font-size: 3em; line-height: 1em">alemaire, jsmadja</p>
+			</div>
+			</div>
+			</td>
+			<td class="project success" width="50%">
+			<div class="projectName">Project-Test</div>
+			</td>
+		</tr>
+		<tr>
+			<td class="project success" width="50%">
+			<div class="projectName">Project-Test</div>
+			</td>
+			<td class="project success" width="50%">
+			<div class="projectName">Project-Test</div>
+			</td>
+		</tr> -->
+	</tbody>
+</table>
+
+<div id="overlay"></div>
 </body>
 </html>

@@ -14,8 +14,10 @@ jwall = {
 				// register main controller
 				ajsl.dispatcher.registerMain(jwall.mvc.MainController);
 				
+				ajsl.log.setLevel('warn');
+				
 				// register events
-				ajsl.event.registerAll(jwall.mvc.event);
+				//ajsl.event.registerAll(jwall.mvc.event);
 		
 				jwall.mvc.view.Loader.init();
 				
@@ -58,6 +60,7 @@ jwall = {
 			});
 		}
 };
+
 
 
 jwall.init();

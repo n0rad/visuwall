@@ -5,17 +5,14 @@
 	border-spacing: 5px;
 }
 
+
 #projectsTable tr td {
-	padding: 5px;
+	border: 1px solid black;
 	vertical-align: top;
-	margin: 1%;
 	overflow: hidden;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	-border-radius: 10px;
-	color: white;
-	font-size: medium;
-	white-space: nowrap;
 	border-top-left-radius: 10px 10px;
 	border-top-right-radius: 10px 10px;
 	border-bottom-right-radius: 10px 10px;
@@ -32,11 +29,23 @@
 
 #projectsTable .commiters {
 	overflow: hidden;
+	top:130px;
+	margin-left: 10px;
 }
 
-.project p.projectName {
-	font-size: 4em;
+.project .content {
+	position: relative;
+	height: 100%;
+}
+
+.project .projectName {
+	overflow : visible;
+	font-size: 5em;
+	line-height: 1em;
 	font-weight: bold;
+	/*position: absolute;*/
+	top: 10px;
+	left: 10px;	
 /*	text-align: center;*/
 }
 

@@ -11,5 +11,10 @@ jwall.business.service.Project = {
 	status : function(callback) {
 		$this = this;
 		$.getJSON("project/status", {}, callback);
+	},
+	
+	finishTime : function(projectName, callback) {
+		$this = this;
+		$.getJSON("project/finishTime", {projectName : projectName}, callback);
 	}
 };
