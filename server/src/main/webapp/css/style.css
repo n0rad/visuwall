@@ -7,7 +7,7 @@
 
 
 #projectsTable tr td {
-	border: 1px solid black;
+/*	border: 1px solid black;*/
 	vertical-align: top;
 	overflow: hidden;
 	-moz-border-radius: 10px;
@@ -17,6 +17,7 @@
 	border-top-right-radius: 10px 10px;
 	border-bottom-right-radius: 10px 10px;
 	border-bottom-left-radius: 10px 10px;
+	color: white;
 }
 
 #projectsTable .success {
@@ -28,9 +29,13 @@
 }
 
 #projectsTable .commiters {
-	overflow: hidden;
+	/*overflow: hidden;
 	top:130px;
-	margin-left: 10px;
+	margin-left: 10px;*/
+	
+		text-align: center;
+	font-size: 5em;
+	padding-top: 10px;
 }
 
 .project .content {
@@ -41,10 +46,10 @@
 .project .projectName {
 	overflow : visible;
 	font-size: 5em;
-	line-height: 1em;
+	line-height: 1.6em;
 	font-weight: bold;
 	/*position: absolute;*/
-	top: 10px;
+	top: 5px;
 	left: 10px;	
 /*	text-align: center;*/
 }
@@ -61,6 +66,11 @@
 	bottom: 25px;*/
 }
 
+.project .timeleft {
+	text-align: center;
+	font-size: 5em;
+	padding-top: 10px;
+}
 
 .project span.when {
 	font-size: 0.3em;
