@@ -18,7 +18,6 @@
 
 	<name>wall</name>
 
-
 	<modules>
 		<module>server</module>
 		<module>hudsonclient</module>
@@ -26,6 +25,7 @@
 
 	<properties>
 		<spring.version>3.0.5.RELEASE</spring.version>
+		<spring-security.version>3.0.5.RELEASE</spring-security.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jackson.version>1.5.0</jackson.version>
 	</properties>
@@ -48,7 +48,7 @@
 		<developer>
 			<id>alemaire</id>
 			<name>Arnaud Lemaire</name>
-			<email>alemaire at norad dot fr</email>
+			<email>dev at norad dot fr</email>
 		</developer>
 	</developers>
 
