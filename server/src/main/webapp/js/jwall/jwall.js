@@ -47,9 +47,8 @@ jwall = {
 						});
 					}
 				});
-								
-				// get projects and send to init
-				jwall.business.service.Project.projects(jwall.mvc.view.ProjectTable.initProjects);
+				
+				jwall.mvc.controller.ProjectController.buildProjects();
 				
 				// create updater event
 				var updater = setInterval(jwall.mvc.event.Updater['input#updater|click'], 10000);
