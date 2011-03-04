@@ -43,7 +43,7 @@ public class HudsonTest {
 
     HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(HUDSON_URL);
 
-    private Hudson hudsonService = new Hudson(HUDSON_URL) {
+    private Hudson hudson = new Hudson(HUDSON_URL) {
         @Override
         Client buildJerseyClient(ClientConfig clientConfig) {
             ClientHandler clientHandler = FileClientHandlerBuilder.newFileClientHandler()
@@ -66,7 +66,7 @@ public class HudsonTest {
 
     @Test
     public void should_retrieve_projects_from_hudson() throws JAXBException {
-        List<HudsonProject> projects = hudsonService.findAllProjects();
+        List<HudsonProject> projects = hudson.findAllProjects();
         assertFalse(projects.isEmpty());
         assertEquals("dev-radar", projects.get(0).getName());
         assertEquals("fluxx", projects.get(1).getName());
@@ -74,39 +74,39 @@ public class HudsonTest {
 
     @Test
     public void should_retrieve_projects_with_building_status() {
-        List<HudsonProject> projects = hudsonService.findAllProjects();
+        List<HudsonProject> projects = hudson.findAllProjects();
         assertFalse(projects.get(0).isBuilding());
         assertTrue(projects.get(1).isBuilding());
     }
 
     @Test
     public void should_retrieve_build_with_last_commiters() {
-        HudsonBuild build = hudsonService.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
+        HudsonBuild build = hudson.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
         assertEquals("Julien Smadja", build.getCommiters()[0]);
         assertEquals("Arnaud Lemaire", build.getCommiters()[1]);
     }
 
     @Test
     public void should_retrieve_build_with_status() throws HudsonProjectNotFoundException {
-        HudsonBuild build = hudsonService.findProject("dev-radar").getLastBuild();
+        HudsonBuild build = hudson.findProject("dev-radar").getLastBuild();
         assertTrue(build.isSuccessful());
     }
 
     @Test
     public void should_retrieve_build_start_time() {
-        HudsonBuild build = hudsonService.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
+        HudsonBuild build = hudson.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
         assertEquals(1298022037803L, build.getStartTime().getTime());
     }
 
     @Test
     public void should_retrieve_artifact_id() throws HudsonProjectNotFoundException {
-        String artifactId = hudsonService.findProject("fluxx").getArtifactId();
+        String artifactId = hudson.findProject("fluxx").getArtifactId();
         assertEquals("fr.fluxx:fluxx", artifactId);
     }
 
     @Test
     public void should_retrieve_projects_with_description() {
-        List<HudsonProject> projects = hudsonService.findAllProjects();
+        List<HudsonProject> projects = hudson.findAllProjects();
         assertEquals("Dev Radar, un mur d'informations", projects.get(0).getDescription());
         assertEquals("Fluxx, aggrégez vos flux RSS!", projects.get(1).getDescription());
     }
@@ -119,27 +119,27 @@ public class HudsonTest {
         float sumDuration = duration107 + duration108;
         long averageBuildDurationTime = (long)(sumDuration / 2);
 
-        long duration = hudsonService.getAverageBuildDurationTime("dev-radar");
+        long duration = hudson.getAverageBuildDurationTime("dev-radar");
         assertEquals(averageBuildDurationTime, duration);
     }
 
     @Test
     public void should_return_successful_build_numbers() throws HudsonProjectNotFoundException {
-        HudsonProject projects = hudsonService.findProject("fluxx");
-        int[] successfullBuildNumbers = hudsonService.getSuccessfulBuildNumbers(projects);
+        HudsonProject projects = hudson.findProject("fluxx");
+        int[] successfullBuildNumbers = hudson.getSuccessfulBuildNumbers(projects);
         assertEquals(102, successfullBuildNumbers[0]);
         assertEquals(101, successfullBuildNumbers[1]);
     }
 
     @Test
     public void should_retrieve_estimated_remaining_time() throws HudsonProjectNotFoundException {
-        Date estimatedFinishTime = hudsonService.getEstimatedFinishTime("fluxx");
+        Date estimatedFinishTime = hudson.getEstimatedFinishTime("fluxx");
         assertNotNull(estimatedFinishTime);
     }
 
     @Test
     public void should_retrieve_test_result() {
-        HudsonBuild build = hudsonService.findBuild("dev-radar", 74);
+        HudsonBuild build = hudson.findBuild("dev-radar", 74);
         TestResult testResult = build.getTestResult();
         assertEquals(1, testResult.getFailCount());
         assertEquals(13, testResult.getPassCount());
