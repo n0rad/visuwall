@@ -18,7 +18,6 @@ package com.jsmadja.wall.projectwall.it.domain;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.Collection;
@@ -26,8 +25,10 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import com.jsmadja.wall.projectwall.Integration;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.ProjectStatus;
 import com.jsmadja.wall.projectwall.domain.Software;
@@ -42,17 +43,8 @@ public class WallITTest {
     @Before
     public void init() {
         wall = new Wall();
-        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://fluxx.fr.cr:8080/hudson"));
-        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://integration.wormee.orange-vallee.net:8080/hudson"));
-    }
-
-    @Test
-    public void should_retrieve_all_data() {
-        Collection<Project> projects = wall.findAllProjects();
-        for (Project project:projects) {
-            assertNotNull(project.getHudsonProject());
-            System.err.println(project.getHudsonProject());
-        }
+        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, Integration.HUDSON_URL));
+        //        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://integration.wormee.orange-vallee.net:8080/hudson"));
     }
 
     @Test
@@ -67,6 +59,7 @@ public class WallITTest {
     }
 
     @Test
+    @Ignore
     public void should_retrieve_project_with_no_last_build() throws ProjectNotFoundException {
         Project project = wall.findProjectByName("on-parameter-tester-staging");
         assertNull(project.getHudsonProject().getLastBuild());
