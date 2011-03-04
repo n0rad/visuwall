@@ -3,12 +3,14 @@ package com.jsmadja.wall.projectwall.web.controller;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -19,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jsmadja.wall.projectwall.persistence.dao.UserService;
-import com.jsmadja.wall.projectwall.persistence.entity.User;
+import com.jsmadja.wall.projectwall.domain.User;
+import com.jsmadja.wall.projectwall.service.UserService;
 
 @Controller
 @RequestMapping("security")

@@ -21,6 +21,7 @@ import com.jsmadja.wall.hudsonclient.domain.HudsonProject;
 
 public final class Project {
 
+    private String id;
     private String name;
     private String description;
     private double coverage;
@@ -67,18 +68,32 @@ public final class Project {
         this.hudsonProject = hudsonProject;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Project)) {
             return false;
         }
-        return name.equals(((Project)obj).name);
+        Project project = (Project)obj;
+        return id.equals(project.id) && name.equals(project.name);
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).add("name", name).add("description", description).add("coverage", coverage)
-        .add("rules compliance", rulesCompliance).toString();
+        return Objects.toStringHelper(this)
+        .add("id", id) //
+        .add("name", name) //
+        .add("description", description) //
+        .add("coverage", coverage) //
+        .add("rules compliance", rulesCompliance) //
+        .toString();
     }
 
 }

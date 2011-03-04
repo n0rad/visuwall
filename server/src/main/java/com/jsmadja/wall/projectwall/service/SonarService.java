@@ -16,6 +16,13 @@
 
 package com.jsmadja.wall.projectwall.service;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang.StringUtils.isNotBlank;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.wsclient.Sonar;
@@ -23,18 +30,32 @@ import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
+import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.TechnicalDebt;
 
-public class SonarService {
+public class SonarService implements Service {
 
-    private final String sonarUrl;
-    private final Sonar sonar;
+    private String url;
+    private String login;
+    private String password;
+
+    private Sonar sonar;
 
     private static final Logger LOG = LoggerFactory.getLogger(SonarService.class);
 
-    public SonarService(String sonarUrl) {
-        this.sonarUrl = sonarUrl;
-        sonar = Sonar.create(sonarUrl);
+    @Override
+    public void init() {
+        if (isBlank(url)) {
+            throw new IllegalStateException("url can't be null.");
+        }
+        if (isNotBlank(login) && isNotBlank(password)) {
+            sonar = Sonar.create(url);
+        } else {
+            sonar = Sonar.create(url, login, login);
+        }
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Initialize sonar with url "+url);
+        }
     }
 
     /**
@@ -44,8 +65,8 @@ public class SonarService {
      */
     public final Double getCoverage(String projectId) throws SonarProjectNotFoundException {
         Measure coverage = getMeasure(projectId, "coverage");
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Coverage measure for project #"+projectId+" is "+coverage);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Coverage measure for project #"+projectId+" is "+coverage);
         }
         return coverage.getValue();
     }
@@ -57,8 +78,8 @@ public class SonarService {
      */
     public final Double getRulesCompliance(String projectId) throws SonarProjectNotFoundException {
         Measure rulesCompliance = getMeasure(projectId, "violations_density");
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Rules compliance measure for project #"+projectId+" is "+rulesCompliance);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Rules compliance measure for project #"+projectId+" is "+rulesCompliance);
         }
         return rulesCompliance.getValue();
     }
@@ -66,7 +87,7 @@ public class SonarService {
     private Measure getMeasure(String projectId, String measureKey) throws SonarProjectNotFoundException {
         Resource project = sonar.find(ResourceQuery.createForMetrics(projectId, measureKey));
         if (project == null) {
-            throw new SonarProjectNotFoundException("Project with id #"+projectId+" not found in sonar "+sonarUrl);
+            throw new SonarProjectNotFoundException("Project with id #"+projectId+" not found in sonar "+url);
         }
         return project.getMeasure(measureKey);
     }
@@ -77,8 +98,8 @@ public class SonarService {
      * @throws SonarProjectNotFoundException
      */
     public TechnicalDebt getTechnicalDebt(String projectId) throws SonarProjectNotFoundException {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Fetch technical debt for project #"+projectId);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Fetch technical debt for project #"+projectId);
         }
 
         Measure ratio = getMeasure(projectId, "technical_debt_ratio");
@@ -97,4 +118,43 @@ public class SonarService {
         return technicalDebt;
     }
 
+    @Override
+    public List<Project> findAllProjects() {
+        return new ArrayList<Project>();
+    }
+
+    @Override
+    public void populate(Project project) throws ProjectNotFoundException {
+        String projectId = project.getId();
+        try {
+            project.setRulesCompliance(getRulesCompliance(projectId));
+        } catch (SonarProjectNotFoundException e) {
+            throw new ProjectNotFoundException(e);
+        }
+    }
+
+    @Override
+    public Date getEstimatedFinishTime(Project project) throws ProjectNotFoundException {
+        throw new RuntimeException("Not implemented!");
+    }
+
+    @Override
+    public Project findProjectByName(String projectName) throws ProjectNotFoundException {
+        throw new RuntimeException("Not implemented!");
+    }
+
+    @Override
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @Override
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    @Override
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

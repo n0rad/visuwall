@@ -66,8 +66,8 @@ public class Hudson {
      */
     public final List<HudsonProject> findAllProjects() {
         String projectsUrl = hudsonUrlBuilder.getAllProjectsUrl();
-        if (LOG.isInfoEnabled()) {
-            LOG.info("All project url : "+projectsUrl);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("All project url : "+projectsUrl);
         }
         WebResource hudsonResource = client.resource(projectsUrl);
         HudsonModelHudson hudson = hudsonResource.get(HudsonModelHudson.class);
@@ -92,13 +92,13 @@ public class Hudson {
      * @return HudsonBuild found in Hudson with its project name and build number
      */
     public final HudsonBuild findBuild(String projectName, int buildNumber) {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Find build with project name ["+projectName+"] and buildNumber ["+buildNumber+"]");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Find build with project name ["+projectName+"] and buildNumber ["+buildNumber+"]");
         }
 
         String buildUrl = hudsonUrlBuilder.getJobUrl(projectName, buildNumber);
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Build url : "+buildUrl);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Build url : "+buildUrl);
         }
         WebResource jobResource = client.resource(buildUrl);
         HudsonMavenMavenModuleSetBuild setBuild = jobResource.get(HudsonMavenMavenModuleSetBuild.class);
@@ -110,8 +110,8 @@ public class Hudson {
         hudsonBuild.setCommiters(getCommiters(setBuild));
 
         String testResultUrl = hudsonUrlBuilder.getTestResultUrl(projectName, buildNumber);
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Test result : "+testResultUrl);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Test result : "+testResultUrl);
         }
         WebResource testResultResource = client.resource(testResultUrl);
         hudsonBuild.setTestResult(hudsonTestService.build(testResultResource));
@@ -126,8 +126,8 @@ public class Hudson {
      */
     public final HudsonProject findProject(String projectName) throws HudsonProjectNotFoundException {
         String projectUrl = hudsonUrlBuilder.getProjectUrl(projectName);
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Project url : "+projectUrl);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Project url : "+projectUrl);
         }
         WebResource  projectResource = client.resource(projectUrl);
         try {
@@ -152,8 +152,8 @@ public class Hudson {
             sumBuildDurationTime += successfulBuild.getDuration();
         }
         long averageTime = (long) (sumBuildDurationTime/successfulBuilds.length);
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Average build time of "+projectName+" is "+averageTime+" ms");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Average build time of "+projectName+" is "+averageTime+" ms");
         }
         return averageTime;
     }
@@ -255,8 +255,8 @@ public class Hudson {
         long averageBuildDurationTime = getAverageBuildDurationTime(projectName);
         DateTime estimatedFinishTime = new DateTime(startTime.getTime()).plus(averageBuildDurationTime);
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Estimated finish time of project "+projectName+" is "+estimatedFinishTime+" ms");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Estimated finish time of project "+projectName+" is "+estimatedFinishTime+" ms");
         }
 
         return estimatedFinishTime.toDate();
