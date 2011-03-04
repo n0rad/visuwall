@@ -15,18 +15,43 @@ jwall.mvc.controller.ProjectController = {
 		var $this = this;
 
 		jwall.business.service.Project.projects(function(projects) {
+			$this.projectsView.addProjects(projects);
 			for (var i = 0; i < projects.length; i++) {
 				var project = projects[i];
 				// save project
 				$this.projects[project.name] = project;
-				// display project
-				$this.projectsView.addProject(project);
+
+				
+				$this.projectsView.updateCommiters(project.name, project.hudsonProject.lastBuild.commiters);
+		
+				if (project.rulesCompliance != 0) {
+					$this.projectsView.updateCompliance(project.name, project.rulesCompliance);
+				}
 				
 				// call updateBuilding as we just receive the status
 				var wasBuilding = project.hudsonProject.building;
 				project.hudsonProject.building = false;
 				$this._updateBuilding(project, wasBuilding);
 			}
+			
+			// Do it twice because adding stats to display modify display size
+			for (var i = 0; i < projects.length; i++) {
+				var project = projects[i];
+				$this.projectsView.displayUT(project.name, 
+						project.hudsonProject.lastBuild.testResult.failCount,
+						project.hudsonProject.lastBuild.testResult.passCount,
+						project.hudsonProject.lastBuild.testResult.skipCount,
+						project.coverage);
+			}
+			for (var i = 0; i < projects.length; i++) {
+				var project = projects[i];
+				$this.projectsView.displayUT(project.name, 
+						project.hudsonProject.lastBuild.testResult.failCount,
+						project.hudsonProject.lastBuild.testResult.passCount,
+						project.hudsonProject.lastBuild.testResult.skipCount,
+						project.coverage);
+			}
+		
 		});
 	},
 	

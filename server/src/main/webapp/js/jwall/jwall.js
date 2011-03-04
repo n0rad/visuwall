@@ -55,7 +55,6 @@ jwall = {
 
 				// Initialize history plugin.
 				$.historyInit(ajsl.dispatcher.dispatch);
-				
 			});
 		}
 };

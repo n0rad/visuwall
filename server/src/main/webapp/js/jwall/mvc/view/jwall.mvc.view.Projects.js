@@ -2,9 +2,27 @@ jwall.mvc.view.Projects = {
 	table : null,
 
 	statusClasses : [ "failure", "success", "unstable"],
+	
+	unitStats : {},
 
 	init : function() {
+		$(window).resize(this._windowResize);
 		this.table = $('table#projectsTable');
+	},
+	
+	addProjects : function(projects) {
+		var projectsByRow = Math.round(Math.sqrt(projects.length));
+		var projectTR;
+		for (var i = 0; i < projects.length; i++) {
+			if (i % projectsByRow == 0) {
+				projectTR = $('<tr></tr>');
+				$('#projectsTable').append(projectTR);
+			}
+		var width = 100 / projectsByRow;
+			var projectTD = this._buildProjectTD(projects[i]);
+			projectTR.append(projectTD);
+			projectTD.fadeIn("slow");
+		}
 	},
 	
 	addProject : function(project) {
@@ -15,19 +33,7 @@ jwall.mvc.view.Projects = {
 		var projectTR = $('<tr></tr>');
 		projectTR.append(projectTD);
 		this.table.append(projectTR);
-		projectTD.fadeIn("slow");
-		
-		//var projectsPerLine = Math.round(Math.sqrt(projects.length));
-//		var projectTR;
-//		for (var i = 0; i < projects.length; i++) {
-//			if (i % projectsPerLine == 0) {
-//				projectTR = $('<tr></tr>');
-//				$('#projectsTable').append(projectTR);
-//			}
-//		var width = 100 / projectsByRow;
-//			var projectTD = jwall.mvc.view.Project.buildProject(projects[i], projectsPerLine);
-//			projectTR.append(projectTD);
-//		}
+		projectTD.fadeIn("slow");		
 	},
 	
 	removeProject : function(project) {
@@ -46,6 +52,12 @@ jwall.mvc.view.Projects = {
 		
 	},
 	
+	updateCompliance : function(projectName, compliance) {
+		this._getElement(projectName, 'p.compliance').html('rules : ' + compliance + '%').show();
+	},
+	hideCompliance : function(projectName) {
+		this._getElement(projectName, 'p.compliance').hide().html('');
+	},
 	
 	showBuilding : function(projectName) {
 		this._getElement(projectName).blink({fadeDownSpeed : 2000, fadeUpSpeed : 2000, blinkCount : -1, fadeToOpacity : 0.3});
@@ -56,25 +68,51 @@ jwall.mvc.view.Projects = {
 	},
 	
 	updateCommiters : function(projectName, commiters) {
-		var commiters = this._buildCommiters(project);
-		this._getElement(projectName, 'p.commiters').html(commiters).show();
+		var displayCommiter = this._buildCommiters(commiters);
+		this._getElement(projectName, 'ul.commiters').html(displayCommiter).marquee({yScroll: "bottom"}).show();
 	},
 	
 	displaySuccess : function(projectName) {
-		this._getElement(projectName, 'p.commiters').hide().html('');
-		this._getElement(projectName).switchClasses(this.statusClasses, 'success', 3000);	
+		this._getElement(projectName, 'ul.commiters').hide().html('');
+		this._getElement(projectName, 'div.projectName').switchClasses(this.statusClasses, 'success', 3000);	
 	},
 	
 	displayFailure : function(projectName) {
-		this._getElement(projectName).switchClasses(this.statusClasses, 'failure', 3000);			
+		this._getElement(projectName, 'div.projectName').switchClasses(this.statusClasses, 'failure', 3000);			
+		this.hideCompliance(projectName, compliance);
 	},
 	
 	displayUnstable : function(projectName) {
-		this._getElement(projectName).switchClasses(this.statusClasses, 'unstable', 3000);	
+		this._getElement(projectName, 'div.projectName').switchClasses(this.statusClasses, 'unstable', 3000);	
 	},
 	
+	displayUT : function(projectName, fail, success, skip, coverage) {
+		this.unitStats[projectName] = [fail, success, skip, coverage];
+		
+		this._realDisplayUT(projectName);
+	},
 
 	// ///////////////////////////////////////////////
+
+	
+	_realDisplayUT : function(projectName) {
+
+		var fail = this.unitStats[projectName][0];
+		var success = this.unitStats[projectName][1];
+		var skip = this.unitStats[projectName][2];
+		var coverage =  this.unitStats[projectName][3];
+		
+		if (coverage == 0) {
+			coverage = 100;
+		}
+
+		var coverageTestNum = fail + success;
+		var failBar = (fail * coverage) / coverageTestNum;
+		var successBar = (success * coverage) / coverageTestNum;
+
+		jwall.mvc.view.Stats.testStatus(this._getElement(projectName, ".unitTest")[0], [[failBar], [0], [successBar]], this._getElement(projectName)[0].clientWidth);		
+
+	},
 	
 	_getElement : function(projectName, suffix) {
 		var request = 'TD#' + projectName;
@@ -82,6 +120,25 @@ jwall.mvc.view.Projects = {
 			request += ' ' + suffix;
 		}
 		return $(request, this.table);
+	},
+	
+	_windowResize : function() {
+		// remove all units stats
+		$("DIV.unitTest", this.table).each(function(i , val) {
+			$(this).html('');
+		});
+
+		// TODO windowResize is called from window so this is window :/
+		var $this = jwall.mvc.view.Projects;
+		// redraw unit stats
+		$("TD", this.table).each(function(i , val) {
+			var projectName = $(this).attr('id');
+			$this._realDisplayUT(projectName);
+		});
+		$("TD", this.table).each(function(i , val) {
+			var projectName = $(this).attr('id');
+			$this._realDisplayUT(projectName);
+		});
 	},
 
 	_buildProjectTD : function(project) {
@@ -95,18 +152,18 @@ jwall.mvc.view.Projects = {
 			status = 'success';
 		}
 		
-		var projectTD = $('<td style="display:none" id="' + project.name + '" class="project ' + status + '"><div id="content"></div></td>');
-		projectTD.append($('<div class="projectName">' + visualName + '<span id="when"></span></div>'));
-		projectTD.append($('<p class="commiters"></p>'));
+		
+		var projectTD = $('<td style="display:none" id="' + project.name + '" class="project"><div id="content"></div></td>');
+		projectTD.append($('<div class="projectName ' + status + '">' + visualName + '<span id="when"></span></div>'));
+		projectTD.append($('<ul class="commiters marquee"></ul>'));
+		projectTD.append($('<p class="compliance"></p>'));
 		projectTD.append($('<p class="timeleft"></p>'));
 		projectTD.append($('<div class="unitTest"></div>'));
 		projectTD.append($('<div class="iTest"></div>'));
-		return projectTD;
 		
-		// jwall.mvc.view.Stats.TestStatus([[30.2], [20.5], [10.4]],
-		// $(".unitTest", projectTD)[0]);
-		// jwall.mvc.view.Stats.TestStatus([[20.2], [10.5], [40.4]],
-		// $(".iTest", projectTD)[0]);
+		return projectTD;
+		//jwall.mvc.view.Stats.testStatus([[20.2], [10.5], [40.4]], $(".iTest", projectTD)[0]);
+		
 		
 		
 		// $(".commiters", projectTD).marquee({});
@@ -129,16 +186,15 @@ jwall.mvc.view.Projects = {
 //projectTD.append(metrics);
 	},
 	
-	_buildCommiters : function(project) {
+	_buildCommiters : function(commiters) {
 		var commiterString = "";
-		for (var i = 0; i < project.hudsonProject.lastBuild.commiters.length; i++) {
-			var commiter =  project.hudsonProject.lastBuild.commiters[i];
-			if (i > 0) {
-				commiterString += ", ";
-			}
+		for (var i = 0; i < commiters.length; i++) {
+			var commiter =  commiters[i];
+			commiterString += "<li>";
 			commiterString += commiter; 
+			commiterString += "</li>";
 		}
-		return commiterString;
+		return $(commiterString);
 	}
 };
 

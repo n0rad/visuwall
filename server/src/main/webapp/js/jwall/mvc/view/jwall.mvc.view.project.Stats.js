@@ -1,9 +1,11 @@
 jwall.mvc.view.Stats = {
 
-	TestStatus : function(data, divId) {
-		var fill = pv.colors("red", "yellow", "green"),
-		    fillText = pv.colors("black", "white", "red"),
-		    w = 600,
+	colors : null,
+
+	testStatus : function(divId, data, width) {
+		var fill = pv.colors("#ef2929", "#fce94f", "#729fcf"),
+		    fillText = pv.colors("black", "black", "black"),
+		    w = width,
 		    h = 30,
 		    x = pv.Scale.linear(0, 100).range(0, w),
 		    y = pv.Scale.ordinal(pv.range(1)).splitBanded(0, h, 1);
