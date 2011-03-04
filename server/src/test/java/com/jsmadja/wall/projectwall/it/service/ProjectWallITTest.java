@@ -18,6 +18,7 @@ package com.jsmadja.wall.projectwall.it.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.Collection;
 
@@ -58,5 +59,11 @@ public class ProjectWallITTest {
     @Test(expected=ProjectNotFoundException.class)
     public void should_throw_exception_when_search_non_existant_project() throws ProjectNotFoundException {
         projectWall.findProject("does.not.exist");
+    }
+
+    @Test
+    public void should_retrieve_project_with_no_last_build() throws ProjectNotFoundException {
+        Project project = projectWall.findProject("on-parameter-tester-staging");
+        assertNull(project.getHudsonProject().getLastBuild());
     }
 }
