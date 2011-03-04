@@ -179,11 +179,15 @@ public class Hudson {
             HudsonProject hudsonProject = new HudsonProject();
             hudsonProject.setName(modelJob.getName());
             hudsonProject.setDescription(modelJob.getDescription());
-            hudsonProject.setLastBuildNumber(modelJob.getLastBuild().getNumber());
+            if (modelJob.getLastBuild() != null) {
+                hudsonProject.setLastBuildNumber(modelJob.getLastBuild().getNumber());
+                hudsonProject.setBuildNumbers(getBuildNumbers(modelJob));
+                hudsonProject.setLastBuild(findBuild(hudsonProject.getName(), hudsonProject.getLastBuildNumber()));
+            }
             hudsonProject.setBuilding(getIsBuilding(modelJob));
-            hudsonProject.setArtifactId(modelJob.getModule().get(0).getName());
-            hudsonProject.setBuildNumbers(getBuildNumbers(modelJob));
-            hudsonProject.setLastBuild(findBuild(hudsonProject.getName(), hudsonProject.getLastBuildNumber()));
+            if (modelJob.getModule().size() > 0) {
+                hudsonProject.setArtifactId(modelJob.getModule().get(0).getName());
+            }
 
             return hudsonProject;
         } catch (UniformInterfaceException e) {

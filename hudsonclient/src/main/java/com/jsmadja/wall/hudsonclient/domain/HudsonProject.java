@@ -26,7 +26,7 @@ public final class HudsonProject {
     private String name;
     private String description;
     private int[] buildNumbers;
-    private int lastBuildNumber;
+    private int lastBuildNumber = -1;
     private String artifactId;
     private boolean building;
 
