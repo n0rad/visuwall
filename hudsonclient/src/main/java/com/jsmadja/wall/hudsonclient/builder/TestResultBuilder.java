@@ -37,12 +37,12 @@ public final class TestResultBuilder {
             int integrationTestCount = countIntegrationTestsIn(surefireReport);
             testResult.setIntegrationTestCount(integrationTestCount);
         } catch(UniformInterfaceException e) {
-            if(LOG.isInfoEnabled()) {
-                LOG.info("no test result");
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("no test result for "+testResultResource.getURI().toString());
             }
         } catch(ClientHandlerException e) {
-            if(LOG.isInfoEnabled()) {
-                LOG.info("no test result");
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("no test result"+testResultResource.getURI().toString());
             }
         }
         return testResult;

@@ -31,27 +31,7 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<context:component-scan base-package="com.jsmadja.wall.projectwall" />
 	<!-- <context:annotation-config /> -->
-
-
-	<bean class="com.jsmadja.wall.hudsonclient.Hudson">
-		<constructor-arg index="0" type="java.lang.String">
-			<value>http://fluxx.fr.cr:8080/hudson</value>
-<!--			<value>http://integration.wormee.orange-vallee.net:8080/hudson</value>-->
-		</constructor-arg>
-	</bean>
-
-
-
-	<bean class="com.jsmadja.wall.projectwall.service.SonarService">
-		<constructor-arg index="0" type="java.lang.String">
-			<value>http://fluxx.fr.cr:9000</value>
-<!--			<value>http://integration.wormee.orange-vallee.net:9000</value>-->
-		</constructor-arg>
-	</bean>
-
-
 	
 	<import resource="db-context.xml"/>
-
 
 </beans>
