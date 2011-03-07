@@ -62,6 +62,16 @@ public class SonarServiceITTest {
         sonarService.getCoverage("does.not.exist");
     }
 
+    @Test(expected = SonarProjectNotFoundException.class)
+    public void should_throw_exception_when_passing_empty_string() throws SonarProjectNotFoundException {
+        sonarService.getCoverage("");
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void should_throw_exception_when_passing_null() throws SonarProjectNotFoundException {
+        sonarService.getCoverage(null);
+    }
+
     @Test
     public void should_retrieve_rules_compliance() throws SonarProjectNotFoundException {
         Double rulesCompliance = sonarService.getRulesCompliance(FLUXX_ARTIFACT_ID);
@@ -81,7 +91,7 @@ public class SonarServiceITTest {
         new SonarService().init();
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = ProjectNotFoundException.class)
     public void should_throw_exception_for_estimated_finish_time() throws ProjectNotFoundException {
         sonarService.getEstimatedFinishTime(new Project());
     }

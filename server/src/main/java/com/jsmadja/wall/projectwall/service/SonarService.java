@@ -30,6 +30,7 @@ import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
+import com.google.common.base.Preconditions;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.TechnicalDebt;
 
@@ -85,6 +86,7 @@ public class SonarService implements Service {
     }
 
     private Measure getMeasure(String projectId, String measureKey) throws SonarProjectNotFoundException {
+        Preconditions.checkNotNull(projectId);
         Resource project = sonar.find(ResourceQuery.createForMetrics(projectId, measureKey));
         if (project == null) {
             throw new SonarProjectNotFoundException("Project with id #"+projectId+" not found in sonar "+url);
@@ -136,7 +138,7 @@ public class SonarService implements Service {
 
     @Override
     public Date getEstimatedFinishTime(Project project) throws ProjectNotFoundException {
-        throw new RuntimeException("Not implemented!");
+        throw new ProjectNotFoundException("Not implemented!");
     }
 
     @Override
