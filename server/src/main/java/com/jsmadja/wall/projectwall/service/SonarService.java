@@ -128,6 +128,7 @@ public class SonarService implements Service {
         String projectId = project.getId();
         try {
             project.setRulesCompliance(getRulesCompliance(projectId));
+            project.setCoverage(getCoverage(projectId));
         } catch (SonarProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
         }
