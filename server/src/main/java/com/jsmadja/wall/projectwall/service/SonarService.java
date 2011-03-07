@@ -31,6 +31,7 @@ import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
 import com.google.common.base.Preconditions;
+import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.TechnicalDebt;
 
@@ -147,6 +148,11 @@ public class SonarService implements Service {
     }
 
     @Override
+    public Build findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) throws BuildNotFoundException {
+        throw new BuildNotFoundException("Not implemented!");
+    }
+
+    @Override
     public void setUrl(String url) {
         this.url = url;
     }
@@ -160,4 +166,5 @@ public class SonarService implements Service {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

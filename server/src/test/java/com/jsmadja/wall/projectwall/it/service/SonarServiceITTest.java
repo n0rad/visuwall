@@ -116,6 +116,11 @@ public class SonarServiceITTest {
         sonarService.populate(project);
 
         assertTrue(project.getRulesCompliance() > 0);
+    }
 
+    @Test
+    public void should_retrieve_coverage_of_project_wall() throws SonarProjectNotFoundException {
+        double coverage = sonarService.getCoverage("com.jsmadja.wall:wall");
+        assertTrue(coverage > 0);
     }
 }

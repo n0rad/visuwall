@@ -10,6 +10,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jsmadja.wall.projectwall.service.BuildNotFoundException;
 import com.jsmadja.wall.projectwall.service.ProjectNotFoundException;
 import com.jsmadja.wall.projectwall.service.Service;
 
@@ -99,5 +100,21 @@ public class Wall {
             statusList.add(status);
         }
         return statusList;
+    }
+
+    public Build findBuildByProjectNameAndBuilderNumber(String projectName, int buildNumber) throws BuildNotFoundException {
+        for (Service service:services) {
+            try {
+                Build build = service.findBuildByProjectNameAndBuildNumber(projectName, buildNumber);
+                if (build != null) {
+                    return build;
+                }
+            } catch (BuildNotFoundException e) {
+                if (LOG.isInfoEnabled()) {
+                    LOG.info(e.getMessage());
+                }
+            }
+        }
+        throw new BuildNotFoundException("No build #"+buildNumber+" for project "+projectName);
     }
 }

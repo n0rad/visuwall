@@ -11,7 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import com.jsmadja.wall.hudsonclient.Hudson;
 import com.jsmadja.wall.hudsonclient.HudsonProjectNotFoundException;
+import com.jsmadja.wall.hudsonclient.domain.HudsonBuild;
 import com.jsmadja.wall.hudsonclient.domain.HudsonProject;
+import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
 
 public class HudsonService implements Service {
@@ -83,6 +85,21 @@ public class HudsonService implements Service {
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
         }
+    }
+
+    @Override
+    public Build findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) throws BuildNotFoundException {
+        return createBuild(hudson.findBuild(projectName, buildNumber));
+    }
+
+    private Build createBuild(HudsonBuild hudsonBuild) {
+        Build build = new Build();
+        build.setCommiters(hudsonBuild.getCommiters());
+        build.setDuration(hudsonBuild.getDuration());
+        build.setStartTime(hudsonBuild.getStartTime());
+        build.setSuccessful(hudsonBuild.isSuccessful());
+        build.setTestResult(hudsonBuild.getTestResult());
+        return build;
     }
 
     @Override

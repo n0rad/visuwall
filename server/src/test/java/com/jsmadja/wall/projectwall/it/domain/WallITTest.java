@@ -30,12 +30,15 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.jsmadja.wall.hudsonclient.domain.TestResult;
 import com.jsmadja.wall.projectwall.Integration;
+import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.ProjectStatus;
 import com.jsmadja.wall.projectwall.domain.Software;
 import com.jsmadja.wall.projectwall.domain.SoftwareAccess;
 import com.jsmadja.wall.projectwall.domain.Wall;
+import com.jsmadja.wall.projectwall.service.BuildNotFoundException;
 import com.jsmadja.wall.projectwall.service.ProjectNotFoundException;
 
 public class WallITTest {
@@ -79,6 +82,16 @@ public class WallITTest {
     public void should_retrieve_estimated_finish_time_of_not_building_project() throws ProjectNotFoundException {
         Date estimatedFinishTime = wall.getEstimatedFinishTime("fluxx");
         assertNotNull(estimatedFinishTime);
+    }
+
+    @Test
+    public void should_retrieve_build() throws BuildNotFoundException {
+        Build build = wall.findBuildByProjectNameAndBuilderNumber("project-wall", 293);
+        TestResult testResult = build.getTestResult();
+        assertEquals(1, testResult.getFailCount());
+        assertEquals(1, testResult.getSkipCount());
+        assertEquals(25, testResult.getTotalCount());
+        assertEquals(14, testResult.getIntegrationTestCount());
     }
 
     @Test

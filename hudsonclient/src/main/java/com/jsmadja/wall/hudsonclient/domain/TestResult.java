@@ -16,6 +16,8 @@
 
 package com.jsmadja.wall.hudsonclient.domain;
 
+import com.google.common.base.Objects;
+
 public final class TestResult {
 
     private int failCount;
@@ -62,6 +64,17 @@ public final class TestResult {
 
     public void setIntegrationTestCount(int integrationTestCount) {
         this.integrationTestCount = integrationTestCount;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+        .add("failCount", failCount) //
+        .add("integrationTestCount", integrationTestCount) //
+        .add("passCount", passCount) //
+        .add("skipCount", skipCount) //
+        .add("totalCount", totalCount)
+        .toString();
     }
 
 }

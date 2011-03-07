@@ -3,6 +3,7 @@ package com.jsmadja.wall.projectwall.service;
 import java.util.Date;
 import java.util.List;
 
+import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
 
 public interface Service {
@@ -18,6 +19,8 @@ public interface Service {
     List<Project> findAllProjects();
 
     Project findProjectByName(String projectName) throws ProjectNotFoundException;
+
+    Build findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) throws BuildNotFoundException;
 
     void populate(Project project) throws ProjectNotFoundException;
 
