@@ -140,7 +140,7 @@ public class SonarService implements Service {
 
     @Override
     public Project findProjectByName(String projectName) throws ProjectNotFoundException {
-        throw new RuntimeException("Not implemented!");
+        throw new ProjectNotFoundException("Not implemented!");
     }
 
     @Override

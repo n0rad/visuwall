@@ -44,13 +44,14 @@ public class WallITTest {
     public void init() {
         wall = new Wall();
         wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, Integration.HUDSON_URL));
-        //        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://integration.wormee.orange-vallee.net:8080/hudson"));
+        wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, Integration.SONAR_URL));
     }
 
     @Test
     public void should_retrieve_data_of_one_project() throws ProjectNotFoundException {
         Project project = wall.findProjectByName("fluxx");
         assertEquals("fluxx", project.getName());
+        System.err.println(project);
     }
 
     @Test(expected=ProjectNotFoundException.class)
