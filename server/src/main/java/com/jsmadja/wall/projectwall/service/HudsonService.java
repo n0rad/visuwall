@@ -71,6 +71,7 @@ public class HudsonService implements Service {
         Project project = new Project();
         project.setName(hudsonProject.getName());
         project.setDescription(hudsonProject.getDescription());
+        project.setId(hudsonProject.getArtifactId());
         project.setHudsonProject(hudsonProject);
         return project;
     }

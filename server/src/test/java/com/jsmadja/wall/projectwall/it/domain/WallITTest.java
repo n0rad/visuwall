@@ -48,10 +48,17 @@ public class WallITTest {
     }
 
     @Test
+    public void should_retrieve_all_projects() {
+        Collection<Project> projects = wall.findAllProjects();
+        for (Project project : projects) {
+            System.err.println(project);
+        }
+    }
+
+    @Test
     public void should_retrieve_data_of_one_project() throws ProjectNotFoundException {
         Project project = wall.findProjectByName("fluxx");
         assertEquals("fluxx", project.getName());
-        System.err.println(project);
     }
 
     @Test(expected=ProjectNotFoundException.class)
