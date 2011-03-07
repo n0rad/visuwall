@@ -30,8 +30,15 @@ public class Wall {
         for(Service service:services) {
             projects.addAll(service.findAllProjects());
         }
+        populate(projects);
 
         return projects;
+    }
+
+    private void populate(List<Project> projects) {
+        for (Project project:projects) {
+            populate(project);
+        }
     }
 
     public void populate(Project project) {

@@ -86,7 +86,7 @@ public class SonarServiceITTest {
         sonarService.getEstimatedFinishTime(new Project());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = ProjectNotFoundException.class)
     public void should_throw_exception_when_searching_by_name() throws ProjectNotFoundException {
         sonarService.findProjectByName("");
     }
