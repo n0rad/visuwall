@@ -27,6 +27,7 @@ public class ProjectController {
     public ProjectController() {
         wall = new Wall();
         wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://fluxx.fr.cr:8080/hudson"));
+        wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://fluxx.fr.cr:9000"));
     }
 
     @RequestMapping

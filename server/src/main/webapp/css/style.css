@@ -9,8 +9,7 @@ BODY {
 	border-spacing: 5px;
 }
 
-
-#projectsTable tr td {
+#projectsTable tr td.project {
 /*	border: 1px solid black;*/
 	vertical-align: top;
 	overflow: hidden;
@@ -25,17 +24,13 @@ BODY {
 	background-color:white;
 }
 
-#projectsTable .success {
+#projectsTable td.success {
 	background-color: green;
-	color: white;
-	text-align: center;
 /*	background-color: #63b542;*/
 }
 
 #projectsTable .failure {
 	background-color: red;
-	color: white;
-	text-align: center;
 /*	background-color: #f3373c;*/
 }
 
@@ -49,49 +44,54 @@ BODY {
 	padding-top: 10px;
 }
 
-#projectsTable .compliance {
-	font-size: 5em;
+TABLE.uTest TD, TABLE.iTest TD {
+	font-weight: bold;
+	color: white !important;
+	font-size: 1.8em;
+	padding-right: 5px;
+	height: 30px;
+	text-align: center;
 }
 
-
-.project .content {
-	position: relative;
+#projectsTable TABLE.innerTable {
 	height: 100%;
+	width: 100%;
+	valign: middle;
 }
 
 .project .projectName {
+	color: white;
+	text-align: center;
 	overflow : visible;
 	font-size: 5em;
-	line-height: 1.6em;
+	line-height: 1.1em;
 	font-weight: bold;
-	/*position: absolute;*/
-	top: 5px;
-	left: 10px;	
-/*	text-align: center;*/
 }
 
-.project .unitTest {
-	float:left;
-/*	position: absolute;
-	bottom: 0px;*/
-}
-
-.project .iTest {
-	float:left;
-/*	position: absolute;
-	bottom: 25px;*/
+.project abbr {
+	font-size: 0.5em;
+	font-style: italic;
 }
 
 .project .timeleft {
 	text-align: center;
-	font-size: 5em;
-	padding-top: 10px;
+	font-size: 2.5em;
+	line-height: 1em;
 }
 
-.project span.when {
-	font-size: 0.3em;
-}
 
-.project .projectMetrics li {
-	display: block;
+
+/* TEST PART */
+TD.uTestTD, TD.iTestTD {
+	height: 30px;
+}
+TABLE.uTest TD.failure, TABLE.iTest TD.failure {
+	background-color: red !important;
+}
+TABLE.uTest TD.ignore, TABLE.iTest TD.ignore {
+	background-color: yellow !important;
+	color: black !important;
+}
+TABLE.uTest TD.success, TABLE.iTest TD.success {
+	background-color: green !important;
 }

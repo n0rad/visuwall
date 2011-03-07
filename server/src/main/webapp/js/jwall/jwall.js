@@ -8,6 +8,25 @@ jwall = {
 		init : function() {
 			$(function (){
 				
+				jQuery.timeago.settings.strings = {
+				        	prefixAgo: "(",
+					        suffixAgo: ")",
+					        suffixFromNow: "from now",
+					        seconds: "<1min",
+					        minute: "1min",
+					        minutes: "%dmin",
+					        hour: "1h",
+					        hours: "%dh",
+					        day: "1d",
+					        days: "%dd",
+					        month: "1M",
+					        months: "%dM",
+					        year: "1y",
+					        years: "%dy"
+						};
+			
+				jQuery("abbr.timeago").timeago();
+				
 				// register controllers
 				ajsl.dispatcher.registerAll(jwall.mvc.controller);
 				
@@ -47,7 +66,7 @@ jwall = {
 						});
 					}
 				});
-				
+								
 				jwall.mvc.controller.ProjectController.buildProjects();
 				
 				// create updater event

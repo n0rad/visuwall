@@ -24,34 +24,37 @@ jwall.mvc.controller.ProjectController = {
 				
 				$this.projectsView.updateCommiters(project.name, project.hudsonProject.lastBuild.commiters);
 		
+				$this._updateState(project);
+				
+				
+				$this.projectsView.updateAgo(project.name, new Date(project.hudsonProject.lastBuild.startTime + project.hudsonProject.lastBuild.duration));
+				
+				
 				if (project.rulesCompliance != 0) {
 					$this.projectsView.updateCompliance(project.name, project.rulesCompliance);
 				}
+
+				$this.projectsView.setUTCoverage(project.name, project.coverage);
+				$this.projectsView.setITCoverage(project.name, 45);
+
 				
-				// call updateBuilding as we just receive the status
+				$this.projectsView.displayIT(project.name, 
+						3,
+						5,
+						10,
+						45);
+				
+				$this.projectsView.displayUT(project.name, 
+						project.hudsonProject.lastBuild.testResult.failCount,
+						project.hudsonProject.lastBuild.testResult.passCount,
+						project.hudsonProject.lastBuild.testResult.skipCount,
+						project.coverage);
+				
+				// call updateBuilding like we just receive the status
 				var wasBuilding = project.hudsonProject.building;
 				project.hudsonProject.building = false;
 				$this._updateBuilding(project, wasBuilding);
 			}
-			
-			// Do it twice because adding stats to display modify display size
-			for (var i = 0; i < projects.length; i++) {
-				var project = projects[i];
-				$this.projectsView.displayUT(project.name, 
-						project.hudsonProject.lastBuild.testResult.failCount,
-						project.hudsonProject.lastBuild.testResult.passCount,
-						project.hudsonProject.lastBuild.testResult.skipCount,
-						project.coverage);
-			}
-			for (var i = 0; i < projects.length; i++) {
-				var project = projects[i];
-				$this.projectsView.displayUT(project.name, 
-						project.hudsonProject.lastBuild.testResult.failCount,
-						project.hudsonProject.lastBuild.testResult.passCount,
-						project.hudsonProject.lastBuild.testResult.skipCount,
-						project.coverage);
-			}
-		
 		});
 	},
 	
@@ -69,8 +72,6 @@ jwall.mvc.controller.ProjectController = {
 				$this._updateBuilding(project, status.building);
 				
 				$this._checkVersionChange(project, status);
-				
-				
 				
 			}	
 			//TODO find new projects
