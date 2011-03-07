@@ -51,12 +51,23 @@ public class Wall {
         }
     }
 
+    /**
+     * @param projectName
+     * @return null if no date could be estimated
+     * @throws ProjectNotFoundException
+     */
     public Date getEstimatedFinishTime(String projectName) throws ProjectNotFoundException {
         Project project = findProjectByName(projectName);
         for(Service service:services) {
-            Date estimatedFinishTime = service.getEstimatedFinishTime(project);
-            if (estimatedFinishTime != null) {
-                return estimatedFinishTime;
+            try {
+                Date estimatedFinishTime = service.getEstimatedFinishTime(project);
+                if (estimatedFinishTime != null) {
+                    return estimatedFinishTime;
+                }
+            } catch(ProjectNotFoundException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage());
+                }
             }
         }
         return null;

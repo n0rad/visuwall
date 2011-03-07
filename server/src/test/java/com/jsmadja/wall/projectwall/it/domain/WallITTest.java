@@ -18,9 +18,11 @@ package com.jsmadja.wall.projectwall.it.domain;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -71,6 +73,12 @@ public class WallITTest {
     public void should_retrieve_project_with_no_last_build() throws ProjectNotFoundException {
         Project project = wall.findProjectByName("on-parameter-tester-staging");
         assertNull(project.getHudsonProject().getLastBuild());
+    }
+
+    @Test
+    public void should_retrieve_estimated_finish_time_of_not_building_project() throws ProjectNotFoundException {
+        Date estimatedFinishTime = wall.getEstimatedFinishTime("fluxx");
+        assertNotNull(estimatedFinishTime);
     }
 
     @Test
