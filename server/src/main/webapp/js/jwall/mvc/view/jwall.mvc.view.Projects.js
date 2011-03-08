@@ -60,10 +60,16 @@ jwall.mvc.view.Projects = {
 			return;
 		}
 		var qualityLi = "";
-		for (var key in quality) {
-			   var obj = quality[key];
-			   qualityLi += '<li>' + key + ' : ' + quality[key] + '</li>';
-			}
+		for (var i = 0; i < quality.length; i++) {
+			   var name = quality[i].value.name;
+			   var value = quality[i].value.formattedValue;
+			   qualityLi += '<li>' + name + ' : ' + value + '</li>';
+		}
+		
+		//		for (var key in quality) {
+//			   var obj = quality[key];
+//			   qualityLi += '<li>' + key + ' : ' + quality[key] + '</li>';
+//			}
 		this._getElement(projectName, 'UL.quality').append($(qualityLi)).marquee({
 			yScroll : 'bottom'
 		});
@@ -160,17 +166,17 @@ jwall.mvc.view.Projects = {
 		var successBar = (success * 100) / allTest;
 		var skipBar = (skip * 100) / allTest;
 		if (success != 0) {
-			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success').width(successBar + "%").html(success);
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success').width(successBar + "%").html(success).show();
 		} else {
 			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success').hide().html('');
 		}
 		if (fail != 0) {
-			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure').width(failBar + "%").html(fail);
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure').width(failBar + "%").html(fail).show();
 		} else {
 			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure').hide().html('');
 		}
 		if (skip != 0) {
-			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore').width(skipBar + "%").html(skip);
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore').width(skipBar + "%").html(skip).show();
 		} else {
 			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore').hide().html('');
 		}

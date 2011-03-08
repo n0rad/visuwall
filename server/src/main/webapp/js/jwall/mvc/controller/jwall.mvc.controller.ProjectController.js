@@ -17,36 +17,10 @@ jwall.mvc.controller.ProjectController = {
 		jwall.business.service.Project.projects(function(projects) {
 			$this.projectsView.addProjects(projects);
 			for (var i = 0; i < projects.length; i++) {
-				var project = projects[i];
-				// save project
-				$this.projects[project.name] = project;
-				
-				$this.projectsView.updateCommiters(project.name, project.hudsonProject.lastBuild.commiters);
-				$this.projectsView.updateAgo(project.name, new Date(project.hudsonProject.lastBuild.startTime + project.hudsonProject.lastBuild.duration));
-				$this._updateState(project);
-				if (project.rulesCompliance != 0) {
-					$this.projectsView.updateQuality(project.name, { 'compliance' : project.rulesCompliance, 'test' : 'salut'});
-				} else {
-					$this.projectsView.updateQuality(project.name, { });					
-				}
-				$this.projectsView.updateUTCoverage(project.name, project.coverage);
-				$this.projectsView.updateUT(project.name, 
-						project.hudsonProject.lastBuild.testResult.failCount,
-						project.hudsonProject.lastBuild.testResult.passCount,
-						project.hudsonProject.lastBuild.testResult.skipCount,
-						project.coverage);
-				$this.projectsView.updateITCoverage(project.name, 0);
-				$this.projectsView.updateIT(project.name, 0,0,0);
-				
-				// call updateBuilding like we just receive the status
-				var wasBuilding = project.hudsonProject.building;
-				project.hudsonProject.building = false;
-				$this._updateBuilding(project, wasBuilding);
+				$this._updateProject(projects[i]);
 			}
 		});
 	},
-	
-
 
 	updateStatus : function() {
 		var $this = this;
@@ -54,26 +28,40 @@ jwall.mvc.controller.ProjectController = {
 			for (var i = 0; i < projectsStatus.length; i++) {
 				var status = projectsStatus[i];
 				var project = $this.projects[status.name];
-
 				LOG.debug('Update status for project ' + status.name);
-
 				$this._updateBuilding(project, status.building);
-				
 				$this._checkVersionChange(project, status);
-				
 			}	
 			//TODO find new projects
 			//TODO find removed projects
 		});
 	},
 	
-	_updateProject : function(newProjectData) {
-		this._updateState(newProjectData);
+	_updateProject : function(project) {
+		this.projectsView.updateCommiters(project.name, project.hudsonProject.lastBuild.commiters);
+		this.projectsView.updateAgo(project.name, new Date(project.hudsonProject.lastBuild.startTime + project.hudsonProject.lastBuild.duration));
+		this._updateState(project);
+		if (project.rulesCompliance != 0) {
+			this.projectsView.updateQuality(project.name, project.qualityResult.measures);
+		} else {
+			this.projectsView.updateQuality(project.name, { });					
+		}
+		this.projectsView.updateUTCoverage(project.name, project.coverage);
+		this.projectsView.updateUT(project.name, 
+				project.hudsonProject.lastBuild.testResult.failCount,
+				project.hudsonProject.lastBuild.testResult.passCount,
+				project.hudsonProject.lastBuild.testResult.skipCount,
+				project.coverage);
+		this.projectsView.updateITCoverage(project.name, 0);
+		this.projectsView.updateIT(project.name, 0,0,0);
 		
-		this._updateBuilding(newProjectData, newProjectData.hudsonProject.building);
+		// call updateBuilding like we just receive the status
+		var wasBuilding = project.hudsonProject.building;
+		project.hudsonProject.building = false;
+		this._updateBuilding(project, wasBuilding);		
 
 		// save project for updates
-		this.projects[newProjectData.name] = newProjectData;		
+		this.projects[project.name] = project;	
 	},
 	
 	
