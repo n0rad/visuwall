@@ -18,4 +18,5 @@ public class HudsonTest {
     public void should_throw_an_exception_when_searching_an_inexistant_build() throws HudsonBuildNotFoundException {
         hudson.findBuild("dev-radar", -1);
     }
+
 }

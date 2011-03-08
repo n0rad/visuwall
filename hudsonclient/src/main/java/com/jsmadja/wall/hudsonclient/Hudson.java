@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
+
 import org.apache.xerces.dom.ElementNSImpl;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -113,6 +115,10 @@ public class Hudson {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(message, e);
             }
+            throw new HudsonBuildNotFoundException(message, e);
+        } catch(WebApplicationException e) {
+            String message = "Error while loading build #" + buildNumber + " for project " + projectName;
+            LOG.warn(message);
             throw new HudsonBuildNotFoundException(message, e);
         }
     }

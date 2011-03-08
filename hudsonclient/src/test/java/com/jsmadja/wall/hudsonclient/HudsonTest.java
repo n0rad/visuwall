@@ -41,6 +41,8 @@ public class HudsonTest {
 
     private static final String HUDSON_URL = "http://fluxx.fr.cr:8080/hudson";
 
+    private static final int INVALID_XML = 0;
+
     HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(HUDSON_URL);
 
     private Hudson hudson = new Hudson(HUDSON_URL) {
@@ -58,6 +60,7 @@ public class HudsonTest {
             .withFile(hudsonUrlBuilder.getTestResultUrl("dev-radar", 74), "hudson/dev-radar_74_surefire_aggregated_report.xml")
             .withFile(hudsonUrlBuilder.getProjectUrl("dev-radar"), "hudson/dev-radar.xml")
             .withFile(hudsonUrlBuilder.getBuildUrl("fluxx", FLUXX_BUILT_WITH_COMMITERS), "hudson/fluxx_built_with_commiters.xml")
+            .withFile(hudsonUrlBuilder.getBuildUrl("jwall", INVALID_XML), "hudson/jwall_invalid.xml")
             .withHeader("Content-Type", "application/xml; charset=utf-8")
             .create();
             return new Client(clientHandler, clientConfig);
@@ -148,4 +151,9 @@ public class HudsonTest {
         assertEquals(2, testResult.getIntegrationTestCount());
     }
 
+
+    @Test(expected = HudsonBuildNotFoundException.class)
+    public void should_not_fail_while_loading_invalid_xml_build() throws HudsonBuildNotFoundException {
+        hudson.findBuild("jwall", INVALID_XML);
+    }
 }
