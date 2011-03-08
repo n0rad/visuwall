@@ -43,11 +43,19 @@ public class Wall {
     }
 
     public void populate(Project project) {
+        QualityResult qualityResult = project.getQualityResult();
+        if (qualityResult == null) {
+            qualityResult = new QualityResult();
+            project.setQualityResult(qualityResult);
+        }
         for(Service service:services) {
             try {
                 service.populate(project);
+                service.populateQuality(project, qualityResult);
             } catch (ProjectNotFoundException e) {
-                LOG.warn(e.getMessage());
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage());
+                }
             }
         }
     }
@@ -79,6 +87,7 @@ public class Wall {
             try {
                 Project project = service.findProjectByName(projectName);
                 if (project != null) {
+                    populate(project);
                     return project;
                 }
             } catch(ProjectNotFoundException e) {

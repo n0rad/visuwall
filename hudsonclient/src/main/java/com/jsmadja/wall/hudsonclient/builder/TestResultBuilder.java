@@ -42,7 +42,7 @@ public final class TestResultBuilder {
             }
         } catch(ClientHandlerException e) {
             if(LOG.isDebugEnabled()) {
-                LOG.debug("no test result"+testResultResource.getURI().toString());
+                LOG.debug("no test result "+testResultResource.getURI().toString());
             }
         }
         return testResult;

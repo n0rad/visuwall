@@ -27,6 +27,7 @@ public final class Project {
     private double coverage;
     private double rulesCompliance;
     private HudsonProject hudsonProject;
+    private QualityResult qualityResult;
 
     public String getName() {
         return name;
@@ -74,6 +75,14 @@ public final class Project {
 
     public String getId() {
         return id;
+    }
+
+    public QualityResult getQualityResult() {
+        return qualityResult;
+    }
+
+    public void setQualityResult(QualityResult qualityResult) {
+        this.qualityResult = qualityResult;
     }
 
     @Override

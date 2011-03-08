@@ -209,8 +209,8 @@ public class Hudson {
         int lastBuildNumber = -1;
         String name = moduleSet.getName();
         String description = moduleSet.getDescription();
-        boolean isBuilding = getIsBuilding(moduleSet);
         HudsonModelRun lastBuild = moduleSet.getLastBuild();
+        boolean isBuilding = getIsBuilding(moduleSet);
         if (lastBuild != null) {
             lastBuildNumber = lastBuild.getNumber();
         }

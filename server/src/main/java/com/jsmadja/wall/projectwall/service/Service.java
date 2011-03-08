@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
+import com.jsmadja.wall.projectwall.domain.QualityResult;
 
 public interface Service {
 
@@ -26,5 +27,6 @@ public interface Service {
 
     Date getEstimatedFinishTime(Project project) throws ProjectNotFoundException;
 
+    void populateQuality(Project project, QualityResult quality) throws ProjectNotFoundException;
 
 }

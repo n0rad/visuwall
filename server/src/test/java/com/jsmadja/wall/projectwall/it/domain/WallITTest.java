@@ -66,6 +66,13 @@ public class WallITTest {
         assertEquals("fluxx", project.getName());
     }
 
+    @Test
+    public void should_retrieve_quality_result() throws ProjectNotFoundException {
+        Project project = wall.findProjectByName("fluxx");
+        assertNotNull(project.getQualityResult());
+        assertFalse(project.getQualityResult().getMeasures().isEmpty());
+    }
+
     @Test(expected=ProjectNotFoundException.class)
     public void should_throw_exception_when_search_non_existant_project() throws ProjectNotFoundException {
         wall.findProjectByName("does.not.exist");
