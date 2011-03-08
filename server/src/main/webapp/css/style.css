@@ -34,13 +34,9 @@ BODY {
 /*	background-color: #f3373c;*/
 }
 
-#projectsTable .commiters {
-	/*overflow: hidden;
-	top:130px;
-	margin-left: 10px;*/
-	
-		text-align: center;
-	font-size: 5em;
+#projectsTable .commiters, #projectsTable .quality {
+	text-align: center;
+	font-size: 4em;
 	padding-top: 10px;
 }
 
@@ -80,18 +76,17 @@ TABLE.uTest TD, TABLE.iTest TD {
 }
 
 
-
 /* TEST PART */
 TD.uTestTD, TD.iTestTD {
 	height: 30px;
 }
 TABLE.uTest TD.failure, TABLE.iTest TD.failure {
-	background-color: red !important;
+	background-color: #ef2929 !important;
 }
 TABLE.uTest TD.ignore, TABLE.iTest TD.ignore {
-	background-color: yellow !important;
+	background-color: #fce94f !important;
 	color: black !important;
 }
 TABLE.uTest TD.success, TABLE.iTest TD.success {
-	background-color: green !important;
+	background-color: #729fcf !important;
 }

@@ -25,9 +25,7 @@ jwall.mvc.view.Projects = {
 
 	addProject : function(project) {
 		LOG.info('add project to display : ' + project.name);
-
 		var projectTD = this._buildProjectTD(project);
-
 		var projectTR = $('<tr></tr>');
 		projectTR.append(projectTD);
 		this.table.append(projectTR);
@@ -41,9 +39,9 @@ jwall.mvc.view.Projects = {
 		location.reload();
 	},
 
-	showCountdown : function(projectName, finishDate) {
-		this.hideCompliance(projectName);
-		this.hideCommiters(projectName);
+	updateCountdown : function(projectName, finishDate) {
+		this._hideQuality(projectName);
+		this._hideCommiters(projectName);
 		var countdownElement = this._getElement(projectName, 'p.timeleft');
 		countdownElement.countdown({
 			until : finishDate,
@@ -52,20 +50,27 @@ jwall.mvc.view.Projects = {
 			onExpiry : function() {
 				countdownElement.html('N/A');
 			}
-		}).show();
-	},
-	stopCountDown : function(projectName) {
-
+		});
+		this._showCountdown(projectName);
 	},
 
-	updateCompliance : function(projectName, compliance) {
-		this._getElement(projectName, '.compliance').html(
-				'rules : ' + compliance + '%').show();
-	},
-	hideCompliance : function(projectName) {
-		this._getElement(projectName, 'TR.complianceTR').hide();
+	updateQuality : function(projectName, quality) {
+		if (Object.size(quality) == 0) {
+			this._hideQuality(projectName);
+			return;
+		}
+		var qualityLi = "";
+		for (var key in quality) {
+			   var obj = quality[key];
+			   qualityLi += '<li>' + key + ' : ' + quality[key] + '</li>';
+			}
+		this._getElement(projectName, 'UL.quality').append($(qualityLi)).marquee({
+			yScroll : 'bottom'
+		});
+		this._showQuality(projectName);
 	},
 
+	
 	showBuilding : function(projectName) {
 		this._getElement(projectName).blink({
 			fadeDownSpeed : 2000,
@@ -76,24 +81,28 @@ jwall.mvc.view.Projects = {
 	},
 	stopBuilding : function(projectName) {
 		this._getElement(projectName).stopBlink();
-		this._getElement(projectName, '.timeleft').hide().html('');
+		this._hideCountDown(projectName);
 	},
 
 	updateCommiters : function(projectName, commiters) {
-		var displayCommiter = this._buildCommiters(commiters);
-		this._getElement(projectName, 'ul.commiters').html(displayCommiter)
+		if (commiters.length == 0) {
+			this._hideCommiters(projectName);
+			return;
+		}
+		var commiterString = '';
+		for ( var i = 0; i < commiters.length; i++) {
+			var commiter = commiters[i];
+			commiterString += '<li>' + commiter + '</li>';
+		}
+		this._getElement(projectName, 'ul.commiters').html($(commiterString))
 				.marquee({
-					yScroll : "bottom"
-				}).show();
-	},
-	
-	hideCommiters : function(projectName) {
-		this._getElement(projectName, "TR.commitersTR").hide();
+					yScroll : 'bottom'
+				});
+		this._showCommiters(projectName);
 	},
 
 	displaySuccess : function(projectName) {
-		this
-		this._getElement(projectName, 'ul.commiters').hide().html('');
+		this._hideCommiters(projectName);
 		this._getElement(projectName, '.projectName').switchClasses(
 				this.statusClasses, 'success', 3000);
 	},
@@ -101,78 +110,27 @@ jwall.mvc.view.Projects = {
 	displayFailure : function(projectName) {
 		this._getElement(projectName, '.projectName').switchClasses(
 				this.statusClasses, 'failure', 3000);
-		this.hideCompliance(projectName);
+		this._hideQuality(projectName);
 	},
-
 	displayUnstable : function(projectName) {
 		this._getElement(projectName, '.projectName').switchClasses(
 				this.statusClasses, 'unstable', 3000);
 	},
-
-	displayUT : function(projectName, fail, success, skip) {
-		var allTest = fail + success + skip;
-
-		var failBar = (fail * 100) / allTest;
-		var successBar = (success * 100) / allTest;
-		var skipBar = (skip * 100) / allTest;
-
-		if (success != 0) {
-			this._getElement(projectName, 'TABLE.uTest TD.success').width(successBar + "%").html(success);
-		} else {
-			this._getElement(projectName, 'TABLE.uTest TD.success').hide().html('');
-		}
-		if (fail != 0) {
-			this._getElement(projectName, 'TABLE.uTest TD.failure').width(failBar + "%").html(fail);
-		} else {
-			this._getElement(projectName, 'TABLE.uTest TD.failure').hide().html('');
-		}
-		if (skip != 0) {
-			this._getElement(projectName, 'TABLE.uTest TD.ignore').width(skipBar + "%").html(skip);
-		} else {
-			this._getElement(projectName, 'TABLE.uTest TD.ignore').hide().html('');
-		}
-	},
 	
-	displayIT : function(projectName, fail, success, skip) {
-		var allTest = fail + success + skip;
-
-		var failBar = (fail * 100) / allTest;
-		var successBar = (success * 100) / allTest;
-		var skipBar = (skip * 100) / allTest;
-
-		if (success != 0) {
-			this._getElement(projectName, 'TABLE.iTest TD.success').width(successBar + "%").html(success);
-		} else {
-			this._getElement(projectName, 'TABLE.iTest TD.success').hide().html('');
-		}
-		if (fail != 0) {
-			this._getElement(projectName, 'TABLE.iTest TD.failure').width(failBar + "%").html(fail);
-		} else {
-			this._getElement(projectName, 'TABLE.iTest TD.failure').hide().html('');
-		}
-		if (skip != 0) {
-			this._getElement(projectName, 'TABLE.iTest TD.ignore').width(skipBar + "%").html(skip);
-		} else {
-			this._getElement(projectName, 'TABLE.iTest TD.ignore').hide().html('');
-		}
+	updateUT : function(projectName, fail, success, skip) {
+		this._updateTest(projectName, fail, success, skip, 'u');
 	},
 
-	setUTCoverage : function(projectName, coverage) {
-		var displayCoverage = coverage;
-		if (coverage == 0) {
-			displayCoverage = 100;
-		}
-		this._getElement(projectName, 'TABLE.uTest').width(
-				displayCoverage + "%");
+	updateIT : function(projectName, fail, success, skip) {
+		this._updateTest(projectName, fail, success, skip, 'i');
 	},
 
-	setITCoverage : function(projectName, coverage) {
-		var displayCoverage = coverage;
-		if (coverage == 0) {
-			displayCoverage = 100;
-		}
-		this._getElement(projectName, 'TABLE.iTest').width(
-				displayCoverage + "%");
+	updateUTCoverage : function(projectName, coverage) {
+		this._updateCoverage(projectName, coverage, 'u');
+	},
+
+	updateITCoverage : function(projectName, coverage) {
+		this._updateCoverage(projectName, coverage, 'i');
 	},
 
 	updateAgo : function(projectName, finishBuild) {
@@ -182,6 +140,42 @@ jwall.mvc.view.Projects = {
 	},
 
 	// ///////////////////////////////////////////////
+	
+	_updateCoverage : function(projectName, coverage, type) {
+		var displayCoverage = coverage;
+		if (coverage == 0) {
+			displayCoverage = 100;
+		}
+		this._getElement(projectName, 'TABLE.' + type + 'Test').width(
+				displayCoverage + "%");
+	},
+	
+	_updateTest : function(projectName, fail, success, skip, type) {
+		if (fail == 0 && success == 0 && skip == 0) {
+			this['_hide' + type + 'T'](projectName);
+			return;
+		}	
+		var allTest = fail + success + skip;
+		var failBar = (fail * 100) / allTest;
+		var successBar = (success * 100) / allTest;
+		var skipBar = (skip * 100) / allTest;
+		if (success != 0) {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success').width(successBar + "%").html(success);
+		} else {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success').hide().html('');
+		}
+		if (fail != 0) {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure').width(failBar + "%").html(fail);
+		} else {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure').hide().html('');
+		}
+		if (skip != 0) {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore').width(skipBar + "%").html(skip);
+		} else {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore').hide().html('');
+		}
+		this['_show' + type + 'T'](projectName);
+	},
 
 	_getElement : function(projectName, suffix) {
 		var request = 'TD#' + projectName;
@@ -205,22 +199,45 @@ jwall.mvc.view.Projects = {
 		projectInnerTable.append($('<tr><td class="projectName">' + visualName
 				+ ' <abbr class="timeago" title=""></abbr></td></tr>'));
 		projectInnerTable.append($('<tr class="commitersTR"><td><ul class="commiters marquee"></ul></tr></td>'));
-		projectInnerTable.append($('<tr class="complianceTR"><td><p class="compliance"></p></tr></td>'));
+		projectInnerTable.append($('<tr class="qualityTR"><td><ul class="quality marquee"></ul></tr></td>'));
 		projectInnerTable.append($('<tr class= "timeleftTR"><td><p class="timeleft"></p></tr></td>'));
 		projectInnerTable.append($('<tr class="iTestTR"><td class="iTestTD"><table class="iTest"><tr><td class="failure"></td><td class="ignore"></td><td class="success"></td></tr></table></tr></td>'));
 		projectInnerTable.append($('<tr class="uTestTR"><td class="uTestTD"><table class="uTest"><tr><td class="failure"></td><td class="ignore"></td><td class="success"></td></tr></table></tr></td>'));
 		return projectTD;
 	},
-
-	_buildCommiters : function(commiters) {
-		var commiterString = "";
-		for ( var i = 0; i < commiters.length; i++) {
-			var commiter = commiters[i];
-			commiterString += "<li>";
-			commiterString += commiter;
-			commiterString += "</li>";
-		}
-		return $(commiterString);
+	
+	_hideCountDown : function(projectName) {
+		this._getElement(projectName, 'TR.timeleftTR').hide();
+	},
+	_hideQuality : function(projectName) {
+		this._getElement(projectName, 'TR.qualityTR').hide();
+	},
+	_showQuality : function(projectName) {
+		this._getElement(projectName, 'TR.qualityTR').show();
+	},
+	_hideCommiters : function(projectName) {
+		this._getElement(projectName, "TR.commitersTR").hide();
+	},
+	_showCommiters : function(projectName) {
+		this._getElement(projectName, "TR.commitersTR").show();
+	},
+	_hideiT : function(projectName) {
+		this._getElement(projectName, "TR.iTestTR").hide();
+	},
+	_hideuT : function(projectName) {
+		this._getElement(projectName, "TR.uTestTR").hide();
+	},
+	_showiT : function(projectName) {
+		this._getElement(projectName, "TR.iTestTR").show();
+	},
+	_showuT : function(projectName) {
+		this._getElement(projectName, "TR.uTestTR").show();
+	},
+	_showCountdown : function(projectName) {
+		this._getElement(projectName, "TR.timeleftTR").show();		
+	},
+	_hideCountdown : function(projectName) {
+		this._getElement(projectName, "TR.timeleftTR").hide();		
 	}
 };
 
