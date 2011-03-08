@@ -125,6 +125,7 @@ public class SonarService implements Service {
                     Double value = measure.getValue();
                     if (value != null) {
                         QualityMeasure qualityMeasure = new QualityMeasure();
+                        qualityMeasure.setName(measure.getRuleName());
                         qualityMeasure.setValue(value);
                         qualityMeasure.setFormattedValue(measure.getFormattedValue());
                         quality.add(key, qualityMeasure);
