@@ -19,9 +19,19 @@ package com.jsmadja.wall.projectwall.service;
 import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +44,9 @@ import com.google.common.base.Preconditions;
 import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.QualityMeasure;
+import com.jsmadja.wall.projectwall.domain.QualityMetric;
 import com.jsmadja.wall.projectwall.domain.QualityResult;
+import com.jsmadja.wall.projectwall.domain.SonarMetrics;
 
 public class SonarService implements Service {
 
@@ -46,6 +58,7 @@ public class SonarService implements Service {
      * http://docs.codehaus.org/display/SONAR/Web+Service+API
      */
     private Sonar sonar;
+    private Map<String, QualityMetric> qualityMetrics = new HashMap<String, QualityMetric>();
 
     private static final Logger LOG = LoggerFactory.getLogger(SonarService.class);
 
@@ -61,6 +74,28 @@ public class SonarService implements Service {
         }
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize sonar with url " + url);
+        }
+        createMetricList();
+    }
+
+    private void createMetricList() {
+        String metricUrl = url+"/api/metrics?format=xml";
+        try {
+            InputStream xmlStream = new URL(metricUrl).openStream();
+            Unmarshaller unmarshaller = JAXBContext.newInstance(SonarMetrics.class).createUnmarshaller();
+            SonarMetrics sonarMetrics = SonarMetrics.class.cast(unmarshaller.unmarshal(xmlStream));
+            for (QualityMetric metric:sonarMetrics.metric) {
+                qualityMetrics.put(metric.getKey(), metric);
+            }
+        } catch (MalformedURLException e) {
+            LOG.error("url: "+metricUrl,e);
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            LOG.error("url: "+metricUrl,e);
+            throw new RuntimeException(e);
+        } catch (JAXBException e) {
+            LOG.error("url: "+metricUrl,e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -92,11 +127,11 @@ public class SonarService implements Service {
 
     private Measure getMeasure(String projectId, String measureKey) throws SonarProjectNotFoundException {
         Preconditions.checkNotNull(projectId);
-        Resource project = sonar.find(ResourceQuery.createForMetrics(projectId, measureKey));
-        if (project == null) {
+        Resource resource = sonar.find(ResourceQuery.createForMetrics(projectId, measureKey));
+        if (resource == null) {
             throw new SonarProjectNotFoundException("Project with id #" + projectId + " not found in sonar " + url);
         }
-        return project.getMeasure(measureKey);
+        return resource.getMeasure(measureKey);
     }
 
     @Override
@@ -125,7 +160,7 @@ public class SonarService implements Service {
                     Double value = measure.getValue();
                     if (value != null) {
                         QualityMeasure qualityMeasure = new QualityMeasure();
-                        qualityMeasure.setName(measure.getRuleName());
+                        qualityMeasure.setName(qualityMetrics.get(key).getName());
                         qualityMeasure.setValue(value);
                         qualityMeasure.setFormattedValue(measure.getFormattedValue());
                         quality.add(key, qualityMeasure);
