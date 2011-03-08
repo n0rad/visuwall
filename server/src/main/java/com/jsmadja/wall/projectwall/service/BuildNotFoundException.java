@@ -1,6 +1,7 @@
 package com.jsmadja.wall.projectwall.service;
 
-public class BuildNotFoundException extends Exception {
+
+public final class BuildNotFoundException extends Exception {
 
     private static final long serialVersionUID = 615519485544622495L;
 
@@ -8,5 +9,8 @@ public class BuildNotFoundException extends Exception {
         super(cause);
     }
 
+    public BuildNotFoundException(Throwable t) {
+        super(t);
+    }
 
 }

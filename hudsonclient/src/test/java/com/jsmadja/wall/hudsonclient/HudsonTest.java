@@ -80,7 +80,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_retrieve_build_with_last_commiters() {
+    public void should_retrieve_build_with_last_commiters() throws HudsonBuildNotFoundException {
         HudsonBuild build = hudson.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
         assertEquals("Julien Smadja", build.getCommiters()[0]);
         assertEquals("Arnaud Lemaire", build.getCommiters()[1]);
@@ -93,7 +93,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_retrieve_build_start_time() {
+    public void should_retrieve_build_start_time() throws HudsonBuildNotFoundException {
         HudsonBuild build = hudson.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
         assertEquals(1298022037803L, build.getStartTime().getTime());
     }
@@ -138,7 +138,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_retrieve_test_result() {
+    public void should_retrieve_test_result() throws HudsonBuildNotFoundException {
         HudsonBuild build = hudson.findBuild("dev-radar", 74);
         TestResult testResult = build.getTestResult();
         assertEquals(1, testResult.getFailCount());
@@ -147,4 +147,5 @@ public class HudsonTest {
         assertEquals(16, testResult.getTotalCount());
         assertEquals(2, testResult.getIntegrationTestCount());
     }
+
 }
