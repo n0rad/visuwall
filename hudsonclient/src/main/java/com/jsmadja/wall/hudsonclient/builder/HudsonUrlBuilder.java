@@ -48,7 +48,7 @@ public class HudsonUrlBuilder {
      * @param buildNumber
      * @return Hudson Url to obtain detailed informations of a job
      */
-    public final String getJobUrl(String jobName, int buildNumber) {
+    public final String getBuildUrl(String jobName, int buildNumber) {
         return hudsonUrl+JOB_URI+"/"+jobName+"/"+buildNumber+API_XML;
     }
 

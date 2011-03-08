@@ -64,7 +64,7 @@ public class HudsonService implements Service {
     public void populate(Project project) throws ProjectNotFoundException {
         try {
             HudsonProject hudsonProject = hudson.findProject(project.getName());
-            // liste des champs à updater
+            project.setHudsonProject(hudsonProject);
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
         }
