@@ -51,7 +51,7 @@ public class Wall {
         for(Service service:services) {
             try {
                 service.populate(project);
-                service.populateQuality(project, qualityResult);
+                service.populateQuality(project, qualityResult, "violations_density", "technical_debt_days");
             } catch (ProjectNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(e.getMessage());

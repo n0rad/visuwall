@@ -124,7 +124,7 @@ public class HudsonService implements Service {
     }
 
     @Override
-    public void populateQuality(Project project, QualityResult quality) throws ProjectNotFoundException {
+    public void populateQuality(Project project, QualityResult quality, String ... metrics) throws ProjectNotFoundException {
         throw new ProjectNotFoundException("populateQuality is not implemented in HudsonService");
     }
 

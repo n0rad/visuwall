@@ -28,10 +28,8 @@ import org.junit.Test;
 
 import com.jsmadja.wall.projectwall.Integration;
 import com.jsmadja.wall.projectwall.domain.Project;
-import com.jsmadja.wall.projectwall.domain.QualityResult;
 import com.jsmadja.wall.projectwall.domain.QualityMeasure;
-import com.jsmadja.wall.projectwall.domain.QualityMetric;
-import com.jsmadja.wall.projectwall.domain.TechnicalDebt;
+import com.jsmadja.wall.projectwall.domain.QualityResult;
 import com.jsmadja.wall.projectwall.service.ProjectNotFoundException;
 import com.jsmadja.wall.projectwall.service.SonarProjectNotFoundException;
 import com.jsmadja.wall.projectwall.service.SonarService;
@@ -83,26 +81,15 @@ public class SonarServiceITTest {
         Double rulesCompliance = sonarService.getRulesCompliance(FLUXX_ARTIFACT_ID);
         assertNotNull(rulesCompliance);
     }
-
-    @Test
-    public void should_retrieve_technical_debt() throws SonarProjectNotFoundException {
-        TechnicalDebt technicalDebt = sonarService.getTechnicalDebt(FLUXX_ARTIFACT_ID);
-        assertEquals(8.9, technicalDebt.getRatio(), 0);
-        assertEquals(5037, technicalDebt.getCost());
-        assertEquals(10, technicalDebt.getDays());
-    }
-
     @Test
     public void should_populate_quality() throws SonarProjectNotFoundException, ProjectNotFoundException {
         Project project = new Project();
         project.setId(FLUXX_ARTIFACT_ID);
         QualityResult quality = new QualityResult();
-        sonarService.populateQuality(project, quality);
+        sonarService.populateQuality(project, quality, "technical_debt_ratio");
         QualityMeasure measure = quality.getMeasure("technical_debt_ratio");
-        QualityMetric metric = measure.getMetric();
         assertEquals("8.9%", measure.getFormattedValue());
         assertEquals(8.9, measure.getValue(), 0);
-        assertEquals("technical_debt_ratio", metric.getKey());
     }
 
     @Test

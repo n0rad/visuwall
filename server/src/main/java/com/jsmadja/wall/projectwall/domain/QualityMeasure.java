@@ -6,19 +6,12 @@ public final class QualityMeasure {
 
     private Double value;
     private String formattedValue;
-    private QualityMetric metric;
 
     public Double getValue() {
         return value;
     }
     public void setValue(Double value) {
         this.value = value;
-    }
-    public QualityMetric getMetric() {
-        return metric;
-    }
-    public void setMetric(QualityMetric metric) {
-        this.metric = metric;
     }
     public String getFormattedValue() {
         return formattedValue;
@@ -32,7 +25,6 @@ public final class QualityMeasure {
         return Objects.toStringHelper(this) //
         .add("value", value) //
         .add("formattedValue", formattedValue) //
-        .add("metric", metric.toString()) //
         .toString();
     }
 }

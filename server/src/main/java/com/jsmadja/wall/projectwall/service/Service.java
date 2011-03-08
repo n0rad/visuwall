@@ -27,6 +27,6 @@ public interface Service {
 
     Date getEstimatedFinishTime(Project project) throws ProjectNotFoundException;
 
-    void populateQuality(Project project, QualityResult quality) throws ProjectNotFoundException;
+    void populateQuality(Project project, QualityResult quality, String ... metrics) throws ProjectNotFoundException;
 
 }
