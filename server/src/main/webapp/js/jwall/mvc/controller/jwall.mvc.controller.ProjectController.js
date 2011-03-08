@@ -20,35 +20,23 @@ jwall.mvc.controller.ProjectController = {
 				var project = projects[i];
 				// save project
 				$this.projects[project.name] = project;
-
 				
 				$this.projectsView.updateCommiters(project.name, project.hudsonProject.lastBuild.commiters);
-		
-				$this._updateState(project);
-				
-				
 				$this.projectsView.updateAgo(project.name, new Date(project.hudsonProject.lastBuild.startTime + project.hudsonProject.lastBuild.duration));
-				
-				
+				$this._updateState(project);
 				if (project.rulesCompliance != 0) {
-					$this.projectsView.updateCompliance(project.name, project.rulesCompliance);
+					$this.projectsView.updateQuality(project.name, { 'compliance' : project.rulesCompliance, 'test' : 'salut'});
+				} else {
+					$this.projectsView.updateQuality(project.name, { });					
 				}
-
-				$this.projectsView.setUTCoverage(project.name, project.coverage);
-				$this.projectsView.setITCoverage(project.name, 45);
-
-				
-				$this.projectsView.displayIT(project.name, 
-						3,
-						5,
-						10,
-						45);
-				
-				$this.projectsView.displayUT(project.name, 
+				$this.projectsView.updateUTCoverage(project.name, project.coverage);
+				$this.projectsView.updateUT(project.name, 
 						project.hudsonProject.lastBuild.testResult.failCount,
 						project.hudsonProject.lastBuild.testResult.passCount,
 						project.hudsonProject.lastBuild.testResult.skipCount,
 						project.coverage);
+				$this.projectsView.updateITCoverage(project.name, 0);
+				$this.projectsView.updateIT(project.name, 0,0,0);
 				
 				// call updateBuilding like we just receive the status
 				var wasBuilding = project.hudsonProject.building;
@@ -104,7 +92,7 @@ jwall.mvc.controller.ProjectController = {
 			if (!project.hudsonProject.building) {
 				var $this = this;
 				jwall.business.service.Project.finishTime(project.name, function(data) {
-					$this.projectsView.showCountdown(project.name, new Date(data));
+					$this.projectsView.updateCountdown(project.name, new Date(data));
 				});
 				LOG.info("project is now building : " + project.name);
 				this.projectsView.showBuilding(project.name);
@@ -119,6 +107,8 @@ jwall.mvc.controller.ProjectController = {
 			this.projectService.project(project.name, function(newProjectData) {
 				$this._updateProject(newProjectData);
 			});			
+		} else {
+			this.projectsView.stopBuilding(project.name);
 		}
 	},
 	
