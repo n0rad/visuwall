@@ -84,8 +84,10 @@ public class Hudson {
                 HudsonProject hudsonProject = findProject(name);
                 projects.add(hudsonProject);
             } catch (HudsonProjectNotFoundException e) {
-                LOG.warn("Can't find project with name [" + name
-                        + "] but should be because the list comes from Hudson itself", e);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Can't find project with name [" + name
+                            + "] but should be because the list comes from Hudson itself", e);
+                }
             }
         }
         return projects;
