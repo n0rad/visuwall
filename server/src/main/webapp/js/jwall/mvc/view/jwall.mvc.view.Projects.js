@@ -197,7 +197,7 @@ jwall.mvc.view.Projects = {
 			visualName = description;
 		}
 
-		var projectTD = $('<td style="display:none" id="' + projectName
+		var projectTD = $('<td id="' + projectName
 				+ '" class="project"></td>');
 		var projectInnerTable = $('<table class="innerTable"><tbody></tbody></table>');
 		projectTD.append(projectInnerTable);
