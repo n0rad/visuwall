@@ -135,12 +135,25 @@ public class Hudson {
         TestResult testResult = hudsonTestService.build(testResultResource);
 
         HudsonBuild hudsonBuild = new HudsonBuild();
+        hudsonBuild.setState(getState(setBuild));
         hudsonBuild.setDuration(setBuild.getDuration());
         hudsonBuild.setStartTime(new Date(setBuild.getTimestamp()));
         hudsonBuild.setSuccessful(isSuccessful(setBuild));
         hudsonBuild.setCommiters(getCommiters(setBuild));
         hudsonBuild.setTestResult(testResult);
         return hudsonBuild;
+    }
+
+    private String getState(HudsonMavenMavenModuleSetBuild setBuild) {
+        if (setBuild == null) {
+            return "NEW";
+        }
+        ElementNSImpl element = (ElementNSImpl)  setBuild.getResult();
+        if (element == null) {
+            return "NEW";
+        }
+
+        return element.getFirstChild().getNodeValue();
     }
 
     /**
@@ -153,8 +166,8 @@ public class Hudson {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Project url : " + projectUrl);
         }
-        WebResource projectResource = client.resource(projectUrl);
         try {
+            WebResource projectResource = client.resource(projectUrl);
             return createHudsonProject(projectResource);
         } catch (HudsonProjectNotCreatedException e) {
             throw new HudsonProjectNotFoundException(e);
@@ -172,8 +185,8 @@ public class Hudson {
         HudsonProject hudsonProject = findProject(projectName);
         float sumBuildDurationTime = 0;
 
-        int[] successfulBuilds = getSuccessfulBuildNumbers(hudsonProject);
-        for (int buildNumber : successfulBuilds) {
+        int[] builds = hudsonProject.getBuildNumbers();
+        for (int buildNumber : builds) {
             HudsonBuild successfulBuild;
             try {
                 successfulBuild = findBuild(projectName, buildNumber);
@@ -184,7 +197,7 @@ public class Hudson {
                 }
             }
         }
-        long averageTime = (long) (sumBuildDurationTime / successfulBuilds.length);
+        long averageTime = (long) (sumBuildDurationTime / builds.length);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Average build time of " + projectName + " is " + averageTime + " ms");
         }

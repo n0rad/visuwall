@@ -9,19 +9,11 @@ import com.jsmadja.wall.hudsonclient.domain.TestResult;
 
 public class Build {
 
-    private boolean successful;
+    private State state;
     private String[] commiters;
     private long duration;
     private Date startTime;
     private TestResult testResult;
-
-    public boolean isSuccessful() {
-        return successful;
-    }
-
-    public void setSuccessful(boolean successful) {
-        this.successful = successful;
-    }
 
     public String[] getCommiters() {
         return commiters;
@@ -56,11 +48,20 @@ public class Build {
         this.testResult = testResult;
     }
 
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
     @Override
     public String toString() {
-        ToStringHelper toString = Objects.toStringHelper(this)
-        .add("status", successful)
-        .add("commiters", Arrays.toString(commiters)).add("duration", duration)
+        ToStringHelper toString = Objects.toStringHelper(this) //
+        .add("state", state) //
+        .add("commiters", Arrays.toString(commiters)) //
+        .add("duration", duration) //
         .add("startTime", startTime);
         if (testResult != null) {
             toString.add("test result", testResult.toString());
