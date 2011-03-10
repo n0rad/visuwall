@@ -5,7 +5,6 @@ import org.junit.Test;
 import com.jsmadja.wall.hudsonclient.Hudson;
 import com.jsmadja.wall.hudsonclient.HudsonBuildNotFoundException;
 import com.jsmadja.wall.hudsonclient.HudsonProjectNotFoundException;
-import com.jsmadja.wall.hudsonclient.domain.HudsonProject;
 
 public class HudsonTest {
 
@@ -22,7 +21,7 @@ public class HudsonTest {
 
     @Test
     public void should_find_not_built_project() throws HudsonProjectNotFoundException {
-        HudsonProject project = hudsonAwired.findProject("ajsl");
+        hudsonAwired.findProject("ajsl");
     }
 
 }
