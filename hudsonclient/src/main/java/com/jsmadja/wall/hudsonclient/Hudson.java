@@ -47,6 +47,8 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 public class Hudson {
 
+    private static final int UNBUILT_PROJECT = -1;
+
     private static final Logger LOG = LoggerFactory.getLogger(Hudson.class);
 
     private HudsonUrlBuilder hudsonUrlBuilder;
@@ -215,7 +217,8 @@ public class Hudson {
 
     private HudsonProject createHudsonProjectFrom(HudsonMavenMavenModuleSet moduleSet) throws HudsonBuildNotFoundException {
         String artifactId = null;
-        int lastBuildNumber = -1;
+        HudsonBuild lastHudsonBuild = null;
+        int lastBuildNumber = UNBUILT_PROJECT;
         String name = moduleSet.getName();
         String description = moduleSet.getDescription();
         HudsonModelRun lastBuild = moduleSet.getLastBuild();
@@ -227,8 +230,9 @@ public class Hudson {
             HudsonMavenMavenModule firstModule = moduleSet.getModule().get(0);
             artifactId = firstModule.getName();
         }
-        HudsonBuild lastHudsonBuild = findBuild(name, lastBuildNumber);
-
+        if (lastBuildNumber != UNBUILT_PROJECT) {
+            lastHudsonBuild = findBuild(name, lastBuildNumber);
+        }
         HudsonProject hudsonProject = new HudsonProject();
         hudsonProject.setBuilding(isBuilding);
         hudsonProject.setLastBuildNumber(lastBuildNumber);
