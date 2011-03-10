@@ -2,5 +2,5 @@ package com.jsmadja.wall.projectwall.domain;
 
 public enum State {
 
-    SUCCESS, NEW, CANCEL, FAILURE, UNSTABLE
+    SUCCESS, NEW, ABORTED, FAILURE, UNSTABLE
 }
