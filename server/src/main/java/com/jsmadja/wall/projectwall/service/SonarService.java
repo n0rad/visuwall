@@ -33,6 +33,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.wsclient.Sonar;
@@ -40,7 +41,6 @@ import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
-import com.google.common.base.Preconditions;
 import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.QualityMeasure;
@@ -126,7 +126,9 @@ public class SonarService implements Service {
     }
 
     private Measure getMeasure(String projectId, String measureKey) throws SonarProjectNotFoundException {
-        Preconditions.checkNotNull(projectId);
+        if (StringUtils.isBlank(projectId)) {
+            throw new SonarProjectNotFoundException("No projectId provided");
+        }
         Resource resource = sonar.find(ResourceQuery.createForMetrics(projectId, measureKey));
         if (resource == null) {
             throw new SonarProjectNotFoundException("Project with id #" + projectId + " not found in sonar " + url);

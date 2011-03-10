@@ -47,6 +47,8 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 public class Hudson {
 
+    private static final int UNBUILT_PROJECT = -1;
+
     private static final Logger LOG = LoggerFactory.getLogger(Hudson.class);
 
     private HudsonUrlBuilder hudsonUrlBuilder;
@@ -84,8 +86,10 @@ public class Hudson {
                 HudsonProject hudsonProject = findProject(name);
                 projects.add(hudsonProject);
             } catch (HudsonProjectNotFoundException e) {
-                LOG.warn("Can't find project with name [" + name
-                        + "] but should be because the list comes from Hudson itself", e);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Can't find project with name [" + name
+                            + "] but should be because the list comes from Hudson itself", e);
+                }
             }
         }
         return projects;
@@ -118,7 +122,9 @@ public class Hudson {
             throw new HudsonBuildNotFoundException(message, e);
         } catch(WebApplicationException e) {
             String message = "Error while loading build #" + buildNumber + " for project " + projectName;
-            LOG.warn(message);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(message, e);
+            }
             throw new HudsonBuildNotFoundException(message, e);
         }
     }
@@ -205,14 +211,14 @@ public class Hudson {
             HudsonMavenMavenModuleSet modelJob = projectResource.get(HudsonMavenMavenModuleSet.class);
             return createHudsonProjectFrom(modelJob);
         } catch (UniformInterfaceException e) {
-            LOG.warn("Error when calling createHudsonProject with projectResource:" + projectResource);
-            throw new HudsonProjectNotCreatedException(e);
+            throw new HudsonProjectNotCreatedException("Error when calling createHudsonProject with projectResource:" + projectResource, e);
         }
     }
 
     private HudsonProject createHudsonProjectFrom(HudsonMavenMavenModuleSet moduleSet) throws HudsonBuildNotFoundException {
         String artifactId = null;
-        int lastBuildNumber = -1;
+        HudsonBuild lastHudsonBuild = null;
+        int lastBuildNumber = UNBUILT_PROJECT;
         String name = moduleSet.getName();
         String description = moduleSet.getDescription();
         HudsonModelRun lastBuild = moduleSet.getLastBuild();
@@ -224,8 +230,9 @@ public class Hudson {
             HudsonMavenMavenModule firstModule = moduleSet.getModule().get(0);
             artifactId = firstModule.getName();
         }
-        HudsonBuild lastHudsonBuild = findBuild(name, lastBuildNumber);
-
+        if (lastBuildNumber != UNBUILT_PROJECT) {
+            lastHudsonBuild = findBuild(name, lastBuildNumber);
+        }
         HudsonProject hudsonProject = new HudsonProject();
         hudsonProject.setBuilding(isBuilding);
         hudsonProject.setLastBuildNumber(lastBuildNumber);
