@@ -13,6 +13,7 @@ public final class HudsonBuild {
     private long duration;
     private Date startTime;
     private TestResult testResult;
+    private String state;
 
     public boolean isSuccessful() {
         return successful;
@@ -55,12 +56,22 @@ public final class HudsonBuild {
         this.testResult = testResult;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     @Override
     public String toString() {
-        ToStringHelper toString = Objects.toStringHelper(this)
-        .add("status", successful)
-        .add("commiters", Arrays.toString(commiters)).add("duration", duration)
-        .add("startTime", startTime);
+        ToStringHelper toString = Objects.toStringHelper(this) //
+        .add("status", successful) //
+        .add("commiters", Arrays.toString(commiters)) //
+        .add("duration", duration) //
+        .add("startTime", startTime) //
+        .add("state", state); //
         if (testResult != null) {
             toString.add("test result", testResult.toString());
         }

@@ -28,6 +28,7 @@ public final class Project {
     private double rulesCompliance;
     private HudsonProject hudsonProject;
     private QualityResult qualityResult;
+    private State state;
 
     public String getName() {
         return name;
@@ -83,6 +84,14 @@ public final class Project {
 
     public void setQualityResult(QualityResult qualityResult) {
         this.qualityResult = qualityResult;
+
+    }
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     @Override
@@ -102,6 +111,7 @@ public final class Project {
         .add("description", description) //
         .add("coverage", coverage) //
         .add("rules compliance", rulesCompliance) //
+        .add("state", state) //
         .toString();
     }
 

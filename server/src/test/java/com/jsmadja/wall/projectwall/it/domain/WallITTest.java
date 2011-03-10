@@ -37,6 +37,7 @@ import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.ProjectStatus;
 import com.jsmadja.wall.projectwall.domain.Software;
 import com.jsmadja.wall.projectwall.domain.SoftwareAccess;
+import com.jsmadja.wall.projectwall.domain.State;
 import com.jsmadja.wall.projectwall.domain.Wall;
 import com.jsmadja.wall.projectwall.service.BuildNotFoundException;
 import com.jsmadja.wall.projectwall.service.ProjectNotFoundException;
@@ -58,6 +59,12 @@ public class WallITTest {
         for (Project project : projects) {
             System.err.println(project);
         }
+    }
+
+    @Test
+    public void should_retrieve_state() throws ProjectNotFoundException {
+        Project project = wall.findProjectByName("fluxx");
+        assertEquals(State.SUCCESS, project.getState());
     }
 
     @Test
@@ -110,6 +117,7 @@ public class WallITTest {
 
         for (ProjectStatus stat:status) {
             assertFalse(StringUtils.isBlank(stat.getName()));
+            assertNotNull(stat.getState());
         }
     }
 }

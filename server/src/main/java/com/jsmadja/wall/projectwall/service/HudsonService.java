@@ -17,6 +17,7 @@ import com.jsmadja.wall.hudsonclient.domain.HudsonProject;
 import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.QualityResult;
+import com.jsmadja.wall.projectwall.domain.State;
 
 public class HudsonService implements Service {
 
@@ -66,6 +67,12 @@ public class HudsonService implements Service {
         try {
             HudsonProject hudsonProject = hudson.findProject(project.getName());
             project.setHudsonProject(hudsonProject);
+            HudsonBuild lastBuild = hudsonProject.getLastBuild();
+            if (lastBuild == null) {
+                project.setState(State.NEW);
+            } else {
+                project.setState(State.valueOf(lastBuild.getState()));
+            }
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
         }
@@ -103,7 +110,7 @@ public class HudsonService implements Service {
         build.setCommiters(hudsonBuild.getCommiters());
         build.setDuration(hudsonBuild.getDuration());
         build.setStartTime(hudsonBuild.getStartTime());
-        build.setSuccessful(hudsonBuild.isSuccessful());
+        build.setState(State.valueOf(hudsonBuild.getState()));
         build.setTestResult(hudsonBuild.getTestResult());
         return build;
     }

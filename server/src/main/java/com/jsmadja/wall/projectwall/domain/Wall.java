@@ -106,6 +106,7 @@ public class Wall {
             status.setBuilding(project.getHudsonProject().isBuilding());
             status.setLastBuildId(project.getHudsonProject().getLastBuildNumber());
             status.setName(project.getName());
+            status.setState(project.getState());
             statusList.add(status);
         }
         return statusList;
