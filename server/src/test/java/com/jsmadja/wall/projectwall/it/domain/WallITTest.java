@@ -117,6 +117,7 @@ public class WallITTest {
 
         for (ProjectStatus stat:status) {
             assertFalse(StringUtils.isBlank(stat.getName()));
+            assertNotNull(stat.getState());
         }
     }
 }
