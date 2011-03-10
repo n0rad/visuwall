@@ -209,8 +209,7 @@ public class Hudson {
             HudsonMavenMavenModuleSet modelJob = projectResource.get(HudsonMavenMavenModuleSet.class);
             return createHudsonProjectFrom(modelJob);
         } catch (UniformInterfaceException e) {
-            LOG.warn("Error when calling createHudsonProject with projectResource:" + projectResource);
-            throw new HudsonProjectNotCreatedException(e);
+            throw new HudsonProjectNotCreatedException("Error when calling createHudsonProject with projectResource:" + projectResource, e);
         }
     }
 

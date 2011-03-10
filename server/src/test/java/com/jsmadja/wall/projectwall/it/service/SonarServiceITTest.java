@@ -71,7 +71,7 @@ public class SonarServiceITTest {
         sonarService.getCoverage("");
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = SonarProjectNotFoundException.class)
     public void should_throw_exception_when_passing_null() throws SonarProjectNotFoundException {
         sonarService.getCoverage(null);
     }
