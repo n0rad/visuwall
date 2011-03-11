@@ -18,13 +18,6 @@
 
 	<name>wall - Test Project</name>
 
-	<parent>
-		<groupId>com.jsmadja.wall</groupId>
-		<artifactId>wall</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../</relativePath>
-	</parent>
-
 	<dependencies>
 		<!-- Test -->
 		<dependency>

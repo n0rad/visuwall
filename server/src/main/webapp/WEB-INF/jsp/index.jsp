@@ -25,31 +25,33 @@ ${cssLinks} ${jsLinks}
 </head>
 <body>
 
-<table id="projectsTable" height="100%" width="100%">
-	<tbody>
-		<!-- <tr>
-			<td class="project success" width="50%">
-			<div class="content">
-			<div class="projectName">Project-Test</div>
-			<div class="commiters">
-			<p style="font-size: 3em; line-height: 1em">alemaire, jsmadja</p>
-			</div>
-			</div>
-			</td>
-			<td class="project success" width="50%">
-			<div class="projectName">Project-Test</div>
-			</td>
-		</tr>
-		<tr>
-			<td class="project success" width="50%">
-			<div class="projectName">Project-Test</div>
-			</td>
-			<td class="project success" width="50%">
-			<div class="projectName">Project-Test</div>
-			</td>
-		</tr> -->
-	</tbody>
-</table>
+<ul id="projectsTable"></ul>
+
+<!--<table id="projectsTable" height="100%" width="100%">-->
+<!--	<tbody>-->
+<!--		 <tr>-->
+<!--			<td class="project success" width="50%">-->
+<!--			<div class="content">-->
+<!--			<div class="projectName">Project-Test</div>-->
+<!--			<div class="commiters">-->
+<!--			<p style="font-size: 3em; line-height: 1em">alemaire, jsmadja</p>-->
+<!--			</div>-->
+<!--			</div>-->
+<!--			</td>-->
+<!--			<td class="project success" width="50%">-->
+<!--			<div class="projectName">Project-Test</div>-->
+<!--			</td>-->
+<!--		</tr>-->
+<!--		<tr>-->
+<!--			<td class="project success" width="50%">-->
+<!--			<div class="projectName">Project-Test</div>-->
+<!--			</td>-->
+<!--			<td class="project success" width="50%">-->
+<!--			<div class="projectName">Project-Test</div>-->
+<!--			</td>-->
+<!--		</tr> -->
+<!--	</tbody>-->
+<!--</table>-->
 
 <div id="overlay"></div>
 </body>

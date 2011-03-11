@@ -1,42 +1,42 @@
 jwall.mvc.view.Projects = {
 	table : null,
 
-	statusClasses : [ "failure", "success", "unstable" ],
-
+	statusClasses : [ 'failure', 'success', 'unstable', 'aborted', 'new' ],
+	
 	init : function() {
-		this.table = $('table#projectsTable');
+		this.table = $('ul#projectsTable').sortable().disableSelection();
+	},
+	
+	addProject : function(name, description) {
+		LOG.info('add project to display : ' + name);
+		
+		var newCss = this._runResize($('LI.project', this.table).length + 1);
+		
+		var projectLI = this._buildProjectTD(name, description);
+		projectLI.css(newCss);
+		this.table.append(projectLI);
+		projectLI.fadeIn("slow");
+	},
+	
+	/**
+	 * return newCss to apply to a new Project
+	 */
+	_runResize : function(NumberOfProjects) {
+		var currentProjects = $('LI.project', this.table);
+		
+		var projectsByRow = Math.round(Math.sqrt(NumberOfProjects));
+		var rows =  Math.round((NumberOfProjects) / projectsByRow);
+		
+		var newCss = {width : (99 / projectsByRow) + '%', height : 97 / rows + '%', margin : (1 / (rows * 2)) + '% ' + (1 / (projectsByRow * 2)) + '%'};
+		currentProjects.stop(true, false);
+		currentProjects.css({opacity: '1', display : 'inline-block'});
+		currentProjects.animate(newCss);
+		return newCss;
 	},
 
-	addProjects : function(projects) {
-		var projectsByRow = Math.round(Math.sqrt(projects.length));
-		var projectTR;
-		for ( var i = 0; i < projects.length; i++) {
-			if (i % projectsByRow == 0) {
-				projectTR = $('<tr></tr>');
-				$('#projectsTable').append(projectTR);
-			}
-			var width = 100 / projectsByRow;
-			var projectTD = this._buildProjectTD(projects[i].name,
-					projects[i].description);
-			projectTR.append(projectTD);
-			projectTD.fadeIn("slow");
-		}
-	},
-
-	addProject : function(project) {
-		LOG.info('add project to display : ' + project.name);
-		var projectTD = this._buildProjectTD(project);
-		var projectTR = $('<tr></tr>');
-		projectTR.append(projectTD);
-		this.table.append(projectTR);
-		projectTD.fadeIn("slow");
-	},
-
-	removeProject : function(project) {
-		alert("removeProject" + project);
-		// TODO manage adding a project to table, for the moment we reload the
-		// page
-		location.reload();
+	removeProject : function(projectName) {
+		this._runResize($('LI.project', this.table).length - 1);
+		this._getElement(projectName).fadeOut("slow").remove();		
 	},
 
 	updateCountdown : function(projectName, finishDate) {
@@ -53,6 +53,11 @@ jwall.mvc.view.Projects = {
 		});
 		this._showCountdown(projectName);
 	},
+	
+	updateBuildTime : function(projectName, duration) {
+		var good = buildVisualDuration(duration);
+		this._getElement(projectName, 'span.duration').replaceWith('~' + good);
+	},
 
 	updateQuality : function(projectName, quality) {
 		if (Object.size(quality) == 0) {
@@ -63,20 +68,14 @@ jwall.mvc.view.Projects = {
 		for (var i = 0; i < quality.length; i++) {
 			   var name = quality[i].value.name;
 			   var value = quality[i].value.formattedValue;
-			   qualityLi += '<li>' + name + ' : ' + value + '</li>';
+			   qualityLi += '<li>' + name + ': ' + value + '</li>';
 		}
-		
-		//		for (var key in quality) {
-//			   var obj = quality[key];
-//			   qualityLi += '<li>' + key + ' : ' + quality[key] + '</li>';
-//			}
 		this._getElement(projectName, 'UL.quality').append($(qualityLi)).marquee({
 			yScroll : 'bottom'
 		});
 		this._showQuality(projectName);
 	},
 
-	
 	showBuilding : function(projectName) {
 		this._getElement(projectName).blink({
 			fadeDownSpeed : 2000,
@@ -123,6 +122,17 @@ jwall.mvc.view.Projects = {
 				this.statusClasses, 'unstable', 3000);
 	},
 	
+	displayNew : function(projectName) {
+		this._getElement(projectName, '.projectName').switchClasses(
+				this.statusClasses, 'new', 3000);
+	},
+	
+	displayAborted : function(projectName) {
+		this._getElement(projectName, '.projectName').switchClasses(
+				this.statusClasses, 'aborted', 3000);
+	},
+	
+	
 	updateUT : function(projectName, fail, success, skip) {
 		this._updateTest(projectName, fail, success, skip, 'u');
 	},
@@ -141,6 +151,10 @@ jwall.mvc.view.Projects = {
 
 	updateAgo : function(projectName, finishBuild) {
 		var abbr = this._getElement(projectName, 'abbr.timeago');
+		if (finishBuild == 0) {
+			abbr.append('never');
+			return;
+		}
 		abbr.attr("title", ISODateString(new Date(finishBuild)));
 		abbr.data("timeago", null).timeago();
 	},
@@ -184,7 +198,7 @@ jwall.mvc.view.Projects = {
 	},
 
 	_getElement : function(projectName, suffix) {
-		var request = 'TD#' + projectName;
+		var request = 'LI#' + projectName;
 		if (suffix != undefined) {
 			request += ' ' + suffix;
 		}
@@ -193,22 +207,22 @@ jwall.mvc.view.Projects = {
 
 	_buildProjectTD : function(projectName, description) {
 		var visualName = projectName;
-		if (description != '') {
+		if (description && description != '') {
 			visualName = description;
 		}
 
-		var projectTD = $('<td style="display:none" id="' + projectName
-				+ '" class="project"></td>');
+		var projectTD = $('<li style="display:none" id="' + projectName
+				+ '" class="project"></li>');
 		var projectInnerTable = $('<table class="innerTable"><tbody></tbody></table>');
 		projectTD.append(projectInnerTable);
 		
 		projectInnerTable.append($('<tr><td class="projectName">' + visualName
-				+ ' <abbr class="timeago" title=""></abbr></td></tr>'));
-		projectInnerTable.append($('<tr class="commitersTR"><td><ul class="commiters marquee"></ul></tr></td>'));
-		projectInnerTable.append($('<tr class="qualityTR"><td><ul class="quality marquee"></ul></tr></td>'));
-		projectInnerTable.append($('<tr class= "timeleftTR"><td><p class="timeleft"></p></tr></td>'));
-		projectInnerTable.append($('<tr class="iTestTR"><td class="iTestTD"><table class="iTest"><tr><td class="failure"></td><td class="ignore"></td><td class="success"></td></tr></table></tr></td>'));
-		projectInnerTable.append($('<tr class="uTestTR"><td class="uTestTD"><table class="uTest"><tr><td class="failure"></td><td class="ignore"></td><td class="success"></td></tr></table></tr></td>'));
+				+ ' <span class="inlineInfo">( <abbr class="timeago" title=""></abbr><span class="duration"></span> )<span></td></tr>'));
+		projectInnerTable.append($('<tr style="display:none" class="commitersTR"><td><ul class="commiters marquee"></ul></tr></td>'));
+		projectInnerTable.append($('<tr style="display:none" class="qualityTR"><td><ul class="quality marquee"></ul></tr></td>'));
+		projectInnerTable.append($('<tr style="display:none" class= "timeleftTR"><td><p class="timeleft"></p></tr></td>'));
+		projectInnerTable.append($('<tr style="display:none" class="iTestTR"><td class="iTestTD"><table class="iTest"><tr><td class="failure"></td><td class="ignore"></td><td class="success"></td></tr></table></tr></td>'));
+		projectInnerTable.append($('<tr style="display:none" class="uTestTR"><td class="uTestTD"><table class="uTest"><tr><td class="failure"></td><td class="ignore"></td><td class="success"></td></tr></table></tr></td>'));
 		return projectTD;
 	},
 	

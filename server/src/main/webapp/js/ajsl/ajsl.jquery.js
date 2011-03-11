@@ -1,3 +1,40 @@
+function buildVisualDuration(duration) {
+	var inst = {options: {
+		compact : true,
+		format : 'dhms'}, _periods: [0, 0, 0, 0, 0, 0, 0], _show : ['!','!','!','!','!','!', '!']};
+	
+	inst._now = new Date();
+	inst._until = new Date(inst._now.getTime() + duration);
+	inst._show = jQuery.countdown._determineShow(inst);
+	var res = jQuery.countdown._calculatePeriods(inst, inst._show, 0, inst._now);
+	var html = jQuery.countdown._generateHTML(inst);
+	var good = strip(html);
+	return good;
+}
+
+
+
+function strip(html)
+{
+   var tmp = document.createElement("DIV");
+   tmp.innerHTML = html;
+   return tmp.textContent||tmp.innerText;
+}
+
+function exists(obj, prop) {
+    var parts = prop.split('.');
+    for(var i = 0, l = parts.length; i < l; i++) {
+        var part = parts[i];
+        if(obj !== null && typeof obj === "object" && part in obj) {
+            obj = obj[part];
+        }
+        else {
+            return false;
+        }
+    }
+    return true;
+}
+
 Object.size = function(obj) {
     var size = 0, key;
     for (key in obj) {
