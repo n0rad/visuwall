@@ -44,7 +44,7 @@ import com.jsmadja.wall.projectwall.domain.QualityMetric;
 import com.jsmadja.wall.projectwall.domain.QualityResult;
 import com.jsmadja.wall.projectwall.domain.SonarMetrics;
 
-public class SonarService implements QualityService {
+public final class SonarService implements QualityService {
 
     private String url;
     private String login;

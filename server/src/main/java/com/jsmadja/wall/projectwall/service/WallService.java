@@ -12,7 +12,9 @@ import com.google.common.base.Preconditions;
 import com.jsmadja.wall.projectwall.domain.Wall;
 
 @Service
-public class WallService {
+public final class WallService {
+
+    private final static int EVERY_FIVE_MINUTES = 5*60*1000;
 
     private Set<Wall> walls = new HashSet<Wall>();
 
@@ -24,7 +26,7 @@ public class WallService {
         }
     }
 
-    @Scheduled(fixedDelay=5*60*1000)
+    @Scheduled(fixedDelay=EVERY_FIVE_MINUTES)
     public synchronized void refreshWalls() {
         if (LOG.isInfoEnabled()) {
             LOG.info("It's time to refresh all walls");

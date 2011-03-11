@@ -18,7 +18,7 @@ import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.State;
 
-public class HudsonService implements BuildService {
+public final class HudsonService implements BuildService {
 
     private static final Logger LOG = LoggerFactory.getLogger(HudsonService.class);
 
