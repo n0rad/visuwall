@@ -1,15 +1,14 @@
 BODY {
 	background-color: black;
+	overflow: hidden;
 }
 
 #projectsTable {
 	height: 100%;
 	width: 100%;
-	border-collapse: separate;
-	border-spacing: 5px;
 }
 
-#projectsTable tr td.project {
+#projectsTable .project {
 /*	border: 1px solid black;*/
 	vertical-align: top;
 	overflow: hidden;
@@ -21,18 +20,28 @@ BODY {
 	border-bottom-right-radius: 10px 10px;
 	border-bottom-left-radius: 10px 10px;
 	color: black;
-	background-color:white;
+	background-color: white;
+	display: inline-block;
 }
 
-#projectsTable td.success {
+#projectsTable .success {
 	background-color: green;
 /*	background-color: #63b542;*/
 }
-
 #projectsTable .failure {
 	background-color: red;
 /*	background-color: #f3373c;*/
 }
+#projectsTable .new {
+	background-color: #58aff3;
+}
+#projectsTable .aborted {
+	background-color: #cacaca;
+}
+#projectsTable .unstable {
+	background-color: #fded72;
+}
+
 
 #projectsTable .commiters, #projectsTable .quality {
 	text-align: center;
@@ -63,7 +72,7 @@ TABLE.uTest TD, TABLE.iTest TD {
 	font-weight: bold;
 }
 
-.project abbr {
+.project .inlineInfo {
 	font-size: 0.5em;
 	font-style: italic;
 }

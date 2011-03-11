@@ -13,47 +13,58 @@ jwall.mvc.controller.ProjectController = {
 	
 	buildProjects : function() {
 		var $this = this;
-
 		jwall.business.service.Project.projects(function(projects) {
-			$this.projectsView.addProjects(projects);
 			for (var i = 0; i < projects.length; i++) {
-				$this._updateProject(projects[i]);
+				$this.addProject(projects[i]);
 			}
 		});
+
+		// TODO remove
+		$('ul#projectsTable li:last-child').live('click', function() {
+		    $(this).prependTo('ul#projectsTable');
+		});
+	},
+	
+	addProject : function(projectData) {
+		this.projectsView.addProject(projectData.name, projectData.description);
+		this._updateProject(projectData);	
 	},
 
 	updateStatus : function() {
 		var $this = this;
 		$this.projectService.status(function (projectsStatus) {
+			var projectDone = [];
 			for (var i = 0; i < projectsStatus.length; i++) {
 				var status = projectsStatus[i];
+
+				if ($this.projects[status.name] == undefined) {
+					// this is a new project
+					$this.projectService.project(status.name, function(newProjectData) {
+						$this.addProject(newProjectData);
+					});
+					continue;
+				}
 				var project = $this.projects[status.name];
 				LOG.debug('Update status for project ' + status.name);
 				$this._updateBuilding(project, status.building);
 				$this._checkVersionChange(project, status);
-			}	
-			//TODO find new projects
-			//TODO find removed projects
+
+				projectDone.push(status.name);
+			}
+			
+			// looking for project to delete
+			for (var key in $this.projects) {
+				if (!projectDone.contains(key)) {
+					$this._removeProject(key);
+				}
+			}
 		});
 	},
 	
 	_updateProject : function(project) {
-		this.projectsView.updateCommiters(project.name, project.hudsonProject.lastBuild.commiters);
-		this.projectsView.updateAgo(project.name, new Date(project.hudsonProject.lastBuild.startTime + project.hudsonProject.lastBuild.duration));
 		this._updateState(project);
-		if (project.rulesCompliance != 0) {
-			this.projectsView.updateQuality(project.name, project.qualityResult.measures);
-		} else {
-			this.projectsView.updateQuality(project.name, { });					
-		}
-		this.projectsView.updateUTCoverage(project.name, project.coverage);
-		this.projectsView.updateUT(project.name, 
-				project.hudsonProject.lastBuild.testResult.failCount,
-				project.hudsonProject.lastBuild.testResult.passCount,
-				project.hudsonProject.lastBuild.testResult.skipCount,
-				project.coverage);
-		this.projectsView.updateITCoverage(project.name, 0);
-		this.projectsView.updateIT(project.name, 0,0,0);
+		this._updateLastBuild(project);
+		this._updateAgo(project);
 		
 		// call updateBuilding like we just receive the status
 		var wasBuilding = project.hudsonProject.building;
@@ -64,14 +75,62 @@ jwall.mvc.controller.ProjectController = {
 		this.projects[project.name] = project;	
 	},
 	
+	_updateLastBuild : function(project) {
+		if (project.hudsonProject.lastBuild != null) {
+			this.projectsView.updateBuildTime(project.name, project.hudsonProject.lastBuild.duration);
+			
+			this.projectsView.updateCommiters(project.name, project.hudsonProject.lastBuild.commiters);
+			if (project.rulesCompliance != 0) {
+				this.projectsView.updateQuality(project.name, project.qualityResult.measures);
+			} else {
+				this.projectsView.updateQuality(project.name, { });					
+			}
+			this.projectsView.updateUTCoverage(project.name, project.coverage);
+			this.projectsView.updateUT(project.name, 
+					project.hudsonProject.lastBuild.testResult.failCount,
+					project.hudsonProject.lastBuild.testResult.passCount,
+					project.hudsonProject.lastBuild.testResult.skipCount,
+					project.coverage);
+			this.projectsView.updateITCoverage(project.name, 0);
+			this.projectsView.updateIT(project.name, 0,0,0);
+
+		}
+	},
+	
+	_updateAgo : function(project) {
+		if (project.hudsonProject.lastBuild != null) {
+			this.projectsView.updateAgo(project.name, new Date(project.hudsonProject.lastBuild.startTime + project.hudsonProject.lastBuild.duration));					
+		} else {
+			this.projectsView.updateAgo(project.name, 0);
+		}
+	},
 	
 	/////////////////////////////////////////////////////////////////////////
+		
+	_removeProject : function(projectName) {
+		delete this.projects[projectName];
+		this.projectsView.removeProject(projectName);
+	},
 	
 	_updateState : function(project) {
-		if (project.hudsonProject.lastBuild.successful) {
+		switch(project.state) {
+		case 'SUCCESS':
 			this.projectsView.displaySuccess(project.name);
-		} else {
+			break;
+		case 'NEW':
+			this.projectsView.displayNew(project.name);
+			break;
+		case 'ABORTED':
+			this.projectsView.displayAborted(project.name);
+			break;
+		case 'FAILURE':
 			this.projectsView.displayFailure(project.name);			
+			break;
+		case 'UNSTABLE':
+			this.projectsView.displayUnstable(project.name);
+			break;
+		default:
+			LOG.error('Unknown project state : ' + project.state);
 		}
 	},
 	

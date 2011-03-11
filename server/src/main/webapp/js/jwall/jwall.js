@@ -9,8 +9,6 @@ jwall = {
 			$(function (){
 				
 				jQuery.timeago.settings.strings = {
-				        	prefixAgo: "(",
-					        suffixAgo: ")",
 					        suffixFromNow: "from now",
 					        seconds: "<1min",
 					        minute: "1min",
@@ -66,7 +64,7 @@ jwall = {
 						});
 					}
 				});
-								
+	
 				jwall.mvc.controller.ProjectController.buildProjects();
 				
 				// create updater event
