@@ -43,7 +43,7 @@ public class Wall {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Refreshing projects");
             }
-            projects.clear();
+            projects = new HashSet<Project>();
             for(Service service:services) {
                 projects.addAll(service.findAllProjects());
             }
