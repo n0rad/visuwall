@@ -48,7 +48,7 @@ public class WallITTest {
 
     @Before
     public void init() {
-        wall = new Wall();
+        wall = new Wall("test");
         wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, Integration.HUDSON_URL));
         wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, Integration.SONAR_URL));
     }
@@ -64,7 +64,7 @@ public class WallITTest {
     @Test
     public void should_retrieve_state() throws ProjectNotFoundException {
         Project project = wall.findProjectByName("fluxx");
-        assertEquals(State.SUCCESS, project.getState());
+        assertEquals(State.UNSTABLE, project.getState());
     }
 
     @Test

@@ -96,6 +96,40 @@ public class HudsonService implements Service {
         }
     }
 
+
+    @Override
+    public boolean isBuilding(Project project) throws ProjectNotFoundException {
+        try {
+            return hudson.isBuilding(project.getName());
+        } catch (HudsonProjectNotFoundException e) {
+            throw new ProjectNotFoundException(e);
+        }
+    }
+
+    @Override
+    public State getState(Project project) throws ProjectNotFoundException {
+        try {
+            String projectName = project.getName();
+            String state = hudson.getState(projectName);
+            return State.valueOf(state);
+        } catch (HudsonProjectNotFoundException e) {
+            throw new ProjectNotFoundException(e);
+        }
+    }
+
+    @Override
+    public int getLastBuildNumber(Project project) throws ProjectNotFoundException, BuildNotFoundException {
+        try {
+            String projectName = project.getName();
+            int lastBuildNumber = hudson.getLastBuildNumber(projectName);
+            return lastBuildNumber;
+        } catch (HudsonProjectNotFoundException e) {
+            throw new ProjectNotFoundException(e);
+        } catch (HudsonBuildNotFoundException e) {
+            throw new BuildNotFoundException(e);
+        }
+    }
+
     @Override
     public Build findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) throws BuildNotFoundException {
         try {

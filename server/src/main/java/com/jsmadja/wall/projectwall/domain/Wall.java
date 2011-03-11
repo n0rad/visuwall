@@ -1,6 +1,7 @@
 package com.jsmadja.wall.projectwall.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Objects;
 import com.jsmadja.wall.projectwall.service.BuildNotFoundException;
 import com.jsmadja.wall.projectwall.service.ProjectNotFoundException;
 import com.jsmadja.wall.projectwall.service.Service;
@@ -17,26 +19,42 @@ import com.jsmadja.wall.projectwall.service.Service;
 
 public class Wall {
 
+    private static final int PROJECT_NOT_BUILT_ID = -1;
+
     private static final Logger LOG = LoggerFactory.getLogger(Wall.class);
 
     private Set<Service> services = new HashSet<Service>();
+
+    private Set<Project> projects = new HashSet<Project>();
+
+    private String name;
+
+    public Wall(String name) {
+        this.name = name;
+    }
 
     public void addSoftwareAccess(SoftwareAccess softwareAccess) {
         services.add(softwareAccess.createService());
     }
 
-    public Collection<Project> findAllProjects() {
-        List<Project> projects = new ArrayList<Project>();
-
-        for(Service service:services) {
-            projects.addAll(service.findAllProjects());
+    public void refreshProjects() {
+        synchronized (projects) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Refreshing projects");
+            }
+            projects.clear();
+            for(Service service:services) {
+                projects.addAll(service.findAllProjects());
+            }
+            populate(projects);
         }
-        populate(projects);
+    }
 
+    public Collection<Project> findAllProjects() {
         return projects;
     }
 
-    private void populate(List<Project> projects) {
+    private void populate(Collection<Project> projects) {
         for (Project project:projects) {
             populate(project);
         }
@@ -88,6 +106,9 @@ public class Wall {
                 Project project = service.findProjectByName(projectName);
                 if (project != null) {
                     populate(project);
+                    synchronized (projects) {
+                        projects.add(project);
+                    }
                     return project;
                 }
             } catch(ProjectNotFoundException e) {
@@ -100,16 +121,61 @@ public class Wall {
     }
 
     public List<ProjectStatus> getStatus() {
-        List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
-        for (Project project:findAllProjects()) {
-            ProjectStatus status = new ProjectStatus();
-            status.setBuilding(project.getHudsonProject().isBuilding());
-            status.setLastBuildId(project.getHudsonProject().getLastBuildNumber());
-            status.setName(project.getName());
-            status.setState(project.getState());
-            statusList.add(status);
+        synchronized (projects) {
+            List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
+            for (Project project:projects) {
+                ProjectStatus status = new ProjectStatus();
+                status.setBuilding(isBuilding(project));
+                status.setLastBuildId(getLastBuildNumber(project));
+                status.setName(project.getName());
+                status.setState(getState(project));
+                statusList.add(status);
+            }
+            return statusList;
         }
-        return statusList;
+    }
+
+    private int getLastBuildNumber(Project project) {
+        for (Service service:services) {
+            try {
+                return service.getLastBuildNumber(project);
+            } catch (ProjectNotFoundException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage());
+                }
+            } catch (BuildNotFoundException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage());
+                }
+            }
+        }
+        return PROJECT_NOT_BUILT_ID;
+    }
+
+    private State getState(Project project) {
+        for (Service service:services) {
+            try {
+                return service.getState(project);
+            } catch (ProjectNotFoundException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage());
+                }
+            }
+        }
+        throw new RuntimeException("Project must have a state."+project);
+    }
+
+    private boolean isBuilding(Project project) {
+        for (Service service:services) {
+            try {
+                return service.isBuilding(project);
+            } catch (ProjectNotFoundException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage());
+                }
+            }
+        }
+        return false;
     }
 
     public Build findBuildByProjectNameAndBuilderNumber(String projectName, int buildNumber) throws BuildNotFoundException {
@@ -126,5 +192,13 @@ public class Wall {
             }
         }
         throw new BuildNotFoundException("No build #"+buildNumber+" for project "+projectName);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this) //
+        .add("name", name) //
+        .add("projects", Arrays.toString(projects.toArray())) //
+        .toString();
     }
 }

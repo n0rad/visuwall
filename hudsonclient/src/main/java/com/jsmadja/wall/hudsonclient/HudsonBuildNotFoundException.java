@@ -8,4 +8,8 @@ public final class HudsonBuildNotFoundException extends Exception {
         super(cause, t);
     }
 
+    public HudsonBuildNotFoundException(String cause) {
+        super(cause);
+    }
+
 }
