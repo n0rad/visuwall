@@ -39,10 +39,7 @@ public class Wall {
 
     public void refreshProjects() {
         synchronized (projects) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Refreshing projects");
-            }
-            projects.clear();
+            projects = new HashSet<Project>();
             for(Service service:services) {
                 projects.addAll(service.findAllProjects());
             }
@@ -50,7 +47,7 @@ public class Wall {
         }
     }
 
-    public Collection<Project> findAllProjects() {
+    public Collection<Project> getProjects() {
         return projects;
     }
 
@@ -192,6 +189,13 @@ public class Wall {
             }
         }
         throw new BuildNotFoundException("No build #"+buildNumber+" for project "+projectName);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Wall))
+            return false;
+        return name == ((Wall)obj).name;
     }
 
     @Override
