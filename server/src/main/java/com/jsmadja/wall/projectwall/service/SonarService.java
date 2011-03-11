@@ -47,6 +47,7 @@ import com.jsmadja.wall.projectwall.domain.QualityMeasure;
 import com.jsmadja.wall.projectwall.domain.QualityMetric;
 import com.jsmadja.wall.projectwall.domain.QualityResult;
 import com.jsmadja.wall.projectwall.domain.SonarMetrics;
+import com.jsmadja.wall.projectwall.domain.State;
 
 public class SonarService implements Service {
 
@@ -203,6 +204,21 @@ public class SonarService implements Service {
     @Override
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean isBuilding(Project project) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("Not implemented!");
+    }
+
+    @Override
+    public State getState(Project project) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("Not implemented!");
+    }
+
+    @Override
+    public int getLastBuildNumber(Project project) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("Not implemented!");
     }
 
 }
