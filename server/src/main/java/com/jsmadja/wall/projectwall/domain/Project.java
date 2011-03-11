@@ -95,6 +95,11 @@ public final class Project {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hashCode(id, name);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Project)) {
             return false;
