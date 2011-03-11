@@ -23,10 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
@@ -41,15 +38,13 @@ import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
-import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.QualityMeasure;
 import com.jsmadja.wall.projectwall.domain.QualityMetric;
 import com.jsmadja.wall.projectwall.domain.QualityResult;
 import com.jsmadja.wall.projectwall.domain.SonarMetrics;
-import com.jsmadja.wall.projectwall.domain.State;
 
-public class SonarService implements Service {
+public class SonarService implements QualityService {
 
     private String url;
     private String login;
@@ -138,22 +133,6 @@ public class SonarService implements Service {
     }
 
     @Override
-    public List<Project> findAllProjects() {
-        return new ArrayList<Project>();
-    }
-
-    @Override
-    public void populate(Project project) throws ProjectNotFoundException {
-        String projectId = project.getId();
-        try {
-            project.setRulesCompliance(getRulesCompliance(projectId));
-            project.setCoverage(getCoverage(projectId));
-        } catch (SonarProjectNotFoundException e) {
-            throw new ProjectNotFoundException(e);
-        }
-    }
-
-    @Override
     public void populateQuality(Project project, QualityResult quality, String... metrics)
     throws ProjectNotFoundException {
         try {
@@ -176,22 +155,6 @@ public class SonarService implements Service {
     }
 
     @Override
-    public Date getEstimatedFinishTime(Project project) throws ProjectNotFoundException {
-        throw new ProjectNotFoundException("Not implemented!");
-    }
-
-    @Override
-    public Project findProjectByName(String projectName) throws ProjectNotFoundException {
-        throw new ProjectNotFoundException("Not implemented!");
-    }
-
-    @Override
-    public Build findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber)
-    throws BuildNotFoundException {
-        throw new BuildNotFoundException("Not implemented!");
-    }
-
-    @Override
     public void setUrl(String url) {
         this.url = url;
     }
@@ -204,21 +167,6 @@ public class SonarService implements Service {
     @Override
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Override
-    public boolean isBuilding(Project project) throws ProjectNotFoundException {
-        throw new ProjectNotFoundException("Not implemented!");
-    }
-
-    @Override
-    public State getState(Project project) throws ProjectNotFoundException {
-        throw new ProjectNotFoundException("Not implemented!");
-    }
-
-    @Override
-    public int getLastBuildNumber(Project project) throws ProjectNotFoundException {
-        throw new ProjectNotFoundException("Not implemented!");
     }
 
 }

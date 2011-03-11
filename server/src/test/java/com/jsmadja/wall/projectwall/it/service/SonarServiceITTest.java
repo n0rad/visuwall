@@ -37,7 +37,6 @@ import com.jsmadja.wall.projectwall.service.SonarService;
 public class SonarServiceITTest {
 
     private static final String DEV_RADAR_ARTIFACT_ID = "com.xebia:dev-radar";
-    private static final String DEV_RADAR_PROJECT_ID = "1";
     private static final String FLUXX_ARTIFACT_ID = "fr.fluxx:fluxx";
 
     private static SonarService sonarService;
@@ -107,33 +106,6 @@ public class SonarServiceITTest {
     @Test(expected = IllegalStateException.class)
     public void should_throw_exception_if_no_url_passed() {
         new SonarService().init();
-    }
-
-    @Test(expected = ProjectNotFoundException.class)
-    public void should_throw_exception_for_estimated_finish_time() throws ProjectNotFoundException {
-        sonarService.getEstimatedFinishTime(new Project());
-    }
-
-    @Test(expected = ProjectNotFoundException.class)
-    public void should_throw_exception_when_searching_by_name() throws ProjectNotFoundException {
-        sonarService.findProjectByName("");
-    }
-
-    @Test
-    public void should_return_empty_list() {
-        assertTrue(sonarService.findAllProjects().isEmpty());
-    }
-
-    @Test
-    public void should_populate_project() throws ProjectNotFoundException {
-        Project project = new Project();
-        project.setId(FLUXX_ARTIFACT_ID);
-
-        assertTrue(project.getRulesCompliance() == 0);
-
-        sonarService.populate(project);
-
-        assertTrue(project.getRulesCompliance() > 0);
     }
 
     @Test

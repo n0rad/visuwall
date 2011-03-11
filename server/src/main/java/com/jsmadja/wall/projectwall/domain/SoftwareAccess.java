@@ -1,6 +1,7 @@
 package com.jsmadja.wall.projectwall.domain;
 
-import com.jsmadja.wall.projectwall.service.Service;
+import com.jsmadja.wall.projectwall.service.BuildService;
+import com.jsmadja.wall.projectwall.service.QualityService;
 
 public class SoftwareAccess {
 
@@ -29,8 +30,17 @@ public class SoftwareAccess {
         this.software = software;
     }
 
-    public Service createService() {
-        Service service = software.getService();
+    public BuildService createBuildService() {
+        BuildService service = software.getBuildService();
+        service.setUrl(url);
+        service.setLogin(login);
+        service.setPassword(password);
+        service.init();
+        return service;
+    }
+
+    public QualityService createQualityService() {
+        QualityService service = software.getQualityService();
         service.setUrl(url);
         service.setLogin(login);
         service.setPassword(password);

@@ -13,8 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 import com.jsmadja.wall.projectwall.service.BuildNotFoundException;
+import com.jsmadja.wall.projectwall.service.BuildService;
 import com.jsmadja.wall.projectwall.service.ProjectNotFoundException;
-import com.jsmadja.wall.projectwall.service.Service;
+import com.jsmadja.wall.projectwall.service.QualityService;
 
 
 public class Wall {
@@ -23,7 +24,8 @@ public class Wall {
 
     private static final Logger LOG = LoggerFactory.getLogger(Wall.class);
 
-    private Set<Service> services = new HashSet<Service>();
+    private Set<BuildService> buildServices = new HashSet<BuildService>();
+    private Set<QualityService> qualityServices = new HashSet<QualityService>();
 
     private Set<Project> projects = new HashSet<Project>();
 
@@ -34,13 +36,18 @@ public class Wall {
     }
 
     public void addSoftwareAccess(SoftwareAccess softwareAccess) {
-        services.add(softwareAccess.createService());
+        if (softwareAccess.getSoftware().isBuildSoftware()) {
+            buildServices.add(softwareAccess.createBuildService());
+        }
+        if (softwareAccess.getSoftware().isQualitySoftware()) {
+            qualityServices.add(softwareAccess.createQualityService());
+        }
     }
 
     public void refreshProjects() {
         synchronized (projects) {
             projects = new HashSet<Project>();
-            for(Service service:services) {
+            for(BuildService service:buildServices) {
                 projects.addAll(service.findAllProjects());
             }
             populate(projects);
@@ -63,9 +70,17 @@ public class Wall {
             qualityResult = new QualityResult();
             project.setQualityResult(qualityResult);
         }
-        for(Service service:services) {
+        for(BuildService service:buildServices) {
             try {
                 service.populate(project);
+            } catch (ProjectNotFoundException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage());
+                }
+            }
+        }
+        for(QualityService service:qualityServices) {
+            try {
                 service.populateQuality(project, qualityResult, "violations_density", "technical_debt_days");
             } catch (ProjectNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
@@ -82,7 +97,7 @@ public class Wall {
      */
     public Date getEstimatedFinishTime(String projectName) throws ProjectNotFoundException {
         Project project = findProjectByName(projectName);
-        for(Service service:services) {
+        for(BuildService service:buildServices) {
             try {
                 Date estimatedFinishTime = service.getEstimatedFinishTime(project);
                 if (estimatedFinishTime != null) {
@@ -98,7 +113,7 @@ public class Wall {
     }
 
     public Project findProjectByName(String projectName) throws ProjectNotFoundException {
-        for(Service service:services) {
+        for(BuildService service:buildServices) {
             try {
                 Project project = service.findProjectByName(projectName);
                 if (project != null) {
@@ -133,7 +148,7 @@ public class Wall {
     }
 
     private int getLastBuildNumber(Project project) {
-        for (Service service:services) {
+        for (BuildService service:buildServices) {
             try {
                 return service.getLastBuildNumber(project);
             } catch (ProjectNotFoundException e) {
@@ -150,7 +165,7 @@ public class Wall {
     }
 
     private State getState(Project project) {
-        for (Service service:services) {
+        for (BuildService service:buildServices) {
             try {
                 return service.getState(project);
             } catch (ProjectNotFoundException e) {
@@ -163,7 +178,7 @@ public class Wall {
     }
 
     private boolean isBuilding(Project project) {
-        for (Service service:services) {
+        for (BuildService service:buildServices) {
             try {
                 return service.isBuilding(project);
             } catch (ProjectNotFoundException e) {
@@ -176,7 +191,7 @@ public class Wall {
     }
 
     public Build findBuildByProjectNameAndBuilderNumber(String projectName, int buildNumber) throws BuildNotFoundException {
-        for (Service service:services) {
+        for (BuildService service:buildServices) {
             try {
                 Build build = service.findBuildByProjectNameAndBuildNumber(projectName, buildNumber);
                 if (build != null) {

@@ -16,10 +16,9 @@ import com.jsmadja.wall.hudsonclient.domain.HudsonBuild;
 import com.jsmadja.wall.hudsonclient.domain.HudsonProject;
 import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
-import com.jsmadja.wall.projectwall.domain.QualityResult;
 import com.jsmadja.wall.projectwall.domain.State;
 
-public class HudsonService implements Service {
+public class HudsonService implements BuildService {
 
     private static final Logger LOG = LoggerFactory.getLogger(HudsonService.class);
 
@@ -162,11 +161,6 @@ public class HudsonService implements Service {
     @Override
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Override
-    public void populateQuality(Project project, QualityResult quality, String ... metrics) throws ProjectNotFoundException {
-        throw new ProjectNotFoundException("populateQuality is not implemented in HudsonService");
     }
 
 }
