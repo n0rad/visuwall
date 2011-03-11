@@ -35,7 +35,6 @@ public class Wall {
 
     public void addSoftwareAccess(SoftwareAccess softwareAccess) {
         services.add(softwareAccess.createService());
-        refreshProjects();
     }
 
     public void refreshProjects() {

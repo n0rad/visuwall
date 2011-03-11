@@ -51,6 +51,7 @@ public class WallITTest {
         wall = new Wall("test");
         wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, Integration.HUDSON_URL));
         wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, Integration.SONAR_URL));
+        wall.refreshProjects();
     }
 
     @Test
