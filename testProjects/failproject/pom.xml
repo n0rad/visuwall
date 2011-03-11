@@ -12,7 +12,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.jsmadja.wall</groupId>
-	<artifactId>wall-testproject</artifactId>
+	<artifactId>failproject</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -26,36 +26,4 @@
 			<version>4.8.1</version>
 		</dependency>
 	</dependencies>
-
-
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<archive>
-						<manifest>
-							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							<addClasspath>true</addClasspath>
-							<mainClass>net.awired.jwall.testproject.TestProject</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
-						<phase>package</phase> <!-- append to the packaging phase. -->
-						<goals>
-							<goal>single</goal> <!-- goals == mojos -->
-						</goals>
-					</execution>
-				</executions>
-
-			</plugin>
-		</plugins>
-	</build>
 </project>
