@@ -55,7 +55,7 @@ public class WallITTest {
 
     @Test
     public void should_retrieve_all_projects() {
-        Collection<Project> projects = wall.findAllProjects();
+        Collection<Project> projects = wall.getProjects();
         for (Project project : projects) {
             System.err.println(project);
         }
@@ -110,7 +110,7 @@ public class WallITTest {
 
     @Test
     public void should_retrieve_status() {
-        Collection<Project> projects = wall.findAllProjects();
+        Collection<Project> projects = wall.getProjects();
         List<ProjectStatus> status = wall.getStatus();
 
         assertEquals(projects.size(), status.size());
