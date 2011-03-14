@@ -3,12 +3,13 @@ jwall.mvc.controller.ProjectController = {
 	projectsView : null,
 	
 	projectService : null,
-	
-	projects : {},
+
+	projectDAO : null,
 	
 	init : function() {
 		this.projectsView = jwall.mvc.view.Projects;
 		this.projectService = jwall.business.service.Project;
+		this.projectDAO = jwall.persistence.dao.ProjectDAO;
 	},
 	
 	buildProjects : function() {
@@ -17,6 +18,13 @@ jwall.mvc.controller.ProjectController = {
 			for (var i = 0; i < projects.length; i++) {
 				$this.addProject(projects[i]);
 			}
+
+//			for (var i = 0; i < projects.length; i++) {
+//				$this.addProject(projects[i]);
+//			}			
+		
+		//	updateUTDiff
+			
 		});
 
 		// TODO remove
@@ -26,8 +34,11 @@ jwall.mvc.controller.ProjectController = {
 	},
 	
 	addProject : function(projectData) {
-		this.projectsView.addProject(projectData.name, projectData.description);
-		this._updateProject(projectData);	
+		this.projectDAO.saveProject(projectData);
+		var project = this.projectDAO.getProject(projectData.name);
+		
+		this.projectsView.addProject(project.name, project.description);
+		this._updateProject(project);
 	},
 
 	updateStatus : function() {
@@ -37,14 +48,14 @@ jwall.mvc.controller.ProjectController = {
 			for (var i = 0; i < projectsStatus.length; i++) {
 				var status = projectsStatus[i];
 
-				if ($this.projects[status.name] == undefined) {
+				if ($this.projectDAO.isProject(status.name)) {
 					// this is a new project
 					$this.projectService.project(status.name, function(newProjectData) {
 						$this.addProject(newProjectData);
 					});
 					continue;
 				}
-				var project = $this.projects[status.name];
+				var project = $this.projectDAO.getProject(status.name);
 				LOG.debug('Update status for project ' + status.name);
 				$this._updateBuilding(project, status.building);
 				$this._checkVersionChange(project, status);
@@ -53,7 +64,7 @@ jwall.mvc.controller.ProjectController = {
 			}
 			
 			// looking for project to delete
-			for (var key in $this.projects) {
+			for (var key in $this.projectDAO.getProjects()) {
 				if (!projectDone.contains(key)) {
 					$this._removeProject(key);
 				}
@@ -70,31 +81,47 @@ jwall.mvc.controller.ProjectController = {
 		var wasBuilding = project.hudsonProject.building;
 		project.hudsonProject.building = false;
 		this._updateBuilding(project, wasBuilding);		
-
-		// save project for updates
-		this.projects[project.name] = project;	
 	},
+
+	/////////////////////////////////////////////////////////////////////////
 	
 	_updateLastBuild : function(project) {
-		if (project.hudsonProject.lastBuild != null) {
-			this.projectsView.updateBuildTime(project.name, project.hudsonProject.lastBuild.duration);
+		var $this = this;
+		this.projectDAO.getLastBuild(project.name, function(lastBuild) {
 			
-			this.projectsView.updateCommiters(project.name, project.hudsonProject.lastBuild.commiters);
+			
+			
+			$this.projectsView.updateBuildTime(project.name, lastBuild.duration);
+			$this.projectsView.updateCommiters(project.name, lastBuild.commiters);
 			if (project.rulesCompliance != 0) {
-				this.projectsView.updateQuality(project.name, project.qualityResult.measures);
+				$this.projectsView.updateQuality(project.name, project.qualityResult.measures);
 			} else {
-				this.projectsView.updateQuality(project.name, { });					
+				$this.projectsView.updateQuality(project.name, { });					
 			}
-			this.projectsView.updateUTCoverage(project.name, project.coverage);
-			this.projectsView.updateUT(project.name, 
-					project.hudsonProject.lastBuild.testResult.failCount,
-					project.hudsonProject.lastBuild.testResult.passCount,
-					project.hudsonProject.lastBuild.testResult.skipCount,
+			$this.projectsView.updateUTCoverage(project.name, project.coverage);
+			$this.projectsView.updateUT(project.name, 
+					lastBuild.testResult.failCount,
+					lastBuild.testResult.passCount,
+					lastBuild.testResult.skipCount,
 					project.coverage);
-			this.projectsView.updateITCoverage(project.name, 0);
-			this.projectsView.updateIT(project.name, 0,0,0);
 
-		}
+			$this.projectsView.updateITCoverage(project.name, 0);
+			$this.projectsView.updateIT(project.name, 0,0,0);
+		
+			$this.projectDAO.getLastTwoBuildIfAvailable(project.name, function(lastBuild, previousBuild) {
+				if (lastBuild == null || previousBuild == null) {
+					return;
+				}
+				
+				var failDiff = lastBuild.testResult.failCount - previousBuild.testResult.failCount;
+				var successDiff = lastBuild.testResult.passCount - previousBuild.testResult.passCount;
+				var skipDiff = lastBuild.testResult.skipCount - previousBuild.testResult.skipCount;
+				
+				$this.projectsView.updateUTDiff(project.name, failDiff, successDiff, skipDiff);
+			});
+				
+			
+		});
 	},
 	
 	_updateAgo : function(project) {
@@ -103,12 +130,10 @@ jwall.mvc.controller.ProjectController = {
 		} else {
 			this.projectsView.updateAgo(project.name, 0);
 		}
-	},
-	
-	/////////////////////////////////////////////////////////////////////////
-		
+	},	
+
 	_removeProject : function(projectName) {
-		delete this.projects[projectName];
+		this.projectDAO.removeProject(projectName);
 		this.projectsView.removeProject(projectName);
 	},
 	

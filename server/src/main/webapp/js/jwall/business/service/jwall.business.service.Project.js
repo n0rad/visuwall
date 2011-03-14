@@ -14,5 +14,10 @@ jwall.business.service.Project = {
 	
 	finishTime : function(projectName, callback) {
 		$.getJSON("project/finishTime", {projectName : projectName}, callback);
+	},
+	
+	getBuild : function(projectName, buildId, callback) {
+		LOG.info("loading build " + buildId + " for project " + projectName);
+		$.getJSON("project/build", {projectName : projectName, buildId : buildId}, callback);		
 	}
 };
