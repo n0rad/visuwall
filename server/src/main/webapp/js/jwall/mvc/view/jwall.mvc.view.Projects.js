@@ -56,9 +56,9 @@ jwall.mvc.view.Projects = {
 	
 	updateBuildTime : function(projectName, duration) {
 		var good = buildVisualDuration(duration);
-		this._getElement(projectName, 'span.duration').replaceWith('~' + good);
+		this._getElement(projectName, 'span.duration').replaceWith(' ~ ' + good);
 	},
-
+	
 	updateQuality : function(projectName, quality) {
 		if (Object.size(quality) == 0) {
 			this._hideQuality(projectName);
@@ -217,7 +217,7 @@ jwall.mvc.view.Projects = {
 		projectTD.append(projectInnerTable);
 		
 		projectInnerTable.append($('<tr><td class="projectName">' + visualName
-				+ ' <span class="inlineInfo">( <abbr class="timeago" title=""></abbr><span class="duration"></span> )<span></td></tr>'));
+				+ ' <div class="inlineInfo"><abbr class="timeago" title=""></abbr> <span class="duration"></span><div></td></tr>'));
 		projectInnerTable.append($('<tr style="display:none" class="commitersTR"><td><ul class="commiters marquee"></ul></tr></td>'));
 		projectInnerTable.append($('<tr style="display:none" class="qualityTR"><td><ul class="quality marquee"></ul></tr></td>'));
 		projectInnerTable.append($('<tr style="display:none" class= "timeleftTR"><td><p class="timeleft"></p></tr></td>'));

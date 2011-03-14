@@ -9,6 +9,7 @@ jwall = {
 			$(function (){
 				
 				jQuery.timeago.settings.strings = {
+							suffixAgo: " ago",
 					        suffixFromNow: "from now",
 					        seconds: "<1min",
 					        minute: "1min",
