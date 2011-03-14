@@ -30,7 +30,9 @@ public final class HudsonProject {
     private String artifactId;
     private boolean building;
 
-    private HudsonBuild lastBuild;
+    private HudsonBuild completedBuild;
+
+    private HudsonBuild currentBuild;
 
     public String getName() {
         return name;
@@ -80,21 +82,31 @@ public final class HudsonProject {
         this.artifactId = artifactId;
     }
 
-    public HudsonBuild getLastBuild() {
-        return lastBuild;
+    public HudsonBuild getCompletedBuild() {
+        return completedBuild;
     }
 
-    public void setLastBuild(HudsonBuild lastBuild) {
-        this.lastBuild = lastBuild;
+    public void setCompletedBuild(HudsonBuild completedBuild) {
+        this.completedBuild = completedBuild;
+    }
+
+    public HudsonBuild getCurrentBuild() {
+        return currentBuild;
+    }
+
+    public void setCurrentBuild(HudsonBuild currentBuild) {
+        this.currentBuild = currentBuild;
     }
 
     @Override
     public String toString() {
-        ToStringHelper toString = Objects.toStringHelper(this)
-        .add("name", name).add("description", description)
-        .add("isBuilding", isBuilding())
-        .add("buildNumbers", Arrays.toString(buildNumbers))
-        .add("lastBuildNumber", lastBuildNumber).add("artifactId", artifactId);
+        ToStringHelper toString = Objects.toStringHelper(this) //
+        .add("name", name) //
+        .add("description", description) //
+        .add("isBuilding", isBuilding()) //
+        .add("buildNumbers", Arrays.toString(buildNumbers)) //
+        .add("lastBuildNumber", lastBuildNumber) //
+        .add("artifactId", artifactId);
         return toString.toString();
     }
 

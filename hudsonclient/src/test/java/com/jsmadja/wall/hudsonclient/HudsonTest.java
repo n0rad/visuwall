@@ -91,7 +91,7 @@ public class HudsonTest {
 
     @Test
     public void should_retrieve_build_with_status() throws HudsonProjectNotFoundException {
-        HudsonBuild build = hudson.findProject("dev-radar").getLastBuild();
+        HudsonBuild build = hudson.findProject("dev-radar").getCompletedBuild();
         assertTrue(build.isSuccessful());
     }
 
