@@ -1,4 +1,4 @@
-package com.jsmadja.wall.projectwall.service;
+package com.jsmadja.wall.projectwall.exception;
 
 public class SonarProjectNotFoundException extends Exception {
 

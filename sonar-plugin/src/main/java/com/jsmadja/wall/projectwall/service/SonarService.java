@@ -44,6 +44,7 @@ import com.jsmadja.wall.projectwall.domain.quality.QualityMeasure;
 import com.jsmadja.wall.projectwall.domain.quality.QualityMetric;
 import com.jsmadja.wall.projectwall.domain.quality.QualityResult;
 import com.jsmadja.wall.projectwall.exception.ProjectNotFoundException;
+import com.jsmadja.wall.projectwall.exception.SonarProjectNotFoundException;
 
 public final class SonarService implements QualityService {
 

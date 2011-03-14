@@ -29,17 +29,14 @@
 		<dependency>
 			<groupId>com.jsmadja.wall</groupId>
 			<artifactId>wall-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.jsmadja.wall</groupId>
 			<artifactId>sonar-plugin</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.jsmadja.wall</groupId>
 			<artifactId>hudson-plugin</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Test -->

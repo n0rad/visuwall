@@ -35,7 +35,6 @@
 		<dependency>
 			<groupId>com.jsmadja.wall</groupId>
 			<artifactId>wall-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.sonar</groupId>

@@ -68,6 +68,21 @@
 				<artifactId>wall-hudsonclient</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>       
+				<groupId>com.jsmadja.wall</groupId>
+                                <artifactId>wall-api</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
+                        <dependency>
+                                <groupId>com.jsmadja.wall</groupId>
+                                <artifactId>hudson-plugin</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
+                        <dependency>
+                                <groupId>com.jsmadja.wall</groupId>
+                                <artifactId>sonar-plugin</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
 		</dependencies>
 	</dependencyManagement>
 

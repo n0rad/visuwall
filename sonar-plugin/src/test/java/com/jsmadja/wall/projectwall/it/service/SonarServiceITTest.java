@@ -30,7 +30,7 @@ import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.quality.QualityMeasure;
 import com.jsmadja.wall.projectwall.domain.quality.QualityResult;
 import com.jsmadja.wall.projectwall.exception.ProjectNotFoundException;
-import com.jsmadja.wall.projectwall.service.SonarProjectNotFoundException;
+import com.jsmadja.wall.projectwall.exception.SonarProjectNotFoundException;
 import com.jsmadja.wall.projectwall.service.SonarService;
 
 public class SonarServiceITTest {
