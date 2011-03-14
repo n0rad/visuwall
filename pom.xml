@@ -21,6 +21,9 @@
 	<modules>
 		<module>server</module>
 		<module>hudsonclient</module>
+		<module>api</module>
+		<module>sonar-plugin</module>
+		<module>hudson-plugin</module>
 	</modules>
 
 	<properties>

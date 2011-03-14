@@ -12,11 +12,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.jsmadja.wall</groupId>
-	<artifactId>wall-hudsonclient</artifactId>
+	<artifactId>sonar-plugin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>wall - Hudson Client</name>
+	<name>wall - Sonar Plugin</name>
 
 	<parent>
 		<groupId>com.jsmadja.wall</groupId>
@@ -24,12 +24,8 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
+
 	<dependencies>
-		<dependency>
-			<groupId>com.jsmadja.wall</groupId>
-			<artifactId>wall-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -37,14 +33,14 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>r07</version>
+			<groupId>com.jsmadja.wall</groupId>
+			<artifactId>wall-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>1.4</version>
+			<groupId>org.codehaus.sonar</groupId>
+			<artifactId>sonar-ws-client</artifactId>
+			<version>2.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -57,14 +53,14 @@
 			<version>2.0</version>
 		</dependency>
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>1.6.2</version>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
 		</dependency>
 		<dependency>
-			<groupId>xerces</groupId>
-			<artifactId>xercesImpl</artifactId>
-			<version>2.9.1</version>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
 		</dependency>
 	</dependencies>
 
@@ -77,39 +73,6 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.mycila.maven-license-plugin</groupId>
-				<artifactId>maven-license-plugin</artifactId>
-				<version>1.8.0</version>
-				<configuration>
-					<header>src/main/licence.txt</header>
-					<strictCheck>true</strictCheck>
-					<useDefaultExcludes>false</useDefaultExcludes>
-					<excludes>
-						<exclude>.gitignore</exclude>
-						<exclude>.git/**</exclude>
-						<exclude>target/**</exclude>
-						<exclude>.settings/**</exclude>
-						<exclude>.project</exclude>
-						<exclude>.classpath</exclude>
-						<exclude>LICENCE</exclude>
-						<exclude>README</exclude>
-						<exclude>**/MANIFEST.MF</exclude>
-						<exclude>.externalToolBuilders/**</exclude>
-						<exclude>.pmd/**</exclude>
-						<exclude>src/test/resources/**</exclude>
-						<exclude>src/main/xsd/**</exclude>
-						<exclude>src/main/java/com/jsmadja/wall/hudsonclient/generated/**</exclude>
-					</excludes>
-					<executions>
-						<execution>
-							<goals>
-								<goal>check</goal>
-							</goals>
-						</execution>
-					</executions>
 				</configuration>
 			</plugin>
 		</plugins>

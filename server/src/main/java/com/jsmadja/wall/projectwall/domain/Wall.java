@@ -12,9 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
-import com.jsmadja.wall.projectwall.service.BuildNotFoundException;
+import com.jsmadja.wall.projectwall.domain.quality.QualityResult;
+import com.jsmadja.wall.projectwall.exception.BuildNotFoundException;
+import com.jsmadja.wall.projectwall.exception.ProjectNotFoundException;
 import com.jsmadja.wall.projectwall.service.BuildService;
-import com.jsmadja.wall.projectwall.service.ProjectNotFoundException;
 import com.jsmadja.wall.projectwall.service.QualityService;
 
 
