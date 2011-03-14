@@ -30,7 +30,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.jsmadja.wall.hudsonclient.domain.TestResult;
 import com.jsmadja.wall.projectwall.Integration;
 import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
@@ -38,9 +37,10 @@ import com.jsmadja.wall.projectwall.domain.ProjectStatus;
 import com.jsmadja.wall.projectwall.domain.Software;
 import com.jsmadja.wall.projectwall.domain.SoftwareAccess;
 import com.jsmadja.wall.projectwall.domain.State;
+import com.jsmadja.wall.projectwall.domain.TestResult;
 import com.jsmadja.wall.projectwall.domain.Wall;
-import com.jsmadja.wall.projectwall.service.BuildNotFoundException;
-import com.jsmadja.wall.projectwall.service.ProjectNotFoundException;
+import com.jsmadja.wall.projectwall.exception.BuildNotFoundException;
+import com.jsmadja.wall.projectwall.exception.ProjectNotFoundException;
 
 public class WallITTest {
 

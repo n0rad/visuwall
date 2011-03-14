@@ -31,7 +31,6 @@ import com.jsmadja.wall.hudsonclient.builder.HudsonUrlBuilder;
 import com.jsmadja.wall.hudsonclient.builder.TestResultBuilder;
 import com.jsmadja.wall.hudsonclient.domain.HudsonBuild;
 import com.jsmadja.wall.hudsonclient.domain.HudsonProject;
-import com.jsmadja.wall.hudsonclient.domain.TestResult;
 import com.jsmadja.wall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import com.jsmadja.wall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModule;
 import com.jsmadja.wall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
@@ -39,6 +38,7 @@ import com.jsmadja.wall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModel
 import com.jsmadja.wall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelRun;
 import com.jsmadja.wall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import com.jsmadja.wall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
+import com.jsmadja.wall.projectwall.domain.TestResult;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
@@ -148,6 +148,7 @@ public class Hudson {
         hudsonBuild.setSuccessful(isSuccessful(setBuild));
         hudsonBuild.setCommiters(getCommiters(setBuild));
         hudsonBuild.setTestResult(testResult);
+        hudsonBuild.setBuildNumber(buildNumber);
         return hudsonBuild;
     }
 

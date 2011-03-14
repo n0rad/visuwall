@@ -30,7 +30,7 @@ import org.junit.Test;
 import com.jsmadja.wall.hudsonclient.builder.HudsonUrlBuilder;
 import com.jsmadja.wall.hudsonclient.domain.HudsonBuild;
 import com.jsmadja.wall.hudsonclient.domain.HudsonProject;
-import com.jsmadja.wall.hudsonclient.domain.TestResult;
+import com.jsmadja.wall.projectwall.domain.TestResult;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandler;
 import com.sun.jersey.api.client.config.ClientConfig;

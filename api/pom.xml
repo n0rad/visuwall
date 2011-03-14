@@ -12,11 +12,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.jsmadja.wall</groupId>
-	<artifactId>wall-hudsonclient</artifactId>
+	<artifactId>wall-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>wall - Hudson Client</name>
+	<name>wall - API</name>
 
 	<parent>
 		<groupId>com.jsmadja.wall</groupId>
@@ -24,49 +24,6 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
-	<dependencies>
-		<dependency>
-			<groupId>com.jsmadja.wall</groupId>
-			<artifactId>wall-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>r07</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>1.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.sli4j</groupId>
-			<artifactId>sli4j-slf4j-logback</artifactId>
-			<version>2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>1.6.2</version>
-		</dependency>
-		<dependency>
-			<groupId>xerces</groupId>
-			<artifactId>xercesImpl</artifactId>
-			<version>2.9.1</version>
-		</dependency>
-	</dependencies>
 
 	<build>
 		<plugins>
@@ -99,9 +56,6 @@
 						<exclude>**/MANIFEST.MF</exclude>
 						<exclude>.externalToolBuilders/**</exclude>
 						<exclude>.pmd/**</exclude>
-						<exclude>src/test/resources/**</exclude>
-						<exclude>src/main/xsd/**</exclude>
-						<exclude>src/main/java/com/jsmadja/wall/hudsonclient/generated/**</exclude>
 					</excludes>
 					<executions>
 						<execution>
@@ -114,5 +68,12 @@
 			</plugin>
 		</plugins>
 	</build>
+	<dependencies>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>r07</version>
+		</dependency>
+	</dependencies>
 
 </project>

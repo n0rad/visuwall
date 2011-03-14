@@ -28,7 +28,15 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.jsmadja.wall</groupId>
-			<artifactId>wall-hudsonclient</artifactId>
+			<artifactId>wall-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.jsmadja.wall</groupId>
+			<artifactId>sonar-plugin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.jsmadja.wall</groupId>
+			<artifactId>hudson-plugin</artifactId>
 		</dependency>
 
 		<!-- Test -->
@@ -72,16 +80,6 @@
 			<groupId>com.googlecode.sli4j</groupId>
 			<artifactId>sli4j-slf4j-logback</artifactId>
 			<version>2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.sonar</groupId>
-			<artifactId>sonar-ws-client</artifactId>
-			<version>2.4</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
 		</dependency>
 
 		<!-- DB -->

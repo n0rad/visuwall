@@ -21,6 +21,9 @@
 	<modules>
 		<module>server</module>
 		<module>hudsonclient</module>
+		<module>api</module>
+		<module>sonar-plugin</module>
+		<module>hudson-plugin</module>
 	</modules>
 
 	<properties>
@@ -65,6 +68,21 @@
 				<artifactId>wall-hudsonclient</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>       
+				<groupId>com.jsmadja.wall</groupId>
+                                <artifactId>wall-api</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
+                        <dependency>
+                                <groupId>com.jsmadja.wall</groupId>
+                                <artifactId>hudson-plugin</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
+                        <dependency>
+                                <groupId>com.jsmadja.wall</groupId>
+                                <artifactId>sonar-plugin</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
 		</dependencies>
 	</dependencyManagement>
 
