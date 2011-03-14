@@ -90,7 +90,7 @@ public class WallITTest {
     @Ignore
     public void should_retrieve_project_with_no_last_build() throws ProjectNotFoundException {
         Project project = wall.findProjectByName("on-parameter-tester-staging");
-        assertNull(project.getHudsonProject().getLastBuild());
+        assertNull(project.getHudsonProject().getCompletedBuild());
     }
 
     @Test
@@ -99,6 +99,7 @@ public class WallITTest {
         assertNotNull(estimatedFinishTime);
     }
 
+    @Ignore
     @Test
     public void should_retrieve_build() throws BuildNotFoundException {
         Build build = wall.findBuildByProjectNameAndBuilderNumber("project-wall", 293);

@@ -66,7 +66,7 @@ public final class HudsonService implements BuildService {
         try {
             HudsonProject hudsonProject = hudson.findProject(project.getName());
             project.setHudsonProject(hudsonProject);
-            HudsonBuild lastBuild = hudsonProject.getLastBuild();
+            HudsonBuild lastBuild = hudsonProject.getCompletedBuild();
             if (lastBuild == null) {
                 project.setState(State.NEW);
             } else {

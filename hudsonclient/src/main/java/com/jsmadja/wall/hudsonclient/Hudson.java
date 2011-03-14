@@ -81,9 +81,19 @@ public class Hudson {
         HudsonModelHudson hudson = hudsonResource.get(HudsonModelHudson.class);
         List<HudsonProject> projects = new ArrayList<HudsonProject>();
         List<Object> hudsonProjects = hudson.getJob();
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(hudsonProjects.size()+" projects to update");
+        }
+
+        int idxProject = 1;
         for (Object project : hudsonProjects) {
             ElementNSImpl element = (ElementNSImpl) project;
             String name = getProjectName(element);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(idxProject+"/"+hudsonProjects.size()+" create project "+name);
+                idxProject++;
+            }
+
             try {
                 HudsonProject hudsonProject = findProject(name);
                 projects.add(hudsonProject);
@@ -256,30 +266,51 @@ public class Hudson {
 
     private HudsonProject createHudsonProjectFrom(HudsonMavenMavenModuleSet moduleSet) throws HudsonBuildNotFoundException {
         String artifactId = null;
-        HudsonBuild lastHudsonBuild = null;
-        int lastBuildNumber = UNBUILT_PROJECT;
+        HudsonBuild lastCompletedHudsonBuild = null, currentHudsonBuild = null;
+
+        int lastCompleteBuildNumber = UNBUILT_PROJECT, currentBuildNumber = UNBUILT_PROJECT;
         String name = moduleSet.getName();
         String description = moduleSet.getDescription();
-        HudsonModelRun lastBuild = moduleSet.getLastBuild();
-        boolean isBuilding = getIsBuilding(moduleSet);
-        if (lastBuild != null) {
-            lastBuildNumber = lastBuild.getNumber();
+
+        // current build number
+        HudsonModelRun currentHudsonRun = moduleSet.getLastBuild();
+        if (currentHudsonRun != null) {
+            currentBuildNumber = currentHudsonRun.getNumber();
         }
+        if (currentBuildNumber != UNBUILT_PROJECT) {
+            currentHudsonBuild = findBuild(name, currentBuildNumber);
+        }
+
+        // last complete build number
+        boolean isBuilding = getIsBuilding(moduleSet);
+        HudsonModelRun lastCompletedHudsonRun;
+        if (isBuilding) {
+            lastCompletedHudsonRun = moduleSet.getLastCompletedBuild();
+        } else {
+            lastCompletedHudsonRun = moduleSet.getLastBuild();
+        }
+        if (lastCompletedHudsonRun != null) {
+            lastCompleteBuildNumber = lastCompletedHudsonRun.getNumber();
+        }
+        if (lastCompleteBuildNumber != UNBUILT_PROJECT) {
+            lastCompletedHudsonBuild = findBuild(name, lastCompleteBuildNumber);
+        }
+
+        // artifact id
         if (!moduleSet.getModule().isEmpty()) {
             HudsonMavenMavenModule firstModule = moduleSet.getModule().get(0);
             artifactId = firstModule.getName();
         }
-        if (lastBuildNumber != UNBUILT_PROJECT) {
-            lastHudsonBuild = findBuild(name, lastBuildNumber);
-        }
+
         HudsonProject hudsonProject = new HudsonProject();
         hudsonProject.setBuilding(isBuilding);
-        hudsonProject.setLastBuildNumber(lastBuildNumber);
+        hudsonProject.setLastBuildNumber(lastCompleteBuildNumber);
         hudsonProject.setName(name);
         hudsonProject.setDescription(description);
         hudsonProject.setArtifactId(artifactId);
         hudsonProject.setBuildNumbers(getBuildNumbers(moduleSet));
-        hudsonProject.setLastBuild(lastHudsonBuild);
+        hudsonProject.setCompletedBuild(lastCompletedHudsonBuild);
+        hudsonProject.setCurrentBuild(currentHudsonBuild);
         return hudsonProject;
     }
 
@@ -341,7 +372,7 @@ public class Hudson {
      */
     public final Date getEstimatedFinishTime(String projectName) throws HudsonProjectNotFoundException {
         HudsonProject project = findProject(projectName);
-        HudsonBuild lastBuild = project.getLastBuild();
+        HudsonBuild lastBuild = project.getCompletedBuild();
         Date startTime = lastBuild.getStartTime();
         long averageBuildDurationTime = getAverageBuildDurationTime(projectName);
         DateTime estimatedFinishTime = new DateTime(startTime.getTime()).plus(averageBuildDurationTime);
