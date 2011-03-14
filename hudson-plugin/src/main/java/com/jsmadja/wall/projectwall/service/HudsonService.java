@@ -147,6 +147,7 @@ public final class HudsonService implements BuildService {
         build.setStartTime(hudsonBuild.getStartTime());
         build.setState(State.valueOf(hudsonBuild.getState()));
         build.setTestResult(hudsonBuild.getTestResult());
+        build.setBuildNumber(hudsonBuild.getBuildNumber());
         return build;
     }
 

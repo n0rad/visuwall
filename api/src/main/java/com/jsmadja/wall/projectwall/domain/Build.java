@@ -13,6 +13,7 @@ public class Build {
     private long duration;
     private Date startTime;
     private TestResult testResult;
+    private int buildNumber;
 
     public String[] getCommiters() {
         return commiters;
@@ -55,9 +56,18 @@ public class Build {
         this.state = state;
     }
 
+    public int getBuildNumber() {
+        return buildNumber;
+    }
+
+    public void setBuildNumber(int buildNumber) {
+        this.buildNumber = buildNumber;
+    }
+
     @Override
     public String toString() {
         ToStringHelper toString = Objects.toStringHelper(this) //
+        .add("builder number", buildNumber) //
         .add("state", state) //
         .add("commiters", Arrays.toString(commiters)) //
         .add("duration", duration) //

@@ -148,6 +148,7 @@ public class Hudson {
         hudsonBuild.setSuccessful(isSuccessful(setBuild));
         hudsonBuild.setCommiters(getCommiters(setBuild));
         hudsonBuild.setTestResult(testResult);
+        hudsonBuild.setBuildNumber(buildNumber);
         return hudsonBuild;
     }
 

@@ -15,6 +15,7 @@ public final class HudsonBuild {
     private Date startTime;
     private TestResult testResult;
     private String state;
+    private int buildNumber;
 
     public boolean isSuccessful() {
         return successful;
@@ -65,9 +66,18 @@ public final class HudsonBuild {
         this.state = state;
     }
 
+    public int getBuildNumber() {
+        return buildNumber;
+    }
+
+    public void setBuildNumber(int buildNumber) {
+        this.buildNumber = buildNumber;
+    }
+
     @Override
     public String toString() {
         ToStringHelper toString = Objects.toStringHelper(this) //
+        .add("build number", buildNumber) //
         .add("status", successful) //
         .add("commiters", Arrays.toString(commiters)) //
         .add("duration", duration) //
