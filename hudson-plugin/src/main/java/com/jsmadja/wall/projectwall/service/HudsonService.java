@@ -68,16 +68,35 @@ public final class HudsonService implements BuildService {
     public void populate(Project project) throws ProjectNotFoundException {
         try {
             HudsonProject hudsonProject = hudson.findProject(project.getName());
-            project.setCompletedBuild(createBuild(hudsonProject.getCompletedBuild()));
-            project.setCurrentBuild(createBuild(hudsonProject.getCurrentBuild()));
-            HudsonBuild lastBuild = hudsonProject.getCompletedBuild();
-            if (lastBuild == null) {
-                project.setState(State.NEW);
-            } else {
-                project.setState(State.valueOf(lastBuild.getState()));
-            }
+            HudsonBuild completedBuild = addCompletedBuild(project, hudsonProject);
+            addCurrentBuild(project, hudsonProject);
+            HudsonBuild lastBuild = completedBuild;
+            addState(project, lastBuild);
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
+        }
+    }
+
+    private void addState(Project project, HudsonBuild lastBuild) {
+        if (lastBuild == null) {
+            project.setState(State.NEW);
+        } else {
+            project.setState(State.valueOf(lastBuild.getState()));
+        }
+    }
+
+    private HudsonBuild addCompletedBuild(Project project, HudsonProject hudsonProject) {
+        HudsonBuild completedBuild = hudsonProject.getCompletedBuild();
+        if (completedBuild != null) {
+            project.setCompletedBuild(createBuild(completedBuild));
+        }
+        return completedBuild;
+    }
+
+    private void addCurrentBuild(Project project, HudsonProject hudsonProject) {
+        HudsonBuild currentBuild = hudsonProject.getCurrentBuild();
+        if (currentBuild != null) {
+            project.setCurrentBuild(createBuild(currentBuild));
         }
     }
 
@@ -87,17 +106,8 @@ public final class HudsonService implements BuildService {
         project.setDescription(hudsonProject.getDescription());
         project.setId(hudsonProject.getArtifactId());
         project.setBuildNumbers(hudsonProject.getBuildNumbers());
-
-        HudsonBuild completedBuild = hudsonProject.getCompletedBuild();
-        if (completedBuild != null) {
-            project.setCompletedBuild(createBuild(completedBuild));
-        }
-
-        HudsonBuild currentBuild = hudsonProject.getCurrentBuild();
-        if (currentBuild != null) {
-            project.setCurrentBuild(createBuild(currentBuild));
-        }
-
+        addCompletedBuild(project, hudsonProject);
+        addCurrentBuild(project, hudsonProject);
         return project;
     }
 

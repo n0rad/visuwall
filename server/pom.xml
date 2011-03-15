@@ -33,10 +33,22 @@
 		<dependency>
 			<groupId>com.jsmadja.wall</groupId>
 			<artifactId>sonar-plugin</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>sli4j-slf4j-logback</artifactId>
+					<groupId>com.googlecode.sli4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.jsmadja.wall</groupId>
 			<artifactId>hudson-plugin</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>sli4j-slf4j-logback</artifactId>
+					<groupId>com.googlecode.sli4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Test -->
@@ -60,7 +72,6 @@
 			<version>${jackson.version}</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>net.awired.ajsl</groupId>
 			<artifactId>ajsl-core</artifactId>
@@ -70,16 +81,6 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>r07</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.sli4j</groupId>
-			<artifactId>sli4j-slf4j-logback</artifactId>
-			<version>2.0</version>
 		</dependency>
 
 		<!-- DB -->
@@ -103,6 +104,16 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>3.4.0.GA</version>
 		</dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.10</version>
+        </dependency>
+	    <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>2.2</version>
+        </dependency>
 
 		<!-- Spring -->
 		<dependency>
@@ -160,6 +171,16 @@
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>3.0.5.RELEASE</version>
 		</dependency>
 	</dependencies>
 

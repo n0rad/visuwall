@@ -33,4 +33,5 @@ public class WallServiceTest {
         wallService.addWall(wall);
         wallService.refreshWalls();
     }
+
 }

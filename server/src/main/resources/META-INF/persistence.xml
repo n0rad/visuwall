@@ -4,8 +4,13 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
       http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
   version="1.0">
-
     <persistence-unit name="jwall" transaction-type="RESOURCE_LOCAL">
-</persistence-unit>
-    
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
+            <!-- value="create" to build a new database on each run; value="update" to modify an existing database; value="create-drop" means the same as "create" but also drops tables when Hibernate closes; value="validate" makes no changes to the database -->
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.show-sql" value="true"/>
+        </properties>
+    </persistence-unit>
 </persistence>
