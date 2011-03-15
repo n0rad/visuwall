@@ -30,13 +30,12 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.jsmadja.wall.projectwall.Integration;
 import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.ProjectStatus;
+import com.jsmadja.wall.projectwall.domain.ProjectStatus.State;
 import com.jsmadja.wall.projectwall.domain.Software;
 import com.jsmadja.wall.projectwall.domain.SoftwareAccess;
-import com.jsmadja.wall.projectwall.domain.State;
 import com.jsmadja.wall.projectwall.domain.TestResult;
 import com.jsmadja.wall.projectwall.domain.Wall;
 import com.jsmadja.wall.projectwall.exception.BuildNotFoundException;
@@ -44,13 +43,16 @@ import com.jsmadja.wall.projectwall.exception.ProjectNotFoundException;
 
 public class WallITTest {
 
+    String HUDSON_URL = "http://fluxx.fr.cr:8080/hudson";
+    String SONAR_URL = "http://fluxx.fr.cr:9000";
+
     private Wall wall;
 
     @Before
     public void init() {
         wall = new Wall("test");
-        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, Integration.HUDSON_URL));
-        wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, Integration.SONAR_URL));
+        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, HUDSON_URL));
+        wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, SONAR_URL));
         wall.refreshProjects();
     }
 
@@ -90,7 +92,7 @@ public class WallITTest {
     @Ignore
     public void should_retrieve_project_with_no_last_build() throws ProjectNotFoundException {
         Project project = wall.findProjectByName("on-parameter-tester-staging");
-        assertNull(project.getHudsonProject().getCompletedBuild());
+        assertNull(project.getCompletedBuild());
     }
 
     @Test
@@ -122,4 +124,5 @@ public class WallITTest {
             assertNotNull(stat.getState());
         }
     }
+
 }

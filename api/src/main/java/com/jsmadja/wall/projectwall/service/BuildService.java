@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
-import com.jsmadja.wall.projectwall.domain.State;
+import com.jsmadja.wall.projectwall.domain.ProjectStatus.State;
 import com.jsmadja.wall.projectwall.exception.BuildNotFoundException;
 import com.jsmadja.wall.projectwall.exception.ProjectNotFoundException;
 

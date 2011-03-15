@@ -9,6 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
 import com.jsmadja.wall.hudsonclient.Hudson;
 import com.jsmadja.wall.hudsonclient.HudsonBuildNotFoundException;
 import com.jsmadja.wall.hudsonclient.HudsonProjectNotFoundException;
@@ -16,7 +17,7 @@ import com.jsmadja.wall.hudsonclient.domain.HudsonBuild;
 import com.jsmadja.wall.hudsonclient.domain.HudsonProject;
 import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
-import com.jsmadja.wall.projectwall.domain.State;
+import com.jsmadja.wall.projectwall.domain.ProjectStatus.State;
 import com.jsmadja.wall.projectwall.exception.BuildNotFoundException;
 import com.jsmadja.wall.projectwall.exception.ProjectNotFoundException;
 
@@ -67,7 +68,8 @@ public final class HudsonService implements BuildService {
     public void populate(Project project) throws ProjectNotFoundException {
         try {
             HudsonProject hudsonProject = hudson.findProject(project.getName());
-            project.setHudsonProject(hudsonProject);
+            project.setCompletedBuild(createBuild(hudsonProject.getCompletedBuild()));
+            project.setCurrentBuild(createBuild(hudsonProject.getCurrentBuild()));
             HudsonBuild lastBuild = hudsonProject.getCompletedBuild();
             if (lastBuild == null) {
                 project.setState(State.NEW);
@@ -84,7 +86,17 @@ public final class HudsonService implements BuildService {
         project.setName(hudsonProject.getName());
         project.setDescription(hudsonProject.getDescription());
         project.setId(hudsonProject.getArtifactId());
-        project.setHudsonProject(hudsonProject);
+
+        HudsonBuild completedBuild = hudsonProject.getCompletedBuild();
+        if (completedBuild != null) {
+            project.setCompletedBuild(createBuild(completedBuild));
+        }
+
+        HudsonBuild currentBuild = hudsonProject.getCurrentBuild();
+        if (currentBuild != null) {
+            project.setCurrentBuild(createBuild(currentBuild));
+        }
+
         return project;
     }
 
@@ -96,7 +108,6 @@ public final class HudsonService implements BuildService {
             throw new ProjectNotFoundException(e);
         }
     }
-
 
     @Override
     public boolean isBuilding(Project project) throws ProjectNotFoundException {
@@ -122,8 +133,7 @@ public final class HudsonService implements BuildService {
     public int getLastBuildNumber(Project project) throws ProjectNotFoundException, BuildNotFoundException {
         try {
             String projectName = project.getName();
-            int lastBuildNumber = hudson.getLastBuildNumber(projectName);
-            return lastBuildNumber;
+            return  hudson.getLastBuildNumber(projectName);
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
         } catch (HudsonBuildNotFoundException e) {
@@ -141,6 +151,7 @@ public final class HudsonService implements BuildService {
     }
 
     private Build createBuild(HudsonBuild hudsonBuild) {
+        Preconditions.checkNotNull(hudsonBuild, "hudsonBuild");
         Build build = new Build();
         build.setCommiters(hudsonBuild.getCommiters());
         build.setDuration(hudsonBuild.getDuration());

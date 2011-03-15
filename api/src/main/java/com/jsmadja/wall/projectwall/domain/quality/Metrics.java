@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "metrics")
-public class Metrics {
+public final class Metrics {
 
     protected List<QualityMetric> metrics;
 

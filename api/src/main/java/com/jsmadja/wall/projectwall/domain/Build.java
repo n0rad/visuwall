@@ -5,8 +5,9 @@ import java.util.Date;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
+import com.jsmadja.wall.projectwall.domain.ProjectStatus.State;
 
-public class Build {
+public final class Build {
 
     private State state;
     private String[] commiters;
@@ -30,7 +31,6 @@ public class Build {
     public void setDuration(long duration) {
         this.duration = duration;
     }
-
 
     public Date getStartTime() {
         return startTime;

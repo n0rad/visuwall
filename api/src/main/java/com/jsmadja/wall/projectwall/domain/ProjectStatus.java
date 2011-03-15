@@ -2,11 +2,15 @@ package com.jsmadja.wall.projectwall.domain;
 
 import com.google.common.base.Objects;
 
-public class ProjectStatus {
+public final class ProjectStatus {
     private String name;
     private boolean building;
     private int lastBuildId;
     private State state;
+
+    public enum State {
+        SUCCESS, NEW, ABORTED, FAILURE, UNSTABLE
+    }
 
     public String getName() {
         return name;
@@ -44,9 +48,9 @@ public class ProjectStatus {
     public String toString() {
         return Objects.toStringHelper(this) //
         .add("name", name) //
+        .add("last build id", lastBuildId) //
         .add("state", state) //
         .add("building", building) //
-        .add("last build id", lastBuildId) //
         .toString();
     }
 }

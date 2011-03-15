@@ -17,7 +17,7 @@
 package com.jsmadja.wall.projectwall.domain;
 
 import com.google.common.base.Objects;
-import com.jsmadja.wall.hudsonclient.domain.HudsonProject;
+import com.jsmadja.wall.projectwall.domain.ProjectStatus.State;
 import com.jsmadja.wall.projectwall.domain.quality.QualityResult;
 
 public final class Project {
@@ -27,9 +27,11 @@ public final class Project {
     private String description;
     private double coverage;
     private double rulesCompliance;
-    private HudsonProject hudsonProject;
     private QualityResult qualityResult;
     private State state;
+
+    private Build completedBuild;
+    private Build currentBuild;
 
     public String getName() {
         return name;
@@ -61,14 +63,6 @@ public final class Project {
 
     public void setRulesCompliance(double rulesCompliance) {
         this.rulesCompliance = rulesCompliance;
-    }
-
-    public HudsonProject getHudsonProject() {
-        return hudsonProject;
-    }
-
-    public void setHudsonProject(HudsonProject hudsonProject) {
-        this.hudsonProject = hudsonProject;
     }
 
     public void setId(String id) {
@@ -107,6 +101,22 @@ public final class Project {
         }
         Project project = (Project)obj;
         return id.equals(project.id) && name.equals(project.name);
+    }
+
+    public Build getCompletedBuild() {
+        return completedBuild;
+    }
+
+    public void setCompletedBuild(Build completedBuild) {
+        this.completedBuild = completedBuild;
+    }
+
+    public Build getCurrentBuild() {
+        return currentBuild;
+    }
+
+    public void setCurrentBuild(Build currentBuild) {
+        this.currentBuild = currentBuild;
     }
 
     @Override
