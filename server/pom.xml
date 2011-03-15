@@ -41,10 +41,10 @@
 		<dependency>
 			<groupId>com.jsmadja.wall</groupId>
 			<artifactId>wall-runnablewar</artifactId>
-			<scope>import</scope>
+<!-- 			<scope>import</scope> -->
+			<classifier>jar-with-dependencies</classifier>
 		</dependency>
 		
-
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -201,6 +201,7 @@
 									<groupId>com.jsmadja.wall</groupId>
 									<artifactId>wall-runnablewar</artifactId>
 									<version>${project.version}</version>
+									<classifier>jar-with-dependencies</classifier>
 									<type>jar</type>
 									<overWrite>false</overWrite>
 									<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}</outputDirectory>

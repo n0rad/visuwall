@@ -30,7 +30,7 @@ public class JNLPMain {
             new MainDialog().setVisible(true);
         }
 
-        Main.main(args);
+        Main2.main(args);
     }
 
     /**

@@ -88,6 +88,7 @@
 				<groupId>com.jsmadja.wall</groupId>
 				<artifactId>wall-runnablewar</artifactId>
 				<version>${project.version}</version>
+				<classifier>jar-with-dependencies</classifier>
 			</dependency>			
 		</dependencies>
 	</dependencyManagement>
