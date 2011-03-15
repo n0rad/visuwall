@@ -243,7 +243,7 @@ public class JarClassLoader extends ClassLoader {
 	 *            JAR file
 	 */
 	private void loadJar(JarFile jarFile) {
-		System.out.println("loader jarfile " + jarFile.getName());
+		//System.out.println("loader jarfile " + jarFile.getName());
 		lstJarFile.add(jarFile);
 		try {
 			Enumeration<JarEntry> en = jarFile.entries();

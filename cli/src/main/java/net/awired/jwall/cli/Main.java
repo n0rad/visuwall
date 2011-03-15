@@ -1,6 +1,5 @@
 package net.awired.jwall.cli;
 
-
 import java.net.URL;
 import java.security.ProtectionDomain;
 
@@ -9,32 +8,20 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
-import net.awired.ajsl.cli.argument.CliArgumentManager;
-import net.awired.ajsl.cli.argument.args.CliOneParamArgument;
-import net.awired.ajsl.cli.param.CliParamInt;
-
 public class Main {
-	
-	class ArgumentManager extends CliArgumentManager {
-		public final CliOneParamArgument<Integer> intArgument;
-		
-		public ArgumentManager() {
-			super("runnablejar");
-			intArgument = new CliOneParamArgument<Integer>('i', new  CliParamInt("value"));
-			intArgument.setParamOneDefValue(42);
-			addArg(intArgument);
-		}
-	}
-	
+
+	private final ArgumentManager argManager;
+
 	public static void main(String[] args) {
-		new Main(args);
+		new Main().run(args);
 	}
-	
-	public Main(String[] args) {
-		ArgumentManager argManager = new ArgumentManager();
+
+	public Main() {
+		argManager = new ArgumentManager(this);
+	}
+
+	public void run(String[] args) {
 		argManager.parse(args);
-		System.out.println("argument i is : " + argManager.intArgument.getParamOneValue());
-		
 		
 		Server server = new Server();
 		SocketConnector connector = new SocketConnector();
@@ -42,16 +29,16 @@ public class Main {
 		// Set some timeout options to make debugging easier.
 		connector.setMaxIdleTime(1000 * 60 * 60);
 		connector.setSoLingerTime(-1);
-		connector.setPort(8080);
+		connector.setPort(argManager.portArg.getParamOneValue());
 		server.setConnectors(new Connector[] { connector });
 
 		WebAppContext context = new WebAppContext();
 		context.setServer(server);
-		context.setContextPath("/");
+		context.setContextPath(argManager.contextPath.getParamOneValue());
 
 		ProtectionDomain protectionDomain = Main.class.getProtectionDomain();
 		URL location = protectionDomain.getCodeSource().getLocation();
-		System.out.println("Starting to load :"  + location);
+		System.out.println("Starting to load :" + location);
 		context.setDescriptor(location.toExternalForm() + "/WEB-INF/web.xml");
 		context.setWar(location.toExternalForm());
 
@@ -65,5 +52,6 @@ public class Main {
 			e.printStackTrace();
 			System.exit(100);
 		}
+
 	}
 }
