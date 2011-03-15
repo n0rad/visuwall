@@ -167,19 +167,19 @@ jwall.mvc.view.Projects = {
 	
 	_updateTestDiff : function(projectName, failDiff, successDiff, skipDiff, type) {
 		if (successDiff) {
-			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success SPAN.diff').html(this._getBracketed(this._getSignedInt(successDiff)));
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success SPAN.diff').html(this._getBracketed(this._getSignedInt(successDiff))).fadeIn("slow");
 		} else {
 			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success SPAN.diff').hide();
 		}
 		
 		if (failDiff) {
-			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure SPAN.diff').html(this._getBracketed(this._getSignedInt(failDiff)));
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure SPAN.diff').html(this._getBracketed(this._getSignedInt(failDiff))).fadeIn("slow");
 		} else {
 			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure SPAN.diff').hide();			
 		}
 		
 		if (skipDiff) {
-			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore SPAN.diff').html(this._getBracketed(this._getSignedInt(skipDiff)));
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore SPAN.diff').html(this._getBracketed(this._getSignedInt(skipDiff))).fadeIn("slow");
 		} else {
 			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore SPAN.diff').hide();			
 		}

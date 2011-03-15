@@ -103,4 +103,5 @@ TABLE.uTest SPAN.diff, TABLE.iTest SPAN.diff {
 	font-size: 0.8em;
 	font-style: italic;
 	white-space: nowrap;
+	display: none;
 }
