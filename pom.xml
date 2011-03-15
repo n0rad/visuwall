@@ -22,6 +22,7 @@
 		<module>server</module>
 		<module>hudsonclient</module>
 		<module>api</module>
+		<module>runnablewar</module>
 		<module>sonar-plugin</module>
 		<module>hudson-plugin</module>
 	</modules>

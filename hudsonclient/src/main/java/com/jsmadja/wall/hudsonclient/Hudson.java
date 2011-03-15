@@ -434,9 +434,6 @@ public class Hudson {
         if (run == null) {
             throw new HudsonBuildNotFoundException("Project "+projectName+" has no last build");
         }
-        if (run.getId() == null) {
-            throw new HudsonBuildNotFoundException("Project "+projectName+" has no last build");
-        }
-        return Integer.parseInt(run.getId());
+        return run.getNumber();
     }
 }

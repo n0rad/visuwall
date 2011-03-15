@@ -64,7 +64,7 @@ jwall.mvc.view.Projects = {
 			this._hideQuality(projectName);
 			return;
 		}
-		var qualityLi = "";
+		var qualityLi = '';
 		for (var i = 0; i < quality.length; i++) {
 			   var name = quality[i].value.name;
 			   var value = quality[i].value.formattedValue;
@@ -149,6 +149,10 @@ jwall.mvc.view.Projects = {
 		this._updateCoverage(projectName, coverage, 'i');
 	},
 
+	updateUTDiff : function(projectName, failDiff, successDiff, skipDiff) {
+		this._updateTestDiff(projectName, failDiff, successDiff, skipDiff, 'u');
+	},
+	
 	updateAgo : function(projectName, finishBuild) {
 		var abbr = this._getElement(projectName, 'abbr.timeago');
 		if (finishBuild == 0) {
@@ -161,13 +165,50 @@ jwall.mvc.view.Projects = {
 
 	// ///////////////////////////////////////////////
 	
+	_updateTestDiff : function(projectName, failDiff, successDiff, skipDiff, type) {
+		if (successDiff) {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success SPAN.diff').html(this._getBracketed(this._getSignedInt(successDiff)));
+		} else {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success SPAN.diff').hide();
+		}
+		
+		if (failDiff) {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure SPAN.diff').html(this._getBracketed(this._getSignedInt(failDiff)));
+		} else {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure SPAN.diff').hide();			
+		}
+		
+		if (skipDiff) {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore SPAN.diff').html(this._getBracketed(this._getSignedInt(skipDiff)));
+		} else {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore SPAN.diff').hide();			
+		}
+	},
+	
+	_getBracketed : function (value) {
+		if (value == null) {
+			return;
+		}
+		return '(' + value + ')';
+	},
+	
+	_getSignedInt : function (value) {
+		if (value > 0) {
+			return '+' + value;
+		} else if (value < 0) {
+			return '' + value;
+		} else {
+			return null;
+			//return '±0';
+		}
+	},
+	
 	_updateCoverage : function(projectName, coverage, type) {
 		var displayCoverage = coverage;
 		if (coverage == 0) {
 			displayCoverage = 100;
 		}
-		this._getElement(projectName, 'TABLE.' + type + 'Test').width(
-				displayCoverage + "%");
+		this._getElement(projectName, 'TABLE.' + type + 'Test').animate({width : displayCoverage + "%"}, 3000);
 	},
 	
 	_updateTest : function(projectName, fail, success, skip, type) {
@@ -180,19 +221,22 @@ jwall.mvc.view.Projects = {
 		var successBar = (success * 100) / allTest;
 		var skipBar = (skip * 100) / allTest;
 		if (success != 0) {
-			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success').width(successBar + "%").html(success).show();
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success SPAN.num').html(success);
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success').animate({width: successBar + "%"}, 2000).fadeIn("slow");
 		} else {
-			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success').hide().html('');
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success').hide();
 		}
 		if (fail != 0) {
-			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure').width(failBar + "%").html(fail).show();
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure SPAN.num').html(fail);
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure').animate({width: failBar + "%"}, 2000).fadeIn("slow");
 		} else {
-			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure').hide().html('');
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure').hide();
 		}
 		if (skip != 0) {
-			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore').width(skipBar + "%").html(skip).show();
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore SPAN.num').html(skip);
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore').animate({width: skipBar + "%"}, 2000).fadeIn("slow");
 		} else {
-			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore').hide().html('');
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore').hide();
 		}
 		this['_show' + type + 'T'](projectName);
 	},
@@ -221,8 +265,8 @@ jwall.mvc.view.Projects = {
 		projectInnerTable.append($('<tr style="display:none" class="commitersTR"><td><ul class="commiters marquee"></ul></tr></td>'));
 		projectInnerTable.append($('<tr style="display:none" class="qualityTR"><td><ul class="quality marquee"></ul></tr></td>'));
 		projectInnerTable.append($('<tr style="display:none" class= "timeleftTR"><td><p class="timeleft"></p></tr></td>'));
-		projectInnerTable.append($('<tr style="display:none" class="iTestTR"><td class="iTestTD"><table class="iTest"><tr><td class="failure"></td><td class="ignore"></td><td class="success"></td></tr></table></tr></td>'));
-		projectInnerTable.append($('<tr style="display:none" class="uTestTR"><td class="uTestTD"><table class="uTest"><tr><td class="failure"></td><td class="ignore"></td><td class="success"></td></tr></table></tr></td>'));
+		projectInnerTable.append($('<tr style="display:none" class="iTestTR"><td class="iTestTD"><table class="iTest"><tr><td class="failure"><span class="num"></span><span class="diff"></span></td><td class="ignore"><span class="num"></span><span class="diff"></span></td><td class="success"><span class="num"></span><span class="diff"></span></td></tr></table></tr></td>'));
+		projectInnerTable.append($('<tr style="display:none" class="uTestTR"><td class="uTestTD"><table class="uTest"><tr><td class="failure"><span class="num"></span><span class="diff"></span></td><td class="ignore"><span class="num"></span><span class="diff"></span></td><td class="success"><span class="num"></span><span class="diff"></span></td></tr></table></tr></td>'));
 		return projectTD;
 	},
 	

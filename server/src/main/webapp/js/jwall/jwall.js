@@ -1,6 +1,7 @@
 jwall = {
 		business : {service : {}},
 		mvc : {controller : {}, view: {}, event: {}},
+		persistence : {dao : {}},
 		
 		/**
 		 * init on ready
@@ -32,7 +33,7 @@ jwall = {
 				// register main controller
 				ajsl.dispatcher.registerMain(jwall.mvc.MainController);
 				
-				ajsl.log.setLevel('warn');
+				//ajsl.log.setLevel('warn');
 				
 				// register events
 				//ajsl.event.registerAll(jwall.mvc.event);

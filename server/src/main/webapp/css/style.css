@@ -97,3 +97,10 @@ TABLE.uTest TD.ignore, TABLE.iTest TD.ignore {
 TABLE.uTest TD.success, TABLE.iTest TD.success {
 	background-color: #729fcf !important;
 }
+
+TABLE.uTest SPAN.diff, TABLE.iTest SPAN.diff {
+	padding-left: 10px;
+	font-size: 0.8em;
+	font-style: italic;
+	white-space: nowrap;
+}
