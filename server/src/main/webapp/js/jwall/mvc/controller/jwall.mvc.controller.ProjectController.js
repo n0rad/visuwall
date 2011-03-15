@@ -78,8 +78,8 @@ jwall.mvc.controller.ProjectController = {
 		this._updateAgo(project);
 		
 		// call updateBuilding like we just receive the status
-		var wasBuilding = project.hudsonProject.building;
-		project.hudsonProject.building = false;
+		var wasBuilding = project.building;
+		project.building = false;
 		this._updateBuilding(project, wasBuilding);		
 	},
 
@@ -87,8 +87,8 @@ jwall.mvc.controller.ProjectController = {
 	
 	
 	_updateLastBuild : function(project) {
-		this.projectsView.updateBuildTime(project.name, project.hudsonProject.completedBuild.duration);
-		this.projectsView.updateCommiters(project.name, project.hudsonProject.completedBuild.commiters);
+		this.projectsView.updateBuildTime(project.name, project.completedBuild.duration);
+		this.projectsView.updateCommiters(project.name, project.completedBuild.commiters);
 		if (project.rulesCompliance != 0) {
 			this.projectsView.updateQuality(project.name, project.qualityResult.measures);
 		} else {
@@ -96,16 +96,16 @@ jwall.mvc.controller.ProjectController = {
 		}
 		this.projectsView.updateUTCoverage(project.name, project.coverage);
 		this.projectsView.updateUT(project.name, 
-				project.hudsonProject.completedBuild.testResult.failCount,
-				project.hudsonProject.completedBuild.testResult.passCount,
-				project.hudsonProject.completedBuild.testResult.skipCount,
+				project.completedBuild.testResult.failCount,
+				project.completedBuild.testResult.passCount,
+				project.completedBuild.testResult.skipCount,
 				project.coverage);
 
 		this.projectsView.updateITCoverage(project.name, 0);
 		this.projectsView.updateIT(project.name, 0,0,0);
 	
 		var $this = this;
-		var completedBuild = project.hudsonProject.completedBuild;
+		var completedBuild = project.completedBuild;
 		
 		this.projectDAO.callbackPreviousCompletedBuild(project.name, function(previousBuild) {
 			if (completedBuild == null || previousBuild == null) {
@@ -121,8 +121,8 @@ jwall.mvc.controller.ProjectController = {
 	},
 	
 	_updateAgo : function(project) {
-		if (project.hudsonProject.completedBuild != null) {
-			this.projectsView.updateAgo(project.name, new Date(project.hudsonProject.completedBuild.startTime + project.hudsonProject.completedBuild.duration));					
+		if (project.completedBuild != null) {
+			this.projectsView.updateAgo(project.name, new Date(project.completedBuild.startTime + project.completedBuild.duration));					
 		} else {
 			this.projectsView.updateAgo(project.name, 0);
 		}
@@ -157,19 +157,19 @@ jwall.mvc.controller.ProjectController = {
 	
 	_updateBuilding : function(project, isBuilding) {
 		if (isBuilding) {
-			if (!project.hudsonProject.building) {
+			if (!project.building) {
 				var $this = this;
 				jwall.business.service.Project.finishTime(project.name, function(data) {
 					$this.projectsView.updateCountdown(project.name, new Date(data));
 				});
 				LOG.info("project is now building : " + project.name);
 				this.projectsView.showBuilding(project.name);
-				project.hudsonProject.building = true;
+				project.building = true;
 			}
-		} else if (project.hudsonProject.building) {
+		} else if (project.building) {
 			LOG.info("building is now over for project : " + project.name);
 			this.projectsView.stopBuilding(project.name);
-			project.hudsonProject.building = false;
+			project.building = false;
 
 			var $this = this;
 			this.projectService.project(project.name, function(newProjectData) {
@@ -191,7 +191,7 @@ jwall.mvc.controller.ProjectController = {
 	},	
 	
 	_checkVersionChangeAndNotBuilding : function(projectData, projectStatus) {
-		if (projectData.hudsonProject.lastBuildNumber != projectStatus.lastBuildId
+		if (projectData.lastBuildNumber != projectStatus.lastBuildId
 			&& !projectStatus.building) {
 			return true;
 		}

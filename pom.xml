@@ -50,7 +50,7 @@
 			<email>julien dot smadja at gmail dot com</email>
 		</developer>
 		<developer>
-			<id>alemaire</id>
+			<id>n0rad</id>
 			<name>Arnaud Lemaire</name>
 			<email>dev at norad dot fr</email>
 		</developer>
@@ -69,25 +69,80 @@
 				<artifactId>wall-hudsonclient</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			<dependency>       
+			<dependency>
 				<groupId>com.jsmadja.wall</groupId>
-                                <artifactId>wall-api</artifactId>
-                                <version>${project.version}</version>
-                        </dependency>
-                        <dependency>
-                                <groupId>com.jsmadja.wall</groupId>
-                                <artifactId>hudson-plugin</artifactId>
-                                <version>${project.version}</version>
-                        </dependency>
-                        <dependency>
-                                <groupId>com.jsmadja.wall</groupId>
-                                <artifactId>sonar-plugin</artifactId>
-                                <version>${project.version}</version>
-                        </dependency>
+				<artifactId>wall-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jsmadja.wall</groupId>
+				<artifactId>hudson-plugin</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jsmadja.wall</groupId>
+				<artifactId>sonar-plugin</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jsmadja.wall</groupId>
+				<artifactId>wall-runnablewar</artifactId>
+				<version>${project.version}</version>
+			</dependency>			
 		</dependencies>
 	</dependencyManagement>
 
-
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<version>1.8.0</version>
+				<configuration>
+					<header>src/main/licence.txt</header>
+					<strictCheck>true</strictCheck>
+					<useDefaultExcludes>false</useDefaultExcludes>
+					<excludes>
+						<exclude>.gitignore</exclude>
+						<exclude>.git/**</exclude>
+						<exclude>target/**</exclude>
+						<exclude>.settings/**</exclude>
+						<exclude>.project</exclude>
+						<exclude>.classpath</exclude>
+						<exclude>LICENCE</exclude>
+						<exclude>README</exclude>
+						<exclude>**/MANIFEST.MF</exclude>
+						<exclude>src/main/webapp/WEB-INF/lib/**</exclude>
+						<exclude>src/main/webapp/WEB-INF/classes/**</exclude>
+						<exclude>src/main/webapp/images/**</exclude>
+						<exclude>.externalToolBuilders/**</exclude>
+						<exclude>.pmd/**</exclude>
+						<exclude>src/test/resources/**</exclude>
+						<exclude>src/main/webapp/js/jquery/**</exclude>
+						<exclude>src/main/xsd/**</exclude>
+						<exclude>infinitest.filters</exclude>
+						<exclude>src/main/java/com/jsmadja/wall/projectwall/generated/**</exclude>
+					</excludes>
+					<executions>
+						<execution>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 
 	<!-- plugin repos -->

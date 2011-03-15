@@ -30,13 +30,20 @@ jwall.persistence.dao.ProjectDAO = {
 		
 		callbackPreviousCompletedBuild : function(projectName, callback) {
 			var buildIdIndex = this._getPreviousCompletedBuildIdIndex(projectName);
+			if (buildIdIndex == null) {
+				return false;
+			}
 			this._callbackPreviousCompletedBuildRec(projectName, callback, buildIdIndex);
 		},
 		
 		_callbackPreviousCompletedBuildRec : function(projectName, callback, buildIdIndex) {
 			var project = this._projects[projectName];
+			if (project.buildNumbers[buildIdIndex] == null) {
+				return;
+			}
+			
 			var $this = this;
-			$this._projectService.getBuild(projectName, project.hudsonProject.buildNumbers[buildIdIndex], function(buildData) {
+			$this._projectService.getBuild(projectName, project.buildNumbers[buildIdIndex], function(buildData) {
 				if (buildData.state != 'ABORTED') {
 					callback(buildData);
 					return;
@@ -52,16 +59,16 @@ jwall.persistence.dao.ProjectDAO = {
 
 		_getPreviousCompletedBuildIdIndex : function(projectName) {
 			var project = this._projects[projectName];
-			var buildNumbers = project.hudsonProject.buildNumbers;
-			for (var i = 0; i <= buildNumbers.length; i++) {
+			var buildNumbers = project.buildNumbers;
+			for (var i = 0; i < buildNumbers.length; i++) {
 				
 				// skip building
-				if (i == 0 && buildNumbers[i] == project.hudsonProject.currentBuild.buildNumber) {
+				if (i == 0 && buildNumbers[i] == project.currentBuild.buildNumber) {
 					continue;
 				}
 				
 				// skip lastBuild
-				if (buildNumbers[i] == project.hudsonProject.completedBuild.buildNumber) {
+				if (buildNumbers[i] == project.completedBuild.buildNumber) {
 					continue;
 				}
 				
