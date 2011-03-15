@@ -37,7 +37,7 @@ jwall.persistence.dao.ProjectDAO = {
 			var project = this._projects[projectName];
 			var $this = this;
 			$this._projectService.getBuild(projectName, project.hudsonProject.buildNumbers[buildIdIndex], function(buildData) {
-				if (buildData.state != 'FAILURE') {
+				if (buildData.state != 'ABORTED') {
 					callback(buildData);
 					return;
 				} else {

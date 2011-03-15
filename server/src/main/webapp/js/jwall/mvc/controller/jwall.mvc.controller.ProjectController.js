@@ -121,8 +121,8 @@ jwall.mvc.controller.ProjectController = {
 	},
 	
 	_updateAgo : function(project) {
-		if (project.hudsonProject.lastBuild != null) {
-			this.projectsView.updateAgo(project.name, new Date(project.hudsonProject.lastBuild.startTime + project.hudsonProject.lastBuild.duration));					
+		if (project.hudsonProject.completedBuild != null) {
+			this.projectsView.updateAgo(project.name, new Date(project.hudsonProject.completedBuild.startTime + project.hudsonProject.completedBuild.duration));					
 		} else {
 			this.projectsView.updateAgo(project.name, 0);
 		}
