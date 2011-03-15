@@ -86,6 +86,7 @@ public final class HudsonService implements BuildService {
         project.setName(hudsonProject.getName());
         project.setDescription(hudsonProject.getDescription());
         project.setId(hudsonProject.getArtifactId());
+        project.setBuildNumbers(hudsonProject.getBuildNumbers());
 
         HudsonBuild completedBuild = hudsonProject.getCompletedBuild();
         if (completedBuild != null) {
