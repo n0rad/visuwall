@@ -100,4 +100,6 @@ TABLE.uTest TD.success, TABLE.iTest TD.success {
 
 TABLE.uTest SPAN.diff, TABLE.iTest SPAN.diff {
 	padding-left: 10px;
+	font-size: 0.8em;
+	font-style: italic;
 }

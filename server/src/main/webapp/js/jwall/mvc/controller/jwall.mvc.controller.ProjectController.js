@@ -85,42 +85,38 @@ jwall.mvc.controller.ProjectController = {
 
 	/////////////////////////////////////////////////////////////////////////
 	
+	
 	_updateLastBuild : function(project) {
-		var $this = this;
-		this.projectDAO.getLastBuild(project.name, function(lastBuild) {
-			
-			
-			
-			$this.projectsView.updateBuildTime(project.name, lastBuild.duration);
-			$this.projectsView.updateCommiters(project.name, lastBuild.commiters);
-			if (project.rulesCompliance != 0) {
-				$this.projectsView.updateQuality(project.name, project.qualityResult.measures);
-			} else {
-				$this.projectsView.updateQuality(project.name, { });					
-			}
-			$this.projectsView.updateUTCoverage(project.name, project.coverage);
-			$this.projectsView.updateUT(project.name, 
-					lastBuild.testResult.failCount,
-					lastBuild.testResult.passCount,
-					lastBuild.testResult.skipCount,
-					project.coverage);
+		this.projectsView.updateBuildTime(project.name, project.hudsonProject.completedBuild.duration);
+		this.projectsView.updateCommiters(project.name, project.hudsonProject.completedBuild.commiters);
+		if (project.rulesCompliance != 0) {
+			this.projectsView.updateQuality(project.name, project.qualityResult.measures);
+		} else {
+			this.projectsView.updateQuality(project.name, { });					
+		}
+		this.projectsView.updateUTCoverage(project.name, project.coverage);
+		this.projectsView.updateUT(project.name, 
+				project.hudsonProject.completedBuild.testResult.failCount,
+				project.hudsonProject.completedBuild.testResult.passCount,
+				project.hudsonProject.completedBuild.testResult.skipCount,
+				project.coverage);
 
-			$this.projectsView.updateITCoverage(project.name, 0);
-			$this.projectsView.updateIT(project.name, 0,0,0);
+		this.projectsView.updateITCoverage(project.name, 0);
+		this.projectsView.updateIT(project.name, 0,0,0);
+	
+		var $this = this;
+		var completedBuild = project.hudsonProject.completedBuild;
 		
-			$this.projectDAO.getLastTwoBuildIfAvailable(project.name, function(lastBuild, previousBuild) {
-				if (lastBuild == null || previousBuild == null) {
-					return;
-				}
-				
-				var failDiff = lastBuild.testResult.failCount - previousBuild.testResult.failCount;
-				var successDiff = lastBuild.testResult.passCount - previousBuild.testResult.passCount;
-				var skipDiff = lastBuild.testResult.skipCount - previousBuild.testResult.skipCount;
-				
-				$this.projectsView.updateUTDiff(project.name, failDiff, successDiff, skipDiff);
-			});
-				
+		this.projectDAO.callbackPreviousCompletedBuild(project.name, function(previousBuild) {
+			if (completedBuild == null || previousBuild == null) {
+				return;
+			}
 			
+			var failDiff = completedBuild.testResult.failCount - previousBuild.testResult.failCount;
+			var successDiff = completedBuild.testResult.totalCount - previousBuild.testResult.totalCount;
+			var skipDiff = completedBuild.testResult.skipCount - previousBuild.testResult.skipCount;
+			
+			$this.projectsView.updateUTDiff(project.name, failDiff, successDiff, skipDiff);
 		});
 	},
 	

@@ -10,7 +10,6 @@ jwall.persistence.dao.ProjectDAO = {
 		
 		saveProject : function(project) {
 			this._projects[project.name] = project;
-			this._rebuildBuilding(project.name);
 		},
 		
 		removeProject : function(projectName) {
@@ -29,49 +28,46 @@ jwall.persistence.dao.ProjectDAO = {
 			return this._projects;
 		},
 		
-		getLastTwoBuildIfAvailable : function(projectName, callback) {
+		callbackPreviousCompletedBuild : function(projectName, callback) {
+			var buildIdIndex = this._getPreviousCompletedBuildIdIndex(projectName);
+			this._callbackPreviousCompletedBuildRec(projectName, callback, buildIdIndex);
+		},
+		
+		_callbackPreviousCompletedBuildRec : function(projectName, callback, buildIdIndex) {
+			var project = this._projects[projectName];
 			var $this = this;
-			var project = this._projects[projectName];
-			if (project.hudsonProject.buildNumbers[1] != undefined) {
-				this.getLastBuild(projectName, function (lastBuild) {
-					$this._projectService.getBuild(projectName, project.hudsonProject.buildNumbers[1], function(buildData) {
-						callback(lastBuild, buildData);
-					});
-				});
-			} else {
-				return false;
-			}
-		},
-		
-		/**
-		 * return false is not build found
-		 */
-		getLastBuild : function(projectName, callback) {
-			var project = this._projects[projectName];
-			if (project.hudsonProject.lastBuild != null) {
-				callback(project.hudsonProject.lastBuild);
-			} else if (project.hudsonProject.buildNumbers[0] != undefined) {
-				var $this = this;
-				this._projectService.getBuild(projectName, project.hudsonProject.buildNumbers[0], function(buildData) {
-					project.hudsonProject.lastBuild = buildData;
+			$this._projectService.getBuild(projectName, project.hudsonProject.buildNumbers[buildIdIndex], function(buildData) {
+				if (buildData.state != 'FAILURE') {
 					callback(buildData);
-				});
-			} else {
-				return false;
-			}
+					return;
+				} else {
+					$this._callbackPreviousCompletedBuildRec(projectName, callback, buildIdIndex + 1);
+				}
+			});
 		},
 		
-		/////////////////////////////////////
 		
-		_rebuildBuilding : function(projectName) {
+
+		/////////////////////////////////////
+
+		_getPreviousCompletedBuildIdIndex : function(projectName) {
 			var project = this._projects[projectName];
-			if (project.hudsonProject.building) {
-				project.hudsonProject.building = project.hudsonProject.lastBuild;
-				project.hudsonProject.buildNumbers.shift();
-				project.hudsonProject.lastBuild = null;
-			} else {
-				project.hudsonProject.building = null;
+			var buildNumbers = project.hudsonProject.buildNumbers;
+			for (var i = 0; i <= buildNumbers.length; i++) {
+				
+				// skip building
+				if (i == 0 && buildNumbers[i] == project.hudsonProject.currentBuild.buildNumber) {
+					continue;
+				}
+				
+				// skip lastBuild
+				if (buildNumbers[i] == project.hudsonProject.completedBuild.buildNumber) {
+					continue;
+				}
+				
+				return i;
 			}
+			return null;
 		}
 		
 };

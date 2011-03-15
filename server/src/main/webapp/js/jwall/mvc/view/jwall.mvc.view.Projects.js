@@ -166,9 +166,41 @@ jwall.mvc.view.Projects = {
 	// ///////////////////////////////////////////////
 	
 	_updateTestDiff : function(projectName, failDiff, successDiff, skipDiff, type) {
-		this._getElement(projectName, 'TABLE.' + type + 'Test TD.success SPAN.diff').html(successDiff);
-		this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure SPAN.diff').html(failDiff);
-		this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore SPAN.diff').html(skipDiff);
+		if (successDiff) {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success SPAN.diff').html(this._getBracketed(this._getSignedInt(successDiff)));
+		} else {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.success SPAN.diff').hide();
+		}
+		
+		if (failDiff) {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure SPAN.diff').html(this._getBracketed(this._getSignedInt(failDiff)));
+		} else {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure SPAN.diff').hide();			
+		}
+		
+		if (skipDiff) {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore SPAN.diff').html(this._getBracketed(this._getSignedInt(skipDiff)));
+		} else {
+			this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore SPAN.diff').hide();			
+		}
+	},
+	
+	_getBracketed : function (value) {
+		if (value == null) {
+			return;
+		}
+		return '(' + value + ')';
+	},
+	
+	_getSignedInt : function (value) {
+		if (value > 0) {
+			return '+' + value;
+		} else if (value < 0) {
+			return '' + value;
+		} else {
+			return null;
+			//return '±0';
+		}
 	},
 	
 	_updateCoverage : function(projectName, coverage, type) {
