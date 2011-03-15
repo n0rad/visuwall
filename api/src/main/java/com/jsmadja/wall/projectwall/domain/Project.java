@@ -29,6 +29,7 @@ public final class Project {
     private double rulesCompliance;
     private QualityResult qualityResult;
     private State state;
+    private int[] buildNumbers;
 
     private Build completedBuild;
     private Build currentBuild;
@@ -87,6 +88,14 @@ public final class Project {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public int[] getBuildNumbers() {
+        return buildNumbers;
+    }
+
+    public void setBuildNumbers(int[] buildNumbers) {
+        this.buildNumbers = buildNumbers;
     }
 
     @Override
