@@ -38,11 +38,15 @@
 			<groupId>com.jsmadja.wall</groupId>
 			<artifactId>hudson-plugin</artifactId>
 		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.jsmadja.wall</groupId> -->
+<!-- 			<artifactId>wall-cli</artifactId> -->
+<!-- 			<scope>import</scope> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>com.jsmadja.wall</groupId>
 			<artifactId>wall-runnablewar</artifactId>
-<!-- 			<scope>import</scope> -->
-			<classifier>jar-with-dependencies</classifier>
+			<scope>import</scope>
 		</dependency>
 		
 		<!-- Test -->
@@ -180,6 +184,9 @@
 						<manifest>
 							<mainClass>Main</mainClass>
 						</manifest>
+						<manifestEntries>
+							<Bundle-MainClass>net.awired.jwall.cli.Main</Bundle-MainClass>
+						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
@@ -201,7 +208,6 @@
 									<groupId>com.jsmadja.wall</groupId>
 									<artifactId>wall-runnablewar</artifactId>
 									<version>${project.version}</version>
-									<classifier>jar-with-dependencies</classifier>
 									<type>jar</type>
 									<overWrite>false</overWrite>
 									<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}</outputDirectory>
