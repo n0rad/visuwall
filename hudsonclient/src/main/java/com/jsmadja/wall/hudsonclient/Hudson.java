@@ -21,6 +21,10 @@ import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+
 import org.apache.xerces.dom.ElementNSImpl;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -58,6 +62,8 @@ public class Hudson {
 
     private Client client;
 
+    private Cache cache;
+
     public Hudson(String hudsonUrl) {
         hudsonUrlBuilder = new HudsonUrlBuilder(hudsonUrl);
         ClientConfig clientConfig = new DefaultClientConfig();
@@ -67,6 +73,9 @@ public class Hudson {
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize hudson with url " + hudsonUrl);
         }
+
+        CacheManager cacheManager = CacheManager.create();
+        cache = cacheManager.getCache("hudson_projects_cache");
     }
 
     /**
@@ -137,6 +146,15 @@ public class Hudson {
     }
 
     private HudsonBuild createHudsonBuildFrom(String projectName, int buildNumber, HudsonMavenMavenModuleSetBuild setBuild) {
+        String cacheKey = "hudsonbuild_"+projectName+"_"+buildNumber;
+        Element element = cache.get(cacheKey);
+        if (element != null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(cacheKey+" is in cache");
+            }
+            return (HudsonBuild) element.getObjectValue();
+        }
+
         String testResultUrl = hudsonUrlBuilder.getTestResultUrl(projectName, buildNumber);
         WebResource testResultResource = client.resource(testResultUrl);
         TestResult testResult = hudsonTestService.build(testResultResource);
@@ -149,6 +167,12 @@ public class Hudson {
         hudsonBuild.setCommiters(getCommiters(setBuild));
         hudsonBuild.setTestResult(testResult);
         hudsonBuild.setBuildNumber(buildNumber);
+
+        cache.put(new Element(cacheKey, hudsonBuild));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("put "+cacheKey+" in cache");
+        }
+
         return hudsonBuild;
     }
 
@@ -395,13 +419,25 @@ public class Hudson {
     }
 
     private HudsonMavenMavenModuleSet findJobByProjectName(String projectName) throws HudsonProjectNotFoundException {
+        Element element = cache.get(projectName);
+        if (element != null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(projectName+" is in cache");
+            }
+            return (HudsonMavenMavenModuleSet) element.getObjectValue();
+        }
         try {
             String projectUrl = hudsonUrlBuilder.getProjectUrl(projectName);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Project url : " + projectUrl);
             }
             WebResource projectResource = client.resource(projectUrl);
-            return projectResource.get(HudsonMavenMavenModuleSet.class);
+            HudsonMavenMavenModuleSet moduleSet = projectResource.get(HudsonMavenMavenModuleSet.class);
+            cache.put(new Element(projectName, moduleSet));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("put "+projectName+" in cache");
+            }
+            return moduleSet;
         } catch(UniformInterfaceException e) {
             throw new HudsonProjectNotFoundException(e);
         }
@@ -420,12 +456,26 @@ public class Hudson {
     }
 
     private HudsonMavenMavenModuleSetBuild findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) {
+        String cacheKey = "build_"+projectName+"_"+buildNumber;
+        Element element = cache.get(cacheKey);
+        if (element != null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(cacheKey+" is in cache");
+            }
+            return (HudsonMavenMavenModuleSetBuild) element.getObjectValue();
+        }
+
         String buildUrl = hudsonUrlBuilder.getBuildUrl(projectName, buildNumber);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Build url : " + buildUrl);
         }
         WebResource jobResource = client.resource(buildUrl);
-        return jobResource.get(HudsonMavenMavenModuleSetBuild.class);
+        HudsonMavenMavenModuleSetBuild setBuild = jobResource.get(HudsonMavenMavenModuleSetBuild.class);
+        cache.put(new Element(cacheKey, setBuild));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("put "+cacheKey+" in cache");
+        }
+        return setBuild;
     }
 
     public int getLastBuildNumber(String projectName) throws HudsonProjectNotFoundException, HudsonBuildNotFoundException {
