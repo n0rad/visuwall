@@ -5,3 +5,6 @@ target
 .externalToolBuilders
 maven-eclipse.xml
 .pmd
+jwall-database.properties
+jwall-database.script
+
