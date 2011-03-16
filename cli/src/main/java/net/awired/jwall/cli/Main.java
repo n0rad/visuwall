@@ -23,7 +23,7 @@ public class Main {
 	public void run(String[] args) {
 		argManager.parse(args);
 		
-		Server server = new Server();
+		final Server server = new Server();
 		SocketConnector connector = new SocketConnector();
 
 		// Set some timeout options to make debugging easier.
@@ -45,8 +45,7 @@ public class Main {
 		server.addHandler(context);
 		try {
 			server.start();
-			System.in.read();
-			server.stop();
+			server.setStopAtShutdown(true);
 			server.join();
 		} catch (Exception e) {
 			e.printStackTrace();
