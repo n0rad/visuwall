@@ -147,11 +147,12 @@ public class Hudson {
 
     private HudsonBuild createHudsonBuildFrom(String projectName, int buildNumber, HudsonMavenMavenModuleSetBuild setBuild) {
         String cacheKey = "hudsonbuild_"+projectName+"_"+buildNumber;
-        if (cache.isKeyInCache(cacheKey)) {
+        Element element = cache.get(cacheKey);
+        if (element != null) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(cacheKey+" is in cache");
             }
-            return (HudsonBuild) cache.get(cacheKey).getObjectValue();
+            return (HudsonBuild) element.getObjectValue();
         }
 
         String testResultUrl = hudsonUrlBuilder.getTestResultUrl(projectName, buildNumber);
@@ -418,11 +419,12 @@ public class Hudson {
     }
 
     private HudsonMavenMavenModuleSet findJobByProjectName(String projectName) throws HudsonProjectNotFoundException {
-        if (cache.isKeyInCache(projectName)) {
+        Element element = cache.get(projectName);
+        if (element != null) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(projectName+" is in cache");
             }
-            return (HudsonMavenMavenModuleSet) cache.get(projectName).getObjectValue();
+            return (HudsonMavenMavenModuleSet) element.getObjectValue();
         }
         try {
             String projectUrl = hudsonUrlBuilder.getProjectUrl(projectName);
@@ -455,11 +457,12 @@ public class Hudson {
 
     private HudsonMavenMavenModuleSetBuild findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) {
         String cacheKey = "build_"+projectName+"_"+buildNumber;
-        if (cache.isKeyInCache(cacheKey)) {
+        Element element = cache.get(cacheKey);
+        if (element != null) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(cacheKey+" is in cache");
             }
-            return (HudsonMavenMavenModuleSetBuild) cache.get(cacheKey).getObjectValue();
+            return (HudsonMavenMavenModuleSetBuild) element.getObjectValue();
         }
 
         String buildUrl = hudsonUrlBuilder.getBuildUrl(projectName, buildNumber);
