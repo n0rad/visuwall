@@ -243,14 +243,13 @@ public class JarClassLoader extends ClassLoader {
 	 *            JAR file
 	 */
 	private void loadJar(JarFile jarFile) {
-		//System.out.println("loader jarfile " + jarFile.getName());
 		lstJarFile.add(jarFile);
 		try {
 			Enumeration<JarEntry> en = jarFile.entries();
 			final String EXT_JAR = ".jar";
 			while (en.hasMoreElements()) {
 				JarEntry je = en.nextElement();
-				if (je.isDirectory() || je.getName().startsWith("WEB-INF")) {
+				if (je.isDirectory() || !je.getName().startsWith("META-INF/runlib")) {
 					continue;
 				}
 				String s = je.getName().toLowerCase(); // JarEntry name

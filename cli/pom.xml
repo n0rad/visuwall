@@ -45,6 +45,12 @@
 			<groupId>net.awired.ajsl</groupId>
 			<artifactId>ajsl-cli</artifactId>
 			<version>1.0-ALPHA5</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
