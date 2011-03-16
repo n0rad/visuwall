@@ -26,7 +26,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -48,8 +47,7 @@ public class WallITTest {
 
     private Wall wall;
 
-    @Before
-    public void init() {
+    public WallITTest() {
         wall = new Wall("test");
         wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, HUDSON_URL));
         wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, SONAR_URL));
