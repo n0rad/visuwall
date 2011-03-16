@@ -8,6 +8,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,25 +26,46 @@ import com.jsmadja.wall.projectwall.exception.ProjectNotFoundException;
 import com.jsmadja.wall.projectwall.service.BuildService;
 import com.jsmadja.wall.projectwall.service.QualityService;
 
-
+@Entity
 public class Wall {
 
     private static final int PROJECT_NOT_BUILT_ID = -1;
 
     private static final Logger LOG = LoggerFactory.getLogger(Wall.class);
 
+    @Transient
     private Set<BuildService> buildServices = new HashSet<BuildService>();
+
+    @Transient
     private Set<QualityService> qualityServices = new HashSet<QualityService>();
 
+    @Transient
     private Set<Project> projects = new HashSet<Project>();
 
+    @Id
     private String name;
+
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    private List<SoftwareAccess> softwareAccesses = new ArrayList<SoftwareAccess>();
+
+    public Wall() { }
 
     public Wall(String name) {
         this.name = name;
     }
 
     public void addSoftwareAccess(SoftwareAccess softwareAccess) {
+        this.softwareAccesses.add(softwareAccess);
+        addServiceFrom(softwareAccess);
+    }
+
+    public void restoreServices() {
+        for (SoftwareAccess access:softwareAccesses) {
+            addServiceFrom(access);
+        }
+    }
+
+    private void addServiceFrom(SoftwareAccess softwareAccess) {
         if (softwareAccess.getSoftware().isBuildSoftware()) {
             buildServices.add(softwareAccess.createBuildService());
         }
@@ -206,6 +234,22 @@ public class Wall {
             }
         }
         throw new BuildNotFoundException("No build #"+buildNumber+" for project "+projectName);
+    }
+
+    public void setSoftwareAccesses(List<SoftwareAccess> softwareAccesses) {
+        this.softwareAccesses = softwareAccesses;
+    }
+
+    public List<SoftwareAccess> getSoftwareAccesses() {
+        return softwareAccesses;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

@@ -1,15 +1,31 @@
 package com.jsmadja.wall.projectwall.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
 import com.jsmadja.wall.projectwall.service.BuildService;
 import com.jsmadja.wall.projectwall.service.QualityService;
 
+@Entity
 public class SoftwareAccess {
 
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @OneToOne(fetch=FetchType.EAGER)
     private Software software;
 
     private String url;
     private String login;
     private String password;
+
+    public SoftwareAccess() {
+
+    }
 
     public SoftwareAccess(Software software, String url) {
         this.software = software;
@@ -48,4 +64,49 @@ public class SoftwareAccess {
         return service;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof SoftwareAccess)) {
+            return false;
+        }
+        SoftwareAccess sa = (SoftwareAccess) obj;
+        return id.equals(sa.id);
+    }
 }
