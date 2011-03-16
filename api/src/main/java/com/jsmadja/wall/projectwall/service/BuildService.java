@@ -19,12 +19,12 @@ public interface BuildService extends Service {
 
     void populate(Project project) throws ProjectNotFoundException;
 
-    Date getEstimatedFinishTime(Project project) throws ProjectNotFoundException;
+    Date getEstimatedFinishTime(String projectName) throws ProjectNotFoundException;
 
-    boolean isBuilding(Project project) throws ProjectNotFoundException;
+    boolean isBuilding(String projectName) throws ProjectNotFoundException;
 
-    State getState(Project project) throws ProjectNotFoundException;
+    State getState(String projectName) throws ProjectNotFoundException;
 
-    int getLastBuildNumber(Project project) throws ProjectNotFoundException, BuildNotFoundException;
+    int getLastBuildNumber(String projectName) throws ProjectNotFoundException, BuildNotFoundException;
 
 }

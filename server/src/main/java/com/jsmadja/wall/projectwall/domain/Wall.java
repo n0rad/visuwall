@@ -126,10 +126,9 @@ public class Wall {
      * @throws ProjectNotFoundException
      */
     public Date getEstimatedFinishTime(String projectName) throws ProjectNotFoundException {
-        Project project = findProjectByName(projectName);
         for(BuildService service:buildServices) {
             try {
-                Date estimatedFinishTime = service.getEstimatedFinishTime(project);
+                Date estimatedFinishTime = service.getEstimatedFinishTime(projectName);
                 if (estimatedFinishTime != null) {
                     return estimatedFinishTime;
                 }
@@ -180,7 +179,7 @@ public class Wall {
     private int getLastBuildNumber(Project project) {
         for (BuildService service:buildServices) {
             try {
-                return service.getLastBuildNumber(project);
+                return service.getLastBuildNumber(project.getName());
             } catch (ProjectNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(e.getMessage());
@@ -197,7 +196,7 @@ public class Wall {
     private State getState(Project project) {
         for (BuildService service:buildServices) {
             try {
-                return service.getState(project);
+                return service.getState(project.getName());
             } catch (ProjectNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(e.getMessage());
@@ -210,7 +209,7 @@ public class Wall {
     private boolean isBuilding(Project project) {
         for (BuildService service:buildServices) {
             try {
-                return service.isBuilding(project);
+                return service.isBuilding(project.getName());
             } catch (ProjectNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(e.getMessage());

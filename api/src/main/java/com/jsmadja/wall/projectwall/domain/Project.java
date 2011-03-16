@@ -137,6 +137,7 @@ public final class Project {
         .add("coverage", coverage) //
         .add("rules compliance", rulesCompliance) //
         .add("state", state) //
+        .add("completed build", completedBuild) //
         .toString();
     }
 
