@@ -252,6 +252,7 @@ public class JarClassLoader extends ClassLoader {
 				if (je.isDirectory() || !je.getName().startsWith("META-INF/runlib")) {
 					continue;
 				}
+//				System.out.println("load :" + je.getName());
 				String s = je.getName().toLowerCase(); // JarEntry name
 				if (s.lastIndexOf(EXT_JAR) == s.length() - EXT_JAR.length()) {
 					JarEntryInfo inf = new JarEntryInfo(jarFile, je);
