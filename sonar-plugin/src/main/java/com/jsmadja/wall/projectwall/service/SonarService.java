@@ -101,6 +101,9 @@ public final class SonarService implements QualityService {
         try {
             ResourceQuery query = ResourceQuery.createForMetrics(projectId, measureKey);
             Resource resource = sonar.find(query);
+            if (resource == null) {
+                throw new SonarMetricNotFoundException("Metric "+measureKey+" not found for project "+projectId+" in Sonar "+url);
+            }
             return resource.getMeasure(measureKey);
         } catch(ConnectionException e) {
             throw new SonarMetricNotFoundException("Metric "+measureKey+" not found for project "+projectId+" in Sonar "+url, e);

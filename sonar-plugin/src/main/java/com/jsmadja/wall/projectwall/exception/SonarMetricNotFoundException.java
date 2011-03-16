@@ -8,4 +8,8 @@ public class SonarMetricNotFoundException extends Exception {
         super(message, cause);
     }
 
+    public SonarMetricNotFoundException(String message) {
+        super(message);
+    }
+
 }
