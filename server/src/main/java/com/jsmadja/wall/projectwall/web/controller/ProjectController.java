@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.jsmadja.wall.projectwall.domain.Build;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.ProjectStatus;
+import com.jsmadja.wall.projectwall.domain.Software;
+import com.jsmadja.wall.projectwall.domain.SoftwareAccess;
 import com.jsmadja.wall.projectwall.domain.Wall;
 import com.jsmadja.wall.projectwall.service.WallService;
 
@@ -32,8 +34,8 @@ public class ProjectController {
 
     public ProjectController() {
         wall = new Wall("orange-vallee");
-        //        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://integration.wormee.orange-vallee.net:8080/hudson"));
-        //        wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://integration.wormee.orange-vallee.net:9000"));
+        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://integration.wormee.orange-vallee.net:8080/hudson"));
+        wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://integration.wormee.orange-vallee.net:9000"));
         wall.refreshProjects();
         // wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://ci.awired.net/jenkins"));
         // wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://sonar.awired.net"));

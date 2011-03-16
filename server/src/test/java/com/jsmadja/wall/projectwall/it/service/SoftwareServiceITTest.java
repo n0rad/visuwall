@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -24,6 +26,8 @@ public class SoftwareServiceITTest {
 
     @Autowired
     SoftwareService softwareService;
+
+    Logger LOG = LoggerFactory.getLogger(SoftwareServiceITTest.class);
 
     @Test
     public void should_find_all_software() throws SoftwareNotCreatedException {
