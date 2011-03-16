@@ -133,8 +133,8 @@ public final class SonarService implements QualityService {
                 }
             }
         }catch(SonarMetricNotFoundException e) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info(e.getMessage());
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(e.getMessage());
             }
         }
     }
