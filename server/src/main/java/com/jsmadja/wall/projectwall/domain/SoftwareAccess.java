@@ -15,6 +15,8 @@ public class SoftwareAccess {
     @Id
     @GeneratedValue
     private Long id;
+    
+    private String name;
 
     @OneToOne(fetch=FetchType.EAGER)
     private Software software;
@@ -109,4 +111,12 @@ public class SoftwareAccess {
         SoftwareAccess sa = (SoftwareAccess) obj;
         return id.equals(sa.id);
     }
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

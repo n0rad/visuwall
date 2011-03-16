@@ -73,14 +73,14 @@ jwall.mvc.controller.ProjectController = {
 	},
 	
 	_updateProject : function(project) {
-		this._updateState(project);
 		this._updateLastBuild(project);
 		this._updateAgo(project);
 		
 		// call updateBuilding like we just receive the status
 		var wasBuilding = project.building;
 		project.building = false;
-		this._updateBuilding(project, wasBuilding);		
+		this._updateBuilding(project, wasBuilding);
+		this._updateState(project);
 	},
 
 	/////////////////////////////////////////////////////////////////////////
@@ -89,11 +89,7 @@ jwall.mvc.controller.ProjectController = {
 	_updateLastBuild : function(project) {
 		this.projectsView.updateBuildTime(project.name, project.completedBuild.duration);
 		this.projectsView.updateCommiters(project.name, project.completedBuild.commiters);
-		if (project.rulesCompliance != 0) {
-			this.projectsView.updateQuality(project.name, project.qualityResult.measures);
-		} else {
-			this.projectsView.updateQuality(project.name, { });					
-		}
+		this.projectsView.updateQuality(project.name, project.qualityResult.measures);
 		this.projectsView.updateUTCoverage(project.name, project.coverage);
 		this.projectsView.updateUT(project.name, 
 				project.completedBuild.testResult.failCount,

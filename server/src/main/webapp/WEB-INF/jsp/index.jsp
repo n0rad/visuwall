@@ -13,7 +13,6 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
 --%>
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -26,32 +25,6 @@ ${cssLinks} ${jsLinks}
 <body>
 
 <ul id="projectsTable"></ul>
-
-<!--<table id="projectsTable" height="100%" width="100%">-->
-<!--	<tbody>-->
-<!--		 <tr>-->
-<!--			<td class="project success" width="50%">-->
-<!--			<div class="content">-->
-<!--			<div class="projectName">Project-Test</div>-->
-<!--			<div class="commiters">-->
-<!--			<p style="font-size: 3em; line-height: 1em">alemaire, jsmadja</p>-->
-<!--			</div>-->
-<!--			</div>-->
-<!--			</td>-->
-<!--			<td class="project success" width="50%">-->
-<!--			<div class="projectName">Project-Test</div>-->
-<!--			</td>-->
-<!--		</tr>-->
-<!--		<tr>-->
-<!--			<td class="project success" width="50%">-->
-<!--			<div class="projectName">Project-Test</div>-->
-<!--			</td>-->
-<!--			<td class="project success" width="50%">-->
-<!--			<div class="projectName">Project-Test</div>-->
-<!--			</td>-->
-<!--		</tr> -->
-<!--	</tbody>-->
-<!--</table>-->
 
 <div id="overlay"></div>
 </body>
