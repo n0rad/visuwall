@@ -8,13 +8,11 @@ import com.jsmadja.wall.hudsonclient.HudsonProjectNotFoundException;
 
 public class HudsonIT {
 
-    private static final String HUDSON_URL = "http://ci.jwall.awired.net";
-
-    private Hudson hudson = new Hudson(HUDSON_URL);
+    private Hudson hudson = new Hudson(IntegrationTestData.HUDSON_URL);
 
     @Test(expected = HudsonBuildNotFoundException.class)
     public void should_throw_an_exception_when_searching_an_inexistant_build() throws HudsonBuildNotFoundException {
-        hudson.findBuild("dev-radar", -1);
+        hudson.findBuild("inexist", -1);
     }
 
     @Test

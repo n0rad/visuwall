@@ -27,7 +27,7 @@ import com.jsmadja.wall.projectwall.service.BuildService;
 import com.jsmadja.wall.projectwall.service.QualityService;
 
 @Entity
-public class Wall {
+public final class Wall {
 
     private static final int PROJECT_NOT_BUILT_ID = -1;
 

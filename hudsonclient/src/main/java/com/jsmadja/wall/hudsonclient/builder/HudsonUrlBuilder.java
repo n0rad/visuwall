@@ -16,6 +16,8 @@
 
 package com.jsmadja.wall.hudsonclient.builder;
 
+
+
 public class HudsonUrlBuilder {
 
     private final String hudsonUrl;
@@ -32,7 +34,7 @@ public class HudsonUrlBuilder {
      * @return Hudson Url to obtain all jobs
      */
     public final String getAllProjectsUrl() {
-        return  hudsonUrl+ALL_JOBS_URI+API_XML;
+        return hudsonUrl+ALL_JOBS_URI+API_XML;
     }
 
     /**
@@ -40,7 +42,11 @@ public class HudsonUrlBuilder {
      * @return Hudson Url to obtain informations of a job
      */
     public final String getProjectUrl(String jobName) {
-        return hudsonUrl+JOB_URI+"/"+jobName+API_XML;
+        return hudsonUrl+JOB_URI+"/"+encode(jobName)+API_XML;
+    }
+
+    private String encode(String url) {
+        return url.replaceAll(" ", "%20");
     }
 
     /**
@@ -49,7 +55,7 @@ public class HudsonUrlBuilder {
      * @return Hudson Url to obtain detailed informations of a job
      */
     public final String getBuildUrl(String jobName, int buildNumber) {
-        return hudsonUrl+JOB_URI+"/"+jobName+"/"+buildNumber+API_XML;
+        return hudsonUrl+JOB_URI+"/"+encode(jobName)+"/"+buildNumber+API_XML;
     }
 
     /**
@@ -58,7 +64,7 @@ public class HudsonUrlBuilder {
      * @return Hudson Url to obtain test informations of a job
      */
     public final String getTestResultUrl(String jobName, int buildNumber) {
-        return hudsonUrl+JOB_URI+"/"+jobName+"/"+buildNumber+"/testReport"+API_XML;
+        return hudsonUrl+JOB_URI+"/"+encode(jobName)+"/"+buildNumber+"/testReport"+API_XML;
 
     }
 

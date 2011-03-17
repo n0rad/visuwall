@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.jsmadja.wall.projectwall.IntegrationTestData;
 import com.jsmadja.wall.projectwall.domain.Software;
 import com.jsmadja.wall.projectwall.domain.SoftwareAccess;
 import com.jsmadja.wall.projectwall.domain.Wall;
@@ -61,8 +62,8 @@ public class WallServiceITTest {
         Software hudson = softwareService.find("softwarehudson");
         Software sonar = softwareService.find("softwaresonar");
 
-        SoftwareAccess hudsonAccess = new SoftwareAccess(hudson, "http://ci.jwall.awired.net");
-        SoftwareAccess sonarAccess = new SoftwareAccess(sonar, "http://sonar.awired.net");
+        SoftwareAccess hudsonAccess = new SoftwareAccess(hudson, IntegrationTestData.HUDSON_URL);
+        SoftwareAccess sonarAccess = new SoftwareAccess(sonar, IntegrationTestData.SONAR_URL);
 
         Wall wall = new Wall(wallName);
         wall.addSoftwareAccess(hudsonAccess);

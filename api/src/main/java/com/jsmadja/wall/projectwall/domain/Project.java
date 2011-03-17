@@ -105,9 +105,14 @@ public final class Project {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Project)) {
+        if (obj == null || !(obj instanceof Project)) {
             return false;
         }
+
+        if (id == null || name == null) {
+            return false;
+        }
+
         Project project = (Project)obj;
         return id.equals(project.id) && name.equals(project.name);
     }
