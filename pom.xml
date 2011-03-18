@@ -11,12 +11,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.jsmadja.wall</groupId>
-	<artifactId>wall</artifactId>
+	<groupId>net.awired.visuwall</groupId>
+	<artifactId>visuwall</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>wall</name>
+	<name>Visuwall</name>
 
 	<modules>
 		<module>cli</module>
@@ -61,38 +61,41 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.jsmadja.wall</groupId>
-				<artifactId>wall-server</artifactId>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-server</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.jsmadja.wall</groupId>
-				<artifactId>wall-hudsonclient</artifactId>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-hudsonclient</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.jsmadja.wall</groupId>
-				<artifactId>wall-api</artifactId>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.jsmadja.wall</groupId>
-				<artifactId>hudson-plugin</artifactId>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-cli</artifactId>
+				<version>${project.version}</version>
+			</dependency>			
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-runnablewar</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+
+			<!-- plugins -->			
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-plugin-hudson</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.jsmadja.wall</groupId>
-				<artifactId>sonar-plugin</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.jsmadja.wall</groupId>
-				<artifactId>wall-runnablewar</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.jsmadja.wall</groupId>
-				<artifactId>wall-cli</artifactId>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-plugin-sonar</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>
@@ -136,7 +139,7 @@
 						<exclude>src/main/webapp/js/jquery/**</exclude>
 						<exclude>src/main/xsd/**</exclude>
 						<exclude>infinitest.filters</exclude>
-						<exclude>src/main/java/com/jsmadja/wall/projectwall/generated/**</exclude>
+						<exclude>src/main/java/net/awired/visuwall/generated/**</exclude>
 					</excludes>
 					<executions>
 						<execution>

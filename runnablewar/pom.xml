@@ -11,22 +11,21 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.jsmadja.wall</groupId>
-	<artifactId>wall-runnablewar</artifactId>
-
-	<name>wall - Runnable War</name>
+	<groupId>net.awired.visuwall</groupId>
+	<artifactId>visuwall-runnablewar</artifactId>
+	<name>Visuwall - Runnable War</name>
 
 	<parent>
-		<groupId>com.jsmadja.wall</groupId>
-		<artifactId>wall</artifactId>
+		<groupId>net.awired.visuwall</groupId>
+		<artifactId>visuwall</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
 	
 	<dependencies>
 		<dependency>
-			<groupId>com.jsmadja.wall</groupId>
-			<artifactId>wall-cli</artifactId>
+			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-cli</artifactId>
 		</dependency>
 	</dependencies>
 	

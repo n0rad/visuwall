@@ -11,19 +11,24 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.jsmadja.wall</groupId>
-	<artifactId>wall-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
-
-	<name>wall - API</name>
+	<groupId>net.awired.visuwall</groupId>
+	<artifactId>visuwall-api</artifactId>
+	<name>visuwall - API</name>
 
 	<parent>
-		<groupId>com.jsmadja.wall</groupId>
-		<artifactId>wall</artifactId>
+		<groupId>net.awired.visuwall</groupId>
+		<artifactId>visuwall</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>r07</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -36,44 +41,16 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>com.mycila.maven-license-plugin</groupId>
-				<artifactId>maven-license-plugin</artifactId>
-				<version>1.8.0</version>
-				<configuration>
-					<header>src/main/licence.txt</header>
-					<strictCheck>true</strictCheck>
-					<useDefaultExcludes>false</useDefaultExcludes>
-					<excludes>
-						<exclude>.gitignore</exclude>
-						<exclude>.git/**</exclude>
-						<exclude>target/**</exclude>
-						<exclude>.settings/**</exclude>
-						<exclude>.project</exclude>
-						<exclude>.classpath</exclude>
-						<exclude>LICENCE</exclude>
-						<exclude>README</exclude>
-						<exclude>**/MANIFEST.MF</exclude>
-						<exclude>.externalToolBuilders/**</exclude>
-						<exclude>.pmd/**</exclude>
-					</excludes>
-					<executions>
-						<execution>
-							<goals>
-								<goal>check</goal>
-							</goals>
-						</execution>
-					</executions>
-				</configuration>
-			</plugin>
+			<!-- should not be needed as declared in parent <plugin> <groupId>com.mycila.maven-license-plugin</groupId> 
+				<artifactId>maven-license-plugin</artifactId> <version>1.8.0</version> <configuration> 
+				<header>src/main/licence.txt</header> <strictCheck>true</strictCheck> <useDefaultExcludes>false</useDefaultExcludes> 
+				<excludes> <exclude>.gitignore</exclude> <exclude>.git/**</exclude> <exclude>target/**</exclude> 
+				<exclude>.settings/**</exclude> <exclude>.project</exclude> <exclude>.classpath</exclude> 
+				<exclude>LICENCE</exclude> <exclude>README</exclude> <exclude>**/MANIFEST.MF</exclude> 
+				<exclude>.externalToolBuilders/**</exclude> <exclude>.pmd/**</exclude> </excludes> 
+				<executions> <execution> <goals> <goal>check</goal> </goals> </execution> 
+				</executions> </configuration> </plugin> -->
 		</plugins>
 	</build>
-	<dependencies>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>r07</version>
-		</dependency>
-	</dependencies>
 
 </project>

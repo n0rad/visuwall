@@ -11,16 +11,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.jsmadja.wall</groupId>
-	<artifactId>hudson-plugin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<groupId>net.awired.visuwall</groupId>
+	<artifactId>visuwall-plugin-hudson</artifactId>
 	<packaging>jar</packaging>
 
-	<name>wall - Hudson Plugin</name>
+	<name>Visuwall - Plugin Hudson</name>
 
 	<parent>
-		<groupId>com.jsmadja.wall</groupId>
-		<artifactId>wall</artifactId>
+		<groupId>net.awired.visuwall</groupId>
+		<artifactId>visuwall</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
@@ -43,13 +42,12 @@
 			<version>2.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.jsmadja.wall</groupId>
-			<artifactId>wall-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.jsmadja.wall</groupId>
-			<artifactId>wall-hudsonclient</artifactId>
+			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-hudsonclient</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
