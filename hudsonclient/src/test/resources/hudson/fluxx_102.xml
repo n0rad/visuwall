@@ -30,7 +30,7 @@
 	<keepLog>false</keepLog>
 	<number>102</number>
 	<result>SUCCESS</result>
-	<timestamp>1298021317379</timestamp>
+	<timestamp>2298021317379</timestamp>
 	<url>http://fluxx.fr.cr:8080/hudson/job/fluxx/102/</url>
 	<builtOn></builtOn>
 	<changeSet></changeSet>

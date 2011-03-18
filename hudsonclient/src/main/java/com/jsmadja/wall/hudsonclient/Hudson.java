@@ -397,7 +397,7 @@ public class Hudson {
      */
     public final Date getEstimatedFinishTime(String projectName) throws HudsonProjectNotFoundException {
         HudsonProject project = findProject(projectName);
-        HudsonBuild lastBuild = project.getCompletedBuild();
+        HudsonBuild lastBuild = project.getCurrentBuild();
         Date startTime = lastBuild.getStartTime();
         long averageBuildDurationTime = getAverageBuildDurationTime(projectName);
         DateTime estimatedFinishTime = new DateTime(startTime.getTime()).plus(averageBuildDurationTime);
