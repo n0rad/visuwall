@@ -44,6 +44,10 @@
 		</license>
 	</licenses>
 
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/awired/visuwall/issues</url>
+	</issueManagement>
 	<developers>
 		<developer>
 			<id>jsmadja</id>
