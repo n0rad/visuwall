@@ -17,7 +17,6 @@ package com.jsmadja.wall.hudsonclient;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
@@ -25,6 +24,7 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import com.jsmadja.wall.hudsonclient.builder.HudsonUrlBuilder;
@@ -137,7 +137,8 @@ public class HudsonTest {
     @Test
     public void should_retrieve_estimated_remaining_time() throws HudsonProjectNotFoundException {
         Date estimatedFinishTime = hudson.getEstimatedFinishTime("fluxx");
-        assertNotNull(estimatedFinishTime);
+        DateTime now = new DateTime();
+        assertTrue(now.isBefore(estimatedFinishTime.getTime()));
     }
 
     @Test
@@ -150,7 +151,6 @@ public class HudsonTest {
         assertEquals(16, testResult.getTotalCount());
         assertEquals(2, testResult.getIntegrationTestCount());
     }
-
 
     @Test(expected = HudsonBuildNotFoundException.class)
     public void should_not_fail_while_loading_invalid_xml_build() throws HudsonBuildNotFoundException {

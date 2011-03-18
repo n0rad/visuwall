@@ -69,8 +69,8 @@ public final class HudsonService implements BuildService {
         try {
             HudsonProject hudsonProject = hudson.findProject(project.getName());
             HudsonBuild completedBuild = addCompletedBuild(project, hudsonProject);
-            addCurrentBuild(project, hudsonProject);
             HudsonBuild lastBuild = completedBuild;
+            addCurrentBuild(project, hudsonProject);
             addState(project, lastBuild);
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
@@ -112,27 +112,26 @@ public final class HudsonService implements BuildService {
     }
 
     @Override
-    public Date getEstimatedFinishTime(Project project) throws ProjectNotFoundException {
+    public Date getEstimatedFinishTime(String projectName) throws ProjectNotFoundException {
         try {
-            return hudson.getEstimatedFinishTime(project.getName());
+            return hudson.getEstimatedFinishTime(projectName);
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
         }
     }
 
     @Override
-    public boolean isBuilding(Project project) throws ProjectNotFoundException {
+    public boolean isBuilding(String projectName) throws ProjectNotFoundException {
         try {
-            return hudson.isBuilding(project.getName());
+            return hudson.isBuilding(projectName);
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
         }
     }
 
     @Override
-    public State getState(Project project) throws ProjectNotFoundException {
+    public State getState(String projectName) throws ProjectNotFoundException {
         try {
-            String projectName = project.getName();
             String state = hudson.getState(projectName);
             return State.valueOf(state);
         } catch (HudsonProjectNotFoundException e) {
@@ -141,9 +140,8 @@ public final class HudsonService implements BuildService {
     }
 
     @Override
-    public int getLastBuildNumber(Project project) throws ProjectNotFoundException, BuildNotFoundException {
+    public int getLastBuildNumber(String projectName) throws ProjectNotFoundException, BuildNotFoundException {
         try {
-            String projectName = project.getName();
             return  hudson.getLastBuildNumber(projectName);
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
@@ -155,7 +153,8 @@ public final class HudsonService implements BuildService {
     @Override
     public Build findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) throws BuildNotFoundException {
         try {
-            return createBuild(hudson.findBuild(projectName, buildNumber));
+            HudsonBuild build = hudson.findBuild(projectName, buildNumber);
+            return createBuild(build);
         } catch (HudsonBuildNotFoundException e) {
             throw new BuildNotFoundException(e);
         }

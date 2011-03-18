@@ -397,7 +397,7 @@ public class Hudson {
      */
     public final Date getEstimatedFinishTime(String projectName) throws HudsonProjectNotFoundException {
         HudsonProject project = findProject(projectName);
-        HudsonBuild lastBuild = project.getCompletedBuild();
+        HudsonBuild lastBuild = project.getCurrentBuild();
         Date startTime = lastBuild.getStartTime();
         long averageBuildDurationTime = getAverageBuildDurationTime(projectName);
         DateTime estimatedFinishTime = new DateTime(startTime.getTime()).plus(averageBuildDurationTime);
@@ -413,7 +413,7 @@ public class Hudson {
         return Client.create(clientConfig);
     }
 
-    public boolean isBuilding(String projectName) throws HudsonProjectNotFoundException {
+    public final boolean isBuilding(String projectName) throws HudsonProjectNotFoundException {
         HudsonModelJob job = findJobByProjectName(projectName);
         return getIsBuilding(job);
     }
@@ -443,7 +443,7 @@ public class Hudson {
         }
     }
 
-    public String getState(String projectName) throws HudsonProjectNotFoundException {
+    public final String getState(String projectName) throws HudsonProjectNotFoundException {
         try {
             int lastBuildNumber = getLastBuildNumber(projectName);
             HudsonMavenMavenModuleSetBuild build = findBuildByProjectNameAndBuildNumber(projectName, lastBuildNumber);
@@ -478,7 +478,7 @@ public class Hudson {
         return setBuild;
     }
 
-    public int getLastBuildNumber(String projectName) throws HudsonProjectNotFoundException, HudsonBuildNotFoundException {
+    public final int getLastBuildNumber(String projectName) throws HudsonProjectNotFoundException, HudsonBuildNotFoundException {
         HudsonMavenMavenModuleSet job = findJobByProjectName(projectName);
         HudsonModelRun run = job.getLastBuild();
         if (run == null) {

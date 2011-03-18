@@ -30,21 +30,21 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.wsclient.Sonar;
+import org.sonar.wsclient.connectors.ConnectionException;
 import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
+import com.google.common.base.Preconditions;
 import com.jsmadja.wall.projectwall.domain.Project;
 import com.jsmadja.wall.projectwall.domain.SonarMetrics;
 import com.jsmadja.wall.projectwall.domain.quality.QualityMeasure;
 import com.jsmadja.wall.projectwall.domain.quality.QualityMetric;
 import com.jsmadja.wall.projectwall.domain.quality.QualityResult;
-import com.jsmadja.wall.projectwall.exception.ProjectNotFoundException;
-import com.jsmadja.wall.projectwall.exception.SonarProjectNotFoundException;
+import com.jsmadja.wall.projectwall.exception.SonarMetricNotFoundException;
 
 public final class SonarService implements QualityService {
 
@@ -66,9 +66,9 @@ public final class SonarService implements QualityService {
             throw new IllegalStateException("url can't be null.");
         }
         if (isNotBlank(login) && isNotBlank(password)) {
-            sonar = Sonar.create(url);
+            sonar = Sonar.create(url, login, password);
         } else {
-            sonar = Sonar.create(url, login, login);
+            sonar = Sonar.create(url);
         }
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize sonar with url " + url);
@@ -97,62 +97,45 @@ public final class SonarService implements QualityService {
         }
     }
 
-    /**
-     * @param projectId
-     * @return
-     * @throws SonarProjectNotFoundException
-     */
-    public final Double getCoverage(String projectId) throws SonarProjectNotFoundException {
-        Measure coverage = getMeasure(projectId, "coverage");
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Coverage measure for project #" + projectId + " is " + coverage);
+    private Measure getMeasure(String projectId, String measureKey) throws SonarMetricNotFoundException {
+        try {
+            ResourceQuery query = ResourceQuery.createForMetrics(projectId, measureKey);
+            Resource resource = sonar.find(query);
+            if (resource == null) {
+                throw new SonarMetricNotFoundException("Metric "+measureKey+" not found for project "+projectId+" in Sonar "+url);
+            }
+            return resource.getMeasure(measureKey);
+        } catch(ConnectionException e) {
+            throw new SonarMetricNotFoundException("Metric "+measureKey+" not found for project "+projectId+" in Sonar "+url, e);
         }
-        return coverage.getValue();
-    }
-
-    /**
-     * @param projectId
-     * @return
-     * @throws SonarProjectNotFoundException
-     */
-    public final Double getRulesCompliance(String projectId) throws SonarProjectNotFoundException {
-        Measure rulesCompliance = getMeasure(projectId, "violations_density");
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Rules compliance measure for project #" + projectId + " is " + rulesCompliance);
-        }
-        return rulesCompliance.getValue();
-    }
-
-    private Measure getMeasure(String projectId, String measureKey) throws SonarProjectNotFoundException {
-        if (StringUtils.isBlank(projectId)) {
-            throw new SonarProjectNotFoundException("No projectId provided");
-        }
-        Resource resource = sonar.find(ResourceQuery.createForMetrics(projectId, measureKey));
-        if (resource == null) {
-            throw new SonarProjectNotFoundException("Project with id #" + projectId + " not found in sonar " + url);
-        }
-        return resource.getMeasure(measureKey);
     }
 
     @Override
-    public void populateQuality(Project project, QualityResult quality, String... metrics)
-    throws ProjectNotFoundException {
+    public void populateQuality(Project project, QualityResult quality, String... metrics) {
+        Preconditions.checkNotNull(project, "project");
+        Preconditions.checkNotNull(quality, "quality");
+        for (String key : metrics) {
+            addMeasure(project, quality, key);
+        }
+    }
+
+    private void addMeasure(Project project, QualityResult quality, String key) {
         try {
-            for (String key : metrics) {
-                Measure measure = getMeasure(project.getId(), key);
-                if (measure != null) {
-                    Double value = measure.getValue();
-                    if (value != null) {
-                        QualityMeasure qualityMeasure = new QualityMeasure();
-                        qualityMeasure.setName(qualityMetrics.get(key).getName());
-                        qualityMeasure.setValue(value);
-                        qualityMeasure.setFormattedValue(measure.getFormattedValue());
-                        quality.add(key, qualityMeasure);
-                    }
+            Measure measure = getMeasure(project.getId(), key);
+            if (measure != null) {
+                Double value = measure.getValue();
+                if (value != null) {
+                    QualityMeasure qualityMeasure = new QualityMeasure();
+                    qualityMeasure.setName(qualityMetrics.get(key).getName());
+                    qualityMeasure.setValue(value);
+                    qualityMeasure.setFormattedValue(measure.getFormattedValue());
+                    quality.add(key, qualityMeasure);
                 }
             }
-        } catch (SonarProjectNotFoundException e) {
-            throw new ProjectNotFoundException(e);
+        }catch(SonarMetricNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(e.getMessage());
+            }
         }
     }
 

@@ -105,9 +105,14 @@ public final class Project {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Project)) {
+        if (obj == null || !(obj instanceof Project)) {
             return false;
         }
+
+        if (id == null || name == null) {
+            return false;
+        }
+
         Project project = (Project)obj;
         return id.equals(project.id) && name.equals(project.name);
     }
@@ -137,6 +142,7 @@ public final class Project {
         .add("coverage", coverage) //
         .add("rules compliance", rulesCompliance) //
         .add("state", state) //
+        .add("completed build", completedBuild) //
         .toString();
     }
 

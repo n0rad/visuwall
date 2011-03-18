@@ -16,6 +16,8 @@
 
 package com.jsmadja.wall.projectwall.it.domain;
 
+import static com.jsmadja.wall.projectwall.IntegrationTestData.HUDSON_URL;
+import static com.jsmadja.wall.projectwall.IntegrationTestData.SONAR_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -26,7 +28,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.jsmadja.wall.projectwall.domain.Build;
@@ -41,9 +42,6 @@ import com.jsmadja.wall.projectwall.exception.BuildNotFoundException;
 import com.jsmadja.wall.projectwall.exception.ProjectNotFoundException;
 
 public class WallITTest {
-
-    String HUDSON_URL = "http://fluxx.fr.cr:8080/hudson";
-    String SONAR_URL = "http://fluxx.fr.cr:9000";
 
     private Wall wall;
 
@@ -64,19 +62,19 @@ public class WallITTest {
 
     @Test
     public void should_retrieve_state() throws ProjectNotFoundException {
-        Project project = wall.findProjectByName("fluxx");
+        Project project = wall.findProjectByName("struts 2 instable");
         assertEquals(State.UNSTABLE, project.getState());
     }
 
     @Test
     public void should_retrieve_data_of_one_project() throws ProjectNotFoundException {
-        Project project = wall.findProjectByName("fluxx");
-        assertEquals("fluxx", project.getName());
+        Project project = wall.findProjectByName("struts");
+        assertEquals("struts", project.getName());
     }
 
     @Test
     public void should_retrieve_quality_result() throws ProjectNotFoundException {
-        Project project = wall.findProjectByName("fluxx");
+        Project project = wall.findProjectByName("struts");
         assertNotNull(project.getQualityResult());
         assertFalse(project.getQualityResult().getMeasures().isEmpty());
     }
@@ -87,27 +85,25 @@ public class WallITTest {
     }
 
     @Test
-    @Ignore
     public void should_retrieve_project_with_no_last_build() throws ProjectNotFoundException {
-        Project project = wall.findProjectByName("on-parameter-tester-staging");
+        Project project = wall.findProjectByName("neverbuild");
         assertNull(project.getCompletedBuild());
     }
 
     @Test
     public void should_retrieve_estimated_finish_time_of_not_building_project() throws ProjectNotFoundException {
-        Date estimatedFinishTime = wall.getEstimatedFinishTime("fluxx");
+        Date estimatedFinishTime = wall.getEstimatedFinishTime("struts");
         assertNotNull(estimatedFinishTime);
     }
 
-    @Ignore
     @Test
-    public void should_retrieve_build() throws BuildNotFoundException {
-        Build build = wall.findBuildByProjectNameAndBuilderNumber("project-wall", 293);
+    public void should_retrieve_test_result() throws BuildNotFoundException {
+        Build build = wall.findBuildByProjectNameAndBuilderNumber("struts", 3);
         TestResult testResult = build.getTestResult();
-        assertEquals(1, testResult.getFailCount());
-        assertEquals(1, testResult.getSkipCount());
-        assertEquals(25, testResult.getTotalCount());
-        assertEquals(14, testResult.getIntegrationTestCount());
+        assertEquals(0, testResult.getFailCount());
+        assertEquals(0, testResult.getSkipCount());
+        assertEquals(331, testResult.getTotalCount());
+        assertEquals(0, testResult.getIntegrationTestCount());
     }
 
     @Test

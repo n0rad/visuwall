@@ -27,7 +27,7 @@ import com.jsmadja.wall.projectwall.service.BuildService;
 import com.jsmadja.wall.projectwall.service.QualityService;
 
 @Entity
-public class Wall {
+public final class Wall {
 
     private static final int PROJECT_NOT_BUILT_ID = -1;
 
@@ -110,13 +110,7 @@ public class Wall {
             }
         }
         for(QualityService service:qualityServices) {
-            try {
-                service.populateQuality(project, qualityResult, "violations_density", "technical_debt_days", "coverage", "violations_density");
-            } catch (ProjectNotFoundException e) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(e.getMessage());
-                }
-            }
+            service.populateQuality(project, qualityResult, "violations_density", "technical_debt_days", "coverage", "violations_density");
         }
     }
 
@@ -126,10 +120,9 @@ public class Wall {
      * @throws ProjectNotFoundException
      */
     public Date getEstimatedFinishTime(String projectName) throws ProjectNotFoundException {
-        Project project = findProjectByName(projectName);
         for(BuildService service:buildServices) {
             try {
-                Date estimatedFinishTime = service.getEstimatedFinishTime(project);
+                Date estimatedFinishTime = service.getEstimatedFinishTime(projectName);
                 if (estimatedFinishTime != null) {
                     return estimatedFinishTime;
                 }
@@ -180,7 +173,7 @@ public class Wall {
     private int getLastBuildNumber(Project project) {
         for (BuildService service:buildServices) {
             try {
-                return service.getLastBuildNumber(project);
+                return service.getLastBuildNumber(project.getName());
             } catch (ProjectNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(e.getMessage());
@@ -197,7 +190,7 @@ public class Wall {
     private State getState(Project project) {
         for (BuildService service:buildServices) {
             try {
-                return service.getState(project);
+                return service.getState(project.getName());
             } catch (ProjectNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(e.getMessage());
@@ -210,7 +203,7 @@ public class Wall {
     private boolean isBuilding(Project project) {
         for (BuildService service:buildServices) {
             try {
-                return service.isBuilding(project);
+                return service.isBuilding(project.getName());
             } catch (ProjectNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(e.getMessage());
