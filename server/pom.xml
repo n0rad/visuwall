@@ -194,7 +194,7 @@
 							<mainClass>Main</mainClass>
 						</manifest>
 						<manifestEntries>
-							<Bundle-MainClass>net.awired.jwall.cli.Main</Bundle-MainClass>
+							<Bundle-MainClass>net.awired.visuwall.cli.Main</Bundle-MainClass>
 						</manifestEntries>
 					</archive>
 				</configuration>
