@@ -14,7 +14,7 @@ class ArgumentManager extends CliArgumentManager {
 	
 	
 	public ArgumentManager(Main main) {
-		super("jwall");
+		super("visuwall");
 		
 		CliParamInt portParam = new  CliParamInt("port");
 		portParam.setNegativable(false);
