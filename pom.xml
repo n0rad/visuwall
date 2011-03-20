@@ -15,7 +15,6 @@
 	<artifactId>visuwall</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-
 	<name>Visuwall</name>
 
 	<modules>
@@ -158,6 +157,15 @@
 	</build>
 
 
+	<!-- distribution -->
+	<distributionManagement>
+		<site>
+			<id>awired-web</id>
+			<name>awired web deployment</name>
+			<url>dav:http://projs.awired.net/visuwall</url>
+		</site>
+	</distributionManagement>
+
 	<!-- plugin repos -->
 	<pluginRepositories>
 		<pluginRepository>
@@ -203,7 +211,5 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-
 	</repositories>
-
 </project>
