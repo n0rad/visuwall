@@ -87,6 +87,9 @@ jwall.mvc.controller.ProjectController = {
 	
 	
 	_updateLastBuild : function(project) {
+		if (project.completedBuild == null) {
+			return
+		}
 		this.projectsView.updateBuildTime(project.name, project.completedBuild.duration);
 		this.projectsView.updateCommiters(project.name, project.completedBuild.commiters);
 		this.projectsView.updateQuality(project.name, project.qualityResult.measures);

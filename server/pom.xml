@@ -214,8 +214,8 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>com.jsmadja.wall</groupId>
-									<artifactId>wall-runnablewar</artifactId>
+									<groupId>net.awired.visuwall</groupId>
+									<artifactId>visuwall-runnablewar</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
 									<overWrite>false</overWrite>
