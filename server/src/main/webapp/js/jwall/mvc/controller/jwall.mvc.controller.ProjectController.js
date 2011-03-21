@@ -93,7 +93,7 @@ jwall.mvc.controller.ProjectController = {
 		this.projectsView.updateBuildTime(project.name, project.completedBuild.duration);
 		this.projectsView.updateCommiters(project.name, project.completedBuild.commiters);
 		this.projectsView.updateQuality(project.name, project.qualityResult.measures);
-		this.projectsView.updateUTCoverage(project.name, project.coverage);
+		this.projectsView.updateUTCoverage(project.name, this._getCoverageFromQualityMeasures(project.qualityResult.measures));
 		this.projectsView.updateUT(project.name, 
 				project.completedBuild.testResult.failCount,
 				project.completedBuild.testResult.passCount,
@@ -125,7 +125,16 @@ jwall.mvc.controller.ProjectController = {
 		} else {
 			this.projectsView.updateAgo(project.name, 0);
 		}
-	},	
+	},
+	
+	_getCoverageFromQualityMeasures : function(measures) {
+		for (var i = 0; i < measures.length; i++) {
+			if (measures[i].key == 'coverage') {
+				return measures[i].value.value;
+			}
+		}
+		return;
+	},
 
 	_removeProject : function(projectName) {
 		this.projectDAO.removeProject(projectName);
