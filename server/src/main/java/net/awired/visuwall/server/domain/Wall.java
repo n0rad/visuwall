@@ -3,10 +3,12 @@ package net.awired.visuwall.server.domain;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -44,7 +46,7 @@ public final class Wall {
     private Set<QualityService> qualityServices = new HashSet<QualityService>();
 
     @Transient
-    private Set<Project> projects = new HashSet<Project>();
+    private Set<Project> projects = Collections.synchronizedSet(new TreeSet<Project>());
 
     @Id
     private String name;
@@ -80,7 +82,7 @@ public final class Wall {
 
     public void refreshProjects() {
         synchronized (projects) {
-            projects = new HashSet<Project>();
+            projects.clear();
             for(BuildService service:buildServices) {
                 projects.addAll(service.findAllProjects());
             }
@@ -225,8 +227,12 @@ public final class Wall {
                     return build;
                 }
             } catch (BuildNotFoundException e) {
-                if (LOG.isInfoEnabled()) {
-                    LOG.info(e.getMessage());
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage());
+                }
+            } catch (ProjectNotFoundException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage());
                 }
             }
         }

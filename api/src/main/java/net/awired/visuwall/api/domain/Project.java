@@ -20,8 +20,9 @@ import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
-public final class Project {
+public final class Project implements Comparable<Project> {
 
     private String id;
     private String name;
@@ -145,6 +146,12 @@ public final class Project {
         .add("state", state) //
         .add("completed build", completedBuild) //
         .toString();
+    }
+
+    @Override
+    public int compareTo(Project project) {
+        Preconditions.checkNotNull(project, "project");
+        return name.compareTo(project.name);
     }
 
 }

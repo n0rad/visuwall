@@ -153,12 +153,14 @@ public final class HudsonService implements BuildService {
     }
 
     @Override
-    public Build findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) throws BuildNotFoundException {
+    public Build findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) throws BuildNotFoundException, ProjectNotFoundException {
         try {
             HudsonBuild build = hudson.findBuild(projectName, buildNumber);
             return createBuild(build);
         } catch (HudsonBuildNotFoundException e) {
             throw new BuildNotFoundException(e);
+        } catch (HudsonProjectNotFoundException e) {
+            throw new ProjectNotFoundException(e);
         }
     }
 

@@ -41,7 +41,7 @@ public class HudsonServiceIT {
     }
 
     @Test
-    public void should_find_build_by_name_and_build_number() throws BuildNotFoundException {
+    public void should_find_build_by_name_and_build_number() throws BuildNotFoundException, ProjectNotFoundException {
         Build build = hudsonService.findBuildByProjectNameAndBuildNumber("struts", 3);
         assertNotNull(build);
     }

@@ -79,4 +79,5 @@ public class WallServiceITTest {
         assertFalse(persistedWall.getProjects().isEmpty());
     }
 
+
 }

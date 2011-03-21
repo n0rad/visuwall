@@ -25,9 +25,6 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.hudsonclient.Hudson;
-import net.awired.visuwall.hudsonclient.HudsonBuildNotFoundException;
-import net.awired.visuwall.hudsonclient.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
@@ -87,7 +84,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_retrieve_build_with_last_commiters() throws HudsonBuildNotFoundException {
+    public void should_retrieve_build_with_last_commiters() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
         HudsonBuild build = hudson.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
         assertEquals("Julien Smadja", build.getCommiters()[0]);
         assertEquals("Arnaud Lemaire", build.getCommiters()[1]);
@@ -100,7 +97,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_retrieve_build_start_time() throws HudsonBuildNotFoundException {
+    public void should_retrieve_build_start_time() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
         HudsonBuild build = hudson.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
         assertEquals(1298022037803L, build.getStartTime().getTime());
     }
@@ -146,7 +143,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_retrieve_test_result() throws HudsonBuildNotFoundException {
+    public void should_retrieve_test_result() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
         HudsonBuild build = hudson.findBuild("dev-radar", 74);
         TestResult testResult = build.getTestResult();
         assertEquals(1, testResult.getFailCount());
@@ -157,7 +154,7 @@ public class HudsonTest {
     }
 
     @Test(expected = HudsonBuildNotFoundException.class)
-    public void should_not_fail_while_loading_invalid_xml_build() throws HudsonBuildNotFoundException {
+    public void should_not_fail_while_loading_invalid_xml_build() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
         hudson.findBuild("jwall", INVALID_XML);
     }
 }
