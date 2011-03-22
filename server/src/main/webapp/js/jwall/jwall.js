@@ -33,7 +33,7 @@ jwall = {
 				// register main controller
 				ajsl.dispatcher.registerMain(jwall.mvc.MainController);
 				
-				//ajsl.log.setLevel('warn');
+				ajsl.log.setLevel('warn');
 				
 				// register events
 				//ajsl.event.registerAll(jwall.mvc.event);

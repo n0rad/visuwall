@@ -2,4 +2,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 - default wall
-- 
+- slideshow time
+- project per page
+- font size with slider
