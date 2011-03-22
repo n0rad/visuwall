@@ -205,7 +205,7 @@ jwall.mvc.view.Projects = {
 	
 	_updateCoverage : function(projectName, coverage, type) {
 		var displayCoverage = coverage;
-		if (coverage == 0) {
+		if (coverage == undefined || coverage == 0) {
 			displayCoverage = 100;
 		}
 		this._getElement(projectName, 'TABLE.' + type + 'Test').animate({width : displayCoverage + "%"}, 3000);

@@ -21,7 +21,7 @@ public class HudsonServiceExceptionIT {
     }
 
     @Test(expected=BuildNotFoundException.class)
-    public void should_throw_exception_when_searching_inexistant_build() throws BuildNotFoundException {
+    public void should_throw_exception_when_searching_inexistant_build() throws BuildNotFoundException, ProjectNotFoundException {
         hudsonService.findBuildByProjectNameAndBuildNumber("", 0);
     }
 

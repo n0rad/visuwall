@@ -16,7 +16,7 @@ public interface BuildService extends Service {
 
     Project findProjectByName(String projectName) throws ProjectNotFoundException;
 
-    Build findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) throws BuildNotFoundException;
+    Build findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) throws BuildNotFoundException, ProjectNotFoundException;
 
     void populate(Project project) throws ProjectNotFoundException;
 

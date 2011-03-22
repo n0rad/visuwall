@@ -26,6 +26,7 @@
 	</parent>
 
 	<dependencies>
+	
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-api</artifactId>

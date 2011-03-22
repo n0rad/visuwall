@@ -1,6 +1,7 @@
 package net.awired.visuwall.server.it.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.UUID;
@@ -38,7 +39,8 @@ public class SoftwareServiceITTest {
         softwareService.persist(software2);
 
         List<Software> softwares = softwareService.findAll();
-        assertEquals(2, softwares.size());
+        assertTrue(softwares.contains(software1));
+        assertTrue(softwares.contains(software2));
     }
 
     @Test

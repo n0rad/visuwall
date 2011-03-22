@@ -89,6 +89,19 @@ public class Software {
     }
 
     @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || !(o instanceof Software)) {
+            return false;
+        }
+        return name.equals(((Software)o).name);
+    }
+
+    @Override
     public String toString() {
         return Objects.toStringHelper(this)
         .add("name", name) //
