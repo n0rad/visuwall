@@ -1,0 +1,7 @@
+UL#navigation {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	background-color: white;
+	border-bottom: 1px solid grey;
+}
