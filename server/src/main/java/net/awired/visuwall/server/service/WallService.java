@@ -22,14 +22,17 @@ import com.google.common.base.Preconditions;
 @Repository
 public class WallService {
 
+	private static final Logger LOG = LoggerFactory.getLogger(WallService.class);
+
+	private final static int EVERY_FIVE_MINUTES = 5*60*1000;
+
+	
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final static int EVERY_FIVE_MINUTES = 5*60*1000;
 
     private Map<String, Wall> walls = new HashMap<String, Wall>();
 
-    private static final Logger LOG = LoggerFactory.getLogger(WallService.class);
 
     public WallService() {
         if (LOG.isInfoEnabled()) {

@@ -1,4 +1,4 @@
-jwall.mvc.view.Projects = {
+visuwall.mvc.view.Projects = {
 	table : null,
 
 	statusClasses : [ 'failure', 'success', 'unstable', 'aborted', 'new' ],
@@ -24,8 +24,8 @@ jwall.mvc.view.Projects = {
 	_runResize : function(NumberOfProjects) {
 		var currentProjects = $('LI.project', this.table);
 		
-		var projectsByRow = Math.round(Math.sqrt(NumberOfProjects));
-		var rows =  Math.round((NumberOfProjects) / projectsByRow);
+		var projectsByRow = Math.ceil(Math.sqrt(NumberOfProjects));
+		var rows =  Math.ceil((NumberOfProjects) / projectsByRow);
 		
 		var newCss = {width : (99 / projectsByRow) + '%', height : 97 / rows + '%', margin : (1 / (rows * 2)) + '% ' + (1 / (projectsByRow * 2)) + '%'};
 		currentProjects.stop(true, false);
@@ -306,5 +306,5 @@ jwall.mvc.view.Projects = {
 };
 
 $(function() {
-	jwall.mvc.view.Projects.init();
+	visuwall.mvc.view.Projects.init();
 });

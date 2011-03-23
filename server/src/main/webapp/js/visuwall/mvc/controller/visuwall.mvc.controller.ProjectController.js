@@ -1,20 +1,24 @@
-jwall.mvc.controller.ProjectController = {
+visuwall.mvc.controller.ProjectController = {
 		
 	projectsView : null,
 	
 	projectService : null,
+	wallService : null,
 
 	projectDAO : null,
 	
+	wallName : 'orange-vallee',
+	
 	init : function() {
-		this.projectsView = jwall.mvc.view.Projects;
-		this.projectService = jwall.business.service.Project;
-		this.projectDAO = jwall.persistence.dao.ProjectDAO;
+		this.projectsView = visuwall.mvc.view.Projects;
+		this.projectService = visuwall.business.service.Project;
+		this.wallService = visuwall.business.service.Wall;
+		this.projectDAO = visuwall.persistence.dao.ProjectDAO;
 	},
 	
 	buildProjects : function() {
 		var $this = this;
-		jwall.business.service.Project.projects(function(projects) {
+		this.projectService.projects(this.wallName, function(projects) {
 			for (var i = 0; i < projects.length; i++) {
 				$this.addProject(projects[i]);
 			}
@@ -43,14 +47,14 @@ jwall.mvc.controller.ProjectController = {
 
 	updateStatus : function() {
 		var $this = this;
-		$this.projectService.status(function (projectsStatus) {
+		$this.wallService.status(this.wallName,function (projectsStatus) {
 			var projectDone = [];
 			for (var i = 0; i < projectsStatus.length; i++) {
 				var status = projectsStatus[i];
 
 				if ($this.projectDAO.isProject(status.name)) {
 					// this is a new project
-					$this.projectService.project(status.name, function(newProjectData) {
+					$this.projectService.project($this.wallName, status.name, function(newProjectData) {
 						$this.addProject(newProjectData);
 					});
 					continue;
@@ -167,7 +171,7 @@ jwall.mvc.controller.ProjectController = {
 		if (isBuilding) {
 			if (!project.building) {
 				var $this = this;
-				jwall.business.service.Project.finishTime(project.name, function(data) {
+				visuwall.business.service.Processing.finishTime(this.wallName, project.name, function(data) {
 					$this.projectsView.updateCountdown(project.name, new Date(data));
 				});
 				LOG.info("project is now building : " + project.name);
@@ -180,7 +184,7 @@ jwall.mvc.controller.ProjectController = {
 			project.building = false;
 
 			var $this = this;
-			this.projectService.project(project.name, function(newProjectData) {
+			this.projectService.project(this.wallName, project.name, function(newProjectData) {
 				$this._updateProject(newProjectData);
 			});			
 		} else {
@@ -192,7 +196,7 @@ jwall.mvc.controller.ProjectController = {
 		if (this._checkVersionChangeAndNotBuilding(project, status)) {
 			LOG.info("Server is not building and version has change, we need an update");
 			var $this = this;
-			this.projectService.project(project.name, function(newProjectData) {
+			this.projectService.project(this.wallName, project.name, function(newProjectData) {
 				$this._updateProject(newProjectData);
 			});
 		}
@@ -209,5 +213,5 @@ jwall.mvc.controller.ProjectController = {
 };
 
 $(function (){
-	jwall.mvc.controller.ProjectController.init();
+	visuwall.mvc.controller.ProjectController.init();
 });

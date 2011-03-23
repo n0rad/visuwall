@@ -14,6 +14,7 @@ import net.awired.visuwall.server.domain.SoftwareAccess;
 import net.awired.visuwall.server.domain.Wall;
 import net.awired.visuwall.server.service.WallService;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,46 +26,38 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/project")
+@RequestMapping("/wall/{wallName}/project")
 public class ProjectController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProjectController.class.getName());
 
-    Wall wall;
-
     @Autowired
     WallService wallService;
-
-    public ProjectController() {
-        wall = new Wall("orange-vallee");
-                wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://integration.wormee.orange-vallee.net:8080/hudson"));
-                wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://integration.wormee.orange-vallee.net:9000"));
-//        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://ci.awired.net/jenkins"));
-//        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://ci.visuwall.awired.net"));
-//        wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://sonar.awired.net"));
-        // wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://fluxx.fr.cr:8080/hudson"));
-        // wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://fluxx.fr.cr:9000"));
-        wall.refreshProjects();
+    
+    ///////////////////////////////////////////////////////////////////
+    
+    @RequestMapping
+    public @ResponseBody Collection<Project> getWallProjects(@PathVariable String wallName) {
+    	return wallService.getWall(wallName).getProjects();
     }
 
-    @PostConstruct
-    public void postConstruct() {
-        wallService.addWall(wall);
-    }
-
-    @RequestMapping("get/{wallName}/{projectName}")
+    @RequestMapping("{projectName}")
     public @ResponseBody Project getProject(@PathVariable String wallName, @PathVariable String projectName) throws Exception {
-        return wall.findProjectByName(projectName);
+        return wallService.getWall(wallName).findProjectByName(projectName);
     }
 
-    @RequestMapping("finishTime/{wallName}/{projectName}")
-    public @ResponseBody Date getFinishTime(@RequestParam String wallName, @RequestParam String projectName) throws Exception {
-        return wall.getEstimatedFinishTime(projectName);
+
+
+    @RequestMapping("{projectName}/build")
+    public @ResponseBody Build getBuild(@PathVariable String wallName, @PathVariable String projectName) throws Exception {
+    	throw new NotImplementedException();
     }
 
-    @RequestMapping("build/{wallName}/{projectName}")
-    public @ResponseBody Build getBuild(@RequestParam("projectName") String projectName, @RequestParam("buildId") int buildId) throws Exception {
-        return wall.findBuildByProjectNameAndBuilderNumber(projectName, buildId);
+    @RequestMapping("{projectName}/build/{buildId}")
+    public @ResponseBody Build getBuild(@PathVariable String wallName, @PathVariable String projectName, @PathVariable int buildId) throws Exception {
+        return wallService.getWall(wallName).findBuildByProjectNameAndBuilderNumber(projectName, buildId);
     }
-
+    
+    ///////////////////////////////////////////////////////////////////
+    
 }

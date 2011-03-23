@@ -1,4 +1,4 @@
-jwall.mvc.view.Loader = {
+visuwall.mvc.view.Loader = {
 
 	_loader : null,
 

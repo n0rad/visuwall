@@ -1,4 +1,4 @@
-jwall = {
+visuwall = {
 		business : {service : {}},
 		mvc : {controller : {}, view: {}, event: {}},
 		persistence : {dao : {}},
@@ -28,20 +28,20 @@ jwall = {
 				jQuery("abbr.timeago").timeago();
 
 				// register controllers
-				ajsl.dispatcher.registerAll(jwall.mvc.controller);
+				ajsl.dispatcher.registerAll(visuwall.mvc.controller);
 
 				// register main controller
-				ajsl.dispatcher.registerMain(jwall.mvc.MainController);
+				ajsl.dispatcher.registerMain(visuwall.mvc.MainController);
 
 				ajsl.log.setLevel('warn');
 				
 				// register events
-				//ajsl.event.registerAll(jwall.mvc.event);
+				//ajsl.event.registerAll(visuwall.mvc.event);
 		
-				jwall.mvc.view.Loader.init();
+				visuwall.mvc.view.Loader.init();
 				
 				// init loader
-				ajsl.loader.init(jwall.mvc.view.Loader);
+				ajsl.loader.init(visuwall.mvc.view.Loader);
 				
 				// loader test
 				$("#loader1").bind('click', function() {
@@ -67,13 +67,13 @@ jwall = {
 					}
 				});
 	
-				jwall.mvc.controller.ProjectController.buildProjects();
+				//visuwall.mvc.controller.ProjectController.buildProjects();
 				
 				
 //				$('UL#navigation').slideUp('slow');
 				
 				// create updater event
-				var updater = setInterval(jwall.mvc.event.Updater['input#updater|click'], 10000);
+				var updater = setInterval(visuwall.mvc.event.Updater['input#updater|click'], 10000);
 
 				// Initialize history plugin.
 				$.historyInit(ajsl.dispatcher.dispatch);
@@ -82,5 +82,6 @@ jwall = {
 };
 
 
-
-jwall.init();
+$(function (){
+	visuwall.init();
+});

@@ -1,4 +1,5 @@
 UL#navigation {
+	display: none;
 	position: absolute;
 	left: 0px;
 	right: 0px;

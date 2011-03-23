@@ -1,11 +1,11 @@
-jwall.persistence.dao.ProjectDAO = {
+visuwall.persistence.dao.ProjectDAO = {
 		
 		_projects : {},
 		
 		_projectService : null,
 		
 		init : function() {
-			this._projectService = jwall.business.service.Project;
+			this._projectService = visuwall.business.service.Project;
 		},
 		
 		saveProject : function(project) {
@@ -43,7 +43,7 @@ jwall.persistence.dao.ProjectDAO = {
 			}
 			
 			var $this = this;
-			$this._projectService.getBuild(projectName, project.buildNumbers[buildIdIndex], function(buildData) {
+			$this._projectService.getBuild(visuwall.mvc.controller.ProjectController.wallName, projectName, project.buildNumbers[buildIdIndex], function(buildData) {
 				if (buildData.state != 'ABORTED') {
 					callback(buildData);
 					return;
@@ -80,5 +80,5 @@ jwall.persistence.dao.ProjectDAO = {
 };
 
 $(function() {
-	jwall.persistence.dao.ProjectDAO.init();
+	visuwall.persistence.dao.ProjectDAO.init();
 });

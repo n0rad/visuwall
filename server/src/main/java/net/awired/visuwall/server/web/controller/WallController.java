@@ -6,8 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectStatus;
+import net.awired.visuwall.server.domain.Software;
+import net.awired.visuwall.server.domain.SoftwareAccess;
 import net.awired.visuwall.server.domain.Wall;
 import net.awired.visuwall.server.service.WallService;
 
@@ -30,7 +34,28 @@ public class WallController {
 
 	@Autowired
 	private WallService wallService;
+	
+    Wall wall;
+	
+    public WallController() {
+        wall = new Wall("orange-vallee");
+                wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://integration.wormee.orange-vallee.net:8080/hudson"));
+                wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://integration.wormee.orange-vallee.net:9000"));
+//        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://ci.awired.net/jenkins"));
+//        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://ci.visuwall.awired.net"));
+//        wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://sonar.awired.net"));
+        // wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://fluxx.fr.cr:8080/hudson"));
+        // wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://fluxx.fr.cr:9000"));
+        wall.refreshProjects();
+    }
 
+    @PostConstruct
+    public void postConstruct() {
+        wallService.addWall(wall);
+    }
+    
+    ////////////////////////////////////////////////////////////////////
+	
 	@RequestMapping
 	public @ResponseBody Set<String> getWallNames() {
 		return wallService.getWallNames();
@@ -57,6 +82,11 @@ public class WallController {
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public ModelAndView create() {
 		return null;
+	}
+	
+	@RequestMapping(value = "{wallName}", method = RequestMethod.DELETE)
+	public void DeleteWall(@PathVariable String wallName) {
+		
 	}
 
 }
