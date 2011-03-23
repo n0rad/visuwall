@@ -3,7 +3,6 @@ package net.awired.visuwall.server.web.controller;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 
@@ -15,8 +14,11 @@ import net.awired.visuwall.server.domain.SoftwareAccess;
 import net.awired.visuwall.server.domain.Wall;
 import net.awired.visuwall.server.service.WallService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,9 +28,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/project")
 public class ProjectController {
 
-    private static final Logger LOG = Logger.getLogger(ProjectController.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ProjectController.class.getName());
 
-    private Wall wall;
+    Wall wall;
 
     @Autowired
     WallService wallService;
@@ -50,29 +52,17 @@ public class ProjectController {
         wallService.addWall(wall);
     }
 
-    @RequestMapping
-    public @ResponseBody Collection<Project> getProjects() {
-        Collection<Project> projects = wall.getProjects();
-        LOG.info("Projects collection size :" + projects.size());
-        return projects;
-    }
-
-    @RequestMapping("status")
-    public @ResponseBody List<ProjectStatus> getStatus() {
-        return wall.getStatus();
-    }
-
-    @RequestMapping("get")
-    public @ResponseBody Project getProject(@RequestParam("projectName") String projectName) throws Exception {
+    @RequestMapping("get/{wallName}/{projectName}")
+    public @ResponseBody Project getProject(@PathVariable String wallName, @PathVariable String projectName) throws Exception {
         return wall.findProjectByName(projectName);
     }
 
-    @RequestMapping("finishTime")
-    public @ResponseBody Date getFinishTime(@RequestParam("projectName") String projectName) throws Exception {
+    @RequestMapping("finishTime/{wallName}/{projectName}")
+    public @ResponseBody Date getFinishTime(@RequestParam String wallName, @RequestParam String projectName) throws Exception {
         return wall.getEstimatedFinishTime(projectName);
     }
 
-    @RequestMapping("build")
+    @RequestMapping("build/{wallName}/{projectName}")
     public @ResponseBody Build getBuild(@RequestParam("projectName") String projectName, @RequestParam("buildId") int buildId) throws Exception {
         return wall.findBuildByProjectNameAndBuilderNumber(projectName, buildId);
     }

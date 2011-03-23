@@ -24,15 +24,15 @@ jwall = {
 					        year: "1y",
 					        years: "%dy"
 						};
-			
+
 				jQuery("abbr.timeago").timeago();
-				
+
 				// register controllers
 				ajsl.dispatcher.registerAll(jwall.mvc.controller);
-				
+
 				// register main controller
 				ajsl.dispatcher.registerMain(jwall.mvc.MainController);
-				
+
 				ajsl.log.setLevel('warn');
 				
 				// register events
@@ -68,6 +68,9 @@ jwall = {
 				});
 	
 				jwall.mvc.controller.ProjectController.buildProjects();
+				
+				
+//				$('UL#navigation').slideUp('slow');
 				
 				// create updater event
 				var updater = setInterval(jwall.mvc.event.Updater['input#updater|click'], 10000);
