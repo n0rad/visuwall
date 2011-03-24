@@ -203,8 +203,9 @@ visuwall.mvc.controller.ProjectController = {
 	},	
 	
 	_checkVersionChangeAndNotBuilding : function(projectData, projectStatus) {
-		if (projectData.lastBuildNumber != projectStatus.lastBuildId
-			&& !projectStatus.building) {
+		// if ever build && not building && last build on server != last completed in js 
+		if (projectStatus.lastBuildId != -1 && !projectStatus.building
+				&& projectStatus.lastBuildId != projectData.completedBuild.buildNumber) {
 			return true;
 		}
 		return false;

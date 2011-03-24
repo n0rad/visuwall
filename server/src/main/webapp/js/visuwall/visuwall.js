@@ -36,7 +36,7 @@ visuwall = {
 				ajsl.log.setLevel('warn');
 				
 				// register events
-				//ajsl.event.registerAll(visuwall.mvc.event);
+				ajsl.event.registerAll(visuwall.mvc.event);
 		
 				visuwall.mvc.view.Loader.init();
 				

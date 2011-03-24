@@ -156,7 +156,7 @@ visuwall.mvc.view.Projects = {
 	updateAgo : function(projectName, finishBuild) {
 		var abbr = this._getElement(projectName, 'abbr.timeago');
 		if (finishBuild == 0) {
-			abbr.append('never');
+			abbr.html('never');
 			return;
 		}
 		abbr.attr("title", ISODateString(new Date(finishBuild)));
@@ -242,7 +242,7 @@ visuwall.mvc.view.Projects = {
 	},
 
 	_getElement : function(projectName, suffix) {
-		var request = 'LI#' + projectName;
+		var request = 'LI[id=' + projectName + ']';
 		if (suffix != undefined) {
 			request += ' ' + suffix;
 		}
