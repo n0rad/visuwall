@@ -16,6 +16,12 @@
 
 package net.awired.visuwall.server.web.controller;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import net.awired.visuwall.server.service.interfaces.CssService;
 import net.awired.visuwall.server.service.interfaces.JsService;
 
@@ -27,7 +33,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
-@RequestMapping("/")
 public class MainController {
 
 	@Autowired
@@ -36,14 +41,19 @@ public class MainController {
 	@Autowired
 	JsService jsService;
 
-	@RequestMapping
-	public ModelAndView getWall() throws Exception {
-
+	@RequestMapping("/index.html")
+	public ModelAndView getIndex() throws Exception {
 		ModelMap modelMap = new ModelMap();
 
 		modelMap.put("jsLinks", jsService.getJsLinks("res/"));
 		modelMap.put("cssLinks", cssService.getCssLinks("res/"));
 
+		
 		return new ModelAndView("index", modelMap);
+	}
+	
+	@RequestMapping("/")
+	public ModelAndView getSlash(HttpServletRequest request) throws Exception {
+		return new ModelAndView("redirect:index.html");
 	}
 }

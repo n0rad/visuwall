@@ -58,6 +58,11 @@ function ISODateString(d) {
 }
 
 (function($) {
+
+	jQuery.fn.slideFadeToggle = function(speed, easing, callback) { 
+        return this.animate({opacity: 'toggle', height: 'toggle'}, speed, 
+easing, callback); 
+};
 	
 	$.fn.switchClasses = function(classSwitch, newClass, duration) {
 		var obj = this;

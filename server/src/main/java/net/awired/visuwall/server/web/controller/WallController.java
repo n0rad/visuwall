@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -73,9 +74,16 @@ public class WallController {
         return wallService.getStatus(wallName);
     }
 
-
+    
+  //  $.ajax("wall/create", {contentType: "application/json", dataType: "json", success : function(data) {alert(data);});
+    
+    
 	@RequestMapping(value = "create", method = RequestMethod.GET)
-	public String getCreate() {
+	public String getCreate(ModelMap model) {
+		Project p = new Project();
+		p.setName("project Name");
+		p.setBuildNumbers(new int[] {42, 43});
+        model.addAttribute("data", p);
 		return WALL_JSP;
 	}
 

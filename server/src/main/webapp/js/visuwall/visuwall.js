@@ -33,7 +33,7 @@ visuwall = {
 				// register main controller
 				ajsl.dispatcher.registerMain(visuwall.mvc.MainController);
 
-				ajsl.log.setLevel('warn');
+				ajsl.log.setLevel('debug');
 				
 				// register events
 				ajsl.event.registerAll(visuwall.mvc.event);
@@ -68,9 +68,6 @@ visuwall = {
 				});
 	
 				//visuwall.mvc.controller.ProjectController.buildProjects();
-				
-				
-//				$('UL#navigation').slideUp('slow');
 				
 				// create updater event
 				var updater = setInterval(visuwall.mvc.event.Updater['input#updater|click'], 10000);
