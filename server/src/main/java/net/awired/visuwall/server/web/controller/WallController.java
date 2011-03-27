@@ -58,12 +58,13 @@ public class WallController {
     ////////////////////////////////////////////////////////////////////
 	
 	@RequestMapping
-	public @ResponseBody Set<String> getWallNames() {
-		return wallService.getWallNames();
+	public String getWallNames(ModelMap model) {
+		model.put("data", wallService.getWallNames());
+		return WALL_JSP;
 	}
 
     @RequestMapping("{wallName}")
-    public @ResponseBody Wall getProjects(@PathVariable String wallName) {
+    public Wall getProjects(@PathVariable String wallName) {
     	Wall wall = wallService.getWall(wallName);
         LOG.info("Projects collection size :" + wall.getProjects().size());
         return wall;
@@ -80,10 +81,7 @@ public class WallController {
     
 	@RequestMapping(value = "create", method = RequestMethod.GET)
 	public String getCreate(ModelMap model) {
-		Project p = new Project();
-		p.setName("project Name");
-		p.setBuildNumbers(new int[] {42, 43});
-        model.addAttribute("data", p);
+        model.addAttribute("data", new Wall());
 		return WALL_JSP;
 	}
 

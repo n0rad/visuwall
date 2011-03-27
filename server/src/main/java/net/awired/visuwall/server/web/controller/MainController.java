@@ -16,12 +16,14 @@
 
 package net.awired.visuwall.server.web.controller;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.awired.visuwall.server.application.VisuwallApplication;
 import net.awired.visuwall.server.service.interfaces.CssService;
 import net.awired.visuwall.server.service.interfaces.JsService;
 
@@ -38,10 +40,18 @@ public class MainController {
 	private static final String ROOT_CONTEXT = "/index.html";
 	
 	@Autowired
+	VisuwallApplication visuwallApplication;
+	
+	@Autowired
 	CssService cssService;
 
 	@Autowired
 	JsService jsService;
+	
+	@PostConstruct
+	protected void init() {
+		System.out.println("Visuwall version : " + visuwallApplication.getVersion());
+	}
 
 	@RequestMapping(ROOT_CONTEXT)
 	public ModelAndView getIndex() throws Exception {

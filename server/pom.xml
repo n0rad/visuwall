@@ -208,6 +208,7 @@
 						</manifest>
 						<manifestEntries>
 							<Bundle-MainClass>net.awired.visuwall.cli.Main</Bundle-MainClass>
+							<VisuwallVersion>${project.version}</VisuwallVersion>
 						</manifestEntries>
 					</archive>
 				</configuration>
