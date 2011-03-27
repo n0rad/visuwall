@@ -35,25 +35,25 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController {
 
+	private static final String ROOT_CONTEXT = "/index.html";
+	
 	@Autowired
 	CssService cssService;
 
 	@Autowired
 	JsService jsService;
 
-	@RequestMapping("/index.html")
+	@RequestMapping(ROOT_CONTEXT)
 	public ModelAndView getIndex() throws Exception {
 		ModelMap modelMap = new ModelMap();
-
 		modelMap.put("jsLinks", jsService.getJsLinks("res/"));
 		modelMap.put("cssLinks", cssService.getCssLinks("res/"));
-
-		
 		return new ModelAndView("index", modelMap);
 	}
 	
 	@RequestMapping("/")
-	public ModelAndView getSlash(HttpServletRequest request) throws Exception {
-		return new ModelAndView("redirect:index.html");
+	public void getSlash(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		   RequestDispatcher dispatcher = request.getRequestDispatcher(ROOT_CONTEXT);
+	        dispatcher.forward(request, response);
 	}
 }
