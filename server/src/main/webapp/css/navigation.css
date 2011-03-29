@@ -4,6 +4,7 @@ DIV#navigationContainer {
 	left: 0px;
 	right: 0px;
 	font-size: 12px;
+	z-index: 50;
 }
 
 UL#navigation {

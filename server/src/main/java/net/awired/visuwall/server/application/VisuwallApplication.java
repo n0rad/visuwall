@@ -1,34 +1,24 @@
 package net.awired.visuwall.server.application;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
 import java.util.Enumeration;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
 import java.util.jar.Manifest;
-import java.util.jar.Attributes.Name;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.ServletContextAware;
 
 @Component
-public class VisuwallApplication {
+public class VisuwallApplication implements ServletContextAware {
 
-	@Autowired
-	ServletContext context;
-	
 	
 	private String version = "Unknow Version";
 
+	private ServletContext context;
+	
     /**
      * Figures out the version from the manifest.
      */
@@ -61,5 +51,10 @@ public class VisuwallApplication {
 
 	public String getVersion() {
 		return version;
+	}
+
+	@Override
+	public void setServletContext(ServletContext servletContext) {
+		this.context = servletContext;
 	}
 }
