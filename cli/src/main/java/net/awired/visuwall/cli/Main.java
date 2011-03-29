@@ -3,8 +3,10 @@ package net.awired.visuwall.cli;
 import java.net.URL;
 import java.security.ProtectionDomain;
 
-import com.sun.corba.se.spi.activation.Server;
-import com.sun.jdi.connect.Connector;
+import org.mortbay.jetty.Connector;
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.bio.SocketConnector;
+import org.mortbay.jetty.webapp.WebAppContext;
 
 public class Main {
 
