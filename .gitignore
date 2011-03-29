@@ -8,4 +8,4 @@ maven-eclipse.xml
 jwall-database.properties
 jwall-database.script
 jwall-database.log
-
+.checkstyle

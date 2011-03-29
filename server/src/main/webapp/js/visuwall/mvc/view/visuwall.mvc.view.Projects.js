@@ -1,4 +1,4 @@
-jwall.mvc.view.Projects = {
+visuwall.mvc.view.Projects = {
 	table : null,
 
 	statusClasses : [ 'failure', 'success', 'unstable', 'aborted', 'new' ],
@@ -24,8 +24,8 @@ jwall.mvc.view.Projects = {
 	_runResize : function(NumberOfProjects) {
 		var currentProjects = $('LI.project', this.table);
 		
-		var projectsByRow = Math.round(Math.sqrt(NumberOfProjects));
-		var rows =  Math.round((NumberOfProjects) / projectsByRow);
+		var projectsByRow = Math.ceil(Math.sqrt(NumberOfProjects));
+		var rows =  Math.ceil((NumberOfProjects) / projectsByRow);
 		
 		var newCss = {width : (99 / projectsByRow) + '%', height : 97 / rows + '%', margin : (1 / (rows * 2)) + '% ' + (1 / (projectsByRow * 2)) + '%'};
 		currentProjects.stop(true, false);
@@ -156,7 +156,7 @@ jwall.mvc.view.Projects = {
 	updateAgo : function(projectName, finishBuild) {
 		var abbr = this._getElement(projectName, 'abbr.timeago');
 		if (finishBuild == 0) {
-			abbr.append('never');
+			abbr.html('never');
 			return;
 		}
 		abbr.attr("title", ISODateString(new Date(finishBuild)));
@@ -205,7 +205,7 @@ jwall.mvc.view.Projects = {
 	
 	_updateCoverage : function(projectName, coverage, type) {
 		var displayCoverage = coverage;
-		if (coverage == 0) {
+		if (coverage == undefined || coverage == 0) {
 			displayCoverage = 100;
 		}
 		this._getElement(projectName, 'TABLE.' + type + 'Test').animate({width : displayCoverage + "%"}, 3000);
@@ -242,7 +242,7 @@ jwall.mvc.view.Projects = {
 	},
 
 	_getElement : function(projectName, suffix) {
-		var request = 'LI#' + projectName;
+		var request = 'LI[id=' + projectName + ']';
 		if (suffix != undefined) {
 			request += ' ' + suffix;
 		}
@@ -306,5 +306,5 @@ jwall.mvc.view.Projects = {
 };
 
 $(function() {
-	jwall.mvc.view.Projects.init();
+	visuwall.mvc.view.Projects.init();
 });

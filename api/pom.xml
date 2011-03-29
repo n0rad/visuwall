@@ -41,15 +41,6 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			<!-- should not be needed as declared in parent <plugin> <groupId>com.mycila.maven-license-plugin</groupId> 
-				<artifactId>maven-license-plugin</artifactId> <version>1.8.0</version> <configuration> 
-				<header>src/main/licence.txt</header> <strictCheck>true</strictCheck> <useDefaultExcludes>false</useDefaultExcludes> 
-				<excludes> <exclude>.gitignore</exclude> <exclude>.git/**</exclude> <exclude>target/**</exclude> 
-				<exclude>.settings/**</exclude> <exclude>.project</exclude> <exclude>.classpath</exclude> 
-				<exclude>LICENCE</exclude> <exclude>README</exclude> <exclude>**/MANIFEST.MF</exclude> 
-				<exclude>.externalToolBuilders/**</exclude> <exclude>.pmd/**</exclude> </excludes> 
-				<executions> <execution> <goals> <goal>check</goal> </goals> </execution> 
-				</executions> </configuration> </plugin> -->
 		</plugins>
 	</build>
 

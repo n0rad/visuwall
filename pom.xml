@@ -17,6 +17,14 @@
 	<packaging>pom</packaging>
 	<name>Visuwall</name>
 
+<!--
+	<parent>
+		<groupId>net.awired.parent.parent-java</groupId>
+		<artifactId>parent-java</artifactId>
+		<version>1.11-SNAPSHOT</version>
+	</parent>
+-->
+
 	<modules>
 		<module>cli</module>
 		<module>server</module>
@@ -89,7 +97,7 @@
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-cli</artifactId>
 				<version>${project.version}</version>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-runnablewar</artifactId>
@@ -203,7 +211,7 @@
 		<repository>
 			<id>awired-repo</id>
 			<name>Awired Releases Repository</name>
-			<url>http://mvn.awired.net/content/repositories/releases/</url>
+			<url>http://mvn.awired.net/nexus/content/repositories/releases/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -214,7 +222,7 @@
 		<repository>
 			<id>awired-snap-repo</id>
 			<name>Awired Snapshots Repository</name>
-			<url>http://mvn.awired.net/content/repositories/snapshots/</url>
+			<url>http://mvn.awired.net/nexus/content/repositories/snapshots/</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>

@@ -1,20 +1,24 @@
-jwall.mvc.controller.ProjectController = {
+visuwall.mvc.controller.ProjectController = {
 		
 	projectsView : null,
 	
 	projectService : null,
+	wallService : null,
 
 	projectDAO : null,
 	
+	wallName : 'orange-vallee',
+	
 	init : function() {
-		this.projectsView = jwall.mvc.view.Projects;
-		this.projectService = jwall.business.service.Project;
-		this.projectDAO = jwall.persistence.dao.ProjectDAO;
+		this.projectsView = visuwall.mvc.view.Projects;
+		this.projectService = visuwall.business.service.Project;
+		this.wallService = visuwall.business.service.Wall;
+		this.projectDAO = visuwall.persistence.dao.ProjectDAO;
 	},
 	
 	buildProjects : function() {
 		var $this = this;
-		jwall.business.service.Project.projects(function(projects) {
+		this.projectService.projects(this.wallName, function(projects) {
 			for (var i = 0; i < projects.length; i++) {
 				$this.addProject(projects[i]);
 			}
@@ -43,14 +47,14 @@ jwall.mvc.controller.ProjectController = {
 
 	updateStatus : function() {
 		var $this = this;
-		$this.projectService.status(function (projectsStatus) {
+		$this.wallService.status(this.wallName,function (projectsStatus) {
 			var projectDone = [];
 			for (var i = 0; i < projectsStatus.length; i++) {
 				var status = projectsStatus[i];
 
 				if ($this.projectDAO.isProject(status.name)) {
 					// this is a new project
-					$this.projectService.project(status.name, function(newProjectData) {
+					$this.projectService.project($this.wallName, status.name, function(newProjectData) {
 						$this.addProject(newProjectData);
 					});
 					continue;
@@ -93,7 +97,7 @@ jwall.mvc.controller.ProjectController = {
 		this.projectsView.updateBuildTime(project.name, project.completedBuild.duration);
 		this.projectsView.updateCommiters(project.name, project.completedBuild.commiters);
 		this.projectsView.updateQuality(project.name, project.qualityResult.measures);
-		this.projectsView.updateUTCoverage(project.name, project.coverage);
+		this.projectsView.updateUTCoverage(project.name, this._getCoverageFromQualityMeasures(project.qualityResult.measures));
 		this.projectsView.updateUT(project.name, 
 				project.completedBuild.testResult.failCount,
 				project.completedBuild.testResult.passCount,
@@ -125,7 +129,16 @@ jwall.mvc.controller.ProjectController = {
 		} else {
 			this.projectsView.updateAgo(project.name, 0);
 		}
-	},	
+	},
+	
+	_getCoverageFromQualityMeasures : function(measures) {
+		for (var i = 0; i < measures.length; i++) {
+			if (measures[i].key == 'coverage') {
+				return measures[i].value.value;
+			}
+		}
+		return;
+	},
 
 	_removeProject : function(projectName) {
 		this.projectDAO.removeProject(projectName);
@@ -158,7 +171,7 @@ jwall.mvc.controller.ProjectController = {
 		if (isBuilding) {
 			if (!project.building) {
 				var $this = this;
-				jwall.business.service.Project.finishTime(project.name, function(data) {
+				visuwall.business.service.Processing.finishTime(this.wallName, project.name, function(data) {
 					$this.projectsView.updateCountdown(project.name, new Date(data));
 				});
 				LOG.info("project is now building : " + project.name);
@@ -171,7 +184,7 @@ jwall.mvc.controller.ProjectController = {
 			project.building = false;
 
 			var $this = this;
-			this.projectService.project(project.name, function(newProjectData) {
+			this.projectService.project(this.wallName, project.name, function(newProjectData) {
 				$this._updateProject(newProjectData);
 			});			
 		} else {
@@ -183,15 +196,16 @@ jwall.mvc.controller.ProjectController = {
 		if (this._checkVersionChangeAndNotBuilding(project, status)) {
 			LOG.info("Server is not building and version has change, we need an update");
 			var $this = this;
-			this.projectService.project(project.name, function(newProjectData) {
+			this.projectService.project(this.wallName, project.name, function(newProjectData) {
 				$this._updateProject(newProjectData);
 			});
 		}
 	},	
 	
 	_checkVersionChangeAndNotBuilding : function(projectData, projectStatus) {
-		if (projectData.lastBuildNumber != projectStatus.lastBuildId
-			&& !projectStatus.building) {
+		// if ever build && not building && last build on server != last completed in js 
+		if (projectStatus.lastBuildId != -1 && !projectStatus.building
+				&& projectStatus.lastBuildId != projectData.completedBuild.buildNumber) {
 			return true;
 		}
 		return false;
@@ -200,5 +214,5 @@ jwall.mvc.controller.ProjectController = {
 };
 
 $(function (){
-	jwall.mvc.controller.ProjectController.init();
+	visuwall.mvc.controller.ProjectController.init();
 });
