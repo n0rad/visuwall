@@ -8,6 +8,7 @@ import java.util.List;
 
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
+import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -27,6 +28,8 @@ public final class HudsonService implements BuildService {
 
     private static final Logger LOG = LoggerFactory.getLogger(HudsonService.class);
 
+    private static final String HUDSON_ID = "HUDSON_ID";
+
     private String url;
     private String login;
     private String password;
@@ -42,13 +45,15 @@ public final class HudsonService implements BuildService {
     }
 
     @Override
-    public List<Project> findAllProjects() {
-        List<Project> projects = new ArrayList<Project>();
+    public List<ProjectId> findAllProjects() {
+        List<ProjectId> projects = new ArrayList<ProjectId>();
         for(HudsonProject hudsonProject:hudson.findAllProjects()) {
-            Project project;
             try {
-                project = createProject(hudsonProject);
-                projects.add(project);
+                Project project = createProject(hudsonProject);
+                ProjectId projectId = new ProjectId();
+                projectId.setName(project.getName());
+                projectId.addId(HUDSON_ID, project.getName());
+                projects.add(projectId);
             } catch (HudsonProjectNotFoundException e) {
                 LOG.warn(e.getMessage(), e);
             }
@@ -57,10 +62,14 @@ public final class HudsonService implements BuildService {
     }
 
     @Override
-    public Project findProjectByName(String projectName) throws ProjectNotFoundException {
+    public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
+        Preconditions.checkNotNull(projectId, "projectId");
         try {
+            String projectName = projectId.getId(HUDSON_ID);
             HudsonProject hudsonProject = hudson.findProject(projectName);
-            return createProject(hudsonProject);
+            Project project = createProject(hudsonProject);
+            project.setProjectId(projectId);
+            return project;
         } catch(HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
         }
@@ -79,11 +88,11 @@ public final class HudsonService implements BuildService {
         }
     }
 
-    private void addState(Project project, HudsonBuild lastBuild) {
-        if (lastBuild == null) {
+    private void addState(Project project, HudsonBuild build) {
+        if (build == null) {
             project.setState(State.NEW);
         } else {
-            project.setState(State.valueOf(lastBuild.getState()));
+            project.setState(State.valueOf(build.getState()));
         }
     }
 
@@ -106,16 +115,23 @@ public final class HudsonService implements BuildService {
         Project project = new Project();
         project.setName(hudsonProject.getName());
         project.setDescription(hudsonProject.getDescription());
-        project.setId(hudsonProject.getArtifactId());
         project.setBuildNumbers(hudsonProject.getBuildNumbers());
         addCompletedBuild(project, hudsonProject);
         addCurrentBuild(project, hudsonProject);
+        addState(project, hudsonProject);
         return project;
     }
 
+    private void addState(Project project, HudsonProject hudsonProject) throws HudsonProjectNotFoundException {
+        String projectName = hudsonProject.getName();
+        String state = hudson.getState(projectName);
+        project.setState(State.valueOf(state));
+    }
+
     @Override
-    public Date getEstimatedFinishTime(String projectName) throws ProjectNotFoundException {
+    public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
         try {
+            String projectName = projectId.getId(HUDSON_ID);
             return hudson.getEstimatedFinishTime(projectName);
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
@@ -123,8 +139,9 @@ public final class HudsonService implements BuildService {
     }
 
     @Override
-    public boolean isBuilding(String projectName) throws ProjectNotFoundException {
+    public boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException {
         try {
+            String projectName = projectId.getId(HUDSON_ID);
             return hudson.isBuilding(projectName);
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
@@ -132,8 +149,9 @@ public final class HudsonService implements BuildService {
     }
 
     @Override
-    public State getState(String projectName) throws ProjectNotFoundException {
+    public State getState(ProjectId projectId) throws ProjectNotFoundException {
         try {
+            String projectName = projectId.getId(HUDSON_ID);
             String state = hudson.getState(projectName);
             return State.valueOf(state);
         } catch (HudsonProjectNotFoundException e) {
@@ -142,8 +160,9 @@ public final class HudsonService implements BuildService {
     }
 
     @Override
-    public int getLastBuildNumber(String projectName) throws ProjectNotFoundException, BuildNotFoundException {
+    public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
         try {
+            String projectName = projectId.getId(HUDSON_ID);
             return  hudson.getLastBuildNumber(projectName);
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
@@ -153,8 +172,9 @@ public final class HudsonService implements BuildService {
     }
 
     @Override
-    public Build findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) throws BuildNotFoundException, ProjectNotFoundException {
+    public Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException, ProjectNotFoundException {
         try {
+            String projectName = projectId.getId(HUDSON_ID);
             HudsonBuild build = hudson.findBuild(projectName, buildNumber);
             return createBuild(build);
         } catch (HudsonBuildNotFoundException e) {

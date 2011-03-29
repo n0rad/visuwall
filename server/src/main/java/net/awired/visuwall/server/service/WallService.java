@@ -49,7 +49,7 @@ public class WallService {
             if (LOG.isInfoEnabled()) {
                 LOG.info("Refreshing wall : "+wall+" and its "+wall.getProjects().size()+" projects");
             }
-            wall.refreshProjects();
+            wall.discoverProjects();
         }
     }
     
@@ -84,7 +84,7 @@ public class WallService {
             throw new WallNotFoundException("Wall with name:"+wallName+" has not been found in database");
         }
         wall.restoreServices();
-        wall.refreshProjects();
+        wall.discoverProjects();
         return wall;
     }
 }

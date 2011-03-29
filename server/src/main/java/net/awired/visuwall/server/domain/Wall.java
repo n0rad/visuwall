@@ -3,12 +3,13 @@ package net.awired.visuwall.server.domain;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -19,15 +20,17 @@ import javax.persistence.Transient;
 
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
+import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.service.BuildService;
 import net.awired.visuwall.api.service.QualityService;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +50,10 @@ public final class Wall {
     private Set<QualityService> qualityServices = new HashSet<QualityService>();
 
     @Transient
-    private Set<Project> projects = Collections.synchronizedSet(new TreeSet<Project>());
+    private Map<ProjectId, ServiceHolder> projects = new HashMap<ProjectId, ServiceHolder>();
+
+    @Transient
+    private Map<String, ProjectId> projectIdsByProjectName = new HashMap<String, ProjectId>();
 
     @Id
     private String name;
@@ -81,55 +87,42 @@ public final class Wall {
         }
     }
 
-    public void refreshProjects() {
-        synchronized (projects) {
-            projects.clear();
-            for(BuildService service:buildServices) {
-                projects.addAll(service.findAllProjects());
-            }
-            populate(projects);
-        }
-    }
-
-    public Collection<Project> getProjects() {
-        return projects;
-    }
-
-    private void populate(Collection<Project> projects) {
-        for (Project project:projects) {
-            populate(project);
-        }
-    }
-
-    public void populate(Project project) {
-        QualityResult qualityResult = project.getQualityResult();
-        if (qualityResult == null) {
-            qualityResult = new QualityResult();
-            project.setQualityResult(qualityResult);
-        }
-        for(BuildService service:buildServices) {
-            try {
-                service.populate(project);
-            } catch (ProjectNotFoundException e) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(e.getMessage());
+    public void discoverProjects() {
+        for(BuildService buildService:buildServices) {
+            List<ProjectId> discoveredProjects = buildService.findAllProjects();
+            for(ProjectId discoveredProject:discoveredProjects) {
+                ServiceHolder holder = getServiceHolder(discoveredProject);
+                holder.getBuildServices().add(buildService);
+                for(QualityService qualityService:qualityServices) {
+                    if(qualityService.contains(discoveredProject)) {
+                        holder = getServiceHolder(discoveredProject);
+                        holder.getQualityServices().add(qualityService);
+                    }
                 }
+                projectIdsByProjectName.put(discoveredProject.getName(), discoveredProject);
+                projects.put(discoveredProject, holder);
             }
         }
-        for(QualityService service:qualityServices) {
-            service.populateQuality(project, qualityResult, "violations_density", "technical_debt_days", "coverage", "violations_density");
+    }
+
+    private ServiceHolder getServiceHolder(ProjectId discoveredProject) {
+        ServiceHolder holder = projects.get(discoveredProject);
+        if (holder == null) {
+            holder = new ServiceHolder();
+            projects.put(discoveredProject, holder);
         }
+        return holder;
     }
 
     /**
-     * @param projectName
      * @return null if no date could be estimated
      * @throws ProjectNotFoundException
      */
     public Date getEstimatedFinishTime(String projectName) throws ProjectNotFoundException {
+        ProjectId projectId = projectIdsByProjectName.get(projectName);
         for(BuildService service:buildServices) {
             try {
-                Date estimatedFinishTime = service.getEstimatedFinishTime(projectName);
+                Date estimatedFinishTime = service.getEstimatedFinishTime(projectId);
                 if (estimatedFinishTime != null) {
                     return estimatedFinishTime;
                 }
@@ -142,45 +135,110 @@ public final class Wall {
         return null;
     }
 
-    public Project findProjectByName(String projectName) throws ProjectNotFoundException {
+    public Project findFreshProject(String projectName) throws ProjectNotFoundException {
+        ProjectId projectId = projectIdsByProjectName.get(projectName);
+        if (projectId == null) {
+            throw new ProjectNotFoundException("Project [name="+projectName+"] has not been found.");
+        }
+        Project project = new Project();
+        project.setProjectId(projectId);
         for(BuildService service:buildServices) {
-            try {
-                Project project = service.findProjectByName(projectName);
-                if (project != null) {
-                    populate(project);
-                    synchronized (projects) {
-                        projects.add(project);
-                    }
-                    return project;
-                }
-            } catch(ProjectNotFoundException e) {
+            hydrateProjectFromBuildServices(project, service);
+        }
+        for(QualityService service:qualityServices) {
+            hydrateProjectFromQualityServices(project, service);
+        }
+
+        if (project.getName() != null) {
+            return project;
+        }
+        throw new ProjectNotFoundException("Project [projectId="+projectId+"] has no name.");
+    }
+
+    private void hydrateProjectFromQualityServices(Project projectToHydrate, QualityService service) {
+        QualityResult qualityResult = service.populateQuality(projectToHydrate.getProjectId(), "coverage");
+        if (qualityResult != null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("service - "+service.getClass().getSimpleName());
+            }
+            for (Entry<String, QualityMeasure> entry : qualityResult.getMeasures()) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug(e.getMessage());
+                    LOG.debug(entry.getKey()+" - "+entry.getValue());
                 }
+                projectToHydrate.getQualityResult().add(entry.getKey(), entry.getValue());
             }
         }
-        throw new ProjectNotFoundException("Project [name="+projectName+"] has not been found.");
+    }
+
+    private void hydrateProjectFromBuildServices(Project projectToHydrate, BuildService service) {
+        try {
+            Project project = service.findProject(projectToHydrate.getProjectId());
+            if (project != null) {
+                String projectName = project.getName();
+                String description = project.getDescription();
+                String artifactId = project.getArtifactId();
+                int[] buildNumbers = project.getBuildNumbers();
+                Build completedBuild = project.getCompletedBuild();
+                Build currentBuild = project.getCurrentBuild();
+                State state = project.getState();
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("service - "+service.getClass().getSimpleName());
+                    LOG.debug("projectName:"+ projectName);
+                    LOG.debug("description:"+ description);
+                    LOG.debug("artifactId:" +artifactId);
+                    LOG.debug("buildNumbers:"+ Arrays.toString(buildNumbers));
+                    LOG.debug("completedBuild:"+ completedBuild);
+                    LOG.debug("currentBuild: "+currentBuild);
+                    LOG.debug("state:"+ state);
+                }
+
+                if (StringUtils.isNotBlank(artifactId)) {
+                    projectToHydrate.setArtifactId(artifactId);
+                }
+                if (buildNumbers != null) {
+                    projectToHydrate.setBuildNumbers(buildNumbers);
+                }
+                if (completedBuild != null) {
+                    projectToHydrate.setCompletedBuild(completedBuild);
+                }
+                if (currentBuild != null) {
+                    projectToHydrate.setCurrentBuild(currentBuild);
+                }
+                if (StringUtils.isNotBlank(description)) {
+                    projectToHydrate.setDescription(description);
+                }
+                if (StringUtils.isNotBlank(projectName)) {
+                    projectToHydrate.setName(projectName);
+                }
+                if (state != null) {
+                    projectToHydrate.setState(state);
+                }
+            }
+        } catch(ProjectNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(e.getMessage());
+            }
+        }
     }
 
     public List<ProjectStatus> getStatus() {
-        synchronized (projects) {
-            List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
-            for (Project project:projects) {
-                ProjectStatus status = new ProjectStatus();
-                status.setBuilding(isBuilding(project));
-                status.setLastBuildId(getLastBuildNumber(project));
-                status.setName(project.getName());
-                status.setState(getState(project));
-                statusList.add(status);
-            }
-            return statusList;
+        List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
+        for (ProjectId projectId:projectIdsByProjectName.values()) {
+            ProjectStatus status = new ProjectStatus();
+            status.setBuilding(isBuilding(projectId));
+            status.setLastBuildId(getLastBuildNumber(projectId));
+            status.setName(projectId.getName());
+            status.setState(getState(projectId));
+            statusList.add(status);
         }
+        return statusList;
     }
 
-    private int getLastBuildNumber(Project project) {
+    private int getLastBuildNumber(ProjectId projectId) {
         for (BuildService service:buildServices) {
             try {
-                return service.getLastBuildNumber(project.getName());
+                return service.getLastBuildNumber(projectId);
             } catch (ProjectNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(e.getMessage());
@@ -194,23 +252,23 @@ public final class Wall {
         return PROJECT_NOT_BUILT_ID;
     }
 
-    private State getState(Project project) {
+    private State getState(ProjectId projectId) {
         for (BuildService service:buildServices) {
             try {
-                return service.getState(project.getName());
+                return service.getState(projectId);
             } catch (ProjectNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(e.getMessage());
                 }
             }
         }
-        throw new RuntimeException("Project must have a state."+project);
+        throw new RuntimeException("Project must have a state.");
     }
 
-    private boolean isBuilding(Project project) {
+    private boolean isBuilding(ProjectId projectId) {
         for (BuildService service:buildServices) {
             try {
-                return service.isBuilding(project.getName());
+                return service.isBuilding(projectId);
             } catch (ProjectNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(e.getMessage());
@@ -220,10 +278,11 @@ public final class Wall {
         return false;
     }
 
-    public Build findBuildByProjectNameAndBuilderNumber(String projectName, int buildNumber) throws BuildNotFoundException {
+    public Build findBuildByBuildNumber(String projectName, int buildNumber) throws BuildNotFoundException {
+        ProjectId projectId = projectIdsByProjectName.get(projectName);
         for (BuildService service:buildServices) {
             try {
-                Build build = service.findBuildByProjectNameAndBuildNumber(projectName, buildNumber);
+                Build build = service.findBuildByBuildNumber(projectId, buildNumber);
                 if (build != null) {
                     return build;
                 }
@@ -237,7 +296,7 @@ public final class Wall {
                 }
             }
         }
-        throw new BuildNotFoundException("No build #"+buildNumber+" for project "+projectName);
+        throw new BuildNotFoundException("No build #"+buildNumber+" for project "+projectId);
     }
 
     public void setSoftwareAccesses(List<SoftwareAccess> softwareAccesses) {
@@ -267,7 +326,19 @@ public final class Wall {
     public String toString() {
         return Objects.toStringHelper(this) //
         .add("name", name) //
-        .add("projects", Arrays.toString(projects.toArray())) //
         .toString();
     }
+
+    public Collection<Project> getProjects() {
+        List<Project> allProjects = new ArrayList<Project>();
+        for(ProjectId projectId:projects.keySet()) {
+            try {
+                allProjects.add(findFreshProject(projectId.getName()));
+            } catch (ProjectNotFoundException e) {
+                LOG.warn(e.getMessage());
+            }
+        }
+        return allProjects;
+    }
+
 }

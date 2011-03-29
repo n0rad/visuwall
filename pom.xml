@@ -29,10 +29,12 @@
 		<module>cli</module>
 		<module>server</module>
 		<module>hudsonclient</module>
+		<module>bambooclient</module>
 		<module>api</module>
 		<module>runnablewar</module>
 		<module>sonar-plugin</module>
 		<module>hudson-plugin</module>
+		<module>bamboo-plugin</module>
 	</modules>
 
 	<properties>
@@ -82,6 +84,11 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
+                                <groupId>net.awired.visuwall</groupId>
+                                <artifactId>visuwall-bambooclient</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
+			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-api</artifactId>
 				<version>${project.version}</version>
@@ -97,8 +104,7 @@
 				<version>${project.version}</version>
 			</dependency>
 
-
-			<!-- plugins -->
+			<!-- plugins -->			
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-plugin-hudson</artifactId>
@@ -107,6 +113,11 @@
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-plugin-sonar</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-plugin-bamboo</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>

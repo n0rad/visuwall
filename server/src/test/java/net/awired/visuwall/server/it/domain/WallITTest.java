@@ -30,8 +30,8 @@ import java.util.List;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectStatus;
-import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.server.domain.Software;
@@ -41,7 +41,6 @@ import net.awired.visuwall.server.domain.Wall;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 
-
 public class WallITTest {
 
     private Wall wall;
@@ -50,7 +49,7 @@ public class WallITTest {
         wall = new Wall("test");
         wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, HUDSON_URL));
         wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, SONAR_URL));
-        wall.refreshProjects();
+        wall.discoverProjects();
     }
 
     @Test
@@ -63,31 +62,31 @@ public class WallITTest {
 
     @Test
     public void should_retrieve_state() throws ProjectNotFoundException {
-        Project project = wall.findProjectByName("struts 2 instable");
+        Project project = wall.findFreshProject("struts 2 instable");
         assertEquals(State.UNSTABLE, project.getState());
     }
 
     @Test
     public void should_retrieve_data_of_one_project() throws ProjectNotFoundException {
-        Project project = wall.findProjectByName("struts");
+        Project project = wall.findFreshProject("struts");
         assertEquals("struts", project.getName());
     }
 
     @Test
     public void should_retrieve_quality_result() throws ProjectNotFoundException {
-        Project project = wall.findProjectByName("struts");
+        Project project = wall.findFreshProject("struts");
         assertNotNull(project.getQualityResult());
         assertFalse(project.getQualityResult().getMeasures().isEmpty());
     }
 
     @Test(expected=ProjectNotFoundException.class)
     public void should_throw_exception_when_search_non_existant_project() throws ProjectNotFoundException {
-        wall.findProjectByName("does.not.exist");
+        wall.findFreshProject("does.not.exist");
     }
 
     @Test
     public void should_retrieve_project_with_no_last_build() throws ProjectNotFoundException {
-        Project project = wall.findProjectByName("neverbuild");
+        Project project = wall.findFreshProject("neverbuild");
         assertNull(project.getCompletedBuild());
     }
 
@@ -99,7 +98,7 @@ public class WallITTest {
 
     @Test
     public void should_retrieve_test_result() throws BuildNotFoundException {
-        Build build = wall.findBuildByProjectNameAndBuilderNumber("struts", 3);
+        Build build = wall.findBuildByBuildNumber("struts", 3);
         TestResult testResult = build.getTestResult();
         assertEquals(0, testResult.getFailCount());
         assertEquals(0, testResult.getSkipCount());
