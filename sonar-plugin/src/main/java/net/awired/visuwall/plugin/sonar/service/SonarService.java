@@ -30,7 +30,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import net.awired.visuwall.api.domain.Project;
+import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
@@ -58,9 +58,12 @@ public final class SonarService implements QualityService {
      * http://docs.codehaus.org/display/SONAR/Web+Service+API
      */
     private Sonar sonar;
+
     private Map<String, QualityMetric> qualityMetrics = new HashMap<String, QualityMetric>();
 
     private static final Logger LOG = LoggerFactory.getLogger(SonarService.class);
+
+    private static final String SONAR_ID = "SONAR_ID";
 
     @Override
     public void init() {
@@ -113,17 +116,28 @@ public final class SonarService implements QualityService {
     }
 
     @Override
-    public void populateQuality(Project project, QualityResult quality, String... metrics) {
-        Preconditions.checkNotNull(project, "project");
-        Preconditions.checkNotNull(quality, "quality");
+    public QualityResult populateQuality(ProjectId projectId, String... metrics) {
+        Preconditions.checkNotNull(projectId, "projectId");
+        QualityResult qualityResult = new QualityResult();
         for (String key : metrics) {
-            addMeasure(project, quality, key);
+            addMeasure(projectId, qualityResult, key);
         }
+        return qualityResult;
     }
 
-    private void addMeasure(Project project, QualityResult quality, String key) {
+    @Override
+    public boolean contains(ProjectId projectId) {
         try {
-            Measure measure = getMeasure(project.getId(), key);
+            getMeasure(projectId.getId(SONAR_ID), "comment_blank_lines");
+        } catch(SonarMetricNotFoundException e) {
+            return false;
+        }
+        return true;
+    }
+
+    private void addMeasure(ProjectId projectId, QualityResult quality, String key) {
+        try {
+            Measure measure = getMeasure(projectId.getId(SONAR_ID), key);
             if (measure != null) {
                 Double value = measure.getValue();
                 if (value != null) {

@@ -16,8 +16,6 @@
 
 package net.awired.visuwall.hudsonclient.builder;
 
-
-
 public class HudsonUrlBuilder {
 
     private final String hudsonUrl;

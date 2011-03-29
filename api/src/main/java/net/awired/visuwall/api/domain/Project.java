@@ -24,12 +24,13 @@ import com.google.common.base.Preconditions;
 
 public final class Project implements Comparable<Project> {
 
-    private String id;
+    private String artifactId;
+    private ProjectId projectId;
     private String name;
     private String description;
     private double coverage;
     private double rulesCompliance;
-    private QualityResult qualityResult;
+    private QualityResult qualityResult = new QualityResult();
     private State state;
     private int[] buildNumbers;
 
@@ -42,6 +43,14 @@ public final class Project implements Comparable<Project> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getArtifactId() {
+        return artifactId;
+    }
+
+    public void setArtifactId(String artifactId) {
+        this.artifactId = artifactId;
     }
 
     public String getDescription() {
@@ -68,12 +77,12 @@ public final class Project implements Comparable<Project> {
         this.rulesCompliance = rulesCompliance;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public ProjectId getProjectId() {
+        return projectId;
     }
 
-    public String getId() {
-        return id;
+    public void setProjectId(ProjectId projectId) {
+        this.projectId = projectId;
     }
 
     public QualityResult getQualityResult() {
@@ -102,7 +111,7 @@ public final class Project implements Comparable<Project> {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, name);
+        return Objects.hashCode(projectId, name);
     }
 
     @Override
@@ -111,12 +120,12 @@ public final class Project implements Comparable<Project> {
             return false;
         }
 
-        if (id == null || name == null) {
+        if (projectId == null) {
             return false;
         }
 
         Project project = (Project)obj;
-        return id.equals(project.id) && name.equals(project.name);
+        return projectId.equals(project.projectId);
     }
 
     public Build getCompletedBuild() {
@@ -138,7 +147,8 @@ public final class Project implements Comparable<Project> {
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-        .add("id", id) //
+        .add("project id", projectId) //
+        .add("artifact id", artifactId) //
         .add("name", name) //
         .add("description", description) //
         .add("coverage", coverage) //

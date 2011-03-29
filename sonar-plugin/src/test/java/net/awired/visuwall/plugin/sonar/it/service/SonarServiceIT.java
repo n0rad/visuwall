@@ -24,7 +24,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import net.awired.visuwall.api.domain.Project;
+import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -38,6 +38,8 @@ public class SonarServiceIT {
 
     private static SonarService sonarService;
 
+    private static final String SONAR_ID = "SONAR_ID";
+
     @BeforeClass
     public static void init() {
         sonarService = new SonarService();
@@ -47,10 +49,9 @@ public class SonarServiceIT {
 
     @Test
     public void should_populate_quality() {
-        Project project = new Project();
-        project.setId(STRUTS_ARTIFACT_ID);
-        QualityResult quality = new QualityResult();
-        sonarService.populateQuality(project, quality, "violations_density");
+        ProjectId projectId = new ProjectId();
+        projectId.addId(SONAR_ID, STRUTS_ARTIFACT_ID);
+        QualityResult quality = sonarService.populateQuality(projectId, "violations_density");
         QualityMeasure measure = quality.getMeasure("violations_density");
         assertEquals("77.2%", measure.getFormattedValue());
         assertEquals(77.2, measure.getValue(), 0);
@@ -58,10 +59,9 @@ public class SonarServiceIT {
 
     @Test
     public void should_have_a_lot_of_quality_metrics() {
-        Project project = new Project();
-        project.setId(STRUTS_ARTIFACT_ID);
-        QualityResult quality = new QualityResult();
-        sonarService.populateQuality(project, quality);
+        ProjectId projectId = new ProjectId();
+        projectId.addId(SONAR_ID, STRUTS_ARTIFACT_ID);
+        QualityResult quality = sonarService.populateQuality(projectId);
         Set<Entry<String, QualityMeasure>> measures = quality.getMeasures();
         for (Entry<String, QualityMeasure> measure : measures) {
             assertNotNull(measure.getValue().getValue());
@@ -70,9 +70,8 @@ public class SonarServiceIT {
 
     @Test
     public void should_not_fail_if_measure_does_not_exist() throws ProjectNotFoundException {
-        Project project = new Project();
-        project.setId(STRUTS_ARTIFACT_ID);
-        QualityResult quality = new QualityResult();
-        sonarService.populateQuality(project, quality, "inexistant_measure");
+        ProjectId projectId = new ProjectId();
+        projectId.addId(SONAR_ID, STRUTS_ARTIFACT_ID);
+        sonarService.populateQuality(projectId, "inexistant_measure");
     }
 }

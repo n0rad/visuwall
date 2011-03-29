@@ -2,7 +2,9 @@ package net.awired.visuwall.server.web.controller;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -28,53 +30,56 @@ public class ProjectController {
 
     private static final Logger LOG = Logger.getLogger(ProjectController.class.getName());
 
-    private Wall wall;
+    private static final Map<String, Wall> walls = new HashMap<String, Wall>();
 
     @Autowired
     WallService wallService;
 
-    public ProjectController() {
-        wall = new Wall("orange-vallee");
-        //        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://integration.wormee.orange-vallee.net:8080/hudson"));
-        //        wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://integration.wormee.orange-vallee.net:9000"));
-        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://ci.awired.net/jenkins"));
-        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://ci.visuwall.awired.net"));
-        wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://sonar.awired.net"));
-        // wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://fluxx.fr.cr:8080/hudson"));
-        // wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://fluxx.fr.cr:9000"));
-        wall.refreshProjects();
-    }
-
     @PostConstruct
     public void postConstruct() {
+        Wall wall = createAwiredWall();
+        walls.put(wall.getName(), wall);
         wallService.addWall(wall);
     }
 
+    private Wall createAwiredWall() {
+        Wall wall = new Wall("awired");
+        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://ci.awired.net/jenkins"));
+        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://ci.visuwall.awired.net"));
+        wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://sonar.awired.net"));
+        return wall;
+    }
+
     @RequestMapping
-    public @ResponseBody Collection<Project> getProjects() {
+    public @ResponseBody Collection<Project> getProjects(@RequestParam("wallName") String wallName) {
+        Wall wall = walls.get(wallName);
         Collection<Project> projects = wall.getProjects();
         LOG.info("Projects collection size :" + projects.size());
         return projects;
     }
 
     @RequestMapping("status")
-    public @ResponseBody List<ProjectStatus> getStatus() {
+    public @ResponseBody List<ProjectStatus> getStatus(@RequestParam("wallName") String wallName) {
+        Wall wall = walls.get(wallName);
         return wall.getStatus();
     }
 
     @RequestMapping("get")
-    public @ResponseBody Project getProject(@RequestParam("projectName") String projectName) throws Exception {
-        return wall.findProjectByName(projectName);
+    public @ResponseBody Project getProject(@RequestParam("wallName") String wallName, @RequestParam("projectName") String projectName) throws Exception {
+        Wall wall = walls.get(wallName);
+        return wall.findFreshProject(projectName);
     }
 
     @RequestMapping("finishTime")
-    public @ResponseBody Date getFinishTime(@RequestParam("projectName") String projectName) throws Exception {
+    public @ResponseBody Date getFinishTime(@RequestParam("wallName") String wallName, @RequestParam("projectName") String projectName) throws Exception {
+        Wall wall = walls.get(wallName);
         return wall.getEstimatedFinishTime(projectName);
     }
 
     @RequestMapping("build")
-    public @ResponseBody Build getBuild(@RequestParam("projectName") String projectName, @RequestParam("buildId") int buildId) throws Exception {
-        return wall.findBuildByProjectNameAndBuilderNumber(projectName, buildId);
+    public @ResponseBody Build getBuild(@RequestParam("wallName") String wallName, @RequestParam("projectName") String projectName, @RequestParam("buildId") int buildId) throws Exception {
+        Wall wall = walls.get(wallName);
+        return wall.findBuildByBuildNumber(projectName, buildId);
     }
 
 }

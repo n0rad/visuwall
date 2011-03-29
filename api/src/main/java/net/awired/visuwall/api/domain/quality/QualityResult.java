@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.google.common.base.Objects;
+
 
 public final class QualityResult {
 
@@ -20,5 +22,12 @@ public final class QualityResult {
 
     public Set<Entry<String, QualityMeasure>> getMeasures() {
         return measures.entrySet();
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this) //
+        .add("measures", measures.values()) //
+        .toString();
     }
 }

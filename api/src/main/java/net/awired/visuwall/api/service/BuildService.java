@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
+import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -12,20 +13,20 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BuildService extends Service {
 
-    List<Project> findAllProjects();
+    List<ProjectId> findAllProjects();
 
-    Project findProjectByName(String projectName) throws ProjectNotFoundException;
+    Project findProject(ProjectId projectId) throws ProjectNotFoundException;
 
-    Build findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) throws BuildNotFoundException, ProjectNotFoundException;
+    Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException, ProjectNotFoundException;
 
     void populate(Project project) throws ProjectNotFoundException;
 
-    Date getEstimatedFinishTime(String projectName) throws ProjectNotFoundException;
+    Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException;
 
-    boolean isBuilding(String projectName) throws ProjectNotFoundException;
+    boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException;
 
-    State getState(String projectName) throws ProjectNotFoundException;
+    State getState(ProjectId projectId) throws ProjectNotFoundException;
 
-    int getLastBuildNumber(String projectName) throws ProjectNotFoundException, BuildNotFoundException;
+    int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException;
 
 }
