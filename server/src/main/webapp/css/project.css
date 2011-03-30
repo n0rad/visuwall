@@ -39,7 +39,7 @@ BODY {
 	background-color: #cacaca;
 }
 #projectsTable .unstable {
-	background-color: #fded72;
+	background-color: #FF9023;
 }
 
 
@@ -70,6 +70,7 @@ TABLE.uTest TD, TABLE.iTest TD {
 	font-size: 5em;
 	line-height: 1.1em;
 	font-weight: bold;
+	text-shadow: black 2px 2px 5px;
 }
 
 .project .inlineInfo {

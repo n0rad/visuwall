@@ -23,7 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"/META-INF/spring/root-context.xml"})
+@ContextConfiguration(locations={"classpath*:/META-INF/spring/*-context.xml"})
 public class SoftwareServiceITTest {
 
     @Autowired

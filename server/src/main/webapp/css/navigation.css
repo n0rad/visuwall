@@ -1,8 +1,18 @@
-UL#navigation {
-/* 	display: none; */
+DIV#navigationContainer {
+	height: 2em;
 	position: absolute;
 	left: 0px;
 	right: 0px;
+	font-size: 12px;
+	z-index: 50;
+}
+
+UL#navigation {
 	background-color: white;
 	border-bottom: 1px solid grey;
+}
+
+UL#navigation DIV#fontSizeSlider {
+	width: 100px;
+	display: inline-block;
 }

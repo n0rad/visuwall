@@ -1,6 +1,10 @@
 package net.awired.visuwall.cli;
 
+import java.util.List;
+
 import net.awired.ajsl.cli.argument.CliArgumentManager;
+import net.awired.ajsl.cli.argument.CliArgumentParseException;
+import net.awired.ajsl.cli.argument.args.CliNoParamArgument;
 import net.awired.ajsl.cli.argument.args.CliOneParamArgument;
 import net.awired.ajsl.cli.param.CliParamInt;
 import net.awired.ajsl.cli.param.CliParamString;
@@ -11,7 +15,7 @@ class ArgumentManager extends CliArgumentManager {
 	
 	public final CliOneParamArgument<String> contextPath;
 	
-	
+	public final CliNoParamArgument version;
 	
 	public ArgumentManager(Main main) {
 		super("visuwall");
@@ -33,6 +37,14 @@ class ArgumentManager extends CliArgumentManager {
 		contextPath.setDescription("Context path to access the application");
 		addArg(contextPath);
 		
+		version = new CliNoParamArgument('V') {
+			public void parse(List<String> args) throws CliArgumentParseException {
+				System.out.println("version genre");
+				System.exit(0);
+			};
+		};
+		version.setName("-version");
+		addArg(version);
 		
 		
 	}

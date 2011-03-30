@@ -16,6 +16,14 @@
 
 package net.awired.visuwall.server.web.controller;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.awired.visuwall.server.application.VisuwallApplication;
 import net.awired.visuwall.server.service.interfaces.CssService;
 import net.awired.visuwall.server.service.interfaces.JsService;
 
@@ -27,23 +35,35 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
-@RequestMapping("/")
 public class MainController {
 
+	private static final String ROOT_CONTEXT = "/index.html";
+	
+	@Autowired
+	VisuwallApplication visuwallApplication;
+	
 	@Autowired
 	CssService cssService;
 
 	@Autowired
 	JsService jsService;
+	
+	@PostConstruct
+	protected void init() {
+		System.out.println("Visuwall version : " + visuwallApplication.getVersion());
+	}
 
-	@RequestMapping
-	public ModelAndView getWall() throws Exception {
-
+	@RequestMapping(ROOT_CONTEXT)
+	public ModelAndView getIndex() throws Exception {
 		ModelMap modelMap = new ModelMap();
-
 		modelMap.put("jsLinks", jsService.getJsLinks("res/"));
 		modelMap.put("cssLinks", cssService.getCssLinks("res/"));
-
 		return new ModelAndView("index", modelMap);
+	}
+	
+	@RequestMapping("/")
+	public void getSlash(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		   RequestDispatcher dispatcher = request.getRequestDispatcher(ROOT_CONTEXT);
+	        dispatcher.forward(request, response);
 	}
 }
