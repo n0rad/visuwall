@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Preconditions;
 
@@ -30,7 +29,7 @@ public class WallService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private Map<String, Wall> walls = new HashMap<String, Wall>();
+    private static Map<String, Wall> WALLS = new HashMap<String, Wall>();
 
     public WallService() {
         if (LOG.isInfoEnabled()) {
@@ -39,11 +38,11 @@ public class WallService {
     }
 
     @Scheduled(fixedDelay=EVERY_FIVE_MINUTES)
-    public synchronized void refreshWalls() {
+    public void refreshWalls() {
         if (LOG.isInfoEnabled()) {
             LOG.info("It's time to refresh all walls");
         }
-        for(Wall wall:walls.values()) {
+        for(Wall wall:WALLS.values()) {
             if (LOG.isInfoEnabled()) {
                 LOG.info("Refreshing wall : "+wall+" and its "+wall.getProjects().size()+" projects");
             }
@@ -52,25 +51,25 @@ public class WallService {
     }
 
     public List<ProjectStatus> getStatus(String wallName) {
-        Wall wall = walls.get(wallName);
+        Wall wall = WALLS.get(wallName);
         List<ProjectStatus> projectStatus  = wall.getStatus();
         return projectStatus;
     }
 
     public Wall getWall(String wallName) {
-        return walls.get(wallName);
+        return WALLS.get(wallName);
     }
 
-    public synchronized void addWall(Wall wall) {
+    public void addWall(Wall wall) {
         Preconditions.checkNotNull(wall);
-        walls.put(wall.getName(), wall);
+        WALLS.put(wall.getName(), wall);
     }
 
     public Set<String> getWallNames() {
-        return walls.keySet();
+        return WALLS.keySet();
     }
 
-    @Transactional
+    //@Transactional
     public void persist(Wall wall) {
         entityManager.persist(wall);
         entityManager.flush();

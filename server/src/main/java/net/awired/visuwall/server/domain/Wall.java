@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -46,7 +47,7 @@ public final class Wall {
     private Set<QualityPlugin> qualityServices = new HashSet<QualityPlugin>();
 
     @Transient
-    private Map<ProjectId, ServiceHolder> projects = new HashMap<ProjectId, ServiceHolder>();
+    private Map<ProjectId, ServiceHolder> projects = new ConcurrentHashMap<ProjectId, ServiceHolder>();
 
     @Transient
     private Map<String, ProjectId> projectIdsByProjectName = new HashMap<String, ProjectId>();
@@ -145,7 +146,11 @@ public final class Wall {
             pluginMergeService.merge(project, service);
         }
         for(QualityPlugin service:qualityServices) {
-            pluginMergeService.merge(project, service);
+            pluginMergeService.merge(project, service, "coverage");
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(project.toString());
         }
 
         if (project.getName() != null) {

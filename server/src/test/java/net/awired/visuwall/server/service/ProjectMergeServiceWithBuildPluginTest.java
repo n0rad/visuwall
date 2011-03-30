@@ -36,7 +36,6 @@ public class ProjectMergeServiceWithBuildPluginTest {
         Build currentBuild = new Build();
 
         Project projectFromBuildPlugin = new Project();
-        projectFromBuildPlugin.setArtifactId("artifactId");
         projectFromBuildPlugin.setBuildNumbers(new int[]{1,2,3});
         projectFromBuildPlugin.setCompletedBuild(completedBuild);
         projectFromBuildPlugin.setCurrentBuild(currentBuild);
@@ -48,7 +47,6 @@ public class ProjectMergeServiceWithBuildPluginTest {
         when(buildPlugin.findProject(projectId)).thenReturn(projectFromBuildPlugin);
         projectMergeService.merge(projectToMerge, buildPlugin);
 
-        assertEquals("artifactId", projectToMerge.getArtifactId());
         assertArrayEquals(new int[]{1,2,3}, projectToMerge.getBuildNumbers());
         assertEquals(completedBuild, projectToMerge.getCompletedBuild());
         assertEquals(currentBuild, projectToMerge.getCurrentBuild());
@@ -63,7 +61,7 @@ public class ProjectMergeServiceWithBuildPluginTest {
         BuildPlugin buildPlugin2 = Mockito.mock(BuildPlugin.class);
 
         Project projectFromBuildPlugin1 = new Project();
-        projectFromBuildPlugin1.setArtifactId("artifactId");
+        projectFromBuildPlugin1.setDescription("description");
 
         Project projectFromBuildPlugin2 = new Project();
         projectFromBuildPlugin2.setName("name");
@@ -75,7 +73,7 @@ public class ProjectMergeServiceWithBuildPluginTest {
         projectMergeService.merge(projectToMerge, buildPlugin1);
         projectMergeService.merge(projectToMerge, buildPlugin2);
 
-        assertEquals("artifactId", projectToMerge.getArtifactId());
+        assertEquals("description", projectToMerge.getDescription());
         assertEquals("name", projectToMerge.getName());
     }
 
@@ -85,10 +83,10 @@ public class ProjectMergeServiceWithBuildPluginTest {
         BuildPlugin buildPlugin2 = Mockito.mock(BuildPlugin.class);
 
         Project projectFromBuildPlugin1 = new Project();
-        projectFromBuildPlugin1.setArtifactId("artifactId1");
+        projectFromBuildPlugin1.setDescription("description1");
 
         Project projectFromBuildPlugin2 = new Project();
-        projectFromBuildPlugin2.setArtifactId("artifactId2");
+        projectFromBuildPlugin2.setDescription("description2");
 
         ProjectId projectId = projectToMerge.getProjectId();
         when(buildPlugin1.findProject(projectId)).thenReturn(projectFromBuildPlugin1);
@@ -97,7 +95,7 @@ public class ProjectMergeServiceWithBuildPluginTest {
         projectMergeService.merge(projectToMerge, buildPlugin1);
         projectMergeService.merge(projectToMerge, buildPlugin2);
 
-        assertEquals("artifactId2", projectToMerge.getArtifactId());
+        assertEquals("description2", projectToMerge.getDescription());
     }
 
     @Test

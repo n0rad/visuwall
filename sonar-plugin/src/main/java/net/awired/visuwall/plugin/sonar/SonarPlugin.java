@@ -63,8 +63,6 @@ public final class SonarPlugin implements QualityPlugin {
 
     private static final Logger LOG = LoggerFactory.getLogger(SonarPlugin.class);
 
-    private static final String SONAR_ID = "SONAR_ID";
-
     @Override
     public void init() {
         if (isBlank(url)) {
@@ -103,6 +101,7 @@ public final class SonarPlugin implements QualityPlugin {
     }
 
     private Measure getMeasure(String projectId, String measureKey) throws SonarMetricNotFoundException {
+        Preconditions.checkNotNull(projectId, "projectId");
         try {
             ResourceQuery query = ResourceQuery.createForMetrics(projectId, measureKey);
             Resource resource = sonar.find(query);
@@ -119,19 +118,24 @@ public final class SonarPlugin implements QualityPlugin {
     public QualityResult populateQuality(ProjectId projectId, String... metrics) {
         Preconditions.checkNotNull(projectId, "projectId");
         QualityResult qualityResult = new QualityResult();
-        if (metrics.length == 0) {
-            metrics = qualityMetrics.keySet().toArray(new String[]{});
-        }
-        for (String key : metrics) {
-            addMeasure(projectId, qualityResult, key);
+        if (projectId.getArtifactId() != null) {
+            if (metrics.length == 0) {
+                metrics = qualityMetrics.keySet().toArray(new String[]{});
+            }
+            for (String key : metrics) {
+                addMeasure(projectId, qualityResult, key);
+            }
         }
         return qualityResult;
     }
 
     @Override
     public boolean contains(ProjectId projectId) {
+        if (projectId.getArtifactId() == null) {
+            return false;
+        }
         try {
-            getMeasure(projectId.getId(SONAR_ID), "comment_blank_lines");
+            getMeasure(projectId.getArtifactId(), "comment_blank_lines");
         } catch(SonarMetricNotFoundException e) {
             return false;
         }
@@ -140,7 +144,7 @@ public final class SonarPlugin implements QualityPlugin {
 
     private void addMeasure(ProjectId projectId, QualityResult quality, String key) {
         try {
-            Measure measure = getMeasure(projectId.getId(SONAR_ID), key);
+            Measure measure = getMeasure(projectId.getArtifactId(), key);
             if (measure != null) {
                 Double value = measure.getValue();
                 if (value != null) {

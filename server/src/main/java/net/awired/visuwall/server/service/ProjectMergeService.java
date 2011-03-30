@@ -23,8 +23,8 @@ public class ProjectMergeService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProjectMergeService.class);
 
-    public void merge(Project projectToMerge, QualityPlugin qualityPlugin) {
-        QualityResult qualityResult = qualityPlugin.populateQuality(projectToMerge.getProjectId());
+    public void merge(Project projectToMerge, QualityPlugin qualityPlugin, String ... metrics) {
+        QualityResult qualityResult = qualityPlugin.populateQuality(projectToMerge.getProjectId(), metrics);
         if (qualityResult != null) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("plugin - "+qualityPlugin.getClass().getSimpleName());
@@ -46,7 +46,6 @@ public class ProjectMergeService {
             if (project != null) {
                 String projectName = project.getName();
                 String description = project.getDescription();
-                String artifactId = project.getArtifactId();
                 int[] buildNumbers = project.getBuildNumbers();
                 Build completedBuild = project.getCompletedBuild();
                 Build currentBuild = project.getCurrentBuild();
@@ -56,16 +55,12 @@ public class ProjectMergeService {
                     LOG.debug("plugin - "+buildPlugin.getClass().getSimpleName());
                     LOG.debug("projectName:"+ projectName);
                     LOG.debug("description:"+ description);
-                    LOG.debug("artifactId:" +artifactId);
                     LOG.debug("buildNumbers:"+ Arrays.toString(buildNumbers));
                     LOG.debug("completedBuild:"+ completedBuild);
                     LOG.debug("currentBuild: "+currentBuild);
                     LOG.debug("state:"+ state);
                 }
 
-                if (StringUtils.isNotBlank(artifactId)) {
-                    projectToMerge.setArtifactId(artifactId);
-                }
                 if (buildNumbers != null) {
                     projectToMerge.setBuildNumbers(buildNumbers);
                 }

@@ -53,6 +53,7 @@ public final class HudsonPlugin implements BuildPlugin {
                 ProjectId projectId = new ProjectId();
                 projectId.setName(project.getName());
                 projectId.addId(HUDSON_ID, project.getName());
+                projectId.setArtifactId(hudsonProject.getArtifactId());
                 projects.add(projectId);
             } catch (HudsonProjectNotFoundException e) {
                 LOG.warn(e.getMessage(), e);

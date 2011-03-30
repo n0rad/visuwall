@@ -24,7 +24,6 @@ import com.google.common.base.Preconditions;
 
 public final class Project implements Comparable<Project> {
 
-    private String artifactId;
     private ProjectId projectId;
     private String name;
     private String description;
@@ -41,14 +40,6 @@ public final class Project implements Comparable<Project> {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getArtifactId() {
-        return artifactId;
-    }
-
-    public void setArtifactId(String artifactId) {
-        this.artifactId = artifactId;
     }
 
     public String getDescription() {
@@ -130,11 +121,11 @@ public final class Project implements Comparable<Project> {
     public String toString() {
         return Objects.toStringHelper(this)
         .add("project id", projectId) //
-        .add("artifact id", artifactId) //
         .add("name", name) //
         .add("description", description) //
         .add("state", state) //
         .add("completed build", completedBuild) //
+        .add("quality result", qualityResult) //
         .toString();
     }
 

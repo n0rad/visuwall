@@ -9,6 +9,8 @@ public class ProjectId {
 
     private String name;
 
+    private String artifactId;
+
     public void addId(String idName, String idValue) {
         ids.put(idName, idValue);
     }
@@ -23,5 +25,13 @@ public class ProjectId {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getArtifactId() {
+        return artifactId;
+    }
+
+    public void setArtifactId(String artifactId) {
+        this.artifactId = artifactId;
     }
 }

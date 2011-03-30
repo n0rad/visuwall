@@ -81,9 +81,7 @@ public class HudsonServiceIT {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "struts");
         Project project = hudsonService.findProject(projectId);
-        System.err.println(project);
         hudsonService.populate(project);
-        System.err.println(project);
         assertEquals("struts", project.getName());
     }
 }
