@@ -28,8 +28,6 @@ public final class Project implements Comparable<Project> {
     private ProjectId projectId;
     private String name;
     private String description;
-    private double coverage;
-    private double rulesCompliance;
     private QualityResult qualityResult = new QualityResult();
     private State state;
     private int[] buildNumbers;
@@ -59,22 +57,6 @@ public final class Project implements Comparable<Project> {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public double getCoverage() {
-        return coverage;
-    }
-
-    public void setCoverage(double coverage) {
-        this.coverage = coverage;
-    }
-
-    public double getRulesCompliance() {
-        return rulesCompliance;
-    }
-
-    public void setRulesCompliance(double rulesCompliance) {
-        this.rulesCompliance = rulesCompliance;
     }
 
     public ProjectId getProjectId() {
@@ -151,8 +133,6 @@ public final class Project implements Comparable<Project> {
         .add("artifact id", artifactId) //
         .add("name", name) //
         .add("description", description) //
-        .add("coverage", coverage) //
-        .add("rules compliance", rulesCompliance) //
         .add("state", state) //
         .add("completed build", completedBuild) //
         .toString();

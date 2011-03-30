@@ -18,7 +18,7 @@ package net.awired.visuwall.plugin.sonar.it.service;
 
 import static net.awired.visuwall.plugin.sonar.it.IntegrationTestData.SONAR_URL;
 
-import net.awired.visuwall.plugin.sonar.service.SonarService;
+import net.awired.visuwall.plugin.sonar.SonarPlugin;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,18 +26,18 @@ import org.junit.Test;
 
 public class SonarServiceExceptionIT {
 
-    private static SonarService sonarService;
+    private static SonarPlugin sonarService;
 
     @BeforeClass
     public static void init() {
-        sonarService = new SonarService();
+        sonarService = new SonarPlugin();
         sonarService.setUrl(SONAR_URL);
         sonarService.init();
     }
 
     @Test(expected = IllegalStateException.class)
     public void should_throw_exception_if_no_url_passed() {
-        new SonarService().init();
+        new SonarPlugin().init();
     }
 
 }

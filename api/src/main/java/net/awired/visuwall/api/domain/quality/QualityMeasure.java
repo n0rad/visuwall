@@ -31,6 +31,25 @@ public final class QualityMeasure {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o == null || !(o instanceof QualityMeasure)) {
+            return false;
+        }
+        QualityMeasure qm = (QualityMeasure) o;
+        boolean isEqual = true;
+        if (name != null) {
+            isEqual &= name.equals(qm.name);
+        }
+        if (value != null) {
+            isEqual &= value.equals(qm.value);
+        }
+        if (formattedValue != null) {
+            isEqual &= formattedValue.equals(qm.formattedValue);
+        }
+        return isEqual;
+    }
+
+    @Override
     public String toString() {
         return Objects.toStringHelper(this) //
         .add("name", name) //

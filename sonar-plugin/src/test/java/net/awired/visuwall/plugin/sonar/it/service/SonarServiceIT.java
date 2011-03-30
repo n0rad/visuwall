@@ -28,7 +28,7 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.plugin.sonar.service.SonarService;
+import net.awired.visuwall.plugin.sonar.SonarPlugin;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -36,13 +36,13 @@ import org.junit.Test;
 
 public class SonarServiceIT {
 
-    private static SonarService sonarService;
+    private static SonarPlugin sonarService;
 
     private static final String SONAR_ID = "SONAR_ID";
 
     @BeforeClass
     public static void init() {
-        sonarService = new SonarService();
+        sonarService = new SonarPlugin();
         sonarService.setUrl(SONAR_URL);
         sonarService.init();
     }

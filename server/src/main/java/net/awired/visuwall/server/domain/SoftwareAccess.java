@@ -6,8 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import net.awired.visuwall.api.service.BuildService;
-import net.awired.visuwall.api.service.QualityService;
+import net.awired.visuwall.api.plugin.BuildPlugin;
+import net.awired.visuwall.api.plugin.QualityPlugin;
 
 
 @Entity
@@ -49,8 +49,8 @@ public class SoftwareAccess {
         this.software = software;
     }
 
-    public BuildService createBuildService() {
-        BuildService service = software.getBuildService();
+    public BuildPlugin createBuildService() {
+        BuildPlugin service = software.getBuildService();
         service.setUrl(url);
         service.setLogin(login);
         service.setPassword(password);
@@ -58,8 +58,8 @@ public class SoftwareAccess {
         return service;
     }
 
-    public QualityService createQualityService() {
-        QualityService service = software.getQualityService();
+    public QualityPlugin createQualityService() {
+        QualityPlugin service = software.getQualityService();
         service.setUrl(url);
         service.setLogin(login);
         service.setPassword(password);

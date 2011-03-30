@@ -3,20 +3,20 @@ package net.awired.visuwall.server.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.awired.visuwall.api.service.BuildService;
-import net.awired.visuwall.api.service.QualityService;
+import net.awired.visuwall.api.plugin.BuildPlugin;
+import net.awired.visuwall.api.plugin.QualityPlugin;
 
 public class ServiceHolder {
 
-    private Set<BuildService> buildServices = new HashSet<BuildService>();
+    private Set<BuildPlugin> buildServices = new HashSet<BuildPlugin>();
 
-    private Set<QualityService> qualityServices = new HashSet<QualityService>();
+    private Set<QualityPlugin> qualityServices = new HashSet<QualityPlugin>();
 
-    public Set<BuildService> getBuildServices() {
+    public Set<BuildPlugin> getBuildServices() {
         return buildServices;
     }
 
-    public Set<QualityService> getQualityServices() {
+    public Set<QualityPlugin> getQualityServices() {
         return qualityServices;
     }
 

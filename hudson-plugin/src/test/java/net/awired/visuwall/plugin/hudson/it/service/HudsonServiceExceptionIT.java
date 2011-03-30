@@ -5,15 +5,15 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.plugin.hudson.HudsonPlugin;
 import net.awired.visuwall.plugin.hudson.it.IntegrationTestData;
-import net.awired.visuwall.plugin.hudson.service.HudsonService;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class HudsonServiceExceptionIT {
 
-    static HudsonService hudsonService = new HudsonService();
+    static HudsonPlugin hudsonService = new HudsonPlugin();
 
     @BeforeClass
     public static void init() {

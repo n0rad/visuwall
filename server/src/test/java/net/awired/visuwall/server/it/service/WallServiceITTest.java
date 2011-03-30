@@ -7,16 +7,16 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.UUID;
 
-import net.awired.visuwall.plugin.hudson.service.HudsonService;
-import net.awired.visuwall.plugin.sonar.service.SonarService;
+import net.awired.visuwall.plugin.hudson.HudsonPlugin;
+import net.awired.visuwall.plugin.sonar.SonarPlugin;
 import net.awired.visuwall.server.IntegrationTestData;
 import net.awired.visuwall.server.domain.Software;
 import net.awired.visuwall.server.domain.SoftwareAccess;
 import net.awired.visuwall.server.domain.Wall;
-import net.awired.visuwall.server.service.SoftwareNotCreatedException;
-import net.awired.visuwall.server.service.SoftwareNotFoundException;
+import net.awired.visuwall.server.exception.SoftwareNotCreatedException;
+import net.awired.visuwall.server.exception.SoftwareNotFoundException;
+import net.awired.visuwall.server.exception.WallNotFoundException;
 import net.awired.visuwall.server.service.SoftwareService;
-import net.awired.visuwall.server.service.WallNotFoundException;
 import net.awired.visuwall.server.service.WallService;
 
 import org.junit.Test;
@@ -56,8 +56,8 @@ public class WallServiceITTest {
 
     @Test
     public void should_persist_software_accesses() throws WallNotFoundException, SoftwareNotFoundException, SoftwareNotCreatedException {
-        softwareService.persist(new Software("softwarehudson", HudsonService.class, true, false));
-        softwareService.persist(new Software("softwaresonar", SonarService.class, false, true));
+        softwareService.persist(new Software("softwarehudson", HudsonPlugin.class, true, false));
+        softwareService.persist(new Software("softwaresonar", SonarPlugin.class, false, true));
 
         String wallName = UUID.randomUUID().toString();
         Software hudson = softwareService.find("softwarehudson");

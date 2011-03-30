@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 
 import net.awired.visuwall.api.domain.ProjectStatus;
 import net.awired.visuwall.server.domain.Wall;
+import net.awired.visuwall.server.exception.WallNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,17 +23,14 @@ import com.google.common.base.Preconditions;
 @Repository
 public class WallService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(WallService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WallService.class);
 
-	private final static int EVERY_FIVE_MINUTES = 5*60*1000;
+    private final static int EVERY_FIVE_MINUTES = 5*60*1000;
 
-	
     @PersistenceContext
     private EntityManager entityManager;
 
-
     private Map<String, Wall> walls = new HashMap<String, Wall>();
-
 
     public WallService() {
         if (LOG.isInfoEnabled()) {
@@ -52,24 +50,24 @@ public class WallService {
             wall.discoverProjects();
         }
     }
-    
+
     public List<ProjectStatus> getStatus(String wallName) {
-    	Wall wall = walls.get(wallName);
-    	List<ProjectStatus> projectStatus  = wall.getStatus();
-    	return projectStatus;
+        Wall wall = walls.get(wallName);
+        List<ProjectStatus> projectStatus  = wall.getStatus();
+        return projectStatus;
     }
-    
+
     public Wall getWall(String wallName) {
-    	return walls.get(wallName);
+        return walls.get(wallName);
     }
 
     public synchronized void addWall(Wall wall) {
         Preconditions.checkNotNull(wall);
         walls.put(wall.getName(), wall);
     }
-    
+
     public Set<String> getWallNames() {
-    	return walls.keySet();
+        return walls.keySet();
     }
 
     @Transactional

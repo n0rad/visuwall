@@ -10,7 +10,7 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.service.BuildService;
+import net.awired.visuwall.api.plugin.BuildPlugin;
 import net.awired.visuwall.bambooclient.Bamboo;
 import net.awired.visuwall.bambooclient.domain.BambooProject;
 
@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
-public class BambooService implements BuildService {
+public class BambooService implements BuildPlugin {
 
     private static final Logger LOG = LoggerFactory.getLogger(BambooService.class);
 
