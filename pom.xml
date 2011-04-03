@@ -16,6 +16,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Visuwall</name>
+	<description>Web application showing build and quality states of Projects in a very visual Wall</description>
 
 	<parent>
 		<groupId>net.awired.parent.parent-java</groupId>
@@ -30,6 +31,7 @@
 		<module>bambooclient</module>
 		<module>api</module>
 		<module>runnablewar</module>
+
 		<module>sonar-plugin</module>
 		<module>hudson-plugin</module>
 		<module>bamboo-plugin</module>
@@ -38,7 +40,6 @@
 	<properties>
 		<spring.version>3.0.5.RELEASE</spring.version>
 		<spring-security.version>3.0.5.RELEASE</spring-security.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jackson.version>1.5.0</jackson.version>
 		<jetty.version>6.1.26</jetty.version>
 	</properties>
@@ -83,10 +84,10 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-                                <groupId>net.awired.visuwall</groupId>
-                                <artifactId>visuwall-bambooclient</artifactId>
-                                <version>${project.version}</version>
-                        </dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-bambooclient</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-api</artifactId>
@@ -103,7 +104,7 @@
 				<version>${project.version}</version>
 			</dependency>
 
-			<!-- plugins -->			
+			<!-- plugins -->
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-plugin-hudson</artifactId>
@@ -208,26 +209,9 @@
 		</repository>
 
 		<repository>
-			<id>awired-repo</id>
-			<name>Awired Releases Repository</name>
-			<url>http://mvn.awired.net/nexus/content/repositories/releases/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>awired-snap-repo</id>
-			<name>Awired Snapshots Repository</name>
-			<url>http://mvn.awired.net/nexus/content/repositories/snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
+			<id>awired</id>
+			<name>Awired public</name>
+			<url>http://mvn.awired.net/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
 </project>
