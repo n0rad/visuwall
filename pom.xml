@@ -17,13 +17,11 @@
 	<packaging>pom</packaging>
 	<name>Visuwall</name>
 
-<!--
 	<parent>
 		<groupId>net.awired.parent.parent-java</groupId>
 		<artifactId>parent-java</artifactId>
 		<version>1.11-SNAPSHOT</version>
 	</parent>
--->
 
 	<modules>
 		<module>cli</module>

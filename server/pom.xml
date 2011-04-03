@@ -211,6 +211,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>visuwall</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -248,7 +249,7 @@
 									<version>${project.version}</version>
 									<type>jar</type>
 									<overWrite>false</overWrite>
-									<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}</outputDirectory>
+									<outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
 								</artifactItem>
 							</artifactItems>
 						</configuration>

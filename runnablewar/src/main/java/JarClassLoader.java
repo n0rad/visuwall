@@ -543,12 +543,8 @@ public class JarClassLoader extends ClassLoader {
 	 *             <p>
 	 *             (3) Actual cause of InvocationTargetException
 	 * 
-	 *             See {@link http
-	 *             ://java.sun.com/developer/Books/javaprogramming
-	 *             /JAR/api/jarclassloader.html} and {@link http
-	 *             ://java.sun.com/developer
-	 *             /Books/javaprogramming/JAR/api/example
-	 *             -1dot2/JarClassLoader.java}
+	 *             See http://java.sun.com/developer/Books/javaprogramming/JAR/api/jarclassloader.html
+	 *             and http://java.sun.com/developer/Books/javaprogramming/JAR/api/example-1dot2/JarClassLoader.java
 	 */
 	public void invokeMain(String sClass, String[] args) throws Throwable {
 		// The default is sun.misc.Launcher$AppClassLoader (run from file system
