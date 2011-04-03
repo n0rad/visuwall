@@ -218,10 +218,10 @@ public class JarClassLoader extends ClassLoader {
 	 * @param inf
 	 *            JAR entry information
 	 * @return temporary file object presenting JAR entry
-	 * @throws JarClassLoaderException
+	 * @throws Exception
 	 */
 	private File createTempFile(JarEntryInfo inf)
-			throws JarClassLoaderException {
+			throws Exception {
 		byte[] a_by = inf.getJarBytes();
 		try {
 			File file = File.createTempFile(inf.getName() + ".", null);
@@ -232,7 +232,7 @@ public class JarClassLoader extends ClassLoader {
 			os.close();
 			return file;
 		} catch (IOException e) {
-			throw new JarClassLoaderException("Cannot create temp file for "
+			throw new Exception("Cannot create temp file for "
 					+ inf.jarEntry, e);
 		}
 	} // createTempFile()
@@ -250,7 +250,7 @@ public class JarClassLoader extends ClassLoader {
 			final String EXT_JAR = ".jar";
 			while (en.hasMoreElements()) {
 				JarEntry je = en.nextElement();
-				if (je.isDirectory() || !je.getName().startsWith("META-INF/runlib")) {
+				if (je.isDirectory() /*|| !je.getName().startsWith("META-INF/runlib")*/) {
 					continue;
 				}
 //				System.out.println("load :" + je.getName());
@@ -263,14 +263,13 @@ public class JarClassLoader extends ClassLoader {
 					try {
 						loadJar(new JarFile(file));
 					} catch (IOException e) {
-						throw new JarClassLoaderException(
+						throw new Exception(
 								"Cannot load inner JAR " + inf.jarEntry, e);
 					}
 				}
 			}
-		} catch (JarClassLoaderException e) {
-			throw new RuntimeException("ERROR on loading InnerJAR: "
-					+ e.getMessageAll());
+		} catch (Exception e) {
+			throw new RuntimeException("ERROR on loading InnerJAR", e);
 		}
 	} // loadJar()
 
@@ -341,10 +340,10 @@ public class JarClassLoader extends ClassLoader {
 	 * @param sClassName
 	 *            class to load
 	 * @return loaded class
-	 * @throws JarClassLoaderException
+	 * @throws Exception
 	 */
 	private Class<?> findJarClass(String sClassName)
-			throws JarClassLoaderException {
+			throws Exception {
 		// http://java.sun.com/developer/onlineTraining/Security/Fundamentals
 		// /magercises/ClassLoader/solution/FileClassLoader.java
 		Class<?> c = hmClass.get(sClassName);
@@ -360,11 +359,11 @@ public class JarClassLoader extends ClassLoader {
 			try {
 				c = defineClass(sClassName, a_by, 0, a_by.length, pd);
 			} catch (ClassFormatError e) {
-				throw new JarClassLoaderException(null, e);
+				throw new Exception(null, e);
 			}
 		}
 		if (c == null) {
-			throw new JarClassLoaderException(sClassName);
+			throw new Exception(sClassName);
 		}
 		hmClass.put(sClassName, c);
 		return c;
@@ -612,7 +611,7 @@ public class JarClassLoader extends ClassLoader {
 					log("Loaded %s from JAR by %s", sClassName, getClass()
 							.getName());
 					return c;
-				} catch (JarClassLoaderException e) {
+				} catch (Exception e) {
 					if (e.getCause() == null) {
 						log("Not found %s in JAR by %s: %s", sClassName,
 								getClass().getName(), e.getMessage());
@@ -695,7 +694,7 @@ public class JarClassLoader extends ClassLoader {
 						inf.jarEntry, getFilename4Log(fileNative));
 				hsNativeFile.add(fileNative);
 				return fileNative.getAbsolutePath();
-			} catch (JarClassLoaderException e) {
+			} catch (Exception e) {
 				log("Failure to load native library %s: %s", sLib, e.toString());
 			}
 		}
@@ -803,15 +802,15 @@ public class JarClassLoader extends ClassLoader {
 		 * @param inf
 		 *            JAR entry information object
 		 * @return byte array for the specified JAR entry
-		 * @throws JarClassLoaderException
+		 * @throws Exception
 		 */
-		byte[] getJarBytes() throws JarClassLoaderException {
+		byte[] getJarBytes() throws Exception {
 			DataInputStream dis = null;
 			byte[] a_by = null;
 			try {
 				long lSize = jarEntry.getSize();
 				if (lSize <= 0 || lSize >= Integer.MAX_VALUE) {
-					throw new JarClassLoaderException("Invalid size " + lSize
+					throw new Exception("Invalid size " + lSize
 							+ " for entry " + jarEntry);
 				}
 				a_by = new byte[(int) lSize];
@@ -819,7 +818,7 @@ public class JarClassLoader extends ClassLoader {
 				dis = new DataInputStream(is);
 				dis.readFully(a_by);
 			} catch (IOException e) {
-				throw new JarClassLoaderException(null, e);
+				throw new Exception(null, e);
 			} finally {
 				if (dis != null) {
 					try {
@@ -832,33 +831,5 @@ public class JarClassLoader extends ClassLoader {
 		} // getJarBytes()
 
 	} // inner class JarEntryInfo
-
-	/**
-	 * Inner class to handle JarClassLoader exceptions
-	 */
-	private static class JarClassLoaderException extends Exception {
-		JarClassLoaderException(String sMsg) {
-			super(sMsg);
-		}
-
-		JarClassLoaderException(String sMsg, Throwable eCause) {
-			super(sMsg, eCause);
-		}
-
-		String getMessageAll() {
-			StringBuilder sb = new StringBuilder();
-			for (Throwable e = this; e != null; e = e.getCause()) {
-				if (sb.length() > 0) {
-					sb.append(" / ");
-				}
-				String sMsg = e.getMessage();
-				if (sMsg == null || sMsg.length() == 0) {
-					sMsg = e.getClass().getSimpleName();
-				}
-				sb.append(sMsg);
-			}
-			return sb.toString();
-		}
-	} // inner class JarClassLoaderException
 
 } // class JarClassLoader

@@ -42,6 +42,7 @@
 		<spring-security.version>3.0.5.RELEASE</spring-security.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jackson.version>1.5.0</jackson.version>
+		<jetty.version>6.1.26</jetty.version>
 	</properties>
 
 	<licenses>

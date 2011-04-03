@@ -37,7 +37,6 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
-import org.apache.xerces.dom.ElementNSImpl;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,7 +95,7 @@ public class Hudson {
 
         int idxProject = 1;
         for (Object project : hudsonProjects) {
-            ElementNSImpl element = (ElementNSImpl) project;
+        	org.w3c.dom.Element element = (org.w3c.dom.Element) project;
             String name = getProjectName(element);
             if (LOG.isDebugEnabled()) {
                 LOG.debug(idxProject+"/"+hudsonProjects.size()+" create project "+name);
@@ -181,7 +180,7 @@ public class Hudson {
         if (setBuild == null) {
             return "NEW";
         }
-        ElementNSImpl element = (ElementNSImpl)  setBuild.getResult();
+        org.w3c.dom.Element element = (org.w3c.dom.Element)  setBuild.getResult();
         if (element == null) {
             return "NEW";
         }
@@ -374,7 +373,7 @@ public class Hudson {
     }
 
     private boolean isSuccessful(HudsonMavenMavenModuleSetBuild job) {
-        ElementNSImpl element = (ElementNSImpl) job.getResult();
+    	Node element = (org.w3c.dom.Element) job.getResult();
 
         if (element == null) {
             return false;
@@ -388,7 +387,7 @@ public class Hudson {
         return "SUCCESS".equals(result.getNodeValue());
     }
 
-    private String getProjectName(ElementNSImpl element) {
+    private String getProjectName(Node element) {
         return element.getFirstChild().getFirstChild().getNodeValue();
     }
 
