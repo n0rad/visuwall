@@ -13,7 +13,7 @@
 
 	<groupId>net.awired.visuwall</groupId>
 	<artifactId>visuwall-api</artifactId>
-	<name>visuwall - API</name>
+	<name>Visuwall - API</name>
 
 	<parent>
 		<groupId>net.awired.visuwall</groupId>
