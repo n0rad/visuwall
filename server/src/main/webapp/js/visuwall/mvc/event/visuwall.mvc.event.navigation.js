@@ -49,10 +49,10 @@ visuwall.mvc.event.navigation = {
 //	  
 //	        },  
 	  
-	        slide: function(e, ui) {  
+	        slide: function(e, ui) { 
 //	            $('#fontSizeSlider').css({'left' : ui.handle.css('left')} ).text(Math.round(ui.value * 15/100 + 8 ));  
 	        	LOG.debug('New font size : ', ui.value);
-	        	$("body").css({fontSize: ui.value + 'em'});  
+	        	$('#projectsTable').css({fontSize: ui.value + 'em'});  
 	        }  
 	    });
 	},

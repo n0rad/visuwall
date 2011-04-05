@@ -77,6 +77,8 @@ visuwall.mvc.controller.ProjectController = {
 	},
 	
 	_updateProject : function(project) {
+		this.projectDAO.saveProject(project);
+
 		this._updateLastBuild(project);
 		this._updateAgo(project);
 		

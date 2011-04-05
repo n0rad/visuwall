@@ -30,6 +30,7 @@
 
 	<!-- allow access to js,css,img with url /res/* -->
 	<mvc:resources mapping="/res/**" location="/" />
+	<mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
 
 	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 		<property name="mediaTypes">
