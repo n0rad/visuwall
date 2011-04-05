@@ -40,12 +40,12 @@ public class WallController {
 //		 "http://integration.wormee.orange-vallee.net:8080/hudson"));
 //		 wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
 //		 "http://integration.wormee.orange-vallee.net:9000"));
-//		wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
-//				"http://ci.awired.net/jenkins"));
-		// wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
-		// "http://ci.visuwall.awired.net"));
-//		wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
-//				"http://sonar.awired.net"));
+		wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
+				"http://ci.awired.net/jenkins"));
+		 wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
+		 "http://ci.visuwall.awired.net"));
+		wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
+				"http://sonar.awired.net"));
 		 wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
 		 "http://fluxx.fr.cr:8080/hudson"));
 		 wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
