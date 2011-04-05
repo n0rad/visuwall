@@ -31,6 +31,7 @@
 			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-api</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-plugin-sonar</artifactId>
