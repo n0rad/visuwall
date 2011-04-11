@@ -1,4 +1,4 @@
-package net.awired.visuwall.plugin.hudson.it.service;
+package net.awired.visuwall.plugin.hudson.it;
 
 import static net.awired.visuwall.plugin.hudson.it.IntegrationTestData.HUDSON_ID;
 import static org.junit.Assert.assertEquals;
@@ -14,25 +14,24 @@ import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.plugin.hudson.HudsonPlugin;
-import net.awired.visuwall.plugin.hudson.it.IntegrationTestData;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 
-public class HudsonServiceIT {
+public class HudsonPluginIT {
 
-    static HudsonPlugin hudsonService = new HudsonPlugin();
+    static HudsonPlugin hudsonPlugin = new HudsonPlugin();
 
     @BeforeClass
     public static void init() {
-        hudsonService.setUrl(IntegrationTestData.HUDSON_URL);
-        hudsonService.init();
+        hudsonPlugin.setUrl(IntegrationTestData.HUDSON_URL);
+        hudsonPlugin.init();
     }
 
     @Test
     public void should_find_all_projects() {
-        List<ProjectId> projects = hudsonService.findAllProjects();
+        List<ProjectId> projects = hudsonPlugin.findAllProjects();
         assertFalse(projects.isEmpty());
     }
 
@@ -40,7 +39,7 @@ public class HudsonServiceIT {
     public void should_find_project() throws ProjectNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "neverbuild");
-        Project project = hudsonService.findProject(projectId);
+        Project project = hudsonPlugin.findProject(projectId);
         assertNotNull(project);
     }
 
@@ -48,7 +47,7 @@ public class HudsonServiceIT {
     public void should_find_build_by_name_and_build_number() throws BuildNotFoundException, ProjectNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "struts");
-        Build build = hudsonService.findBuildByBuildNumber(projectId, 3);
+        Build build = hudsonPlugin.findBuildByBuildNumber(projectId, 3);
         assertNotNull(build);
     }
 
@@ -56,7 +55,7 @@ public class HudsonServiceIT {
     public void should_find_last_build_number() throws ProjectNotFoundException, BuildNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "struts");
-        int buildNumber = hudsonService.getLastBuildNumber(projectId);
+        int buildNumber = hudsonPlugin.getLastBuildNumber(projectId);
         assertEquals(3, buildNumber);
     }
 
@@ -64,7 +63,7 @@ public class HudsonServiceIT {
     public void should_verify_not_building_project() throws ProjectNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "struts");
-        boolean building = hudsonService.isBuilding(projectId);
+        boolean building = hudsonPlugin.isBuilding(projectId);
         assertFalse(building);
     }
 
@@ -72,7 +71,7 @@ public class HudsonServiceIT {
     public void should_verify_state() throws ProjectNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "struts");
-        State state = hudsonService.getState(projectId);
+        State state = hudsonPlugin.getState(projectId);
         assertEquals(State.SUCCESS, state);
     }
 
@@ -80,8 +79,8 @@ public class HudsonServiceIT {
     public void should_populate_project() throws ProjectNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "struts");
-        Project project = hudsonService.findProject(projectId);
-        hudsonService.populate(project);
+        Project project = hudsonPlugin.findProject(projectId);
+        hudsonPlugin.populate(project);
         assertEquals("struts", project.getName());
     }
 }

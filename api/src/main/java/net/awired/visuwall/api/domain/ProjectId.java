@@ -3,6 +3,8 @@ package net.awired.visuwall.api.domain;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.base.Objects;
+
 public class ProjectId {
 
     private final Map<String, String> ids = new HashMap<String, String>();
@@ -33,5 +35,12 @@ public class ProjectId {
 
     public void setArtifactId(String artifactId) {
         this.artifactId = artifactId;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this) //
+        .add("name", name) //
+        .toString();
     }
 }

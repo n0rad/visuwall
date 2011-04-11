@@ -8,6 +8,8 @@ public class BambooProject {
 
     private String link;
 
+    private Boolean building;
+
     public String getName() {
         return name;
     }
@@ -30,5 +32,13 @@ public class BambooProject {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public Boolean isBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Boolean building) {
+        this.building = building;
     }
 }

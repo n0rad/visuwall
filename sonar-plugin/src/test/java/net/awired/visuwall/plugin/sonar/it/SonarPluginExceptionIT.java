@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.it.service;
+package net.awired.visuwall.plugin.sonar.it;
 
 import static net.awired.visuwall.plugin.sonar.it.IntegrationTestData.SONAR_URL;
-
 import net.awired.visuwall.plugin.sonar.SonarPlugin;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 
-public class SonarServiceExceptionIT {
+public class SonarPluginExceptionIT {
 
-    private static SonarPlugin sonarService;
+    private static SonarPlugin sonarPlugin;
 
     @BeforeClass
     public static void init() {
-        sonarService = new SonarPlugin();
-        sonarService.setUrl(SONAR_URL);
-        sonarService.init();
+        sonarPlugin = new SonarPlugin();
+        sonarPlugin.setUrl(SONAR_URL);
+        sonarPlugin.init();
     }
 
     @Test(expected = IllegalStateException.class)

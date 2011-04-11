@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.it.service;
+package net.awired.visuwall.plugin.sonar.it;
 
 import static net.awired.visuwall.plugin.sonar.it.IntegrationTestData.SONAR_URL;
 import static net.awired.visuwall.plugin.sonar.it.IntegrationTestData.STRUTS_ARTIFACT_ID;
@@ -34,24 +34,24 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 
-public class SonarServiceIT {
+public class SonarPluginIT {
 
-    private static SonarPlugin sonarService;
+    private static SonarPlugin sonarPlugin;
 
     private static final String SONAR_ID = "SONAR_ID";
 
     @BeforeClass
     public static void init() {
-        sonarService = new SonarPlugin();
-        sonarService.setUrl(SONAR_URL);
-        sonarService.init();
+        sonarPlugin = new SonarPlugin();
+        sonarPlugin.setUrl(SONAR_URL);
+        sonarPlugin.init();
     }
 
     @Test
     public void should_populate_quality() {
         ProjectId projectId = new ProjectId();
         projectId.addId(SONAR_ID, STRUTS_ARTIFACT_ID);
-        QualityResult quality = sonarService.populateQuality(projectId, "violations_density");
+        QualityResult quality = sonarPlugin.populateQuality(projectId, "violations_density");
         QualityMeasure measure = quality.getMeasure("violations_density");
         assertEquals("77.2%", measure.getFormattedValue());
         assertEquals(77.2, measure.getValue(), 0);
@@ -61,7 +61,7 @@ public class SonarServiceIT {
     public void should_have_a_lot_of_quality_metrics() {
         ProjectId projectId = new ProjectId();
         projectId.addId(SONAR_ID, STRUTS_ARTIFACT_ID);
-        QualityResult quality = sonarService.populateQuality(projectId);
+        QualityResult quality = sonarPlugin.populateQuality(projectId);
         Set<Entry<String, QualityMeasure>> measures = quality.getMeasures();
         for (Entry<String, QualityMeasure> measure : measures) {
             assertNotNull(measure.getValue().getValue());
@@ -72,6 +72,6 @@ public class SonarServiceIT {
     public void should_not_fail_if_measure_does_not_exist() throws ProjectNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.addId(SONAR_ID, STRUTS_ARTIFACT_ID);
-        sonarService.populateQuality(projectId, "inexistant_measure");
+        sonarPlugin.populateQuality(projectId, "inexistant_measure");
     }
 }

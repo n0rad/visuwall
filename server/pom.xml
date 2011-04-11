@@ -56,9 +56,17 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
+		<!-- runnable war -->
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>
-			<artifactId>visuwall-runnablewar</artifactId>
+			<artifactId>visuwall-cli</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.awired.ajsl</groupId>
+			<artifactId>ajsl-bootstrap</artifactId>
+			<version>${ajsl.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -221,7 +229,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>Main</mainClass>
+							<mainClass>Bootstrap</mainClass>
 						</manifest>
 						<manifestEntries>
 							<Bundle-MainClass>net.awired.visuwall.cli.Main</Bundle-MainClass>
@@ -245,12 +253,29 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>net.awired.visuwall</groupId>
-									<artifactId>visuwall-runnablewar</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
+									<groupId>net.awired.ajsl</groupId>
+									<artifactId>ajsl-bootstrap</artifactId>
+									<version>${ajsl.version}</version>
 									<overWrite>false</overWrite>
 									<outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>net.awired.visuwall</groupId>
+									<artifactId>visuwall-cli</artifactId>
+									<version>${project.version}</version>
+									<overWrite>false</overWrite>
+									<outputDirectory>${project.build.directory}/${project.build.finalName}/META-INF/lib</outputDirectory>
 								</artifactItem>
 							</artifactItems>
 						</configuration>

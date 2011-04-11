@@ -30,8 +30,7 @@
 		<module>hudsonclient</module>
 		<module>bambooclient</module>
 		<module>api</module>
-		<module>runnablewar</module>
-
+		
 		<module>sonar-plugin</module>
 		<module>hudson-plugin</module>
 		<module>bamboo-plugin</module>
@@ -42,6 +41,7 @@
 		<spring-security.version>3.0.5.RELEASE</spring-security.version>
 		<jackson.version>1.5.0</jackson.version>
 		<jetty.version>6.1.26</jetty.version>
+		<ajsl.version>1.0-ALPHA6-SNAPSHOT</ajsl.version>
 	</properties>
 
 	<licenses>
@@ -96,11 +96,6 @@
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-cli</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>net.awired.visuwall</groupId>
-				<artifactId>visuwall-runnablewar</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 

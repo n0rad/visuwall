@@ -61,6 +61,9 @@ public final class Wall {
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     private List<SoftwareAccess> softwareAccesses = new ArrayList<SoftwareAccess>();
 
+    @Transient
+    private String[] metrics = new String[]{"coverage", "ncloc", "violations_density"};
+
     public Wall() { }
 
     public Wall(String name) {
@@ -146,7 +149,7 @@ public final class Wall {
             pluginMergeService.merge(project, service);
         }
         for(QualityPlugin service:qualityServices) {
-            pluginMergeService.merge(project, service, "coverage");
+            pluginMergeService.merge(project, service, metrics);
         }
 
         if (LOG.isDebugEnabled()) {

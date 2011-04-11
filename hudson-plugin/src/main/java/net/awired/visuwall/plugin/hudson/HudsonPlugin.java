@@ -31,8 +31,6 @@ public final class HudsonPlugin implements BuildPlugin {
     private static final String HUDSON_ID = "HUDSON_ID";
 
     private String url;
-    private String login;
-    private String password;
 
     private Hudson hudson;
 
@@ -204,12 +202,10 @@ public final class HudsonPlugin implements BuildPlugin {
 
     @Override
     public void setLogin(String login) {
-        this.login = login;
     }
 
     @Override
     public void setPassword(String password) {
-        this.password = password;
     }
 
 }

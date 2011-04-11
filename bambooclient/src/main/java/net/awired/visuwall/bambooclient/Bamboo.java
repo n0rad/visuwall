@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.awired.visuwall.bambooclient.builder.BambooUrlBuilder;
+import net.awired.visuwall.bambooclient.domain.BambooBuild;
 import net.awired.visuwall.bambooclient.domain.BambooProject;
+import net.awired.visuwall.bambooclient.rest.Build;
+import net.awired.visuwall.bambooclient.rest.Builds;
 import net.awired.visuwall.bambooclient.rest.Plan;
 import net.awired.visuwall.bambooclient.rest.Plans;
 import net.awired.visuwall.bambooclient.rest.Result;
@@ -89,8 +92,73 @@ public final class Bamboo {
         WebResource bambooResource = client.resource(projectsUrl);
         Results results = bambooResource.get(Results.class);
 
-        BambooProject project = createProjectFrom(results.results.get(0).result);
+        BambooProject project = createProjectFrom(results.results.get(0).result.get(0));
+        String isBuildingUrl = bambooUrlBuilder.getIsBuildingUrl(projectName);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("IsBuilding url : " + isBuildingUrl);
+        }
+        bambooResource = client.resource(isBuildingUrl);
+        Plan plan = bambooResource.get(Plan.class);
+        project.setBuilding(plan.isBuilding);
         return project;
+    }
+
+    public int getLastBuildNumber(String projectName) {
+        Preconditions.checkNotNull(projectName, "projectName");
+
+        String lastBuildUrl = bambooUrlBuilder.getLatestBuildResult(projectName);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Last build url : " + lastBuildUrl);
+        }
+        WebResource bambooResource = client.resource(lastBuildUrl);
+        Results results = bambooResource.get(Results.class);
+        return results.results.get(0).result.get(0).number;
+    }
+
+    public BambooBuild findBuild(String projectName, int buildNumber) {
+        Preconditions.checkNotNull(projectName, "projectName");
+
+        String buildUrl = bambooUrlBuilder.getBuildUrl(projectName, buildNumber);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Build url : " + buildUrl);
+        }
+        WebResource bambooResource = client.resource(buildUrl);
+        Result result = bambooResource.get(Result.class);
+        BambooBuild build = createBuildFrom(result);
+        return build;
+    }
+
+    private BambooBuild createBuildFrom(Result result) {
+        BambooBuild bambooBuild = new BambooBuild();
+        bambooBuild.setBuildNumber(result.number);
+        bambooBuild.setDuration(result.buildDuration.longValue());
+        bambooBuild.setStartTime(result.buildStartedTime);
+        bambooBuild.setState(result.state);
+        bambooBuild.setPassCount(result.successfulTestCount);
+        bambooBuild.setFailCount(result.failedTestCount);
+        return bambooBuild;
+    }
+
+    public String getState(String projectName) {
+        Preconditions.checkNotNull(projectName, "projectName");
+
+        String lastBuildUrl = bambooUrlBuilder.getLastBuildUrl();
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Last build url : " + lastBuildUrl);
+        }
+
+        int lastBuildNumber = getLastBuildNumber(projectName);
+        String key = projectName+"-"+lastBuildNumber;
+
+        WebResource bambooResource = client.resource(lastBuildUrl);
+        Builds builds = bambooResource.get(Builds.class);
+        List<Build> allBuilds = builds.builds.get(0).build;
+        for (Build build:allBuilds) {
+            if (key.equals(build.key)) {
+                return build.state;
+            }
+        }
+        throw new RuntimeException("Not state found for projectName: "+projectName);
     }
 
 }

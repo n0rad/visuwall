@@ -16,4 +16,27 @@ public class BambooUrlBuilderTest {
         assertEquals(expectedUrl, builder.getAllProjectsUrl());
     }
 
+    @Test
+    public void should_build_latest_result_url() {
+        String expectedUrl = "http://bamboo.visuwall.awired.net/rest/api/latest/result/STRUTS-STRUTS";
+        assertEquals(expectedUrl, builder.getLatestBuildResult("STRUTS-STRUTS"));
+    }
+
+    @Test
+    public void should_build_build_url() {
+        String expectedUrl = "http://bamboo.visuwall.awired.net/rest/api/latest/result/STRUTS-STRUTS-3?expand=changes,metadata,stages,labels,jiraIssues,comments";
+        assertEquals(expectedUrl, builder.getBuildUrl("STRUTS-STRUTS", 3));
+    }
+
+    @Test
+    public void should_build_is_building_url() {
+        String expectedUrl = "http://bamboo.visuwall.awired.net/rest/api/latest/plan/STRUTS2INSTABLE-STRUTS2INSTABLE";
+        assertEquals(expectedUrl, builder.getIsBuildingUrl("STRUTS2INSTABLE-STRUTS2INSTABLE"));
+    }
+
+    @Test
+    public void should_build_latest_build_url() {
+        assertEquals("http://bamboo.visuwall.awired.net/rest/api/latest/build", builder.getLastBuildUrl());
+    }
+
 }
