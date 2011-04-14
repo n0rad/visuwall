@@ -2,15 +2,15 @@
 <div id="navigationContainer">
 	<div id="modal" style="display:none"></div>
 	<ul id="navigation">
-		<form id="navigationForm" action="" name="navigation">
-			<li>Wall : <select><option>wallname1</option>
-			</select></li>
-			<li><input id="wallEdit" type="button" value="Edit" /></li>
-	<!-- 		<li>Page :<select><option>Page 1</option>
-			</select></li>
-			<li>Slideshow :<input type="checkbox" /></li> -->
-			<li><div id="fontSizeSlider"></div></li>
-			<li id="about"><a href="http://visuwall.awired.net/" title="Visuwall">Visuwall</a> - ${version}</li>
-		</form>
+		<li id="name">Visuwall</li>
+		<li id="wallSelector">
+			<button id="select">Run last action</button>
+			<button id="add">Select an action</button>
+		</li>
+<!-- 		<li>Page :<select><option>Page 1</option>
+		</select></li>
+		<li>Slideshow :<input type="checkbox" /></li> -->
+		<li><div id="fontSizeSlider"></div></li>
+		<li id="about"><a href="http://visuwall.awired.net/" title="Visuwall">${version}</a></li>
 	</ul>
 </div>

@@ -1,15 +1,15 @@
 DIV#navigationContainer {
-	height: 2em;
+	height: 2.7em;
 	position: absolute;
 	left: 0px;
 	right: 0px;
-	font-size: 12px;
 	z-index: 50;
 }
 
 UL#navigation {
 	background-color: white;
 	border-bottom: 1px solid grey;
+	height: 100%;
 }
 
 UL#navigation DIV#fontSizeSlider {
@@ -17,6 +17,11 @@ UL#navigation DIV#fontSizeSlider {
 	display: inline-block;
 }
 
+LI#name {
+	font-size: 2em;
+	font-weight: bold;
+	margin: auto;
+}
 
 LI#about {
 	font-size: 0.9em;
@@ -26,7 +31,6 @@ LI#about {
 }
 
 LI#about A {
-	font-weight: bold;
 	color: black;
 }
 

@@ -108,4 +108,5 @@ visuwall.mvc.wall = {
 		event.data.eventObj.softTabsCount++;
 	}
 
+	
 };

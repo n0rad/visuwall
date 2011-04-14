@@ -28,5 +28,11 @@
 <script type="text/javascript">
 	//$(function() {
 	ajsl.event.register(visuwall.mvc.wall);
+	$("#wallForm").submit(function() {
+		$.post(this.action, $(this).serialize(), function(data) {
+			   alert("Data Loaded: " + data);
+		});
+		return false;
+	});
 	//});
 </script>
