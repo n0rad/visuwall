@@ -30,6 +30,7 @@ import net.awired.visuwall.server.service.ProjectMergeService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.AutoPopulatingList;
 
 import com.google.common.base.Objects;
 
@@ -59,8 +60,8 @@ public final class Wall {
     private String name;
 
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    private List<SoftwareAccess> softwareAccesses = new ArrayList<SoftwareAccess>();
-
+    private List<SoftwareAccess> softwareAccesses = new AutoPopulatingList<SoftwareAccess>(SoftwareAccess.class);
+    
     public Wall() { }
 
     public Wall(String name) {

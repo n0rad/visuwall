@@ -16,3 +16,20 @@ UL#navigation DIV#fontSizeSlider {
 	width: 100px;
 	display: inline-block;
 }
+
+
+LI#about {
+	font-size: 0.9em;
+	float:right;
+	padding-right: 5px;
+	line-height: 2em;
+}
+
+LI#about A {
+	font-weight: bold;
+	color: black;
+}
+
+LI#about A:HOVER {
+	text-decoration: underline;
+}

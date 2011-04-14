@@ -10,6 +10,7 @@
 			</select></li>
 			<li>Slideshow :<input type="checkbox" /></li> -->
 			<li><div id="fontSizeSlider"></div></li>
+			<li id="about"><a href="http://visuwall.awired.net/" title="Visuwall">Visuwall</a> - ${version}</li>
 		</form>
 	</ul>
 </div>

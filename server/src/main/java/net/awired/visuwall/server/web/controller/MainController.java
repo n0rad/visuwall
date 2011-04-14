@@ -58,6 +58,7 @@ public class MainController {
 		ModelMap modelMap = new ModelMap();
 		modelMap.put("jsLinks", jsService.getJsLinks("res/"));
 		modelMap.put("cssLinks", cssService.getCssLinks("res/"));
+		modelMap.put("version", visuwallApplication.getVersion());
 		return new ModelAndView("index", modelMap);
 	}
 	
