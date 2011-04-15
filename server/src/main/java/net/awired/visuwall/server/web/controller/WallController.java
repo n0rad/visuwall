@@ -2,14 +2,12 @@ package net.awired.visuwall.server.web.controller;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-
-import javax.annotation.PostConstruct;
 
 import net.awired.visuwall.api.domain.ProjectStatus;
 import net.awired.visuwall.server.domain.Software;
-import net.awired.visuwall.server.domain.SoftwareAccess;
 import net.awired.visuwall.server.domain.Wall;
+import net.awired.visuwall.server.exception.NotCreatedException;
+import net.awired.visuwall.server.exception.NotFoundException;
 import net.awired.visuwall.server.service.SoftwareService;
 import net.awired.visuwall.server.service.WallService;
 
@@ -49,17 +47,17 @@ public class WallController {
 
 
 	public WallController() {
-		wall = new Wall("orange-vallee");
+//		wall = new Wall("orange-vallee");
 //		 wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
 //		 "http://integration.wormee.orange-vallee.net:8080/hudson"));
 //		 wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
 //		 "http://integration.wormee.orange-vallee.net:9000"));
-		wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
-				"http://ci.awired.net/jenkins"));
-		 wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
-		 "http://ci.visuwall.awired.net"));
-		wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
-				"http://sonar.awired.net"));
+//		wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
+//				"http://ci.awired.net/jenkins"));
+//		 wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
+//		 "http://ci.visuwall.awired.net"));
+//		wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
+//				"http://sonar.awired.net"));
 //		 wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
 //		 "http://fluxx.fr.cr:8080/hudson"));
 //		 wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
@@ -67,24 +65,18 @@ public class WallController {
 //		wall.discoverProjects();
 	}
 
-	@PostConstruct
-	public void postConstruct() {
-		wallService.addWall(wall);
-	}
-
 	// //////////////////////////////////////////////////////////////////
 
 	@RequestMapping
 	public @ResponseBody
-	Set<String> getWallNames() {
+	List<String> getWallNames() {
 		return wallService.getWallNames();
 	}
 
 	@RequestMapping("{wallName}")
 	public @ResponseBody
-	Wall getProjects(@PathVariable String wallName) {
-		Wall wall = wallService.getWall(wallName);
-		LOG.info("Projects collection size :" + wall.getProjects().size());
+	Wall getProjects(@PathVariable String wallName)  throws NotFoundException {
+		Wall wall = wallService.find(wallName);
 		return wall;
 	}
 
@@ -105,7 +97,8 @@ public class WallController {
 	}
 
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public ModelAndView create() {
+	public ModelAndView create(Wall wall) throws NotCreatedException {
+		wallService.persist(wall);
 		return null;
 	}
 

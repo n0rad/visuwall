@@ -1,21 +1,19 @@
 package net.awired.visuwall.server.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
-import net.awired.visuwall.api.domain.ProjectStatus;
 import net.awired.visuwall.server.domain.Wall;
-import net.awired.visuwall.server.exception.WallNotFoundException;
+import net.awired.visuwall.server.exception.NotCreatedException;
+import net.awired.visuwall.server.exception.NotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Preconditions;
 
@@ -24,64 +22,35 @@ public class WallService {
 
     private static final Logger LOG = LoggerFactory.getLogger(WallService.class);
 
-    private final static int EVERY_FIVE_MINUTES = 5*60*1000;
-
     @PersistenceContext
     private EntityManager entityManager;
 
-    private static Map<String, Wall> WALLS = new HashMap<String, Wall>();
+    public Wall find(String wallName) throws NotFoundException {
+        Preconditions.checkNotNull(wallName, "wallName");
 
-    public WallService() {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("WallService is starting ...");
-        }
-    }
-
-    @Scheduled(fixedDelay=EVERY_FIVE_MINUTES)
-    public void refreshWalls() {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("It's time to refresh all walls");
-        }
-        for(Wall wall:WALLS.values()) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Refreshing wall : "+wall+" and its "+wall.getProjects().size()+" projects");
-            }
-            wall.discoverProjects();
-        }
-    }
-
-    public List<ProjectStatus> getStatus(String wallName) {
-        Wall wall = WALLS.get(wallName);
-        List<ProjectStatus> projectStatus  = wall.getStatus();
-        return projectStatus;
-    }
-
-    public Wall getWall(String wallName) {
-        return WALLS.get(wallName);
-    }
-
-    public void addWall(Wall wall) {
-        Preconditions.checkNotNull(wall);
-        WALLS.put(wall.getName(), wall);
-    }
-
-    public Set<String> getWallNames() {
-        return WALLS.keySet();
-    }
-
-    //@Transactional
-    public void persist(Wall wall) {
-        entityManager.persist(wall);
-        entityManager.flush();
-    }
-
-    public Wall load(String wallName) throws WallNotFoundException {
         Wall wall = entityManager.find(Wall.class, wallName);
         if (wall == null) {
-            throw new WallNotFoundException("Wall with name:"+wallName+" has not been found in database");
+            throw new NotFoundException("Wall with name : " + wallName + " not found in database");
         }
-        wall.restoreServices();
-        wall.discoverProjects();
         return wall;
     }
+
+    @Transactional
+    public void persist(Wall wall) throws NotCreatedException {
+        Preconditions.checkNotNull(wall, "wall");
+        try {
+            entityManager.persist(wall);
+            entityManager.flush();
+        } catch(Throwable e) {
+            String message = "Can't create wall " + wall + " in database";
+            LOG.error(message, e);
+            throw new NotCreatedException(message, e);
+        }
+    }
+    
+    public List<String> getWallNames() {
+        Query query =  entityManager.createNamedQuery(Wall.QUERY_NAMES);
+        return query.getResultList();
+    }
+
 }

@@ -9,7 +9,7 @@ import java.util.UUID;
 import net.awired.visuwall.plugin.hudson.HudsonPlugin;
 import net.awired.visuwall.plugin.sonar.SonarPlugin;
 import net.awired.visuwall.server.domain.Software;
-import net.awired.visuwall.server.exception.SoftwareNotCreatedException;
+import net.awired.visuwall.server.exception.NotCreatedException;
 import net.awired.visuwall.server.exception.SoftwareNotFoundException;
 import net.awired.visuwall.server.service.SoftwareService;
 
@@ -32,7 +32,7 @@ public class SoftwareServiceITTest {
     Logger LOG = LoggerFactory.getLogger(SoftwareServiceITTest.class);
 
     @Test
-    public void should_find_all_software() throws SoftwareNotCreatedException {
+    public void should_find_all_software() throws NotCreatedException {
         Software software1 = new Software("software1", HudsonPlugin.class, true, true);
         Software software2 = new Software("software2", SonarPlugin.class, true, true);
         softwareService.persist(software1);
@@ -44,7 +44,7 @@ public class SoftwareServiceITTest {
     }
 
     @Test
-    public void should_persist_software() throws SoftwareNotFoundException, SoftwareNotCreatedException {
+    public void should_persist_software() throws SoftwareNotFoundException, NotCreatedException {
         String name = "hudson";
         String className = HudsonPlugin.class.getName();
         boolean buildSoftware = true;
@@ -61,12 +61,12 @@ public class SoftwareServiceITTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void should_throw_exception_when_passing_null_to_persist() throws SoftwareNotCreatedException {
+    public void should_throw_exception_when_passing_null_to_persist() throws NotCreatedException {
         softwareService.persist(null);
     }
 
     @Test
-    public void should_find_a_software() throws SoftwareNotFoundException, SoftwareNotCreatedException {
+    public void should_find_a_software() throws SoftwareNotFoundException, NotCreatedException {
         Software mysoftware = new Software("mysoftware", HudsonPlugin.class, true, true);
         softwareService.persist(mysoftware);
         softwareService.find("mysoftware");
@@ -83,7 +83,7 @@ public class SoftwareServiceITTest {
     }
 
     @Test(expected = Exception.class)
-    public void should_throw_exception_when_trying_to_persist_already_existing_software() throws SoftwareNotCreatedException {
+    public void should_throw_exception_when_trying_to_persist_already_existing_software() throws NotCreatedException {
         String name = UUID.randomUUID().toString();
         softwareService.persist(new Software(name, HudsonPlugin.class, true, true));
         softwareService.persist(new Software(name, HudsonPlugin.class, true, true));

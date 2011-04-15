@@ -7,7 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import net.awired.visuwall.server.domain.Software;
-import net.awired.visuwall.server.exception.SoftwareNotCreatedException;
+import net.awired.visuwall.server.exception.NotCreatedException;
 import net.awired.visuwall.server.exception.SoftwareNotFoundException;
 
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class SoftwareService {
     }
 
     @Transactional
-    public void persist(Software software) throws SoftwareNotCreatedException {
+    public void persist(Software software) throws NotCreatedException {
         Preconditions.checkNotNull(software, "software");
         try {
             entityManager.persist(software);
@@ -49,7 +49,7 @@ public class SoftwareService {
         } catch(Throwable e) {
             String message = "Can't create software "+software+" in database";
             LOG.error(message, e);
-            throw new SoftwareNotCreatedException(message, e);
+            throw new NotCreatedException(message, e);
         }
     }
 }
