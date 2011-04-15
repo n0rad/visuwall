@@ -81,11 +81,10 @@ public class WallController {
 	}
 
 	@RequestMapping("{wallName}")
-	public @ResponseBody
-	Wall getProjects(@PathVariable String wallName) {
+	public String getProjects(@PathVariable String wallName, ModelMap modelMap) {
 		Wall wall = wallService.getWall(wallName);
-		LOG.info("Projects collection size :" + wall.getProjects().size());
-		return wall;
+		modelMap.put("data", wall);
+		return WALL_JSP;
 	}
 
 	@RequestMapping("{wallName}/status")
