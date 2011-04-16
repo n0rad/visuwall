@@ -25,7 +25,9 @@ import net.awired.visuwall.server.domain.Wall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ProjectService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ProjectService.class);
@@ -44,53 +46,44 @@ public class ProjectService {
 
     private ProjectMergeService pluginMergeService = new ProjectMergeService();
     
-	public Collection<Project> getProjects(Wall wall) {
-		List<Project> allProjects = new ArrayList<Project>();
-		for (ProjectId projectId : projects.keySet()) {
-			try {
-				allProjects.add(findFreshProject(projectId.getName()));
-			} catch (ProjectNotFoundException e) {
-				LOG.warn(e.getMessage());
-			}
-		}
-		return allProjects;
-	}
+//	public Collection<Project> getProjects(Wall wall) {
+//		List<Project> allProjects = new ArrayList<Project>();
+//		for (ProjectId projectId : projects.keySet()) {
+//			try {
+//				allProjects.add(findFreshProject(projectId.getName()));
+//			} catch (ProjectNotFoundException e) {
+//				LOG.warn(e.getMessage());
+//			}
+//		}
+//		return allProjects;
+//	}
 
-    private void addServiceFrom(SoftwareAccess softwareAccess) {
-        if (softwareAccess.getSoftware().isBuildSoftware()) {
-            buildServices.add(softwareAccess.createBuildService());
-        }
-        if (softwareAccess.getSoftware().isQualitySoftware()) {
-            qualityServices.add(softwareAccess.createQualityService());
-        }
-    }
-
-    public void discoverProjects() {
-        for(BuildPlugin buildService : buildServices) {
-            List<ProjectId> discoveredProjects = buildService.findAllProjects();
-            for(ProjectId discoveredProject:discoveredProjects) {
-                ServiceHolder holder = getServiceHolder(discoveredProject);
-                holder.getBuildServices().add(buildService);
-                for(QualityPlugin qualityService:qualityServices) {
-                    if(qualityService.contains(discoveredProject)) {
-                        holder = getServiceHolder(discoveredProject);
-                        holder.getQualityServices().add(qualityService);
-                    }
-                }
-                projectIdsByProjectName.put(discoveredProject.getName(), discoveredProject);
-                projects.put(discoveredProject, holder);
-            }
-        }
-    }
-
-    private ServiceHolder getServiceHolder(ProjectId discoveredProject) {
-        ServiceHolder holder = projects.get(discoveredProject);
-        if (holder == null) {
-            holder = new ServiceHolder();
-            projects.put(discoveredProject, holder);
-        }
-        return holder;
-    }
+//    public void discoverProjects() {
+//        for(BuildPlugin buildService : buildServices) {
+//            List<ProjectId> discoveredProjects = buildService.findAllProjects();
+//            for(ProjectId discoveredProject:discoveredProjects) {
+//                ServiceHolder holder = getServiceHolder(discoveredProject);
+//                holder.getBuildServices().add(buildService);
+//                for(QualityPlugin qualityService:qualityServices) {
+//                    if(qualityService.contains(discoveredProject)) {
+//                        holder = getServiceHolder(discoveredProject);
+//                        holder.getQualityServices().add(qualityService);
+//                    }
+//                }
+//                projectIdsByProjectName.put(discoveredProject.getName(), discoveredProject);
+//                projects.put(discoveredProject, holder);
+//            }
+//        }
+//    }
+//    
+//    private ServiceHolder getServiceHolder(ProjectId discoveredProject) {
+//        ServiceHolder holder = projects.get(discoveredProject);
+//        if (holder == null) {
+//            holder = new ServiceHolder();
+//            projects.put(discoveredProject, holder);
+//        }
+//        return holder;
+//    }
 
     /**
      * @return null if no date could be estimated
@@ -113,46 +106,46 @@ public class ProjectService {
         return null;
     }
 
-    public Project findFreshProject(String projectName) throws ProjectNotFoundException {
-        ProjectId projectId = projectIdsByProjectName.get(projectName);
-        if (projectId == null) {
-            throw new ProjectNotFoundException("Project [name="+projectName+"] has not been found.");
-        }
-        Project project = new Project();
-        project.setProjectId(projectId);
-        for(BuildPlugin service:buildServices) {
-            pluginMergeService.merge(project, service);
-        }
-        for(QualityPlugin service:qualityServices) {
-            pluginMergeService.merge(project, service, "coverage");
-        }
+//    public Project findFreshProject(String projectName) throws ProjectNotFoundException {
+//        ProjectId projectId = projectIdsByProjectName.get(projectName);
+//        if (projectId == null) {
+//            throw new ProjectNotFoundException("Project [name="+projectName+"] has not been found.");
+//        }
+//        Project project = new Project();
+//        project.setProjectId(projectId);
+//        for(BuildPlugin service:buildServices) {
+//            pluginMergeService.merge(project, service);
+//        }
+//        for(QualityPlugin service:qualityServices) {
+//            pluginMergeService.merge(project, service, "coverage");
+//        }
+//
+//        if (LOG.isDebugEnabled()) {
+//            LOG.debug(project.toString());
+//        }
+//
+//        if (project.getName() != null) {
+//            return project;
+//        }
+//        projectIdsByProjectName.remove(projectName);
+//        projects.remove(projectId);
+//        throw new ProjectNotFoundException("Project [projectId="+projectId+"] has no name.");
+//    }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(project.toString());
-        }
+//    public List<ProjectStatus> getStatus() {
+//        List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
+//        for (ProjectId projectId:projectIdsByProjectName.values()) {
+//            ProjectStatus status = new ProjectStatus();
+//            status.setBuilding(isBuilding(projectId));
+//            status.setLastBuildId(getLastBuildNumber(projectId));
+//            status.setName(projectId.getName());
+//            status.setState(getState(projectId));
+//            statusList.add(status);
+//        }
+//        return statusList;
+//    }
 
-        if (project.getName() != null) {
-            return project;
-        }
-        projectIdsByProjectName.remove(projectName);
-        projects.remove(projectId);
-        throw new ProjectNotFoundException("Project [projectId="+projectId+"] has no name.");
-    }
-
-    public List<ProjectStatus> getStatus() {
-        List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
-        for (ProjectId projectId:projectIdsByProjectName.values()) {
-            ProjectStatus status = new ProjectStatus();
-            status.setBuilding(isBuilding(projectId));
-            status.setLastBuildId(getLastBuildNumber(projectId));
-            status.setName(projectId.getName());
-            status.setState(getState(projectId));
-            statusList.add(status);
-        }
-        return statusList;
-    }
-
-    private int getLastBuildNumber(ProjectId projectId) {
+    private int getLastBuildNumber(Wall wall, ProjectId projectId) {
         for (BuildPlugin service:buildServices) {
             try {
                 return service.getLastBuildNumber(projectId);
@@ -182,7 +175,7 @@ public class ProjectService {
         throw new RuntimeException("Project must have a state.");
     }
 
-    private boolean isBuilding(ProjectId projectId) {
+    private boolean isBuilding(Wall wall, ProjectId projectId) {
         for (BuildPlugin service:buildServices) {
             try {
                 return service.isBuilding(projectId);
@@ -219,25 +212,25 @@ public class ProjectService {
 	//////////
 	////////////
 	////////////
-    private final static int EVERY_FIVE_MINUTES = 5*60*1000;
-
-    @Scheduled(fixedDelay=EVERY_FIVE_MINUTES)
-    public void refreshWalls() {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("It's time to refresh all walls");
-        }
-        for(Wall wall : WALLS.values()) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Refreshing wall : "+wall+" and its "+wall.getProjects().size()+" projects");
-            }
-            wall.discoverProjects();
-        }
-    }
-
-    public List<ProjectStatus> getStatus(String wallName) {
-        Wall wall = WALLS.get(wallName);
-        List<ProjectStatus> projectStatus  = wall.getStatus();
-        return projectStatus;
-    }
+//    private final static int EVERY_FIVE_MINUTES = 5*60*1000;
+//
+//    @Scheduled(fixedDelay=EVERY_FIVE_MINUTES)
+//    public void refreshWalls() {
+//        if (LOG.isInfoEnabled()) {
+//            LOG.info("It's time to refresh all walls");
+//        }
+//        for(Wall wall : WALLS.values()) {
+//            if (LOG.isInfoEnabled()) {
+//                LOG.info("Refreshing wall : "+wall+" and its "+wall.getProjects().size()+" projects");
+//            }
+//            wall.discoverProjects();
+//        }
+//    }
+//
+//    public List<ProjectStatus> getStatus(String wallName) {
+//        Wall wall = WALLS.get(wallName);
+//        List<ProjectStatus> projectStatus  = wall.getStatus();
+//        return projectStatus;
+//    }
 
 }

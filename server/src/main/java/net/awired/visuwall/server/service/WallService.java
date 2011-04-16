@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+
 import net.awired.visuwall.server.domain.Wall;
 import net.awired.visuwall.server.exception.NotCreatedException;
 import net.awired.visuwall.server.exception.NotFoundException;

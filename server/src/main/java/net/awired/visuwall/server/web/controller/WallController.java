@@ -4,13 +4,16 @@ import java.util.Collection;
 import java.util.List;
 
 import net.awired.visuwall.api.domain.ProjectStatus;
+import net.awired.visuwall.api.plugin.Plugin;
 import net.awired.visuwall.server.domain.Software;
 import net.awired.visuwall.server.domain.Wall;
 import net.awired.visuwall.server.exception.NotCreatedException;
 import net.awired.visuwall.server.exception.NotFoundException;
+import net.awired.visuwall.server.service.PluginService;
 import net.awired.visuwall.server.service.SoftwareService;
 import net.awired.visuwall.server.service.WallService;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +40,8 @@ public class WallController {
 	@Autowired
 	private SoftwareService softwareService;
 
-	Wall wall;
-	
+	@Autowired
+	private PluginService pluginService;
 	
 	@ModelAttribute("softwares")
 	public Collection<Software> populatePetTypes() {
@@ -70,20 +73,25 @@ public class WallController {
 	@RequestMapping
 	public @ResponseBody
 	List<String> getWallNames() {
+		List<Plugin> plugins = pluginService.getPlugins();
+		for (Plugin plugin : plugins) {
+			System.out.println(plugin);
+		}
 		return wallService.getWallNames();
 	}
 
 	@RequestMapping("{wallName}")
-	public @ResponseBody
-	Wall getProjects(@PathVariable String wallName)  throws NotFoundException {
+	public String getProjects(@PathVariable String wallName, ModelMap modelMap) throws NotFoundException {
 		Wall wall = wallService.find(wallName);
-		return wall;
+		modelMap.put("data", wall);
+		return WALL_JSP;
 	}
 
 	@RequestMapping("{wallName}/status")
 	public @ResponseBody
 	List<ProjectStatus> getStatus(@PathVariable String wallName) {
-		return wallService.getStatus(wallName);
+		throw new NotImplementedException();
+		//return wallService.getStatus(wallName);
 	}
 
 	@RequestMapping(value = "create", method = RequestMethod.GET)

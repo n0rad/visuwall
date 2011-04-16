@@ -48,11 +48,6 @@ public class MainController {
 	@Autowired
 	JsService jsService;
 	
-	@PostConstruct
-	protected void init() {
-		System.out.println("Visuwall version : " + visuwallApplication.getVersion());
-	}
-
 	@RequestMapping(ROOT_CONTEXT)
 	public ModelAndView getIndex() throws Exception {
 		ModelMap modelMap = new ModelMap();

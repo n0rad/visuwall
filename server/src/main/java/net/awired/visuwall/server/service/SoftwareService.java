@@ -2,13 +2,14 @@ package net.awired.visuwall.server.service;
 
 import java.util.List;
 
+import javassist.NotFoundException;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import net.awired.visuwall.server.domain.Software;
 import net.awired.visuwall.server.exception.NotCreatedException;
-import net.awired.visuwall.server.exception.SoftwareNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +26,12 @@ public class SoftwareService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SoftwareService.class);
 
-    public Software find(String name) throws SoftwareNotFoundException {
+    public Software find(String name) throws NotFoundException {
         Preconditions.checkNotNull(name, "name");
 
         Software software = entityManager.find(Software.class, name);
         if (software == null) {
-            throw new SoftwareNotFoundException("Software with name:"+name+" not found in database");
+            throw new NotFoundException("Software with name:"+name+" not found in database");
         }
         return software;
     }

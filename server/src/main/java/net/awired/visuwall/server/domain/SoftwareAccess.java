@@ -1,13 +1,8 @@
 package net.awired.visuwall.server.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
-import net.awired.visuwall.api.plugin.BuildPlugin;
-import net.awired.visuwall.api.plugin.QualityPlugin;
 
 
 @Entity
@@ -18,13 +13,10 @@ public class SoftwareAccess {
     private Long id;
     
     private String name;
-
-    @OneToOne(fetch=FetchType.EAGER)
-    private Software software;
-
     private String url;
     private String login;
     private String password;
+    private Software software;
 
     public SoftwareAccess() {
 
@@ -47,24 +39,6 @@ public class SoftwareAccess {
 
     public void setSoftware(Software software) {
         this.software = software;
-    }
-
-    public BuildPlugin createBuildService() {
-        BuildPlugin service = software.getBuildService();
-        service.setUrl(url);
-        service.setLogin(login);
-        service.setPassword(password);
-        service.init();
-        return service;
-    }
-
-    public QualityPlugin createQualityService() {
-        QualityPlugin service = software.getQualityService();
-        service.setUrl(url);
-        service.setLogin(login);
-        service.setPassword(password);
-        service.init();
-        return service;
     }
 
     public Long getId() {

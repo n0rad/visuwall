@@ -13,6 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 
 import org.springframework.util.AutoPopulatingList;
@@ -20,7 +21,7 @@ import org.springframework.util.AutoPopulatingList;
 import com.google.common.base.Objects;
 
 @Entity
-@NamedQueries({ @NamedQuery(name = Wall.QUERY_NAMES, query = "SELECT wall.name FROM Wall") })
+@NamedQueries({ @NamedQuery(name = Wall.QUERY_NAMES, query = "SELECT name FROM Wall") })
 public final class Wall {
 	
 	public static final String QUERY_NAMES = "wallNames";
@@ -32,6 +33,9 @@ public final class Wall {
 	private List<SoftwareAccess> softwareAccesses = new AutoPopulatingList<SoftwareAccess>(
 			SoftwareAccess.class);
 
+	@Transient
+	private List<Project> projects = new AutoPopulatingList<Project>(Project.class);
+	
 	public Wall() {
 	}
 

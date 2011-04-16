@@ -25,6 +25,7 @@
 	</parent>
 
 	<modules>
+		<module>common</module>
 		<module>cli</module>
 		<module>server</module>
 		<module>hudsonclient</module>
@@ -73,6 +74,11 @@
 
 	<dependencyManagement>
 		<dependencies>
+                        <dependency>
+                                <groupId>net.awired.visuwall</groupId>
+                                <artifactId>visuwall-common</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-server</artifactId>
