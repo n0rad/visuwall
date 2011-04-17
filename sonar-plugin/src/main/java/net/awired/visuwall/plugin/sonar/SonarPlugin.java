@@ -46,6 +46,7 @@ public final class SonarPlugin implements QualityPlugin {
             LOG.info("Initialize sonar with url " + url);
         }
         measureCreator = new MeasureFinder(url, login, password);
+        measureCreator.init();
     }
 
     @Override
@@ -81,8 +82,14 @@ public final class SonarPlugin implements QualityPlugin {
     @Override
     public boolean contains(ProjectId projectId) {
         Preconditions.checkNotNull(projectId, "projectId is mandatory");
+
+        String artifactId = projectId.getArtifactId();
+        if (artifactId == null) {
+            return false;
+        }
+
         try {
-            measureCreator.findMeasure(projectId.getArtifactId(), "comment_blank_lines");
+            measureCreator.findMeasure(artifactId, "comment_blank_lines");
         } catch(SonarMetricNotFoundException e) {
             return false;
         }
