@@ -1,10 +1,10 @@
 package net.awired.visuwall.server.exception;
 
-public class WallNotFoundException extends Exception {
+public class NotFoundException extends Exception {
 
     private static final long serialVersionUID = -8160584319934461979L;
 
-    public WallNotFoundException(String cause) {
+    public NotFoundException(String cause) {
         super(cause);
     }
 

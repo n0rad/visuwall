@@ -28,6 +28,10 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+<<<<<<< HEAD:sonar-plugin/src/test/java/net/awired/visuwall/plugin/sonar/it/service/SonarServiceIT.java
+import net.awired.visuwall.plugin.sonar.SonarConnectionPlugin;
+=======
+>>>>>>> d1e18665bbedc8f7ed1fe0a53acb4e91bb188f97:it/src/it/java/net/awired/visuwall/plugin/sonar/SonarPluginIT.java
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,6 +39,17 @@ import org.junit.Test;
 
 public class SonarPluginIT {
 
+<<<<<<< HEAD:sonar-plugin/src/test/java/net/awired/visuwall/plugin/sonar/it/service/SonarServiceIT.java
+    private static SonarConnectionPlugin sonarService;
+
+    private static final String SONAR_ID = "SONAR_ID";
+
+    @BeforeClass
+    public static void init() {
+        sonarService = new SonarConnectionPlugin();
+        sonarService.setUrl(SONAR_URL);
+        sonarService.init();
+=======
     private static SonarPlugin sonarPlugin;
 
     @BeforeClass
@@ -42,6 +57,7 @@ public class SonarPluginIT {
         sonarPlugin = new SonarPlugin();
         sonarPlugin.setUrl(SONAR_URL);
         sonarPlugin.init();
+>>>>>>> d1e18665bbedc8f7ed1fe0a53acb4e91bb188f97:it/src/it/java/net/awired/visuwall/plugin/sonar/SonarPluginIT.java
     }
 
     @Test

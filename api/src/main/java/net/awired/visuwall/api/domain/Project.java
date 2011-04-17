@@ -24,115 +24,124 @@ import com.google.common.base.Preconditions;
 
 public final class Project implements Comparable<Project> {
 
-    private ProjectId projectId;
-    private String name;
-    private String description;
-    private QualityResult qualityResult = new QualityResult();
-    private State state;
-    private int[] buildNumbers;
+	private ProjectId projectId;
+	private String name;
+	private String description;
+	private QualityResult qualityResult = new QualityResult();
+	private State state;
+	private int[] buildNumbers;
 
-    private Build completedBuild;
-    private Build currentBuild;
+	private Build completedBuild;
+	private Build currentBuild;
 
-    public String getName() {
-        return name;
-    }
+	public Project() {
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public Project(ProjectId projectId) {
+		this.projectId = projectId;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	// ////////////////////////////////////////////////////////////////
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public ProjectId getProjectId() {
-        return projectId;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setProjectId(ProjectId projectId) {
-        this.projectId = projectId;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public QualityResult getQualityResult() {
-        return qualityResult;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setQualityResult(QualityResult qualityResult) {
-        this.qualityResult = qualityResult;
+	public ProjectId getProjectId() {
+		return projectId;
+	}
 
-    }
-    public State getState() {
-        return state;
-    }
+	public void setProjectId(ProjectId projectId) {
+		this.projectId = projectId;
+	}
 
-    public void setState(State state) {
-        this.state = state;
-    }
+	public QualityResult getQualityResult() {
+		return qualityResult;
+	}
 
-    public int[] getBuildNumbers() {
-        return buildNumbers;
-    }
+	public void setQualityResult(QualityResult qualityResult) {
+		this.qualityResult = qualityResult;
 
-    public void setBuildNumbers(int[] buildNumbers) {
-        this.buildNumbers = buildNumbers;
-    }
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(projectId, name);
-    }
+	public State getState() {
+		return state;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Project)) {
-            return false;
-        }
+	public void setState(State state) {
+		this.state = state;
+	}
 
-        if (projectId == null) {
-            return false;
-        }
+	public int[] getBuildNumbers() {
+		return buildNumbers;
+	}
 
-        Project project = (Project)obj;
-        return projectId.equals(project.projectId);
-    }
+	public void setBuildNumbers(int[] buildNumbers) {
+		this.buildNumbers = buildNumbers;
+	}
 
-    public Build getCompletedBuild() {
-        return completedBuild;
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(projectId, name);
+	}
 
-    public void setCompletedBuild(Build completedBuild) {
-        this.completedBuild = completedBuild;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof Project)) {
+			return false;
+		}
 
-    public Build getCurrentBuild() {
-        return currentBuild;
-    }
+		if (projectId == null) {
+			return false;
+		}
 
-    public void setCurrentBuild(Build currentBuild) {
-        this.currentBuild = currentBuild;
-    }
+		Project project = (Project) obj;
+		return projectId.equals(project.projectId);
+	}
 
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-        .add("project id", projectId) //
-        .add("name", name) //
-        .add("description", description) //
-        .add("state", state) //
-        .add("completed build", completedBuild) //
-        .add("quality result", qualityResult) //
-        .toString();
-    }
+	public Build getCompletedBuild() {
+		return completedBuild;
+	}
 
-    @Override
-    public int compareTo(Project project) {
-        Preconditions.checkNotNull(project, "project");
-        return name.compareTo(project.name);
-    }
+	public void setCompletedBuild(Build completedBuild) {
+		this.completedBuild = completedBuild;
+	}
+
+	public Build getCurrentBuild() {
+		return currentBuild;
+	}
+
+	public void setCurrentBuild(Build currentBuild) {
+		this.currentBuild = currentBuild;
+	}
+
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this).add("project id", projectId) //
+				.add("name", name) //
+				.add("description", description) //
+				.add("state", state) //
+				.add("completed build", completedBuild) //
+				.add("quality result", qualityResult) //
+				.toString();
+	}
+
+	@Override
+	public int compareTo(Project project) {
+		Preconditions.checkNotNull(project, "project");
+		return name.compareTo(project.name);
+	}
 
 }
