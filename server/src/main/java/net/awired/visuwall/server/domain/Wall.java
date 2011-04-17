@@ -1,5 +1,6 @@
 package net.awired.visuwall.server.domain;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -102,10 +103,15 @@ public final class Wall {
                         holder.getQualityServices().add(qualityService);
                     }
                 }
+
                 projectIdsByProjectName.put(discoveredProject.getName(), discoveredProject);
                 projects.put(discoveredProject, holder);
             }
         }
+    }
+
+    private String decode(String projectName) {
+        return URLDecoder.decode(projectName);
     }
 
     private ServiceHolder getServiceHolder(ProjectId discoveredProject) {
@@ -122,6 +128,7 @@ public final class Wall {
      * @throws ProjectNotFoundException
      */
     public Date getEstimatedFinishTime(String projectName) throws ProjectNotFoundException {
+        projectName = decode(projectName);
         ProjectId projectId = projectIdsByProjectName.get(projectName);
         for(BuildPlugin service:buildServices) {
             try {
@@ -139,6 +146,7 @@ public final class Wall {
     }
 
     public Project findFreshProject(String projectName) throws ProjectNotFoundException {
+        projectName = decode(projectName);
         ProjectId projectId = projectIdsByProjectName.get(projectName);
         if (projectId == null) {
             throw new ProjectNotFoundException("Project [name="+projectName+"] has not been found.");
@@ -221,6 +229,7 @@ public final class Wall {
     }
 
     public Build findBuildByBuildNumber(String projectName, int buildNumber) throws BuildNotFoundException {
+        projectName = decode(projectName);
         ProjectId projectId = projectIdsByProjectName.get(projectName);
         for (BuildPlugin service:buildServices) {
             try {

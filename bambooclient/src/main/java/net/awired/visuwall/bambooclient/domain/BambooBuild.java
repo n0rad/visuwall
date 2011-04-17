@@ -64,4 +64,8 @@ public class BambooBuild {
         this.passCount = passCount;
     }
 
+    public boolean isSuccessful() {
+        return "Successful".equals(state);
+    }
+
 }

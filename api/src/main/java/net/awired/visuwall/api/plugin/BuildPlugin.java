@@ -19,6 +19,12 @@ public interface BuildPlugin extends Plugin {
 
     Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException, ProjectNotFoundException;
 
+    /**
+     * Populating a project means fill its attributes with all data that you can fetch from your system
+     * If you can fetch State or Build informations, add it in <code>project</code>!
+     * @param project Project to populate
+     * @throws ProjectNotFoundException Throw this exception if you can't find this project in your system
+     */
     void populate(Project project) throws ProjectNotFoundException;
 
     Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException;

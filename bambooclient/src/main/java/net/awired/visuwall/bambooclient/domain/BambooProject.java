@@ -10,6 +10,10 @@ public class BambooProject {
 
     private Boolean building;
 
+    private int[] buildNumbers;
+
+    private BambooBuild currentBuild;
+
     public String getName() {
         return name;
     }
@@ -40,5 +44,21 @@ public class BambooProject {
 
     public void setBuilding(Boolean building) {
         this.building = building;
+    }
+
+    public int[] getBuildNumbers() {
+        return buildNumbers;
+    }
+
+    public void setBuildNumbers(int[] buildNumbers) {
+        this.buildNumbers = buildNumbers;
+    }
+
+    public BambooBuild getCurrentBuild() {
+        return currentBuild;
+    }
+
+    public void setCurrentBuild(BambooBuild currentBuild) {
+        this.currentBuild = currentBuild;
     }
 }

@@ -8,6 +8,7 @@ import javax.persistence.NamedQuery;
 import net.awired.visuwall.api.plugin.BuildPlugin;
 import net.awired.visuwall.api.plugin.Plugin;
 import net.awired.visuwall.api.plugin.QualityPlugin;
+import net.awired.visuwall.plugin.bamboo.BambooPlugin;
 import net.awired.visuwall.plugin.hudson.HudsonPlugin;
 import net.awired.visuwall.plugin.sonar.SonarPlugin;
 
@@ -24,10 +25,9 @@ public class Software {
     private boolean buildSoftware;
     private boolean qualitySoftware;
 
-    public static final Software HUDSON = new Software("hudson",
-            HudsonPlugin.class, true, false);
-    public static final Software SONAR = new Software("sonar",
-            SonarPlugin.class, false, true);
+    public static final Software HUDSON = new Software("hudson", HudsonPlugin.class, true, false);
+    public static final Software SONAR = new Software("sonar", SonarPlugin.class, false, true);
+    public static final Software BAMBOO = new Software("bamboo", BambooPlugin.class, true, false);
 
     public Software() {
     }

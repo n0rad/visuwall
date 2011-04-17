@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import net.awired.visuwall.api.domain.ProjectStatus;
+import net.awired.visuwall.server.domain.Software;
+import net.awired.visuwall.server.domain.SoftwareAccess;
 import net.awired.visuwall.server.domain.Wall;
 import net.awired.visuwall.server.service.WallService;
 
@@ -34,8 +36,10 @@ public class WallController {
 
     public WallController() {
         wall = new Wall("orange-vallee");
-        //        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://10.2.40.60/lifeisbetteron/jenkins"));
-        //        wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://10.2.40.60/lifeisbetteron/sonar"));
+        //wall.addSoftwareAccess(new SoftwareAccess(Software.BAMBOO, "http://bamboo.visuwall.awired.net"));
+
+        wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON, "http://10.2.40.60/lifeisbetteron/jenkins"));
+        wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR, "http://10.2.40.60/lifeisbetteron/sonar"));
         //		wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
         //				"http://ci.awired.net/jenkins"));
         // wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,

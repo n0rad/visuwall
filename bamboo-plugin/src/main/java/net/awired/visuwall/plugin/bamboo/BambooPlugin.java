@@ -15,6 +15,8 @@ import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.BuildPlugin;
 import net.awired.visuwall.bambooclient.Bamboo;
+import net.awired.visuwall.bambooclient.BambooBuildNotFoundException;
+import net.awired.visuwall.bambooclient.BambooProjectNotFoundException;
 import net.awired.visuwall.bambooclient.domain.BambooBuild;
 import net.awired.visuwall.bambooclient.domain.BambooProject;
 
@@ -55,7 +57,7 @@ public class BambooPlugin implements BuildPlugin {
 
     @Override
     public void init() {
-        Preconditions.checkNotNull(url, "url");
+        Preconditions.checkNotNull(url, "Use setUrl() before calling init method");
         bamboo = new Bamboo(url);
     }
 
@@ -91,7 +93,11 @@ public class BambooPlugin implements BuildPlugin {
     public Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
     ProjectNotFoundException {
         String projectName = getProjectName(projectId);
-        return createBuild(bamboo.findBuild(projectName, buildNumber));
+        try {
+            return createBuild(bamboo.findBuild(projectName, buildNumber));
+        } catch (BambooBuildNotFoundException e) {
+            throw new BuildNotFoundException(e);
+        }
     }
 
     private Build createBuild(BambooBuild bambooBuild) {
@@ -123,7 +129,12 @@ public class BambooPlugin implements BuildPlugin {
 
     @Override
     public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
-        return null;
+        String projectName = getProjectName(projectId);
+        try {
+            return bamboo.getEstimatedFinishTime(projectName);
+        } catch (BambooProjectNotFoundException e) {
+            throw new ProjectNotFoundException(e);
+        }
     }
 
     @Override
