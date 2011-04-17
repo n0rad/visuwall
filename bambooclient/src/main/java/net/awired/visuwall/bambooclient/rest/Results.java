@@ -13,5 +13,5 @@ public class Results {
 
     public List<Results> results;
 
-    public Result result;
+    public List<Result> result;
 }

@@ -47,7 +47,7 @@ public class Result {
 
     public Integer successfulTestCount;
 
-    public String failedTestCount;
+    public Integer failedTestCount;
 
     public String buildReason;
 }

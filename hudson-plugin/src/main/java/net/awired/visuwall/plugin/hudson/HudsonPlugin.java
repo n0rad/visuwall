@@ -28,5 +28,4 @@ public class HudsonPlugin implements VisuwallPlugin {
 		//TODO it
 		return true;
 	}
-
 }

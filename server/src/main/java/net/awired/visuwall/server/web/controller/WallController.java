@@ -40,6 +40,8 @@ public class WallController {
 	@Autowired
 	private WallService wallService;
 	
+//	 projectName = decode(projectName);
+	
 	@PostConstruct
 	void init() throws NotCreatedException {
 		Wall newwall = new Wall("orange-vallee");
@@ -58,20 +60,10 @@ public class WallController {
 				.getName(), 1.0f), "http://fluxx.fr.cr:9000"));
 		softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
 				.getName(), 1.0f), "http://fluxx.fr.cr:8080/hudson"));
+		softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
+				.getName(), 1.0f), "http://ci.visuwall.awired.net"));
 
 		wallService.persist(newwall);
-
-		// wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
-		// "http://ci.awired.net/jenkins"));
-		// wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
-		// "http://ci.visuwall.awired.net"));
-		// wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
-		// "http://sonar.awired.net"));
-		// wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
-		// "http://fluxx.fr.cr:8080/hudson"));
-		// wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
-		// "http://fluxx.fr.cr:9000"));
-		// wall.discoverProjects();
 	}
 
 	@RequestMapping

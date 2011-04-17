@@ -28,4 +28,5 @@ public class SonarPlugin implements VisuwallPlugin {
 		return true;
 	}
 
+
 }

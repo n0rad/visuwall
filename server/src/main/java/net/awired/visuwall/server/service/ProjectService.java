@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Transient;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
@@ -31,6 +33,9 @@ public class ProjectService {
 	ProjectMergeService projectMergeService;
 		
     private static final int PROJECT_NOT_BUILT_ID = -1;
+
+    @Transient
+    private String[] metrics = new String[]{"coverage", "ncloc", "violations_density"};
 
     
 //	public Collection<Project> getProjects(Wall wall) {
@@ -76,7 +81,7 @@ public class ProjectService {
         	projectMergeService.merge(project, service);
         }
         for(QualityConnectionPlugin service : pluginHolder.getQualityServices()) {
-        	projectMergeService.merge(project, service, "coverage");
+        	projectMergeService.merge(project, service, metrics);
         }
         if (LOG.isDebugEnabled()) {
             LOG.debug(project.toString());

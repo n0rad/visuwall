@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
+import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
@@ -80,7 +81,7 @@ public class Hudson {
     /**
      * @return List of all available projects on Hudson
      */
-    public final List<HudsonProject> findAllProjects() {
+    public List<HudsonProject> findAllProjects() {
         String projectsUrl = hudsonUrlBuilder.getAllProjectsUrl();
         if (LOG.isDebugEnabled()) {
             LOG.debug("All project url : " + projectsUrl);
@@ -90,15 +91,15 @@ public class Hudson {
         List<HudsonProject> projects = new ArrayList<HudsonProject>();
         List<Object> hudsonProjects = hudson.getJob();
         if (LOG.isDebugEnabled()) {
-            LOG.debug(hudsonProjects.size()+" projects to update");
+            LOG.debug(hudsonProjects.size() + " projects to update");
         }
 
         int idxProject = 1;
         for (Object project : hudsonProjects) {
-        	org.w3c.dom.Element element = (org.w3c.dom.Element) project;
+            org.w3c.dom.Element element = (org.w3c.dom.Element) project;
             String name = getProjectName(element);
             if (LOG.isDebugEnabled()) {
-                LOG.debug(idxProject+"/"+hudsonProjects.size()+" create project "+name);
+                LOG.debug(idxProject + "/" + hudsonProjects.size() + " create project " + name);
                 idxProject++;
             }
 
@@ -122,7 +123,8 @@ public class Hudson {
      * @throws HudsonBuildNotFoundException
      * @throws HudsonProjectNotFoundException
      */
-    public final HudsonBuild findBuild(String projectName, int buildNumber) throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+    public HudsonBuild findBuild(String projectName, int buildNumber) throws HudsonBuildNotFoundException,
+    HudsonProjectNotFoundException {
         try {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Find build with project name [" + projectName + "] and buildNumber [" + buildNumber + "]");
@@ -136,7 +138,7 @@ public class Hudson {
                 LOG.debug(message, e);
             }
             throw new HudsonBuildNotFoundException(message, e);
-        } catch(WebApplicationException e) {
+        } catch (WebApplicationException e) {
             String message = "Error while loading build #" + buildNumber + " for project " + projectName;
             if (LOG.isDebugEnabled()) {
                 LOG.debug(message, e);
@@ -145,13 +147,11 @@ public class Hudson {
         }
     }
 
-    private HudsonBuild createHudsonBuildFrom(String projectName, int buildNumber, HudsonMavenMavenModuleSetBuild setBuild) {
-        String cacheKey = "hudsonbuild_"+projectName+"_"+buildNumber;
+    private HudsonBuild createHudsonBuildFrom(String projectName, int buildNumber,
+            HudsonMavenMavenModuleSetBuild setBuild) {
+        String cacheKey = "hudsonbuild_" + projectName + "_" + buildNumber;
         Element element = cache.get(cacheKey);
         if (element != null) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(cacheKey+" is in cache");
-            }
             return (HudsonBuild) element.getObjectValue();
         }
 
@@ -169,9 +169,6 @@ public class Hudson {
         hudsonBuild.setBuildNumber(buildNumber);
 
         cache.put(new Element(cacheKey, hudsonBuild));
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("put "+cacheKey+" in cache");
-        }
 
         return hudsonBuild;
     }
@@ -180,7 +177,7 @@ public class Hudson {
         if (setBuild == null) {
             return "NEW";
         }
-        org.w3c.dom.Element element = (org.w3c.dom.Element)  setBuild.getResult();
+        org.w3c.dom.Element element = (org.w3c.dom.Element) setBuild.getResult();
         if (element == null) {
             return "NEW";
         }
@@ -193,7 +190,7 @@ public class Hudson {
      * @return HudsonProject found with its name
      * @throws HudsonProjectNotFoundException
      */
-    public final HudsonProject findProject(String projectName) throws HudsonProjectNotFoundException {
+    public HudsonProject findProject(String projectName) throws HudsonProjectNotFoundException {
         try {
             HudsonMavenMavenModuleSet moduleSet = findJobByProjectName(projectName);
             return createHudsonProjectFrom(moduleSet);
@@ -203,34 +200,22 @@ public class Hudson {
     }
 
     /**
-     * If there is no success job in history, the average build duration time is the max duration time
-     * Else we compute the average success build duration
+     * If there is no success job in history, the average build duration time is the max duration time Else we compute
+     * the average success build duration
+     * 
      * @param projectName
      * @return Average build duration time computed with old successful jobs
      * @throws HudsonProjectNotFoundException
      */
-    public final long getAverageBuildDurationTime(String projectName) throws HudsonProjectNotFoundException {
+    public long getAverageBuildDurationTime(String projectName) throws HudsonProjectNotFoundException {
         HudsonProject hudsonProject = findProject(projectName);
+
         long averageTime;
 
         if (isNeverSuccessful(hudsonProject)) {
-            averageTime = maxDurationTime(hudsonProject);
+            averageTime = maxDuration(hudsonProject);
         } else {
-            float sumBuildDurationTime = 0;
-            int[] builds = hudsonProject.getBuildNumbers();
-            for (int buildNumber : builds) {
-                try {
-                    HudsonBuild build = findBuild(projectName, buildNumber);
-                    if (build.isSuccessful()) {
-                        sumBuildDurationTime += build.getDuration();
-                    }
-                } catch (HudsonBuildNotFoundException e) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug(e.getMessage());
-                    }
-                }
-            }
-            averageTime = (long) (sumBuildDurationTime / builds.length);
+            averageTime = computeAverageBuildDuration(hudsonProject);
         }
 
         if (LOG.isDebugEnabled()) {
@@ -240,14 +225,16 @@ public class Hudson {
         return averageTime;
     }
 
-    private long maxDurationTime(HudsonProject hudsonProject) throws HudsonProjectNotFoundException {
-        long max = 0;
-        int[] builds = hudsonProject.getBuildNumbers();
-        for (int buildNumber : builds) {
+    private long computeAverageBuildDuration(HudsonProject hudsonProject) throws HudsonProjectNotFoundException {
+        String projectName = hudsonProject.getName();
+        float sumBuildDurationTime = 0;
+        int[] buildNumbers = hudsonProject.getBuildNumbers();
+
+        for (int buildNumber : buildNumbers) {
             try {
-                HudsonBuild build = findBuild(hudsonProject.getName(), buildNumber);
-                if (build.getDuration() > max) {
-                    max = build.getDuration();
+                HudsonBuild build = findBuild(projectName, buildNumber);
+                if (build.isSuccessful()) {
+                    sumBuildDurationTime += build.getDuration();
                 }
             } catch (HudsonBuildNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
@@ -255,12 +242,31 @@ public class Hudson {
                 }
             }
         }
+
+        return (long) (sumBuildDurationTime / buildNumbers.length);
+    }
+
+    private long maxDuration(HudsonProject hudsonProject) throws HudsonProjectNotFoundException {
+        long max = 0;
+        int[] buildNumbers = hudsonProject.getBuildNumbers();
+
+        for (int buildNumber : buildNumbers) {
+            try {
+                HudsonBuild build = findBuild(hudsonProject.getName(), buildNumber);
+                max = Math.max(max, build.getDuration());
+            } catch (HudsonBuildNotFoundException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage());
+                }
+            }
+        }
+
         return max;
     }
 
     private boolean isNeverSuccessful(HudsonProject hudsonProject) throws HudsonProjectNotFoundException {
-        int[] builds = hudsonProject.getBuildNumbers();
-        for (int buildNumber : builds) {
+        int[] buildNumbers = hudsonProject.getBuildNumbers();
+        for (int buildNumber : buildNumbers) {
             try {
                 HudsonBuild build = findBuild(hudsonProject.getName(), buildNumber);
                 if (build.isSuccessful()) {
@@ -289,7 +295,8 @@ public class Hudson {
         return color.endsWith("_anime");
     }
 
-    private HudsonProject createHudsonProjectFrom(HudsonMavenMavenModuleSet moduleSet) throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+    private HudsonProject createHudsonProjectFrom(HudsonMavenMavenModuleSet moduleSet)
+    throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
         String artifactId = null;
         HudsonBuild lastCompletedHudsonBuild = null, currentHudsonBuild = null;
 
@@ -344,7 +351,7 @@ public class Hudson {
      * @return An array of successful build numbers
      * @throws HudsonProjectNotFoundException
      */
-    public final int[] getSuccessfulBuildNumbers(HudsonProject hudsonProject) throws HudsonProjectNotFoundException {
+    public int[] getSuccessfulBuildNumbers(HudsonProject hudsonProject) throws HudsonProjectNotFoundException {
         List<Integer> successfulBuildNumbers = new ArrayList<Integer>();
         for (Integer buildNumber : hudsonProject.getBuildNumbers()) {
             try {
@@ -373,7 +380,7 @@ public class Hudson {
     }
 
     private boolean isSuccessful(HudsonMavenMavenModuleSetBuild job) {
-    	Node element = (org.w3c.dom.Element) job.getResult();
+        Node element = (org.w3c.dom.Element) job.getResult();
 
         if (element == null) {
             return false;
@@ -396,7 +403,7 @@ public class Hudson {
      * @return Date which we think the project will finish to build
      * @throws HudsonProjectNotFoundException
      */
-    public final Date getEstimatedFinishTime(String projectName) throws HudsonProjectNotFoundException {
+    public Date getEstimatedFinishTime(String projectName) throws HudsonProjectNotFoundException {
         HudsonProject project = findProject(projectName);
         HudsonBuild lastBuild = project.getCurrentBuild();
         Date startTime = lastBuild.getStartTime();
@@ -414,7 +421,7 @@ public class Hudson {
         return Client.create(clientConfig);
     }
 
-    public final boolean isBuilding(String projectName) throws HudsonProjectNotFoundException {
+    public boolean isBuilding(String projectName) throws HudsonProjectNotFoundException {
         HudsonModelJob job = findJobByProjectName(projectName);
         return getIsBuilding(job);
     }
@@ -422,9 +429,6 @@ public class Hudson {
     private HudsonMavenMavenModuleSet findJobByProjectName(String projectName) throws HudsonProjectNotFoundException {
         Element element = cache.get(projectName);
         if (element != null) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(projectName+" is in cache");
-            }
             return (HudsonMavenMavenModuleSet) element.getObjectValue();
         }
         try {
@@ -435,41 +439,34 @@ public class Hudson {
             WebResource projectResource = client.resource(projectUrl);
             HudsonMavenMavenModuleSet moduleSet = projectResource.get(HudsonMavenMavenModuleSet.class);
             cache.put(new Element(projectName, moduleSet));
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("put "+projectName+" in cache");
-            }
             return moduleSet;
-        } catch(UniformInterfaceException e) {
+        } catch (UniformInterfaceException e) {
             throw new HudsonProjectNotFoundException(e);
         }
     }
 
-    public final String getState(String projectName) throws HudsonProjectNotFoundException {
+    public String getState(String projectName) throws HudsonProjectNotFoundException {
+        Preconditions.checkNotNull(projectName, "projectName is mandatory");
         try {
             int lastBuildNumber = getLastBuildNumber(projectName);
             HudsonMavenMavenModuleSetBuild build = findBuildByProjectNameAndBuildNumber(projectName, lastBuildNumber);
             return getState(build);
-        } catch(HudsonProjectNotFoundException e) {
+        } catch (HudsonProjectNotFoundException e) {
             throw new HudsonProjectNotFoundException(e);
         } catch (HudsonBuildNotFoundException e) {
             return DEFAULT_STATE;
         }
     }
 
-    private HudsonMavenMavenModuleSetBuild findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber) throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
-        String cacheKey = "build_"+projectName+"_"+buildNumber;
+    private HudsonMavenMavenModuleSetBuild findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber)
+    throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+        String cacheKey = "build_" + projectName + "_" + buildNumber;
         Element element = cache.get(cacheKey);
         if (element != null) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(cacheKey+" is in cache");
-            }
             return (HudsonMavenMavenModuleSetBuild) element.getObjectValue();
         }
         HudsonMavenMavenModuleSetBuild setBuild = findSetBuild(projectName, buildNumber);
         cache.put(new Element(cacheKey, setBuild));
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("put "+cacheKey+" in cache");
-        }
         return setBuild;
     }
 
@@ -483,11 +480,12 @@ public class Hudson {
         HudsonMavenMavenModuleSetBuild setBuild;
         try {
             setBuild = jobResource.get(HudsonMavenMavenModuleSetBuild.class);
-        } catch(UniformInterfaceException e) {
+        } catch (UniformInterfaceException e) {
             if (projectExists(projectName)) {
-                throw new HudsonBuildNotFoundException("Build #"+buildNumber+" not found for project "+projectName, e);
+                throw new HudsonBuildNotFoundException("Build #" + buildNumber + " not found for project "
+                        + projectName, e);
             } else {
-                throw new HudsonProjectNotFoundException("Project "+projectName+" not found", e);
+                throw new HudsonProjectNotFoundException("Project " + projectName + " not found", e);
             }
         }
         return setBuild;
@@ -502,11 +500,12 @@ public class Hudson {
         return true;
     }
 
-    public final int getLastBuildNumber(String projectName) throws HudsonProjectNotFoundException, HudsonBuildNotFoundException {
+    public int getLastBuildNumber(String projectName) throws HudsonProjectNotFoundException,
+    HudsonBuildNotFoundException {
         HudsonMavenMavenModuleSet job = findJobByProjectName(projectName);
         HudsonModelRun run = job.getLastBuild();
         if (run == null) {
-            throw new HudsonBuildNotFoundException("Project "+projectName+" has no last build");
+            throw new HudsonBuildNotFoundException("Project " + projectName + " has no last build");
         }
         return run.getNumber();
     }

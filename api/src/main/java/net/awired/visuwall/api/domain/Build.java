@@ -10,7 +10,7 @@ import com.google.common.base.Objects.ToStringHelper;
 
 public final class Build {
 
-    private State state;
+    private State state = State.UNKNOWN;
     private String[] commiters;
     private long duration;
     private Date startTime;
@@ -22,7 +22,9 @@ public final class Build {
     }
 
     public void setCommiters(String[] commiters) {
-        this.commiters = commiters.clone();
+        if (commiters != null) {
+            this.commiters = commiters.clone();
+        }
     }
 
     public long getDuration() {

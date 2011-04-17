@@ -22,4 +22,6 @@ public class Plan {
     public String key;
 
     public Link link;
+
+    public Boolean isBuilding;
 }

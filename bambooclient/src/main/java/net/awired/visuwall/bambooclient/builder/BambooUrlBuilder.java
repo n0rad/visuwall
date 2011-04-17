@@ -4,19 +4,31 @@ public class BambooUrlBuilder {
 
     private String bambooUrl;
 
-    private static final String ALL_PLANS = "/latest/plan";
-    private static final String REST = "/rest/api";
-
     public BambooUrlBuilder(String bambooUrl) {
-        this.bambooUrl = bambooUrl + REST;
+        this.bambooUrl = bambooUrl + "/rest/api/";
     }
 
     public String getAllProjectsUrl() {
-        return bambooUrl + ALL_PLANS;
+        return bambooUrl + "latest/plan";
     }
 
     public String getProjectsUrl(String projectName) {
-        return bambooUrl+"/latest/result/"+projectName+ "?expand=results.result";
+        return bambooUrl+"latest/result/"+projectName+ "?expand=results.result";
     }
 
+    public String getBuildUrl(String projectName, int buildNumber) {
+        return bambooUrl+"latest/result/"+projectName+"-"+buildNumber+"?expand=changes,metadata,stages,labels,jiraIssues,comments";
+    }
+
+    public String getLatestBuildResult(String projectName) {
+        return bambooUrl+"latest/result/"+projectName;
+    }
+
+    public String getIsBuildingUrl(String projectName) {
+        return bambooUrl+"latest/plan/"+projectName;
+    }
+
+    public String getLastBuildUrl() {
+        return bambooUrl + "latest/build";
+    }
 }
