@@ -11,7 +11,7 @@ public class HudsonIT {
 
     @Test(expected = HudsonBuildNotFoundException.class)
     public void should_throw_an_exception_when_searching_an_inexistant_build() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
-        hudson.findBuild("inexist", -1);
+        hudson.findBuild("neverbuild", -1);
     }
 
     @Test
@@ -24,8 +24,8 @@ public class HudsonIT {
         hudson.findProject("");
     }
 
-    @Test(expected=HudsonBuildNotFoundException.class)
-    public void should_throw_exception_when_searching_inexistant_build() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+    @Test(expected=HudsonProjectNotFoundException.class)
+    public void should_throw_exception_when_searching_inexistant_project_with_build_no() throws HudsonProjectNotFoundException, HudsonBuildNotFoundException {
         hudson.findBuild("", 0);
     }
 
