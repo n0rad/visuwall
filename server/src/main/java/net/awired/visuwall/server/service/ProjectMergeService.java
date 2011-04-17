@@ -10,24 +10,26 @@ import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.BuildPlugin;
-import net.awired.visuwall.api.plugin.QualityPlugin;
+import net.awired.visuwall.api.plugin.BuildConnectionPlugin;
+import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.google.common.base.Preconditions;
 
+@Service
 public class ProjectMergeService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProjectMergeService.class);
 
-    public void merge(Project projectToMerge, QualityPlugin qualityPlugin, String ... metrics) {
+    public void merge(Project projectToMerge, QualityConnectionPlugin qualityPlugin, String... metrics) {
         QualityResult qualityResult = qualityPlugin.populateQuality(projectToMerge.getProjectId(), metrics);
         if (qualityResult != null) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("plugin - "+qualityPlugin.getClass().getSimpleName());
+                LOG.debug("plugin - " + qualityPlugin.getClass().getSimpleName());
             }
             for (Entry<String, QualityMeasure> entry : qualityResult.getMeasures()) {
                 if (LOG.isDebugEnabled()) {
@@ -38,7 +40,7 @@ public class ProjectMergeService {
         }
     }
 
-    public void merge(Project projectToMerge, BuildPlugin buildPlugin) {
+    public void merge(Project projectToMerge, BuildConnectionPlugin buildPlugin) {
         ProjectId projectId = projectToMerge.getProjectId();
         Preconditions.checkState(projectId != null, "projectToComplete must have a projectId");
         try {

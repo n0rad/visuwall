@@ -4,6 +4,9 @@ import java.util.Collection;
 
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
+import net.awired.visuwall.server.domain.Wall;
+import net.awired.visuwall.server.exception.NotFoundException;
+import net.awired.visuwall.server.service.ProjectService;
 import net.awired.visuwall.server.service.WallService;
 
 import org.apache.commons.lang.NotImplementedException;
@@ -21,17 +24,21 @@ public class ProjectController {
     @Autowired
     WallService wallService;
 
+    @Autowired
+    ProjectService projectService;
+    
     @RequestMapping
-    public @ResponseBody Collection<Project> getWallProjects(@PathVariable String wallName) {
-        return wallService.getWall(wallName).getProjects();
+    public @ResponseBody Collection<Project> getWallProjects(@PathVariable String wallName) throws NotFoundException {
+        Wall wall = wallService.find(wallName);
+    	return wall.getProjects();
     }
 
     @RequestMapping("{projectName}")
     public @ResponseBody Project getProject(@PathVariable String wallName, @PathVariable String projectName) throws Exception {
-        return wallService.getWall(wallName).findFreshProject(projectName);
+        Wall wall = wallService.find(wallName);
+        projectService.updateWallProject(wall, projectName);
+        return wall.getProjectFromName(projectName);
     }
-
-
 
     @RequestMapping("{projectName}/build")
     public @ResponseBody Build getBuild(@PathVariable String wallName, @PathVariable String projectName) throws Exception {
@@ -40,7 +47,8 @@ public class ProjectController {
 
     @RequestMapping("{projectName}/build/{buildId}")
     public @ResponseBody Build getBuild(@PathVariable String wallName, @PathVariable String projectName, @PathVariable int buildId) throws Exception {
-        return wallService.getWall(wallName).findBuildByBuildNumber(projectName, buildId);
+        Wall wall = wallService.find(wallName);
+        return projectService.findBuildByBuildNumber(wall, projectName, buildId);
     }
 
 }

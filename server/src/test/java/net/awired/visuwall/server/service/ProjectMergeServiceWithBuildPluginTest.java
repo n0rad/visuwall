@@ -8,7 +8,7 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.BuildPlugin;
+import net.awired.visuwall.api.plugin.BuildConnectionPlugin;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class ProjectMergeServiceWithBuildPluginTest {
 
     @Test
     public void should_merge_with_one_build_plugin() throws ProjectNotFoundException {
-        BuildPlugin buildPlugin = Mockito.mock(BuildPlugin.class);
+        BuildConnectionPlugin buildPlugin = Mockito.mock(BuildConnectionPlugin.class);
 
         Build completedBuild = new Build();
         Build currentBuild = new Build();
@@ -57,8 +57,8 @@ public class ProjectMergeServiceWithBuildPluginTest {
 
     @Test
     public void should_merge_with_two_build_plugins() throws ProjectNotFoundException {
-        BuildPlugin buildPlugin1 = Mockito.mock(BuildPlugin.class);
-        BuildPlugin buildPlugin2 = Mockito.mock(BuildPlugin.class);
+        BuildConnectionPlugin buildPlugin1 = Mockito.mock(BuildConnectionPlugin.class);
+        BuildConnectionPlugin buildPlugin2 = Mockito.mock(BuildConnectionPlugin.class);
 
         Project projectFromBuildPlugin1 = new Project();
         projectFromBuildPlugin1.setDescription("description");
@@ -79,8 +79,8 @@ public class ProjectMergeServiceWithBuildPluginTest {
 
     @Test
     public void last_plugin_is_always_right() throws ProjectNotFoundException {
-        BuildPlugin buildPlugin1 = Mockito.mock(BuildPlugin.class);
-        BuildPlugin buildPlugin2 = Mockito.mock(BuildPlugin.class);
+        BuildConnectionPlugin buildPlugin1 = Mockito.mock(BuildConnectionPlugin.class);
+        BuildConnectionPlugin buildPlugin2 = Mockito.mock(BuildConnectionPlugin.class);
 
         Project projectFromBuildPlugin1 = new Project();
         projectFromBuildPlugin1.setDescription("description1");
@@ -100,7 +100,7 @@ public class ProjectMergeServiceWithBuildPluginTest {
 
     @Test
     public void should_not_fail_if_project_is_not_found() throws ProjectNotFoundException {
-        BuildPlugin buildPlugin = Mockito.mock(BuildPlugin.class);
+        BuildConnectionPlugin buildPlugin = Mockito.mock(BuildConnectionPlugin.class);
         ProjectId projectId = projectToMerge.getProjectId();
         when(buildPlugin.findProject(projectId)).thenThrow(new ProjectNotFoundException("project not found"));
         projectMergeService.merge(projectToMerge, buildPlugin);

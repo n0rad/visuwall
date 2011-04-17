@@ -4,8 +4,8 @@
 	<ul id="navigation">
 		<li id="name">Visuwall</li>
 		<li id="wallSelector">
-			<button id="select">Run last action</button>
-			<button id="add">Select an action</button>
+			<button id="select">Select wall</button>
+			<button id="add">Add new wall</button>
 		</li>
 <!-- 		<li>Page :<select><option>Page 1</option>
 		</select></li>

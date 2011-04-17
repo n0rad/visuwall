@@ -9,9 +9,12 @@ import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
 public class Main {
-
+	
+	public static final String HOME_KEY = "VISUWALL_HOME";
+	
     private final ArgumentManager argManager;
 
+    
     public static void main(String[] args) {
         new Main().run(args);
     }
@@ -22,7 +25,11 @@ public class Main {
 
     public void run(String[] args) {
         argManager.parse(args);
-
+        
+        if (argManager.rootFolder.isSet()) {
+	        System.setProperty(HOME_KEY, argManager.rootFolder.getParamOneValue());
+        }
+        
         final Server server = new Server();
         SocketConnector connector = new SocketConnector();
 

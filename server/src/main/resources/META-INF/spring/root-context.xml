@@ -31,7 +31,19 @@
 	<task:annotation-driven executor="taskExecutor"
 		scheduler="taskScheduler" />
 
-
-	<context:property-placeholder location="classpath*:META-INF/spring/*.properties" />
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:META-INF/spring/*.properties</value>
+			</list>
+		</property>
+		<property name="propertiesArray">
+			<list>
+				<bean factory-bean="visuwallApplication" factory-method="visuwallProperties" />
+			</list>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="false" />
+	</bean>
 
 </beans>

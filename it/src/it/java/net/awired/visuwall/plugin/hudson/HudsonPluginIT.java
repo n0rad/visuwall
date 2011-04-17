@@ -14,6 +14,11 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+<<<<<<< HEAD:hudson-plugin/src/test/java/net/awired/visuwall/plugin/hudson/it/service/HudsonServiceIT.java
+import net.awired.visuwall.plugin.hudson.HudsonConnectionPlugin;
+import net.awired.visuwall.plugin.hudson.it.IntegrationTestData;
+=======
+>>>>>>> d1e18665bbedc8f7ed1fe0a53acb4e91bb188f97:it/src/it/java/net/awired/visuwall/plugin/hudson/HudsonPluginIT.java
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -21,7 +26,11 @@ import org.junit.Test;
 
 public class HudsonPluginIT {
 
+<<<<<<< HEAD:hudson-plugin/src/test/java/net/awired/visuwall/plugin/hudson/it/service/HudsonServiceIT.java
+    static HudsonConnectionPlugin hudsonService = new HudsonConnectionPlugin();
+=======
     static HudsonPlugin hudsonPlugin = new HudsonPlugin();
+>>>>>>> d1e18665bbedc8f7ed1fe0a53acb4e91bb188f97:it/src/it/java/net/awired/visuwall/plugin/hudson/HudsonPluginIT.java
 
     @BeforeClass
     public static void init() {

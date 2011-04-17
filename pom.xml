@@ -25,12 +25,13 @@
 	</parent>
 
 	<modules>
+		<module>common</module>
 		<module>cli</module>
 		<module>server</module>
 		<module>hudsonclient</module>
 		<module>bambooclient</module>
 		<module>api</module>
-<!--		<module>it</module> -->
+		<module>it</module>
 		
 		<module>sonar-plugin</module>
 		<module>hudson-plugin</module>
@@ -74,6 +75,11 @@
 
 	<dependencyManagement>
 		<dependencies>
+                        <dependency>
+                                <groupId>net.awired.visuwall</groupId>
+                                <artifactId>visuwall-common</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-server</artifactId>
