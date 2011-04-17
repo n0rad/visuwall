@@ -36,6 +36,7 @@ public class SoftwareService {
         return software;
     }
 
+    @SuppressWarnings("unchecked")
     public List<Software> findAll() {
         Query query = entityManager.createNamedQuery("findAll");
         return query.getResultList();

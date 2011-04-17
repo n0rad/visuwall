@@ -1,13 +1,8 @@
 package net.awired.visuwall.server.domain;
 
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
-import net.awired.visuwall.api.domain.ProjectId;
-
 
 @Entity
 public class SoftwareAccess {
@@ -15,16 +10,16 @@ public class SoftwareAccess {
     @Id
     @GeneratedValue
     private Long id;
-    
+
     private String name;
     private String url;
     private String login;
     private String password;
     private Software software;
 
-//TODO on next version
-//    private boolean allProject;
-//    private List<ProjectId> projectIds;
+    //TODO on next version
+    //    private boolean allProject;
+    //    private List<ProjectId> projectIds;
 
     public SoftwareAccess() {
 
@@ -81,36 +76,36 @@ public class SoftwareAccess {
         this.password = password;
     }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SoftwareAccess other = (SoftwareAccess) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        SoftwareAccess other = (SoftwareAccess) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
+    }
 }

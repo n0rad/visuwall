@@ -32,30 +32,24 @@ import com.google.common.base.Preconditions;
 
 public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 
-	private static final Logger LOG = LoggerFactory.getLogger(SonarConnectionPlugin.class);
-
-    private final String url;
-    private final String login;
-    private final String password;
+    private static final Logger LOG = LoggerFactory.getLogger(SonarConnectionPlugin.class);
 
     private MeasureFinder measureCreator;
-   
+
+    public SonarConnectionPlugin(String url) {
+        this(url, null, null);
+    }
+
     public SonarConnectionPlugin(String url, String login, String password) {
-    	this.url = url;
-    	this.login = login;
-    	this.password = password;
-    	
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize sonar with url " + url);
         }
         measureCreator = new MeasureFinder(url, login, password);
+    }
+
+    public void init() {
         measureCreator.init();
     }
-    
-	@Override
-	public void close() {
-		// TODO close
-	}
 
     @Override
     public QualityResult populateQuality(ProjectId projectId, String... metrics) {
@@ -103,7 +97,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
         }
         return true;
     }
-    
+
     @VisibleForTesting
     void setMeasureCreator(MeasureFinder measureCreator) {
         this.measureCreator = measureCreator;

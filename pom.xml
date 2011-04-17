@@ -31,7 +31,7 @@
 		<module>hudsonclient</module>
 		<module>bambooclient</module>
 		<module>api</module>
-		<module>it</module>
+<!--		<module>it</module> -->
 		
 		<module>sonar-plugin</module>
 		<module>hudson-plugin</module>

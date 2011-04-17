@@ -20,18 +20,11 @@ import net.awired.visuwall.bambooclient.BambooProjectNotFoundException;
 import net.awired.visuwall.bambooclient.domain.BambooBuild;
 import net.awired.visuwall.bambooclient.domain.BambooProject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Preconditions;
 
 public class BambooConnectionPlugin implements BuildConnectionPlugin {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BambooConnectionPlugin.class);
-
     private static final String BAMBOO_ID = "BAMBOO_ID";
-
-    private String url;
 
     private Bamboo bamboo;
 
@@ -41,16 +34,15 @@ public class BambooConnectionPlugin implements BuildConnectionPlugin {
         STATE_MAPPING.put("Successful", State.SUCCESS);
         STATE_MAPPING.put("Failed", State.FAILURE);
     }
-    
+
     public BambooConnectionPlugin(String url, String login, String password) {
-    	Preconditions.checkNotNull(url, "Use setUrl() before calling init method");
-    	bamboo = new Bamboo(url);
-	}
-    
-	@Override
-	public void close() {
-		//TODO close
-	}
+        this(url);
+    }
+
+    public BambooConnectionPlugin(String url) {
+        Preconditions.checkNotNull(url, "Use setUrl() before calling init method");
+        bamboo = new Bamboo(url);
+    }
 
     @Override
     public List<ProjectId> findAllProjects() {

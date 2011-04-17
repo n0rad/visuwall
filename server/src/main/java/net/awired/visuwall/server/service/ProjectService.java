@@ -1,7 +1,5 @@
 package net.awired.visuwall.server.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -27,93 +25,93 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProjectService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ProjectService.class);
-	
-	@Autowired
-	ProjectMergeService projectMergeService;
-		
+    private static final Logger LOG = LoggerFactory.getLogger(ProjectService.class);
+
+    @Autowired
+    ProjectMergeService projectMergeService;
+
     private static final int PROJECT_NOT_BUILT_ID = -1;
 
     @Transient
     private String[] metrics = new String[]{"coverage", "ncloc", "violations_density"};
 
-    
-//	public Collection<Project> getProjects(Wall wall) {
-//		List<Project> allProjects = new ArrayList<Project>();
-//		for (Project project : wall.getProjects()) {
-//			try {
-//				allProjects.add(findFreshProject(wall, project.getProjectId().getName()));
-//			} catch (ProjectNotFoundException e) {
-//				LOG.warn(e.getMessage());
-//			}
-//		}
-//		return allProjects;
-//	}
-    
+
+    //	public Collection<Project> getProjects(Wall wall) {
+    //		List<Project> allProjects = new ArrayList<Project>();
+    //		for (Project project : wall.getProjects()) {
+    //			try {
+    //				allProjects.add(findFreshProject(wall, project.getProjectId().getName()));
+    //			} catch (ProjectNotFoundException e) {
+    //				LOG.warn(e.getMessage());
+    //			}
+    //		}
+    //		return allProjects;
+    //	}
+
     public void updateWallProjects(Wall wall) {
         for(BuildConnectionPlugin buildService : wall.getPluginHolder().getBuildServices()) {
             List<ProjectId> discoveredProjects = buildService.findAllProjects();
             for(ProjectId discoveredProjectId : discoveredProjects) {
-            	
-            	Project project;
-            	try {
-					project = wall.getProjectFromProjectId(discoveredProjectId);
-					
-            	} catch (NotFoundException e) {
-            		project = new Project(discoveredProjectId);
-            		wall.getProjects().add(project);
-				}
 
-            	updateProject(wall.getPluginHolder(), project);
+                Project project;
+                try {
+                    project = wall.getProjectFromProjectId(discoveredProjectId);
+
+                } catch (NotFoundException e) {
+                    project = new Project(discoveredProjectId);
+                    wall.getProjects().add(project);
+                }
+
+                updateProject(wall.getPluginHolder(), project);
             }
         }
     }
-    
+
     public void updateWallProject(Wall wall, String projectName) throws ProjectNotFoundException {
-    	Project project = wall.getProjectFromName(projectName);
-    	updateProject(wall.getPluginHolder(), project);    	
+        Project project = wall.getProjectFromName(projectName);
+        updateProject(wall.getPluginHolder(), project);
     }
 
-    
-    
+
+
     private void updateProject(PluginHolder pluginHolder, Project project) {
         for(BuildConnectionPlugin service : pluginHolder.getBuildServices()) {
-        	projectMergeService.merge(project, service);
+            projectMergeService.merge(project, service);
         }
         for(QualityConnectionPlugin service : pluginHolder.getQualityServices()) {
-        	projectMergeService.merge(project, service, metrics);
+            projectMergeService.merge(project, service, metrics);
         }
         if (LOG.isDebugEnabled()) {
             LOG.debug(project.toString());
         }
     }
-    
-//    public Project findFreshProject(Wall wall, String projectName) throws ProjectNotFoundException {
-//        Project project = wall.getProjectFromName(projectName);
-//        if (project.getProjectId() == null) {
-//            throw new ProjectNotFoundException("Project [name="+projectName+"] has not been found.");
-//        }
-//        Project freshProject = new Project();
-//        freshProject.setProjectId(project.getProjectId());
-//        for(BuildConnectionPlugin service : wall.getPluginHolder().getBuildServices()) {
-//        	projectMergeService.merge(freshProject, service);
-//        }
-//        for(QualityConnectionPlugin service : wall.getPluginHolder().getQualityServices()) {
-//        	projectMergeService.merge(freshProject, service, "coverage");
-//        }
-//
-//        if (LOG.isDebugEnabled()) {
-//            LOG.debug(project.toString());
-//        }
-//
-//        if (project.getName() == null) {
-//        	wall.getProjects().remove(project);
-//        	throw new ProjectNotFoundException("Project [projectId=" + project.getProjectId() + "] has no name.");
-//        }
-//
-//        return project;
-//    }
-    
+
+    //    public Project findFreshProject(Wall wall, String projectName) throws ProjectNotFoundException {
+    //        Project project = wall.getProjectFromName(projectName);
+    //        if (project.getProjectId() == null) {
+    //            throw new ProjectNotFoundException("Project [name="+projectName+"] has not been found.");
+    //        }
+    //        Project freshProject = new Project();
+    //        freshProject.setProjectId(project.getProjectId());
+    //        for(BuildConnectionPlugin service : wall.getPluginHolder().getBuildServices()) {
+    //        	projectMergeService.merge(freshProject, service);
+    //        }
+    //        for(QualityConnectionPlugin service : wall.getPluginHolder().getQualityServices()) {
+    //        	projectMergeService.merge(freshProject, service, "coverage");
+    //        }
+    //
+    //        if (LOG.isDebugEnabled()) {
+    //            LOG.debug(project.toString());
+    //        }
+    //
+    //        if (project.getName() == null) {
+    //        	wall.getProjects().remove(project);
+    //        	throw new ProjectNotFoundException("Project [projectId=" + project.getProjectId() + "] has no name.");
+    //        }
+    //
+    //        return project;
+    //    }
+
     /**
      * @return null if no date could be estimated
      * @throws ProjectNotFoundException

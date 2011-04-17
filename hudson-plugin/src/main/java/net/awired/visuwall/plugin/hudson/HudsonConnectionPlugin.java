@@ -31,29 +31,21 @@ public final class HudsonConnectionPlugin implements BuildConnectionPlugin {
 
     private static final String HUDSON_ID = "HUDSON_ID";
 
-    private final String url;
-    private final String login;
-    private final String password;
-
     private Hudson hudson;
-    
+
     private ProjectBuilder projectCreator = new ProjectBuilder();
 
 
     public HudsonConnectionPlugin(String url, String login, String password) {
+        this(url);
+    }
+
+    public HudsonConnectionPlugin(String url) {
         if (isBlank(url)) {
             throw new IllegalStateException("url can't be null.");
         }
-    	this.url = url;
-    	this.login = login;
-    	this.password = password;
         hudson = new Hudson(url);
-	}
-    
-	@Override
-	public void close() {
-		// TODO manage close
-	}
+    }
 
     @Override
     public List<ProjectId> findAllProjects() {

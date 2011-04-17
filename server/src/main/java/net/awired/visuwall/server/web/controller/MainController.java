@@ -16,10 +16,7 @@
 
 package net.awired.visuwall.server.web.controller;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -37,29 +34,29 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController {
 
-	private static final String ROOT_CONTEXT = "/index.html";
-	
-	@Autowired
-	VisuwallApplication visuwallApplication;
-	
-	@Autowired
-	CssService cssService;
+    private static final String ROOT_CONTEXT = "/index.html";
 
-	@Autowired
-	JsService jsService;
-	
-	@RequestMapping(ROOT_CONTEXT)
-	public ModelAndView getIndex() throws Exception {
-		ModelMap modelMap = new ModelMap();
-		modelMap.put("jsLinks", jsService.getJsLinks("res/"));
-		modelMap.put("cssLinks", cssService.getCssLinks("res/"));
-		modelMap.put("version", visuwallApplication.getVersion());
-		return new ModelAndView("index", modelMap);
-	}
-	
-	@RequestMapping("/")
-	public void getSlash(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		   RequestDispatcher dispatcher = request.getRequestDispatcher(ROOT_CONTEXT);
-	        dispatcher.forward(request, response);
-	}
+    @Autowired
+    VisuwallApplication visuwallApplication;
+
+    @Autowired
+    CssService cssService;
+
+    @Autowired
+    JsService jsService;
+
+    @RequestMapping(ROOT_CONTEXT)
+    public ModelAndView getIndex() throws Exception {
+        ModelMap modelMap = new ModelMap();
+        modelMap.put("jsLinks", jsService.getJsLinks("res/"));
+        modelMap.put("cssLinks", cssService.getCssLinks("res/"));
+        modelMap.put("version", visuwallApplication.getVersion());
+        return new ModelAndView("index", modelMap);
+    }
+
+    @RequestMapping("/")
+    public void getSlash(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        RequestDispatcher dispatcher = request.getRequestDispatcher(ROOT_CONTEXT);
+        dispatcher.forward(request, response);
+    }
 }
