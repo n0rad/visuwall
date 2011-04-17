@@ -13,7 +13,7 @@ public class HudsonConnectionPluginExceptionIT {
 
     static HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin(IntegrationTestData.HUDSON_URL);
 
-    @Test(expected=BuildNotFoundException.class)
+    @Test(expected=ProjectNotFoundException.class)
     public void should_throw_exception_when_searching_inexistant_build() throws BuildNotFoundException, ProjectNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "");

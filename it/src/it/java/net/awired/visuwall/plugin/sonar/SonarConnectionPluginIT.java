@@ -40,6 +40,7 @@ public class SonarConnectionPluginIT {
     @BeforeClass
     public static void init() {
         sonarPlugin = new SonarConnectionPlugin(SONAR_URL);
+        sonarPlugin.init();
     }
 
     @Test
