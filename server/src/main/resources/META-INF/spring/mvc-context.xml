@@ -29,8 +29,8 @@
 	<mvc:annotation-driven />
 
 	<!-- allow access to js,css,img with url /res/* -->
-	<mvc:resources mapping="/res/**" location="/" />
 	<mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
+	<mvc:resources mapping="/res/**" location="/" />
 
 	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 		<property name="mediaTypes">

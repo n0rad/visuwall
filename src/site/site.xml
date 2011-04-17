@@ -14,25 +14,17 @@
 			<item name="Awired" href="http://www.awired.net" />
 		</breadcrumbs>
 
-
 <!-- 		<links> -->
 <!-- 			<item name="Awired" href="http://awired.net" /> -->
 <!-- 		</links> -->
 
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
-			<item name="Goals" href="plugin-info.html" />
-			<item name="Usage" href="usage.html" />
-			<item name="FAQ" href="faq.html" />
+			<item name="Downloads" href="download.html" />
+			<item name="Demo" href="http://demo.visuwall.awired.net" />
 		</menu>
 
 		<menu ref="reports" />
-
-		<!-- <menu name="Xeus Technologies"> <item name="JCL" href="/index.html" 
-			/> <item name="Bottomline" href="http://bottomline.sourceforge.net" /> <item 
-			name="Hotfusion" href="http://hotfusion.xtreemhost.com/" /> <item name="Elk" 
-			href="http://elk-wc.sourceforge.net" /> <item name="More..." href="http://xeustech.blogspot.com" 
-			/> </menu> -->
 	</body>
 
 
@@ -41,9 +33,4 @@
 		<artifactId>awired-skin</artifactId>
 		<version>1.11-SNAPSHOT</version>
 	</skin>
-
-	<poweredBy>
-		<logo name="Awired" href="http://awired.net/"
-			img="http://gl.awired.net/images/logo/awired.net-full-b-small.png" />
-	</poweredBy>
 </project>

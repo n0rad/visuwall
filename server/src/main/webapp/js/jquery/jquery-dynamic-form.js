@@ -45,6 +45,8 @@ $.fn.dynamicForm = function (plusSelector, minusSelector, options){
 	var source = $(this),
 	minus,
 	plus,
+	minusFunc,
+	plusFunc,	
 	template,
 	formFields = "input, checkbox, select, textarea",
 	clones = [],
@@ -55,14 +57,29 @@ $.fn.dynamicForm = function (plusSelector, minusSelector, options){
 	},
 	subDynamicForm = [],
 	formPrefix;
+
+	if (typeof plusSelector === 'function') {
+		plusFunc = plusSelector;
+	}
+	if (typeof minusSelector === 'function') {
+		minusFunc = minusSelector;
+	}
 	
 	// Set plus and minus elements within sub dynamic form clones
 	if(options.internalSubDynamicForm){
-		minus = $(options.internalContainer).find(minusSelector);
-		plus = $(options.internalContainer).find(plusSelector);
+		if (typeof minusSelector !== 'function') {
+			minus = $(options.internalContainer).find(minusSelector);
+		}
+		if (typeof plusSelector !== 'function') {
+			plus = $(options.internalContainer).find(plusSelector);
+		}
 	}else{	//Set normal plus an minus element
-		minus = $(minusSelector);
-		plus = $(plusSelector);
+		if (typeof minusSelector !== 'function') {
+			minus = $(minusSelector);
+		}
+		if (typeof plusSelector !== 'function') {
+			plus = $(plusSelector);
+		}
 	}
 	
 	// Extend default options with those provided
@@ -389,14 +406,18 @@ $.fn.dynamicForm = function (plusSelector, minusSelector, options){
 		});
 	}
 	
-	isPlusDescendentOfTemplate = source.find("*").filter(function(){
-		return this == plus.get(0);
-	});
-	
-	isPlusDescendentOfTemplate = isPlusDescendentOfTemplate.length > 0 ? true : false;
+	if (plus) {
+	var isPlusDescendentOfTemplate = false;
+		isPlusDescendentOfTemplate = source.find("*").filter(function(){
+			return this == plus.get(0);
+		});
+		
+		isPlusDescendentOfTemplate = isPlusDescendentOfTemplate.length > 0 ? true : false;
 	
 	/* Hide minus element */
-	minus.hide();
+	if (minus) {
+		minus.hide();
+	}
 	
 	/* If plus element is within the template */
 	if (isPlusDescendentOfTemplate) {
@@ -411,8 +432,19 @@ $.fn.dynamicForm = function (plusSelector, minusSelector, options){
 		/* Handle click on minus */
 		minus.click(outerClickOnMinus);
 	}
+	} else {
+//		plus.click(outerClickOnPlus);
+//		minus.click(outerClickOnMinus);
+	}
+
 	
 	$.extend( source, {
+		outerClickOnPlus : function() {
+			return outerClickOnPlus;
+		},
+		outerClickOnMinus : function() {
+			return outerClickOnMinus;			
+		},
 		getPlus : function(){
 			return plus;
 		},

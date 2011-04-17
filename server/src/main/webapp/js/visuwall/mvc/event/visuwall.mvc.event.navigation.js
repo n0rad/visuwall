@@ -57,13 +57,22 @@ visuwall.mvc.event.navigation = {
 	    });
 	},
 	
-
-	'INPUT#wallEdit|click' : function() {
-		$.historyLoad('edit/2');
-	//	$("#modal").load("security/getregister", function(data) {
-		//	$(this)
-
-//		});
-		//return false;
+	'#wallSelector #select|init' : function(element) {
+		element
+		.button()
+		.click(function() {
+			alert( "Running the last action" );
+		})
+		.next()
+			.button( {
+				text: false,
+				icons: {
+					primary: "ui-icon-plusthick"
+				}
+			})
+			.click(function() {
+				$.historyLoad('edit/2');
+			}).parent().buttonset();
 	}
+
 };

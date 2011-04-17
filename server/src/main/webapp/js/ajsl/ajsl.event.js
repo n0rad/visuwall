@@ -8,18 +8,26 @@ ajsl.event = {
 
 	register : function(eventObj) {
 		for (var ev in eventObj) {
+			
+			var context = null;
+			if (typeof eventObj.context == 'function') {
+				context = eventObj.context();
+			} else if (eventObj.context) {
+				context = $(eventObj.context);
+			}
+			
 			if (typeof eventObj[ev] == 'function') {
 				
 				var ppos = ev.indexOf('|');
 				var selector = ev.substring(0, ppos);
 				var event = ev.substring(ppos + 1).trim();
 				if (!selector) {
-					var elements = $(eventObj.context);
+					var elements = context;
 				} else {
-					var elements = $(selector, eventObj.context);
+					var elements = $(selector, context);
 				}
 				
-				if (elements.length == 0) {
+				if (elements.length == 0 && event != 'init') {
 					LOG.error('nothing found to register event : ', ev);
 					return;
 				}
@@ -29,7 +37,7 @@ ajsl.event = {
 					eventObj[ev](elements);
 				} else {
 					LOG.debug('bind "', ev, '" event to', elements);					
-					elements.bind(event, eventObj[ev]);
+					elements.bind(event, {eventObj : eventObj}, eventObj[ev]);
 				}
 				
 			}
