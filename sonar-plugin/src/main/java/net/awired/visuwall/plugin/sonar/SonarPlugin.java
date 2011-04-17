@@ -10,7 +10,10 @@ public class SonarPlugin implements VisuwallPlugin {
 
 	@Override
 	public ConnectionPlugin connect(String url, Properties info) {
-		return new SonarConnectionPlugin(url, null, null);
+		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin(
+				url, null, null);
+		sonarConnectionPlugin.init();
+		return sonarConnectionPlugin;
 	}
 
 	@Override
@@ -27,6 +30,5 @@ public class SonarPlugin implements VisuwallPlugin {
 	public boolean isManagable(URL url) {
 		return true;
 	}
-
 
 }
