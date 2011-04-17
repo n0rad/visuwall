@@ -26,31 +26,13 @@
 	</parent>
 
 	<dependencies>
-
-		
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-plugin-sonar</artifactId>
-			<exclusions>
-				<exclusion>
-					<artifactId>sli4j-slf4j-logback</artifactId>
-					<groupId>com.googlecode.sli4j</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-plugin-hudson</artifactId>
-			<exclusions>
-				<exclusion>
-					<artifactId>sli4j-slf4j-logback</artifactId>
-					<groupId>com.googlecode.sli4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>xml-apis</artifactId>
-					<groupId>xml-apis</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>
