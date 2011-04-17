@@ -7,7 +7,7 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.QualityPlugin;
+import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class ProjectMergeServiceWithQualityPluginTest {
 
     @Test
     public void should_merge_with_one_build_plugin() throws ProjectNotFoundException {
-        QualityPlugin qualityPlugin = Mockito.mock(QualityPlugin.class);
+        QualityConnectionPlugin qualityPlugin = Mockito.mock(QualityConnectionPlugin.class);
 
         QualityResult qualityResult = new QualityResult();
         QualityMeasure coverage = new QualityMeasure();
@@ -47,8 +47,8 @@ public class ProjectMergeServiceWithQualityPluginTest {
 
     @Test
     public void should_merge_with_two_build_plugins() throws ProjectNotFoundException {
-        QualityPlugin qualityPlugin1 = Mockito.mock(QualityPlugin.class);
-        QualityPlugin qualityPlugin2 = Mockito.mock(QualityPlugin.class);
+        QualityConnectionPlugin qualityPlugin1 = Mockito.mock(QualityConnectionPlugin.class);
+        QualityConnectionPlugin qualityPlugin2 = Mockito.mock(QualityConnectionPlugin.class);
 
         QualityResult qualityResult1 = new QualityResult();
         QualityMeasure coverage = new QualityMeasure();
@@ -76,8 +76,8 @@ public class ProjectMergeServiceWithQualityPluginTest {
 
     @Test
     public void last_plugin_is_always_right() throws ProjectNotFoundException {
-        QualityPlugin qualityPlugin1 = Mockito.mock(QualityPlugin.class);
-        QualityPlugin qualityPlugin2 = Mockito.mock(QualityPlugin.class);
+        QualityConnectionPlugin qualityPlugin1 = Mockito.mock(QualityConnectionPlugin.class);
+        QualityConnectionPlugin qualityPlugin2 = Mockito.mock(QualityConnectionPlugin.class);
 
         QualityResult qualityResult1 = new QualityResult();
         QualityMeasure coverage = new QualityMeasure();

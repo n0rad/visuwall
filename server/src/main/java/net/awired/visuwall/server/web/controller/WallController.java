@@ -1,25 +1,27 @@
 package net.awired.visuwall.server.web.controller;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+
+import javax.annotation.PostConstruct;
 
 import net.awired.visuwall.api.domain.ProjectStatus;
-import net.awired.visuwall.api.plugin.Plugin;
+import net.awired.visuwall.plugin.hudson.HudsonPlugin;
+import net.awired.visuwall.plugin.sonar.SonarPlugin;
 import net.awired.visuwall.server.domain.Software;
+import net.awired.visuwall.server.domain.SoftwareAccess;
 import net.awired.visuwall.server.domain.Wall;
 import net.awired.visuwall.server.exception.NotCreatedException;
 import net.awired.visuwall.server.exception.NotFoundException;
-import net.awired.visuwall.server.service.PluginService;
-import net.awired.visuwall.server.service.SoftwareService;
 import net.awired.visuwall.server.service.WallService;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/wall")
+@Scope("singleton")
 public class WallController {
 
 	private static final Logger LOG = LoggerFactory
@@ -37,51 +40,50 @@ public class WallController {
 	@Autowired
 	private WallService wallService;
 	
-	@Autowired
-	private SoftwareService softwareService;
+	@PostConstruct
+	void init() throws NotCreatedException {
+		Wall newwall = new Wall("orange-vallee");
+		List<SoftwareAccess> softwareAccesses = newwall.getSoftwareAccesses();
 
-	@Autowired
-	private PluginService pluginService;
-	
-	@ModelAttribute("softwares")
-	public Collection<Software> populatePetTypes() {
-		return softwareService.findAll();
+		// softwareAccesses.add(new SoftwareAccess(new Software(),
+		// "http://integration.wormee.orange-vallee.net:8080/hudson"));
+		// softwareAccesses.add(new SoftwareAccess(new Software(),
+		// "http://integration.wormee.orange-vallee.net:9000"));
+
+		softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
+				.getName(), 1.0f), "http://ci.awired.net/jenkins"));
+		softwareAccesses.add(new SoftwareAccess(new Software(SonarPlugin.class
+				.getName(), 1.0f), "http://sonar.awired.net"));
+		softwareAccesses.add(new SoftwareAccess(new Software(SonarPlugin.class
+				.getName(), 1.0f), "http://fluxx.fr.cr:9000"));
+		softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
+				.getName(), 1.0f), "http://fluxx.fr.cr:8080/hudson"));
+
+		wallService.persist(newwall);
+
+		// wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
+		// "http://ci.awired.net/jenkins"));
+		// wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
+		// "http://ci.visuwall.awired.net"));
+		// wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
+		// "http://sonar.awired.net"));
+		// wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
+		// "http://fluxx.fr.cr:8080/hudson"));
+		// wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
+		// "http://fluxx.fr.cr:9000"));
+		// wall.discoverProjects();
 	}
-
-
-	public WallController() {
-//		wall = new Wall("orange-vallee");
-//		 wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
-//		 "http://integration.wormee.orange-vallee.net:8080/hudson"));
-//		 wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
-//		 "http://integration.wormee.orange-vallee.net:9000"));
-//		wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
-//				"http://ci.awired.net/jenkins"));
-//		 wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
-//		 "http://ci.visuwall.awired.net"));
-//		wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
-//				"http://sonar.awired.net"));
-//		 wall.addSoftwareAccess(new SoftwareAccess(Software.HUDSON,
-//		 "http://fluxx.fr.cr:8080/hudson"));
-//		 wall.addSoftwareAccess(new SoftwareAccess(Software.SONAR,
-//		 "http://fluxx.fr.cr:9000"));
-//		wall.discoverProjects();
-	}
-
-	// //////////////////////////////////////////////////////////////////
 
 	@RequestMapping
-	public @ResponseBody
-	List<String> getWallNames() {
-		List<Plugin> plugins = pluginService.getPlugins();
-		for (Plugin plugin : plugins) {
-			System.out.println(plugin);
-		}
-		return wallService.getWallNames();
+	public String getWallNames(ModelMap modelMap) {
+		Set<String> wallNames = wallService.getWallNames();
+		modelMap.put("data", wallNames);
+		return "wall/wallList";
 	}
 
 	@RequestMapping("{wallName}")
-	public String getProjects(@PathVariable String wallName, ModelMap modelMap) throws NotFoundException {
+	public String getProjects(@PathVariable String wallName, ModelMap modelMap)
+			throws NotFoundException {
 		Wall wall = wallService.find(wallName);
 		modelMap.put("data", wall);
 		return WALL_JSP;
@@ -89,17 +91,16 @@ public class WallController {
 
 	@RequestMapping("{wallName}/status")
 	public @ResponseBody
-	List<ProjectStatus> getStatus(@PathVariable String wallName) {
-		throw new NotImplementedException();
-		//return wallService.getStatus(wallName);
+	List<ProjectStatus> getStatus(@PathVariable String wallName,
+			ModelMap modelMap) throws NotFoundException {
+		Wall wall = wallService.find(wallName);
+		List<ProjectStatus> status = wallService.getStatus(wall);
+		return status;
 	}
 
 	@RequestMapping(value = "create", method = RequestMethod.GET)
 	public String getCreate(ModelMap modelMap) {
 		Wall wall = new Wall();
-//		SoftwareAccess softwareAccess = new SoftwareAccess();
-//		softwareAccess.setSoftware(new Software());
-//		wall.addSoftwareAccess(softwareAccess);
 		modelMap.put("data", wall);
 		return WALL_JSP;
 	}
@@ -112,7 +113,7 @@ public class WallController {
 
 	@RequestMapping(value = "{wallName}", method = RequestMethod.DELETE)
 	public void DeleteWall(@PathVariable String wallName) {
-
+		throw new NotImplementedException();
 	}
 
 }

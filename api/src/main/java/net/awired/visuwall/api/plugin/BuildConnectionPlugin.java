@@ -11,7 +11,7 @@ import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 
-public interface BuildPlugin extends Plugin {
+public interface BuildConnectionPlugin extends ConnectionPlugin {
 
     List<ProjectId> findAllProjects();
 

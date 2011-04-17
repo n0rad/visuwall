@@ -27,17 +27,18 @@ public class ProjectController {
     @Autowired
     ProjectService projectService;
     
-//    @RequestMapping
-//    public @ResponseBody Collection<Project> getWallProjects(@PathVariable String wallName) throws NotFoundException {
-//        Wall wall = wallService.find(wallName);
-//    	return projectService.getProjects(wall);
-//    }
-//
-//    @RequestMapping("{projectName}")
-//    public @ResponseBody Project getProject(@PathVariable String wallName, @PathVariable String projectName) throws Exception {
-//        Wall wall = wallService.find(wallName);
-//        return projectService.findFreshProject(projectName);
-//    }
+    @RequestMapping
+    public @ResponseBody Collection<Project> getWallProjects(@PathVariable String wallName) throws NotFoundException {
+        Wall wall = wallService.find(wallName);
+    	return wall.getProjects();
+    }
+
+    @RequestMapping("{projectName}")
+    public @ResponseBody Project getProject(@PathVariable String wallName, @PathVariable String projectName) throws Exception {
+        Wall wall = wallService.find(wallName);
+        projectService.updateWallProject(wall, projectName);
+        return wall.getProjectFromName(projectName);
+    }
 
     @RequestMapping("{projectName}/build")
     public @ResponseBody Build getBuild(@PathVariable String wallName, @PathVariable String projectName) throws Exception {
@@ -47,7 +48,7 @@ public class ProjectController {
     @RequestMapping("{projectName}/build/{buildId}")
     public @ResponseBody Build getBuild(@PathVariable String wallName, @PathVariable String projectName, @PathVariable int buildId) throws Exception {
         Wall wall = wallService.find(wallName);
-        return projectService.findBuildByBuildNumber(projectName, buildId);
+        return projectService.findBuildByBuildNumber(wall, projectName, buildId);
     }
 
 }

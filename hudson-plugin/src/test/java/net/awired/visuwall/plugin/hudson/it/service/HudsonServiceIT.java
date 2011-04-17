@@ -13,7 +13,7 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.plugin.hudson.HudsonPlugin;
+import net.awired.visuwall.plugin.hudson.HudsonConnectionPlugin;
 import net.awired.visuwall.plugin.hudson.it.IntegrationTestData;
 
 import org.junit.BeforeClass;
@@ -22,7 +22,7 @@ import org.junit.Test;
 
 public class HudsonServiceIT {
 
-    static HudsonPlugin hudsonService = new HudsonPlugin();
+    static HudsonConnectionPlugin hudsonService = new HudsonConnectionPlugin();
 
     @BeforeClass
     public static void init() {

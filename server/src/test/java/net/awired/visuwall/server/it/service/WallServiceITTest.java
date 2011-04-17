@@ -7,8 +7,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.UUID;
 
-import net.awired.visuwall.plugin.hudson.HudsonPlugin;
-import net.awired.visuwall.plugin.sonar.SonarPlugin;
+import net.awired.visuwall.plugin.hudson.HudsonConnectionPlugin;
+import net.awired.visuwall.plugin.sonar.SonarConnectionPlugin;
 import net.awired.visuwall.server.IntegrationTestData;
 import net.awired.visuwall.server.domain.Software;
 import net.awired.visuwall.server.domain.SoftwareAccess;
@@ -57,8 +57,8 @@ public class WallServiceITTest {
 
     @Test
     public void should_persist_software_accesses() throws NotFoundException, SoftwareNotFoundException, NotCreatedException {
-        softwareService.persist(new Software("softwarehudson", HudsonPlugin.class, true, false));
-        softwareService.persist(new Software("softwaresonar", SonarPlugin.class, false, true));
+        softwareService.persist(new Software("softwarehudson", HudsonConnectionPlugin.class, true, false));
+        softwareService.persist(new Software("softwaresonar", SonarConnectionPlugin.class, false, true));
 
         String wallName = UUID.randomUUID().toString();
         Software hudson = softwareService.find("softwarehudson");

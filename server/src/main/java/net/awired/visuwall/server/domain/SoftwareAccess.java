@@ -1,8 +1,12 @@
 package net.awired.visuwall.server.domain;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import net.awired.visuwall.api.domain.ProjectId;
 
 
 @Entity
@@ -17,6 +21,10 @@ public class SoftwareAccess {
     private String login;
     private String password;
     private Software software;
+
+//TODO on next version
+//    private boolean allProject;
+//    private List<ProjectId> projectIds;
 
     public SoftwareAccess() {
 
