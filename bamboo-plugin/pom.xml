@@ -32,11 +32,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.1</version>
-		</dependency>
-		<dependency>
 			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-api</artifactId>
 		</dependency>
