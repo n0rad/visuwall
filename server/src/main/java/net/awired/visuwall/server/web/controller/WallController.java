@@ -41,17 +41,25 @@ public class WallController {
         Wall newwall = new Wall("orange-vallee");
         List<SoftwareAccess> softwareAccesses = newwall.getSoftwareAccesses();
 
-        // softwareAccesses.add(new SoftwareAccess(new Software(),
-        // "http://integration.wormee.orange-vallee.net:8080/hudson"));
-        // softwareAccesses.add(new SoftwareAccess(new Software(),
-        // "http://integration.wormee.orange-vallee.net:9000"));
+        //		softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
+        //				.getName(), 1.0f),
+        //				"http://10.2.40.60/lifeisbetteron/jenkins"));
+        //		softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
+        //				.getName(), 1.0f),
+        //				"http://integration.wormee.orange-vallee.net:8080/jenkins"));
+        //		softwareAccesses.add(new SoftwareAccess(new Software(SonarPlugin.class
+        //				.getName(), 1.0f),
+        //				"http://integration.wormee.orange-vallee.net:9000"));
 
-        softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class.getName(), 1.0f),
-        "http://ci.awired.net/jenkins"));
-        softwareAccesses.add(new SoftwareAccess(new Software(SonarPlugin.class.getName(), 1.0f),
-        "http://sonar.awired.net"));
-        softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class.getName(), 1.0f),
-        "http://ci.visuwall.awired.net"));
+        softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
+                .getName(), 1.0f), "http://ci.awired.net/jenkins"));
+        softwareAccesses.add(new SoftwareAccess(new Software(SonarPlugin.class
+                .getName(), 1.0f), "http://sonar.awired.net"));
+        softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
+                .getName(), 1.0f), "http://ci.visuwall.awired.net"));
+        // softwareAccesses.add(new SoftwareAccess(new
+        // Software(BambooPlugin.class.getName(), 1.0f),
+        // "http://bamboo.visuwall.awired.net"));
 
         wallService.persist(newwall);
     }
@@ -64,7 +72,8 @@ public class WallController {
     }
 
     @RequestMapping("{wallName}")
-    public String getProjects(@PathVariable String wallName, ModelMap modelMap) throws NotFoundException {
+    public String getProjects(@PathVariable String wallName, ModelMap modelMap)
+    throws NotFoundException {
         Wall wall = wallService.find(wallName);
         modelMap.put("data", wall);
         return WALL_JSP;
@@ -72,7 +81,8 @@ public class WallController {
 
     @RequestMapping("{wallName}/status")
     public @ResponseBody
-    List<ProjectStatus> getStatus(@PathVariable String wallName, ModelMap modelMap) throws NotFoundException {
+    List<ProjectStatus> getStatus(@PathVariable String wallName,
+            ModelMap modelMap) throws NotFoundException {
         Wall wall = wallService.find(wallName);
         List<ProjectStatus> status = wallService.getStatus(wall);
         return status;

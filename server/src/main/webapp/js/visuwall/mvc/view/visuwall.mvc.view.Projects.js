@@ -1,7 +1,7 @@
 visuwall.mvc.view.Projects = {
 	table : null,
 
-	statusClasses : [ 'failure', 'success', 'unstable', 'aborted', 'new' ],
+	statusClasses : [ 'failure', 'success', 'unstable', 'aborted', 'new', 'notbuilt', 'unknown' ],
 	
 	init : function() {
 		this.table = $('ul#projectsTable').sortable().disableSelection();
@@ -132,6 +132,15 @@ visuwall.mvc.view.Projects = {
 				this.statusClasses, 'aborted', 3000);
 	},
 	
+	displayNotBuilt : function(projectName) {
+		this._getElement(projectName, '.projectName').switchClasses(
+				this.statusClasses, 'notbuilt', 3000);
+	},
+	
+	displayUnknown : function(projectName) {
+		this._getElement(projectName, '.projectName').switchClasses(
+				this.statusClasses, 'unknown', 3000);
+	},
 	
 	updateUT : function(projectName, fail, success, skip) {
 		this._updateTest(projectName, fail, success, skip, 'u');

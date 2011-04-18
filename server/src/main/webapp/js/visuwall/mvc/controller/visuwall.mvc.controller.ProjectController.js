@@ -164,8 +164,12 @@ visuwall.mvc.controller.ProjectController = {
 		case 'UNSTABLE':
 			this.projectsView.displayUnstable(project.name);
 			break;
+		case 'NOT_BUILT':
+			this.projectsView.displayNotBuilt(project.name);
+			break;
+		case 'UNKNOWN':
 		default:
-			LOG.error('Unknown project state : ' + project.state);
+			this.projectsView.displayUnknown(project.name);
 		}
 	},
 	

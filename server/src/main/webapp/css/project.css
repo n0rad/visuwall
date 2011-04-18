@@ -41,6 +41,12 @@ BODY {
 #projectsTable .unstable {
 	background-color: #FF9023;
 }
+#projectsTable .notbuilt {
+	background-color: #802c2c;
+}
+#projectsTable .unknown {
+	background-color: black;
+}
 
 
 #projectsTable .commiters, #projectsTable .quality {
