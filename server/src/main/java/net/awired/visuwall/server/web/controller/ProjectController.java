@@ -4,10 +4,10 @@ import java.util.Collection;
 
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
-import net.awired.visuwall.server.domain.Wall;
-import net.awired.visuwall.server.exception.NotFoundException;
-import net.awired.visuwall.server.service.ProjectService;
-import net.awired.visuwall.server.service.WallService;
+import net.awired.visuwall.core.domain.Wall;
+import net.awired.visuwall.core.exception.NotFoundException;
+import net.awired.visuwall.core.service.ProjectService;
+import net.awired.visuwall.core.service.WallService;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;

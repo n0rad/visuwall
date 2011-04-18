@@ -24,7 +24,7 @@ public class HudsonPlugin implements VisuwallPlugin {
 	}
 
 	@Override
-	public boolean isManagable(URL url) {
+	public boolean isManageable(URL url) {
 		//TODO it
 		return true;
 	}

@@ -1,9 +1,9 @@
 package net.awired.visuwall;
 
+import net.awired.visuwall.core.domain.Software;
+import net.awired.visuwall.core.domain.SoftwareAccess;
 import net.awired.visuwall.plugin.hudson.HudsonPlugin;
 import net.awired.visuwall.plugin.sonar.SonarPlugin;
-import net.awired.visuwall.server.domain.Software;
-import net.awired.visuwall.server.domain.SoftwareAccess;
 
 public interface IntegrationTestData {
 

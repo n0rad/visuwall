@@ -34,7 +34,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 
     private static final Logger LOG = LoggerFactory.getLogger(SonarConnectionPlugin.class);
 
-    private MeasureFinder measureCreator;
+    private MeasureFinder measureFinder;
 
     public SonarConnectionPlugin(String url) {
         this(url, null, null);
@@ -44,11 +44,11 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize sonar with url " + url);
         }
-        measureCreator = new MeasureFinder(url, login, password);
+        measureFinder = new MeasureFinder(url, login, password);
     }
 
     public void init() {
-        measureCreator.init();
+        measureFinder.init();
     }
 
     @Override
@@ -57,7 +57,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
         QualityResult qualityResult = new QualityResult();
         if (projectId.getArtifactId() != null) {
             if (metrics.length == 0) {
-                metrics = measureCreator.getAllMetricKeys();
+                metrics = measureFinder.getAllMetricKeys();
             }
 
             if (LOG.isDebugEnabled()) {
@@ -66,7 +66,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 
             for (String key : metrics) {
                 try {
-                    QualityMeasure qualityMeasure = measureCreator.createQualityMeasure(projectId.getArtifactId(), key);
+                    QualityMeasure qualityMeasure = measureFinder.createQualityMeasure(projectId.getArtifactId(), key);
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("found qualityMeasure : "+qualityMeasure);
                     }
@@ -91,7 +91,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
         }
 
         try {
-            measureCreator.findMeasure(artifactId, "comment_blank_lines");
+            measureFinder.findMeasure(artifactId, "comment_blank_lines");
         } catch(SonarMetricNotFoundException e) {
             return false;
         }
@@ -100,7 +100,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 
     @VisibleForTesting
     void setMeasureCreator(MeasureFinder measureCreator) {
-        this.measureCreator = measureCreator;
+        this.measureFinder = measureCreator;
     }
 
 }

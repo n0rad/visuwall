@@ -23,13 +23,6 @@
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<context:component-scan base-package="net.awired.visuwall" />
-	<!-- <context:annotation-config /> -->
-
-	<task:scheduler id="taskScheduler" />
-	<task:executor id="taskExecutor" pool-size="1" />
-
-	<task:annotation-driven executor="taskExecutor"
-		scheduler="taskScheduler" />
 
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

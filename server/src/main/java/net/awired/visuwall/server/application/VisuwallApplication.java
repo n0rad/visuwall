@@ -42,6 +42,11 @@ public class VisuwallApplication implements ServletContextAware {
 
     public Properties visuwallProperties() {
         Properties prop = new Properties();
+
+        if (home == null) {
+            home = "/tmp";
+        }
+
         prop.setProperty(HOME_KEY, home);
         return prop;
     }

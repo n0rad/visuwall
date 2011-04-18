@@ -24,7 +24,7 @@ public class BambooPlugin implements VisuwallPlugin {
 	}
 
 	@Override
-	public boolean isManagable(URL url) {
+	public boolean isManageable(URL url) {
 		return true;
 	}
 

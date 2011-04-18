@@ -6,14 +6,14 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import net.awired.visuwall.api.domain.ProjectStatus;
+import net.awired.visuwall.core.domain.Software;
+import net.awired.visuwall.core.domain.SoftwareAccess;
+import net.awired.visuwall.core.domain.Wall;
+import net.awired.visuwall.core.exception.NotCreatedException;
+import net.awired.visuwall.core.exception.NotFoundException;
+import net.awired.visuwall.core.service.WallService;
 import net.awired.visuwall.plugin.hudson.HudsonPlugin;
 import net.awired.visuwall.plugin.sonar.SonarPlugin;
-import net.awired.visuwall.server.domain.Software;
-import net.awired.visuwall.server.domain.SoftwareAccess;
-import net.awired.visuwall.server.domain.Wall;
-import net.awired.visuwall.server.exception.NotCreatedException;
-import net.awired.visuwall.server.exception.NotFoundException;
-import net.awired.visuwall.server.service.WallService;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
