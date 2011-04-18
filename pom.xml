@@ -27,7 +27,7 @@
 	<modules>
 		<module>core</module>
 		<module>cli</module>
-		<module>server</module>
+		<module>web</module>
 		<module>hudsonclient</module>
 		<module>bambooclient</module>
 		<module>api</module>
@@ -82,7 +82,7 @@
 			</dependency>
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
-				<artifactId>visuwall-server</artifactId>
+				<artifactId>visuwall-web</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
