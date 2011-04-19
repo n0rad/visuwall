@@ -13,8 +13,7 @@ public class ProjectBuilder {
     public Project buildProjectFrom(HudsonProject hudsonProject) {
         Preconditions.checkNotNull(hudsonProject, "hudsonProject is mandatory");
 
-        Project project = new Project();
-        project.setName(hudsonProject.getName());
+        Project project = new Project(hudsonProject.getName());
         project.setDescription(hudsonProject.getDescription());
         project.setBuildNumbers(hudsonProject.getBuildNumbers());
 

@@ -25,8 +25,7 @@ public class ProjectMergeServiceWithBuildPluginTest {
     public void init() {
         ProjectId projectId = new ProjectId();
         projectId.addId("id", "value");
-        projectToMerge = new Project();
-        projectToMerge.setProjectId(projectId);
+        projectToMerge = new Project(projectId);
     }
 
     @Test
@@ -36,13 +35,12 @@ public class ProjectMergeServiceWithBuildPluginTest {
         Build completedBuild = new Build();
         Build currentBuild = new Build();
 
-        Project projectFromBuildPlugin = new Project();
+        Project projectFromBuildPlugin = new Project("name");
         projectFromBuildPlugin.setBuildNumbers(new int[]{1,2,3});
         projectFromBuildPlugin.setCompletedBuild(completedBuild);
         projectFromBuildPlugin.setCurrentBuild(currentBuild);
         projectFromBuildPlugin.setDescription("description");
         projectFromBuildPlugin.setState(State.UNSTABLE);
-        projectFromBuildPlugin.setName("name");
 
         ProjectId projectId = projectToMerge.getProjectId();
         when(buildPlugin.findProject(projectId)).thenReturn(projectFromBuildPlugin);
@@ -61,11 +59,10 @@ public class ProjectMergeServiceWithBuildPluginTest {
         BuildConnectionPlugin buildPlugin1 = Mockito.mock(BuildConnectionPlugin.class);
         BuildConnectionPlugin buildPlugin2 = Mockito.mock(BuildConnectionPlugin.class);
 
-        Project projectFromBuildPlugin1 = new Project();
+        Project projectFromBuildPlugin1 = new Project("name1");
         projectFromBuildPlugin1.setDescription("description");
 
-        Project projectFromBuildPlugin2 = new Project();
-        projectFromBuildPlugin2.setName("name");
+        Project projectFromBuildPlugin2 = new Project("name2");
 
         ProjectId projectId = projectToMerge.getProjectId();
         when(buildPlugin1.findProject(projectId)).thenReturn(projectFromBuildPlugin1);
@@ -75,7 +72,7 @@ public class ProjectMergeServiceWithBuildPluginTest {
         projectMergeService.merge(projectToMerge, buildPlugin2);
 
         assertEquals("description", projectToMerge.getDescription());
-        assertEquals("name", projectToMerge.getName());
+        assertEquals("name2", projectToMerge.getName());
     }
 
     @Test
@@ -83,10 +80,10 @@ public class ProjectMergeServiceWithBuildPluginTest {
         BuildConnectionPlugin buildPlugin1 = Mockito.mock(BuildConnectionPlugin.class);
         BuildConnectionPlugin buildPlugin2 = Mockito.mock(BuildConnectionPlugin.class);
 
-        Project projectFromBuildPlugin1 = new Project();
+        Project projectFromBuildPlugin1 = new Project("name1");
         projectFromBuildPlugin1.setDescription("description1");
 
-        Project projectFromBuildPlugin2 = new Project();
+        Project projectFromBuildPlugin2 = new Project("name2");
         projectFromBuildPlugin2.setDescription("description2");
 
         ProjectId projectId = projectToMerge.getProjectId();

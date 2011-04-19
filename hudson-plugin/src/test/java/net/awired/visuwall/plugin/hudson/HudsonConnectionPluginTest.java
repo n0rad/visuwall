@@ -84,6 +84,7 @@ public class HudsonConnectionPluginTest {
         Hudson hudson = Mockito.mock(Hudson.class);
 
         HudsonProject hudsonProject = new HudsonProject();
+        hudsonProject.setName("name");
         when(hudson.findProject(Matchers.anyString())).thenReturn(hudsonProject);
 
         HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin("url");
@@ -187,8 +188,7 @@ public class HudsonConnectionPluginTest {
 
         when(hudson.findProject(Matchers.anyString())).thenReturn(hudsonProject );
 
-        Project project = new Project();
-        project.setName("old_name");
+        Project project = new Project("old_name");
 
         hudsonPlugin.populate(project);
 

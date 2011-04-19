@@ -89,4 +89,13 @@ public final class QualityMetric {
         .add("valTyp", valTyp)
         .toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof QualityMetric) {
+            return Objects.equal(key, ((QualityMetric)o).key);
+        } else {
+            return false;
+        }
+    }
 }

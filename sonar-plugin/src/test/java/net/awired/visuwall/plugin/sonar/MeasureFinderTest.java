@@ -12,6 +12,7 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
+import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class MeasureFinderTest {
     MetricsLoader metricsLoader = Mockito.mock(MetricsLoader.class);
 
     @Before
-    public void init() {
+    public void init() throws SonarMetricsNotFoundException {
         QualityMetric qualityMetric = new QualityMetric();
         qualityMetric.setName("Coverage");
         qualityMetric.setKey("coverage");
@@ -35,7 +36,7 @@ public class MeasureFinderTest {
         Map<String, QualityMetric> metricList = new HashMap<String, QualityMetric>();
         metricList.put("coverage", qualityMetric );
 
-        when(metricsLoader.createMetricList(Matchers.anyString())).thenReturn(metricList );
+        when(metricsLoader.createMetricList(Matchers.anyString())).thenReturn(metricList);
     }
 
     @Test
@@ -57,9 +58,9 @@ public class MeasureFinderTest {
         metrics.put("coverage", qualityMetric);
 
         MeasureFinder measureFinder = new MeasureFinder("sonarUrl");
-        measureFinder.setMetricsLoader(metricsLoader);
-        measureFinder.setSonar(sonar);
-        measureFinder.setMetrics(metrics);
+        measureFinder.metricsLoader = metricsLoader;
+        measureFinder.sonar = sonar;
+        measureFinder.metrics = metrics;
 
         QualityMeasure qualityMeasure = measureFinder.createQualityMeasure("projectId", "coverage");
 
@@ -82,8 +83,8 @@ public class MeasureFinderTest {
         when(sonar.find((ResourceQuery) Matchers.anyObject())).thenReturn(resource );
 
         MeasureFinder measureFinder = new MeasureFinder("sonarUrl");
-        measureFinder.setMetricsLoader(metricsLoader);
-        measureFinder.setSonar(sonar);
+        measureFinder.metricsLoader = metricsLoader;
+        measureFinder.sonar = sonar;
 
         ProjectId projectId = new ProjectId();
         projectId.setArtifactId("artifactId");
@@ -102,7 +103,7 @@ public class MeasureFinderTest {
         metrics.put("violations", new QualityMetric());
 
         MeasureFinder measureFinder = new MeasureFinder("sonarUrl");
-        measureFinder.setMetrics(metrics);
+        measureFinder.metrics = metrics;
 
         String[] metricKeys = measureFinder.getAllMetricKeys();
 

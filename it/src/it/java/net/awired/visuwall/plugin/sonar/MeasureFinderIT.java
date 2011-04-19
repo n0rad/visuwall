@@ -2,6 +2,7 @@ package net.awired.visuwall.plugin.sonar;
 
 import static org.junit.Assert.assertEquals;
 import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
 
 import org.junit.Test;
@@ -10,7 +11,7 @@ import org.sonar.wsclient.services.Measure;
 public class MeasureFinderIT {
 
     @Test
-    public void should_find_measure() throws SonarMetricNotFoundException {
+    public void should_find_measure() throws SonarMetricNotFoundException, SonarMetricsNotFoundException {
         MeasureFinder measureFinder = new MeasureFinder(IntegrationTestData.SONAR_URL);
         measureFinder.init();
 

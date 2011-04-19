@@ -13,7 +13,7 @@ import javax.persistence.Transient;
 
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.core.exception.NotFoundException;
+import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 import org.springframework.util.AutoPopulatingList;
 
@@ -47,28 +47,24 @@ import com.google.common.base.Preconditions;
         this.name = name;
     }
 
-    /**
-     * @param projectId
-     * @return null if not found
-     */
-    public Project getProjectFromProjectId(ProjectId projectId) throws NotFoundException {
+    public Project getProjectByProjectId(ProjectId projectId) throws ProjectNotFoundException {
         Preconditions.checkNotNull(projectId, "projectId is mandatory");
         for (Project project : projects) {
             if (projectId.equals(project.getProjectId())) {
                 return project;
             }
         }
-        throw new NotFoundException("project with this id not found : " + projectId);
+        throw new ProjectNotFoundException("project with this id not found : " + projectId);
     }
 
-    public Project getProjectFromName(String name) {
+    public Project getProjectByName(String name) throws ProjectNotFoundException {
         Preconditions.checkNotNull(name, "name is mandatory");
         for (Project project : projects) {
             if (name.equals(project.getName())) {
                 return project;
             }
         }
-        throw new RuntimeException("Project not found for this name : " + name);
+        throw new ProjectNotFoundException("Project not found for this name : " + name);
     }
 
     @Override

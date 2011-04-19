@@ -15,7 +15,6 @@ import net.awired.visuwall.api.plugin.BuildConnectionPlugin;
 import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
 import net.awired.visuwall.core.domain.PluginHolder;
 import net.awired.visuwall.core.domain.Wall;
-import net.awired.visuwall.core.exception.NotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,9 +45,9 @@ public class ProjectService {
 
                 Project project;
                 try {
-                    project = wall.getProjectFromProjectId(discoveredProjectId);
+                    project = wall.getProjectByProjectId(discoveredProjectId);
 
-                } catch (NotFoundException e) {
+                } catch (ProjectNotFoundException e) {
                     project = new Project(discoveredProjectId);
                     wall.getProjects().add(project);
                 }
@@ -62,7 +61,7 @@ public class ProjectService {
         Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
         Preconditions.checkNotNull(projectName, "projectName is a mandatory parameter");
 
-        Project project = wall.getProjectFromName(projectName);
+        Project project = wall.getProjectByName(projectName);
         updateProject(wall.getPluginHolder(), project);
     }
 
@@ -86,7 +85,7 @@ public class ProjectService {
         Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
         Preconditions.checkNotNull(projectName, "projectName is a mandatory parameter");
 
-        ProjectId projectId = wall.getProjectFromName(projectName).getProjectId();
+        ProjectId projectId = wall.getProjectByName(projectName).getProjectId();
         for(BuildConnectionPlugin service : wall.getPluginHolder().getBuildServices()) {
             try {
                 Date estimatedFinishTime = service.getEstimatedFinishTime(projectId);
@@ -154,11 +153,11 @@ public class ProjectService {
         return false;
     }
 
-    public Build findBuildByBuildNumber(Wall wall, String projectName, int buildNumber) throws BuildNotFoundException {
+    public Build findBuildByBuildNumber(Wall wall, String projectName, int buildNumber) throws BuildNotFoundException, ProjectNotFoundException {
         Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
         Preconditions.checkNotNull(projectName, "projectName is a mandatory parameter");
 
-        ProjectId projectId = wall.getProjectFromName(projectName).getProjectId();
+        ProjectId projectId = wall.getProjectByName(projectName).getProjectId();
         for (BuildConnectionPlugin service : wall.getPluginHolder().getBuildServices()) {
             try {
                 Build build = service.findBuildByBuildNumber(projectId, buildNumber);

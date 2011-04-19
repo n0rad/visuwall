@@ -22,6 +22,7 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
+import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
 
 import org.slf4j.Logger;
@@ -48,7 +49,11 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
     }
 
     public void init() {
-        measureFinder.init();
+        try {
+            measureFinder.init();
+        } catch (SonarMetricsNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

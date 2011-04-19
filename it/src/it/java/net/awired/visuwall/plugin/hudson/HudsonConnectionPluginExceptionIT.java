@@ -50,8 +50,7 @@ public class HudsonConnectionPluginExceptionIT {
 
     @Test(expected=ProjectNotFoundException.class)
     public void should_throw_exception_when_populating_inexistant_project() throws ProjectNotFoundException {
-        Project project = new Project();
-        project.setName("");
+        Project project = new Project("");
         hudsonPlugin.populate(project);
     }
 }

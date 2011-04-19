@@ -8,6 +8,7 @@ import java.util.Map;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
+import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
 import org.sonar.wsclient.Sonar;
 import org.sonar.wsclient.connectors.ConnectionException;
@@ -20,7 +21,8 @@ import com.google.common.base.Preconditions;
 
 public class MeasureFinder {
 
-    private MetricsLoader metricsLoader = new MetricsLoader();
+    @VisibleForTesting
+    MetricsLoader metricsLoader = new MetricsLoader();
 
     private String sonarUrl;
     private String login;
@@ -29,9 +31,11 @@ public class MeasureFinder {
     /**
      * http://docs.codehaus.org/display/SONAR/Web+Service+API
      */
-    private Sonar sonar;
+    @VisibleForTesting
+    Sonar sonar;
 
-    private Map<String, QualityMetric> metrics;
+    @VisibleForTesting
+    Map<String, QualityMetric> metrics;
 
     public MeasureFinder(String sonarUrl) {
         this.sonarUrl = sonarUrl;
@@ -43,7 +47,7 @@ public class MeasureFinder {
         this.password = password;
     }
 
-    public void init() {
+    public void init() throws SonarMetricsNotFoundException {
         if (isBlank(sonarUrl)) {
             throw new IllegalStateException("sonarUrl can't be null.");
         }
@@ -86,21 +90,6 @@ public class MeasureFinder {
 
     public String[] getAllMetricKeys() {
         return metrics.keySet().toArray(new String[]{});
-    }
-
-    @VisibleForTesting
-    void setMetricsLoader(MetricsLoader metricsLoader) {
-        this.metricsLoader = metricsLoader;
-    }
-
-    @VisibleForTesting
-    void setSonar(Sonar sonar) {
-        this.sonar = sonar;
-    }
-
-    @VisibleForTesting
-    void setMetrics(Map<String, QualityMetric> metrics) {
-        this.metrics = metrics;
     }
 
 }

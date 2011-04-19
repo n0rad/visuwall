@@ -56,16 +56,15 @@ public class BambooConnectionPlugin implements BuildConnectionPlugin {
         return projects;
     }
 
-    private Project createProject(BambooProject bambooProject) {
-        Project project = new Project();
-        project.setName(bambooProject.getName());
-        return project;
-    }
-
     @Override
     public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
         String projectName = getProjectName(projectId);
-        return createProject(bamboo.findProject(projectName));
+
+        BambooProject bambooProject = bamboo.findProject(projectName);
+
+        Project project = new Project(projectId);
+        project.setName(bambooProject.getName());
+        return project;
     }
 
     private String getProjectName(ProjectId projectId) {

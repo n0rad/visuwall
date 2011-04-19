@@ -24,8 +24,7 @@ public class ProjectMergeServiceWithQualityPluginTest {
     public void init() {
         ProjectId projectId = new ProjectId();
         projectId.addId("id", "value");
-        projectToMerge = new Project();
-        projectToMerge.setProjectId(projectId);
+        projectToMerge = new Project(projectId);
     }
 
     @Test

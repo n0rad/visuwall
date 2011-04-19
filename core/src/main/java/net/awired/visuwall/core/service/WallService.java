@@ -80,7 +80,6 @@ public class WallService {
         try {
             entityManager.merge(wall);
             entityManager.flush();
-            WALLS.put(wall.getName(), wall);
         } catch (Throwable e) {
             String message = "Can't create wall " + wall + " in database";
             LOG.error(message, e);
@@ -108,6 +107,9 @@ public class WallService {
                 LOG.info("Refreshing wall : " + wall + " and its " + wall.getProjects().size() + " projects");
             }
             projectService.updateWallProjects(wall);
+            if (LOG.isInfoEnabled()) {
+                LOG.info("Done refreshing wall : " + wall + " and its " + wall.getProjects().size() + " projects");
+            }
         }
     }
 

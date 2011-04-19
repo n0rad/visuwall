@@ -37,7 +37,7 @@ public class ProjectController {
     public @ResponseBody Project getProject(@PathVariable String wallName, @PathVariable String projectName) throws Exception {
         Wall wall = wallService.find(wallName);
         projectService.updateWallProject(wall, projectName);
-        return wall.getProjectFromName(projectName);
+        return wall.getProjectByName(projectName);
     }
 
     @RequestMapping("{projectName}/build")

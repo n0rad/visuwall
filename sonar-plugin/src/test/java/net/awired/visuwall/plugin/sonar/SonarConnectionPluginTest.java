@@ -12,6 +12,7 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
+import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
 
 import org.junit.Before;
@@ -27,7 +28,7 @@ public class SonarConnectionPluginTest {
     MeasureFinder measureCreator = Mockito.mock(MeasureFinder.class);
 
     @Before
-    public void init() {
+    public void init() throws SonarMetricsNotFoundException {
         when(metricsLoader.createMetricList(Matchers.anyString())).thenReturn(metricList);
         when(measureCreator.getAllMetricKeys()).thenReturn(new String[]{"coverage"});
     }

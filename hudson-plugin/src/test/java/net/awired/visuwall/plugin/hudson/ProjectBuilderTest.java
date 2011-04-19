@@ -58,7 +58,7 @@ public class ProjectBuilderTest {
         hudsonProject.setCurrentBuild(currentBuild);
         hudsonProject.setCompletedBuild(completedBuild);
 
-        Project project = new Project();
+        Project project = new Project("");
         projectBuilder.addCurrentAndCompletedBuilds(project, hudsonProject);
 
         assertEquals("commiter1", project.getCurrentBuild().getCommiters()[0]);

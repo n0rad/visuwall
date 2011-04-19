@@ -79,7 +79,7 @@ public final class HudsonConnectionPlugin implements BuildConnectionPlugin {
             Project project = projectCreator.buildProjectFrom(hudsonProject);
             State state = getState(projectId);
             project.setState(state);
-            project.setProjectId(projectId);
+            project.addId(HUDSON_ID, projectName);
             return project;
         } catch(HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
