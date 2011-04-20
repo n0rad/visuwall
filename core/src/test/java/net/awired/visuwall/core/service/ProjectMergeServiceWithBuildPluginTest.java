@@ -1,4 +1,4 @@
-package net.awired.visuwall.server.service;
+package net.awired.visuwall.core.service;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;

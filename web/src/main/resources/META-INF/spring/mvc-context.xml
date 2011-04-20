@@ -33,6 +33,7 @@
 	<mvc:resources mapping="/res/**" location="/" />
 
 	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+<!-- 	<property name=""></property> -->
 		<property name="mediaTypes">
 			<map>
 				<entry key="html" value="text/html" />

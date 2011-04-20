@@ -10,6 +10,8 @@
 						http://www.springframework.org/schema/mvc  http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"
 	default-autowire="byName">
 
+	<context:component-scan base-package="net.awired.visuwall.core.domain" />
+
 	<tx:annotation-driven />
 
 	<bean id="entityManagerFactory"

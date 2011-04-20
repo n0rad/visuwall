@@ -23,6 +23,7 @@
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<context:component-scan base-package="net.awired.visuwall" />
+	<context:component-scan base-package="net.awired.ajsl" />
 
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
