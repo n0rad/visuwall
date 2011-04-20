@@ -20,9 +20,9 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.awired.ajsl.web.service.interfaces.CssService;
+import net.awired.ajsl.web.service.interfaces.JsService;
 import net.awired.visuwall.server.application.VisuwallApplication;
-import net.awired.visuwall.server.service.interfaces.CssService;
-import net.awired.visuwall.server.service.interfaces.JsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

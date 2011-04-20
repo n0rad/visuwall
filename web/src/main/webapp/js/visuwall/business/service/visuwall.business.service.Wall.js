@@ -5,7 +5,7 @@ visuwall.business.service.Wall ={
 		},
 		
 		get : function(wallName, callback) {
-			$.getJSON('wall/' + wallName, {}, callback);
+			$.getJSON('wall/' + wallName + '/', {}, callback);
 		},
 		
 		status : function(wallName, callback) {

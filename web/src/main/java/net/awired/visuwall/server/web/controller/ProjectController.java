@@ -7,7 +7,7 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotFoundException;
 import net.awired.visuwall.core.service.ProjectService;
-import net.awired.visuwall.core.service.WallService;
+import net.awired.visuwall.core.service.WallHolderService;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ProjectController {
 
     @Autowired
-    WallService wallService;
+    WallHolderService wallService;
 
     @Autowired
     ProjectService projectService;

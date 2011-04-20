@@ -5,11 +5,11 @@ visuwall.business.service.Project = {
 	},
 		
 	project : function(wallName, projectName, callback) {
-	    $.getJSON('wall/' + wallName + '/project/' + projectName, {}, callback);
+	    $.getJSON('wall/' + wallName + '/project/' + projectName + '/', {}, callback);
 	},
 	
 	getBuild : function(wallName, projectName, buildId, callback) {
 		LOG.info('loading build ' + buildId + ' for project ' + projectName + ' in wall ' + wallName);
-		$.getJSON('wall/' + wallName + '/project/' + projectName + '/build/' + buildId, {}, callback);		
+		$.getJSON('wall/' + wallName + '/project/' + projectName + '/build/' + buildId + '/', {}, callback);		
 	}
 };

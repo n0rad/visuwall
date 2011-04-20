@@ -4,7 +4,7 @@ import java.util.Date;
 
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.service.ProjectService;
-import net.awired.visuwall.core.service.WallService;
+import net.awired.visuwall.core.service.WallHolderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ProcessingController {
 
     @Autowired
-    private WallService wallService;
+    private WallHolderService wallService;
 
     @Autowired
     private ProjectService projectService;

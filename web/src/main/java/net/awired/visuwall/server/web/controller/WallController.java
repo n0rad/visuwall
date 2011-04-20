@@ -11,7 +11,7 @@ import net.awired.visuwall.core.domain.SoftwareAccess;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
-import net.awired.visuwall.core.service.WallService;
+import net.awired.visuwall.core.service.WallHolderService;
 import net.awired.visuwall.plugin.hudson.HudsonPlugin;
 import net.awired.visuwall.plugin.sonar.SonarPlugin;
 
@@ -34,7 +34,7 @@ public class WallController {
     private static final String WALL_JSP = "wall/wallForm";
 
     @Autowired
-    private WallService wallService;
+    private WallHolderService wallService;
 
     @PostConstruct
     void init() throws NotCreatedException {
@@ -83,8 +83,7 @@ public class WallController {
     public @ResponseBody
     List<ProjectStatus> getStatus(@PathVariable String wallName,
             ModelMap modelMap) throws NotFoundException {
-        Wall wall = wallService.find(wallName);
-        List<ProjectStatus> status = wallService.getStatus(wall);
+        List<ProjectStatus> status = wallService.getStatus(wallName);
         return status;
     }
 

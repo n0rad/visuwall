@@ -129,7 +129,8 @@ public final class Project implements Comparable<Project> {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("project id", projectId) //
+		return Objects.toStringHelper(this) //
+				.add("project id", projectId) //
 				.add("name", name) //
 				.add("description", description) //
 				.add("state", state) //

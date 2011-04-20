@@ -35,7 +35,7 @@ public class ProjectService {
     private static final int PROJECT_NOT_BUILT_ID = -1;
 
     @Transient
-    private String[] metrics = new String[]{"coverage", "ncloc", "violations_density"};
+    String[] metrics = new String[]{"coverage", "ncloc", "violations_density"};
 
     public void updateWallProjects(Wall wall) {
         Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
@@ -47,7 +47,6 @@ public class ProjectService {
                 Project project;
                 try {
                     project = wall.getProjectFromProjectId(discoveredProjectId);
-
                 } catch (NotFoundException e) {
                     project = new Project(discoveredProjectId);
                     wall.getProjects().add(project);
@@ -66,7 +65,7 @@ public class ProjectService {
         updateProject(wall.getPluginHolder(), project);
     }
 
-    private void updateProject(PluginHolder pluginHolder, Project project) {
+    void updateProject(PluginHolder pluginHolder, Project project) {
         for(BuildConnectionPlugin service : pluginHolder.getBuildServices()) {
             projectMergeService.merge(project, service);
         }
