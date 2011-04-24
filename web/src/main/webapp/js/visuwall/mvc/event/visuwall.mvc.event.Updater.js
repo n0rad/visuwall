@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-ul.marquee {
-	line-height: 1;
-	position: relative;
-	overflow: hidden;
-	height: 1em;
-}
-
-ul.marquee li {
-	position: absolute;
-	top: -999em;
-}
+visuwall.mvc.event.Updater = {
+		
+	
+	
+	"input#updater|click" : function() {
+		LOG.info("run updater");
+		visuwall.mvc.controller.ProjectController.updateStatus();
+	}
+		
+};
