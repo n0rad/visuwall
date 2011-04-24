@@ -1,5 +1,5 @@
 visuwall.mvc.controller.edit = {
-	run : function(wallId) {
+	run : function(vars, wallId) {
 		LOG.info("Edit wall with id : " + wallId);
 		$("#modal").load("wall/create", function(data) {
 			$(this).dialog({
@@ -9,7 +9,7 @@ visuwall.mvc.controller.edit = {
 				resizable: false,
 				modal: true,
 				close: function(event, ui) {
-					$.historyLoad('');
+					$.history.queryBuilder().removeController('edit').load();
 				}
 			});
 		});

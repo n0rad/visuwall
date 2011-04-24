@@ -62,6 +62,14 @@ public class WallController {
         // "http://bamboo.visuwall.awired.net"));
 
         wallService.persist(newwall);
+
+        Wall newwall2 = new Wall("Awired.net");
+        List<SoftwareAccess> softwareAccesses2 = newwall.getSoftwareAccesses();
+        softwareAccesses2.add(new SoftwareAccess(new Software(HudsonPlugin.class
+                .getName(), 1.0f), "http://ci.awired.net/jenkins"));
+        softwareAccesses2.add(new SoftwareAccess(new Software(SonarPlugin.class
+                .getName(), 1.0f), "http://sonar.awired.net"));
+        wallService.persist(newwall2);    
     }
 
     @RequestMapping

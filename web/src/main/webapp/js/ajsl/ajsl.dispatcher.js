@@ -1,22 +1,18 @@
 ajsl.dispatcher = {
 
-	_ctlrs : {},
+	_ctrls : {},
 
-	_mainCtlr : null,
+	_mainCtrl : null,
 
-	register : function(ctlr, name) {
-		if (this._ctlrs[name] != undefined) {
-			LOG.warn("controller with name ", name, "is already registered");
-		}
-		this._ctlrs[name] = ctlr;
-	},
+//	register : function(ctrl, name) {
+//		if (this._ctrls[name] != undefined) {
+//			LOG.warn("controller with name ", name, "is already registered");
+//		}
+//		this._ctrls[name] = ctlr;
+//	},
 
-	registerMain : function(ctlr) {
-		if (typeof (ctlr.run) == undefined) {
-			LOG.error('main controller is not a simple controller');
-			return;
-		}
-		this._mainCtlr = ctlr;
+	registerMain : function(ctrl) {
+		this._mainCtrl = ctrl;
 	},
 
 	registerAll : function(obj) {
@@ -24,7 +20,24 @@ ajsl.dispatcher = {
 		// if (this._controllers[name] != undefined) {
 		// LOG.warn("controller with name ", name, "is already registered");
 		// }
-		$.extend(this._ctlrs, obj);
+		var ctrls = {};
+		for (var ctrlName in obj) {
+			for (var methodName in obj[ctrlName]) {
+				if (typeof (obj[ctrlName][methodName]) != 'function'
+					|| methodName[0] == '_' || methodName == 'init'
+					|| obj[ctrlName][methodName] == this._mainCtrl) {
+					continue;
+				}
+				
+				var ctrlRun;
+				if (methodName == 'run') {
+					ctrlRun = ctrlName;
+				} else {
+					ctrlRun = ctrlName + '/' + methodName;
+				}
+				this._ctrls[ctrlRun] = obj[ctrlName][methodName];
+			}
+		}
 	},
 
 // function init() {
@@ -41,35 +54,53 @@ ajsl.dispatcher = {
 	dispatch : function(url) {
 		LOG.debug("dispatch for url '", url, "'");
 
-		// check if main
-		if (url.trim() == '') {
-			ajsl.dispatcher._mainCtlr.run();
+		if (!url) {
+			ajsl.dispatcher._mainCtrl();
 			return;
 		}
 
+		var parsedCtrls = $.history.parseRequest(url);
+		
+		for (var ctrl in parsedCtrls) {
+			if (ajsl.dispatcher._ctrls[ctrl] == undefined) {
+				LOG.error("no controller for '", ctrl, "'");
+				continue;
+			}
+			var action = ajsl.dispatcher._ctrls[ctrl];
+			var vars = parsedCtrls[ctrl].vars;
+			var args = parsedCtrls[ctrl].ctrlVars.join("','");
+			eval("action(vars, '" + args + "');");
+		}
+		
+		
+		
+		
+		
+		return;
+		
 		var splits = url.split('/');
 		// find controller
-		if (ajsl.dispatcher._ctlrs[splits[0]] == undefined) {
+		if (ajsl.dispatcher._ctrls[splits[0]] == undefined) {
 			LOG.error("no controller for '", splits[0], "'");
 			return;
 		}
-		var ctlr = ajsl.dispatcher._ctlrs[splits[0]];
+		var ctrl = ajsl.dispatcher._ctrls[splits[0]];
 
 		var action = null;
-		if (ctlr.run != undefined && typeof ctlr.run == 'function') {
+		if (ctrl.run != undefined && typeof ctrl.run == 'function') {
 			// controller is simple
-			action = ctlr.run;
+			action = ctrl.run;
 		} else {
 			// multicontroller
 
 			// TODO check that splits[1] is a function
-			if (ajsl.dispatcher._ctlrs[splits[0]][splits[1]] == undefined) {
+			if (ajsl.dispatcher._ctrls[splits[0]][splits[1]] == undefined) {
 				LOG.error("no action named '", splits[1], "' in controller '",
 						splits[0], "'");
 				return;
 			}
 
-			action = ctlr[splits[0]];
+			action = ctrl[splits[0]];
 
 			// remove controller to remove action on next shift
 			splits.shift();
@@ -81,4 +112,5 @@ ajsl.dispatcher = {
 		var args = splits.join("','");
 		eval("action('" + args + "');");
 	}
+	
 };

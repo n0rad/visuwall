@@ -6,8 +6,6 @@ visuwall.mvc.wall = {
 
 	init : function(context) {
 		var tabs = $("#softTabs");
-
-		
 //        var mainDynamicForm = $("#tabs-1").dynamicForm(addFunction, removeFunction, {
 //            limit:5, 
 //            formPrefix:"wallForm",

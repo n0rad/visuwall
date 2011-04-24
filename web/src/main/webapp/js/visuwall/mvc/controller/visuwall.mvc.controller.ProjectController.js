@@ -14,7 +14,18 @@ visuwall.mvc.controller.ProjectController = {
 		this.projectService = visuwall.business.service.Project;
 		this.wallService = visuwall.business.service.Wall;
 		this.projectDAO = visuwall.persistence.dao.ProjectDAO;
+		
+		// create updater event
+		var updater = setInterval(visuwall.mvc.event.navigation['#refresh|click'], 10000);
+		this.updateStatus();
 	},
+	
+	loadWall : function(wallname) {
+		this.wallName = wallname;
+		
+//		this._removeProject
+	},
+	
 	
 	buildProjects : function() {
 		var $this = this;
@@ -46,6 +57,7 @@ visuwall.mvc.controller.ProjectController = {
 	},
 
 	updateStatus : function() {
+		LOG.debug("run updater");
 		var $this = this;
 		$this.wallService.status(this.wallName,function (projectsStatus) {
 			var projectDone = [];

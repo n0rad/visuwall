@@ -23,6 +23,12 @@
 	<link rel="shortcut icon" href="favicon.ico" />
 	${cssLinks}
 	${jsLinks}
+	
+	<script type="text/javascript">
+	$(function() {
+		visuwall.init();
+	});
+	</script>
 </head>
 <body>
 <jsp:include page="navigation.jsp"/>

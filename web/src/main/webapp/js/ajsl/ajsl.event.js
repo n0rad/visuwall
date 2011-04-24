@@ -16,7 +16,7 @@ ajsl.event = {
 				context = $(eventObj.context);
 			}
 			
-			if (typeof eventObj[ev] == 'function') {
+			if ($.isFunction(eventObj[ev])) {
 				
 				var ppos = ev.indexOf('|');
 				var selector = ev.substring(0, ppos);
@@ -33,8 +33,9 @@ ajsl.event = {
 				}
 				
 				if (event == 'init') {
-					LOG.debug('init "', ev, '" event to', elements);
-					eventObj[ev](elements);
+					elements.each(eventObj[ev]);
+//					LOG.debug('init "', ev, '" event to', elements);
+//					eventObj[ev](elements);
 				} else {
 					LOG.debug('bind "', ev, '" event to', elements);					
 					elements.bind(event, {eventObj : eventObj}, eventObj[ev]);

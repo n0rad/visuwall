@@ -105,6 +105,10 @@ TABLE.uTest TD.success, TABLE.iTest TD.success {
 	background-color: #729fcf !important;
 }
 
+UL.quality li {
+	white-space: nowrap;
+}
+
 TABLE.uTest SPAN.diff, TABLE.iTest SPAN.diff {
 	padding-left: 10px;
 	font-size: 0.8em;

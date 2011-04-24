@@ -1,84 +1,85 @@
 visuwall = {
-		business : {service : {}},
-		mvc : {controller : {}, view: {}, event: {}},
-		persistence : {dao : {}},
-		
-		/**
-		 * init on ready
-		 */
-		init : function() {
-			$(function (){
-				
-				jQuery.timeago.settings.strings = {
-							suffixAgo: " ago",
-					        suffixFromNow: "from now",
-					        seconds: "<1min",
-					        minute: "1min",
-					        minutes: "%dmin",
-					        hour: "1h",
-					        hours: "%dh",
-					        day: "1d",
-					        days: "%dd",
-					        month: "1M",
-					        months: "%dM",
-					        year: "1y",
-					        years: "%dy"
-						};
+	business : {
+		service : {}
+	},
+	mvc : {
+		controller : {},
+		view : {},
+		event : {}
+	},
+	persistence : {
+		dao : {}
+	},
 
-				jQuery("abbr.timeago").timeago();
+	/**
+	 * init on ready
+	 */
+	init : function() {
+		jQuery.timeago.settings.strings = {
+			suffixAgo : " ago",
+			suffixFromNow : "from now",
+			seconds : "<1min",
+			minute : "1min",
+			minutes : "%dmin",
+			hour : "1h",
+			hours : "%dh",
+			day : "1d",
+			days : "%dd",
+			month : "1M",
+			months : "%dM",
+			year : "1y",
+			years : "%dy"
+		};
 
-				// register controllers
-				ajsl.dispatcher.registerAll(visuwall.mvc.controller);
+		jQuery("abbr.timeago").timeago();
 
-				// register main controller
-				ajsl.dispatcher.registerMain(visuwall.mvc.MainController);
+		// register main controller
+		ajsl.dispatcher.registerMain(visuwall.mvc.controller.main.run);
 
-				ajsl.log.setLevel('debug');
-				
-				// register events
-				ajsl.event.registerAll(visuwall.mvc.event);
-		
-				visuwall.mvc.view.Loader.init();
-				
-				// init loader
-				ajsl.loader.init(visuwall.mvc.view.Loader);
-				
-				// loader test
-				$("#loader1").bind('click', function() {
+		// register controllers
+		ajsl.dispatcher.registerAll(visuwall.mvc.controller);
+
+		ajsl.log.setLevel('warn');
+
+		// register events
+		ajsl.event.registerAll(visuwall.mvc.event);
+
+		visuwall.mvc.view.Loader.init();
+
+		// init loader
+		ajsl.loader.init(visuwall.mvc.view.Loader);
+
+		// loader test
+		$("#loader1").bind(
+				'click',
+				function() {
 					if ($("#loader1").hasClass('selected')) {
 						$("#loader1").removeClass('selected');
 						ajsl.loader.del('loader1');
 					} else {
 						$("#loader1").addClass('selected');
-						ajsl.loader.add('loader1', 'description of loader1', function() {
-							LOG.info('cancel loader1');					
-						});
+						ajsl.loader.add('loader1', 'description of loader1',
+								function() {
+									LOG.info('cancel loader1');
+								});
 					}
 				});
-				$("#loader2").bind('click', function() {
+		$("#loader2").bind(
+				'click',
+				function() {
 					if ($("#loader2").hasClass('selected')) {
 						$("#loader2").removeClass('selected');
 						ajsl.loader.del('loader2');
 					} else {
 						$("#loader2").addClass('selected');
-						ajsl.loader.add('loader2', 'description of loader2', function() {
-							LOG.info('cancel loader2');					
-						});
+						ajsl.loader.add('loader2', 'description of loader2',
+								function() {
+									LOG.info('cancel loader2');
+								});
 					}
 				});
-	
-				//visuwall.mvc.controller.ProjectController.buildProjects();
-				
-				// create updater event
-				var updater = setInterval(visuwall.mvc.event.Updater['input#updater|click'], 10000);
 
-				// Initialize history plugin.
-				$.historyInit(ajsl.dispatcher.dispatch);
-			});
-		}
+		// Initialize history plugin.
+		$.history.init(ajsl.dispatcher.dispatch, {unescape : true, ctrls : ajsl.dispatcher._ctrls});
+	}
 };
-
-
-$(function (){
-	visuwall.init();
-});
