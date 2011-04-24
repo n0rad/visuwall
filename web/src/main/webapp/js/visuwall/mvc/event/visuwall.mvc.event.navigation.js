@@ -51,42 +51,42 @@ visuwall.mvc.event.navigation = new function() {
 //				'slow', $('#navigation', this.context).fadeOut());
 	};
 
-//	'#fontSizeSlider|init' : function(element) {
-//		element.slider({
-//			// handle: '.slider_handle',
-//			value : 0.7,
-//			min : 0.5,
-//			max : 1.2,
-//			step : 0.01,
-//			// start: function(e, ui) {
-//			// $('#fontSizeSlider').fadeIn('fast', function() { captionVisible =
-//			// true;});
-//			// },
-//			// stop: function(e, ui) {
-//			// // if (captionVisible == false) {
-//			// // $('#fontSizeSlider').fadeIn('fast', function() {
-//			// captionVisible = true;});
-//			//	  
-//			// // $('#fontSizeSlider').css('left',
-//			// ui.handle.css('left')).text(Math.round(ui.value * 15/100 + 8 ));
-//			//	  
-//			// $("#body").animate({fontSize: ui.value * 15/100 + 8 });
-//			// //}
-//			// //$('#fontSizeSlider').fadeOut('fast', function() {
-//			// captionVisible = false; });
-//			//	  
-//			// },
-//
-//			slide : function(e, ui) {
-//				// $('#fontSizeSlider').css({'left' : ui.handle.css('left')}
-//				// ).text(Math.round(ui.value * 15/100 + 8 ));
-//				LOG.debug('New font size : ', ui.value);
-//				$('#projectsTable').css({
-//					fontSize : ui.value + 'em'
-//				});
-//			}
-//		});
-//	},
+	this['#fontSizeSlider|init'] = function() {
+		$(this).slider({
+			// handle: '.slider_handle',
+			value : 0.7,
+			min : 0.5,
+			max : 1.2,
+			step : 0.01,
+			// start: function(e, ui) {
+			// $('#fontSizeSlider').fadeIn('fast', function() { captionVisible =
+			// true;});
+			// },
+			// stop: function(e, ui) {
+			// // if (captionVisible == false) {
+			// // $('#fontSizeSlider').fadeIn('fast', function() {
+			// captionVisible = true;});
+			//	  
+			// // $('#fontSizeSlider').css('left',
+			// ui.handle.css('left')).text(Math.round(ui.value * 15/100 + 8 ));
+			//	  
+			// $("#body").animate({fontSize: ui.value * 15/100 + 8 });
+			// //}
+			// //$('#fontSizeSlider').fadeOut('fast', function() {
+			// captionVisible = false; });
+			//	  
+			// },
+
+			slide : function(e, ui) {
+				// $('#fontSizeSlider').css({'left' : ui.handle.css('left')}
+				// ).text(Math.round(ui.value * 15/100 + 8 ));
+				LOG.debug('New font size : ', ui.value);
+				$('#projectsTable').css({
+					fontSize : ui.value + 'em'
+				});
+			}
+		});
+	};
 
 	// '#wallSelector #select|init' : function(element) {
 	// element.button().click(function() {
