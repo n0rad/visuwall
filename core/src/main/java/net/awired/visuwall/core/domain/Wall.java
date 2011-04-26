@@ -31,6 +31,7 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.util.AutoPopulatingList;
 
 import com.google.common.base.Objects;
@@ -54,6 +55,7 @@ import com.google.common.base.Preconditions;
     private List<Project> projects = new AutoPopulatingList<Project>(Project.class);
 
     @Transient
+    @JsonIgnore
     transient private PluginHolder pluginHolder;
 
     public Wall() {
@@ -123,10 +125,12 @@ import com.google.common.base.Preconditions;
         this.projects = projects;
     }
 
+    @JsonIgnore
     public PluginHolder getPluginHolder() {
         return pluginHolder;
     }
 
+    @JsonIgnore
     public void setPluginHolder(PluginHolder pluginHolder) {
         this.pluginHolder = pluginHolder;
     }

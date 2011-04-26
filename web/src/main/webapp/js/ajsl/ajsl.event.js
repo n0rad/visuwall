@@ -34,18 +34,30 @@ ajsl.event = {
 			
 			if ($.isFunction(eventObj[ev])) {
 				
-				var ppos = ev.indexOf('|');
-				var selector = ev.substring(0, ppos);
-				var event = ev.substring(ppos + 1).trim();
-				if (!selector) {
-					var elements = context;
-				} else {
-					var elements = $(selector, context);
+				var eventSplit = ev.split('|');
+				
+				var selector = eventSplit[0].trim();
+				var event = eventSplit[1];
+				var run = eventSplit[2];
+				
+				
+				var elements = context;
+				
+				if (selector == 'init' && !event && !run) {
+					event = selector;
+					selector = null;
 				}
+
+				
+                if (!selector) {
+                	var elements = context;
+                } else {
+                	var elements = $(selector, context);
+                }
 				
 				if (elements.length == 0 && event != 'init') {
 					LOG.error('nothing found to register event : ', ev);
-					return;
+					continue;
 				}
 				
 				if (event == 'init') {
@@ -53,8 +65,13 @@ ajsl.event = {
 //					LOG.debug('init "', ev, '" event to', elements);
 //					eventObj[ev](elements);
 				} else {
-					LOG.debug('bind "', ev, '" event to', elements);					
-					elements.bind(event, {eventObj : eventObj}, eventObj[ev]);
+					if (run) {
+						LOG.debug('bind live "', ev, '" event to', elements);
+						elements.live(event, {eventObj : eventObj}, eventObj[ev]);
+					} else {
+						LOG.debug('bind "', ev, '" event to', elements);
+						elements.bind(event, {eventObj : eventObj}, eventObj[ev]);
+					}
 				}
 				
 			}

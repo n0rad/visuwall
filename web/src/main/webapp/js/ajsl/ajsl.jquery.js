@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+String.prototype.ucfirst = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
 function buildVisualDuration(duration) {
 	var inst = {options: {
 		compact : true,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-visuwall.business.service.Wall ={
+visuwall.business.service.Wall = {
 
 		wall : function(callback) {
 			$.getJSON('wall', {}, function(data) {
@@ -22,9 +22,11 @@ visuwall.business.service.Wall ={
 			});
 		},
 		
-//		get : function(wallName, callback) {
-//			$.getJSON('wall/' + wallName + '/', {}, callback);
-//		},
+		get : function(wallName, callback) {
+			$.getJSON('wall/' + wallName + '/', {}, function(data) {
+				callback(data.data);
+			});
+		},
 		
 		status : function(wallName, callback) {
 			$.getJSON('wall/' + wallName + '/status', {}, callback);

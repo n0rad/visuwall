@@ -68,11 +68,11 @@ public class WallController {
         //				"http://integration.wormee.orange-vallee.net:9000"));
 
         softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
-                .getName(), 1.0f), "http://ci.awired.net/jenkins"));
+                .getName(), 1.0f), "http://ci.awired.net/jenkins", "awired-ci"));
         softwareAccesses.add(new SoftwareAccess(new Software(SonarPlugin.class
-                .getName(), 1.0f), "http://sonar.awired.net"));
+                .getName(), 1.0f), "http://sonar.awired.net", "awired-sonar"));
         softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
-                .getName(), 1.0f), "http://ci.visuwall.awired.net"));
+                .getName(), 1.0f), "http://ci.visuwall.awired.net", "visuwall-ci"));
         // softwareAccesses.add(new SoftwareAccess(new
         // Software(BambooPlugin.class.getName(), 1.0f),
         // "http://bamboo.visuwall.awired.net"));
@@ -82,9 +82,9 @@ public class WallController {
         Wall newwall2 = new Wall("Awired.net");
         List<SoftwareAccess> softwareAccesses2 = newwall.getSoftwareAccesses();
         softwareAccesses2.add(new SoftwareAccess(new Software(HudsonPlugin.class
-                .getName(), 1.0f), "http://ci.awired.net/jenkins"));
+                .getName(), 1.0f), "http://ci.awired.net/jenkins", "awired-ci"));
         softwareAccesses2.add(new SoftwareAccess(new Software(SonarPlugin.class
-                .getName(), 1.0f), "http://sonar.awired.net"));
+                .getName(), 1.0f), "http://sonar.awired.net", "awired-sonar"));
         wallService.persist(newwall2);    
     }
 

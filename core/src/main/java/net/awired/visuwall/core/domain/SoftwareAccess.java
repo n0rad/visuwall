@@ -41,13 +41,14 @@ public class SoftwareAccess {
 
     }
 
-    public SoftwareAccess(Software software, String url) {
+    public SoftwareAccess(Software software, String url, String name) {
         this.software = software;
         this.url = url;
+        this.name = name;
     }
 
-    public SoftwareAccess(Software software, String url, String login, String password) {
-        this(software, url);
+    public SoftwareAccess(Software software, String url, String name, String login, String password) {
+        this(software, url, name);
         this.login = login;
         this.password = password;
     }
