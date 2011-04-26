@@ -46,14 +46,9 @@
 		<module>core</module>
 		<module>cli</module>
 		<module>web</module>
-		<module>hudsonclient</module>
-		<module>bambooclient</module>
+		<module>plugins</module>
 		<module>api</module>
 		<module>it</module>
-
-		<module>sonar-plugin</module>
-		<module>hudson-plugin</module>
-		<module>bamboo-plugin</module>
 	</modules>
 
 	<properties>
