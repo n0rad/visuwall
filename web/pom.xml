@@ -56,13 +56,11 @@
 		</dependency>
 
 		<!-- runnable war -->
-<!--
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-cli</artifactId>
 			<scope>provided</scope>
 		</dependency>
--->
 		<dependency>
 			<groupId>net.awired.ajsl</groupId>
 			<artifactId>ajsl-bootstrap</artifactId>
