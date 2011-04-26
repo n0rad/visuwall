@@ -20,57 +20,72 @@ import com.google.common.base.Objects;
 
 public final class QualityMeasure {
 
-    private String name;
-    private Double value;
-    private String formattedValue;
+	private String name;
+	private Double value;
+	private String formattedValue;
+	private String key;
 
-    public Double getValue() {
-        return value;
-    }
-    public void setValue(Double value) {
-        this.value = value;
-    }
+	public Double getValue() {
+		return value;
+	}
 
-    public String getFormattedValue() {
-        return formattedValue;
-    }
-    public void setFormattedValue(String formattedValue) {
-        this.formattedValue = formattedValue;
-    }
+	public void setValue(Double value) {
+		this.value = value;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getFormattedValue() {
+		return formattedValue;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setFormattedValue(String formattedValue) {
+		this.formattedValue = formattedValue;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || !(o instanceof QualityMeasure)) {
-            return false;
-        }
-        QualityMeasure qm = (QualityMeasure) o;
-        boolean isEqual = true;
-        if (name != null) {
-            isEqual &= name.equals(qm.name);
-        }
-        if (value != null) {
-            isEqual &= value.equals(qm.value);
-        }
-        if (formattedValue != null) {
-            isEqual &= formattedValue.equals(qm.formattedValue);
-        }
-        return isEqual;
-    }
+	public String getName() {
+		return name;
+	}
 
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this) //
-        .add("name", name) //
-        .add("value", value) //
-        .add("formattedValue", formattedValue) //
-        .toString();
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof QualityMeasure)) {
+			return false;
+		}
+		QualityMeasure qm = (QualityMeasure) o;
+		boolean isEqual = true;
+		if (key != null) {
+			isEqual &= key.equals(qm.key);
+		}
+		if (name != null) {
+			isEqual &= name.equals(qm.name);
+		}
+		if (value != null) {
+			isEqual &= value.equals(qm.value);
+		}
+		if (formattedValue != null) {
+			isEqual &= formattedValue.equals(qm.formattedValue);
+		}
+		return isEqual;
+	}
+
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this) //
+		        .add("key", key) //
+		        .add("name", name) //
+		        .add("value", value) //
+		        .add("formattedValue", formattedValue) //
+		        .toString();
+	}
 }

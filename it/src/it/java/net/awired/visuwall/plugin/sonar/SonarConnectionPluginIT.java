@@ -32,43 +32,41 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
 public class SonarConnectionPluginIT {
 
-    private static SonarConnectionPlugin sonarPlugin;
+	private static SonarConnectionPlugin sonarPlugin;
 
-    @BeforeClass
-    public static void init() {
-        sonarPlugin = new SonarConnectionPlugin(SONAR_URL);
-        sonarPlugin.init();
-    }
+	@BeforeClass
+	public static void init() {
+		sonarPlugin = new SonarConnectionPlugin(SONAR_URL);
+	}
 
-    @Test
-    public void should_populate_quality() {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId(STRUTS_ARTIFACT_ID);
-        QualityResult quality = sonarPlugin.populateQuality(projectId, "violations_density");
-        QualityMeasure measure = quality.getMeasure("violations_density");
-        assertEquals("Rules compliance", measure.getName());
-        assertEquals("77.2%", measure.getFormattedValue());
-        assertEquals(77.2, measure.getValue(), 0);
-    }
+	@Test
+	public void should_populate_quality() {
+		ProjectId projectId = new ProjectId();
+		projectId.setArtifactId(STRUTS_ARTIFACT_ID);
+		QualityResult quality = sonarPlugin.populateQuality(projectId, "violations_density");
+		QualityMeasure measure = quality.getMeasure("violations_density");
+		assertEquals("Rules compliance", measure.getName());
+		assertEquals("77.2%", measure.getFormattedValue());
+		assertEquals(77.2, measure.getValue(), 0);
+	}
 
-    @Test
-    public void should_have_a_lot_of_quality_metrics() {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId(STRUTS_ARTIFACT_ID);
-        QualityResult quality = sonarPlugin.populateQuality(projectId);
-        Set<Entry<String, QualityMeasure>> measures = quality.getMeasures();
-        for (Entry<String, QualityMeasure> measure : measures) {
-            assertNotNull(measure.getValue().getValue());
-        }
-    }
+	@Test
+	public void should_have_a_lot_of_quality_metrics() {
+		ProjectId projectId = new ProjectId();
+		projectId.setArtifactId(STRUTS_ARTIFACT_ID);
+		QualityResult quality = sonarPlugin.populateQuality(projectId);
+		Set<Entry<String, QualityMeasure>> measures = quality.getMeasures();
+		for (Entry<String, QualityMeasure> measure : measures) {
+			assertNotNull(measure.getValue().getValue());
+		}
+	}
 
-    @Test
-    public void should_not_fail_if_measure_does_not_exist() throws ProjectNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId(STRUTS_ARTIFACT_ID);
-        sonarPlugin.populateQuality(projectId, "inexistant_measure");
-    }
+	@Test
+	public void should_not_fail_if_measure_does_not_exist() throws ProjectNotFoundException {
+		ProjectId projectId = new ProjectId();
+		projectId.setArtifactId(STRUTS_ARTIFACT_ID);
+		sonarPlugin.populateQuality(projectId, "inexistant_measure");
+	}
 }
