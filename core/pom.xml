@@ -95,7 +95,6 @@
 			<version>1.6.1</version>
 		</dependency>
 
-
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>

@@ -28,8 +28,8 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
+import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,76 +38,75 @@ import org.mockito.Mockito;
 
 public class SonarConnectionPluginTest {
 
-    Map<String, QualityMetric> metricList = createMetricList();
+	Map<String, QualityMetric> metricList = createMetricList();
 
-    MetricsLoader metricsLoader = Mockito.mock(MetricsLoader.class);
-    MeasureFinder measureCreator = Mockito.mock(MeasureFinder.class);
+	MetricFinder metricListBuilder = Mockito.mock(MetricFinder.class);
+	MeasureFinder measureFinder = Mockito.mock(MeasureFinder.class);
 
-    @Before
-    public void init() throws SonarMetricsNotFoundException {
-        when(metricsLoader.createMetricList(Matchers.anyString())).thenReturn(metricList);
-        when(measureCreator.getAllMetricKeys()).thenReturn(new String[]{"coverage"});
-    }
+	@Before
+	public void init() throws SonarMetricsNotFoundException {
+		when(metricListBuilder.findMetrics()).thenReturn(metricList);
+	}
 
-    @Test
-    public void should_create_quality_measure() throws SonarMetricNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId("artifactId");
+	@Test
+	public void should_create_quality_measure() throws SonarMetricNotFoundException {
+		ProjectId projectId = new ProjectId();
+		projectId.setArtifactId("artifactId");
 
-        QualityMeasure coverageMeasure = new QualityMeasure();
-        coverageMeasure.setName("Coverage");
-        coverageMeasure.setFormattedValue("5%");
-        coverageMeasure.setValue(5D);
-        when(measureCreator.createQualityMeasure(projectId.getArtifactId(), "coverage")).thenReturn(coverageMeasure);
+		QualityMeasure coverageMeasure = new QualityMeasure();
+		coverageMeasure.setName("Coverage");
+		coverageMeasure.setFormattedValue("5%");
+		coverageMeasure.setValue(5D);
+		coverageMeasure.setKey("coverage");
+		when(measureFinder.findQualityMeasure("artifactId", "coverage")).thenReturn(coverageMeasure);
 
-        SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin("url");
-        sonarPlugin.setMeasureCreator(measureCreator);
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
 
-        QualityResult qualityResult = sonarPlugin.populateQuality(projectId);
-        QualityMeasure freshCoverageMeasure = qualityResult.getMeasure("coverage");
+		QualityResult qualityResult = sonarPlugin.populateQuality(projectId);
+		QualityMeasure freshCoverageMeasure = qualityResult.getMeasure("coverage");
 
-        assertEquals(coverageMeasure.getName(), freshCoverageMeasure.getName());
-        assertEquals(coverageMeasure.getValue(), freshCoverageMeasure.getValue());
-        assertEquals(coverageMeasure.getFormattedValue(), freshCoverageMeasure.getFormattedValue());
-    }
+		assertEquals(coverageMeasure.getKey(), freshCoverageMeasure.getKey());
+		assertEquals(coverageMeasure.getName(), freshCoverageMeasure.getName());
+		assertEquals(coverageMeasure.getValue(), freshCoverageMeasure.getValue());
+		assertEquals(coverageMeasure.getFormattedValue(), freshCoverageMeasure.getFormattedValue());
+	}
 
-    @Test
-    public void should_find_project() {
-        SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin("url");
-        sonarPlugin.setMeasureCreator(measureCreator);
+	@Test
+	public void should_find_project() {
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
 
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId("artifactId");
+		ProjectId projectId = new ProjectId();
+		projectId.setArtifactId("artifactId");
 
-        assertTrue(sonarPlugin.contains(projectId));
-    }
+		assertTrue(sonarPlugin.contains(projectId));
+	}
 
-    @Test
-    public void should_not_find_project() throws SonarMetricNotFoundException {
-        SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin("url");
-        sonarPlugin.setMeasureCreator(measureCreator);
+	@Test
+	public void should_not_find_project() throws SonarMetricNotFoundException {
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
 
-        when(measureCreator.findMeasure(Matchers.anyString(), Matchers.anyString())).thenThrow(new SonarMetricNotFoundException(""));
+		when(measureFinder.findMeasure(Matchers.anyString(), Matchers.anyString())).thenThrow(
+		        new SonarMetricNotFoundException(""));
 
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId("artifactId");
+		ProjectId projectId = new ProjectId();
+		projectId.setArtifactId("artifactId");
 
-        assertFalse(sonarPlugin.contains(projectId));
-    }
+		assertFalse(sonarPlugin.contains(projectId));
+	}
 
-    @Test
-    public void should_return_false_when_no_artifact_id_found() {
-        SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin("url");
-        assertFalse(sonarPlugin.contains(new ProjectId()));
-    }
+	@Test
+	public void should_return_false_when_no_artifact_id_found() {
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
+		assertFalse(sonarPlugin.contains(new ProjectId()));
+	}
 
-    private Map<String, QualityMetric> createMetricList() {
-        Map<String, QualityMetric> metricList = new HashMap<String, QualityMetric>();
-        QualityMetric coverageMetric = new QualityMetric();
-        coverageMetric.setKey("coverage");
-        coverageMetric.setName("Coverage");
-        metricList.put(coverageMetric.getKey(), coverageMetric);
-        return metricList;
-    }
+	private Map<String, QualityMetric> createMetricList() {
+		Map<String, QualityMetric> metricList = new HashMap<String, QualityMetric>();
+		QualityMetric coverageMetric = new QualityMetric();
+		coverageMetric.setKey("coverage");
+		coverageMetric.setName("Coverage");
+		metricList.put(coverageMetric.getKey(), coverageMetric);
+		return metricList;
+	}
 
 }

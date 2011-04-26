@@ -18,11 +18,7 @@ package net.awired.visuwall.plugin.sonar;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
-
-import java.util.Map;
-
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
-import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
@@ -37,75 +33,70 @@ import com.google.common.base.Preconditions;
 
 public class MeasureFinder {
 
-    @VisibleForTesting
-    MetricsLoader metricsLoader = new MetricsLoader();
+	private String sonarUrl;
 
-    private String sonarUrl;
-    private String login;
-    private String password;
+	/**
+	 * http://docs.codehaus.org/display/SONAR/Web+Service+API
+	 */
+	private Sonar sonar;
 
-    /**
-     * http://docs.codehaus.org/display/SONAR/Web+Service+API
-     */
-    @VisibleForTesting
-    Sonar sonar;
+	public MeasureFinder(String sonarUrl) throws SonarMetricsNotFoundException {
+		this(sonarUrl, null, null);
+	}
 
-    @VisibleForTesting
-    Map<String, QualityMetric> metrics;
+	public MeasureFinder(String sonarUrl, String login, String password) throws SonarMetricsNotFoundException {
+		this.sonarUrl = sonarUrl;
 
-    public MeasureFinder(String sonarUrl) {
-        this.sonarUrl = sonarUrl;
-    }
+		if (isBlank(sonarUrl)) {
+			throw new IllegalStateException("sonarUrl can't be null.");
+		}
+		if (isNotBlank(login) && isNotBlank(password)) {
+			sonar = Sonar.create(sonarUrl, login, password);
+		} else {
+			sonar = Sonar.create(sonarUrl);
+		}
+	}
 
-    public MeasureFinder(String sonarUrl, String login, String password) {
-        this(sonarUrl);
-        this.login = login;
-        this.password = password;
-    }
+	@VisibleForTesting
+	MeasureFinder(Sonar sonar) {
+		this.sonar = sonar;
+	}
 
-    public void init() throws SonarMetricsNotFoundException {
-        if (isBlank(sonarUrl)) {
-            throw new IllegalStateException("sonarUrl can't be null.");
-        }
-        if (isNotBlank(login) && isNotBlank(password)) {
-            sonar = Sonar.create(sonarUrl, login, password);
-        } else {
-            sonar = Sonar.create(sonarUrl);
-        }
-        metrics = metricsLoader.createMetricList(sonarUrl);
-    }
+	public QualityMeasure findQualityMeasure(String artifactId, String measureKey) throws SonarMetricNotFoundException {
+		Preconditions.checkNotNull(artifactId, "artifactId is a mandatory parameter");
+		Preconditions.checkNotNull(measureKey, "measureKey is a mandatory parameter");
 
-    public QualityMeasure createQualityMeasure(String projectId, String key) throws SonarMetricNotFoundException {
-        Measure measure = findMeasure(projectId, key);
-        if (measure != null) {
-            Double value = measure.getValue();
-            if (value != null) {
-                QualityMeasure qualityMeasure = new QualityMeasure();
-                qualityMeasure.setName(metrics.get(key).getName());
-                qualityMeasure.setValue(value);
-                qualityMeasure.setFormattedValue(measure.getFormattedValue());
-                return qualityMeasure;
-            }
-        }
-        throw new SonarMetricNotFoundException("metric '"+key+"' is not found for project '"+projectId+"'");
-    }
+		Measure measure = findMeasure(artifactId, measureKey);
+		if (measure != null) {
+			Double value = measure.getValue();
+			if (value != null) {
+				QualityMeasure qualityMeasure = new QualityMeasure();
+				qualityMeasure.setKey(measureKey);
+				qualityMeasure.setValue(value);
+				qualityMeasure.setFormattedValue(measure.getFormattedValue());
+				return qualityMeasure;
+			}
+		}
+		throw new SonarMetricNotFoundException("metric '" + measureKey + "' is not found for project '" + artifactId
+		        + "'");
+	}
 
-    public Measure findMeasure(String projectId, String measureKey) throws SonarMetricNotFoundException {
-        Preconditions.checkNotNull(projectId, "projectId");
-        try {
-            ResourceQuery query = ResourceQuery.createForMetrics(projectId, measureKey);
-            Resource resource = sonar.find(query);
-            if (resource == null) {
-                throw new SonarMetricNotFoundException("Metric "+measureKey+" not found for project "+projectId+" in Sonar "+sonarUrl);
-            }
-            return resource.getMeasure(measureKey);
-        } catch(ConnectionException e) {
-            throw new SonarMetricNotFoundException("Metric "+measureKey+" not found for project "+projectId+" in Sonar "+sonarUrl, e);
-        }
-    }
+	public Measure findMeasure(String artifactId, String measureKey) throws SonarMetricNotFoundException {
+		Preconditions.checkNotNull(artifactId, "artifactId is a mandatory parameter");
+		Preconditions.checkNotNull(measureKey, "measureKey is a mandatory parameter");
 
-    public String[] getAllMetricKeys() {
-        return metrics.keySet().toArray(new String[]{});
-    }
+		try {
+			ResourceQuery query = ResourceQuery.createForMetrics(artifactId, measureKey);
+			Resource resource = sonar.find(query);
+			if (resource == null) {
+				throw new SonarMetricNotFoundException("Metric " + measureKey + " not found for project " + artifactId
+				        + " in Sonar " + sonarUrl);
+			}
+			return resource.getMeasure(measureKey);
+		} catch (ConnectionException e) {
+			throw new SonarMetricNotFoundException("Metric " + measureKey + " not found for project " + artifactId
+			        + " in Sonar " + sonarUrl, e);
+		}
+	}
 
 }

@@ -40,122 +40,122 @@ import com.google.common.base.Preconditions;
 
 public class BambooConnectionPlugin implements BuildConnectionPlugin {
 
-    private static final String BAMBOO_ID = "BAMBOO_ID";
+	private static final String BAMBOO_ID = "BAMBOO_ID";
 
-    private Bamboo bamboo;
+	private Bamboo bamboo;
 
-    private static final Map<String, State> STATE_MAPPING = new HashMap<String, State>();
+	private static final Map<String, State> STATE_MAPPING = new HashMap<String, State>();
 
-    static {
-        STATE_MAPPING.put("Successful", State.SUCCESS);
-        STATE_MAPPING.put("Failed", State.FAILURE);
-    }
+	static {
+		STATE_MAPPING.put("Successful", State.SUCCESS);
+		STATE_MAPPING.put("Failed", State.FAILURE);
+	}
 
-    public BambooConnectionPlugin(String url, String login, String password) {
-        this(url);
-    }
+	public BambooConnectionPlugin(String url, String login, String password) {
+		this(url);
+	}
 
-    public BambooConnectionPlugin(String url) {
-        Preconditions.checkNotNull(url, "Use setUrl() before calling init method");
-        bamboo = new Bamboo(url);
-    }
+	public BambooConnectionPlugin(String url) {
+		Preconditions.checkNotNull(url, "Use setUrl() before calling init method");
+		bamboo = new Bamboo(url);
+	}
 
-    @Override
-    public List<ProjectId> findAllProjects() {
-        List<ProjectId> projects = new ArrayList<ProjectId>();
-        for(BambooProject bambooProject:bamboo.findAllProjects()) {
-            ProjectId projectId = new ProjectId();
-            projectId.setName(bambooProject.getName());
-            projectId.addId(BAMBOO_ID, bambooProject.getKey());
-            projects.add(projectId);
-        }
-        return projects;
-    }
+	@Override
+	public List<ProjectId> findAllProjects() {
+		List<ProjectId> projects = new ArrayList<ProjectId>();
+		for (BambooProject bambooProject : bamboo.findAllProjects()) {
+			ProjectId projectId = new ProjectId();
+			projectId.setName(bambooProject.getName());
+			projectId.addId(BAMBOO_ID, bambooProject.getKey());
+			projects.add(projectId);
+		}
+		return projects;
+	}
 
-    @Override
-    public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
-        String projectName = getProjectName(projectId);
+	@Override
+	public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
+		String projectKey = getProjectKey(projectId);
 
-        BambooProject bambooProject = bamboo.findProject(projectName);
+		BambooProject bambooProject = bamboo.findProject(projectKey);
 
-        Project project = new Project(projectId);
-        project.setName(bambooProject.getName());
-        return project;
-    }
+		Project project = new Project(projectId);
+		project.setName(bambooProject.getName());
+		return project;
+	}
 
-    private String getProjectName(ProjectId projectId) {
-        return projectId.getId(BAMBOO_ID);
-    }
+	private String getProjectKey(ProjectId projectId) {
+		return projectId.getId(BAMBOO_ID);
+	}
 
-    @Override
-    public Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
-    ProjectNotFoundException {
-        String projectName = getProjectName(projectId);
-        try {
-            return createBuild(bamboo.findBuild(projectName, buildNumber));
-        } catch (BambooBuildNotFoundException e) {
-            throw new BuildNotFoundException(e);
-        }
-    }
+	@Override
+	public Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
+	        ProjectNotFoundException {
+		String projectName = getProjectKey(projectId);
+		try {
+			return createBuild(bamboo.findBuild(projectName, buildNumber));
+		} catch (BambooBuildNotFoundException e) {
+			throw new BuildNotFoundException(e);
+		}
+	}
 
-    private Build createBuild(BambooBuild bambooBuild) {
-        Build build = new Build();
-        build.setBuildNumber(bambooBuild.getBuildNumber());
-        build.setDuration(bambooBuild.getDuration());
-        build.setStartTime(bambooBuild.getStartTime());
-        build.setState(getState(bambooBuild.getState()));
-        TestResult testResult = new TestResult();
-        testResult.setFailCount(bambooBuild.getFailCount());
-        testResult.setPassCount(bambooBuild.getPassCount());
-        build.setTestResult(testResult);
-        return build;
-    }
+	private Build createBuild(BambooBuild bambooBuild) {
+		Build build = new Build();
+		build.setBuildNumber(bambooBuild.getBuildNumber());
+		build.setDuration(bambooBuild.getDuration());
+		build.setStartTime(bambooBuild.getStartTime());
+		build.setState(getState(bambooBuild.getState()));
+		TestResult testResult = new TestResult();
+		testResult.setFailCount(bambooBuild.getFailCount());
+		testResult.setPassCount(bambooBuild.getPassCount());
+		build.setTestResult(testResult);
+		return build;
+	}
 
-    private State getState(String bambooState) {
-        State state = STATE_MAPPING.get(bambooState);
-        if (state == null) {
-            throw new RuntimeException("No state mapping for bambooState: "+bambooState);
-        }
-        return state;
-    }
+	private State getState(String bambooState) {
+		State state = STATE_MAPPING.get(bambooState);
+		if (state == null) {
+			throw new RuntimeException("No state mapping for bambooState: " + bambooState);
+		}
+		return state;
+	}
 
-    @Override
-    public void populate(Project project) throws ProjectNotFoundException {
-        Project bambooProject = findProject(project.getProjectId());
-        project.setName(bambooProject.getName());
-    }
+	@Override
+	public void populate(Project project) throws ProjectNotFoundException {
+		Project bambooProject = findProject(project.getProjectId());
+		project.setName(bambooProject.getName());
+	}
 
-    @Override
-    public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
-        String projectName = getProjectName(projectId);
-        try {
-            return bamboo.getEstimatedFinishTime(projectName);
-        } catch (BambooProjectNotFoundException e) {
-            throw new ProjectNotFoundException(e);
-        }
-    }
+	@Override
+	public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
+		String projectName = getProjectKey(projectId);
+		try {
+			return bamboo.getEstimatedFinishTime(projectName);
+		} catch (BambooProjectNotFoundException e) {
+			throw new ProjectNotFoundException(e);
+		}
+	}
 
-    @Override
-    public boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException {
-        String projectName = getProjectName(projectId);
-        BambooProject bambooProject = bamboo.findProject(projectName);
-        return bambooProject.isBuilding();
-    }
+	@Override
+	public boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException {
+		String projectName = getProjectKey(projectId);
+		BambooProject bambooProject = bamboo.findProject(projectName);
+		return bambooProject.isBuilding();
+	}
 
-    @Override
-    public State getState(ProjectId projectId) throws ProjectNotFoundException {
-        String projectName = getProjectName(projectId);
-        String bambooState = bamboo.getState(projectName);
-        return getState(bambooState);
-    }
+	@Override
+	public State getState(ProjectId projectId) throws ProjectNotFoundException {
+		String projectName = getProjectKey(projectId);
+		String bambooState = bamboo.getState(projectName);
+		return getState(bambooState);
+	}
 
-    @Override
-    public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
-        Preconditions.checkNotNull(projectId, "projectId");
-        String id = getProjectName(projectId);
-        Preconditions.checkNotNull(id, BAMBOO_ID);
+	@Override
+	public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
+		Preconditions.checkNotNull(projectId, "projectId is a mandatory parameter");
+		String id = getProjectKey(projectId);
+		Preconditions.checkNotNull(id, BAMBOO_ID);
 
-        return bamboo.getLastBuildNumber(id);
-    }
+		return bamboo.getLastBuildNumber(id);
+	}
 
 }

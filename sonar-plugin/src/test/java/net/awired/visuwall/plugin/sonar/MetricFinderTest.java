@@ -27,29 +27,28 @@ import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
 import org.junit.Test;
 
+public class MetricFinderTest {
 
-public class MetricsLoaderTest {
+	@Test
+	public void should_create_metrics() throws SonarMetricsNotFoundException {
+		final QualityMetric qualityMetric = new QualityMetric();
+		qualityMetric.setKey("coverage_key");
 
-    @Test
-    public void should_create_metrics() throws SonarMetricsNotFoundException {
-        final QualityMetric qualityMetric = new QualityMetric();
-        qualityMetric.setKey("coverage_key");
+		MetricFinder metricsLoader = new MetricFinder("http://sonar") {
+			@Override
+			SonarMetrics fetchMetrics() {
+				SonarMetrics sonarMetrics = new SonarMetrics();
 
-        MetricsLoader metricsLoader = new MetricsLoader(){
-            @Override
-            SonarMetrics fetchMetrics(String sonarUrl) {
-                SonarMetrics sonarMetrics = new SonarMetrics();
+				sonarMetrics.metric = new ArrayList<QualityMetric>();
+				sonarMetrics.metric.add(qualityMetric);
 
-                sonarMetrics.metric = new ArrayList<QualityMetric>();
-                sonarMetrics.metric.add(qualityMetric);
+				return sonarMetrics;
+			}
+		};
 
-                return sonarMetrics;
-            }
-        };
+		Map<String, QualityMetric> metrics = metricsLoader.findMetrics();
 
-        Map<String, QualityMetric> metrics = metricsLoader.createMetricList("sonarUrl");
-
-        QualityMetric qm = metrics.get("coverage_key");
-        assertEquals(qualityMetric, qm);
-    }
+		QualityMetric qm = metrics.get("coverage_key");
+		assertEquals(qualityMetric, qm);
+	}
 }

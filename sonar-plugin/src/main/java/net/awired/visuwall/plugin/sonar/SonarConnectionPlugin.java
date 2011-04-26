@@ -16,14 +16,15 @@
 
 package net.awired.visuwall.plugin.sonar;
 
-import java.util.Arrays;
+import java.util.Map;
 
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
+import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
-import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
+import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,79 +34,83 @@ import com.google.common.base.Preconditions;
 
 public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SonarConnectionPlugin.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SonarConnectionPlugin.class);
 
-    private MeasureFinder measureFinder;
+	private MeasureFinder measureFinder;
 
-    public SonarConnectionPlugin(String url) {
-        this(url, null, null);
-    }
+	private MetricFinder metricListBuilder;
 
-    public SonarConnectionPlugin(String url, String login, String password) {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Initialize sonar with url " + url);
-        }
-        measureFinder = new MeasureFinder(url, login, password);
-    }
+	private Map<String, QualityMetric> metricsMap;
+	private String[] metricKeys = new String[] {};
 
-    public void init() {
-        try {
-            measureFinder.init();
-        } catch (SonarMetricsNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public SonarConnectionPlugin(String url) {
+		this(url, null, null);
+	}
 
-    @Override
-    public QualityResult populateQuality(ProjectId projectId, String... metrics) {
-        Preconditions.checkNotNull(projectId, "projectId");
-        QualityResult qualityResult = new QualityResult();
-        if (projectId.getArtifactId() != null) {
-            if (metrics.length == 0) {
-                metrics = measureFinder.getAllMetricKeys();
-            }
+	public SonarConnectionPlugin(String url, String login, String password) {
+		if (LOG.isInfoEnabled()) {
+			LOG.info("Initialize sonar with url " + url);
+		}
+		try {
+			measureFinder = new MeasureFinder(url, login, password);
+			metricListBuilder = new MetricFinder(url);
+			metricsMap = metricListBuilder.findMetrics();
+			metricKeys = metricsMap.keySet().toArray(new String[] {});
+		} catch (SonarMetricsNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("metrics to find : "+Arrays.toString(metrics));
-            }
+	@VisibleForTesting
+	SonarConnectionPlugin(MeasureFinder measureFinder, MetricFinder metricListBuilder) {
+		try {
+			this.measureFinder = measureFinder;
+			metricsMap = metricListBuilder.findMetrics();
+			metricKeys = metricsMap.keySet().toArray(new String[] {});
+		} catch (SonarMetricsNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-            for (String key : metrics) {
-                try {
-                    QualityMeasure qualityMeasure = measureFinder.createQualityMeasure(projectId.getArtifactId(), key);
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("found qualityMeasure : "+qualityMeasure);
-                    }
-                    qualityResult.add(key, qualityMeasure);
-                } catch(SonarMetricNotFoundException e) {
-                    if(LOG.isDebugEnabled()) {
-                        LOG.debug(e.getMessage());
-                    }
-                }
-            }
-        }
-        return qualityResult;
-    }
+	@Override
+	public QualityResult populateQuality(ProjectId projectId, String... metrics) {
+		Preconditions.checkNotNull(projectId, "projectId");
 
-    @Override
-    public boolean contains(ProjectId projectId) {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+		QualityResult qualityResult = new QualityResult();
+		if (projectId.getArtifactId() != null) {
+			if (metrics.length == 0) {
+				metrics = metricKeys;
+			}
+			for (String key : metrics) {
+				try {
+					QualityMeasure qualityMeasure = measureFinder.findQualityMeasure(projectId.getArtifactId(), key);
+					qualityMeasure.setName(metricsMap.get(key).getName());
+					qualityResult.add(key, qualityMeasure);
+				} catch (SonarMetricNotFoundException e) {
+					if (LOG.isDebugEnabled()) {
+						LOG.debug(e.getMessage());
+					}
+				}
+			}
+		}
+		return qualityResult;
+	}
 
-        String artifactId = projectId.getArtifactId();
-        if (artifactId == null) {
-            return false;
-        }
+	@Override
+	public boolean contains(ProjectId projectId) {
+		Preconditions.checkNotNull(projectId, "projectId is mandatory");
 
-        try {
-            measureFinder.findMeasure(artifactId, "comment_blank_lines");
-        } catch(SonarMetricNotFoundException e) {
-            return false;
-        }
-        return true;
-    }
+		String artifactId = projectId.getArtifactId();
+		if (artifactId == null) {
+			return false;
+		}
 
-    @VisibleForTesting
-    void setMeasureCreator(MeasureFinder measureCreator) {
-        this.measureFinder = measureCreator;
-    }
+		try {
+			measureFinder.findMeasure(artifactId, "comment_blank_lines");
+		} catch (SonarMetricNotFoundException e) {
+			return false;
+		}
+		return true;
+	}
 
 }
