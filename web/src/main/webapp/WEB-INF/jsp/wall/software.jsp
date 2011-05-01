@@ -20,12 +20,14 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<form:hidden path="softwareAccesses[0].id"/>
+
 <form:label path="softwareAccesses[0].url">Url</form:label>
 <form:input path="softwareAccesses[0].url" class="ui-widget-content ui-corner-all url"/>
 
-<form:label path="softwareAccesses[0].software">Type</form:label>
-<form:select path="softwareAccesses[0].software">
-	<form:options items="${softwares}" itemLabel="name" itemValue="id"/>
+<form:label path="softwareAccesses[0].pluginClassName">Type</form:label>
+<form:select path="softwareAccesses[0].pluginClassName">
+	<form:options items="${softwares}" itemLabel="name" itemValue="className"/>
 </form:select>
 
 <form:label path="softwareAccesses[0].name" >Name</form:label>

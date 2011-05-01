@@ -24,5 +24,8 @@
 	version="1.0">
 
 	<persistence-unit name="visuwall" transaction-type="RESOURCE_LOCAL">
+		<properties>
+			<property name="hibernate.jdbc.batch_size" value="0" />
+		</properties>
 	</persistence-unit>
 </persistence>

@@ -2,6 +2,9 @@
 	
 	$.extend($.history, {
 		parseRequest : function(request) {
+			//TODO fill _ctrl cleanly
+			this._queryBuilderObj._ctrl = this._options.ctrls;
+			
 			var result = {};
 			if (request) {
 				var controllers = request.split('|');
@@ -26,6 +29,17 @@
 				}
 				result.ctrlVars = varsSepar[0].split('/');
 				result.ctrl = result.ctrlVars.shift();
+				
+				// check for specific method
+				if (result.ctrlVars.length) {
+					var ctrlWithMethod = result.ctrl + '/' + result.ctrlVars[0];
+					if (this._ctrl[ctrlWithMethod] != undefined) {
+						result.ctrlVars.shift();
+						result.ctrl = ctrlWithMethod; 
+					}
+				}
+				
+				// vars
 				if (varsSepar.length > 1) {
 					result.vars = this._parseQueryVars(varsSepar[1]);
 				} else {

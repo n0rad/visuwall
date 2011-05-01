@@ -103,9 +103,16 @@ public class WallHolderService implements WallService {
 		}
 		reconstructWall(wall);
 		WALLS.put(wall.getName(), wall);
-
 	}
 
+	@Override
+	public Wall update(Wall wall) {
+		Wall newWall = wallService.update(wall);
+		reconstructWall(newWall);
+		WALLS.put(newWall.getName(), newWall);
+		return newWall;
+	}
+	
 	// ////////////////////////////////////////////////////////////////////////////////
 
 	public Set<String> getWallNames() {

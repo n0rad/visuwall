@@ -29,7 +29,7 @@ public interface IntegrationTestData {
     String SONAR_URL = "http://sonar.awired.net";
     String STRUTS_ARTIFACT_ID = "org.apache.struts:struts-core";
 
-    SoftwareAccess HUDSON_ACCESS = new SoftwareAccess(new Software(HudsonPlugin.class.getName(), 1.0f), HUDSON_URL, "");
-    SoftwareAccess SONAR_ACCESS = new SoftwareAccess(new Software(SonarPlugin.class.getName(), 1.0f), SONAR_URL, "");
+    SoftwareAccess HUDSON_ACCESS = new SoftwareAccess(HudsonPlugin.class, HUDSON_URL, "");
+    SoftwareAccess SONAR_ACCESS = new SoftwareAccess(SonarPlugin.class, SONAR_URL, "");
 
 }

@@ -114,12 +114,12 @@ visuwall.mvc.event.navigation = new function() {
 	};
 
 	this['#wallSelector #edit|click'] = function() {
-		var editCtrlUrl = 'edit/' + $('#wallSelector #wallSelect').val();
+		var editCtrlUrl = 'wall/edit/' + $('#wallSelector #wallSelect').val();
 		$.history.queryBuilder().addController(editCtrlUrl).load();
 	};
 
 	this['#wallSelector #add|click'] = function() {
-		$.history.queryBuilder().addController('create?toto42=tot&genre=').load();
+		$.history.queryBuilder().addController('wall/create').load();
 	};
 	
 	this['#refresh|click'] = function() {

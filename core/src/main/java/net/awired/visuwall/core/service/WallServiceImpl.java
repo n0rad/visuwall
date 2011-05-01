@@ -22,6 +22,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import net.awired.visuwall.core.domain.SoftwareAccess;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
@@ -37,38 +38,43 @@ import com.google.common.base.Preconditions;
 @Repository
 @Transactional
 public class WallServiceImpl implements WallService {
-    
-    private static final Logger LOG = LoggerFactory.getLogger(WallServiceImpl.class);
-	
+
+	private static final Logger LOG = LoggerFactory
+			.getLogger(WallServiceImpl.class);
+
 	@PersistenceContext
-    private EntityManager entityManager;
-    
-    public void persist(Wall wall) throws NotCreatedException {
-        Preconditions.checkNotNull(wall, "wall parameter is mandatory");
-        Preconditions.checkNotNull(wall.getName(), "wall must have a name");
+	private EntityManager entityManager;
 
-        try {
-            entityManager.merge(wall);
-            entityManager.flush();            
-        } catch (Throwable e) {
-            String message = "Can't create wall " + wall + " in database";
-            LOG.error(message, e);
-            throw new NotCreatedException(message, e);
-        }
-    }
-    
-    
-    @SuppressWarnings("unchecked")
-    public List<Wall> getWalls() {
-        Query query = entityManager.createNamedQuery(Wall.QUERY_WALLS);
-        return query.getResultList();
-    }
+	@Override
+	public void persist(Wall wall) throws NotCreatedException {
+		Preconditions.checkNotNull(wall, "wall parameter is mandatory");
+		Preconditions.checkNotNull(wall.getName(), "wall must have a name");
 
-    @VisibleForTesting
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+		try {
+			entityManager.persist(wall);
+		} catch (Throwable e) {
+			String message = "Can't create wall " + wall + " in database";
+			LOG.error(message, e);
+			throw new NotCreatedException(message, e);
+		}
+	}
 
+	@Override
+	public Wall update(Wall wall) {
+		Wall persistWall = entityManager.merge(wall);
+		return persistWall;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Wall> getWalls() {
+		Query query = entityManager.createNamedQuery(Wall.QUERY_WALLS);
+		return query.getResultList();
+	}
+
+	@VisibleForTesting
+	public void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
 
 	@Override
 	public Wall find(String wallName) throws NotFoundException {

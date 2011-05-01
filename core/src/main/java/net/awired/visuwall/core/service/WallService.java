@@ -25,9 +25,11 @@ import net.awired.visuwall.core.exception.NotFoundException;
 public interface WallService {
 
 	void persist(Wall wall) throws NotCreatedException;
-
+	
 	List<Wall> getWalls();
 
 	Wall find(String wallName) throws NotFoundException;
+	
+    Wall update(Wall wall);
 
 }

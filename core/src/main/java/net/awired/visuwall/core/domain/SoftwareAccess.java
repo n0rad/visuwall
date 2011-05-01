@@ -16,9 +16,13 @@
 
 package net.awired.visuwall.core.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class SoftwareAccess {
@@ -31,34 +35,38 @@ public class SoftwareAccess {
     private String url;
     private String login;
     private String password;
-    private Software software;
+    private String pluginClassName;
 
+    
     // TODO on next version
     // private boolean allProject;
     // private List<ProjectId> projectIds;
+
+    /////////////////////////////////////////////////////////////
+
+//    
+//    @ManyToOne
+//    @JoinColumn (name="SOFTWARE_ID", nullable = false, updatable = false, insertable = false)
+////    @ManyToOne(optional = false)
+////    @JoinColumn (name="WALL_ID")
+//    private Wall      wall;
+    
+    /////////////////////////////////////////////////////////////
 
     public SoftwareAccess() {
 
     }
 
-    public SoftwareAccess(Software software, String url, String name) {
-        this.software = software;
+    public SoftwareAccess(Class<?> plugin, String url, String name) {
+        this.pluginClassName = plugin.getName();
         this.url = url;
         this.name = name;
     }
 
-    public SoftwareAccess(Software software, String url, String name, String login, String password) {
-        this(software, url, name);
+    public SoftwareAccess(Class<?> plugin, String url, String name, String login, String password) {
+        this(plugin, url, name);
         this.login = login;
         this.password = password;
-    }
-
-    public Software getSoftware() {
-        return software;
-    }
-
-    public void setSoftware(Software software) {
-        this.software = software;
     }
 
     public Long getId() {
@@ -125,4 +133,12 @@ public class SoftwareAccess {
             return false;
         return true;
     }
+
+	public String getPluginClassName() {
+		return pluginClassName;
+	}
+
+	public void setPluginClassName(String pluginClassName) {
+		this.pluginClassName = pluginClassName;
+	}
 }

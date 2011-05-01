@@ -21,6 +21,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<form:hidden path="id"/>
+
 <form:label path="name">Name</form:label>
 <form:input path="name" type="text"
 	class="ui-widget-content ui-corner-all" id="name" name="name" />
@@ -46,11 +48,5 @@
 <script type="text/javascript">
 	//$(function() {
 	ajsl.event.register(visuwall.mvc.wall);
-	$("#wallForm").submit(function() {
-		$.post(this.action, $(this).serialize(), function(data) {
-			   alert("Data Loaded: " + data);
-		});
-		return false;
-	});
 	//});
 </script>

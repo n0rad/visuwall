@@ -18,16 +18,30 @@ package net.awired.visuwall.server.web.controller;
 
 import java.util.List;
 
-import net.awired.visuwall.core.domain.Software;
+import javax.ws.rs.GET;
 
+import net.awired.visuwall.api.plugin.VisuwallPlugin;
+import net.awired.visuwall.core.domain.PluginInfo;
+import net.awired.visuwall.core.domain.Software;
+import net.awired.visuwall.core.service.PluginService;
+
+import org.sonar.wsclient.services.Plugin;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class SoftwareController {
+@RequestMapping("/plugin")
+public class PluginController {
 
+	@Autowired
+	private PluginService pluginService;
 	
-	public List<Software> getSoftwareList() {
-		return null;
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public @ResponseBody List<PluginInfo> getSoftwareList() {
+		return pluginService.getPluginsInfo();
 	}
-		
 }

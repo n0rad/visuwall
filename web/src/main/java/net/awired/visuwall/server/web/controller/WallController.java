@@ -19,114 +19,87 @@ package net.awired.visuwall.server.web.controller;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
 import net.awired.visuwall.api.domain.ProjectStatus;
-import net.awired.visuwall.core.domain.Software;
-import net.awired.visuwall.core.domain.SoftwareAccess;
 import net.awired.visuwall.core.domain.Wall;
-import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
+import net.awired.visuwall.core.service.PluginService;
 import net.awired.visuwall.core.service.WallHolderService;
-import net.awired.visuwall.plugin.hudson.HudsonPlugin;
-import net.awired.visuwall.plugin.sonar.SonarPlugin;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.context.request.WebRequest;
 
 @Controller
 @RequestMapping("/wall")
-@Scope("singleton")
 public class WallController {
 
-    private static final String WALL_JSP = "wall/wallForm";
+	private static final String WALL_JSP = "wall/wallForm";
 
-    @Autowired
-    private WallHolderService wallService;
+	@Autowired
+	private WallHolderService wallService;
 
-    @PostConstruct
-    void init() throws NotCreatedException {
-        Wall newwall = new Wall("orange-vallee");
-        List<SoftwareAccess> softwareAccesses = newwall.getSoftwareAccesses();
+	@Autowired
+	private PluginService pluginService;
 
-        //		softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
-        //				.getName(), 1.0f),
-        //				"http://10.2.40.60/lifeisbetteron/jenkins"));
-        //		softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
-        //				.getName(), 1.0f),
-        //				"http://integration.wormee.orange-vallee.net:8080/jenkins"));
-        //		softwareAccesses.add(new SoftwareAccess(new Software(SonarPlugin.class
-        //				.getName(), 1.0f),
-        //				"http://integration.wormee.orange-vallee.net:9000"));
+	@RequestMapping
+	public String getWallNames(ModelMap modelMap) {
+		Set<String> wallNames = wallService.getWallNames();
+		modelMap.put("data", wallNames);
+		return "wall/wallList";
+	}
 
-        softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
-                .getName(), 1.0f), "http://ci.awired.net/jenkins", "awired-ci"));
-        softwareAccesses.add(new SoftwareAccess(new Software(SonarPlugin.class
-                .getName(), 1.0f), "http://sonar.awired.net", "awired-sonar"));
-        softwareAccesses.add(new SoftwareAccess(new Software(HudsonPlugin.class
-                .getName(), 1.0f), "http://ci.visuwall.awired.net", "visuwall-ci"));
-        // softwareAccesses.add(new SoftwareAccess(new
-        // Software(BambooPlugin.class.getName(), 1.0f),
-        // "http://bamboo.visuwall.awired.net"));
+	@RequestMapping("{wallName}")
+	public String getProjects(@PathVariable String wallName, ModelMap modelMap)
+			throws NotFoundException {
+		Wall wall = wallService.find(wallName);
+		modelMap.put("data", wall);
+		return WALL_JSP;
+	}
 
-        wallService.persist(newwall);
+	@RequestMapping("{wallName}/status")
+	public @ResponseBody
+	List<ProjectStatus> getStatus(@PathVariable String wallName,
+			ModelMap modelMap) throws NotFoundException {
+		List<ProjectStatus> status = wallService.getStatus(wallName);
+		return status;
+	}
 
-        Wall newwall2 = new Wall("Awired.net");
-        List<SoftwareAccess> softwareAccesses2 = newwall.getSoftwareAccesses();
-        softwareAccesses2.add(new SoftwareAccess(new Software(HudsonPlugin.class
-                .getName(), 1.0f), "http://ci.awired.net/jenkins", "awired-ci"));
-        softwareAccesses2.add(new SoftwareAccess(new Software(SonarPlugin.class
-                .getName(), 1.0f), "http://sonar.awired.net", "awired-sonar"));
-        wallService.persist(newwall2);    
-    }
+	@RequestMapping(value = "create", method = RequestMethod.GET)
+	public String getCreate(ModelMap modelMap) {
+		Wall wall = new Wall();
+		modelMap.put("data", wall);
+		modelMap.put("softwares", pluginService.getPluginsInfo());
+		return WALL_JSP;
+	}
 
-    @RequestMapping
-    public String getWallNames(ModelMap modelMap) {
-        Set<String> wallNames = wallService.getWallNames();
-        modelMap.put("data", wallNames);
-        return "wall/wallList";
-    }
+	// @RequestMapping(value = "create", method = RequestMethod.POST)
+	// public ModelAndView create(Wall wall) throws NotCreatedException {
+	// wallService.persist(wall);
+	// return null;
+	// }
 
-    @RequestMapping("{wallName}")
-    public String getProjects(@PathVariable String wallName, ModelMap modelMap)
-    throws NotFoundException {
-        Wall wall = wallService.find(wallName);
-        modelMap.put("data", wall);
-        return WALL_JSP;
-    }
+	@RequestMapping(method = RequestMethod.POST)
+	public @ResponseBody Object update(Wall wall) {
+		wallService.update(wall);
+		return true;
+	}
 
-    @RequestMapping("{wallName}/status")
-    public @ResponseBody
-    List<ProjectStatus> getStatus(@PathVariable String wallName,
-            ModelMap modelMap) throws NotFoundException {
-        List<ProjectStatus> status = wallService.getStatus(wallName);
-        return status;
-    }
+	@RequestMapping(value = "{wallName}", method = RequestMethod.DELETE)
+	public void DeleteWall(@PathVariable String wallName) {
+		throw new NotImplementedException();
+	}
 
-    @RequestMapping(value = "create", method = RequestMethod.GET)
-    public String getCreate(ModelMap modelMap) {
-        Wall wall = new Wall();
-        modelMap.put("data", wall);
-        return WALL_JSP;
-    }
-
-    @RequestMapping(value = "create", method = RequestMethod.POST)
-    public ModelAndView create(Wall wall) throws NotCreatedException {
-        wallService.persist(wall);
-        return null;
-    }
-
-    @RequestMapping(value = "{wallName}", method = RequestMethod.DELETE)
-    public void DeleteWall(@PathVariable String wallName) {
-        throw new NotImplementedException();
-    }
+	@InitBinder
+	public void initBinder(WebDataBinder binder, WebRequest request) {
+		binder.setAutoGrowNestedPaths(false);
+	}
 
 }

@@ -187,6 +187,14 @@ visuwall.mvc.wall = new function() {
 //	mouseup
 //	mousemove
 	
+	this["#wallForm|submit"] = function() {
+		$.ajax({url : 'wall/', type : 'POST', data : $(this).serialize(), success : function(data) {
+				   alert("Data Loaded: " + data);
+			}
+		});
+		return false;
+	};
+	
 	this['INPUT:regex(id,softwareAccesses.*\.name)|blur|live'] = function() {
 		var softTabs = $('#softTabs');
 		var tabIdFull = $('DIV[id^="tabs-"]', softTabs).has(this).attr('id');

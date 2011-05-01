@@ -27,6 +27,7 @@ import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.core.domain.PluginHolder;
+import net.awired.visuwall.core.domain.PluginInfo;
 import net.awired.visuwall.core.domain.Software;
 import net.awired.visuwall.core.domain.SoftwareAccess;
 
@@ -40,6 +41,19 @@ public class PluginService {
 
     private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader.load(VisuwallPlugin.class);
 
+    public List<PluginInfo> getPluginsInfo() {
+    	List<VisuwallPlugin> visuwallPlugins = getPlugins();
+    	List<PluginInfo> pluginInfos = new ArrayList<PluginInfo>(visuwallPlugins.size());
+    	for (VisuwallPlugin visuwallPlugin : visuwallPlugins) {
+			PluginInfo pluginInfo = new PluginInfo();
+			pluginInfo.setClassName(visuwallPlugin.getClass().getName());
+			pluginInfo.setVersion(visuwallPlugin.getVersion());
+			pluginInfo.setName(visuwallPlugin.getName());
+			pluginInfos.add(pluginInfo);
+		}
+    	return pluginInfos;
+    }
+    
     public List<VisuwallPlugin> getPlugins() {
         Iterator<VisuwallPlugin> pluginIt = pluginLoader.iterator();
         List<VisuwallPlugin> result = new ArrayList<VisuwallPlugin>();
@@ -58,7 +72,7 @@ public class PluginService {
         PluginHolder pluginHolder = new PluginHolder();
         for (SoftwareAccess softwareAccess : softwareAccesses) {
             // TODO refactor as we recreate a connection
-            VisuwallPlugin plugin = getPluginFromSoftware(softwareAccess.getSoftware());
+            VisuwallPlugin plugin = getPluginFromSoftware(softwareAccess);
 
             // connect
             Properties properties = new Properties();
@@ -77,11 +91,11 @@ public class PluginService {
         return pluginHolder;
     }
 
-    public VisuwallPlugin getPluginFromSoftware(Software software) {
+    public VisuwallPlugin getPluginFromSoftware(SoftwareAccess softwareAccess) {
         List<VisuwallPlugin> plugins = getPlugins();
         for (VisuwallPlugin plugin : plugins) {
             // TODO manage version
-            if (software.getClassName().equals(plugin.getClass().getName())) {
+            if (softwareAccess.getPluginClassName().equals(plugin.getClass().getName())) {
                 return plugin;
             }
         }

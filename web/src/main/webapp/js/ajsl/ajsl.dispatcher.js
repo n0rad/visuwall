@@ -26,6 +26,10 @@ ajsl.dispatcher = {
 //		}
 //		this._ctrls[name] = ctlr;
 //	},
+	
+	isController : function(name) {
+		return this._ctrls[name] == undefined;
+	},
 
 	registerMain : function(ctrl) {
 		this._mainCtrl = ctrl;
