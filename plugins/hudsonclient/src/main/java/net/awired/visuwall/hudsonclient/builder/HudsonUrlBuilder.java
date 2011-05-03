@@ -18,52 +18,56 @@ package net.awired.visuwall.hudsonclient.builder;
 
 public class HudsonUrlBuilder {
 
-    private final String hudsonUrl;
+	private final String hudsonUrl;
 
-    private static final String API_XML = "/api/xml";
-    private static final String ALL_JOBS_URI = "";
-    private static final String JOB_URI = "/job";
+	private static final String API_XML = "/api/xml";
+	private static final String ALL_JOBS_URI = "";
+	private static final String JOB_URI = "/job";
 
-    public HudsonUrlBuilder(String hudsonUrl) {
-        this.hudsonUrl = hudsonUrl;
-    }
+	public HudsonUrlBuilder(String hudsonUrl) {
+		this.hudsonUrl = hudsonUrl;
+	}
 
-    /**
-     * @return Hudson Url to obtain all jobs
-     */
-    public final String getAllProjectsUrl() {
-        return hudsonUrl+ALL_JOBS_URI+API_XML;
-    }
+	/**
+	 * @return Hudson Url to obtain all jobs
+	 */
+	public final String getAllProjectsUrl() {
+		return hudsonUrl + ALL_JOBS_URI + API_XML;
+	}
 
-    /**
-     * @param jobName
-     * @return Hudson Url to obtain informations of a job
-     */
-    public final String getProjectUrl(String jobName) {
-        return hudsonUrl+JOB_URI+"/"+encode(jobName)+API_XML;
-    }
+	/**
+	 * @param jobName
+	 * @return Hudson Url to obtain informations of a job
+	 */
+	public final String getProjectUrl(String jobName) {
+		return hudsonUrl + JOB_URI + "/" + encode(jobName) + API_XML;
+	}
 
-    private String encode(String url) {
-        return url.replaceAll(" ", "%20");
-    }
+	private String encode(String url) {
+		return url.replaceAll(" ", "%20");
+	}
 
-    /**
-     * @param jobName
-     * @param buildNumber
-     * @return Hudson Url to obtain detailed informations of a job
-     */
-    public final String getBuildUrl(String jobName, int buildNumber) {
-        return hudsonUrl+JOB_URI+"/"+encode(jobName)+"/"+buildNumber+API_XML;
-    }
+	/**
+	 * @param jobName
+	 * @param buildNumber
+	 * @return Hudson Url to obtain detailed informations of a job
+	 */
+	public final String getBuildUrl(String jobName, int buildNumber) {
+		return hudsonUrl + JOB_URI + "/" + encode(jobName) + "/" + buildNumber + API_XML;
+	}
 
-    /**
-     * @param jobName
-     * @param buildNumber
-     * @return Hudson Url to obtain test informations of a job
-     */
-    public final String getTestResultUrl(String jobName, int buildNumber) {
-        return hudsonUrl+JOB_URI+"/"+encode(jobName)+"/"+buildNumber+"/testReport"+API_XML;
+	/**
+	 * @param jobName
+	 * @param buildNumber
+	 * @return Hudson Url to obtain test informations of a job
+	 */
+	public final String getTestResultUrl(String jobName, int buildNumber) {
+		return hudsonUrl + JOB_URI + "/" + encode(jobName) + "/" + buildNumber + "/testReport" + API_XML;
 
-    }
+	}
+
+	public String getPomUrl(String jobName) {
+		return hudsonUrl + JOB_URI + "/" + encode(jobName) + "/ws/pom.xml";
+	}
 
 }

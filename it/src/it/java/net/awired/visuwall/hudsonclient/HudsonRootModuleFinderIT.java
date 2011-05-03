@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-visuwall.mvc.view.Navigation = {
+package net.awired.visuwall.hudsonclient;
 
-	navigation : null,
-		
-	init : function() {
-		this.navigation = $('#navigation');
-	},
+import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 
-	replaceWallList : function(newWallList) {
-		var select = $('#wallSelect', this.navigation);
-		var selectedValue = select.val();
-		select.children().remove();
-		for ( var i = 0; i < newWallList.length; i++) {
-			var newOption = $('<option value="' + newWallList[i] + '">' + newWallList[i] + '</option>');
-			select.append(newOption);
-		}
-		select.val(selectedValue);
+import org.junit.Assert;
+import org.junit.Test;
+
+public class HudsonRootModuleFinderIT {
+
+	@Test
+	public void should_find_synthesis_root_module_from_hudson() throws ArtifactIdNotFoundException {
+		HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(IntegrationTestData.HUDSON_URL);
+		HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
+		String artifactId = hudsonRootModuleFinder.findArtifactId("struts");
+		Assert.assertEquals("org.apache.struts:struts-parent", artifactId);
 	}
-};
+
+}

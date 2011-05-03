@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-visuwall.business.service.Plugin = {
+package net.awired.visuwall.hudsonclient;
 
-		wall : function(callback) {
-			$.getJSON('wall', {}, function(data) {
-				callback(data.data);
-			});
-		}
-};
+public class ArtifactIdNotFoundException extends Exception {
+
+	private static final long serialVersionUID = 6187422971413955095L;
+
+	public ArtifactIdNotFoundException(String message, Throwable t) {
+		super(message, t);
+	}
+
+	public ArtifactIdNotFoundException(String message) {
+		super(message);
+	}
+
+}
