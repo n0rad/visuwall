@@ -17,6 +17,7 @@
 package net.awired.visuwall.hudsonclient;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -43,16 +44,7 @@ public class HudsonRootModuleFinder {
 
 		String logMessage = "Can't find artifactId, job : " + jobName + " at url :'" + pomUrl + "'";
 		try {
-			URL url = new URL(pomUrl);
-			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(url.openStream());
-			String groupId = findFirstChildValue(doc, "groupId");
-			String artifactId = findFirstChildValue(doc, "artifactId");
-
-			if (groupId == null || artifactId == null) {
-				throw new ArtifactIdNotFoundException(logMessage);
-			}
-
-			return groupId + ":" + artifactId;
+			return createArtifactIdFrom(pomUrl);
 		} catch (MalformedURLException e) {
 			throw new ArtifactIdNotFoundException(logMessage, e);
 		} catch (IOException e) {
@@ -64,16 +56,37 @@ public class HudsonRootModuleFinder {
 		}
 	}
 
-	private String findFirstChildValue(Document doc, String tagName) {
+	private String createArtifactIdFrom(String pomUrl) throws MalformedURLException, IOException, SAXException,
+            ParserConfigurationException {
+	    Document doc = loadPom(pomUrl);
+	    String groupId = findValueInFirstLevel(doc, "groupId");
+	    String artifactId = findValueInFirstLevel(doc, "artifactId");
+	    return groupId + ":" + artifactId;
+    }
+
+	private Document loadPom(String pomUrl) throws MalformedURLException, IOException, SAXException,
+	        ParserConfigurationException {
+		URL url = new URL(pomUrl);
+		InputStream stream = url.openStream();
+		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
+		stream.close();
+		return doc;
+	}
+
+	private String findValueInFirstLevel(Document doc, String tagName) {
 		NodeList artifactIds = doc.getElementsByTagName(tagName);
 		for (int i = 0; i < artifactIds.getLength(); i++) {
 			Node artifactId = artifactIds.item(i);
 			String parentName = artifactId.getParentNode().getNodeName();
-			if ("project".equals(parentName)) {
+			if (isFirstLevel(parentName)) {
 				return artifactId.getTextContent();
 			}
 		}
 		return null;
 	}
+
+	private boolean isFirstLevel(String parentName) {
+	    return "project".equals(parentName);
+    }
 
 }

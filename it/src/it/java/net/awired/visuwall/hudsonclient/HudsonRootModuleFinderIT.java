@@ -32,4 +32,11 @@ public class HudsonRootModuleFinderIT {
 		Assert.assertEquals("org.apache.struts:struts-parent", artifactId);
 	}
 
+	@Test
+	public void should_find_synthesis_root_module_from_jenkins() throws ArtifactIdNotFoundException {
+		HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder("http://10.2.40.60/lifeisbetteron/jenkins");
+		HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
+		String artifactId = hudsonRootModuleFinder.findArtifactId("synthesis");
+		Assert.assertEquals("com.orangevallee.on.server.synthesis:synthesis", artifactId);
+	}
 }

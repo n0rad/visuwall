@@ -311,7 +311,7 @@ public class Hudson {
 			artifactId = hudsonRootModuleFinder.findArtifactId(name);
 		} catch (ArtifactIdNotFoundException e) {
 			if (LOG.isDebugEnabled()) {
-				LOG.debug("can't find the artifactId for project " + name);
+				LOG.debug("can't find the artifactId for project " + name + " cause:" + e.getCause());
 			}
 			artifactId = "";
 		}
