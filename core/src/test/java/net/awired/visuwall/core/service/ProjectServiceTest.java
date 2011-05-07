@@ -42,7 +42,7 @@ public class ProjectServiceTest {
 	public void init() {
 		projectService = new ProjectService();
 		ProjectEnhancerService projectMergeService = Mockito.mock(ProjectEnhancerService.class);
-		projectService.projectMergeService = projectMergeService;
+		projectService.projectEnhancerService = projectMergeService;
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -79,9 +79,9 @@ public class ProjectServiceTest {
 		Project project = new Project("test");
 		projectService.updateProject(pluginHolder, project);
 
-		Mockito.verify(projectService.projectMergeService).enhanceWithBuildInformations(project,
+		Mockito.verify(projectService.projectEnhancerService).enhanceWithBuildInformations(project,
 		        pluginHolder.getBuildServices().iterator().next());
-		Mockito.verify(projectService.projectMergeService).enhanceWithQualityAnalysis(project,
+		Mockito.verify(projectService.projectEnhancerService).enhanceWithQualityAnalysis(project,
 		        pluginHolder.getQualityServices().iterator().next(), projectService.metrics);
 	}
 }
