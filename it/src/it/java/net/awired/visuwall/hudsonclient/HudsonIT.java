@@ -23,7 +23,7 @@ import org.junit.Test;
 
 public class HudsonIT {
 
-    private Hudson hudson = new Hudson(IntegrationTestData.HUDSON_URL);
+    private Hudson hudson = new Hudson(IntegrationTestData.JENKINS_URL);
 
     @Test(expected = HudsonBuildNotFoundException.class)
     public void should_throw_an_exception_when_searching_an_inexistant_build() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {

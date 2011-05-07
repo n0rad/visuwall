@@ -158,12 +158,19 @@ public class HudsonTest {
 	@Test
 	public void should_retrieve_test_result() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
 		HudsonBuild build = hudson.findBuild("dev-radar", 74);
-		TestResult testResult = build.getTestResult();
+		TestResult testResult = build.getUnitTestResult();
 		assertEquals(1, testResult.getFailCount());
 		assertEquals(13, testResult.getPassCount());
 		assertEquals(2, testResult.getSkipCount());
 		assertEquals(16, testResult.getTotalCount());
-		assertEquals(2, testResult.getIntegrationTestCount());
+	}
+
+	@Test
+	public void should_retrieve_integration_test_count() throws HudsonBuildNotFoundException,
+	        HudsonProjectNotFoundException {
+		HudsonBuild build = hudson.findBuild("dev-radar", 74);
+		TestResult testResult = build.getIntegrationTestResult();
+		assertEquals(2, testResult.getTotalCount());
 	}
 
 	@Test(expected = HudsonBuildNotFoundException.class)

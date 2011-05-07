@@ -127,15 +127,20 @@ visuwall.mvc.controller.ProjectController = {
 		this.projectsView.updateBuildTime(project.name, project.completedBuild.duration);
 		this.projectsView.updateCommiters(project.name, project.completedBuild.commiters);
 		this.projectsView.updateQuality(project.name, project.qualityResult.measures);
+		
 		this.projectsView.updateUTCoverage(project.name, this._getCoverageFromQualityMeasures(project.qualityResult.measures));
 		this.projectsView.updateUT(project.name, 
-				project.completedBuild.testResult.failCount,
-				project.completedBuild.testResult.passCount,
-				project.completedBuild.testResult.skipCount,
-				project.coverage);
+				project.completedBuild.unitTestResult.failCount,
+				project.completedBuild.unitTestResult.passCount,
+				project.completedBuild.unitTestResult.skipCount,
+				project.completedBuild.unitTestResult.coverage);
 
 		this.projectsView.updateITCoverage(project.name, 0);
-		this.projectsView.updateIT(project.name, 0,0,0);
+		this.projectsView.updateIT(project.name, 
+				project.completedBuild.integrationTestResult.failCount,
+				project.completedBuild.integrationTestResult.passCount,
+				project.completedBuild.integrationTestResult.skipCount,
+				project.completedBuild.integrationTestResult.coverage);
 	
 		var $this = this;
 		var completedBuild = project.completedBuild;
@@ -145,9 +150,9 @@ visuwall.mvc.controller.ProjectController = {
 				return;
 			}
 			
-			var failDiff = completedBuild.testResult.failCount - previousBuild.testResult.failCount;
-			var successDiff = completedBuild.testResult.totalCount - previousBuild.testResult.totalCount;
-			var skipDiff = completedBuild.testResult.skipCount - previousBuild.testResult.skipCount;
+			var failDiff = completedBuild.unitTestResult.failCount - previousBuild.unitTestResult.failCount;
+			var successDiff = completedBuild.unitTestResult.totalCount - previousBuild.unitTestResult.totalCount;
+			var skipDiff = completedBuild.unitTestResult.skipCount - previousBuild.unitTestResult.skipCount;
 			
 			$this.projectsView.updateUTDiff(project.name, failDiff, successDiff, skipDiff);
 		});

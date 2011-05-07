@@ -40,8 +40,7 @@ public final class Project implements Comparable<Project> {
 	}
 
 	public Project(ProjectId projectId) {
-		Preconditions.checkNotNull(projectId,
-				"projectId is a mandatory parameter");
+		Preconditions.checkNotNull(projectId, "projectId is a mandatory parameter");
 		this.projectId = projectId;
 	}
 
@@ -69,11 +68,6 @@ public final class Project implements Comparable<Project> {
 
 	public QualityResult getQualityResult() {
 		return qualityResult;
-	}
-
-	public void setQualityResult(QualityResult qualityResult) {
-		this.qualityResult = qualityResult;
-
 	}
 
 	public State getState() {
@@ -130,13 +124,13 @@ public final class Project implements Comparable<Project> {
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this) //
-				.add("project id", projectId) //
-				.add("name", getName()) //
-				.add("description", description) //
-				.add("state", state) //
-				.add("completed build", completedBuild) //
-				.add("quality result", qualityResult) //
-				.toString();
+		        .add("project id", projectId) //
+		        .add("name", getName()) //
+		        .add("description", description) //
+		        .add("state", state) //
+		        .add("completed build", completedBuild) //
+		        .add("quality result", qualityResult) //
+		        .toString();
 	}
 
 	@Override

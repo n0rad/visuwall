@@ -36,7 +36,7 @@ import org.junit.Test;
 
 public class HudsonConnectionPluginIT {
 
-    static HudsonConnectionPlugin hudsonService = new HudsonConnectionPlugin(IntegrationTestData.HUDSON_URL);
+    static HudsonConnectionPlugin hudsonService = new HudsonConnectionPlugin(IntegrationTestData.JENKINS_URL);
 
     @Test
     public void should_find_all_projects() {

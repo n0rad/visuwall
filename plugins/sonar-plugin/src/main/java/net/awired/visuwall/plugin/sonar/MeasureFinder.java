@@ -99,4 +99,9 @@ public class MeasureFinder {
 		}
 	}
 
+	public Double findMeasureValue(String artifactId, String measureKey) throws SonarMetricNotFoundException {
+		Measure measure = findMeasure(artifactId, measureKey);
+		return measure.getValue();
+	}
+
 }

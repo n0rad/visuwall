@@ -160,7 +160,8 @@ public class Hudson {
 
 		String testResultUrl = hudsonUrlBuilder.getTestResultUrl(projectName, buildNumber);
 		WebResource testResultResource = client.resource(testResultUrl);
-		TestResult testResult = hudsonTestService.build(testResultResource);
+		TestResult unitTestResult = hudsonTestService.buildUnitTestResult(testResultResource);
+		TestResult integrationTestResult = hudsonTestService.buildIntegrationTestResult(testResultResource);
 
 		HudsonBuild hudsonBuild = new HudsonBuild();
 		hudsonBuild.setState(getState(setBuild));
@@ -168,7 +169,8 @@ public class Hudson {
 		hudsonBuild.setStartTime(new Date(setBuild.getTimestamp()));
 		hudsonBuild.setSuccessful(isSuccessful(setBuild));
 		hudsonBuild.setCommiters(getCommiters(setBuild));
-		hudsonBuild.setTestResult(testResult);
+		hudsonBuild.setUnitTestResult(unitTestResult);
+		hudsonBuild.setIntegrationTestResult(integrationTestResult);
 		hudsonBuild.setBuildNumber(buildNumber);
 
 		cache.put(new Element(cacheKey, hudsonBuild));

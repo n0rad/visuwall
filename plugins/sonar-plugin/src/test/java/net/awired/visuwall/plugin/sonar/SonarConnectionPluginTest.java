@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
@@ -35,6 +36,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.sonar.wsclient.services.Measure;
 
 public class SonarConnectionPluginTest {
 
@@ -62,7 +64,7 @@ public class SonarConnectionPluginTest {
 
 		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
 
-		QualityResult qualityResult = sonarPlugin.populateQuality(projectId);
+		QualityResult qualityResult = sonarPlugin.analizeQuality(projectId);
 		QualityMeasure freshCoverageMeasure = qualityResult.getMeasure("coverage");
 
 		assertEquals(coverageMeasure.getKey(), freshCoverageMeasure.getKey());
@@ -98,6 +100,36 @@ public class SonarConnectionPluginTest {
 	public void should_return_false_when_no_artifact_id_found() {
 		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
 		assertFalse(sonarPlugin.contains(new ProjectId()));
+	}
+
+	@Test
+	public void should_build_valid_unit_test_result() throws SonarMetricNotFoundException {
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
+
+		when(measureFinder.findMeasureValue("artifactId", "coverage")).thenReturn(8D);
+
+		ProjectId projectId = new ProjectId();
+		projectId.setArtifactId("artifactId");
+
+		TestResult unitTestResult = sonarPlugin.analyzeUnitTests(projectId);
+
+		assertEquals(8, unitTestResult.getCoverage(), 0);
+	}
+
+	@Test
+	public void should_build_valid_integration_test_result() throws SonarMetricNotFoundException {
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
+
+		Measure value = new Measure();
+		value.setValue(8D);
+		when(measureFinder.findMeasure("artifactId", "it_coverage")).thenReturn(value);
+
+		ProjectId projectId = new ProjectId();
+		projectId.setArtifactId("artifactId");
+
+		TestResult integrationTestResult = sonarPlugin.analyzeIntegrationTests(projectId);
+
+		assertEquals(8, integrationTestResult.getCoverage(), 0);
 	}
 
 	private Map<String, QualityMetric> createMetricList() {

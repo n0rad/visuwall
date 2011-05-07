@@ -45,7 +45,7 @@ public class ProjectService {
 	private static final Logger LOG = LoggerFactory.getLogger(ProjectService.class);
 
 	@Autowired
-	ProjectMergeService projectMergeService;
+	ProjectEnhancerService projectMergeService;
 
 	private static final int PROJECT_NOT_BUILT_ID = -1;
 
@@ -82,10 +82,10 @@ public class ProjectService {
 
 	void updateProject(PluginHolder pluginHolder, Project project) {
 		for (BuildConnectionPlugin service : pluginHolder.getBuildServices()) {
-			projectMergeService.merge(project, service);
+			projectMergeService.enhanceWithBuildInformations(project, service);
 		}
 		for (QualityConnectionPlugin service : pluginHolder.getQualityServices()) {
-			projectMergeService.merge(project, service, metrics);
+			projectMergeService.enhanceWithQualityAnalysis(project, service, metrics);
 		}
 		if (LOG.isDebugEnabled()) {
 			LOG.debug(project.toString());
