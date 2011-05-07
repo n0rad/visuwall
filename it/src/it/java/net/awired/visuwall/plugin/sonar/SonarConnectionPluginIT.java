@@ -32,6 +32,7 @@ import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SonarConnectionPluginIT {
@@ -86,6 +87,7 @@ public class SonarConnectionPluginIT {
 		assertEquals(1829, unitTestsAnalysis.getTotalCount());
 	}
 
+	@Ignore("we have to create a dummy project and install jacoco on awired CI")
 	@Test
 	public void should_analyze_integration_tests() {
 		ProjectId projectId = new ProjectId();
