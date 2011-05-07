@@ -23,19 +23,24 @@ import com.google.common.base.Objects;
 
 public class ProjectId {
 
-    private final Map<String, String> ids = new HashMap<String, String>();
+	private final Map<String, String> ids = new HashMap<String, String>();
 
-    private String name;
+	private String name;
 
-    private String artifactId;
+	private String artifactId;
 
-    
+	public ProjectId() {
+	}
+
+	public ProjectId(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((artifactId == null) ? 0 : artifactId.hashCode());
+		result = prime * result + ((artifactId == null) ? 0 : artifactId.hashCode());
 		result = prime * result + ((ids == null) ? 0 : ids.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
@@ -68,36 +73,36 @@ public class ProjectId {
 		return true;
 	}
 
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this) //
-        .add("name", name) //
-        .toString();
-    }
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this) //
+		        .add("name", name) //
+		        .toString();
+	}
 
-    public void addId(String idName, String idValue) {
-        ids.put(idName, idValue);
-    }
-    
-    public String getId(String idName) {
-        return ids.get(idName);
-    }
-    
-    ////////////////////////////////////////////
+	public void addId(String idName, String idValue) {
+		ids.put(idName, idValue);
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getId(String idName) {
+		return ids.get(idName);
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	// //////////////////////////////////////////
 
-    public String getArtifactId() {
-        return artifactId;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setArtifactId(String artifactId) {
-        this.artifactId = artifactId;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getArtifactId() {
+		return artifactId;
+	}
+
+	public void setArtifactId(String artifactId) {
+		this.artifactId = artifactId;
+	}
 }

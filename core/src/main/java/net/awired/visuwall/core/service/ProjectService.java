@@ -149,7 +149,7 @@ public class ProjectService {
 				}
 			}
 		}
-		throw new RuntimeException("Project must have a state.");
+		throw new RuntimeException("Project " + projectId + " must have a state. It can't be found in " + pluginHolder);
 	}
 
 	public boolean isBuilding(PluginHolder pluginHolder, ProjectId projectId) {

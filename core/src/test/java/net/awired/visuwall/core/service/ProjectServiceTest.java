@@ -41,8 +41,8 @@ public class ProjectServiceTest {
 	@Before
 	public void init() {
 		projectService = new ProjectService();
-		ProjectEnhancerService projectMergeService = Mockito.mock(ProjectEnhancerService.class);
-		projectService.projectEnhancerService = projectMergeService;
+		ProjectEnhancerService projectEnhancerService = Mockito.mock(ProjectEnhancerService.class);
+		projectService.projectEnhancerService = projectEnhancerService;
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -84,4 +84,5 @@ public class ProjectServiceTest {
 		Mockito.verify(projectService.projectEnhancerService).enhanceWithQualityAnalysis(project,
 		        pluginHolder.getQualityServices().iterator().next(), projectService.metrics);
 	}
+
 }
