@@ -29,14 +29,13 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
+import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.sonar.wsclient.services.Measure;
 
 public class SonarConnectionPluginTest {
 
@@ -51,7 +50,7 @@ public class SonarConnectionPluginTest {
 	}
 
 	@Test
-	public void should_create_quality_measure() throws SonarMetricNotFoundException {
+	public void should_create_quality_measure() throws SonarMeasureNotFoundException {
 		ProjectId projectId = new ProjectId();
 		projectId.setArtifactId("artifactId");
 
@@ -84,11 +83,11 @@ public class SonarConnectionPluginTest {
 	}
 
 	@Test
-	public void should_not_find_project() throws SonarMetricNotFoundException {
+	public void should_not_find_project() throws SonarMeasureNotFoundException {
 		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
 
 		when(measureFinder.findMeasure(Matchers.anyString(), Matchers.anyString())).thenThrow(
-		        new SonarMetricNotFoundException(""));
+		        new SonarMeasureNotFoundException(""));
 
 		ProjectId projectId = new ProjectId();
 		projectId.setArtifactId("artifactId");
@@ -103,7 +102,7 @@ public class SonarConnectionPluginTest {
 	}
 
 	@Test
-	public void should_build_valid_unit_test_result() throws SonarMetricNotFoundException {
+	public void should_build_valid_unit_test_result() throws SonarMeasureNotFoundException {
 		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
 
 		when(measureFinder.findMeasureValue("artifactId", "coverage")).thenReturn(8D);
@@ -117,12 +116,10 @@ public class SonarConnectionPluginTest {
 	}
 
 	@Test
-	public void should_build_valid_integration_test_result() throws SonarMetricNotFoundException {
+	public void should_build_valid_integration_test_result() throws SonarMeasureNotFoundException {
 		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
 
-		Measure value = new Measure();
-		value.setValue(8D);
-		when(measureFinder.findMeasure("artifactId", "it_coverage")).thenReturn(value);
+		when(measureFinder.findMeasureValue("artifactId", "it_coverage")).thenReturn(8D);
 
 		ProjectId projectId = new ProjectId();
 		projectId.setArtifactId("artifactId");

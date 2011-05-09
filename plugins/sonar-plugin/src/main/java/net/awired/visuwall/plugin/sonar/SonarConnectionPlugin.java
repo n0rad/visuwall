@@ -24,12 +24,11 @@ import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
-import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
+import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.wsclient.services.Measure;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -88,7 +87,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 					QualityMeasure qualityMeasure = measureFinder.findQualityMeasure(projectId.getArtifactId(), key);
 					qualityMeasure.setName(metricsMap.get(key).getName());
 					qualityResult.add(key, qualityMeasure);
-				} catch (SonarMetricNotFoundException e) {
+				} catch (SonarMeasureNotFoundException e) {
 					if (LOG.isDebugEnabled()) {
 						LOG.debug(e.getMessage());
 					}
@@ -109,7 +108,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 
 		try {
 			measureFinder.findMeasure(artifactId, "comment_blank_lines");
-		} catch (SonarMetricNotFoundException e) {
+		} catch (SonarMeasureNotFoundException e) {
 			return false;
 		}
 		return true;
@@ -138,7 +137,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 			unitTestResult.setFailCount(failCount);
 			unitTestResult.setSkipCount(skipCount);
 			unitTestResult.setPassCount(totalTests.intValue() - failCount - skipCount);
-		} catch (SonarMetricNotFoundException e) {
+		} catch (SonarMeasureNotFoundException e) {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Unit tests informations are not available for project " + projectId + ", cause "
 				        + e.getMessage());
@@ -154,9 +153,9 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 
 		try {
 			String artifactId = projectId.getArtifactId();
-			Measure itCoverage = measureFinder.findMeasure(artifactId, "it_coverage");
-			integrationTestResult.setCoverage(itCoverage.getValue());
-		} catch (SonarMetricNotFoundException e) {
+			Double itCoverage = measureFinder.findMeasureValue(artifactId, "it_coverage");
+			integrationTestResult.setCoverage(itCoverage);
+		} catch (SonarMeasureNotFoundException e) {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Integration tests informations are not available for project " + projectId + ", cause "
 				        + e.getMessage());
