@@ -45,8 +45,7 @@ import com.google.common.base.Preconditions;
 @Service
 public class WallHolderService implements WallService {
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(WallHolderService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(WallHolderService.class);
 
 	private final static int EVERY_FIVE_MINUTES = 5 * 60 * 1000;
 
@@ -83,8 +82,7 @@ public class WallHolderService implements WallService {
 
 		Wall wall = WALLS.get(wallName);
 		if (wall == null) {
-			throw new NotFoundException("Wall with name : " + wallName
-					+ " not found in database");
+			throw new NotFoundException("Wall with name : " + wallName + " not found in database");
 		}
 		return wall;
 	}
@@ -112,7 +110,7 @@ public class WallHolderService implements WallService {
 		WALLS.put(newWall.getName(), newWall);
 		return newWall;
 	}
-	
+
 	// ////////////////////////////////////////////////////////////////////////////////
 
 	public Set<String> getWallNames() {
@@ -126,8 +124,7 @@ public class WallHolderService implements WallService {
 		}
 		for (Wall wall : WALLS.values()) {
 			if (LOG.isInfoEnabled()) {
-				LOG.info("Refreshing wall : " + wall + " and its "
-						+ wall.getProjects().size() + " projects");
+				LOG.info("Refreshing wall : " + wall + " and its " + wall.getProjects().size() + " projects");
 			}
 			reconstructWall(wall);
 		}
@@ -136,14 +133,12 @@ public class WallHolderService implements WallService {
 	private void reconstructWall(Wall wall) {
 		List<SoftwareAccess> softwareAccesses = wall.getSoftwareAccesses();
 		if (softwareAccesses != null) {
-			PluginHolder pluginHolder = pluginService
-					.getPluginHolderFromSoftwares(softwareAccesses);
+			PluginHolder pluginHolder = pluginService.getPluginHolderFromSoftwares(softwareAccesses);
 			wall.setPluginHolder(pluginHolder);
 		}
 		projectService.updateWallProjects(wall);
 		if (LOG.isInfoEnabled()) {
-			LOG.info("Done refreshing wall : " + wall + " and its "
-					+ wall.getProjects().size() + " projects");
+			LOG.info("Done refreshing wall : " + wall + " and its " + wall.getProjects().size() + " projects");
 		}
 	}
 
@@ -161,10 +156,8 @@ public class WallHolderService implements WallService {
 			PluginHolder pluginHolder = wall.getPluginHolder();
 			ProjectId projectId = project.getProjectId();
 
-			status.setBuilding(projectService.isBuilding(pluginHolder,
-					projectId));
-			status.setLastBuildId(projectService.getLastBuildNumber(
-					pluginHolder, projectId));
+			status.setBuilding(projectService.isBuilding(pluginHolder, projectId));
+			status.setLastBuildId(projectService.getLastBuildNumber(pluginHolder, projectId));
 			status.setName(projectId.getName());
 			status.setState(projectService.getState(pluginHolder, projectId));
 		}

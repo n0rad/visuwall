@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 
 public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 
@@ -78,13 +79,14 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 		Preconditions.checkNotNull(projectId, "projectId");
 
 		QualityResult qualityResult = new QualityResult();
-		if (projectId.getArtifactId() != null) {
+		String artifactId = projectId.getArtifactId();
+		if (!Strings.isNullOrEmpty(artifactId)) {
 			if (metrics.length == 0) {
 				metrics = metricKeys;
 			}
 			for (String key : metrics) {
 				try {
-					QualityMeasure qualityMeasure = measureFinder.findQualityMeasure(projectId.getArtifactId(), key);
+					QualityMeasure qualityMeasure = measureFinder.findQualityMeasure(artifactId, key);
 					qualityMeasure.setName(metricsMap.get(key).getName());
 					qualityResult.add(key, qualityMeasure);
 				} catch (SonarMeasureNotFoundException e) {
@@ -118,13 +120,20 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 	public TestResult analyzeUnitTests(ProjectId projectId) {
 		Preconditions.checkNotNull(projectId, "projectId is mandatory");
 		TestResult unitTestResult = new TestResult();
-		insertUnitTestAnalysis(projectId, unitTestResult);
+		String artifactId = projectId.getArtifactId();
+		if (Strings.isNullOrEmpty(artifactId)) {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("can't analyze project " + projectId + " without artifactId. Is it a maven project ?");
+			}
+
+		} else {
+			insertUnitTestAnalysis(artifactId, unitTestResult);
+		}
 		return unitTestResult;
 	}
 
-	private void insertUnitTestAnalysis(ProjectId projectId, TestResult unitTestResult) {
+	private void insertUnitTestAnalysis(String artifactId, TestResult unitTestResult) {
 		try {
-			String artifactId = projectId.getArtifactId();
 			Double coverage = measureFinder.findMeasureValue(artifactId, "coverage");
 			Double failures = measureFinder.findMeasureValue(artifactId, "test_failures");
 			Double errors = measureFinder.findMeasureValue(artifactId, "test_errors");
@@ -139,8 +148,8 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 			unitTestResult.setPassCount(totalTests.intValue() - failCount - skipCount);
 		} catch (SonarMeasureNotFoundException e) {
 			if (LOG.isDebugEnabled()) {
-				LOG.debug("Unit tests informations are not available for project " + projectId + ", cause "
-				        + e.getMessage());
+				LOG.debug("Unit tests informations are not available for project with artifactId : " + artifactId
+				        + ", cause " + e.getMessage());
 			}
 		}
 	}
@@ -153,15 +162,20 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 
 		try {
 			String artifactId = projectId.getArtifactId();
-			Double itCoverage = measureFinder.findMeasureValue(artifactId, "it_coverage");
-			integrationTestResult.setCoverage(itCoverage);
+			if (Strings.isNullOrEmpty(artifactId)) {
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("can't analyze project " + projectId + " without artifactId. Is it a maven project ?");
+				}
+			} else {
+				Double itCoverage = measureFinder.findMeasureValue(artifactId, "it_coverage");
+				integrationTestResult.setCoverage(itCoverage);
+			}
 		} catch (SonarMeasureNotFoundException e) {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Integration tests informations are not available for project " + projectId + ", cause "
 				        + e.getMessage());
 			}
 		}
-
 		return integrationTestResult;
 	}
 }

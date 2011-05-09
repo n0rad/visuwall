@@ -77,6 +77,8 @@ public class ProjectId {
 	public String toString() {
 		return Objects.toStringHelper(this) //
 		        .add("name", name) //
+		        .add("artifactId", artifactId) //
+		        .add("ids", ids) //
 		        .toString();
 	}
 

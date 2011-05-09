@@ -128,19 +128,17 @@ visuwall.mvc.controller.ProjectController = {
 		this.projectsView.updateCommiters(project.name, project.completedBuild.commiters);
 		this.projectsView.updateQuality(project.name, project.qualityResult.measures);
 		
-		this.projectsView.updateUTCoverage(project.name, this._getCoverageFromQualityMeasures(project.qualityResult.measures));
+		this.projectsView.updateUTCoverage(project.name, project.completedBuild.unitTestResult.coverage);
 		this.projectsView.updateUT(project.name, 
 				project.completedBuild.unitTestResult.failCount,
 				project.completedBuild.unitTestResult.passCount,
-				project.completedBuild.unitTestResult.skipCount,
-				project.completedBuild.unitTestResult.coverage);
+				project.completedBuild.unitTestResult.skipCount);
 
-		this.projectsView.updateITCoverage(project.name, 0);
+		this.projectsView.updateITCoverage(project.name, project.completedBuild.integrationTestResult.coverage);
 		this.projectsView.updateIT(project.name, 
 				project.completedBuild.integrationTestResult.failCount,
 				project.completedBuild.integrationTestResult.passCount,
-				project.completedBuild.integrationTestResult.skipCount,
-				project.completedBuild.integrationTestResult.coverage);
+				project.completedBuild.integrationTestResult.skipCount);
 	
 		var $this = this;
 		var completedBuild = project.completedBuild;
@@ -166,15 +164,6 @@ visuwall.mvc.controller.ProjectController = {
 		}
 	},
 	
-	_getCoverageFromQualityMeasures : function(measures) {
-		for (var i = 0; i < measures.length; i++) {
-			if (measures[i].key == 'coverage') {
-				return measures[i].value.value;
-			}
-		}
-		return;
-	},
-
 	_removeProject : function(projectName) {
 		this.projectDAO.removeProject(projectName);
 		this.projectsView.removeProject(projectName);

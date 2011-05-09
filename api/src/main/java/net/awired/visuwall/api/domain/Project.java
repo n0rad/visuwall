@@ -20,6 +20,7 @@ import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Preconditions;
 
 public final class Project implements Comparable<Project> {
@@ -123,14 +124,22 @@ public final class Project implements Comparable<Project> {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this) //
+		ToStringHelper toString = Objects.toStringHelper(this) //
 		        .add("project id", projectId) //
 		        .add("name", getName()) //
 		        .add("description", description) //
 		        .add("state", state) //
-		        .add("completed build", completedBuild) //
-		        .add("quality result", qualityResult) //
-		        .toString();
+		        .add("quality result", qualityResult); //
+
+		if (completedBuild != null) {
+			toString.add("completedBuild", completedBuild);
+		}
+		if (currentBuild != null) {
+			toString.add("currentBuild", currentBuild);
+		}
+		toString.addValue("\n");
+
+		return toString.toString();
 	}
 
 	@Override
