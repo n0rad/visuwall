@@ -14,29 +14,15 @@
  * limitations under the License.
  */
 
-ajsl = new function() {
-	this.utils = {};
-
-	this.get = function(id) {
-		$.ajax({
-			  url: url,
-			  dataType: 'script',
-			  success: success
-			});
-		
-		
-		$.when($.ajax("/page1.php"), $.ajax("/page2.php")).done(function(a1,  a2){
-		    /* a1 and a2 are arguments resolved for the 
-		        page1 and page2 ajax requests, respectively */
-		   var jqXHR = a1[2]; /* arguments are [ "success", statusText, jqXHR ] */
-		   if ( /Whip It/.test(jqXHR.responseText) ) {
-		      alert("First page has 'Whip It' somewhere.");
-		   }
-		});
-		
-		$.getScript("res/visuwall/ctrl/controller/", function(data, textStatus) {
-			
-		});
+visuwall.ctrl.controller.wall = new function() {
+	$this = this;
+	
+	this.currentWall;
+	this.currentWallUpdater;
+	
+	this.showWall = function(wallName) {
+		$this.currentWall = new visuwall.mvc.controller.process.Wall(wallName);
+		$this.currentWallUpdater = setInterval(visuwall.mvc.event.navigation['#refresh|click'], 10000);
 	};
 
 };

@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-visuwall.mvc.event.navigation = new function() {
+visuwall.theme.def.event.navigation = new function() {
 	var $this = this;
 	
-	this.context = 'DIV#navigationContainer';
+	this.context;
 	this.navigationController;
-	this.projectController;
+	this.wallController;
 	
 	$(function(){
-		$this.navigationController = visuwall.mvc.controller.navigation;
-		$this.projectController = visuwall.mvc.controller.ProjectController;
-		//this['|mouseleave']();
+		$this.context = 'DIV#navigationContainer';
+		$this.navigationController = visuwall.ctrl.controller.navigation;
+		$this.wallController = visuwall.ctrl.controller.wall;
+	//	this['|mouseleave']();
 	});
 
 	this['|mouseenter'] = function() {
@@ -123,7 +124,7 @@ visuwall.mvc.event.navigation = new function() {
 	};
 	
 	this['#refresh|click'] = function() {
-		$this.projectController.updateStatus();
+		$this.wallController.updateStatus();
 	};
 
 };

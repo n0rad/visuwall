@@ -16,7 +16,6 @@
 
 package net.awired.visuwall.core.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -36,9 +35,6 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.core.utils.ShrinkList;
 
-import org.apache.commons.collections.FactoryUtils;
-import org.apache.commons.collections.list.GrowthList;
-import org.apache.commons.collections.list.LazyList;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Cascade;
 import org.springframework.util.AutoPopulatingList;
@@ -67,14 +63,9 @@ public final class Wall {
 			org.hibernate.annotations.CascadeType.EVICT,
 			org.hibernate.annotations.CascadeType.DELETE,
 			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
-	// new AutoPopulatingList<SoftwareAccess>(SoftwareAccess.class)
 	private List<SoftwareAccess> softwareAccesses = new ShrinkList<SoftwareAccess>(
 			SoftwareAccess.class);
-	// private List<SoftwareAccess> softwareAccesses = GrowthList.decorate(new
-	// ArrayList<SoftwareAccess>());
-	// private List<SoftwareAccess> softwareAccesses = LazyList.decorate(new
-	// ArrayList<SoftwareAccess>(),
-	// FactoryUtils.instantiateFactory(SoftwareAccess.class));
+
 
 	@Transient
 	private List<Project> projects = new AutoPopulatingList<Project>(

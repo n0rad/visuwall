@@ -28,6 +28,7 @@
 	
 	<script type="text/javascript">
 	$(function() {
+		ajsl.service.registerAll(${jsService});
 		visuwall.init();
 	});
 	</script>
@@ -36,5 +37,72 @@
 <jsp:include page="navigation.jsp"/>
 <ul id="projectsTable"></ul>
 <div id="overlay"></div>
+<div id="contents">
+	<div style="display:none"" id="formCreation">
+		 
+		 
+		 
+		 
+		<form id="wallForm" action="/visuwall-web/wall/create.html" method="post"> 
+		<input id="id" name="id" type="hidden" value=""/> 
+		 
+		<label for="name">Name</label> 
+		<input id="name" name="name" name="name" class="ui-widget-content ui-corner-all" type="text" type="text" value=""/> 
+		 
+		<div id="softTabs"> 
+			<ul> 
+				<li><a href="#tabs-0">New</a> <span class="ui-icon ui-icon-close">Remove
+						Tab</span></li> 
+				<li><div id="softAdd" class="ui-state-default ui-corner-all"
+						title=".ui-icon-plusthick"> 
+						<span class="ui-icon ui-icon-plusthick"></span> 
+					</div> 
+				</li> 
+			</ul> 
+			<div id="tabs-0"> 
+		<input id="softwareAccesses0.id" name="softwareAccesses[0].id" type="hidden" value=""/> 
+		<label for="softwareAccesses0.url">Url</label> 
+		<input id="softwareAccesses0.url" name="softwareAccesses[0].url" class="ui-widget-content ui-corner-all url" type="text" value=""/> 
+		 
+		<label for="softwareAccesses0.pluginClassName">Type</label> 
+		<select id="softwareAccesses0.pluginClassName" name="softwareAccesses[0].pluginClassName"> 
+			<option value="net.awired.visuwall.plugin.bamboo.BambooPlugin">Bamboo</option><option value="net.awired.visuwall.plugin.hudson.HudsonPlugin">Hudson</option><option value="net.awired.visuwall.plugin.sonar.SonarPlugin">Sonar</option> 
+		</select> 
+		<label for="softwareAccesses0.name">Name</label> 
+		<input id="softwareAccesses0.name" name="softwareAccesses[0].name" class="ui-widget-content ui-corner-all" type="text" value=""/> 
+		<label for="softwareAccesses0.login">Login</label> 
+		<input id="softwareAccesses0.login" name="softwareAccesses[0].login" class="ui-widget-content ui-corner-all" type="text" value=""/> 
+		<label for="softwareAccesses0.password">Password</label> 
+		<input id="softwareAccesses0.password" name="softwareAccesses[0].password" class="ui-widget-content ui-corner-all" type="password" value=""/> 
+
+		<!-- 
+		<ol class="projects ui-widget-content ui-corner-all">
+			<li>proj1</li>
+			<li>proj1</li>
+			<li>proj1</li>
+			<li>proj1</li>
+			<li>proj1</li>
+			<li>proj1</li>
+			<li>proj1</li>
+			<li>proj1</li>
+			<li>proj1</li>
+			<li>proj1</li>
+			<li>proj1</li>
+			<li>proj2</li>
+		</ol> --> 
+			</div> 
+		</div> 
+		 
+		 
+		<script type="text/javascript"> 
+			//$(function() {
+			ajsl.event.register(visuwall.theme.def.event.wallForm);
+			//});
+		</script> 
+			
+			<input type="submit" value="submit"/> 
+		</form>	
+	</div>
+</div>
 </body>
 </html>

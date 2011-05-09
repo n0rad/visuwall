@@ -16,10 +16,14 @@
 
 package net.awired.visuwall.server.web.controller;
 
+import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 
+import net.awired.ajsl.web.domain.JsServiceMap;
+import net.awired.ajsl.web.service.interfaces.JsService;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.core.domain.PluginInfo;
 import net.awired.visuwall.core.domain.Software;
@@ -32,6 +36,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Maps;
+
 @Controller
 @RequestMapping("/plugin")
 public class PluginController {
@@ -39,6 +46,29 @@ public class PluginController {
 	@Autowired
 	private PluginService pluginService;
 	
+	@Autowired
+	JsService jsService;
+	
+	@RequestMapping("js")
+	public @ResponseBody Map<String, List<String>> res() throws Exception {
+		Map<File, String> jsMap = jsService.getJsFiles();
+		
+		JsServiceMap serviceMap = jsService.buildServiceMapFromJsMap(jsMap);
+		Predicate<List<String>> predicate = new Predicate<List<String>>() {
+			@Override
+			public boolean apply(List<String> value) {
+				for (String string : value) {
+					return string.startsWith("js/visuwall");
+				}
+				return true;
+			}
+		};
+
+		Map<String, List<String>> val = Maps.filterValues(serviceMap, predicate);
+
+		//String obj = jsService.buildJsServiceMapString(serviceMap);
+		return val;
+	}
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody List<PluginInfo> getSoftwareList() {

@@ -47,6 +47,6 @@
 
 <script type="text/javascript">
 	//$(function() {
-	ajsl.event.register(visuwall.mvc.wall);
+	ajsl.event.register(visuwall.theme.def.event.wallForm);
 	//});
 </script>

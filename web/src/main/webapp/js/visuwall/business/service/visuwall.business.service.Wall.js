@@ -22,6 +22,10 @@ visuwall.business.service.Wall = {
 			});
 		},
 		
+		getCreate : function(callback) {
+			$.get('wall/create', {}, callback);
+		},
+		
 		get : function(wallName, callback) {
 			$.getJSON('wall/' + wallName + '/', {}, function(data) {
 				callback(data.data);

@@ -1,78 +1,29 @@
-/*
- * Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-visuwall.mvc.controller.ProjectController = {
-		
-	projectsView : null,
+visuwall.ctrl.process.Wall = function(wallName) {
+	var $this = this;
 	
-	projectService : null,
-	wallService : null,
-
-	projectDAO : null,
+	this.projectsView;
 	
-	wallName : 'orange-vallee',
+	this.projectService;
+	this.wallService;
+	this.projectDAO;
 	
-	init : function() {
+	this.wallName = wallname,
+	
+	$(function() {
 		this.projectsView = visuwall.mvc.view.Projects;
 		this.projectService = visuwall.business.service.Project;
 		this.wallService = visuwall.business.service.Wall;
-		this.projectDAO = visuwall.persistence.dao.ProjectDAO;
+	});
 		
-		// create updater event
-		var updater = setInterval(visuwall.mvc.event.navigation['#refresh|click'], 10000);
-		this.updateStatus();
-	},
-	
-	loadWall : function(wallname) {
-		this.wallName = wallname;
-		
-//		this._removeProject
-	},
-	
-	
-	buildProjects : function() {
-		var $this = this;
-		this.projectService.projects(this.wallName, function(projects) {
-			for (var i = 0; i < projects.length; i++) {
-				$this.addProject(projects[i]);
-			}
-
-//			for (var i = 0; i < projects.length; i++) {
-//				$this.addProject(projects[i]);
-//			}			
-		
-		//	updateUTDiff
-			
-		});
-
-		// TODO remove
-		$('ul#projectsTable li:last-child').live('click', function() {
-		    $(this).prependTo('ul#projectsTable');
-		});
-	},
-	
-	addProject : function(projectData) {
+	this.addProject = function(projectData) {
 		this.projectDAO.saveProject(projectData);
 		var project = this.projectDAO.getProject(projectData.name);
 		
 		this.projectsView.addProject(project.name, project.description);
 		this._updateProject(project);
-	},
+	};
 
-	updateStatus : function() {
+	this.updateStatus = function() {
 		LOG.debug("run updater");
 		var $this = this;
 		$this.wallService.status(this.wallName,function (projectsStatus) {
@@ -102,9 +53,9 @@ visuwall.mvc.controller.ProjectController = {
 				}
 			}
 		});
-	},
+	};
 	
-	_updateProject : function(project) {
+	this._updateProject = function(project) {
 		this.projectDAO.saveProject(project);
 
 		this._updateLastBuild(project);
@@ -115,12 +66,11 @@ visuwall.mvc.controller.ProjectController = {
 		project.building = false;
 		this._updateBuilding(project, wasBuilding);
 		this._updateState(project);
-	},
+	};
 
 	/////////////////////////////////////////////////////////////////////////
 	
-	
-	_updateLastBuild : function(project) {
+	this._updateLastBuild = function(project) {
 		if (project.completedBuild == null) {
 			return
 		}
@@ -151,31 +101,31 @@ visuwall.mvc.controller.ProjectController = {
 			
 			$this.projectsView.updateUTDiff(project.name, failDiff, successDiff, skipDiff);
 		});
-	},
+	};
 	
-	_updateAgo : function(project) {
+	this._updateAgo = function(project) {
 		if (project.completedBuild != null) {
 			this.projectsView.updateAgo(project.name, new Date(project.completedBuild.startTime + project.completedBuild.duration));					
 		} else {
 			this.projectsView.updateAgo(project.name, 0);
 		}
-	},
+	};
 	
-	_getCoverageFromQualityMeasures : function(measures) {
+	this._getCoverageFromQualityMeasures = function(measures) {
 		for (var i = 0; i < measures.length; i++) {
 			if (measures[i].key == 'coverage') {
 				return measures[i].value.value;
 			}
 		}
 		return;
-	},
+	};
 
-	_removeProject : function(projectName) {
+	this._removeProject = function(projectName) {
 		this.projectDAO.removeProject(projectName);
 		this.projectsView.removeProject(projectName);
-	},
+	};
 	
-	_updateState : function(project) {
+	this._updateState = function(project) {
 		switch(project.state) {
 		case 'SUCCESS':
 			this.projectsView.displaySuccess(project.name);
@@ -199,9 +149,9 @@ visuwall.mvc.controller.ProjectController = {
 		default:
 			this.projectsView.displayUnknown(project.name);
 		}
-	},
+	};
 	
-	_updateBuilding : function(project, isBuilding) {
+	this._updateBuilding = function(project, isBuilding) {
 		if (isBuilding) {
 			if (!project.building) {
 				var $this = this;
@@ -224,9 +174,9 @@ visuwall.mvc.controller.ProjectController = {
 		} else {
 			this.projectsView.stopBuilding(project.name);
 		}
-	},
+	};
 	
-	_checkVersionChange : function(project, status) {
+	this._checkVersionChange = function(project, status) {
 		if (this._checkVersionChangeAndNotBuilding(project, status)) {
 			LOG.info("Server is not building and version has change, we need an update");
 			var $this = this;
@@ -234,19 +184,20 @@ visuwall.mvc.controller.ProjectController = {
 				$this._updateProject(newProjectData);
 			});
 		}
-	},	
+	};
 	
-	_checkVersionChangeAndNotBuilding : function(projectData, projectStatus) {
+	this._checkVersionChangeAndNotBuilding = function(projectData, projectStatus) {
 		// if ever build && not building && last build on server != last completed in js 
 		if (projectStatus.lastBuildId != -1 && !projectStatus.building
 				&& projectStatus.lastBuildId != projectData.completedBuild.buildNumber) {
 			return true;
 		}
 		return false;
-	}
-	
-};
+	};
 
-$(function (){
-	visuwall.mvc.controller.ProjectController.init();
-});
+	///////////////////////////////////////
+
+
+
+	this.updateStatus();
+};

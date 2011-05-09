@@ -18,13 +18,21 @@ visuwall = {
 	business : {
 		service : {}
 	},
-	mvc : {
+	ctrl : {
 		controller : {},
-		view : {},
-		event : {}
+		history : {},
+		process : {}
+		
 	},
 	persistence : {
 		dao : {}
+	},
+
+	theme : {
+		def : {
+			event : {},
+			view : {}
+		}
 	},
 
 	/**
@@ -49,21 +57,24 @@ visuwall = {
 
 		jQuery("abbr.timeago").timeago();
 
+		// DI
+		ajsl.service.injectAll(visuwall.ctrl.history);
+		
 		// register main controller
-		ajsl.dispatcher.registerMain(visuwall.mvc.controller.main.run);
+		ajsl.dispatcher.registerMain(visuwall.ctrl.history.main.run);
 
+		
 		// register controllers
-		ajsl.dispatcher.registerAll(visuwall.mvc.controller);
+		// ajsl.dispatcher.registerAll(visuwall.ctrl.history);
 
-		ajsl.log.setLevel('warn');
+		ajsl.log.setLevel('debug');
 
 		// register events
-		ajsl.event.registerAll(visuwall.mvc.event);
+		ajsl.event.registerAll(visuwall.theme.def.event);
 
-		visuwall.mvc.view.Loader.init();
 
 		// init loader
-		ajsl.loader.init(visuwall.mvc.view.Loader);
+		ajsl.loader.init(visuwall.theme.def.view.loader);
 
 		// loader test
 		$("#loader1").bind(
