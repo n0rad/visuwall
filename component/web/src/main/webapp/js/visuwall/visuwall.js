@@ -69,7 +69,7 @@ visuwall = {
 		ajsl.dispatcher.registerMain(visuwall.ctrl.history.main.run);
 		ajsl.dispatcher.registerAll(visuwall.ctrl.history);
 
-		ajsl.log.setLevel('debug');
+		ajsl.log.setLevel('warn');
 
 		// register events
 		//ajsl.event.registerAll(visuwall.theme.def.event);
