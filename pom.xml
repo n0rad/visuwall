@@ -43,12 +43,19 @@
 	</parent>
 
 	<modules>
-		<module>core</module>
-		<module>cli</module>
-		<module>web</module>
-		<module>plugins</module>
-		<module>api</module>
-		<module>it</module>
+		<module>plugins/bambooclient</module>
+		<module>plugins/hudsonclient</module>
+		<module>plugins/sonar-plugin</module>
+		<module>plugins/hudson-plugin</module>
+		<module>plugins/bamboo-plugin</module>
+		<module>plugins/jenkins-plugin</module>
+
+
+		<module>component/core</module>
+		<module>component/cli</module>
+		<module>component/web</module>
+		<module>component/api</module>
+		<module>component/it</module>
 	</modules>
 
 	<properties>
