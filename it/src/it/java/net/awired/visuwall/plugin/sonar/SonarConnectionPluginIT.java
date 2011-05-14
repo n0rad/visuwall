@@ -91,15 +91,12 @@ public class SonarConnectionPluginIT {
 	@Test
 	public void should_analyze_integration_tests() {
 		ProjectId projectId = new ProjectId();
-		projectId.setArtifactId("com.orangevallee.on.server.webservice:voxon");
-		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin("http://localhost:9000");
+		projectId.setArtifactId("com.orangevallee.on.server.synthesis:synthesis");
+		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin(
+		        "http://10.2.40.60/lifeisbetteron/sonar");
 
 		TestResult integrationTestsAnalysis = sonarConnectionPlugin.analyzeIntegrationTests(projectId);
 
-		assertEquals(33.4, integrationTestsAnalysis.getCoverage(), 0);
-		assertEquals(0, integrationTestsAnalysis.getFailCount());
-		assertEquals(0, integrationTestsAnalysis.getSkipCount());
-		assertEquals(0, integrationTestsAnalysis.getPassCount());
-		assertEquals(0, integrationTestsAnalysis.getTotalCount());
+		assertEquals(5.0, integrationTestsAnalysis.getCoverage(), 0);
 	}
 }

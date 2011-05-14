@@ -30,6 +30,7 @@ import org.sonar.wsclient.services.ResourceQuery;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 
 public class MeasureFinder {
 
@@ -63,7 +64,7 @@ public class MeasureFinder {
 	}
 
 	public QualityMeasure findQualityMeasure(String artifactId, String measureKey) throws SonarMeasureNotFoundException {
-		Preconditions.checkNotNull(artifactId, "artifactId is a mandatory parameter");
+		Preconditions.checkState(!Strings.isNullOrEmpty(artifactId), "artifactId is a mandatory parameter");
 		Preconditions.checkNotNull(measureKey, "measureKey is a mandatory parameter");
 
 		Measure measure = findMeasure(artifactId, measureKey);
@@ -82,7 +83,7 @@ public class MeasureFinder {
 	}
 
 	public Measure findMeasure(String artifactId, String measureKey) throws SonarMeasureNotFoundException {
-		Preconditions.checkNotNull(artifactId, "artifactId is a mandatory parameter");
+		Preconditions.checkState(!Strings.isNullOrEmpty(artifactId), "artifactId is a mandatory parameter");
 		Preconditions.checkNotNull(measureKey, "measureKey is a mandatory parameter");
 
 		try {
@@ -106,6 +107,8 @@ public class MeasureFinder {
 	}
 
 	public Double findMeasureValue(String artifactId, String measureKey) throws SonarMeasureNotFoundException {
+		Preconditions.checkState(!Strings.isNullOrEmpty(artifactId), "artifactId is a mandatory parameter");
+
 		Measure measure = findMeasure(artifactId, measureKey);
 		return measure.getValue();
 	}

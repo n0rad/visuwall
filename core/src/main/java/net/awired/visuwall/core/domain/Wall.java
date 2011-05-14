@@ -43,9 +43,8 @@ import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 @Entity
-@NamedQueries({
-		@NamedQuery(name = Wall.QUERY_NAMES, query = "SELECT name FROM Wall"), //
-		@NamedQuery(name = Wall.QUERY_WALLS, query = "SELECT w FROM Wall AS w") })
+@NamedQueries({ @NamedQuery(name = Wall.QUERY_NAMES, query = "SELECT name FROM Wall"), //
+        @NamedQuery(name = Wall.QUERY_WALLS, query = "SELECT w FROM Wall AS w") })
 public final class Wall {
 
 	public static final String QUERY_NAMES = "wallNames";
@@ -66,10 +65,8 @@ public final class Wall {
 	private List<SoftwareAccess> softwareAccesses = new ShrinkList<SoftwareAccess>(
 			SoftwareAccess.class);
 
-
 	@Transient
-	private List<Project> projects = new AutoPopulatingList<Project>(
-			Project.class);
+	private List<Project> projects = new AutoPopulatingList<Project>(Project.class);
 
 	@Transient
 	@JsonIgnore
@@ -82,28 +79,24 @@ public final class Wall {
 		this.name = name;
 	}
 
-	public Project getProjectByProjectId(ProjectId projectId)
-			throws ProjectNotFoundException {
+	public Project getProjectByProjectId(ProjectId projectId) throws ProjectNotFoundException {
 		Preconditions.checkNotNull(projectId, "projectId is mandatory");
 		for (Project project : projects) {
 			if (projectId.equals(project.getProjectId())) {
 				return project;
 			}
 		}
-		throw new ProjectNotFoundException("project with this id not found : "
-				+ projectId);
+		throw new ProjectNotFoundException("project with this id not found : " + projectId);
 	}
 
-	public Project getProjectByName(String name)
-			throws ProjectNotFoundException {
+	public Project getProjectByName(String name) throws ProjectNotFoundException {
 		Preconditions.checkNotNull(name, "name is mandatory");
 		for (Project project : projects) {
 			if (name.equals(project.getName())) {
 				return project;
 			}
 		}
-		throw new ProjectNotFoundException("Project not found for this name : "
-				+ name);
+		throw new ProjectNotFoundException("Project not found for this name : " + name);
 	}
 
 	@Override
@@ -116,8 +109,9 @@ public final class Wall {
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this) //
-				.add("name", name) //
-				.toString();
+		        .add("name", name) //
+		        // .add("projects", Arrays.toString(projects.toArray())) //
+		        .toString();
 	}
 
 	// /////////////////////////////////////////////////////////
