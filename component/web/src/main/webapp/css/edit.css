@@ -1,0 +1,87 @@
+/**
+ * Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#modal Input,#modal LABEL {
+	display: block;
+	width: 200px;
+}
+
+OL.projects .ui-selecting {
+	background: #FECA40;
+}
+
+OL.projects .ui-selected {
+	background: #F39814;
+	color: white;
+}
+
+OL.projects {
+	float: right;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow-y: visible;
+	overflow-x: hidden;
+	position: absolute;	
+	bottom: 1em;
+	right: 1.4em;
+
+	width: 320px;
+	height: 160px;
+}
+
+INPUT.disabled {
+	color: grey;
+	background-color: #F0F0F0;
+}
+
+OL.projects li {
+	margin: 0.2em;
+	padding: 0.3em;
+}
+
+DIV#softAdd {
+	margin: .4em;
+	cursor: pointer;
+}
+
+#modal INPUT.url {
+	width: 100%;
+}
+
+.ui-tabs-nav {
+	border: 0 !important;
+	-moz-border-radius: 0  !important;
+	-webkit-border-radius: 0  !important;
+	border-radius: 0  !important;
+	border-bottom: 1px solid #AAA !important;
+}
+
+#softwareTabs {
+	margin-top: 1em;
+	background-color: #eee;
+	padding: 0 !important;
+}
+
+#softwareTabs .ui-tabs-panel {
+	background-color: #eee;
+}
+
+#softwareTabs li .ui-icon-close {
+	float: left;
+	margin: 0.4em 0.2em 0 0;
+	cursor: pointer;
+}
