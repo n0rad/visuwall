@@ -1,7 +1,7 @@
-visuwall.ctrl.history.wallHistory = new function() {
+visuwall.ctrl.history.wall = new function() {
 	var $this = this;
 
-	this.__serviceNames__ = ['wallController', 'navigationController'];
+	this.__inject__ = ['wallController', 'navigationController'];
 
 	this.run = function(vars, wallId) {
 		$this.wallController.showWall(wallId);

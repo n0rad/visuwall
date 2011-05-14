@@ -104,10 +104,10 @@ public class BambooConnectionPlugin implements BuildConnectionPlugin {
 		build.setDuration(bambooBuild.getDuration());
 		build.setStartTime(bambooBuild.getStartTime());
 		build.setState(getState(bambooBuild.getState()));
-		TestResult testResult = new TestResult();
-		testResult.setFailCount(bambooBuild.getFailCount());
-		testResult.setPassCount(bambooBuild.getPassCount());
-		build.setTestResult(testResult);
+		TestResult unitTestResult = new TestResult();
+		unitTestResult.setFailCount(bambooBuild.getFailCount());
+		unitTestResult.setPassCount(bambooBuild.getPassCount());
+		build.setUnitTestResult(unitTestResult);
 		return build;
 	}
 

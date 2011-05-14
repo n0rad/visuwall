@@ -74,7 +74,7 @@ public class BambooConnectionPluginIT {
 		assertEquals(dateTime.toDate(), build.getStartTime());
 
 		assertEquals(State.SUCCESS, build.getState());
-		TestResult testResult = build.getTestResult();
+		TestResult testResult = build.getUnitTestResult();
 		assertEquals(0, testResult.getFailCount());
 		assertEquals(331, testResult.getPassCount());
 	}

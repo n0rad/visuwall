@@ -5239,20 +5239,43 @@ if ( getComputedStyle ) {
 
 		// If we're not dealing with a regular pixel number
 		// but a number that has a weird ending, we need to convert it to pixels
-		if ( !rnumpx.test( ret ) && rnum.test( ret ) ) {
-			// Remember the original values
-			left = style.left;
-			rsLeft = elem.runtimeStyle.left;
+        if ( !rnumpx.test( ret ) && rnum.test( ret ) ) {
+            // Remember the original values
+            left = style.left;
 
-			// Put in the new values to get a computed value out
-			elem.runtimeStyle.left = elem.currentStyle.left;
-			style.left = name === "fontSize" ? "1em" : (ret || 0);
-			ret = style.pixelLeft + "px";
-
-			// Revert the changed values
-			style.left = left;
-			elem.runtimeStyle.left = rsLeft;
-		}
+            // Put in the new values to get a computed value out
+            if ( rsLeft ) {
+                elem.runtimeStyle.left = elem.currentStyle.left;
+            }
+            try
+            { style.left = name === "fontSize" ? "1em" : (ret || 0);
+            }
+            catch(objError)
+            {
+            }
+            finally
+            { ret = style.pixelLeft + "px";
+              // Revert the changed values
+              style.left = left;
+              if ( rsLeft ) { elem.runtimeStyle.left = rsLeft; }
+            }
+        }
+		
+		
+//		if ( !rnumpx.test( ret ) && rnum.test( ret ) ) {
+//			// Remember the original values
+//			left = style.left;
+//			rsLeft = elem.runtimeStyle.left;
+//
+//			// Put in the new values to get a computed value out
+//			elem.runtimeStyle.left = elem.currentStyle.left;
+//			style.left = name === "fontSize" ? "1em" : (ret || 0);
+//			ret = style.pixelLeft + "px";
+//
+//			// Revert the changed values
+//			style.left = left;
+//			elem.runtimeStyle.left = rsLeft;
+//		}
 
 		return ret;
 	};
@@ -6484,13 +6507,23 @@ jQuery.extend( jQuery.fx, {
 			jQuery.style( fx.elem, "opacity", fx.now );
 		},
 
-		_default: function( fx ) {
-			if ( fx.elem.style && fx.elem.style[ fx.prop ] != null ) {
-				fx.elem.style[ fx.prop ] = (fx.prop === "width" || fx.prop === "height" ? Math.max(0, fx.now) : fx.now) + fx.unit;
-			} else {
-				fx.elem[ fx.prop ] = fx.now;
-			}
-		}
+        _default: function( fx ) {
+            if ( fx.elem.style && fx.elem.style[ fx.prop ] != null ) {
+                try {
+                fx.elem.style[ fx.prop ] = (fx.prop === "width" || fx.prop === "height" ? Math.max(0, fx.now) : fx.now) + fx.unit;
+                } catch(e) {} finally {};
+            } else {
+                fx.elem[ fx.prop ] = fx.now;
+            }
+        }
+
+//		_default: function( fx ) {
+//			if ( fx.elem.style && fx.elem.style[ fx.prop ] != null ) {
+//				fx.elem.style[ fx.prop ] = (fx.prop === "width" || fx.prop === "height" ? Math.max(0, fx.now) : fx.now) + fx.unit;
+//			} else {
+//				fx.elem[ fx.prop ] = fx.now;
+//			}
+//		}
 	}
 });
 

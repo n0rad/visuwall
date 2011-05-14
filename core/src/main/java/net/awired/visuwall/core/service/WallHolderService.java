@@ -113,11 +113,13 @@ public class WallHolderService implements WallService {
 		return newWall;
 	}
 	
-	// ////////////////////////////////////////////////////////////////////////////////
-
+	@Override
 	public Set<String> getWallNames() {
 		return WALLS.keySet();
 	}
+
+	// ////////////////////////////////////////////////////////////////////////////////
+
 
 	@Scheduled(fixedDelay = EVERY_FIVE_MINUTES)
 	public void refreshWalls() {

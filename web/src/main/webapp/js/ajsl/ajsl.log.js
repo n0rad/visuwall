@@ -52,12 +52,12 @@ ajsl.log = {
 	$().ajaxError(function (e, xhr, settings, exception) {
 		LOG.info("load error", e);
 	});
-
+	
 	// register to window onerror
-	window.onerror = function(errorMsg, url, lineNumber) {
-		LOG.error("Uncaught exception " + errorMsg + " at " + url + " :" + lineNumber);
-		return true;
-	};
+//	window.onerror = function(errorMsg, url, lineNumber) {
+//		LOG.error("Uncaught exception " + errorMsg + " at " + url + " :" + lineNumber);
+//		return true;
+//	};
 
 },
 

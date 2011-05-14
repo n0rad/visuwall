@@ -19,11 +19,12 @@ package net.awired.visuwall.plugin.sonar;
 import java.util.Map;
 
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
-import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
+import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
 import org.slf4j.Logger;
@@ -73,7 +74,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 	}
 
 	@Override
-	public QualityResult populateQuality(ProjectId projectId, String... metrics) {
+	public QualityResult analizeQuality(ProjectId projectId, String... metrics) {
 		Preconditions.checkNotNull(projectId, "projectId");
 
 		QualityResult qualityResult = new QualityResult();
@@ -86,7 +87,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 					QualityMeasure qualityMeasure = measureFinder.findQualityMeasure(projectId.getArtifactId(), key);
 					qualityMeasure.setName(metricsMap.get(key).getName());
 					qualityResult.add(key, qualityMeasure);
-				} catch (SonarMetricNotFoundException e) {
+				} catch (SonarMeasureNotFoundException e) {
 					if (LOG.isDebugEnabled()) {
 						LOG.debug(e.getMessage());
 					}
@@ -107,10 +108,60 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 
 		try {
 			measureFinder.findMeasure(artifactId, "comment_blank_lines");
-		} catch (SonarMetricNotFoundException e) {
+		} catch (SonarMeasureNotFoundException e) {
 			return false;
 		}
 		return true;
 	}
 
+	@Override
+	public TestResult analyzeUnitTests(ProjectId projectId) {
+		Preconditions.checkNotNull(projectId, "projectId is mandatory");
+		TestResult unitTestResult = new TestResult();
+		insertUnitTestAnalysis(projectId, unitTestResult);
+		return unitTestResult;
+	}
+
+	private void insertUnitTestAnalysis(ProjectId projectId, TestResult unitTestResult) {
+		try {
+			String artifactId = projectId.getArtifactId();
+			Double coverage = measureFinder.findMeasureValue(artifactId, "coverage");
+			Double failures = measureFinder.findMeasureValue(artifactId, "test_failures");
+			Double errors = measureFinder.findMeasureValue(artifactId, "test_errors");
+			Double totalTests = measureFinder.findMeasureValue(artifactId, "tests");
+
+			int skipCount = measureFinder.findMeasureValue(artifactId, "skipped_tests").intValue();
+			int failCount = failures.intValue() + errors.intValue();
+
+			unitTestResult.setCoverage(coverage);
+			unitTestResult.setFailCount(failCount);
+			unitTestResult.setSkipCount(skipCount);
+			unitTestResult.setPassCount(totalTests.intValue() - failCount - skipCount);
+		} catch (SonarMeasureNotFoundException e) {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Unit tests informations are not available for project " + projectId + ", cause "
+				        + e.getMessage());
+			}
+		}
+	}
+
+	@Override
+	public TestResult analyzeIntegrationTests(ProjectId projectId) {
+		Preconditions.checkNotNull(projectId, "projectId is mandatory");
+
+		TestResult integrationTestResult = new TestResult();
+
+		try {
+			String artifactId = projectId.getArtifactId();
+			Double itCoverage = measureFinder.findMeasureValue(artifactId, "it_coverage");
+			integrationTestResult.setCoverage(itCoverage);
+		} catch (SonarMeasureNotFoundException e) {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Integration tests informations are not available for project " + projectId + ", cause "
+				        + e.getMessage());
+			}
+		}
+
+		return integrationTestResult;
+	}
 }

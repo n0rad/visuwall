@@ -145,6 +145,11 @@
 				<artifactId>visuwall-it</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+                        <dependency>
+                                <groupId>net.awired.visuwall</groupId>
+                                <artifactId>visuwall-plugin-jenkins</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
 		</dependencies>
 	</dependencyManagement>
 

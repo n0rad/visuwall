@@ -27,7 +27,7 @@ import org.junit.Test;
 
 public class HudsonConnectionPluginExceptionIT {
 
-    static HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin(IntegrationTestData.HUDSON_URL);
+    static HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin(IntegrationTestData.JENKINS_URL);
 
     @Test(expected=ProjectNotFoundException.class)
     public void should_throw_exception_when_searching_inexistant_build() throws BuildNotFoundException, ProjectNotFoundException {

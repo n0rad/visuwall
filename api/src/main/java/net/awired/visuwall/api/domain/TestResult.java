@@ -20,61 +20,56 @@ import com.google.common.base.Objects;
 
 public final class TestResult {
 
-    private int failCount;
-    private int passCount;
-    private int skipCount;
-    private int totalCount;
-    private int integrationTestCount;
+	private int failCount;
+	private int passCount;
+	private int skipCount;
+	private int totalCount;
+	private double coverage;
 
-    public int getFailCount() {
-        return failCount;
-    }
+	public int getFailCount() {
+		return failCount;
+	}
 
-    public void setFailCount(int failCount) {
-        this.failCount = failCount;
-    }
+	public void setFailCount(int failCount) {
+		this.failCount = failCount;
+	}
 
-    public int getPassCount() {
-        return passCount;
-    }
+	public int getPassCount() {
+		return passCount;
+	}
 
-    public void setPassCount(int passCount) {
-        this.passCount = passCount;
-    }
+	public void setPassCount(int passCount) {
+		this.passCount = passCount;
+	}
 
-    public int getSkipCount() {
-        return skipCount;
-    }
+	public int getSkipCount() {
+		return skipCount;
+	}
 
-    public void setSkipCount(int skipCount) {
-        this.skipCount = skipCount;
-    }
+	public void setSkipCount(int skipCount) {
+		this.skipCount = skipCount;
+	}
 
-    public int getTotalCount() {
-        return totalCount;
-    }
+	public int getTotalCount() {
+		return passCount + skipCount + failCount;
+	}
 
-    public void setTotalCount(int totalCount) {
-        this.totalCount = totalCount;
-    }
+	public double getCoverage() {
+		return coverage;
+	}
 
-    public int getIntegrationTestCount() {
-        return integrationTestCount;
-    }
+	public void setCoverage(double coverage) {
+		this.coverage = coverage;
+	}
 
-    public void setIntegrationTestCount(int integrationTestCount) {
-        this.integrationTestCount = integrationTestCount;
-    }
-
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-        .add("failCount", failCount) //
-        .add("integrationTestCount", integrationTestCount) //
-        .add("passCount", passCount) //
-        .add("skipCount", skipCount) //
-        .add("totalCount", totalCount)
-        .toString();
-    }
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this) //
+		        .add("passCount", passCount) //
+		        .add("skipCount", skipCount) //
+		        .add("failCount", failCount) //
+		        .add("totalCount", totalCount) //
+		        .add("coverage", coverage).toString();
+	}
 
 }

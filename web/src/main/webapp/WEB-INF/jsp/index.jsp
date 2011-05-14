@@ -25,12 +25,12 @@
 	<link rel="shortcut icon" href="favicon.ico" />
 	${cssLinks}
 	${jsLinks}
-	
 	<script type="text/javascript">
 	$(function() {
-		ajsl.service.registerAll(${jsService});
-		visuwall.init();
+		visuwall.init(${jsData});	
 	});
+	
+	
 	</script>
 </head>
 <body>
@@ -38,10 +38,7 @@
 <ul id="projectsTable"></ul>
 <div id="overlay"></div>
 <div id="contents">
-	<div style="display:none"" id="formCreation">
-		 
-		 
-		 
+	<div style="display:none" id="formCreation">
 		 
 		<form id="wallForm" action="/visuwall-web/wall/create.html" method="post"> 
 		<input id="id" name="id" type="hidden" value=""/> 
@@ -92,14 +89,6 @@
 		</ol> --> 
 			</div> 
 		</div> 
-		 
-		 
-		<script type="text/javascript"> 
-			//$(function() {
-			ajsl.event.register(visuwall.theme.def.event.wallForm);
-			//});
-		</script> 
-			
 			<input type="submit" value="submit"/> 
 		</form>	
 	</div>

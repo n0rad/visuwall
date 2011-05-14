@@ -37,49 +37,54 @@ import com.sun.jersey.api.client.WebResource;
  */
 public final class TestResultBuilder {
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(TestResultBuilder.class);
+	private static final Logger LOG = LoggerFactory.getLogger(TestResultBuilder.class);
 
-	/**
-	 * @param testResultResource
-	 * @return TestResult data if available
-	 */
-	public TestResult build(WebResource testResultResource) {
-		TestResult testResult = new TestResult();
+	public TestResult buildUnitTestResult(WebResource testResultResource) {
+		TestResult unitTestResult = new TestResult();
 		try {
 			HudsonMavenReportersSurefireAggregatedReport surefireReport = testResultResource
-					.get(HudsonMavenReportersSurefireAggregatedReport.class);
-			testResult.setFailCount(surefireReport.getFailCount());
-			testResult.setPassCount(computePassCount(surefireReport));
-			testResult.setSkipCount(surefireReport.getSkipCount());
-			testResult.setTotalCount(surefireReport.getTotalCount());
-			int integrationTestCount = countIntegrationTestsIn(surefireReport);
-			testResult.setIntegrationTestCount(integrationTestCount);
+			        .get(HudsonMavenReportersSurefireAggregatedReport.class);
+			unitTestResult.setFailCount(surefireReport.getFailCount());
+			unitTestResult.setPassCount(computePassCount(surefireReport));
+			unitTestResult.setSkipCount(surefireReport.getSkipCount());
 		} catch (UniformInterfaceException e) {
 			if (LOG.isDebugEnabled()) {
-				LOG.debug("no test result for "
-						+ testResultResource.getURI().toString());
+				LOG.debug("no test result for " + testResultResource.getURI().toString());
 			}
 		} catch (ClientHandlerException e) {
 			if (LOG.isDebugEnabled()) {
-				LOG.debug("no test result "
-						+ testResultResource.getURI().toString());
+				LOG.debug("no test result " + testResultResource.getURI().toString());
 			}
 		}
-		return testResult;
+		return unitTestResult;
 	}
 
-	private int computePassCount(
-			HudsonMavenReportersSurefireAggregatedReport surefireReport) {
-		return surefireReport.getTotalCount() - surefireReport.getFailCount()
-				- surefireReport.getSkipCount();
+	public TestResult buildIntegrationTestResult(WebResource testResultResource) {
+		TestResult integrationTestResult = new TestResult();
+		try {
+			HudsonMavenReportersSurefireAggregatedReport surefireReport = testResultResource
+			        .get(HudsonMavenReportersSurefireAggregatedReport.class);
+			int integrationTestCount = countIntegrationTestsIn(surefireReport);
+			integrationTestResult.setPassCount(integrationTestCount);
+		} catch (UniformInterfaceException e) {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("no test result for " + testResultResource.getURI().toString());
+			}
+		} catch (ClientHandlerException e) {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("no test result " + testResultResource.getURI().toString());
+			}
+		}
+		return integrationTestResult;
 	}
 
-	private int countIntegrationTestsIn(
-			HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+	private int computePassCount(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+		return surefireReport.getTotalCount() - surefireReport.getFailCount() - surefireReport.getSkipCount();
+	}
+
+	private int countIntegrationTestsIn(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
 		int integrationTestCount = 0;
-		for (HudsonTasksTestAggregatedTestResultActionChildReport childReport : surefireReport
-				.getChildReport()) {
+		for (HudsonTasksTestAggregatedTestResultActionChildReport childReport : surefireReport.getChildReport()) {
 			Element childReportResult = (Element) childReport.getResult();
 			List<String> testNames = findTestNamesFrom(childReportResult);
 			for (String testName : testNames) {
@@ -104,6 +109,6 @@ public final class TestResultBuilder {
 	}
 
 	private boolean isIntegrationTest(String testName) {
-		return testName.endsWith("ITTest") || testName.contains(".it.");
+		return testName.endsWith("ITTest") || testName.contains(".it.") || testName.endsWith("IT");
 	}
 }

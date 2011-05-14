@@ -16,20 +16,23 @@
 
 package net.awired.visuwall;
 
-import net.awired.visuwall.core.domain.Software;
 import net.awired.visuwall.core.domain.SoftwareAccess;
-import net.awired.visuwall.plugin.hudson.HudsonPlugin;
+import net.awired.visuwall.plugin.jenkins.JenkinsPlugin;
 import net.awired.visuwall.plugin.sonar.SonarPlugin;
 
 public interface IntegrationTestData {
+	String BAMBOO_URL = "http://bamboo.visuwall.awired.net";
+	String JENKINS_URL = "http://ci.visuwall.awired.net";
 
-    String BAMBOO_URL = "http://bamboo.visuwall.awired.net";
-    String HUDSON_URL = "http://ci.visuwall.awired.net";
-    String HUDSON_ID = "HUDSON_ID";
-    String SONAR_URL = "http://sonar.awired.net";
-    String STRUTS_ARTIFACT_ID = "org.apache.struts:struts-core";
+	String HUDSON_ID = "HUDSON_ID";
+	String JENKINS_ID = "JENKINS_ID";
 
-    SoftwareAccess HUDSON_ACCESS = new SoftwareAccess(HudsonPlugin.class, HUDSON_URL, "");
-    SoftwareAccess SONAR_ACCESS = new SoftwareAccess(SonarPlugin.class, SONAR_URL, "");
+	String SONAR_URL = "http://sonar.awired.net";
+
+	String STRUTS_ARTIFACT_ID = "org.apache.struts:struts-core";
+	String STRUTS_2_ARTIFACT_ID = "org.apache.struts:struts2-parent";
+
+	SoftwareAccess JENKINS_ACCESS = new SoftwareAccess(JenkinsPlugin.class, JENKINS_URL, "jenkins access");
+	SoftwareAccess SONAR_ACCESS = new SoftwareAccess(SonarPlugin.class, SONAR_URL, "sonar access");
 
 }

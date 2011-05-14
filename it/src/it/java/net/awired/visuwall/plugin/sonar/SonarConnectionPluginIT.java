@@ -17,6 +17,7 @@
 package net.awired.visuwall.plugin.sonar;
 
 import static net.awired.visuwall.IntegrationTestData.SONAR_URL;
+import static net.awired.visuwall.IntegrationTestData.STRUTS_2_ARTIFACT_ID;
 import static net.awired.visuwall.IntegrationTestData.STRUTS_ARTIFACT_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,11 +26,13 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SonarConnectionPluginIT {
@@ -45,7 +48,7 @@ public class SonarConnectionPluginIT {
 	public void should_populate_quality() {
 		ProjectId projectId = new ProjectId();
 		projectId.setArtifactId(STRUTS_ARTIFACT_ID);
-		QualityResult quality = sonarPlugin.populateQuality(projectId, "violations_density");
+		QualityResult quality = sonarPlugin.analizeQuality(projectId, "violations_density");
 		QualityMeasure measure = quality.getMeasure("violations_density");
 		assertEquals("Rules compliance", measure.getName());
 		assertEquals("77.2%", measure.getFormattedValue());
@@ -56,7 +59,7 @@ public class SonarConnectionPluginIT {
 	public void should_have_a_lot_of_quality_metrics() {
 		ProjectId projectId = new ProjectId();
 		projectId.setArtifactId(STRUTS_ARTIFACT_ID);
-		QualityResult quality = sonarPlugin.populateQuality(projectId);
+		QualityResult quality = sonarPlugin.analizeQuality(projectId);
 		Set<Entry<String, QualityMeasure>> measures = quality.getMeasures();
 		for (Entry<String, QualityMeasure> measure : measures) {
 			assertNotNull(measure.getValue().getValue());
@@ -67,6 +70,36 @@ public class SonarConnectionPluginIT {
 	public void should_not_fail_if_measure_does_not_exist() throws ProjectNotFoundException {
 		ProjectId projectId = new ProjectId();
 		projectId.setArtifactId(STRUTS_ARTIFACT_ID);
-		sonarPlugin.populateQuality(projectId, "inexistant_measure");
+		sonarPlugin.analizeQuality(projectId, "inexistant_measure");
+	}
+
+	@Test
+	public void should_analyze_unit_tests() {
+		ProjectId projectId = new ProjectId();
+		projectId.setArtifactId(STRUTS_2_ARTIFACT_ID);
+
+		TestResult unitTestsAnalysis = sonarPlugin.analyzeUnitTests(projectId);
+
+		assertEquals(39.4, unitTestsAnalysis.getCoverage(), 0);
+		assertEquals(8, unitTestsAnalysis.getFailCount());
+		assertEquals(0, unitTestsAnalysis.getSkipCount());
+		assertEquals(1821, unitTestsAnalysis.getPassCount());
+		assertEquals(1829, unitTestsAnalysis.getTotalCount());
+	}
+
+	@Ignore("we have to create a dummy project and install jacoco on awired CI")
+	@Test
+	public void should_analyze_integration_tests() {
+		ProjectId projectId = new ProjectId();
+		projectId.setArtifactId("com.orangevallee.on.server.webservice:voxon");
+		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin("http://localhost:9000");
+
+		TestResult integrationTestsAnalysis = sonarConnectionPlugin.analyzeIntegrationTests(projectId);
+
+		assertEquals(33.4, integrationTestsAnalysis.getCoverage(), 0);
+		assertEquals(0, integrationTestsAnalysis.getFailCount());
+		assertEquals(0, integrationTestsAnalysis.getSkipCount());
+		assertEquals(0, integrationTestsAnalysis.getPassCount());
+		assertEquals(0, integrationTestsAnalysis.getTotalCount());
 	}
 }

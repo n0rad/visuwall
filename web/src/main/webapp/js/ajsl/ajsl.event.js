@@ -16,21 +16,21 @@
 
 ajsl.event = {
 
-	registerAll : function(eventObjs) {
-		for (var evObj in eventObjs) {
-			this.register(eventObjs[evObj]);
-		}
-	},
+//	registerAll : function(eventObjs) {
+//		for (var evObj in eventObjs) {
+//			this.register(eventObjs[evObj]);
+//		}
+//	},
 
-	register : function(eventObj) {
+	register : function(eventObj, context) {
 		for (var ev in eventObj) {
 			
-			var context = null;
-			if (typeof eventObj.context == 'function') {
-				context = eventObj.context();
-			} else if (eventObj.context) {
-				context = $(eventObj.context);
-			}
+//			var context = null;
+//			if (typeof eventObj.context == 'function') {
+//				context = eventObj.context();
+//			} else if (eventObj.context) {
+//				context = $(eventObj.context);
+//			}
 			
 			if ($.isFunction(eventObj[ev])) {
 				

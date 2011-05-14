@@ -75,6 +75,7 @@ ajsl.dispatcher = new function() {
 
 		if (!url) {
 			$this._mainCtrl();
+			$this._lastDispatch = {};
 			return;
 		}
 
@@ -82,13 +83,13 @@ ajsl.dispatcher = new function() {
 		
 		for (var ctrl in parsedCtrls) {
 			if ($this._ctrls[ctrl] == undefined) {
-				LOG.error("no controller for '", ctrl, "'");
+				LOG.error("no history for '", ctrl, "'");
 				continue;
 			}
 			
 			if ($this._lastDispatch && $this._lastDispatch[ctrl]
 				&& _.isEqual($this._lastDispatch[ctrl], parsedCtrls[ctrl])) {
-				LOG.debug("skip controller '", ctrl, "'as already dispatched in last url");
+				LOG.debug("skip history '", ctrl, "'as already dispatched in last url");
 				continue;
 			}
 			

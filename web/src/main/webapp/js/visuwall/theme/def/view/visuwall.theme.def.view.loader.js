@@ -17,6 +17,44 @@
 visuwall.theme.def.view.loader = new function() {
 	var $this = this;
 	
+	
+	tt = function() {
+		// init loader
+		ajsl.loader.init(visuwall.theme.def.view.loader);
+
+		// loader test
+		$("#loader1").bind(
+				'click',
+				function() {
+					if ($("#loader1").hasClass('selected')) {
+						$("#loader1").removeClass('selected');
+						ajsl.loader.del('loader1');
+					} else {
+						$("#loader1").addClass('selected');
+						ajsl.loader.add('loader1', 'description of loader1',
+								function() {
+									LOG.info('cancel loader1');
+								});
+					}
+				});
+		$("#loader2").bind(
+				'click',
+				function() {
+					if ($("#loader2").hasClass('selected')) {
+						$("#loader2").removeClass('selected');
+						ajsl.loader.del('loader2');
+					} else {
+						$("#loader2").addClass('selected');
+						ajsl.loader.add('loader2', 'description of loader2',
+								function() {
+									LOG.info('cancel loader2');
+								});
+					}
+				});
+
+		
+	}
+	
 	this._loader;
 
 	this._list;

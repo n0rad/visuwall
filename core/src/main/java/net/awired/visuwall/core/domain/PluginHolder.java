@@ -22,28 +22,37 @@ import java.util.Set;
 import net.awired.visuwall.api.plugin.BuildConnectionPlugin;
 import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
 
+import com.google.common.base.Objects;
+
 public class PluginHolder {
 
-    private final Set<BuildConnectionPlugin> buildServices = new HashSet<BuildConnectionPlugin>();
+	private final Set<BuildConnectionPlugin> buildServices = new HashSet<BuildConnectionPlugin>();
 
-    private final Set<QualityConnectionPlugin> qualityServices = new HashSet<QualityConnectionPlugin>();
+	private final Set<QualityConnectionPlugin> qualityServices = new HashSet<QualityConnectionPlugin>();
 
-    public void addBuildService(BuildConnectionPlugin buildPlugin) {
-        buildServices.add(buildPlugin);
-    }
+	public void addBuildService(BuildConnectionPlugin buildPlugin) {
+		buildServices.add(buildPlugin);
+	}
 
-    public void addQualityService(QualityConnectionPlugin qualityPlugin) {
-        qualityServices.add(qualityPlugin);
-    }
+	public void addQualityService(QualityConnectionPlugin qualityPlugin) {
+		qualityServices.add(qualityPlugin);
+	}
 
-    ////////////////////////////////////////////////////
+	// //////////////////////////////////////////////////
 
-    public Set<BuildConnectionPlugin> getBuildServices() {
-        return buildServices;
-    }
+	public Set<BuildConnectionPlugin> getBuildServices() {
+		return buildServices;
+	}
 
-    public Set<QualityConnectionPlugin> getQualityServices() {
-        return qualityServices;
-    }
+	public Set<QualityConnectionPlugin> getQualityServices() {
+		return qualityServices;
+	}
 
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this) //
+		        .add("buildServices", buildServices) //
+		        .add("qualityServices", qualityServices) //
+		        .toString();
+	}
 }

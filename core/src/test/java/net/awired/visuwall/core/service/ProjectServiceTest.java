@@ -41,9 +41,8 @@ public class ProjectServiceTest {
 	@Before
 	public void init() {
 		projectService = new ProjectService();
-		ProjectMergeService projectMergeService = Mockito
-				.mock(ProjectMergeService.class);
-		projectService.projectMergeService = projectMergeService;
+		ProjectEnhancerService projectEnhancerService = Mockito.mock(ProjectEnhancerService.class);
+		projectService.projectEnhancerService = projectEnhancerService;
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -54,10 +53,8 @@ public class ProjectServiceTest {
 
 	public PluginHolder getPluginHolder() {
 		PluginHolder pluginHolder = new PluginHolder();
-		BuildConnectionPlugin buildConnectionPlugin = Mockito
-				.mock(BuildConnectionPlugin.class);
-		QualityConnectionPlugin qualityConnectionPlugin = Mockito
-				.mock(QualityConnectionPlugin.class);
+		BuildConnectionPlugin buildConnectionPlugin = Mockito.mock(BuildConnectionPlugin.class);
+		QualityConnectionPlugin qualityConnectionPlugin = Mockito.mock(QualityConnectionPlugin.class);
 		pluginHolder.addBuildService(buildConnectionPlugin);
 		pluginHolder.addQualityService(qualityConnectionPlugin);
 
@@ -82,10 +79,10 @@ public class ProjectServiceTest {
 		Project project = new Project("test");
 		projectService.updateProject(pluginHolder, project);
 
-		Mockito.verify(projectService.projectMergeService).merge(project,
-				pluginHolder.getBuildServices().iterator().next());
-		Mockito.verify(projectService.projectMergeService).merge(project,
-				pluginHolder.getQualityServices().iterator().next(),
-				projectService.metrics);
+		Mockito.verify(projectService.projectEnhancerService).enhanceWithBuildInformations(project,
+		        pluginHolder.getBuildServices().iterator().next());
+		Mockito.verify(projectService.projectEnhancerService).enhanceWithQualityAnalysis(project,
+		        pluginHolder.getQualityServices().iterator().next(), projectService.metrics);
 	}
+
 }

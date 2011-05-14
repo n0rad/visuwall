@@ -38,7 +38,12 @@ visuwall = {
 	/**
 	 * init on ready
 	 */
-	init : function() {
+	init : function(jsData) {
+
+		// DI
+		ajsl.service.registerAll(jsData.jsService);
+		ajsl.service.defineInterfacesAll(jsData.jsServiceMethod);
+		
 		jQuery.timeago.settings.strings = {
 			suffixAgo : " ago",
 			suffixFromNow : "from now",
@@ -60,53 +65,24 @@ visuwall = {
 		// DI
 		ajsl.service.injectAll(visuwall.ctrl.history);
 		
-		// register main controller
-		ajsl.dispatcher.registerMain(visuwall.ctrl.history.main.run);
-
-		
 		// register controllers
-		// ajsl.dispatcher.registerAll(visuwall.ctrl.history);
+		ajsl.dispatcher.registerMain(visuwall.ctrl.history.main.run);
+		ajsl.dispatcher.registerAll(visuwall.ctrl.history);
 
 		ajsl.log.setLevel('debug');
 
 		// register events
-		ajsl.event.registerAll(visuwall.theme.def.event);
+		//ajsl.event.registerAll(visuwall.theme.def.event);
 
 
-		// init loader
-		ajsl.loader.init(visuwall.theme.def.view.loader);
-
-		// loader test
-		$("#loader1").bind(
-				'click',
-				function() {
-					if ($("#loader1").hasClass('selected')) {
-						$("#loader1").removeClass('selected');
-						ajsl.loader.del('loader1');
-					} else {
-						$("#loader1").addClass('selected');
-						ajsl.loader.add('loader1', 'description of loader1',
-								function() {
-									LOG.info('cancel loader1');
-								});
-					}
-				});
-		$("#loader2").bind(
-				'click',
-				function() {
-					if ($("#loader2").hasClass('selected')) {
-						$("#loader2").removeClass('selected');
-						ajsl.loader.del('loader2');
-					} else {
-						$("#loader2").addClass('selected');
-						ajsl.loader.add('loader2', 'description of loader2',
-								function() {
-									LOG.info('cancel loader2');
-								});
-					}
-				});
 
 		// Initialize history plugin.
 		$.history.init(ajsl.dispatcher.dispatch, {unescape : true, ctrls : ajsl.dispatcher._ctrls});
+
+		// run init
+		ajsl.service.get('initController', function(bean) {
+			bean.run(jsData.init);
+		});
+		
 	}
 };

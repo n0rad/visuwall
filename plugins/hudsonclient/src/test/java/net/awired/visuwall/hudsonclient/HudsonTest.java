@@ -31,7 +31,9 @@ import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 
 import org.joda.time.DateTime;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandler;
@@ -39,123 +41,141 @@ import com.sun.jersey.api.client.config.ClientConfig;
 
 public class HudsonTest {
 
-    private static final int FLUXX_BUILT_WITH_COMMITERS = 273;
+	private static final int FLUXX_BUILT_WITH_COMMITERS = 273;
 
-    private static final String HUDSON_URL = "http://fluxx.fr.cr:8080/hudson";
+	private static final String HUDSON_URL = "http://fluxx.fr.cr:8080/hudson";
 
-    private static final int INVALID_XML = 0;
+	private static final int INVALID_XML = 0;
 
-    HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(HUDSON_URL);
+	HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(HUDSON_URL);
 
-    private Hudson hudson = new Hudson(HUDSON_URL) {
-        @Override
-        Client buildJerseyClient(ClientConfig clientConfig) {
-            ClientHandler clientHandler = FileClientHandlerBuilder.newFileClientHandler()
-            .withFile(hudsonUrlBuilder.getAllProjectsUrl(), "hudson/all_jobs.xml")
-            .withFile(hudsonUrlBuilder.getProjectUrl("fluxx"), "hudson/fluxx.xml")
-            .withFile(hudsonUrlBuilder.getBuildUrl("fluxx", 101), "hudson/fluxx_101.xml")
-            .withFile(hudsonUrlBuilder.getBuildUrl("fluxx", 102), "hudson/fluxx_102.xml")
-            .withFile(hudsonUrlBuilder.getProjectUrl("dev-radar"), "hudson/dev-radar.xml")
-            .withFile(hudsonUrlBuilder.getBuildUrl("dev-radar", 107), "hudson/dev-radar_107.xml")
-            .withFile(hudsonUrlBuilder.getBuildUrl("dev-radar", 108), "hudson/dev-radar_108.xml")
-            .withFile(hudsonUrlBuilder.getBuildUrl("dev-radar", 74), "hudson/dev-radar_74.xml")
-            .withFile(hudsonUrlBuilder.getTestResultUrl("dev-radar", 74), "hudson/dev-radar_74_surefire_aggregated_report.xml")
-            .withFile(hudsonUrlBuilder.getProjectUrl("dev-radar"), "hudson/dev-radar.xml")
-            .withFile(hudsonUrlBuilder.getBuildUrl("fluxx", FLUXX_BUILT_WITH_COMMITERS), "hudson/fluxx_built_with_commiters.xml")
-            .withFile(hudsonUrlBuilder.getBuildUrl("jwall", INVALID_XML), "hudson/jwall_invalid.xml")
-            .withHeader("Content-Type", "application/xml; charset=utf-8")
-            .create();
-            return new Client(clientHandler, clientConfig);
-        }
-    };
+	private Hudson hudson = new Hudson(HUDSON_URL) {
+		@Override
+		Client buildJerseyClient(ClientConfig clientConfig) {
+			ClientHandler clientHandler = FileClientHandlerBuilder
+			        .newFileClientHandler()
+			        .withFile(hudsonUrlBuilder.getAllProjectsUrl(), "hudson/all_jobs.xml")
+			        .withFile(hudsonUrlBuilder.getProjectUrl("fluxx"), "hudson/fluxx.xml")
+			        .withFile(hudsonUrlBuilder.getBuildUrl("fluxx", 101), "hudson/fluxx_101.xml")
+			        .withFile(hudsonUrlBuilder.getBuildUrl("fluxx", 102), "hudson/fluxx_102.xml")
+			        .withFile(hudsonUrlBuilder.getProjectUrl("dev-radar"), "hudson/dev-radar.xml")
+			        .withFile(hudsonUrlBuilder.getBuildUrl("dev-radar", 107), "hudson/dev-radar_107.xml")
+			        .withFile(hudsonUrlBuilder.getBuildUrl("dev-radar", 108), "hudson/dev-radar_108.xml")
+			        .withFile(hudsonUrlBuilder.getBuildUrl("dev-radar", 74), "hudson/dev-radar_74.xml")
+			        .withFile(hudsonUrlBuilder.getTestResultUrl("dev-radar", 74),
+			                "hudson/dev-radar_74_surefire_aggregated_report.xml")
+			        .withFile(hudsonUrlBuilder.getProjectUrl("dev-radar"), "hudson/dev-radar.xml")
+			        .withFile(hudsonUrlBuilder.getBuildUrl("fluxx", FLUXX_BUILT_WITH_COMMITERS),
+			                "hudson/fluxx_built_with_commiters.xml")
+			        .withFile(hudsonUrlBuilder.getBuildUrl("jwall", INVALID_XML), "hudson/jwall_invalid.xml")
+			        .withHeader("Content-Type", "application/xml; charset=utf-8").create();
+			return new Client(clientHandler, clientConfig);
+		}
+	};
 
-    @Test
-    public void should_retrieve_projects_from_hudson() throws JAXBException {
-        List<HudsonProject> projects = hudson.findAllProjects();
-        assertFalse(projects.isEmpty());
-        assertEquals("dev-radar", projects.get(0).getName());
-        assertEquals("fluxx", projects.get(1).getName());
-    }
+	@Before
+	public void init() throws ArtifactIdNotFoundException {
+		HudsonRootModuleFinder hudsonRootModuleFinder = Mockito.mock(HudsonRootModuleFinder.class);
+		Mockito.when(hudsonRootModuleFinder.findArtifactId(Mockito.anyString())).thenReturn("groupId:artifactId");
+		hudson.setHudsonRootModuleFinder(hudsonRootModuleFinder);
+	}
 
-    @Test
-    public void should_retrieve_projects_with_building_status() {
-        List<HudsonProject> projects = hudson.findAllProjects();
-        assertFalse(projects.get(0).isBuilding());
-        assertTrue(projects.get(1).isBuilding());
-    }
+	@Test
+	public void should_retrieve_projects_from_hudson() throws JAXBException {
+		List<HudsonProject> projects = hudson.findAllProjects();
+		assertFalse(projects.isEmpty());
+		assertEquals("dev-radar", projects.get(0).getName());
+		assertEquals("fluxx", projects.get(1).getName());
+	}
 
-    @Test
-    public void should_retrieve_build_with_last_commiters() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
-        HudsonBuild build = hudson.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
-        assertEquals("Julien Smadja", build.getCommiters()[0]);
-        assertEquals("Arnaud Lemaire", build.getCommiters()[1]);
-    }
+	@Test
+	public void should_retrieve_projects_with_building_status() {
+		List<HudsonProject> projects = hudson.findAllProjects();
+		assertFalse(projects.get(0).isBuilding());
+		assertTrue(projects.get(1).isBuilding());
+	}
 
-    @Test
-    public void should_retrieve_build_with_status() throws HudsonProjectNotFoundException {
-        HudsonBuild build = hudson.findProject("dev-radar").getCompletedBuild();
-        assertTrue(build.isSuccessful());
-    }
+	@Test
+	public void should_retrieve_build_with_last_commiters() throws HudsonBuildNotFoundException,
+	        HudsonProjectNotFoundException {
+		HudsonBuild build = hudson.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
+		assertEquals("Julien Smadja", build.getCommiters()[0]);
+		assertEquals("Arnaud Lemaire", build.getCommiters()[1]);
+	}
 
-    @Test
-    public void should_retrieve_build_start_time() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
-        HudsonBuild build = hudson.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
-        assertEquals(1298022037803L, build.getStartTime().getTime());
-    }
+	@Test
+	public void should_retrieve_build_with_status() throws HudsonProjectNotFoundException {
+		HudsonBuild build = hudson.findProject("dev-radar").getCompletedBuild();
+		assertTrue(build.isSuccessful());
+	}
 
-    @Test
-    public void should_retrieve_artifact_id() throws HudsonProjectNotFoundException {
-        String artifactId = hudson.findProject("fluxx").getArtifactId();
-        assertEquals("fr.fluxx:fluxx", artifactId);
-    }
+	@Test
+	public void should_retrieve_build_start_time() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+		HudsonBuild build = hudson.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
+		assertEquals(1298022037803L, build.getStartTime().getTime());
+	}
 
-    @Test
-    public void should_retrieve_projects_with_description() {
-        List<HudsonProject> projects = hudson.findAllProjects();
-        assertEquals("Dev Radar, un mur d'informations", projects.get(0).getDescription());
-        assertEquals("Fluxx, aggrégez vos flux RSS!", projects.get(1).getDescription());
-    }
+	@Test
+	public void should_retrieve_artifact_id() throws HudsonProjectNotFoundException {
+		String artifactId = hudson.findProject("fluxx").getArtifactId();
+		assertEquals("groupId:artifactId", artifactId);
+	}
 
-    @Test
-    public void should_retrieve_average_build_duration_time() throws HudsonProjectNotFoundException {
-        long duration108 = 31953;
-        long duration107 = 29261;
+	@Test
+	public void should_retrieve_projects_with_description() {
+		List<HudsonProject> projects = hudson.findAllProjects();
+		assertEquals("Dev Radar, un mur d'informations", projects.get(0).getDescription());
+		assertEquals("Fluxx, aggrégez vos flux RSS!", projects.get(1).getDescription());
+	}
 
-        float sumDuration = duration107 + duration108;
-        long averageBuildDurationTime = (long)(sumDuration / 2);
+	@Test
+	public void should_retrieve_average_build_duration_time() throws HudsonProjectNotFoundException {
+		long duration108 = 31953;
+		long duration107 = 29261;
 
-        long duration = hudson.getAverageBuildDurationTime("dev-radar");
-        assertEquals(averageBuildDurationTime, duration);
-    }
+		float sumDuration = duration107 + duration108;
+		long averageBuildDurationTime = (long) (sumDuration / 2);
 
-    @Test
-    public void should_return_successful_build_numbers() throws HudsonProjectNotFoundException {
-        HudsonProject projects = hudson.findProject("fluxx");
-        int[] successfullBuildNumbers = hudson.getSuccessfulBuildNumbers(projects);
-        assertEquals(102, successfullBuildNumbers[0]);
-        assertEquals(101, successfullBuildNumbers[1]);
-    }
+		long duration = hudson.getAverageBuildDurationTime("dev-radar");
+		assertEquals(averageBuildDurationTime, duration);
+	}
 
-    @Test
-    public void should_retrieve_estimated_remaining_time() throws HudsonProjectNotFoundException {
-        Date estimatedFinishTime = hudson.getEstimatedFinishTime("fluxx");
-        DateTime now = new DateTime();
-        assertTrue(now.isBefore(estimatedFinishTime.getTime()));
-    }
+	@Test
+	public void should_return_successful_build_numbers() throws HudsonProjectNotFoundException {
+		HudsonProject projects = hudson.findProject("fluxx");
+		int[] successfullBuildNumbers = hudson.getSuccessfulBuildNumbers(projects);
+		assertEquals(102, successfullBuildNumbers[0]);
+		assertEquals(101, successfullBuildNumbers[1]);
+	}
 
-    @Test
-    public void should_retrieve_test_result() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
-        HudsonBuild build = hudson.findBuild("dev-radar", 74);
-        TestResult testResult = build.getTestResult();
-        assertEquals(1, testResult.getFailCount());
-        assertEquals(13, testResult.getPassCount());
-        assertEquals(2, testResult.getSkipCount());
-        assertEquals(16, testResult.getTotalCount());
-        assertEquals(2, testResult.getIntegrationTestCount());
-    }
+	@Test
+	public void should_retrieve_estimated_remaining_time() throws HudsonProjectNotFoundException {
+		Date estimatedFinishTime = hudson.getEstimatedFinishTime("fluxx");
+		DateTime now = new DateTime();
+		assertTrue(now.isBefore(estimatedFinishTime.getTime()));
+	}
 
-    @Test(expected = HudsonBuildNotFoundException.class)
-    public void should_not_fail_while_loading_invalid_xml_build() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
-        hudson.findBuild("jwall", INVALID_XML);
-    }
+	@Test
+	public void should_retrieve_test_result() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+		HudsonBuild build = hudson.findBuild("dev-radar", 74);
+		TestResult testResult = build.getUnitTestResult();
+		assertEquals(1, testResult.getFailCount());
+		assertEquals(13, testResult.getPassCount());
+		assertEquals(2, testResult.getSkipCount());
+		assertEquals(16, testResult.getTotalCount());
+	}
+
+	@Test
+	public void should_retrieve_integration_test_count() throws HudsonBuildNotFoundException,
+	        HudsonProjectNotFoundException {
+		HudsonBuild build = hudson.findBuild("dev-radar", 74);
+		TestResult testResult = build.getIntegrationTestResult();
+		assertEquals(2, testResult.getTotalCount());
+	}
+
+	@Test(expected = HudsonBuildNotFoundException.class)
+	public void should_not_fail_while_loading_invalid_xml_build() throws HudsonBuildNotFoundException,
+	        HudsonProjectNotFoundException {
+		hudson.findBuild("jwall", INVALID_XML);
+	}
 }

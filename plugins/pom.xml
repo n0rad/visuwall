@@ -49,6 +49,7 @@
 		<module>sonar-plugin</module>
 		<module>hudson-plugin</module>
 		<module>bamboo-plugin</module>
+		<module>jenkins-plugin</module>
 	</modules>
 
 </project>

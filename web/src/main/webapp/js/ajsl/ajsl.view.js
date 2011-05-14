@@ -1,23 +1,24 @@
 ajsl.view = new function() {
-
+	var $this = this;
+	
 	this.formFields = "input, checkbox, select, textarea";
 
-	this.rebuildFormRec = function(form, data, root, rootMethod) {
+	this.rebuildFormRec = function(form, data, formManager, root, rootMethod) {
 		if (root == undefined) {
 			root = '';
 		}
 		if (rootMethod == undefined) {
 			rootMethod = 'addForm';
 		}
-
-		for ( var formElem in data) {
+	
+		for (var formElem in data) {
 			if (data[formElem] instanceof Array) {
 				var assertMethodName = rootMethod + formElem.ucfirst();
 				for ( var i = 0; i < data[formElem].length; i++) {
-					if (assertMethodName in $this.editFormMng) {
-						$this.editFormMng[assertMethodName](i);
+					if (assertMethodName in formManager) {
+						formManager[assertMethodName](i);
 					}
-					rebuildFormRec(form, data[formElem][i], root + formElem
+					$this.rebuildFormRec(form, data[formElem][i], formManager, root + formElem
 							+ '[' + i + '].', assertMethodName);
 				}
 			} else {

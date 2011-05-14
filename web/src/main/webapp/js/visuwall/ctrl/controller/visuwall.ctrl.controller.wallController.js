@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-visuwall.ctrl.controller.wall = new function() {
-	$this = this;
+visuwall.ctrl.controller.wallController = new function() {
+	var $this = this;
 	
 	this.currentWall;
 	this.currentWallUpdater;
 	
 	this.showWall = function(wallName) {
-		$this.currentWall = new visuwall.mvc.controller.process.Wall(wallName);
-		$this.currentWallUpdater = setInterval(visuwall.mvc.event.navigation['#refresh|click'], 10000);
+		//TODO use DI
+		$this.currentWall = new visuwall.ctrl.process.Wall(wallName);
+		ajsl.service.inject($this.currentWall);
+		$this.currentWallUpdater = setInterval(visuwall.theme.def.event.navigationEvent['#refresh|click'], 10000);
+		$this.updateStatus();
+	};
+	
+	this.updateStatus = function() {
+		$this.currentWall.updateStatus();
 	};
 
 };

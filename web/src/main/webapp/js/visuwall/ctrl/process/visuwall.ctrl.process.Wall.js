@@ -1,118 +1,143 @@
 visuwall.ctrl.process.Wall = function(wallName) {
 	var $this = this;
-	
-	this.projectsView;
-	
-	this.projectService;
-	this.wallService;
-	this.projectDAO;
-	
-	this.wallName = wallname,
-	
-	$(function() {
-		this.projectsView = visuwall.mvc.view.Projects;
-		this.projectService = visuwall.business.service.Project;
-		this.wallService = visuwall.business.service.Wall;
-	});
-		
+
+	this.__inject__ = [ 'wallView', 'projectService', 'wallService',
+			'projectDAO', 'processingService' ];
+
+	this.wallName = wallName;
+
 	this.addProject = function(projectData) {
-		this.projectDAO.saveProject(projectData);
-		var project = this.projectDAO.getProject(projectData.name);
-		
-		this.projectsView.addProject(project.name, project.description);
-		this._updateProject(project);
+		$this.projectDAO.saveProject(projectData);
+		$this.projectDAO.getProject(projectData.name, function(project) {
+			$this.wallView.addProject(project.name, project.description);
+			$this._updateProject(project);
+		});
 	};
 
 	this.updateStatus = function() {
 		LOG.debug("run updater");
-		var $this = this;
-		$this.wallService.status(this.wallName,function (projectsStatus) {
+		$this.wallService.status($this.wallName, function(projectsStatus) {
 			var projectDone = [];
+			
+			var updateFunc = function(status, projectsStatus) {
+				$this.projectDAO.getProject(status.name, function(project) {
+					LOG.debug('Update status for project ' + status.name);
+					$this._updateBuilding(project, status.building);
+					$this._checkVersionChange(project, status);
+					projectDone.push(status.name);
+
+					// looking for project to delete only when all done
+					if (projectDone.length == projectsStatus.length) {
+						$this.projectDAO.getProjects(function(projects) {
+							for (var key in projects) {
+								if (!projectDone.contains(key)) {
+									$this._removeProject(key);
+								}
+							}
+						});
+					}
+				});
+			};
+			
 			for (var i = 0; i < projectsStatus.length; i++) {
 				var status = projectsStatus[i];
 
-				if ($this.projectDAO.isProject(status.name)) {
-					// this is a new project
-					$this.projectService.project($this.wallName, status.name, function(newProjectData) {
-						$this.addProject(newProjectData);
-					});
-					continue;
-				}
-				var project = $this.projectDAO.getProject(status.name);
-				LOG.debug('Update status for project ' + status.name);
-				$this._updateBuilding(project, status.building);
-				$this._checkVersionChange(project, status);
+				$this.projectDAO.isProject(status.name, function(isProjectRes) {
+					var stat = status;
+					if (!isProjectRes) {
+						// this is a new project
+						$this.projectService.project($this.wallName,
+								stat.name, function(newProjectData) {
+									$this.addProject(newProjectData);
+									updateFunc(stat, projectsStatus);
+								});
+					} else {
+						updateFunc(stat, projectsStatus);
+					}
 
-				projectDone.push(status.name);
-			}
-			
-			// looking for project to delete
-			for (var key in $this.projectDAO.getProjects()) {
-				if (!projectDone.contains(key)) {
-					$this._removeProject(key);
-				}
+
+				});
 			}
 		});
 	};
 	
 	this._updateProject = function(project) {
-		this.projectDAO.saveProject(project);
+		$this.projectDAO.saveProject(project);
 
-		this._updateLastBuild(project);
-		this._updateAgo(project);
-		
+		$this._updateLastBuild(project);
+		$this._updateAgo(project);
+
 		// call updateBuilding like we just receive the status
 		var wasBuilding = project.building;
 		project.building = false;
-		this._updateBuilding(project, wasBuilding);
-		this._updateState(project);
+		$this._updateBuilding(project, wasBuilding);
+		$this._updateState(project);
 	};
 
-	/////////////////////////////////////////////////////////////////////////
-	
+	// ///////////////////////////////////////////////////////////////////////
+
 	this._updateLastBuild = function(project) {
 		if (project.completedBuild == null) {
 			return
-		}
-		this.projectsView.updateBuildTime(project.name, project.completedBuild.duration);
-		this.projectsView.updateCommiters(project.name, project.completedBuild.commiters);
-		this.projectsView.updateQuality(project.name, project.qualityResult.measures);
-		this.projectsView.updateUTCoverage(project.name, this._getCoverageFromQualityMeasures(project.qualityResult.measures));
-		this.projectsView.updateUT(project.name, 
-				project.completedBuild.testResult.failCount,
-				project.completedBuild.testResult.passCount,
-				project.completedBuild.testResult.skipCount,
-				project.coverage);
 
-		this.projectsView.updateITCoverage(project.name, 0);
-		this.projectsView.updateIT(project.name, 0,0,0);
-	
-		var $this = this;
+		}
+		$this.wallView.updateBuildTime(project.name,
+				project.completedBuild.duration);
+		$this.wallView.updateCommiters(project.name,
+				project.completedBuild.commiters);
+		$this.wallView.updateQuality(project.name,
+				project.qualityResult.measures);
+
+		$this.wallView
+				.updateUTCoverage(
+						project.name,
+						$this
+								._getCoverageFromQualityMeasures(project.qualityResult.measures));
+		$this.wallView.updateUT(project.name,
+				project.completedBuild.unitTestResult.failCount,
+				project.completedBuild.unitTestResult.passCount,
+				project.completedBuild.unitTestResult.skipCount,
+				project.completedBuild.unitTestResult.coverage);
+
+		$this.wallView.updateITCoverage(project.name, 0);
+		$this.wallView.updateIT(project.name,
+				project.completedBuild.integrationTestResult.failCount,
+				project.completedBuild.integrationTestResult.passCount,
+				project.completedBuild.integrationTestResult.skipCount,
+				project.completedBuild.integrationTestResult.coverage);
+
 		var completedBuild = project.completedBuild;
-		
-		this.projectDAO.callbackPreviousCompletedBuild(project.name, function(previousBuild) {
+
+		$this.projectDAO.callbackPreviousCompletedBuild($this.wallName , project.name, function(
+				previousBuild) {
 			if (completedBuild == null || previousBuild == null) {
 				return;
 			}
-			
-			var failDiff = completedBuild.testResult.failCount - previousBuild.testResult.failCount;
-			var successDiff = completedBuild.testResult.totalCount - previousBuild.testResult.totalCount;
-			var skipDiff = completedBuild.testResult.skipCount - previousBuild.testResult.skipCount;
-			
-			$this.projectsView.updateUTDiff(project.name, failDiff, successDiff, skipDiff);
+
+			var failDiff = completedBuild.unitTestResult.failCount
+					- previousBuild.unitTestResult.failCount;
+			var successDiff = completedBuild.unitTestResult.totalCount
+					- previousBuild.unitTestResult.totalCount;
+			var skipDiff = completedBuild.unitTestResult.skipCount
+					- previousBuild.unitTestResult.skipCount;
+
+			$this.wallView.updateUTDiff(project.name, failDiff,
+					successDiff, skipDiff);
 		});
 	};
-	
+
 	this._updateAgo = function(project) {
 		if (project.completedBuild != null) {
-			this.projectsView.updateAgo(project.name, new Date(project.completedBuild.startTime + project.completedBuild.duration));					
+			$this.wallView.updateAgo(project.name, new Date(
+					project.completedBuild.startTime
+							+ project.completedBuild.duration));
 		} else {
-			this.projectsView.updateAgo(project.name, 0);
+			$this.wallView.updateAgo(project.name, 0);
 		}
 	};
-	
+
 	this._getCoverageFromQualityMeasures = function(measures) {
-		for (var i = 0; i < measures.length; i++) {
+		for ( var i = 0; i < measures.length; i++) {
 			if (measures[i].key == 'coverage') {
 				return measures[i].value.value;
 			}
@@ -121,83 +146,83 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	};
 
 	this._removeProject = function(projectName) {
-		this.projectDAO.removeProject(projectName);
-		this.projectsView.removeProject(projectName);
+		$this.projectDAO.removeProject(projectName);
+		$this.wallView.removeProject(projectName);
 	};
-	
+
 	this._updateState = function(project) {
-		switch(project.state) {
+		switch (project.state) {
 		case 'SUCCESS':
-			this.projectsView.displaySuccess(project.name);
+			$this.wallView.displaySuccess(project.name);
 			break;
 		case 'NEW':
-			this.projectsView.displayNew(project.name);
+			$this.wallView.displayNew(project.name);
 			break;
 		case 'ABORTED':
-			this.projectsView.displayAborted(project.name);
+			$this.wallView.displayAborted(project.name);
 			break;
 		case 'FAILURE':
-			this.projectsView.displayFailure(project.name);			
+			$this.wallView.displayFailure(project.name);
 			break;
 		case 'UNSTABLE':
-			this.projectsView.displayUnstable(project.name);
+			$this.wallView.displayUnstable(project.name);
 			break;
 		case 'NOT_BUILT':
-			this.projectsView.displayNotBuilt(project.name);
+			$this.wallView.displayNotBuilt(project.name);
 			break;
 		case 'UNKNOWN':
 		default:
-			this.projectsView.displayUnknown(project.name);
+			$this.wallView.displayUnknown(project.name);
 		}
 	};
-	
+
 	this._updateBuilding = function(project, isBuilding) {
 		if (isBuilding) {
 			if (!project.building) {
-				var $this = this;
-				visuwall.business.service.Processing.finishTime(this.wallName, project.name, function(data) {
-					$this.projectsView.updateCountdown(project.name, new Date(data));
-				});
+				$this.processingService.finishTime($this.wallName,
+						project.name, function(data) {
+							$this.wallView.updateCountdown(project.name,
+									new Date(data));
+						});
 				LOG.info("project is now building : " + project.name);
-				this.projectsView.showBuilding(project.name);
+				$this.wallView.showBuilding(project.name);
 				project.building = true;
 			}
 		} else if (project.building) {
 			LOG.info("building is now over for project : " + project.name);
-			this.projectsView.stopBuilding(project.name);
+			this.wallView.stopBuilding(project.name);
 			project.building = false;
 
-			var $this = this;
-			this.projectService.project(this.wallName, project.name, function(newProjectData) {
-				$this._updateProject(newProjectData);
-			});			
+			$this.projectService.project($this.wallName, project.name,
+					function(newProjectData) {
+						$this._updateProject(newProjectData);
+					});
 		} else {
-			this.projectsView.stopBuilding(project.name);
+			$this.wallView.stopBuilding(project.name);
 		}
 	};
-	
+
 	this._checkVersionChange = function(project, status) {
-		if (this._checkVersionChangeAndNotBuilding(project, status)) {
-			LOG.info("Server is not building and version has change, we need an update");
-			var $this = this;
-			this.projectService.project(this.wallName, project.name, function(newProjectData) {
-				$this._updateProject(newProjectData);
-			});
+		if ($this._checkVersionChangeAndNotBuilding(project, status)) {
+			LOG
+					.info("Server is not building and version has change, we need an update");
+			$this.projectService.project($this.wallName, project.name,
+					function(newProjectData) {
+						$this._updateProject(newProjectData);
+					});
 		}
 	};
-	
-	this._checkVersionChangeAndNotBuilding = function(projectData, projectStatus) {
-		// if ever build && not building && last build on server != last completed in js 
-		if (projectStatus.lastBuildId != -1 && !projectStatus.building
+
+	this._checkVersionChangeAndNotBuilding = function(projectData,
+			projectStatus) {
+		// if ever build && not building && last build on server != last
+		// completed in js
+		if (projectStatus.lastBuildId != -1
+				&& !projectStatus.building
 				&& projectStatus.lastBuildId != projectData.completedBuild.buildNumber) {
 			return true;
 		}
 		return false;
 	};
 
-	///////////////////////////////////////
-
-
-
-	this.updateStatus();
 };

@@ -17,6 +17,7 @@
 package net.awired.visuwall.core.service;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +28,7 @@ import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -80,6 +82,11 @@ public class WallServiceImpl implements WallService {
 	public Wall find(String wallName) throws NotFoundException {
 		Wall wall = entityManager.find(Wall.class, wallName);
 		return wall;
+	}
+
+	@Override
+	public Set<String> getWallNames() {
+		throw new NotImplementedException();
 	}
 
 }

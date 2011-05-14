@@ -19,6 +19,7 @@ package net.awired.visuwall.plugin.sonar;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
+import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
 
 import org.junit.Test;
@@ -32,7 +33,7 @@ import org.sonar.wsclient.services.ResourceQuery;
 public class MeasureFinderTest {
 
 	@Test
-	public void should_find_quality_measure() throws SonarMetricNotFoundException {
+	public void should_find_quality_measure() throws SonarMetricNotFoundException, SonarMeasureNotFoundException {
 		Measure coverageMeasure = new Measure();
 		coverageMeasure.setFormattedValue("5%");
 		coverageMeasure.setValue(5D);
@@ -55,7 +56,7 @@ public class MeasureFinderTest {
 	}
 
 	@Test
-	public void should_find_measure() throws SonarMetricNotFoundException {
+	public void should_find_measure() throws SonarMetricNotFoundException, SonarMeasureNotFoundException {
 		Measure coverageMeasure = new Measure();
 		coverageMeasure.setFormattedValue("5%");
 		coverageMeasure.setValue(5D);

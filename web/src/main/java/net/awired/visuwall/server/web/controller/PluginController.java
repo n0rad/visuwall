@@ -49,27 +49,6 @@ public class PluginController {
 	@Autowired
 	JsService jsService;
 	
-	@RequestMapping("js")
-	public @ResponseBody Map<String, List<String>> res() throws Exception {
-		Map<File, String> jsMap = jsService.getJsFiles();
-		
-		JsServiceMap serviceMap = jsService.buildServiceMapFromJsMap(jsMap);
-		Predicate<List<String>> predicate = new Predicate<List<String>>() {
-			@Override
-			public boolean apply(List<String> value) {
-				for (String string : value) {
-					return string.startsWith("js/visuwall");
-				}
-				return true;
-			}
-		};
-
-		Map<String, List<String>> val = Maps.filterValues(serviceMap, predicate);
-
-		//String obj = jsService.buildJsServiceMapString(serviceMap);
-		return val;
-	}
-	
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody List<PluginInfo> getSoftwareList() {
 		return pluginService.getPluginsInfo();
