@@ -27,32 +27,32 @@ visuwall.theme.def.event.navigationEvent = new function() {
 		$this.context = 'DIV#navigationContainer';
 	});
 	
-	this['|init'] = function() {
-		$this['|mouseleave']();
-	};
-	
-	this['|mouseenter'] = function() {
-		if ($this.toggleFlag == 'wait') {
-			$this.toggleFlag = 'show';
-		} else if ($this.toggleFlag == 'hide') {
-			$this.toggleFlag = 'show';
-			$("#navigation").slideToggle("fast");			
-		}
-	};
-	
-	this['|mouseleave'] = function() {
-		$this.toggleFlag = 'wait';
-		window.setTimeout(function() {
-			$("#navigation").each(function() {
-				if ($this.toggleFlag != 'wait') {
-					return;
-				}
-				$(this).slideToggle("fast", function() {
-					$this.toggleFlag = 'hide';
-				});
-			});
-		}, 1000);
-	};
+//	this['|init'] = function() {
+//		$this['|mouseleave']();
+//	};
+//	
+//	this['|mouseenter'] = function() {
+//		if ($this.toggleFlag == 'wait') {
+//			$this.toggleFlag = 'show';
+//		} else if ($this.toggleFlag == 'hide') {
+//			$this.toggleFlag = 'show';
+//			$("#navigation").slideToggle("fast");			
+//		}
+//	};
+//	
+//	this['|mouseleave'] = function() {
+//		$this.toggleFlag = 'wait';
+//		window.setTimeout(function() {
+//			$("#navigation").each(function() {
+//				if ($this.toggleFlag != 'wait') {
+//					return;
+//				}
+//				$(this).slideToggle("fast", function() {
+//					$this.toggleFlag = 'hide';
+//				});
+//			});
+//		}, 1000);
+//	};
 
 	this['#fontSizeSlider|init'] = function() {
 		var slideFunc =  function(e, ui) {
@@ -72,6 +72,7 @@ visuwall.theme.def.event.navigationEvent = new function() {
 	};
 	
 	this['#wallSelector #wallSelect|init'] = function() {
+		//$(this).selectBox();
 		setInterval($this.navigationController.updateWallList, 15000);
 	};
 

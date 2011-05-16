@@ -26,6 +26,13 @@ UL#navigation {
 	background-color: white;
 	border-bottom: 1px solid grey;
 	height: 100%;
+	
+/* 	position: relative; */
+}
+
+UL#navigation SELECT {
+	font-size: 1.3em;
+	font: -webkit-small-control;
 }
 
 UL#navigation DIV#fontSizeSlider {
@@ -33,17 +40,25 @@ UL#navigation DIV#fontSizeSlider {
 	display: inline-block;
 }
 
+UL#navigation LI {
+	display:table-cell;
+	vertical-align:middle;
+	padding-right: 10px;
+	height: 1.45em;
+	white-space: nowrap;
+}
+
+
 LI#name {
+	padding-left: 5px;
 	font-size: 2em;
 	font-weight: bold;
-	margin: auto;
 }
 
 LI#about {
-	font-size: 0.9em;
-	float:right;
-	padding-right: 5px;
-	line-height: 2em;
+	text-align: right;
+	width: 100%;
+	font-weight: bold;
 }
 
 LI#about A {

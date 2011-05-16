@@ -33,6 +33,9 @@ import net.awired.visuwall.core.domain.SoftwareAccess;
 
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
+
 @Service
 public class PluginService {
 
@@ -92,6 +95,8 @@ public class PluginService {
     }
 
     public VisuwallPlugin getPluginFromSoftware(SoftwareAccess softwareAccess) {
+		Preconditions.checkNotNull(softwareAccess.getPluginClassName(), "softwareAccess.getPluginClassName");
+    	
         List<VisuwallPlugin> plugins = getPlugins();
         for (VisuwallPlugin plugin : plugins) {
             // TODO manage version

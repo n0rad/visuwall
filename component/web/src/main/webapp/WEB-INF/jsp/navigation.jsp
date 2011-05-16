@@ -23,14 +23,11 @@
 		<li id="name">Visuwall</li>
 		<li id="wallSelector">
 			<select id="wallSelect" name="wall"></select>
-			<input id="edit" type="button" value="Edit">
-			<input id="add" type="button" value="Add">
+			<button id="edit" type="button" value="Edit">Edit</button>
+			<button id="add" type="button" value="Add">Add</button>
 		</li>
-		<!-- 		<li>Page :<select><option>Page 1</option>
-		</select></li>
-		<li>Slideshow :<input type="checkbox" /></li> -->
 		<li><div id="fontSizeSlider"></div></li>
-		<li><button id="refresh"></button></li>
+		<li><button id="refresh">Refresh</button></li>
 		<li id="about"><a href="http://visuwall.awired.net/"
 			title="Visuwall">${version}</a></li>
 	</ul>

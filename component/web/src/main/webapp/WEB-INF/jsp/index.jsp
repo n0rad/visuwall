@@ -63,7 +63,6 @@
 		 
 		<label for="softwareAccesses0.pluginClassName">Type</label> 
 		<select id="softwareAccesses0.pluginClassName" name="softwareAccesses[0].pluginClassName"> 
-			<option value="net.awired.visuwall.plugin.bamboo.BambooPlugin">Bamboo</option><option value="net.awired.visuwall.plugin.hudson.HudsonPlugin">Hudson</option><option value="net.awired.visuwall.plugin.sonar.SonarPlugin">Sonar</option> 
 		</select> 
 		<label for="softwareAccesses0.name">Name</label> 
 		<input id="softwareAccesses0.name" name="softwareAccesses[0].name" class="ui-widget-content ui-corner-all" type="text" value=""/> 
