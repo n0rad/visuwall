@@ -15,7 +15,7 @@
  */
 
 DIV#navigationContainer {
-	height: 2.7em;
+	height: 26px;
 	position: absolute;
 	left: 0px;
 	right: 0px;
@@ -23,11 +23,9 @@ DIV#navigationContainer {
 }
 
 UL#navigation {
-	background-color: white;
-	border-bottom: 1px solid grey;
-	height: 100%;
-	
-/* 	position: relative; */
+	background: black url('../img/nav-back4.png') repeat-x;
+	border-bottom: 1px solid white;
+	height: 26px;
 }
 
 UL#navigation SELECT {
@@ -44,21 +42,22 @@ UL#navigation LI {
 	display:table-cell;
 	vertical-align:middle;
 	padding-right: 10px;
-	height: 1.45em;
+	height: 26px;
 	white-space: nowrap;
 }
-
 
 LI#name {
 	padding-left: 5px;
 	font-size: 2em;
 	font-weight: bold;
+	text-shadow: 1px 1px 1px white;
 }
 
 LI#about {
 	text-align: right;
 	width: 100%;
 	font-weight: bold;
+	text-shadow: 1px 1px 1px white;
 }
 
 LI#about A {
