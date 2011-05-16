@@ -31,6 +31,7 @@ UL#navigation {
 UL#navigation SELECT {
 	font-size: 1.3em;
 	font: -webkit-small-control;
+	border-color: grey;
 }
 
 UL#navigation DIV#fontSizeSlider {
