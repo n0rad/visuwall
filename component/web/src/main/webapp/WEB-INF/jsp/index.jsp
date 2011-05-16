@@ -65,11 +65,11 @@
 		<select id="softwareAccesses0.pluginClassName" name="softwareAccesses[0].pluginClassName"> 
 		</select> 
 		<label for="softwareAccesses0.name">Name</label> 
-		<input id="softwareAccesses0.name" name="softwareAccesses[0].name" class="ui-widget-content ui-corner-all" type="text" value=""/> 
+		<input id="softwareAccesses0.name" name="softwareAccesses[0].name" class="ui-widget-content ui-corner-all" type="text" value="" disabled="disabled"/> 
 		<label for="softwareAccesses0.login">Login</label> 
-		<input id="softwareAccesses0.login" name="softwareAccesses[0].login" class="ui-widget-content ui-corner-all" type="text" value=""/> 
+		<input id="softwareAccesses0.login" name="softwareAccesses[0].login" class="ui-widget-content ui-corner-all" type="text" value="" disabled="disabled"/> 
 		<label for="softwareAccesses0.password">Password</label> 
-		<input id="softwareAccesses0.password" name="softwareAccesses[0].password" class="ui-widget-content ui-corner-all" type="password" value=""/> 
+		<input id="softwareAccesses0.password" name="softwareAccesses[0].password" class="ui-widget-content ui-corner-all" type="password" value="" disabled="disabled"/> 
 
 		<!-- 
 		<ol class="projects ui-widget-content ui-corner-all">
