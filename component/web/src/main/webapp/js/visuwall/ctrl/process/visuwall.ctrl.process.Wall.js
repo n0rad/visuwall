@@ -7,10 +7,16 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	this.wallName = wallName;
 
 	this.addProject = function(projectData) {
-		$this.projectDAO.saveProject(projectData);
-		$this.projectDAO.getProject(projectData.name, function(project) {
-			$this.wallView.addProject(project.name, project.description);
-			$this._updateProject(project);
+		$this.projectDAO.isProject(projectData.name, function(result) {
+			if (!result) {
+				$this.projectDAO.saveProject(projectData);
+				$this.projectDAO.getProject(projectData.name, function(project) {
+					$this.wallView.addProject(project.name, project.description);
+					$this._updateProject(project);
+				});				
+			} else {
+				LOG.warn('project with name ', projectData.name, ' already exists');
+			}
 		});
 	};
 
