@@ -21,7 +21,10 @@ import static net.awired.visuwall.IntegrationTestData.STRUTS_2_ARTIFACT_ID;
 import static net.awired.visuwall.IntegrationTestData.STRUTS_ARTIFACT_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -41,14 +44,15 @@ public class SonarConnectionPluginIT {
 
 	@BeforeClass
 	public static void init() {
-		sonarPlugin = new SonarConnectionPlugin(SONAR_URL);
+		sonarPlugin = new SonarConnectionPlugin();
+		sonarPlugin.connect(SONAR_URL);
 	}
 
 	@Test
 	public void should_populate_quality() {
 		ProjectId projectId = new ProjectId();
 		projectId.setArtifactId(STRUTS_ARTIFACT_ID);
-		QualityResult quality = sonarPlugin.analizeQuality(projectId, "violations_density");
+		QualityResult quality = sonarPlugin.analyzeQuality(projectId, "violations_density");
 		QualityMeasure measure = quality.getMeasure("violations_density");
 		assertEquals("Rules compliance", measure.getName());
 		assertEquals("77.2%", measure.getFormattedValue());
@@ -59,7 +63,7 @@ public class SonarConnectionPluginIT {
 	public void should_have_a_lot_of_quality_metrics() {
 		ProjectId projectId = new ProjectId();
 		projectId.setArtifactId(STRUTS_ARTIFACT_ID);
-		QualityResult quality = sonarPlugin.analizeQuality(projectId);
+		QualityResult quality = sonarPlugin.analyzeQuality(projectId);
 		Set<Entry<String, QualityMeasure>> measures = quality.getMeasures();
 		for (Entry<String, QualityMeasure> measure : measures) {
 			assertNotNull(measure.getValue().getValue());
@@ -70,7 +74,7 @@ public class SonarConnectionPluginIT {
 	public void should_not_fail_if_measure_does_not_exist() throws ProjectNotFoundException {
 		ProjectId projectId = new ProjectId();
 		projectId.setArtifactId(STRUTS_ARTIFACT_ID);
-		sonarPlugin.analizeQuality(projectId, "inexistant_measure");
+		sonarPlugin.analyzeQuality(projectId, "inexistant_measure");
 	}
 
 	@Test
@@ -92,11 +96,19 @@ public class SonarConnectionPluginIT {
 	public void should_analyze_integration_tests() {
 		ProjectId projectId = new ProjectId();
 		projectId.setArtifactId("com.orangevallee.on.server.synthesis:synthesis");
-		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin(
-		        "http://10.2.40.60/lifeisbetteron/sonar");
+		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
+		sonarConnectionPlugin.connect("http://10.2.40.60/lifeisbetteron/sonar");
 
 		TestResult integrationTestsAnalysis = sonarConnectionPlugin.analyzeIntegrationTests(projectId);
 
 		assertEquals(5.0, integrationTestsAnalysis.getCoverage(), 0);
 	}
+
+	@Test
+	public void should_recognize_sonar_instance_with_valid_url() throws MalformedURLException {
+		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
+		boolean isSonarInstance = sonarConnectionPlugin.isSonarInstance(new URL(SONAR_URL));
+		assertTrue(isSonarInstance);
+	}
+
 }

@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.plugin.sonar;
 
+import java.net.URL;
 import java.util.Map;
 
 import net.awired.visuwall.api.domain.ProjectId;
@@ -45,11 +46,16 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 	private Map<String, QualityMetric> metricsMap;
 	private String[] metricKeys = new String[] {};
 
-	public SonarConnectionPlugin(String url) {
-		this(url, null, null);
+	private boolean connected;
+
+	public SonarConnectionPlugin() {
 	}
 
-	public SonarConnectionPlugin(String url, String login, String password) {
+	public void connect(String url) {
+		connect(url, null, null);
+	}
+
+	public void connect(String url, String login, String password) {
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Initialize sonar with url " + url);
 		}
@@ -58,6 +64,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 			metricListBuilder = new MetricFinder(url);
 			metricsMap = metricListBuilder.findMetrics();
 			metricKeys = metricsMap.keySet().toArray(new String[] {});
+			connected = true;
 		} catch (SonarMetricsNotFoundException e) {
 			throw new RuntimeException(e);
 		}
@@ -69,14 +76,16 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 			this.measureFinder = measureFinder;
 			metricsMap = metricListBuilder.findMetrics();
 			metricKeys = metricsMap.keySet().toArray(new String[] {});
+			connected = true;
 		} catch (SonarMetricsNotFoundException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
-	public QualityResult analizeQuality(ProjectId projectId, String... metrics) {
+	public QualityResult analyzeQuality(ProjectId projectId, String... metrics) {
 		Preconditions.checkNotNull(projectId, "projectId");
+		Preconditions.checkState(connected, "You must connect your plugin");
 
 		QualityResult qualityResult = new QualityResult();
 		String artifactId = projectId.getArtifactId();
@@ -102,6 +111,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 	@Override
 	public boolean contains(ProjectId projectId) {
 		Preconditions.checkNotNull(projectId, "projectId is mandatory");
+		Preconditions.checkState(connected, "You must connect your plugin");
 
 		String artifactId = projectId.getArtifactId();
 		if (artifactId == null) {
@@ -119,6 +129,8 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 	@Override
 	public TestResult analyzeUnitTests(ProjectId projectId) {
 		Preconditions.checkNotNull(projectId, "projectId is mandatory");
+		Preconditions.checkState(connected, "You must connect your plugin");
+
 		TestResult unitTestResult = new TestResult();
 		String artifactId = projectId.getArtifactId();
 		if (Strings.isNullOrEmpty(artifactId)) {
@@ -157,6 +169,7 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 	@Override
 	public TestResult analyzeIntegrationTests(ProjectId projectId) {
 		Preconditions.checkNotNull(projectId, "projectId is mandatory");
+		Preconditions.checkState(connected, "You must connect your plugin");
 
 		TestResult integrationTestResult = new TestResult();
 
@@ -177,5 +190,11 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 			}
 		}
 		return integrationTestResult;
+	}
+
+	public boolean isSonarInstance(URL sonarUrl) {
+		Preconditions.checkNotNull(sonarUrl, "sonarUrl is mandatory");
+
+		return false;
 	}
 }

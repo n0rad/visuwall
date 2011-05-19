@@ -96,7 +96,7 @@ public class ProjectEnhancerService {
 		ProjectId projectId = analyzedProject.getProjectId();
 		Build build = analyzedProject.getCompletedBuild();
 
-		QualityResult qualityAnalysis = qualityPlugin.analizeQuality(projectId, metrics);
+		QualityResult qualityAnalysis = qualityPlugin.analyzeQuality(projectId, metrics);
 		TestResult unitTestsAnalysis = qualityPlugin.analyzeUnitTests(projectId);
 		TestResult integrationTestsAnalysis = qualityPlugin.analyzeIntegrationTests(projectId);
 
