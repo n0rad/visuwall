@@ -18,6 +18,7 @@ package net.awired.visuwall.plugin.jenkins;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
+import com.google.common.io.ByteStreams;
 
 public final class JenkinsConnectionPlugin implements BuildConnectionPlugin {
 
@@ -209,6 +211,15 @@ public final class JenkinsConnectionPlugin implements BuildConnectionPlugin {
 
 	public boolean isJenkinsInstance(URL url) {
 		Preconditions.checkNotNull(url, "url is mandatory");
-		return false;
+		try {
+			url = new URL(url.toString() + "/api");
+			byte[] content = ByteStreams.toByteArray(url.openStream());
+			String xml = new String(content);
+			return xml.contains("Remote API [Jenkins]");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
+
 }

@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.plugin.sonar;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.common.io.ByteStreams;
 
 public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 
@@ -192,9 +194,16 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 		return integrationTestResult;
 	}
 
-	public boolean isSonarInstance(URL sonarUrl) {
-		Preconditions.checkNotNull(sonarUrl, "sonarUrl is mandatory");
-
-		return false;
+	public boolean isSonarInstance(URL url) {
+		Preconditions.checkNotNull(url, "url is mandatory");
+		try {
+			url = new URL(url.toString() + "/api/properties");
+			byte[] content = ByteStreams.toByteArray(url.openStream());
+			String xml = new String(content);
+			return xml.contains("sonar.core.version");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

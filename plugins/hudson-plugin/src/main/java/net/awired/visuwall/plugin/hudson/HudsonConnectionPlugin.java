@@ -18,6 +18,7 @@ package net.awired.visuwall.plugin.hudson;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
+import com.google.common.io.ByteStreams;
 
 public final class HudsonConnectionPlugin implements BuildConnectionPlugin {
 
@@ -50,7 +52,7 @@ public final class HudsonConnectionPlugin implements BuildConnectionPlugin {
 
 	private Hudson hudson;
 
-	private ProjectBuilder projectCreator = new ProjectBuilder();
+	private ProjectBuilder projectBuilder = new ProjectBuilder();
 
 	private boolean connected;
 
@@ -81,7 +83,7 @@ public final class HudsonConnectionPlugin implements BuildConnectionPlugin {
 	}
 
 	private ProjectId createProjectIdFrom(HudsonProject hudsonProject) throws HudsonProjectNotFoundException {
-		Project project = projectCreator.buildProjectFrom(hudsonProject);
+		Project project = projectBuilder.buildProjectFrom(hudsonProject);
 		ProjectId projectId = new ProjectId();
 		projectId.setName(project.getName());
 		projectId.addId(HUDSON_ID, project.getName());
@@ -97,7 +99,7 @@ public final class HudsonConnectionPlugin implements BuildConnectionPlugin {
 		try {
 			String projectName = extractProjectNameFrom(projectId);
 			HudsonProject hudsonProject = hudson.findProject(projectName);
-			Project project = projectCreator.buildProjectFrom(hudsonProject);
+			Project project = projectBuilder.buildProjectFrom(hudsonProject);
 			State state = getState(projectId);
 			project.setState(state);
 			project.addId(HUDSON_ID, projectName);
@@ -114,7 +116,7 @@ public final class HudsonConnectionPlugin implements BuildConnectionPlugin {
 
 		try {
 			HudsonProject hudsonProject = hudson.findProject(project.getName());
-			projectCreator.addCurrentAndCompletedBuilds(project, hudsonProject);
+			projectBuilder.addCurrentAndCompletedBuilds(project, hudsonProject);
 			if (project.getCompletedBuild() != null) {
 				project.setState(project.getCompletedBuild().getState());
 			}
@@ -191,7 +193,7 @@ public final class HudsonConnectionPlugin implements BuildConnectionPlugin {
 		try {
 			String projectName = extractProjectNameFrom(projectId);
 			HudsonBuild build = hudson.findBuild(projectName, buildNumber);
-			return projectCreator.buildBuildFrom(build);
+			return projectBuilder.buildBuildFrom(build);
 		} catch (HudsonBuildNotFoundException e) {
 			throw new BuildNotFoundException(e);
 		} catch (HudsonProjectNotFoundException e) {
@@ -200,7 +202,16 @@ public final class HudsonConnectionPlugin implements BuildConnectionPlugin {
 	}
 
 	public boolean isHudsonInstance(URL url) {
-		return false;
+		Preconditions.checkNotNull(url, "url is mandatory");
+		try {
+			url = new URL(url.toString() + "/api");
+			byte[] content = ByteStreams.toByteArray(url.openStream());
+			String xml = new String(content);
+			return xml.contains("Remote API [Hudson]");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@VisibleForTesting

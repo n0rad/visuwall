@@ -17,7 +17,6 @@
 package net.awired.visuwall.plugin.hudson;
 
 import static net.awired.visuwall.IntegrationTestData.HUDSON_ID;
-import static net.awired.visuwall.IntegrationTestData.HUDSON_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -105,7 +104,7 @@ public class HudsonConnectionPluginIT {
 	@Test
 	public void should_recognize_hudson_instance_with_valid_url() throws MalformedURLException {
 		HudsonConnectionPlugin hudsonConnectionPlugin = new HudsonConnectionPlugin();
-		boolean isHudsonInstance = hudsonConnectionPlugin.isHudsonInstance(new URL(HUDSON_URL));
+		boolean isHudsonInstance = hudsonConnectionPlugin.isHudsonInstance(new URL("http://fluxx.fr.cr:8080/hudson"));
 		assertTrue(isHudsonInstance);
 	}
 }
