@@ -72,6 +72,7 @@ visuwall.theme.def.event.navigationEvent = new function() {
 	};
 	
 	this['#wallSelector #wallSelect|init'] = function() {
+		//$(this).selectBox();
 		setInterval($this.navigationController.updateWallList, 15000);
 	};
 
@@ -81,8 +82,10 @@ visuwall.theme.def.event.navigationEvent = new function() {
 	};
 
 	this['#wallSelector #edit|click'] = function() {
-		var editCtrlUrl = 'wall/edit/' + $('#wallSelector #wallSelect').val();
-		$.history.queryBuilder().addController(editCtrlUrl).load();
+		var wallId = $('#wallSelector #wallSelect').val();
+		if (wallId) {
+			$.history.queryBuilder().addController('wall/edit/' + editCtrlUrl).load();
+		}
 	};
 
 	this['#wallSelector #add|click'] = function() {

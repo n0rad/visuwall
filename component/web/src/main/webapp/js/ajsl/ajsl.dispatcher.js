@@ -96,7 +96,7 @@ ajsl.dispatcher = new function() {
 			var action = $this._ctrls[ctrl];
 			var vars = parsedCtrls[ctrl].vars;
 			var args = parsedCtrls[ctrl].ctrlVars.join("','");
-			eval("action(vars, '" + args + "');");
+			$this._ctrls[ctrl].apply(this || window, parsedCtrls[ctrl].ctrlVars);
 		}
 		
 		$this._lastDispatch = parsedCtrls;

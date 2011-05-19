@@ -13,8 +13,8 @@ visuwall.theme.def.view.navigationView = new function() {
 		var select = $('#wallSelect', this.navigation);
 		var selectedValue = select.val();
 		select.children().remove();
-		var emptyOption = $('<option>Select a wall</option>');
-		select.append(emptyOption);
+//		var emptyOption = $('<option disabled="disabled">Select a wall</option>');
+//		select.append(emptyOption);
 		for ( var i = 0; i < newWallList.length; i++) {
 			var newOption = $('<option value="' + newWallList[i] + '">' + newWallList[i] + '</option>');
 			select.append(newOption);

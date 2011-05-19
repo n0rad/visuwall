@@ -29,7 +29,9 @@ visuwall.ctrl.controller.wallController = new function() {
 	};
 	
 	this.updateStatus = function() {
-		$this.currentWall.updateStatus();
+		if ($this.currentWall) {
+			$this.currentWall.updateStatus();
+		}
 	};
 
 };

@@ -15,7 +15,7 @@
  */
 
 DIV#navigationContainer {
-	height: 2.7em;
+	height: 26px;
 	position: absolute;
 	left: 0px;
 	right: 0px;
@@ -23,9 +23,15 @@ DIV#navigationContainer {
 }
 
 UL#navigation {
-	background-color: white;
-	border-bottom: 1px solid grey;
-	height: 100%;
+	background: black url('../img/nav-back4.png') repeat-x;
+	border-bottom: 1px solid white;
+	height: 26px;
+}
+
+UL#navigation SELECT {
+	font-size: 1.3em;
+	font: -webkit-small-control;
+	border-color: grey;
 }
 
 UL#navigation DIV#fontSizeSlider {
@@ -33,17 +39,26 @@ UL#navigation DIV#fontSizeSlider {
 	display: inline-block;
 }
 
+UL#navigation LI {
+	display:table-cell;
+	vertical-align:middle;
+	padding-right: 10px;
+	height: 26px;
+	white-space: nowrap;
+}
+
 LI#name {
+	padding-left: 5px;
 	font-size: 2em;
 	font-weight: bold;
-	margin: auto;
+	text-shadow: 1px 1px 1px white;
 }
 
 LI#about {
-	font-size: 0.9em;
-	float:right;
-	padding-right: 5px;
-	line-height: 2em;
+	text-align: right;
+	width: 100%;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px white;
 }
 
 LI#about A {
