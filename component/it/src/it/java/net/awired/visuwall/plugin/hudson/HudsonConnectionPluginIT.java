@@ -17,10 +17,14 @@
 package net.awired.visuwall.plugin.hudson;
 
 import static net.awired.visuwall.IntegrationTestData.HUDSON_ID;
+import static net.awired.visuwall.IntegrationTestData.HUDSON_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import net.awired.visuwall.IntegrationTestData;
@@ -31,15 +35,21 @@ import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class HudsonConnectionPluginIT {
 
-	static HudsonConnectionPlugin hudsonService = new HudsonConnectionPlugin(IntegrationTestData.JENKINS_URL);
+	static HudsonConnectionPlugin hudsonConnectionPlugin = new HudsonConnectionPlugin();
+
+	@BeforeClass
+	public static void setUp() {
+		hudsonConnectionPlugin.connect(IntegrationTestData.HUDSON_URL);
+	}
 
 	@Test
 	public void should_find_all_projects() {
-		List<ProjectId> projects = hudsonService.findAllProjects();
+		List<ProjectId> projects = hudsonConnectionPlugin.findAllProjects();
 		assertFalse(projects.isEmpty());
 	}
 
@@ -47,7 +57,7 @@ public class HudsonConnectionPluginIT {
 	public void should_find_project() throws ProjectNotFoundException {
 		ProjectId projectId = new ProjectId();
 		projectId.addId(HUDSON_ID, "neverbuild");
-		Project project = hudsonService.findProject(projectId);
+		Project project = hudsonConnectionPlugin.findProject(projectId);
 		assertNotNull(project);
 	}
 
@@ -55,7 +65,7 @@ public class HudsonConnectionPluginIT {
 	public void should_find_build_by_name_and_build_number() throws BuildNotFoundException, ProjectNotFoundException {
 		ProjectId projectId = new ProjectId();
 		projectId.addId(HUDSON_ID, "struts");
-		Build build = hudsonService.findBuildByBuildNumber(projectId, 3);
+		Build build = hudsonConnectionPlugin.findBuildByBuildNumber(projectId, 3);
 		assertNotNull(build);
 	}
 
@@ -63,7 +73,7 @@ public class HudsonConnectionPluginIT {
 	public void should_find_last_build_number() throws ProjectNotFoundException, BuildNotFoundException {
 		ProjectId projectId = new ProjectId();
 		projectId.addId(HUDSON_ID, "struts");
-		int buildNumber = hudsonService.getLastBuildNumber(projectId);
+		int buildNumber = hudsonConnectionPlugin.getLastBuildNumber(projectId);
 		assertEquals(3, buildNumber);
 	}
 
@@ -71,7 +81,7 @@ public class HudsonConnectionPluginIT {
 	public void should_verify_not_building_project() throws ProjectNotFoundException {
 		ProjectId projectId = new ProjectId();
 		projectId.addId(HUDSON_ID, "struts");
-		boolean building = hudsonService.isBuilding(projectId);
+		boolean building = hudsonConnectionPlugin.isBuilding(projectId);
 		assertFalse(building);
 	}
 
@@ -79,7 +89,7 @@ public class HudsonConnectionPluginIT {
 	public void should_verify_state() throws ProjectNotFoundException {
 		ProjectId projectId = new ProjectId();
 		projectId.addId(HUDSON_ID, "struts");
-		State state = hudsonService.getState(projectId);
+		State state = hudsonConnectionPlugin.getState(projectId);
 		assertEquals(State.SUCCESS, state);
 	}
 
@@ -87,8 +97,15 @@ public class HudsonConnectionPluginIT {
 	public void should_populate_project() throws ProjectNotFoundException {
 		ProjectId projectId = new ProjectId();
 		projectId.addId(HUDSON_ID, "struts");
-		Project project = hudsonService.findProject(projectId);
-		hudsonService.populate(project);
+		Project project = hudsonConnectionPlugin.findProject(projectId);
+		hudsonConnectionPlugin.populate(project);
 		assertEquals("struts", project.getName());
+	}
+
+	@Test
+	public void should_recognize_hudson_instance_with_valid_url() throws MalformedURLException {
+		HudsonConnectionPlugin hudsonConnectionPlugin = new HudsonConnectionPlugin();
+		boolean isHudsonInstance = hudsonConnectionPlugin.isHudsonInstance(new URL(HUDSON_URL));
+		assertTrue(isHudsonInstance);
 	}
 }

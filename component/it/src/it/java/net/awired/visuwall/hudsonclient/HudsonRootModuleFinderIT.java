@@ -26,7 +26,7 @@ public class HudsonRootModuleFinderIT {
 
 	@Test
 	public void should_find_synthesis_root_module_from_hudson() throws ArtifactIdNotFoundException {
-		HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(IntegrationTestData.JENKINS_URL);
+		HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(IntegrationTestData.HUDSON_URL);
 		HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
 		String artifactId = hudsonRootModuleFinder.findArtifactId("struts");
 		Assert.assertEquals("org.apache.struts:struts-parent", artifactId);
