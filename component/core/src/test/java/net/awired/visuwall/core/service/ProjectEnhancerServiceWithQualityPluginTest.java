@@ -60,7 +60,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 		qualityResult.add("coverage", coverage);
 
 		ProjectId projectId = projectToEnhance.getProjectId();
-		when(qualityPlugin.analizeQuality(projectId)).thenReturn(qualityResult);
+		when(qualityPlugin.analyzeQuality(projectId)).thenReturn(qualityResult);
 		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin);
 
 		assertEquals(coverage, projectToEnhance.getQualityResult().getMeasure("coverage"));
@@ -86,8 +86,8 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 		qualityResult2.add("violations", violations);
 
 		ProjectId projectId = projectToEnhance.getProjectId();
-		when(qualityPlugin1.analizeQuality(projectId)).thenReturn(qualityResult1);
-		when(qualityPlugin2.analizeQuality(projectId)).thenReturn(qualityResult2);
+		when(qualityPlugin1.analyzeQuality(projectId)).thenReturn(qualityResult1);
+		when(qualityPlugin2.analyzeQuality(projectId)).thenReturn(qualityResult2);
 		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin1);
 		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin2);
 
@@ -115,8 +115,8 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 		qualityResult2.add("coverage", coverage2);
 
 		ProjectId projectId = projectToEnhance.getProjectId();
-		when(qualityPlugin1.analizeQuality(projectId)).thenReturn(qualityResult1);
-		when(qualityPlugin2.analizeQuality(projectId)).thenReturn(qualityResult2);
+		when(qualityPlugin1.analyzeQuality(projectId)).thenReturn(qualityResult1);
+		when(qualityPlugin2.analyzeQuality(projectId)).thenReturn(qualityResult2);
 		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin1);
 		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin2);
 

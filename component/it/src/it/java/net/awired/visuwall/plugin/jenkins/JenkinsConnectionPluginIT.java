@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.exception;
+package net.awired.visuwall.plugin.jenkins;
 
+import static net.awired.visuwall.IntegrationTestData.JENKINS_URL;
+import static org.junit.Assert.assertTrue;
 
-public class SonarMeasureNotFoundException extends Exception {
+import java.net.MalformedURLException;
+import java.net.URL;
 
-	private static final long serialVersionUID = -7205356356110212352L;
+import org.junit.Test;
 
-	public SonarMeasureNotFoundException(String msg) {
-		super(msg);
+public class JenkinsConnectionPluginIT {
+
+	@Test
+	public void should_recognize_jenkins_instance_with_valid_url() throws MalformedURLException {
+		JenkinsConnectionPlugin jenkinsConnectionPlugin = new JenkinsConnectionPlugin();
+		boolean isJenkinsInstance = jenkinsConnectionPlugin.isJenkinsInstance(new URL(JENKINS_URL));
+		assertTrue(isJenkinsInstance);
 	}
-
-	public SonarMeasureNotFoundException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
 }

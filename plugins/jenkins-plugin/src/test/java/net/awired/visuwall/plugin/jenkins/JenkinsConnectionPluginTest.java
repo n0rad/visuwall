@@ -52,7 +52,8 @@ public class JenkinsConnectionPluginTest {
 
 		Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("not_valid_state");
 
-		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin("url");
+		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
+		jenkinsPlugin.connect("url");
 		jenkinsPlugin.setHudson(hudson);
 
 		ProjectId projectId = new ProjectId();
@@ -66,7 +67,8 @@ public class JenkinsConnectionPluginTest {
 
 		Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("FAILURE");
 
-		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin("url");
+		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
+		jenkinsPlugin.connect("url");
 		jenkinsPlugin.setHudson(hudson);
 
 		ProjectId projectId = new ProjectId();
@@ -86,7 +88,8 @@ public class JenkinsConnectionPluginTest {
 
 		when(hudson.findAllProjects()).thenReturn(hudsonProjects);
 
-		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin("url");
+		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
+		jenkinsPlugin.connect("url");
 		jenkinsPlugin.setHudson(hudson);
 
 		List<ProjectId> projectIds = jenkinsPlugin.findAllProjects();
@@ -105,7 +108,8 @@ public class JenkinsConnectionPluginTest {
 		hudsonProject.setName("name");
 		when(hudson.findProject(Matchers.anyString())).thenReturn(hudsonProject);
 
-		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin("url");
+		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
+		jenkinsPlugin.connect("url");
 		jenkinsPlugin.setHudson(hudson);
 
 		ProjectId projectId = new ProjectId();
@@ -123,7 +127,8 @@ public class JenkinsConnectionPluginTest {
 		when(hudson.isBuilding("project1")).thenReturn(true);
 		when(hudson.isBuilding("project2")).thenReturn(false);
 
-		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin("url");
+		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
+		jenkinsPlugin.connect("url");
 		jenkinsPlugin.setHudson(hudson);
 
 		ProjectId projectId = new ProjectId();
@@ -142,7 +147,8 @@ public class JenkinsConnectionPluginTest {
 		Date date = new Date();
 		when(hudson.getEstimatedFinishTime(Matchers.anyString())).thenReturn(date);
 
-		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin("url");
+		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
+		jenkinsPlugin.connect("url");
 		jenkinsPlugin.setHudson(hudson);
 
 		ProjectId projectId = new ProjectId();
@@ -156,7 +162,8 @@ public class JenkinsConnectionPluginTest {
 	        HudsonBuildNotFoundException, HudsonProjectNotFoundException {
 		Hudson hudson = Mockito.mock(Hudson.class);
 
-		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin("url");
+		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
+		jenkinsPlugin.connect("url");
 		jenkinsPlugin.setHudson(hudson);
 
 		HudsonBuild hudsonBuild = new HudsonBuild();
@@ -176,7 +183,8 @@ public class JenkinsConnectionPluginTest {
 	        ProjectNotFoundException, BuildNotFoundException {
 		Hudson hudson = Mockito.mock(Hudson.class);
 
-		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin("url");
+		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
+		jenkinsPlugin.connect("url");
 		jenkinsPlugin.setHudson(hudson);
 
 		when(hudson.getLastBuildNumber("project1")).thenReturn(5);
@@ -193,7 +201,8 @@ public class JenkinsConnectionPluginTest {
 	public void should_populate_project() throws ProjectNotFoundException, HudsonProjectNotFoundException {
 		Hudson hudson = Mockito.mock(Hudson.class);
 
-		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin("url");
+		JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
+		jenkinsPlugin.connect("url");
 		jenkinsPlugin.setHudson(hudson);
 
 		HudsonBuild currentBuild = new HudsonBuild();
@@ -218,12 +227,16 @@ public class JenkinsConnectionPluginTest {
 
 	@Test(expected = IllegalStateException.class)
 	public void should_throw_exception_if_no_url() {
-		new JenkinsConnectionPlugin("");
+		new JenkinsConnectionPlugin().connect("");
 	}
 
 	@Test
 	public void should_create_hudson() {
-		new JenkinsConnectionPlugin("url");
+		new JenkinsConnectionPlugin().connect("url");
 	}
 
+	@Test(expected = NullPointerException.class)
+	public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance() {
+		new JenkinsConnectionPlugin().isJenkinsInstance(null);
+	}
 }

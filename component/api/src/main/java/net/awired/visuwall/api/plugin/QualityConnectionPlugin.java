@@ -22,7 +22,7 @@ import net.awired.visuwall.api.domain.quality.QualityResult;
 
 public interface QualityConnectionPlugin extends ConnectionPlugin {
 
-	QualityResult analizeQuality(ProjectId projectId, String... metrics);
+	QualityResult analyzeQuality(ProjectId projectId, String... metrics);
 
 	TestResult analyzeUnitTests(ProjectId projectId);
 

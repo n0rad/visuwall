@@ -22,11 +22,16 @@ import java.util.Properties;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
+import com.google.common.base.Preconditions;
+
 public class JenkinsPlugin implements VisuwallPlugin {
+
+	private JenkinsConnectionPlugin jenkinsConnectionPlugin = new JenkinsConnectionPlugin();
 
 	@Override
 	public ConnectionPlugin connect(String url, Properties info) {
-		return new JenkinsConnectionPlugin(url, null, null);
+		jenkinsConnectionPlugin.connect(url);
+		return jenkinsConnectionPlugin;
 	}
 
 	@Override
@@ -41,6 +46,7 @@ public class JenkinsPlugin implements VisuwallPlugin {
 
 	@Override
 	public boolean isManageable(URL url) {
-		return true;
+		Preconditions.checkNotNull(url, "url is mandatory");
+		return jenkinsConnectionPlugin.isJenkinsInstance(url);
 	}
 }

@@ -22,11 +22,16 @@ import java.util.Properties;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
+import com.google.common.base.Preconditions;
+
 public class HudsonPlugin implements VisuwallPlugin {
+
+	private HudsonConnectionPlugin hudsonConnectionPlugin = new HudsonConnectionPlugin();
 
 	@Override
 	public ConnectionPlugin connect(String url, Properties info) {
-		return new HudsonConnectionPlugin(url, null, null);
+		hudsonConnectionPlugin.connect(url);
+		return hudsonConnectionPlugin;
 	}
 
 	@Override
@@ -41,6 +46,8 @@ public class HudsonPlugin implements VisuwallPlugin {
 
 	@Override
 	public boolean isManageable(URL url) {
-		return true;
+		Preconditions.checkNotNull(url, "url is mandatory");
+
+		return hudsonConnectionPlugin.isHudsonInstance(url);
 	}
 }

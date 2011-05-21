@@ -23,6 +23,7 @@ import net.awired.visuwall.plugin.sonar.SonarPlugin;
 public interface IntegrationTestData {
 	String BAMBOO_URL = "http://bamboo.visuwall.awired.net";
 	String JENKINS_URL = "http://ci.visuwall.awired.net";
+	String HUDSON_URL = "http://ci.visuwall.awired.net";
 
 	String HUDSON_ID = "HUDSON_ID";
 	String JENKINS_ID = "JENKINS_ID";

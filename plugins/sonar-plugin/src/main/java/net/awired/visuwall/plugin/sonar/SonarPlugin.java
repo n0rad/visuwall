@@ -24,9 +24,11 @@ import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
 public class SonarPlugin implements VisuwallPlugin {
 
+	private SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
+
 	@Override
 	public ConnectionPlugin connect(String url, Properties info) {
-		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin(url);
+		sonarConnectionPlugin.connect(url);
 		return sonarConnectionPlugin;
 	}
 
@@ -42,7 +44,7 @@ public class SonarPlugin implements VisuwallPlugin {
 
 	@Override
 	public boolean isManageable(URL url) {
-		return true;
+		return sonarConnectionPlugin.isSonarInstance(url);
 	}
 
 }

@@ -63,7 +63,7 @@ public class SonarConnectionPluginTest {
 
 		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
 
-		QualityResult qualityResult = sonarPlugin.analizeQuality(projectId);
+		QualityResult qualityResult = sonarPlugin.analyzeQuality(projectId);
 		QualityMeasure freshCoverageMeasure = qualityResult.getMeasure("coverage");
 
 		assertEquals(coverageMeasure.getKey(), freshCoverageMeasure.getKey());
@@ -127,6 +127,12 @@ public class SonarConnectionPluginTest {
 		TestResult integrationTestResult = sonarPlugin.analyzeIntegrationTests(projectId);
 
 		assertEquals(8, integrationTestResult.getCoverage(), 0);
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void should_throw_exception_when_passing_null_to_is_sonar_instance() {
+		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
+		sonarConnectionPlugin.isSonarInstance(null);
 	}
 
 	private Map<String, QualityMetric> createMetricList() {
