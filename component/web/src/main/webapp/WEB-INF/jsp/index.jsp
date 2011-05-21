@@ -59,11 +59,8 @@
 			<div id="tabs-0"> 
 		<input id="softwareAccesses0.id" name="softwareAccesses[0].id" type="hidden" value=""/> 
 		<label for="softwareAccesses0.url">Url</label> 
-		<input id="softwareAccesses0.url" name="softwareAccesses[0].url" class="ui-widget-content ui-corner-all url" type="text" value=""/> 
-		 
-		<label for="softwareAccesses0.pluginClassName">Type</label> 
-		<select id="softwareAccesses0.pluginClassName" name="softwareAccesses[0].pluginClassName"> 
-		</select> 
+		<label id="softwareAccesses0.urlcheck" class="check"></label>
+		<input id="softwareAccesses0.url" name="softwareAccesses[0].url" class="ui-widget-content ui-corner-all url" type="text" value=""/>
 		<label for="softwareAccesses0.login">Login</label> 
 		<input id="softwareAccesses0.login" name="softwareAccesses[0].login" class="ui-widget-content ui-corner-all disabled" type="text" value="" disabled="disabled"/> 
 		<label for="softwareAccesses0.password">Password</label> 
@@ -86,7 +83,7 @@
 		</ol> --> 
 			</div> 
 		</div>
-			<input class="submit" type="submit" value="submit"/> 
+			<input class="submit" type="submit" value="Save"/> 
 			<div class="loader"></div>
 			<div class="success"></div>
 			<div class="failure"></div>

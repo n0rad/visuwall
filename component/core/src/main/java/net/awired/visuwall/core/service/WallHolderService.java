@@ -16,6 +16,8 @@
 
 package net.awired.visuwall.core.service;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,7 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus;
 import net.awired.visuwall.core.domain.PluginHolder;
+import net.awired.visuwall.core.domain.PluginInfo;
 import net.awired.visuwall.core.domain.SoftwareAccess;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
@@ -142,6 +145,7 @@ public class WallHolderService implements WallService {
 
 	private void reconstructWall(Wall wall) {
 		List<SoftwareAccess> softwareAccesses = wall.getSoftwareAccesses();
+		reconstructSoftwareAccesses(softwareAccesses);
 		if (softwareAccesses != null) {
 			PluginHolder pluginHolder = pluginService
 					.getPluginHolderFromSoftwares(softwareAccesses);
@@ -151,6 +155,18 @@ public class WallHolderService implements WallService {
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Done refreshing wall : " + wall + " and its "
 					+ wall.getProjects().size() + " projects");
+		}
+	}
+	
+	private void reconstructSoftwareAccesses(List<SoftwareAccess> softwareAccesses) {
+		for (SoftwareAccess softwareAccess : softwareAccesses) {
+			try {
+				PluginInfo pluginInfo = pluginService.getPluginInfoFromManagableUrl(new URL(softwareAccess.getUrl()));
+				softwareAccess.setPluginClassName(pluginInfo.getClassName());
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

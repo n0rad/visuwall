@@ -7,7 +7,7 @@ visuwall.ctrl.controller.wallFormController = new function() {
 			type : 'POST',
 			data : $(data).serialize(),
 			error : function(jqXHR, textStatus, errorThrown) {
-				failureCallback(textStatus + " - " + errorThrown);
+				failureCallback(textStatus + " " + jqXHR.statusText);
 			},
 			success : function(data, textStatus, jqXHR) {
 				successCallback();

@@ -94,9 +94,10 @@ ajsl.dispatcher = new function() {
 			}
 			
 			var action = $this._ctrls[ctrl];
+			var ctrlVars = parsedCtrls[ctrl].ctrlVars;
 			var vars = parsedCtrls[ctrl].vars;
-			var args = parsedCtrls[ctrl].ctrlVars.join("','");
-			$this._ctrls[ctrl].apply(this || window, parsedCtrls[ctrl].ctrlVars);
+			ctrlVars.unshift(vars);
+			$this._ctrls[ctrl].apply(this || window, ctrlVars);
 		}
 		
 		$this._lastDispatch = parsedCtrls;

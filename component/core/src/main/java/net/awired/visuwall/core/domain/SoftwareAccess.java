@@ -16,113 +16,103 @@
 
 package net.awired.visuwall.core.domain;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 @Entity
 public class SoftwareAccess {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-    private String url;
-    private String login;
-    private String password;
-    private String pluginClassName;
+	private String url;
+	private String login;
+	private String password;
 
-    
-    // TODO on next version
-    // private boolean allProject;
-    // private List<ProjectId> projectIds;
+	@Transient
+	private String pluginClassName;
 
-    /////////////////////////////////////////////////////////////
+	// TODO on next version
+	// private boolean allProject;
+	// private List<ProjectId> projectIds;
 
-//    
-//    @ManyToOne
-//    @JoinColumn (name="SOFTWARE_ID", nullable = false, updatable = false, insertable = false)
-////    @ManyToOne(optional = false)
-////    @JoinColumn (name="WALL_ID")
-//    private Wall      wall;
-    
-    /////////////////////////////////////////////////////////////
+	public SoftwareAccess() {
 
-    public SoftwareAccess() {
+	}
 
-    }
+	public SoftwareAccess(Class<?> plugin, String url) {
+		this.pluginClassName = plugin.getName();
+		this.url = url;
+	}
 
-    public SoftwareAccess(Class<?> plugin, String url) {
-        this.pluginClassName = plugin.getName();
-        this.url = url;
-    }
+	public SoftwareAccess(Class<?> plugin, String url, String login,
+			String password) {
+		this(plugin, url);
+		this.login = login;
+		this.password = password;
+	}
 
-    public SoftwareAccess(Class<?> plugin, String url, String login, String password) {
-        this(plugin, url);
-        this.login = login;
-        this.password = password;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SoftwareAccess other = (SoftwareAccess) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	// ///////////////////////////////////////////////////////////
 
-    public String getUrl() {
-        return url;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getLogin() {
-        return login;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getLogin() {
+		return login;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setLogin(String login) {
+		this.login = login;
+	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        SoftwareAccess other = (SoftwareAccess) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public String getPluginClassName() {
 		return pluginClassName;

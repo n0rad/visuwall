@@ -16,8 +16,12 @@
 
 package net.awired.visuwall.server.web.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import net.awired.visuwall.api.domain.ProjectStatus;
 import net.awired.visuwall.core.domain.Wall;
@@ -50,6 +54,11 @@ public class WallController {
 	@Autowired
 	private PluginService pluginService;
 
+	@ExceptionHandler(Exception.class)
+	public void handleAllExceptions(HttpServletResponse response, Exception e) throws IOException {
+		response.sendError(500, e.getMessage());
+	}
+	
 	@RequestMapping
 	public String getWallNames(ModelMap modelMap) {
 		Set<String> wallNames = wallService.getWallNames();
@@ -80,12 +89,6 @@ public class WallController {
 		modelMap.put("softwares", pluginService.getPluginsInfo());
 		return WALL_JSP;
 	}
-
-	// @RequestMapping(value = "create", method = RequestMethod.POST)
-	// public ModelAndView create(Wall wall) throws NotCreatedException {
-	// wallService.persist(wall);
-	// return null;
-	// }
 
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody Object update(Wall wall) {

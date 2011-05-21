@@ -17,7 +17,7 @@
 visuwall.theme.def.event.wallFormEvent = new function() {
 	var $this = this;
 
-	this.__inject__ = ['wallFormView', 'wallFormController'];
+	this.__inject__ = ['wallFormView', 'wallFormController', 'wallController', 'pluginService', 'navigationView', 'wallService'];
 	
 	
 //	this.context = 'DIV#modal';
@@ -39,8 +39,8 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 						var newContent = $(contents[contents.length - 2])
 								.clone();
 
-						ajsl.view.resetFormValues(newContent);
 						ajsl.view.incrementFormIndexes(newContent);
+						ajsl.view.resetFormValues(newContent);
 
 						var childrens = newContent.children();
 						for (var i = 0; i < childrens.length; i++) {
@@ -80,10 +80,19 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 		$this.wallFormController.submitWallData(this, function() { // success
 			$("#wallForm .loader").empty();
 			$("#modal .success").html("Success");
-			$("#modal").delay(2000).dialog('close');
+			setTimeout(function() {
+				$this.wallService.wall(function(wallNameList) {
+					$this.navigationView.replaceWallList(wallNameList);
+					if (wallNameList.length == 1) {
+						$.history.queryBuilder().addController('wall/' + wallNameList[0]).load();
+					}
+				});
+				
+				$("#modal").dialog('close');
+			}, 1000);
 		}, function (msg) { //failure
 			$("#wallForm .loader").empty();
-			$("#modal .failure").html("Error : " + msg);
+			$("#modal .failure").html(msg);
 		});
 		return false;
 	};
@@ -106,6 +115,25 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 			hostname = 'New';
 		}
 		$('UL LI A[href="#' + tabIdFull + '"]', softTabs).html(hostname);
+
+		////////////
+		
+		var classes = ['failureCheck', 'successCheck', 'loadingCheck'];
+		var domObj = $('#' + $(this).attr('id').replace(".", "\\.") + "check", $(this).parent());
+		
+		if (!$(this).val().trim()) {
+			domObj.switchClasses(classes, '', 1);			
+			return; 
+		}
+		
+		domObj.switchClasses(classes, 'loadingCheck', 1);
+		$this.pluginService.manageable($(this).val(), function(pluginInfo) {
+			//success
+			domObj.switchClasses(classes, 'successCheck', 1);			
+		}, function() {
+			// fail
+			domObj.switchClasses(classes, 'failureCheck', 1);			
+		});
 	};
 
 	this['DIV#softAdd|click'] = function(event) {

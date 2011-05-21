@@ -40,13 +40,13 @@ ajsl.view = new function() {
 			} else {
 				// .trigger('change');
 				$('[name="' + root + formElem + '"]', form).val(data[formElem])
-						.blur();
+						.blur().change();
 			}
 		}
 	};
 
 	this.resetFormValues = function(element) {
-		element.find($this.formFields).val('');
+		element.find($this.formFields).val('').blur().change();
 	};
 
 	this.incrementFormIndexes = function(element) {
@@ -61,9 +61,12 @@ ajsl.view = new function() {
 			});
 		});
 
-		// increment name
+		// increment labels
 		element.find('label').each(function() {
 			this.htmlFor = this.htmlFor.replace(/(\d+)\./, function(str, p1) {
+				return (parseInt(p1, 10) + 1) + '.';
+			});
+			this.id = this.id.replace(/(\d+)\./, function(str, p1) {
 				return (parseInt(p1, 10) + 1) + '.';
 			});
 		});

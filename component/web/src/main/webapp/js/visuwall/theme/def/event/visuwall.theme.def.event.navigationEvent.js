@@ -84,7 +84,7 @@ visuwall.theme.def.event.navigationEvent = new function() {
 	this['#wallSelector #edit|click'] = function() {
 		var wallId = $('#wallSelector #wallSelect').val();
 		if (wallId) {
-			$.history.queryBuilder().addController('wall/edit/' + editCtrlUrl).load();
+			$.history.queryBuilder().addController('wall/edit/' + wallId).load();
 		}
 	};
 

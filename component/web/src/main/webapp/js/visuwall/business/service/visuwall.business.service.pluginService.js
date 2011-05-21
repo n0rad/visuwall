@@ -20,5 +20,25 @@ visuwall.business.service.pluginService = {
 		$.getJSON('wall', {}, function(data) {
 			callback(data.data);
 		});
+	},
+
+	manageable : function(url, success, failure) {
+		$.ajax({
+			  url: 'plugin/managable',
+			  dataType: 'json',
+			  data: {url : url},
+			  success: function(pluginInfo) {
+					success(pluginInfo);
+				},
+			  error: function() {
+				  failure();
+			  },
+			  // TODO fucking change that
+			  statusCode: {
+				    500: function() {
+				    	failure();
+				    }
+				  }
+			});
 	}
 };
