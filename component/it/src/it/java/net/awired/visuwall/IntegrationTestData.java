@@ -32,7 +32,7 @@ public interface IntegrationTestData {
 	String STRUTS_ARTIFACT_ID = "org.apache.struts:struts-core";
 	String STRUTS_2_ARTIFACT_ID = "org.apache.struts:struts2-parent";
 
-	SoftwareAccess JENKINS_ACCESS = new SoftwareAccess(JenkinsPlugin.class, JENKINS_URL, "jenkins access");
-	SoftwareAccess SONAR_ACCESS = new SoftwareAccess(SonarPlugin.class, SONAR_URL, "sonar access");
+	SoftwareAccess JENKINS_ACCESS = new SoftwareAccess(JenkinsPlugin.class, JENKINS_URL);
+	SoftwareAccess SONAR_ACCESS = new SoftwareAccess(SonarPlugin.class, SONAR_URL);
 
 }

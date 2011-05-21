@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -96,7 +97,7 @@ public class WallController {
 	public void DeleteWall(@PathVariable String wallName) {
 		throw new NotImplementedException();
 	}
-
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder, WebRequest request) {
 		binder.setAutoGrowNestedPaths(false);

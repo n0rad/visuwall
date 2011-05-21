@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.core.service;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,31 +29,41 @@ import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.core.domain.PluginHolder;
 import net.awired.visuwall.core.domain.PluginInfo;
-import net.awired.visuwall.core.domain.Software;
 import net.awired.visuwall.core.domain.SoftwareAccess;
 
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicate;
 
 @Service
 public class PluginService {
 
-    public PluginService() {
-    }
-
     private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader.load(VisuwallPlugin.class);
 
+    public PluginInfo getPluginInfoFromManagableUrl(URL url) {
+    	List<VisuwallPlugin> visuwallPlugins = getPlugins();
+    	for (VisuwallPlugin visuwallPlugin : visuwallPlugins) {
+    		if (visuwallPlugin.isManageable(url)) {
+    			return getPluginInfo(visuwallPlugin);
+    		}
+    	}
+    	throw new RuntimeException("no plugin to manage url " + url);
+    }
+    
+    public PluginInfo getPluginInfo(VisuwallPlugin visuwallPlugin) {
+		PluginInfo pluginInfo = new PluginInfo();
+		pluginInfo.setClassName(visuwallPlugin.getClass().getName());
+		pluginInfo.setVersion(visuwallPlugin.getVersion());
+		pluginInfo.setName(visuwallPlugin.getName());
+		return pluginInfo;
+    }
+    
     public List<PluginInfo> getPluginsInfo() {
     	List<VisuwallPlugin> visuwallPlugins = getPlugins();
     	List<PluginInfo> pluginInfos = new ArrayList<PluginInfo>(visuwallPlugins.size());
     	for (VisuwallPlugin visuwallPlugin : visuwallPlugins) {
-			PluginInfo pluginInfo = new PluginInfo();
-			pluginInfo.setClassName(visuwallPlugin.getClass().getName());
-			pluginInfo.setVersion(visuwallPlugin.getVersion());
-			pluginInfo.setName(visuwallPlugin.getName());
-			pluginInfos.add(pluginInfo);
+    		PluginInfo pluginInfo = getPluginInfo(visuwallPlugin);
+    		pluginInfos.add(pluginInfo);
 		}
     	return pluginInfos;
     }

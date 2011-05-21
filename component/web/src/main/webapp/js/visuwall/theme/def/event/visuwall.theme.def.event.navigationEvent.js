@@ -36,7 +36,7 @@ visuwall.theme.def.event.navigationEvent = new function() {
 			$this.toggleFlag = 'show';
 		} else if ($this.toggleFlag == 'hide') {
 			$this.toggleFlag = 'show';
-			$("#navigation").slideToggle("fast");			
+			$("#navigation").slideDown("fast");			
 		}
 	};
 	
@@ -47,7 +47,7 @@ visuwall.theme.def.event.navigationEvent = new function() {
 				if ($this.toggleFlag != 'wait') {
 					return;
 				}
-				$(this).slideToggle("fast", function() {
+				$(this).slideUp("fast", function() {
 					$this.toggleFlag = 'hide';
 				});
 			});

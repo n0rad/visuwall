@@ -17,7 +17,7 @@
 visuwall.theme.def.event.wallFormEvent = new function() {
 	var $this = this;
 
-	this.__inject__ = ['wallFormView'];
+	this.__inject__ = ['wallFormView', 'wallFormController'];
 	
 	
 //	this.context = 'DIV#modal';
@@ -74,13 +74,16 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 	};
 
 	this["#wallForm|submit"] = function() {
-		$.ajax({
-			url : 'wall/',
-			type : 'POST',
-			data : $(this).serialize(),
-			success : function(data) {
-				alert("Data Loaded: " + data);
-			}
+		$("#modal .success").empty();
+		$("#modal .failure").empty();
+		$("#wallForm .loader").empty().html('<img src="res/img/ajax-loader.gif" />');
+		$this.wallFormController.submitWallData(this, function() { // success
+			$("#wallForm .loader").empty();
+			$("#modal .success").html("Success");
+			$("#modal").delay(2000).dialog('close');
+		}, function (msg) { //failure
+			$("#wallForm .loader").empty();
+			$("#modal .failure").html("Error : " + msg);
 		});
 		return false;
 	};
@@ -92,10 +95,17 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 	// mouseup
 	// mousemove
 
-	this['INPUT:regex(id,softwareAccesses.*\.name)|blur|live'] = function() {
+	this['INPUT:regex(id,softwareAccesses.*\.url)|change|live'] = function() {
 		var softTabs = $('#softTabs');
 		var tabIdFull = $('DIV[id^="tabs-"]', softTabs).has(this).attr('id');
-		$('UL LI A[href="#' + tabIdFull + '"]', softTabs).html($(this).val());
+		var hostname = getHostname($(this).val());
+		if (!hostname) {
+			hostname = $(this).val();
+		}
+		if (!hostname) {
+			hostname = 'New';
+		}
+		$('UL LI A[href="#' + tabIdFull + '"]', softTabs).html(hostname);
 	};
 
 	this['DIV#softAdd|click'] = function(event) {

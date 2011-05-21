@@ -71,11 +71,6 @@ visuwall = {
 
 		ajsl.log.setLevel('warn');
 
-		// register events
-		//ajsl.event.registerAll(visuwall.theme.def.event);
-
-
-
 		// Initialize history plugin.
 		$.history.init(ajsl.dispatcher.dispatch, {unescape : true, ctrls : ajsl.dispatcher._ctrls});
 

@@ -10,7 +10,7 @@ visuwall.theme.def.view.wallFormView = new function() {
 	this.context;
 	
 	this.getFormData = function(callback) {
-		//TODO
+		//TODO get form from server instead of html dom element
 		if (!$this.wallFormData) {
 			var container = $('#formCreation');
 			$this.wallFormData = container.clone().show();
@@ -21,7 +21,6 @@ visuwall.theme.def.view.wallFormView = new function() {
 		$this.wallFormEvent.__getObject__(function(bean) {
 			ajsl.event.register(bean, data);
 		});		
-//		ajsl.event.register($this.wallFormEvent);
 		callback(data);
 	};
 	

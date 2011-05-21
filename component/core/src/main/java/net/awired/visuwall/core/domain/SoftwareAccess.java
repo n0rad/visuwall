@@ -31,7 +31,6 @@ public class SoftwareAccess {
     @GeneratedValue
     private Long id;
 
-    private String name;
     private String url;
     private String login;
     private String password;
@@ -57,14 +56,13 @@ public class SoftwareAccess {
 
     }
 
-    public SoftwareAccess(Class<?> plugin, String url, String name) {
+    public SoftwareAccess(Class<?> plugin, String url) {
         this.pluginClassName = plugin.getName();
         this.url = url;
-        this.name = name;
     }
 
-    public SoftwareAccess(Class<?> plugin, String url, String name, String login, String password) {
-        this(plugin, url, name);
+    public SoftwareAccess(Class<?> plugin, String url, String login, String password) {
+        this(plugin, url);
         this.login = login;
         this.password = password;
     }
@@ -99,14 +97,6 @@ public class SoftwareAccess {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override
