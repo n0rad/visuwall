@@ -35,6 +35,7 @@ import net.awired.visuwall.core.exception.NotFoundException;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -60,6 +61,7 @@ public class WallHolderServiceTest {
 		wallHolderService.wallService = wallService;
 		wallHolderService.projectService = projectService;
 		wallHolderService.pluginService = pluginService;
+		wallHolderService.init();
 	}
 
 	@After
