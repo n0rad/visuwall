@@ -110,23 +110,17 @@ visuwall.ctrl.process.Wall = function(wallName) {
 		$this.wallView.updateQuality(project.name,
 				project.qualityResult.measures);
 
-		$this.wallView
-				.updateUTCoverage(
-						project.name,
-						$this
-								._getCoverageFromQualityMeasures(project.qualityResult.measures));
+		$this.wallView.updateUTCoverage(project.name, project.completedBuild.unitTestResult.coverage);
 		$this.wallView.updateUT(project.name,
 				project.completedBuild.unitTestResult.failCount,
 				project.completedBuild.unitTestResult.passCount,
-				project.completedBuild.unitTestResult.skipCount,
-				project.completedBuild.unitTestResult.coverage);
+				project.completedBuild.unitTestResult.skipCount);
 
-		$this.wallView.updateITCoverage(project.name, 0);
+		$this.wallView.updateITCoverage(project.name, project.completedBuild.integrationTestResult.coverage);
 		$this.wallView.updateIT(project.name,
 				project.completedBuild.integrationTestResult.failCount,
 				project.completedBuild.integrationTestResult.passCount,
-				project.completedBuild.integrationTestResult.skipCount,
-				project.completedBuild.integrationTestResult.coverage);
+				project.completedBuild.integrationTestResult.skipCount);
 
 		var completedBuild = project.completedBuild;
 
@@ -156,15 +150,6 @@ visuwall.ctrl.process.Wall = function(wallName) {
 		} else {
 			$this.wallView.updateAgo(project.name, 0);
 		}
-	};
-
-	this._getCoverageFromQualityMeasures = function(measures) {
-		for ( var i = 0; i < measures.length; i++) {
-			if (measures[i].key == 'coverage') {
-				return measures[i].value.value;
-			}
-		}
-		return;
 	};
 
 	this._removeProject = function(projectName) {
