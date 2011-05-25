@@ -73,6 +73,12 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 		$this.tabs.tabs("remove", index);
 	};
 
+	
+//	this["#wallForm #delete|click"] = function() {		
+//		$this.wallService.deleteWall();
+//		$("#modal").dialog('close');
+//	};
+	
 	this["#wallForm|submit"] = function() {
 		$("#modal .success").empty();
 		$("#modal .failure").empty();

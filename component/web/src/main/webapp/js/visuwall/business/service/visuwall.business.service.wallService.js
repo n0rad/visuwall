@@ -32,6 +32,10 @@ visuwall.business.service.wallService = {
 			});
 		},
 		
+		deleteWall : function(wallname) {
+			$.ajax({url: 'wall/' + wallName + '/'});
+		},
+		
 		status : function(wallName, callback) {
 			$.getJSON('wall/' + wallName + '/status', {}, callback);
 		}

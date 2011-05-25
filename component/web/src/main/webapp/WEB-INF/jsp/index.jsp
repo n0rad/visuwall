@@ -87,6 +87,7 @@
 			<div class="loader"></div>
 			<div class="success"></div>
 			<div class="failure"></div>
+<!-- 			<input id="delete" type="button" value="Delete"/>  -->
 		</form>	
 	</div>
 </div>
