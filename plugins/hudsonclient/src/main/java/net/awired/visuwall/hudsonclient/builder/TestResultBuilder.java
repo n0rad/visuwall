@@ -149,9 +149,6 @@ public final class TestResultBuilder {
 			else if ("status".equals(attributeName))
 				test.status = attributeValue; 
 		}
-		if (LOG.isDebugEnabled()) {
-			LOG.debug(test.toString());
-		}
 		return test;
 	}
 
