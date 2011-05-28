@@ -206,4 +206,9 @@ public final class HudsonConnectionPlugin implements BuildConnectionPlugin {
 		this.hudson = hudson;
 	}
 
+	@Override
+	public List<String> findProjectNames() {
+		return hudson.findProjectNames();
+	}
+
 }

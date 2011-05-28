@@ -543,4 +543,17 @@ public class Hudson {
 	void setHudsonRootModuleFinder(HudsonRootModuleFinder hudsonRootModuleFinder) {
 		this.hudsonRootModuleFinder = hudsonRootModuleFinder;
 	}
+
+	public List<String> findProjectNames() {
+		List<String> projectNames = new ArrayList<String>();
+		String projectsUrl = hudsonUrlBuilder.getAllProjectsUrl();
+		WebResource hudsonResource = client.resource(projectsUrl);
+		HudsonModelHudson hudson = hudsonResource.get(HudsonModelHudson.class);
+		for (Object job : hudson.getJob()) {
+			org.w3c.dom.Element element = (org.w3c.dom.Element) job;
+			String name = getProjectName(element);
+			projectNames.add(name);
+		}
+		return projectNames;
+	}
 }
