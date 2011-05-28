@@ -33,6 +33,7 @@ import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -180,6 +181,7 @@ public class HudsonTest {
 		hudson.findBuild("jwall", INVALID_XML);
 	}
 	
+	@Ignore
 	@Test
 	public void should_return_unstable_state_when_having_fail_test() throws HudsonProjectNotFoundException {
 		
