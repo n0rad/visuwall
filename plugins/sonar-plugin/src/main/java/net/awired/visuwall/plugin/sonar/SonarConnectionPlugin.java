@@ -151,15 +151,16 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 			Double coverage = measureFinder.findMeasureValue(artifactId, "coverage");
 			Double failures = measureFinder.findMeasureValue(artifactId, "test_failures");
 			Double errors = measureFinder.findMeasureValue(artifactId, "test_errors");
-			Double totalTests = measureFinder.findMeasureValue(artifactId, "tests");
+			Double passTests = measureFinder.findMeasureValue(artifactId, "tests");
 
 			int skipCount = measureFinder.findMeasureValue(artifactId, "skipped_tests").intValue();
 			int failCount = failures.intValue() + errors.intValue();
+			int passCount = passTests.intValue() - failCount;
 
 			unitTestResult.setCoverage(coverage);
 			unitTestResult.setFailCount(failCount);
 			unitTestResult.setSkipCount(skipCount);
-			unitTestResult.setPassCount(totalTests.intValue() - failCount - skipCount);
+			unitTestResult.setPassCount(passCount);
 		} catch (SonarMeasureNotFoundException e) {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Unit tests informations are not available for project with artifactId : " + artifactId
@@ -194,5 +195,16 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 		return integrationTestResult;
 	}
 
-
+	public boolean isSonarInstance(URL url) {
+		Preconditions.checkNotNull(url, "url is mandatory");
+		try {
+			url = new URL(url.toString() + "/api/properties");
+			byte[] content = ByteStreams.toByteArray(url.openStream());
+			String xml = new String(content);
+			return xml.contains("sonar.core.version");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }
