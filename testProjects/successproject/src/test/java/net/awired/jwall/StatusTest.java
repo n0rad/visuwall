@@ -18,6 +18,7 @@ public class StatusTest {
 			} else if ("error".equals(value)) {
 				throw new RuntimeException("This is a Error project");
 			}
+			
 		}
 	}
 	
