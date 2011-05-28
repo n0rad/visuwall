@@ -27,6 +27,22 @@
                 pre { background: #000; color: #fff; padding: 15px;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
+    
+    
+    
+    .img-shadow {
+float:right;
+background: url(img/trans-shadow.png) no-repeat bottom right; /* Most major browsers other than IE supports transparent shadow. Newer release of IE should be able to support that. */
+}
+
+.img-shadow img {
+display: block; /* IE won't do well without this */
+position: relative; /* Make the shadow's position relative to its image */
+padding: 5px; /* This creates a border around the image */
+background-color: #fff; /* Background color of the border created by the padding */
+border: 1px solid #cecece; /* A 1 pixel greyish border is applied to the white border created by the padding */
+margin: -6px 6px 6px -6px; /* Offset the image by certain pixels to reveal the shadow, as the shadows are 6 pixels wide, offset it by that amount to get a perfect shadow */
+}
   </style>
 </head>
 
@@ -56,8 +72,10 @@
     Visuwall is a web application showing build and quality states of Projects in a very visual way that you can put it on a wall in your open space.
     </p>
 
+	
     <h2>Demo</h2>
-    <p><a href="http://demo.visuwall.awired.net">demo.visuwall.awired.net</a></p>
+	<span class="img-shadow"><img style="float:right" width="350" src="img/Capture-1-320.png"></span>
+    <p><a href="http://demo.visuwall.awired.net">demo</a></p>
     
     <h2>Project Resources</h2>
     <ul>
