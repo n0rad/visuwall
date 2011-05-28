@@ -127,11 +127,4 @@ public class SonarConnectionPluginIT {
 		assertEquals(5.0, integrationTestsAnalysis.getCoverage(), 0);
 	}
 
-	@Test
-	public void should_recognize_sonar_instance_with_valid_url() throws MalformedURLException {
-		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
-		boolean isSonarInstance = sonarConnectionPlugin.isSonarInstance(new URL(SONAR_URL));
-		assertTrue(isSonarInstance);
-	}
-
 }

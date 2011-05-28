@@ -101,10 +101,4 @@ public class HudsonConnectionPluginIT {
 		assertEquals("struts", project.getName());
 	}
 
-	@Test
-	public void should_recognize_hudson_instance_with_valid_url() throws MalformedURLException {
-		HudsonConnectionPlugin hudsonConnectionPlugin = new HudsonConnectionPlugin();
-		boolean isHudsonInstance = hudsonConnectionPlugin.isHudsonInstance(new URL("http://fluxx.fr.cr:8080/hudson"));
-		assertTrue(isHudsonInstance);
-	}
 }
