@@ -91,6 +91,29 @@ public class SonarConnectionPluginIT {
 		assertEquals(1829, unitTestsAnalysis.getTotalCount());
 	}
 
+	@Test
+	public void should_count_exact_it_and_ut() {
+		ProjectId projectId = new ProjectId();
+		projectId.setArtifactId("fr.xebia.librestry:librestry");
+
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin();
+		sonarPlugin.connect("http://fluxx.fr.cr:9000");
+		TestResult unitTestsAnalysis = sonarPlugin.analyzeUnitTests(projectId);
+//		assertEquals(39.4, unitTestsAnalysis.getCoverage(), 0);
+		assertEquals(1, unitTestsAnalysis.getFailCount());
+		assertEquals(5, unitTestsAnalysis.getSkipCount());
+		assertEquals(3, unitTestsAnalysis.getPassCount());
+		assertEquals(9, unitTestsAnalysis.getTotalCount());
+
+		TestResult integrationTestsAnalysis = sonarPlugin.analyzeIntegrationTests(projectId);
+		assertEquals(47.4, integrationTestsAnalysis.getCoverage(), 0);
+		// Sonar/Jacoco don't count IT tests
+		assertEquals(0, integrationTestsAnalysis.getFailCount());
+		assertEquals(0, integrationTestsAnalysis.getSkipCount());
+		assertEquals(0, integrationTestsAnalysis.getPassCount());
+		assertEquals(0, integrationTestsAnalysis.getTotalCount());
+	}
+	
 	@Ignore("we have to create a dummy project and install jacoco on awired CI")
 	@Test
 	public void should_analyze_integration_tests() {
