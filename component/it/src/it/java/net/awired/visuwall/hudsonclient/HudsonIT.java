@@ -16,7 +16,10 @@
 
 package net.awired.visuwall.hudsonclient;
 
+import static org.junit.Assert.assertEquals;
 import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.api.domain.TestResult;
+import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 
 import org.junit.Test;
 
@@ -46,4 +49,21 @@ public class HudsonIT {
 		hudson.findBuild("", 0);
 	}
 
+	@Test
+	public void should_count_it_and_ut() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+		Hudson hudson = new Hudson("http://fluxx.fr.cr:8080/hudson");
+		HudsonBuild build = hudson.findBuild("itcoverage-project", 12);
+		TestResult unitTestResult = build.getUnitTestResult();
+		TestResult integrationTestResult = build.getIntegrationTestResult();
+		
+		assertEquals(1, unitTestResult.getFailCount());
+		assertEquals(5, unitTestResult.getSkipCount());
+		assertEquals(3, unitTestResult.getPassCount());
+		assertEquals(9, unitTestResult.getTotalCount());
+
+		assertEquals(4, integrationTestResult.getFailCount());
+		assertEquals(6, integrationTestResult.getSkipCount());
+		assertEquals(2, integrationTestResult.getPassCount());
+		assertEquals(12, integrationTestResult.getTotalCount());
+	}
 }

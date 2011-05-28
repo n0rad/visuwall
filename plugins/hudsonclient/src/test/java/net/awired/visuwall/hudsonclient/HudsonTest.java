@@ -162,9 +162,9 @@ public class HudsonTest {
 		HudsonBuild build = hudson.findBuild("dev-radar", 74);
 		TestResult testResult = build.getUnitTestResult();
 		assertEquals(1, testResult.getFailCount());
-		assertEquals(13, testResult.getPassCount());
+		assertEquals(11, testResult.getPassCount());
 		assertEquals(2, testResult.getSkipCount());
-		assertEquals(16, testResult.getTotalCount());
+		assertEquals(14, testResult.getTotalCount());
 	}
 
 	@Test
