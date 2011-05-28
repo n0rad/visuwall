@@ -1,0 +1,256 @@
+<!--
+
+    Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+
+<!-- Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> 
+	- Arnaud LEMAIRE <alemaire at norad dot fr> Licensed under the Apache License, 
+	Version 2.0 (the "License"); you may not use this file except in compliance 
+	with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>net.awired.visuwall</groupId>
+	<artifactId>visuwall</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Visuwall</name>
+	<description>Web application showing build and quality states of Projects in a very visual Wall</description>
+
+	<parent>
+		<groupId>net.awired.parent.parent-java</groupId>
+		<artifactId>parent-java</artifactId>
+		<version>1.11-SNAPSHOT</version>
+	</parent>
+
+	<modules>
+		<module>plugins/bambooclient</module>
+		<module>plugins/hudsonclient</module>
+		<module>plugins/sonar-plugin</module>
+		<module>plugins/hudson-plugin</module>
+		<module>plugins/bamboo-plugin</module>
+		<module>plugins/jenkins-plugin</module>
+
+
+		<module>component/core</module>
+		<module>component/cli</module>
+		<module>component/web</module>
+		<module>component/api</module>
+		<module>component/it</module>
+	</modules>
+
+	<properties>
+		<spring.version>3.0.5.RELEASE</spring.version>
+		<spring-security.version>3.0.5.RELEASE</spring-security.version>
+		<jackson.version>1.5.0</jackson.version>
+		<jetty.version>6.1.26</jetty.version>
+		<ajsl.version>1.0-ALPHA6-SNAPSHOT</ajsl.version>
+	</properties>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments />
+		</license>
+	</licenses>
+
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/awired/visuwall/issues</url>
+	</issueManagement>
+	<developers>
+		<developer>
+			<id>jsmadja</id>
+			<name>Julien Smadja</name>
+			<email>julien dot smadja at gmail dot com</email>
+		</developer>
+		<developer>
+			<id>n0rad</id>
+			<name>Arnaud Lemaire</name>
+			<email>dev at norad dot fr</email>
+		</developer>
+	</developers>
+
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-web</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-classes</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-hudsonclient</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-bambooclient</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-cli</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<!-- plugins -->
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-plugin-hudson</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-plugin-sonar</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-plugin-bamboo</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-it</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+                        <dependency>
+                                <groupId>net.awired.visuwall</groupId>
+                                <artifactId>visuwall-plugin-jenkins</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<version>1.8.0</version>
+				<configuration>
+					<header>licence.txt</header>
+					<strictCheck>true</strictCheck>
+					<useDefaultExcludes>false</useDefaultExcludes>
+					<excludes>
+						<exclude>**/*.png</exclude>
+						<exclude>.metadata/**</exclude>
+						<exclude>.gitignore</exclude>
+						<exclude>.git/**</exclude>
+						<exclude>target/**</exclude>
+						<exclude>.settings/**</exclude>
+						<exclude>.project</exclude>
+						<exclude>.classpath</exclude>
+						<exclude>LICENCE</exclude>
+						<exclude>README</exclude>
+						<exclude>**/MANIFEST.MF</exclude>
+						<exclude>src/main/webapp/WEB-INF/lib/**</exclude>
+						<exclude>src/main/webapp/WEB-INF/classes/**</exclude>
+						<exclude>src/main/webapp/images/**</exclude>
+						<exclude>.externalToolBuilders/**</exclude>
+						<exclude>.pmd/**</exclude>
+						<exclude>src/test/resources/**</exclude>
+						<exclude>src/main/webapp/js/jquery/**</exclude>
+						<exclude>src/main/xsd/**</exclude>
+						<exclude>infinitest.filters</exclude>
+						<exclude>src/main/java/net/awired/visuwall/generated/**</exclude>
+					</excludes>
+					<executions>
+						<execution>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+
+	<!-- distribution -->
+	<distributionManagement>
+		<site>
+			<id>awired-web</id>
+			<name>awired web deployment</name>
+			<url>dav:http://projs.awired.net/visuwall</url>
+		</site>
+	</distributionManagement>
+
+	<!-- plugin repos -->
+	<pluginRepositories>
+		<pluginRepository>
+			<id>maven2-repository.java.net</id>
+			<name>Java.net Repository for Maven</name>
+			<url>http://download.java.net/maven/2/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<!-- dependencies repos -->
+	<repositories>
+		<repository>
+			<id>java.net</id>
+			<name>Java.net Repository</name>
+			<url>http://download.java.net/maven/glassfish</url>
+		</repository>
+
+		<repository>
+			<id>maven2-repository.java.net</id>
+			<name>Java.net Repository for Maven</name>
+			<url>http://download.java.net/maven/2/</url>
+		</repository>
+
+		<repository>
+			<id>awired</id>
+			<name>Awired public</name>
+			<url>http://mvn.awired.net/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
+</project>

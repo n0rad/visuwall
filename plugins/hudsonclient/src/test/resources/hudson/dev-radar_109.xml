@@ -1,0 +1,30 @@
+<mavenModuleSetBuild>
+	<action>
+		<cause>
+			<shortDescription>Démarré par l'utilisateur anonymous
+			</shortDescription>
+			<userName>anonymous</userName>
+		</cause>
+	</action>
+	<action>
+		<lastBuiltRevision>
+			<SHA1>959bfb93ffa2f6627a70df2fe20638846ae5aafb</SHA1>
+			<branch>
+				<SHA1>959bfb93ffa2f6627a70df2fe20638846ae5aafb</SHA1>
+				<name>origin/story_2_review</name>
+			</branch>
+		</lastBuiltRevision>
+	</action>
+	<action></action>
+	<action></action>
+	<building>true</building>
+	<duration>0</duration>
+	<fullDisplayName>dev-radar #109</fullDisplayName>
+	<id>2011-02-18_11-25-18</id>
+	<keepLog>false</keepLog>
+	<number>109</number>
+	<timestamp>1298024718192</timestamp>
+	<url>http://fluxx.fr.cr:8080/hudson/job/dev-radar/109/</url>
+	<builtOn></builtOn>
+	<changeSet></changeSet>
+</mavenModuleSetBuild>

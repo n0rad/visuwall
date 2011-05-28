@@ -1,0 +1,12 @@
+.classpath
+.settings
+.project
+target
+.externalToolBuilders
+maven-eclipse.xml
+.pmd
+jwall-database.properties
+jwall-database.script
+jwall-database.log
+.checkstyle
+.metadata

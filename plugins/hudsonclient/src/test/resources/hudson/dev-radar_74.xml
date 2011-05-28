@@ -1,0 +1,45 @@
+<mavenModuleSetBuild>
+	<action>
+		<cause>
+			<shortDescription>Démarré par l'utilisateur anonymous
+			</shortDescription>
+			<userName>anonymous</userName>
+		</cause>
+	</action>
+	<action>
+		<lastBuiltRevision>
+			<SHA1>fac25c3445f2e39300218899c7ebe08d93bc8181</SHA1>
+			<branch>
+				<SHA1>fac25c3445f2e39300218899c7ebe08d93bc8181</SHA1>
+				<name>origin/master</name>
+			</branch>
+		</lastBuiltRevision>
+	</action>
+	<action></action>
+	<action>
+		<failCount>1</failCount>
+		<skipCount>0</skipCount>
+		<totalCount>16</totalCount>
+		<urlName>testReport</urlName>
+	</action>
+	<action>
+		<failCount>0</failCount>
+		<skipCount>0</skipCount>
+		<totalCount>0</totalCount>
+		<urlName>aggregatedTestReport</urlName>
+	</action>
+	<action></action>
+	<action></action>
+	<action></action>
+	<building>false</building>
+	<duration>91807</duration>
+	<fullDisplayName>dev-radar-sonar #74</fullDisplayName>
+	<id>2011-01-23_11-39-50</id>
+	<keepLog>false</keepLog>
+	<number>74</number>
+	<result>FAILURE</result>
+	<timestamp>1295779190000</timestamp>
+	<url>http://fluxx.fr.cr:8080/hudson/job/dev-radar-sonar/74/</url>
+	<builtOn></builtOn>
+	<changeSet></changeSet>
+</mavenModuleSetBuild>
