@@ -6,11 +6,12 @@ import org.junit.Test;
 public class StatusTest {
 
 	@Test
-	public void should_test() {
+	public void should_test() throws Exception {
 		String value = System.getenv("status");
 		String valueProp = System.getProperty("status");
 		System.out.println("##########" + value);
 		System.out.println("##########" + valueProp);
+		Thread.currentThread().sleep(60000L);
 		if (value != null && !value.trim().equals("")) {
 			System.out.println("status value :" + value);
 			if ("fail".equals(value)) {
