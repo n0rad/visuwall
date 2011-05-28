@@ -33,7 +33,7 @@ public class BookIT {
 	}
 
 	private String buildUri(String uri) {
-		return "http://localhost:8080/librestry/api" + uri;
+		return "http://localhost:9876/librestry/api" + uri;
 	}
 
 }

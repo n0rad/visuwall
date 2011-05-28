@@ -59,6 +59,7 @@
 					</container>
 					<configuration>
 						<properties>
+							<cargo.servlet.port>9876</cargo.servlet.port>
 							<cargo.logging>low</cargo.logging>
 							<cargo.jvmargs>-javaagent:${jacoco.agent.path}=destfile=${jacoco.file.path}</cargo.jvmargs>
 						</properties>
