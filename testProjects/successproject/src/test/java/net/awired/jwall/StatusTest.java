@@ -11,7 +11,7 @@ public class StatusTest {
 		String valueProp = System.getProperty("status");
 		System.out.println("##########" + value);
 		System.out.println("##########" + valueProp);
-		if (value != null && value.trim().equals("")) {
+		if (value != null && !value.trim().equals("")) {
 			System.out.println("status value :" + value);
 			if ("fail".equals(value)) {
 				Assert.fail("this is a fail project");
