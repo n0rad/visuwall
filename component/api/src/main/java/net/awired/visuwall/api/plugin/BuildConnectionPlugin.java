@@ -51,4 +51,5 @@ public interface BuildConnectionPlugin extends ConnectionPlugin {
 
     int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException;
 
+    List<String> findProjectNames();
 }

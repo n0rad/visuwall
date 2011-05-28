@@ -16,10 +16,15 @@
 
 package net.awired.visuwall.hudsonclient;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
+import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 
 import org.junit.Test;
 
@@ -72,5 +77,15 @@ public class HudsonIT {
 		Hudson hudson = new Hudson("http://fluxx.fr.cr:8080/hudson");
 		String status = hudson.getState("itcoverage-project");
 		assertEquals("UNSTABLE", status);
+	}
+	
+	@Test
+	public void should_retrieve_project_names_and_descriptions() {
+		Hudson hudson = new Hudson("https://builds.apache.org/");
+		List<String> projects = hudson.findProjectNames();
+		assertFalse(projects.isEmpty());
+		for(String project:projects) {
+			System.err.println(project);
+		}
 	}
 }

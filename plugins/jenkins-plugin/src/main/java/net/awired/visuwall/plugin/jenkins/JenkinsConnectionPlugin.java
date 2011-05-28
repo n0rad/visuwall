@@ -209,4 +209,9 @@ public final class JenkinsConnectionPlugin implements BuildConnectionPlugin {
 		this.hudson = hudson;
 	}
 
+	@Override
+	public List<String> findProjectNames() {
+		return hudson.findProjectNames();
+	}
+
 }

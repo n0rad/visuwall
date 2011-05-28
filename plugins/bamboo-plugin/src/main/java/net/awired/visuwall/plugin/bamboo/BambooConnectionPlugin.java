@@ -158,4 +158,9 @@ public class BambooConnectionPlugin implements BuildConnectionPlugin {
 		return bamboo.getLastBuildNumber(id);
 	}
 
+	@Override
+	public List<String> findProjectNames() {
+		throw new RuntimeException("Not yet implemented");
+	}
+
 }
