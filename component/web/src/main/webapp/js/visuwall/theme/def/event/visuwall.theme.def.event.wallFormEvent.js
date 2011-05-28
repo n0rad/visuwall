@@ -109,8 +109,14 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 	// mousedown
 	// mouseup
 	// mousemove
-
-	this['INPUT:regex(id,softwareAccesses.*\.url)|change|live'] = function() {
+	
+	var urlFunc = function() {
+		var val = $(this).val();
+		if (val[val.length - 1] == '/') {
+			$(this).val(val.slice(0, -1));
+			val = $(this).val();
+		}
+		
 		var softTabs = $('#softTabs');
 		var tabIdFull = $('DIV[id^="tabs-"]', softTabs).has(this).attr('id');
 		var hostname = getHostname($(this).val());
@@ -141,6 +147,10 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 			domObj.switchClasses(classes, 'failureCheck', 1);			
 		});
 	};
+	
+
+	this['INPUT:regex(id,softwareAccesses.*\.url)|change|live'] = urlFunc;
+	this['INPUT:regex(id,softwareAccesses.*\.url)|blur|live'] = urlFunc;
 
 	this['DIV#softAdd|click'] = function(event) {
 		$this.wallFormView.addFormSoftwareAccesses();

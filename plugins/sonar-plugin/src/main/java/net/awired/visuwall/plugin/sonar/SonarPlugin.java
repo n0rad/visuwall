@@ -16,18 +16,21 @@
 
 package net.awired.visuwall.plugin.sonar;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
+
+import com.google.common.base.Preconditions;
+import com.google.common.io.ByteStreams;
 
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
 public class SonarPlugin implements VisuwallPlugin {
 
-	private SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
-
 	@Override
-	public ConnectionPlugin connect(String url, Properties info) {
+	public ConnectionPlugin getConnection(String url, Properties info) {
+		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
 		sonarConnectionPlugin.connect(url);
 		return sonarConnectionPlugin;
 	}
@@ -44,7 +47,15 @@ public class SonarPlugin implements VisuwallPlugin {
 
 	@Override
 	public boolean isManageable(URL url) {
-		return sonarConnectionPlugin.isSonarInstance(url);
+		try {
+			url = new URL(url.toString() + "/api/properties");
+			byte[] content = ByteStreams.toByteArray(url.openStream());
+			String xml = new String(content);
+			return xml.contains("sonar.core.version");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

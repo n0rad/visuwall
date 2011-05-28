@@ -92,7 +92,7 @@ public class PluginService {
             Properties properties = new Properties();
             // properties.put("login", softwareAccess.getLogin());
             // properties.put("password", softwareAccess.getPassword());
-            ConnectionPlugin connection = plugin.connect(softwareAccess.getUrl(), properties);
+            ConnectionPlugin connection = plugin.getConnection(softwareAccess.getUrl(), properties);
 
             if (connection instanceof BuildConnectionPlugin) {
                 pluginHolder.addBuildService((BuildConnectionPlugin) connection);

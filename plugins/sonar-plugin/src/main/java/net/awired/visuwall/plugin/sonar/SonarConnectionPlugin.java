@@ -194,16 +194,5 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 		return integrationTestResult;
 	}
 
-	public boolean isSonarInstance(URL url) {
-		Preconditions.checkNotNull(url, "url is mandatory");
-		try {
-			url = new URL(url.toString() + "/api/properties");
-			byte[] content = ByteStreams.toByteArray(url.openStream());
-			String xml = new String(content);
-			return xml.contains("sonar.core.version");
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
+
 }
