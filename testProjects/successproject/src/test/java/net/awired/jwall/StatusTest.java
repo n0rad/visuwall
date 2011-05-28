@@ -6,7 +6,7 @@ import org.junit.Test;
 public class StatusTest {
 
 	@Test
-	public void main(String[] args) {
+	public void should_test() {
 		String value = System.getenv("status");
 		if (value != null && value.trim().equals("")) {
 			System.out.println("status value :" + value);
