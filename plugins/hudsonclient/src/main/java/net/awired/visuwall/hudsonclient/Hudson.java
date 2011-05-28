@@ -159,6 +159,10 @@ public class Hudson {
 		}
 
 		String testResultUrl = hudsonUrlBuilder.getTestResultUrl(projectName, buildNumber);
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Test result url : " + testResultUrl);
+		}
+		
 		WebResource testResultResource = client.resource(testResultUrl);
 		TestResult unitTestResult = hudsonTestService.buildUnitTestResult(testResultResource);
 		TestResult integrationTestResult = hudsonTestService.buildIntegrationTestResult(testResultResource);

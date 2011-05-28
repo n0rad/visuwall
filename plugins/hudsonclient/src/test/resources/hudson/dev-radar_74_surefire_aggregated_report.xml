@@ -21,8 +21,8 @@
 					<duration>0.0010</duration>
 					<failedSince>0</failedSince>
 					<name>event_should_convert_email_to_gravatar_url</name>
-					<skipped>false</skipped>
-					<status>PASSED</status>
+					<skipped>true</skipped>
+					<status>SKIPPED</status>
 				</case>
 				<duration>0.0010</duration>
 				<name>com.xebia.devradar.EventTest</name>
@@ -32,10 +32,10 @@
 					<age>0</age>
 					<className>com.xebia.devradar.GitHubFetcherBisTest</className>
 					<duration>0.536</duration>
-					<failedSince>0</failedSince>
+					<failedSince>1</failedSince>
 					<name>should_throw_a_runtime_exception_if_cannot_get_commits</name>
 					<skipped>false</skipped>
-					<status>PASSED</status>
+					<status>FAILED</status>
 				</case>
 				<case>
 					<age>0</age>
@@ -61,8 +61,8 @@
 					<duration>0.239</duration>
 					<failedSince>0</failedSince>
 					<name>should_return_an_2_event_set_if_2_commit_exists</name>
-					<skipped>false</skipped>
-					<status>PASSED</status>
+					<skipped>true</skipped>
+					<status>SKIPPED</status>
 				</case>
 				<case>
 					<age>0</age>
