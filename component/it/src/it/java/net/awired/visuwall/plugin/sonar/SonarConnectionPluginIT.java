@@ -99,7 +99,7 @@ public class SonarConnectionPluginIT {
 		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin();
 		sonarPlugin.connect("http://fluxx.fr.cr:9000");
 		TestResult unitTestsAnalysis = sonarPlugin.analyzeUnitTests(projectId);
-//		assertEquals(39.4, unitTestsAnalysis.getCoverage(), 0);
+		assertEquals(18.4, unitTestsAnalysis.getCoverage(), 0);
 		assertEquals(1, unitTestsAnalysis.getFailCount());
 		assertEquals(5, unitTestsAnalysis.getSkipCount());
 		assertEquals(3, unitTestsAnalysis.getPassCount());
@@ -112,19 +112,6 @@ public class SonarConnectionPluginIT {
 		assertEquals(0, integrationTestsAnalysis.getSkipCount());
 		assertEquals(0, integrationTestsAnalysis.getPassCount());
 		assertEquals(0, integrationTestsAnalysis.getTotalCount());
-	}
-	
-	@Ignore("we have to create a dummy project and install jacoco on awired CI")
-	@Test
-	public void should_analyze_integration_tests() {
-		ProjectId projectId = new ProjectId();
-		projectId.setArtifactId("com.orangevallee.on.server.synthesis:synthesis");
-		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
-		sonarConnectionPlugin.connect("http://10.2.40.60/lifeisbetteron/sonar");
-
-		TestResult integrationTestsAnalysis = sonarConnectionPlugin.analyzeIntegrationTests(projectId);
-
-		assertEquals(5.0, integrationTestsAnalysis.getCoverage(), 0);
 	}
 
 }
