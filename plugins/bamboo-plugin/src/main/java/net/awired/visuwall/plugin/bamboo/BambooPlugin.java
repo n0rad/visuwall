@@ -25,7 +25,7 @@ import net.awired.visuwall.api.plugin.VisuwallPlugin;
 public class BambooPlugin implements VisuwallPlugin {
 
 	@Override
-	public ConnectionPlugin connect(String url, Properties info) {
+	public ConnectionPlugin getConnection(String url, Properties info) {
 		return new BambooConnectionPlugin(url, null, null);
 	}
 

@@ -201,19 +201,6 @@ public final class HudsonConnectionPlugin implements BuildConnectionPlugin {
 		}
 	}
 
-	public boolean isHudsonInstance(URL url) {
-		Preconditions.checkNotNull(url, "url is mandatory");
-		try {
-			url = new URL(url.toString() + "/api");
-			byte[] content = ByteStreams.toByteArray(url.openStream());
-			String xml = new String(content);
-			return xml.contains("Remote API [Hudson]");
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
 	@VisibleForTesting
 	void setHudson(Hudson hudson) {
 		this.hudson = hudson;

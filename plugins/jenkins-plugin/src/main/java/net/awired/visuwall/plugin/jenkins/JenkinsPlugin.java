@@ -16,20 +16,26 @@
 
 package net.awired.visuwall.plugin.jenkins;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
 import com.google.common.base.Preconditions;
+import com.google.common.io.ByteStreams;
 
 public class JenkinsPlugin implements VisuwallPlugin {
-
-	private JenkinsConnectionPlugin jenkinsConnectionPlugin = new JenkinsConnectionPlugin();
+	
+	private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
 
 	@Override
-	public ConnectionPlugin connect(String url, Properties info) {
+	public ConnectionPlugin getConnection(String url, Properties info) {
+		JenkinsConnectionPlugin jenkinsConnectionPlugin = new JenkinsConnectionPlugin();
 		jenkinsConnectionPlugin.connect(url);
 		return jenkinsConnectionPlugin;
 	}
@@ -47,6 +53,14 @@ public class JenkinsPlugin implements VisuwallPlugin {
 	@Override
 	public boolean isManageable(URL url) {
 		Preconditions.checkNotNull(url, "url is mandatory");
-		return jenkinsConnectionPlugin.isJenkinsInstance(url);
+		try {
+			url = new URL(url.toString() + "/api");
+			byte[] content = ByteStreams.toByteArray(url.openStream());
+			String xml = new String(content);
+			return xml.contains("Remote API [Jenkins]");
+		} catch (IOException e) {
+			LOG.trace(url + " is not an jenkins instance ", e);
+			return false;
+		}
 	}
 }

@@ -16,20 +16,26 @@
 
 package net.awired.visuwall.plugin.hudson;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
-import com.google.common.base.Preconditions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.io.ByteStreams;
 
 public class HudsonPlugin implements VisuwallPlugin {
 
-	private HudsonConnectionPlugin hudsonConnectionPlugin = new HudsonConnectionPlugin();
+	private static final Logger LOG = LoggerFactory
+			.getLogger(HudsonPlugin.class);
 
 	@Override
-	public ConnectionPlugin connect(String url, Properties info) {
+	public ConnectionPlugin getConnection(String url, Properties info) {
+		HudsonConnectionPlugin hudsonConnectionPlugin = new HudsonConnectionPlugin();
 		hudsonConnectionPlugin.connect(url);
 		return hudsonConnectionPlugin;
 	}
@@ -46,8 +52,14 @@ public class HudsonPlugin implements VisuwallPlugin {
 
 	@Override
 	public boolean isManageable(URL url) {
-		Preconditions.checkNotNull(url, "url is mandatory");
-
-		return hudsonConnectionPlugin.isHudsonInstance(url);
+		try {
+			url = new URL(url.toString() + "/api");
+			byte[] content = ByteStreams.toByteArray(url.openStream());
+			String xml = new String(content);
+			return xml.contains("Remote API [Hudson]");
+		} catch (IOException e) {
+			LOG.trace(url + " is not an hudson instance ", e);
+			return false;
+		}
 	}
 }

@@ -209,17 +209,4 @@ public final class JenkinsConnectionPlugin implements BuildConnectionPlugin {
 		this.hudson = hudson;
 	}
 
-	public boolean isJenkinsInstance(URL url) {
-		Preconditions.checkNotNull(url, "url is mandatory");
-		try {
-			url = new URL(url.toString() + "/api");
-			byte[] content = ByteStreams.toByteArray(url.openStream());
-			String xml = new String(content);
-			return xml.contains("Remote API [Jenkins]");
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
 }
