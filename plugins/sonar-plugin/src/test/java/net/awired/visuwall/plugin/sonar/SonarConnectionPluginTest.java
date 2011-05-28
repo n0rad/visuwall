@@ -129,12 +129,6 @@ public class SonarConnectionPluginTest {
 		assertEquals(8, integrationTestResult.getCoverage(), 0);
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void should_throw_exception_when_passing_null_to_is_sonar_instance() {
-		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
-		sonarConnectionPlugin.isSonarInstance(null);
-	}
-
 	private Map<String, QualityMetric> createMetricList() {
 		Map<String, QualityMetric> metricList = new HashMap<String, QualityMetric>();
 		QualityMetric coverageMetric = new QualityMetric();

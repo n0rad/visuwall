@@ -235,8 +235,4 @@ public class JenkinsConnectionPluginTest {
 		new JenkinsConnectionPlugin().connect("url");
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance() {
-		new JenkinsConnectionPlugin().isJenkinsInstance(null);
-	}
 }
