@@ -26,12 +26,14 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import net.awired.visuwall.api.domain.TestResult;
+import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -177,5 +179,13 @@ public class HudsonTest {
 	public void should_not_fail_while_loading_invalid_xml_build() throws HudsonBuildNotFoundException,
 	        HudsonProjectNotFoundException {
 		hudson.findBuild("jwall", INVALID_XML);
+	}
+	
+	@Ignore
+	@Test
+	public void should_return_unstable_state_when_having_fail_test() throws HudsonProjectNotFoundException {
+		
+		String state = hudson.getState("projectName");
+		assertEquals("UNSTABLE", state);
 	}
 }
