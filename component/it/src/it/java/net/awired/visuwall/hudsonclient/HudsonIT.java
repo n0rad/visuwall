@@ -66,4 +66,11 @@ public class HudsonIT {
 		assertEquals(2, integrationTestResult.getPassCount());
 		assertEquals(12, integrationTestResult.getTotalCount());
 	}
+	
+	@Test
+	public void should_be_unstable_when_having_passed_tests_and_failed_tests() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+		Hudson hudson = new Hudson("http://fluxx.fr.cr:8080/hudson");
+		String status = hudson.getState("itcoverage-project");
+		assertEquals("UNSTABLE", status);
+	}
 }

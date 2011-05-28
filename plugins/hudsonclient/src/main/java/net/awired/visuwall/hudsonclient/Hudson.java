@@ -462,12 +462,29 @@ public class Hudson {
 		try {
 			int lastBuildNumber = getLastBuildNumber(projectName);
 			HudsonMavenMavenModuleSetBuild build = findBuildByProjectNameAndBuildNumber(projectName, lastBuildNumber);
-			return getState(build);
+			String state = getState(build);
+			if ("FAILURE".equals(state) && hasPassedTests(projectName)) {
+				state = "UNSTABLE";
+			}
+			return state;
 		} catch (HudsonProjectNotFoundException e) {
 			throw new HudsonProjectNotFoundException(e);
 		} catch (HudsonBuildNotFoundException e) {
 			return DEFAULT_STATE;
 		}
+	}
+
+	private boolean hasPassedTests(String projectName) throws HudsonProjectNotFoundException {
+		HudsonProject project = findProject(projectName);
+		HudsonBuild build = project.getCompletedBuild();
+		if (build != null) {
+			TestResult unitTestResult = build.getUnitTestResult();
+			TestResult integrationTestResult = build.getIntegrationTestResult();
+			int passedUnitTests = unitTestResult == null ? 0 : unitTestResult.getPassCount();
+			int passedIntegrationTests = integrationTestResult == null ? 0 : integrationTestResult.getPassCount();
+			return (passedUnitTests + passedIntegrationTests) > 0;
+		}
+		return false;
 	}
 
 	private HudsonMavenMavenModuleSetBuild findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber)
