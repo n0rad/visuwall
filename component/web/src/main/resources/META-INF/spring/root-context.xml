@@ -57,5 +57,14 @@
 		</property>
 		<property name="ignoreUnresolvablePlaceholders" value="false" />
 	</bean>
+	
+	
+	
+	<task:scheduler id="taskScheduler" />
+	<task:executor id="taskExecutor" pool-size="1" />
+
+	<task:annotation-driven executor="taskExecutor"
+		scheduler="taskScheduler" />
+	
 
 </beans>
