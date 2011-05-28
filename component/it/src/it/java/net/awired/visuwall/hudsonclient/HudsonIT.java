@@ -52,7 +52,7 @@ public class HudsonIT {
 	@Test
 	public void should_count_it_and_ut() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
 		Hudson hudson = new Hudson("http://fluxx.fr.cr:8080/hudson");
-		HudsonBuild build = hudson.findBuild("itcoverage-project", 12);
+		HudsonBuild build = hudson.findBuild("itcoverage-project", 17);
 		TestResult unitTestResult = build.getUnitTestResult();
 		TestResult integrationTestResult = build.getIntegrationTestResult();
 		
