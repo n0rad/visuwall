@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,6 +53,7 @@ public class WallHolderService implements WallService {
 			.getLogger(WallHolderService.class);
 
 	private final static int EVERY_FIVE_MINUTES = 5 * 60 * 1000;
+	private final static int THIRTY_SECONDS = 30 * 1000;
 
 	@Autowired
 	ProjectService projectService;
@@ -71,10 +73,12 @@ public class WallHolderService implements WallService {
 			List<Wall> walls = wallService.getWalls();
 			for (Wall wall : walls) {
 				try {
-				reconstructWall(wall);
-				WALLS.put(wall.getName(), wall);
+					reconstructWall(wall);
+					WALLS.put(wall.getName(), wall);
 				} catch (Exception e) {
-					LOG.error("can not reconstruct wall with name " + wall.getName(), e);
+					LOG.error(
+							"can not reconstruct wall with name "
+									+ wall.getName(), e);
 				}
 			}
 		}
@@ -129,7 +133,7 @@ public class WallHolderService implements WallService {
 
 	// ////////////////////////////////////////////////////////////////////////////////
 
-	@Scheduled(fixedDelay = EVERY_FIVE_MINUTES)
+	@Scheduled(fixedDelay = THIRTY_SECONDS)
 	public void refreshWalls() {
 		if (LOG.isInfoEnabled()) {
 			LOG.info("It's time to refresh all walls");
@@ -157,11 +161,14 @@ public class WallHolderService implements WallService {
 					+ wall.getProjects().size() + " projects");
 		}
 	}
-	
-	private void reconstructSoftwareAccesses(List<SoftwareAccess> softwareAccesses) {
+
+	private void reconstructSoftwareAccesses(
+			List<SoftwareAccess> softwareAccesses) {
 		for (SoftwareAccess softwareAccess : softwareAccesses) {
 			try {
-				PluginInfo pluginInfo = pluginService.getPluginInfoFromManagableUrl(new URL(softwareAccess.getUrl()));
+				PluginInfo pluginInfo = pluginService
+						.getPluginInfoFromManagableUrl(new URL(softwareAccess
+								.getUrl()));
 				softwareAccess.setPluginClassName(pluginInfo.getClassName());
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
@@ -177,9 +184,10 @@ public class WallHolderService implements WallService {
 		Preconditions.checkNotNull(wall, "wall not found for name", wallName);
 
 		List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
-		for (Project project : wall.getProjects()) {
+		Iterator<Project> iter = wall.getProjects().iterator();
+		while (iter.hasNext()) {
+			Project project = iter.next();
 			ProjectStatus status = new ProjectStatus();
-			statusList.add(status);
 
 			PluginHolder pluginHolder = wall.getPluginHolder();
 			ProjectId projectId = project.getProjectId();
@@ -189,7 +197,15 @@ public class WallHolderService implements WallService {
 			status.setLastBuildId(projectService.getLastBuildNumber(
 					pluginHolder, projectId));
 			status.setName(projectId.getName());
-			status.setState(projectService.getState(pluginHolder, projectId));
+			try {
+				status.setState(projectService
+						.getState(pluginHolder, projectId));
+			} catch (Exception e) {
+				LOG.debug("state of project not found", e);
+				iter.remove();
+				continue;
+			}
+			statusList.add(status);
 		}
 		return statusList;
 	}

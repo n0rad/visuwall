@@ -30,6 +30,8 @@ import net.awired.visuwall.core.service.PluginService;
 import net.awired.visuwall.core.service.WallHolderService;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -45,6 +47,8 @@ import org.springframework.web.context.request.WebRequest;
 @Controller
 @RequestMapping("/wall")
 public class WallController {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(WallController.class);
 
 	private static final String WALL_JSP = "wall/wallForm";
 
@@ -56,6 +60,7 @@ public class WallController {
 
 	@ExceptionHandler(Exception.class)
 	public void handleAllExceptions(HttpServletResponse response, Exception e) throws IOException {
+		LOG.error("error :", e);
 		response.sendError(500, e.getMessage());
 	}
 	
