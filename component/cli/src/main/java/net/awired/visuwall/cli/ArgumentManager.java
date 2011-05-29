@@ -22,12 +22,13 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.Manifest;
 
-import net.awired.ajsl.cli.argument.CliArgumentManager;
-import net.awired.ajsl.cli.argument.CliArgumentParseException;
-import net.awired.ajsl.cli.argument.args.CliNoParamArgument;
-import net.awired.ajsl.cli.argument.args.CliOneParamArgument;
-import net.awired.ajsl.cli.param.CliParamInt;
-import net.awired.ajsl.cli.param.CliParamString;
+import net.awired.aclm.argument.CliArgumentManager;
+import net.awired.aclm.argument.CliArgumentParseException;
+import net.awired.aclm.argument.args.CliNoParamArgument;
+import net.awired.aclm.argument.args.CliOneParamArgument;
+import net.awired.aclm.param.CliParamInt;
+import net.awired.aclm.param.CliParamString;
+
 
 class ArgumentManager extends CliArgumentManager {
 
