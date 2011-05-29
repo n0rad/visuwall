@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.awired.visuwall.plugin.jenkins;
 
 import java.io.IOException;
@@ -31,40 +30,41 @@ import com.google.common.io.ByteStreams;
 
 public class JenkinsPlugin implements VisuwallPlugin {
 
-	private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
 
-	@Override
-	public ConnectionPlugin getConnection(String url, Properties info) {
-		JenkinsConnectionPlugin jenkinsConnectionPlugin = new JenkinsConnectionPlugin();
-		jenkinsConnectionPlugin.connect(url);
-		return jenkinsConnectionPlugin;
-	}
+    @Override
+    public ConnectionPlugin getConnection(String url, Properties info) {
+        JenkinsConnectionPlugin jenkinsConnectionPlugin = new JenkinsConnectionPlugin();
+        jenkinsConnectionPlugin.connect(url);
+        return jenkinsConnectionPlugin;
+    }
 
-	@Override
-	public String getName() {
-		return "Jenkins";
-	}
+    @Override
+    public String getName() {
+        return "Jenkins";
+    }
 
-	@Override
-	public int getVersion() {
-		return 1;
-	}
+    @Override
+    public int getVersion() {
+        return 1;
+    }
 
-	@Override
-	public boolean isManageable(URL url) {
-		Preconditions.checkNotNull(url, "url is mandatory");
-		if (url.getHost().contains("builds.apache.org"))
-			return true;
-		try {
-			url = new URL(url.toString() + "/api");
-			byte[] content = ByteStreams.toByteArray(url.openStream());
-			String xml = new String(content);
-			return xml.contains("Remote API [Jenkins]");
-		} catch (IOException e) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(url + " is not an jenkins instance ", e);
-			}
-			return false;
-		}
-	}
+    @Override
+    public boolean isManageable(URL url) {
+        Preconditions.checkNotNull(url, "url is mandatory");
+        if (url.getHost().contains("builds.apache.org")) {
+            return true;
+        }
+        try {
+            url = new URL(url.toString() + "/api");
+            byte[] content = ByteStreams.toByteArray(url.openStream());
+            String xml = new String(content);
+            return xml.contains("Remote API [Jenkins]");
+        } catch (IOException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(url + " is not an jenkins instance ", e);
+            }
+            return false;
+        }
+    }
 }
