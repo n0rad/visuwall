@@ -20,10 +20,7 @@ import static net.awired.visuwall.IntegrationTestData.HUDSON_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import net.awired.visuwall.IntegrationTestData;
@@ -73,7 +70,7 @@ public class HudsonConnectionPluginIT {
 		ProjectId projectId = new ProjectId();
 		projectId.addId(HUDSON_ID, "struts");
 		int buildNumber = hudsonConnectionPlugin.getLastBuildNumber(projectId);
-		assertEquals(3, buildNumber);
+		assertEquals(4, buildNumber);
 	}
 
 	@Test

@@ -21,12 +21,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
-import java.util.List;
-
-import javax.xml.bind.JAXBException;
 
 import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
@@ -51,50 +47,42 @@ public class HudsonTest {
 
 	HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(HUDSON_URL);
 
-	private Hudson hudson = new Hudson(HUDSON_URL) {
-		@Override
-		Client buildJerseyClient(ClientConfig clientConfig) {
-			ClientHandler clientHandler = FileClientHandlerBuilder
-			        .newFileClientHandler()
-			        .withFile(hudsonUrlBuilder.getAllProjectsUrl(), "hudson/all_jobs.xml")
-			        .withFile(hudsonUrlBuilder.getProjectUrl("fluxx"), "hudson/fluxx.xml")
-			        .withFile(hudsonUrlBuilder.getBuildUrl("fluxx", 101), "hudson/fluxx_101.xml")
-			        .withFile(hudsonUrlBuilder.getBuildUrl("fluxx", 102), "hudson/fluxx_102.xml")
-			        .withFile(hudsonUrlBuilder.getProjectUrl("dev-radar"), "hudson/dev-radar.xml")
-			        .withFile(hudsonUrlBuilder.getBuildUrl("dev-radar", 107), "hudson/dev-radar_107.xml")
-			        .withFile(hudsonUrlBuilder.getBuildUrl("dev-radar", 108), "hudson/dev-radar_108.xml")
-			        .withFile(hudsonUrlBuilder.getBuildUrl("dev-radar", 74), "hudson/dev-radar_74.xml")
-			        .withFile(hudsonUrlBuilder.getTestResultUrl("dev-radar", 74),
-			                "hudson/dev-radar_74_surefire_aggregated_report.xml")
-			        .withFile(hudsonUrlBuilder.getProjectUrl("dev-radar"), "hudson/dev-radar.xml")
-			        .withFile(hudsonUrlBuilder.getBuildUrl("fluxx", FLUXX_BUILT_WITH_COMMITERS),
-			                "hudson/fluxx_built_with_commiters.xml")
-			        .withFile(hudsonUrlBuilder.getBuildUrl("jwall", INVALID_XML), "hudson/jwall_invalid.xml")
-			        .withHeader("Content-Type", "application/xml; charset=utf-8").create();
-			return new Client(clientHandler, clientConfig);
-		}
-	};
+	private Hudson hudson;
 
 	@Before
 	public void init() throws ArtifactIdNotFoundException {
+		HudsonFinder hudsonFinder = new HudsonFinder(hudsonUrlBuilder) {
+			@Override
+			Client buildJerseyClient(ClientConfig clientConfig) {
+				ClientHandler clientHandler = FileClientHandlerBuilder
+				        .newFileClientHandler()
+				        .withFile(hudsonUrlBuilder.getAllProjectsUrl(), "hudson/all_jobs.xml")
+				        .withFile(hudsonUrlBuilder.getProjectUrl("fluxx"), "hudson/fluxx.xml")
+				        .withFile(hudsonUrlBuilder.getBuildUrl("fluxx", 101), "hudson/fluxx_101.xml")
+				        .withFile(hudsonUrlBuilder.getBuildUrl("fluxx", 102), "hudson/fluxx_102.xml")
+				        .withFile(hudsonUrlBuilder.getProjectUrl("dev-radar"), "hudson/dev-radar.xml")
+				        .withFile(hudsonUrlBuilder.getBuildUrl("dev-radar", 107), "hudson/dev-radar_107.xml")
+				        .withFile(hudsonUrlBuilder.getBuildUrl("dev-radar", 108), "hudson/dev-radar_108.xml")
+				        .withFile(hudsonUrlBuilder.getBuildUrl("dev-radar", 74), "hudson/dev-radar_74.xml")
+				        .withFile(hudsonUrlBuilder.getTestResultUrl("dev-radar", 74),
+				                "hudson/dev-radar_74_surefire_aggregated_report.xml")
+				        .withFile(hudsonUrlBuilder.getProjectUrl("dev-radar"), "hudson/dev-radar.xml")
+				        .withFile(hudsonUrlBuilder.getBuildUrl("fluxx", FLUXX_BUILT_WITH_COMMITERS),
+				                "hudson/fluxx_built_with_commiters.xml")
+				        .withFile(hudsonUrlBuilder.getBuildUrl("jwall", INVALID_XML), "hudson/jwall_invalid.xml")
+				        .withHeader("Content-Type", "application/xml; charset=utf-8").create();
+				return new Client(clientHandler, clientConfig);
+			}
+		};
 		HudsonRootModuleFinder hudsonRootModuleFinder = Mockito.mock(HudsonRootModuleFinder.class);
 		Mockito.when(hudsonRootModuleFinder.findArtifactId(Mockito.anyString())).thenReturn("groupId:artifactId");
-		hudson.setHudsonRootModuleFinder(hudsonRootModuleFinder);
+		hudson = new Hudson(HUDSON_URL, hudsonUrlBuilder, hudsonFinder);
 	}
 
 	@Test
-	public void should_retrieve_projects_from_hudson() throws JAXBException {
-		List<HudsonProject> projects = hudson.findAllProjects();
-		assertFalse(projects.isEmpty());
-		assertEquals("dev-radar", projects.get(0).getName());
-		assertEquals("fluxx", projects.get(1).getName());
-	}
-
-	@Test
-	public void should_retrieve_projects_with_building_status() {
-		List<HudsonProject> projects = hudson.findAllProjects();
-		assertFalse(projects.get(0).isBuilding());
-		assertTrue(projects.get(1).isBuilding());
+	public void should_retrieve_projects_with_building_status() throws HudsonProjectNotFoundException {
+		assertTrue(hudson.findProject("fluxx").isBuilding());
+		assertFalse(hudson.findProject("dev-radar").isBuilding());
 	}
 
 	@Test
@@ -120,14 +108,13 @@ public class HudsonTest {
 	@Test
 	public void should_retrieve_artifact_id() throws HudsonProjectNotFoundException {
 		String artifactId = hudson.findProject("fluxx").getArtifactId();
-		assertEquals("groupId:artifactId", artifactId);
+		assertEquals("fr.fluxx:fluxx", artifactId);
 	}
 
 	@Test
-	public void should_retrieve_projects_with_description() {
-		List<HudsonProject> projects = hudson.findAllProjects();
-		assertEquals("Dev Radar, un mur d'informations", projects.get(0).getDescription());
-		assertEquals("Fluxx, aggrégez vos flux RSS!", projects.get(1).getDescription());
+	public void should_retrieve_projects_with_description() throws HudsonProjectNotFoundException {
+		assertEquals("Dev Radar, un mur d'informations", hudson.findProject("dev-radar").getDescription());
+		assertEquals("Fluxx, aggrégez vos flux RSS!", hudson.findProject("fluxx").getDescription());
 	}
 
 	@Test
@@ -180,11 +167,11 @@ public class HudsonTest {
 	        HudsonProjectNotFoundException {
 		hudson.findBuild("jwall", INVALID_XML);
 	}
-	
+
 	@Ignore
 	@Test
 	public void should_return_unstable_state_when_having_fail_test() throws HudsonProjectNotFoundException {
-		
+
 		String state = hudson.getState("projectName");
 		assertEquals("UNSTABLE", state);
 	}

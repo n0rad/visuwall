@@ -23,15 +23,9 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonTasksTestAggregatedTestResultActionChildReport;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
 
 /**
  * TestResultBuilder is used to manipulate Hudson Test data
@@ -41,57 +35,31 @@ public final class TestResultBuilder {
 	class Test {
 		public String className;
 		public String status;
+
 		@Override
 		public String toString() {
-			return className+":"+status;
+			return className + ":" + status;
 		}
 	}
-	
-	private static final Logger LOG = LoggerFactory.getLogger(TestResultBuilder.class);
 
-	public TestResult buildUnitTestResult(WebResource testResultResource) {
+	public TestResult buildUnitTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
 		TestResult unitTestResult = new TestResult();
-		try {
-			HudsonMavenReportersSurefireAggregatedReport surefireReport = testResultResource
-			        .get(HudsonMavenReportersSurefireAggregatedReport.class);
-			List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
-			countUnitTests(unitTestResult, tests);
-		} catch (UniformInterfaceException e) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("no test result for " + testResultResource.getURI().toString());
-			}
-		} catch (ClientHandlerException e) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("no test result " + testResultResource.getURI().toString());
-			}
-		}
+		List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
+		countUnitTests(unitTestResult, tests);
 		return unitTestResult;
 	}
-	
 
-	public TestResult buildIntegrationTestResult(WebResource testResultResource) {
+	public TestResult buildIntegrationTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
 		TestResult integrationTestResult = new TestResult();
-		try {
-			HudsonMavenReportersSurefireAggregatedReport surefireReport = testResultResource
-			        .get(HudsonMavenReportersSurefireAggregatedReport.class);
-			List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
-			countIntegrationTests(integrationTestResult, tests);
-		} catch (UniformInterfaceException e) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("no test result for " + testResultResource.getURI().toString());
-			}
-		} catch (ClientHandlerException e) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("no test result " + testResultResource.getURI().toString());
-			}
-		}
+		List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
+		countIntegrationTests(integrationTestResult, tests);
 		return integrationTestResult;
 	}
 
 	private void countUnitTests(TestResult unitTestsResult,
-			List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
+	        List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
 		List<Test> tests = createTestsFrom(testReport);
-		for (Test test:tests) {
+		for (Test test : tests) {
 			if (isUnitTest(test)) {
 				updateTestResult(unitTestsResult, test);
 			}
@@ -99,31 +67,30 @@ public final class TestResultBuilder {
 	}
 
 	private void countIntegrationTests(TestResult integrationTestsResult,
-			List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
+	        List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
 		List<Test> tests = createTestsFrom(testReport);
-		for (Test test:tests) {
+		for (Test test : tests) {
 			if (isIntegrationTest(test)) {
 				updateTestResult(integrationTestsResult, test);
 			}
 		}
 	}
-	
+
 	private void updateTestResult(TestResult unitTestsResult, Test test) {
 		String status = test.status;
 		if ("FAILED".equals(status))
-			unitTestsResult.setFailCount(unitTestsResult.getFailCount()  + 1);
+			unitTestsResult.setFailCount(unitTestsResult.getFailCount() + 1);
 		if ("SKIPPED".equals(status))
-			unitTestsResult.setSkipCount(unitTestsResult.getSkipCount()  + 1);
+			unitTestsResult.setSkipCount(unitTestsResult.getSkipCount() + 1);
 		if ("PASSED".equals(status))
-			unitTestsResult.setPassCount(unitTestsResult.getPassCount()  + 1);
+			unitTestsResult.setPassCount(unitTestsResult.getPassCount() + 1);
 	}
 
 	private boolean isUnitTest(Test test) {
 		return !isIntegrationTest(test);
 	}
 
-	private List<Test> createTestsFrom(
-			List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
+	private List<Test> createTestsFrom(List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
 		List<Test> tests = new ArrayList<Test>();
 		for (HudsonTasksTestAggregatedTestResultActionChildReport childReport : testReport) {
 			Element childReportResult = (Element) childReport.getResult();
@@ -140,14 +107,14 @@ public final class TestResultBuilder {
 	private Test createTestFrom(Node testNode) {
 		Test test = new Test();
 		NodeList testAttributes = testNode.getChildNodes();
-		for (int j = 0; j < testAttributes.getLength() ; j++) {
+		for (int j = 0; j < testAttributes.getLength(); j++) {
 			Node attributeNode = testAttributes.item(j);
 			String attributeName = attributeNode.getNodeName();
 			String attributeValue = attributeNode.getTextContent();
 			if ("className".equals(attributeName))
 				test.className = attributeValue;
 			else if ("status".equals(attributeName))
-				test.status = attributeValue; 
+				test.status = attributeValue;
 		}
 		return test;
 	}

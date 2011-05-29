@@ -16,7 +16,7 @@
 
 package net.awired.visuwall.plugin.sonar;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
@@ -31,10 +31,8 @@ public class MeasureFinderIT {
 	public void should_find_measure() throws SonarMetricNotFoundException, SonarMetricsNotFoundException,
 	        SonarMeasureNotFoundException {
 		MeasureFinder measureFinder = new MeasureFinder(IntegrationTestData.SONAR_URL);
-
 		Measure measure = measureFinder.findMeasure(IntegrationTestData.STRUTS_ARTIFACT_ID, "violations_density");
-
-		assertEquals("77.2%", measure.getFormattedValue());
-		assertEquals(77.2, measure.getValue(), 0);
+		assertTrue(measure.getFormattedValue().length() > 0);
+		assertTrue(measure.getValue() > 0);
 	}
 }

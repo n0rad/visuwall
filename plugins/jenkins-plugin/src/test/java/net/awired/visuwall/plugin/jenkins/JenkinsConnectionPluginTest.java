@@ -57,6 +57,7 @@ public class JenkinsConnectionPluginTest {
 		jenkinsPlugin.setHudson(hudson);
 
 		ProjectId projectId = new ProjectId();
+		projectId.addId(JENKINS_ID, "name");
 		State state = jenkinsPlugin.getState(projectId);
 		assertEquals(State.UNKNOWN, state);
 	}
@@ -72,6 +73,7 @@ public class JenkinsConnectionPluginTest {
 		jenkinsPlugin.setHudson(hudson);
 
 		ProjectId projectId = new ProjectId();
+		projectId.addId(JENKINS_ID, "name");
 		State state = jenkinsPlugin.getState(projectId);
 		assertEquals(State.FAILURE, state);
 	}

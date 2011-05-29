@@ -20,17 +20,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.io.ByteStreams;
 
 public class JenkinsPlugin implements VisuwallPlugin {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
 
 	@Override
@@ -53,13 +53,17 @@ public class JenkinsPlugin implements VisuwallPlugin {
 	@Override
 	public boolean isManageable(URL url) {
 		Preconditions.checkNotNull(url, "url is mandatory");
+		if (url.getHost().contains("builds.apache.org"))
+			return true;
 		try {
 			url = new URL(url.toString() + "/api");
 			byte[] content = ByteStreams.toByteArray(url.openStream());
 			String xml = new String(content);
 			return xml.contains("Remote API [Jenkins]");
 		} catch (IOException e) {
-			LOG.trace(url + " is not an jenkins instance ", e);
+			if (LOG.isDebugEnabled()) {
+				LOG.debug(url + " is not an jenkins instance ", e);
+			}
 			return false;
 		}
 	}

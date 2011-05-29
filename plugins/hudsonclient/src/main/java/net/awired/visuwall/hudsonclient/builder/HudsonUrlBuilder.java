@@ -16,6 +16,8 @@
 
 package net.awired.visuwall.hudsonclient.builder;
 
+import com.google.common.base.Preconditions;
+
 public class HudsonUrlBuilder {
 
 	private final String hudsonUrl;
@@ -25,6 +27,7 @@ public class HudsonUrlBuilder {
 	private static final String JOB_URI = "/job";
 
 	public HudsonUrlBuilder(String hudsonUrl) {
+		Preconditions.checkNotNull(hudsonUrl);
 		this.hudsonUrl = hudsonUrl;
 	}
 
@@ -40,6 +43,7 @@ public class HudsonUrlBuilder {
 	 * @return Hudson Url to obtain informations of a job
 	 */
 	public final String getProjectUrl(String jobName) {
+		Preconditions.checkNotNull(jobName, "jobName is mandatory");
 		return hudsonUrl + JOB_URI + "/" + encode(jobName) + API_XML;
 	}
 
@@ -53,6 +57,8 @@ public class HudsonUrlBuilder {
 	 * @return Hudson Url to obtain detailed informations of a job
 	 */
 	public final String getBuildUrl(String jobName, int buildNumber) {
+		Preconditions.checkNotNull(jobName, "jobName is mandatory");
+		Preconditions.checkArgument(buildNumber >= 0, "buidNumber must be positive");
 		return hudsonUrl + JOB_URI + "/" + encode(jobName) + "/" + buildNumber + API_XML;
 	}
 
@@ -62,11 +68,14 @@ public class HudsonUrlBuilder {
 	 * @return Hudson Url to obtain test informations of a job
 	 */
 	public final String getTestResultUrl(String jobName, int buildNumber) {
+		Preconditions.checkNotNull(jobName, "jobName is mandatory");
+		Preconditions.checkArgument(buildNumber >= 0, "buidNumber must be positive");
 		return hudsonUrl + JOB_URI + "/" + encode(jobName) + "/" + buildNumber + "/testReport" + API_XML;
 
 	}
 
 	public String getPomUrl(String jobName) {
+		Preconditions.checkNotNull(jobName, "jobName is mandatory");
 		return hudsonUrl + JOB_URI + "/" + encode(jobName) + "/ws/pom.xml";
 	}
 

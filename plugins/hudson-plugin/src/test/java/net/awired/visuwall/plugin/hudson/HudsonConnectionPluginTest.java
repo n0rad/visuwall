@@ -56,6 +56,7 @@ public class HudsonConnectionPluginTest {
 		hudsonPlugin.setHudson(hudson);
 
 		ProjectId projectId = new ProjectId();
+		projectId.addId("HUDSON_ID", "idValue");
 		State state = hudsonPlugin.getState(projectId);
 		assertEquals(State.UNKNOWN, state);
 	}
@@ -71,6 +72,7 @@ public class HudsonConnectionPluginTest {
 		hudsonPlugin.setHudson(hudson);
 
 		ProjectId projectId = new ProjectId();
+		projectId.addId("HUDSON_ID", "idValue");
 		State state = hudsonPlugin.getState(projectId);
 		assertEquals(State.FAILURE, state);
 	}

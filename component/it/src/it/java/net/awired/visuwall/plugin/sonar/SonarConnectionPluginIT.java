@@ -21,10 +21,7 @@ import static net.awired.visuwall.IntegrationTestData.STRUTS_2_ARTIFACT_ID;
 import static net.awired.visuwall.IntegrationTestData.STRUTS_ARTIFACT_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -35,7 +32,6 @@ import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class SonarConnectionPluginIT {
@@ -55,8 +51,8 @@ public class SonarConnectionPluginIT {
 		QualityResult quality = sonarPlugin.analyzeQuality(projectId, "violations_density");
 		QualityMeasure measure = quality.getMeasure("violations_density");
 		assertEquals("Rules compliance", measure.getName());
-		assertEquals("77.2%", measure.getFormattedValue());
-		assertEquals(77.2, measure.getValue(), 0);
+		assertEquals("83.9%", measure.getFormattedValue());
+		assertEquals(83.9, measure.getValue(), 0);
 	}
 
 	@Test
@@ -84,11 +80,11 @@ public class SonarConnectionPluginIT {
 
 		TestResult unitTestsAnalysis = sonarPlugin.analyzeUnitTests(projectId);
 
-		assertEquals(39.4, unitTestsAnalysis.getCoverage(), 0);
+		assertEquals(40.9, unitTestsAnalysis.getCoverage(), 0);
 		assertEquals(8, unitTestsAnalysis.getFailCount());
 		assertEquals(0, unitTestsAnalysis.getSkipCount());
-		assertEquals(1821, unitTestsAnalysis.getPassCount());
-		assertEquals(1829, unitTestsAnalysis.getTotalCount());
+		assertEquals(1824, unitTestsAnalysis.getPassCount());
+		assertEquals(1832, unitTestsAnalysis.getTotalCount());
 	}
 
 	@Test

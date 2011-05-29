@@ -18,8 +18,6 @@ package net.awired.visuwall.plugin.jenkins;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +40,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
-import com.google.common.io.ByteStreams;
 
 public final class JenkinsConnectionPlugin implements BuildConnectionPlugin {
 
@@ -72,10 +69,11 @@ public final class JenkinsConnectionPlugin implements BuildConnectionPlugin {
 	@Override
 	public List<ProjectId> findAllProjects() {
 		Preconditions.checkState(connected, "You must connect your plugin");
-
 		List<ProjectId> projectIds = new ArrayList<ProjectId>();
-		for (HudsonProject hudsonProject : hudson.findAllProjects()) {
+		List<HudsonProject> projects = hudson.findAllProjects();
+		for (int i = 0; i < projects.size(); i++) {
 			try {
+				HudsonProject hudsonProject = projects.get(i);
 				ProjectId projectId = createProjectIdFrom(hudsonProject);
 				projectIds.add(projectId);
 			} catch (HudsonProjectNotFoundException e) {
@@ -98,9 +96,10 @@ public final class JenkinsConnectionPlugin implements BuildConnectionPlugin {
 	public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
 		Preconditions.checkNotNull(projectId, "projectId is mandatory");
 		Preconditions.checkState(connected, "You must connect your plugin");
-
 		try {
 			String projectName = extractProjectNameFrom(projectId);
+			if (projectName == null)
+				throw new ProjectNotFoundException("Project " + projectId + " has no name");
 			HudsonProject hudsonProject = hudson.findProject(projectName);
 			Project project = projectCreator.buildProjectFrom(hudsonProject);
 			State state = getState(projectId);
@@ -148,6 +147,8 @@ public final class JenkinsConnectionPlugin implements BuildConnectionPlugin {
 
 		try {
 			String projectName = extractProjectNameFrom(projectId);
+			if (projectName == null)
+				throw new ProjectNotFoundException("Project " + projectId + " has no name");
 			return hudson.isBuilding(projectName);
 		} catch (HudsonProjectNotFoundException e) {
 			throw new ProjectNotFoundException(e);
@@ -161,6 +162,8 @@ public final class JenkinsConnectionPlugin implements BuildConnectionPlugin {
 
 		try {
 			String projectName = extractProjectNameFrom(projectId);
+			if (projectName == null)
+				throw new ProjectNotFoundException("Project " + projectId + " has no name");
 			String state = hudson.getState(projectName);
 			return State.getStateByName(state);
 		} catch (HudsonProjectNotFoundException e) {
@@ -176,9 +179,10 @@ public final class JenkinsConnectionPlugin implements BuildConnectionPlugin {
 	public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
 		Preconditions.checkNotNull(projectId, "projectId is mandatory");
 		Preconditions.checkState(connected, "You must connect your plugin");
-
 		try {
 			String projectName = extractProjectNameFrom(projectId);
+			if (projectName == null)
+				throw new ProjectNotFoundException("Project " + projectId + " has no name");
 			return hudson.getLastBuildNumber(projectName);
 		} catch (HudsonProjectNotFoundException e) {
 			throw new ProjectNotFoundException(e);
@@ -192,9 +196,10 @@ public final class JenkinsConnectionPlugin implements BuildConnectionPlugin {
 	        ProjectNotFoundException {
 		Preconditions.checkNotNull(projectId, "projectId is mandatory");
 		Preconditions.checkState(connected, "You must connect your plugin");
-
 		try {
 			String projectName = extractProjectNameFrom(projectId);
+			if (projectName == null)
+				throw new ProjectNotFoundException("Project " + projectId + " has no name");
 			HudsonBuild build = hudson.findBuild(projectName, buildNumber);
 			return projectCreator.buildBuildFrom(build);
 		} catch (HudsonBuildNotFoundException e) {
