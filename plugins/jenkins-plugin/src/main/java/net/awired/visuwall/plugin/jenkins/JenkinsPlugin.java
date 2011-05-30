@@ -53,11 +53,8 @@ public class JenkinsPlugin implements VisuwallPlugin {
     @Override
     public boolean isManageable(URL url) {
         Preconditions.checkNotNull(url, "url is mandatory");
-        if (url.getHost().contains("builds.apache.org")) {
-            return true;
-        }
         try {
-            url = new URL(url.toString() + "/api");
+            url = new URL(url.toString() + "/api/");
             byte[] content = ByteStreams.toByteArray(url.openStream());
             String xml = new String(content);
             return xml.contains("Remote API [Jenkins]");

@@ -158,6 +158,7 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	};
 
 	this._updateState = function(project) {
+		//TODO replace with dynamic call
 		switch (project.state) {
 		case 'SUCCESS':
 			$this.wallView.displaySuccess(project.name);

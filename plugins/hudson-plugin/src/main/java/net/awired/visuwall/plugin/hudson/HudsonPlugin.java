@@ -26,6 +26,7 @@ import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
 import com.google.common.io.ByteStreams;
 
 public class HudsonPlugin implements VisuwallPlugin {
@@ -52,8 +53,9 @@ public class HudsonPlugin implements VisuwallPlugin {
 
 	@Override
 	public boolean isManageable(URL url) {
+        Preconditions.checkNotNull(url, "url is mandatory");
 		try {
-			url = new URL(url.toString() + "/api");
+			url = new URL(url.toString() + "/api/");
 			byte[] content = ByteStreams.toByteArray(url.openStream());
 			String xml = new String(content);
 			return xml.contains("Remote API [Hudson]");
