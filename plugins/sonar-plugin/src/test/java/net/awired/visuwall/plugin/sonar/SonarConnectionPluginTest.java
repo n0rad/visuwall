@@ -16,12 +16,14 @@
 
 package net.awired.visuwall.plugin.sonar;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.awired.visuwall.api.domain.ProjectId;
@@ -36,17 +38,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.sonar.wsclient.services.Metric;
 
 public class SonarConnectionPluginTest {
 
 	Map<String, QualityMetric> metricList = createMetricList();
 
-	MetricFinder metricListBuilder = Mockito.mock(MetricFinder.class);
+	MetricFinder metricFinder = Mockito.mock(MetricFinder.class);
 	MeasureFinder measureFinder = Mockito.mock(MeasureFinder.class);
 
 	@Before
 	public void init() throws SonarMetricsNotFoundException {
-		when(metricListBuilder.findMetrics()).thenReturn(metricList);
+		when(metricFinder.findMetrics()).thenReturn(metricList);
 	}
 
 	@Test
@@ -61,7 +64,7 @@ public class SonarConnectionPluginTest {
 		coverageMeasure.setKey("coverage");
 		when(measureFinder.findQualityMeasure("artifactId", "coverage")).thenReturn(coverageMeasure);
 
-		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
 
 		QualityResult qualityResult = sonarPlugin.analyzeQuality(projectId);
 		QualityMeasure freshCoverageMeasure = qualityResult.getMeasure("coverage");
@@ -74,7 +77,7 @@ public class SonarConnectionPluginTest {
 
 	@Test
 	public void should_find_project() {
-		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
 
 		ProjectId projectId = new ProjectId();
 		projectId.setArtifactId("artifactId");
@@ -84,7 +87,7 @@ public class SonarConnectionPluginTest {
 
 	@Test
 	public void should_not_find_project() throws SonarMeasureNotFoundException {
-		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
 
 		when(measureFinder.findMeasure(Matchers.anyString(), Matchers.anyString())).thenThrow(
 		        new SonarMeasureNotFoundException(""));
@@ -97,13 +100,13 @@ public class SonarConnectionPluginTest {
 
 	@Test
 	public void should_return_false_when_no_artifact_id_found() {
-		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
 		assertFalse(sonarPlugin.contains(new ProjectId()));
 	}
 
 	@Test
 	public void should_build_valid_unit_test_result() throws SonarMeasureNotFoundException {
-		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
 
 		when(measureFinder.findMeasureValue("artifactId", "coverage")).thenReturn(8D);
 
@@ -117,7 +120,7 @@ public class SonarConnectionPluginTest {
 
 	@Test
 	public void should_build_valid_integration_test_result() throws SonarMeasureNotFoundException {
-		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricListBuilder);
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
 
 		when(measureFinder.findMeasureValue("artifactId", "it_coverage")).thenReturn(8D);
 
@@ -129,6 +132,43 @@ public class SonarConnectionPluginTest {
 		assertEquals(8, integrationTestResult.getCoverage(), 0);
 	}
 
+	@Test
+	/***
+	 * <metric>
+		<key>generated_lines</key>
+		<name>Generated Lines</name>
+		<description>Number of generated lines</description>
+		<domain>Size</domain>
+		<qualitative>false</qualitative>
+		<direction>-1</direction>
+		<user_managed>false</user_managed>
+		<val_type>INT</val_type>
+		<hidden>false</hidden>
+	</metric>
+	 */
+	public void should_build_valid_metric_map() throws SonarMetricsNotFoundException {
+		QualityMetric generatedLinesMetric = new QualityMetric();
+		generatedLinesMetric.setKey("generated_lines");
+		generatedLinesMetric.setName("Generated Lines");
+		generatedLinesMetric.setDescription("Number of generated lines");
+		generatedLinesMetric.setDomain("Size");
+		generatedLinesMetric.setQualitative(false);
+		generatedLinesMetric.setDirection(-1);
+		generatedLinesMetric.setUserManaged(false);
+		generatedLinesMetric.setValTyp("INT");
+		generatedLinesMetric.setHidden(false);
+		
+		Map<String, QualityMetric> qualityMetrics = new HashMap<String, QualityMetric>();
+		qualityMetrics.put("size", generatedLinesMetric);
+		when(metricFinder.findMetrics()).thenReturn(qualityMetrics);
+		
+		SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
+		Map<String, List<QualityMetric> > metrics = sonarPlugin.getMetricsByCategory();
+		List<QualityMetric> sizeMetrics = metrics.get("Size");
+
+		assertEquals(generatedLinesMetric, sizeMetrics.get(0));
+	}
+	
 	private Map<String, QualityMetric> createMetricList() {
 		Map<String, QualityMetric> metricList = new HashMap<String, QualityMetric>();
 		QualityMetric coverageMetric = new QualityMetric();

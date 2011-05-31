@@ -18,6 +18,9 @@ package net.awired.visuwall.plugin.sonar;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.awired.visuwall.api.domain.ProjectId;
@@ -31,6 +34,7 @@ import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.wsclient.services.Metric;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -73,10 +77,10 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 	}
 
 	@VisibleForTesting
-	SonarConnectionPlugin(MeasureFinder measureFinder, MetricFinder metricListBuilder) {
+	SonarConnectionPlugin(MeasureFinder measureFinder, MetricFinder metricFinder) {
 		try {
 			this.measureFinder = measureFinder;
-			metricsMap = metricListBuilder.findMetrics();
+			metricsMap = metricFinder.findMetrics();
 			metricKeys = metricsMap.keySet().toArray(new String[] {});
 			connected = true;
 		} catch (SonarMetricsNotFoundException e) {
@@ -206,5 +210,19 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public Map<String, List<QualityMetric>> getMetricsByCategory() {
+		Map<String, List<QualityMetric>> metricsByDomain = new HashMap<String, List<QualityMetric>>();
+		for(QualityMetric metricValue:metricsMap.values()) {
+			String domain = metricValue.getDomain();
+			List<QualityMetric> domainMetrics = metricsByDomain.get(domain);
+			if (domainMetrics == null) {
+				domainMetrics = new ArrayList<QualityMetric>();
+				metricsByDomain.put(domain, domainMetrics);
+			}
+			domainMetrics.add(metricValue);
+		}
+		return metricsByDomain;
 	}
 }
