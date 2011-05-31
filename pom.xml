@@ -52,7 +52,7 @@
 		<spring-security.version>3.0.5.RELEASE</spring-security.version>
 		<jackson.version>1.5.0</jackson.version>
 		<jetty.version>6.1.26</jetty.version>
-		<ajsl.version>0.1</ajsl.version>
+		<ajsl.version>0.1.1</ajsl.version>
 	</properties>
 
 	<licenses>
