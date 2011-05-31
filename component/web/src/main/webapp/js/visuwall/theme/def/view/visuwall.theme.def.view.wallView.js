@@ -283,9 +283,9 @@ visuwall.theme.def.view.wallView = new function() {
 
 	this._buildProjectTD = function(projectName, description) {
 		var visualName = projectName;
-		if (description && description != '') {
-			visualName = description;
-		}
+//		if (description && description != '') {
+//			visualName = description;
+//		}
 
 		var projectTD = $('<li style="display:none" id="' + projectName
 				+ '" class="project"></li>');

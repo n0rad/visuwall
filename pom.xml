@@ -29,7 +29,7 @@
 	<parent>
 		<groupId>net.awired.parent.parent-java</groupId>
 		<artifactId>parent-java</artifactId>
-		<version>1.11-SNAPSHOT</version>
+		<version>1.11</version>
 	</parent>
 
 	<modules>
@@ -53,7 +53,7 @@
 		<spring-security.version>3.0.5.RELEASE</spring-security.version>
 		<jackson.version>1.5.0</jackson.version>
 		<jetty.version>6.1.26</jetty.version>
-		<ajsl.version>1.0-ALPHA6-SNAPSHOT</ajsl.version>
+		<ajsl.version>0.1</ajsl.version>
 	</properties>
 
 	<licenses>
@@ -81,6 +81,12 @@
 			<email>dev at norad dot fr</email>
 		</developer>
 	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/awired/visuwall.git</connection>
+		<developerConnection>scm:git:git@github.com:awired/visuwall.git</developerConnection>
+		<url>http://github.com/awired/visuwall</url>
+	</scm>
 
 
 	<dependencyManagement>

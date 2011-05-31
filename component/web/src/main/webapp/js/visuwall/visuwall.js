@@ -69,7 +69,7 @@ visuwall = {
 		ajsl.dispatcher.registerMain(visuwall.ctrl.history.main.run);
 		ajsl.dispatcher.registerAll(visuwall.ctrl.history);
 
-		ajsl.log.setLevel('warn');
+		ajsl.log.setLevel('error');
 
 		// Initialize history plugin.
 		$.history.init(ajsl.dispatcher.dispatch, {unescape : true, ctrls : ajsl.dispatcher._ctrls});
