@@ -44,7 +44,7 @@ public class VisuwallApplication implements ServletContextAware {
     //	@PostConstruct
     public void init() {
         try {
-            version = findVersion(version);
+            findVersion(version);
             home = getHomeDir();
 
             System.out.println("######################################");
@@ -68,24 +68,27 @@ public class VisuwallApplication implements ServletContextAware {
     }
 
 
-    public String findVersion(String fallback) throws IOException {
+    public void findVersion(String fallback) throws IOException {
         // runnnable war
         Enumeration<URL> manifests = VisuwallApplication.class.getClassLoader()
         .getResources("META-INF/MANIFEST.MF");
         while (manifests.hasMoreElements()) {
             URL res = manifests.nextElement();
             Manifest manifest = new Manifest(res.openStream());
-            String v = manifest.getMainAttributes().getValue("VisuwallVersion");
-            if (v != null)
-                return v;
+            String versionManifest = manifest.getMainAttributes().getValue("VisuwallVersion");
+            if (versionManifest != null) {
+            	this.version = 'V' + versionManifest;
+            	return;
+            }
         }
+        
         // tomcat like
         Manifest manifest = new Manifest(
                 context.getResourceAsStream("META-INF/MANIFEST.MF"));
-        String v = manifest.getMainAttributes().getValue("VisuwallVersion");
-        if (v != null)
-            return v;
-        return fallback;
+        String versionManifest = manifest.getMainAttributes().getValue("VisuwallVersion");
+        if (versionManifest != null) {
+        	this.version = 'V' + versionManifest;
+        }
     }
 
     public static String getHomeDir() {
