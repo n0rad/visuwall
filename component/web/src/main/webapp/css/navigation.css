@@ -54,9 +54,12 @@ LI#name {
 	text-shadow: 1px 1px 1px white;
 }
 
-LI#about {
-	text-align: right;
+LI#helper {
 	width: 100%;
+	text-align: right;
+}
+
+LI#about {
 	font-weight: bold;
 	text-shadow: 1px 1px 1px white;
 }
@@ -67,4 +70,33 @@ LI#about A {
 
 LI#about A:HOVER {
 	text-decoration: underline;
+}
+
+#helperdiv TABLE TH {
+	font-weight: bold;
+}
+
+#helperdiv TABLE {
+	background-color: white;
+	border: 1px solid black;
+	border-collapse: separate;
+	border-spacing: 5px;
+}
+
+
+#helperdiv TD .success-state,
+#helperdiv TD .failure-state,
+#helperdiv TD .new-state,
+#helperdiv TD .aborted-state,
+#helperdiv TD .unstable-state,
+#helperdiv TD .notbuilt-state,
+#helperdiv TD .unknown-state {
+	width: 20px;
+	height: 20px;	
+}
+
+#helperdiv TABLE TR TD {
+	margin: 10px;
+	padding: 2px;
+	text-align: left;
 }

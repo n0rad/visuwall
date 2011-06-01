@@ -40,27 +40,27 @@ BODY {
 	display: inline-block;
 }
 
-#projectsTable .success {
+.success-state {
 	background-color: green;
 /*	background-color: #63b542;*/
 }
-#projectsTable .failure {
+.failure-state {
 	background-color: red;
 /*	background-color: #f3373c;*/
 }
-#projectsTable .new {
+.new-state {
 	background-color: #58aff3;
 }
-#projectsTable .aborted {
+.aborted-state {
 	background-color: #cacaca;
 }
-#projectsTable .unstable {
+.unstable-state {
 	background-color: #FF9023;
 }
-#projectsTable .notbuilt {
+.notbuilt-state {
 	background-color: #802c2c;
 }
-#projectsTable .unknown {
+.unknown-state {
 	background-color: black;
 }
 

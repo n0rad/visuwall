@@ -18,7 +18,7 @@ visuwall.theme.def.view.wallView = new function() {
 	var $this = this;
 	this.table;
 
-	this.statusClasses = [ 'failure', 'success', 'unstable', 'aborted', 'new', 'notbuilt', 'unknown' ];
+	this.statusClasses = [ 'failure-state', 'success-state', 'unstable-state', 'aborted-state', 'new-state', 'notbuilt-state', 'unknown-state' ];
 	
 	$(function() {
 		$this.table = $('ul#projectsTable').sortable().disableSelection();
@@ -132,37 +132,37 @@ visuwall.theme.def.view.wallView = new function() {
 	this.displaySuccess = function(projectName) {
 		$this._hideCommiters(projectName);
 		$this._getElement(projectName, '.projectName').switchClasses(
-				$this.statusClasses, 'success', 3000);
+				$this.statusClasses, 'success-state', 3000);
 	};
 
 	this.displayFailure = function(projectName) {
 		$this._getElement(projectName, '.projectName').switchClasses(
-				$this.statusClasses, 'failure', 3000);
+				$this.statusClasses, 'failure-state', 3000);
 		$this._hideQuality(projectName);
 	};
 	this.displayUnstable = function(projectName) {
 		$this._getElement(projectName, '.projectName').switchClasses(
-				$this.statusClasses, 'unstable', 3000);
+				$this.statusClasses, 'unstable-state', 3000);
 	};
 	
 	this.displayNew = function(projectName) {
 		$this._getElement(projectName, '.projectName').switchClasses(
-				$this.statusClasses, 'new', 3000);
+				$this.statusClasses, 'new-state', 3000);
 	};
 	
 	this.displayAborted = function(projectName) {
 		$this._getElement(projectName, '.projectName').switchClasses(
-				$this.statusClasses, 'aborted', 3000);
+				$this.statusClasses, 'aborted-state', 3000);
 	};
 	
 	this.displayNotBuilt = function(projectName) {
 		$this._getElement(projectName, '.projectName').switchClasses(
-				$this.statusClasses, 'notbuilt', 3000);
+				$this.statusClasses, 'notbuilt-state', 3000);
 	};
 	
 	this.displayUnknown = function(projectName) {
 		$this._getElement(projectName, '.projectName').switchClasses(
-				$this.statusClasses, 'unknown', 3000);
+				$this.statusClasses, 'unknown-state', 3000);
 	};
 	
 	this.updateUT = function(projectName, fail, success, skip) {
@@ -194,7 +194,7 @@ visuwall.theme.def.view.wallView = new function() {
 		abbr.attr("title", ISODateString(new Date(finishBuild)));
 		abbr.data("timeago", null).timeago();
 	};
-
+	
 	// ///////////////////////////////////////////////
 	
 	this._updateTestDiff = function(projectName, failDiff, successDiff, skipDiff, type) {
