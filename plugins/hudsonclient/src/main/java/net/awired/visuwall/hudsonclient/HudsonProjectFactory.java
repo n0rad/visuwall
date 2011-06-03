@@ -16,16 +16,14 @@
 
 package net.awired.visuwall.hudsonclient;
 
-public final class HudsonProjectNotCreatedException extends Exception {
+import net.awired.visuwall.hudsonclient.builder.HudsonProjectBuilder;
+import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 
-    private static final long serialVersionUID = -6952748181282352092L;
+public class HudsonProjectFactory {
 
-    public HudsonProjectNotCreatedException(Throwable cause) {
-        super(cause);
-    }
-
-    public HudsonProjectNotCreatedException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public HudsonProjectBuilder create(HudsonUrlBuilder hudsonUrlBuilder,
+			HudsonFinder hudsonFinder) {
+		return new HudsonProjectBuilder(hudsonUrlBuilder, hudsonFinder);
+	}
 
 }

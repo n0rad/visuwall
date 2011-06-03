@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package net.awired.visuwall.hudsonclient;
+package net.awired.visuwall.hudsonclient.exception;
 
-public class ArtifactIdNotFoundException extends Exception {
+public class NotMavenProjectException extends Exception {
 
-	private static final long serialVersionUID = 6187422971413955095L;
+	private static final long serialVersionUID = 6123323199073340395L;
 
-	public ArtifactIdNotFoundException(String message, Throwable t) {
-		super(message, t);
-	}
-
-	public ArtifactIdNotFoundException(String message) {
+	public NotMavenProjectException(String message) {
 		super(message);
 	}
 

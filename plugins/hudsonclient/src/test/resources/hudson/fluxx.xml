@@ -1,4 +1,4 @@
-<mavenModuleSet>
+<MavenModuleSet>
 	<action></action>
 	<action></action>
 	<description>Fluxx, aggrégez vos flux RSS!</description>
@@ -135,4 +135,4 @@
 		<color>disabled</color>
 		<displayName>fluxx</displayName>
 	</module>
-</mavenModuleSet>
+</MavenModuleSet>

@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package net.awired.visuwall.hudsonclient;
+package net.awired.visuwall.hudsonclient.util;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
-public class HudsonProjectNotFoundException extends Exception {
+public class ClasspathFiles {
 
-    private static final long serialVersionUID = 4159195103131261896L;
-
-    public HudsonProjectNotFoundException(Throwable cause) {
-        super(cause);
-    }
-
-    public HudsonProjectNotFoundException(String cause) {
-        super(cause);
-    }
-
-    public HudsonProjectNotFoundException(String message, Throwable cause) {
-        super(message, cause);
+    public static String getAbsolutePathFile(String fileName) throws URISyntaxException {
+        Class<?> clazz = ClasspathFiles.class;
+        ClassLoader classLoader = clazz.getClassLoader();
+        URL resource = classLoader.getResource(fileName);
+        URI uri = resource.toURI();
+        String pomUrl = "file://" + uri.getPath();
+        return pomUrl;
     }
 }

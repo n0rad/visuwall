@@ -16,39 +16,19 @@
 
 package net.awired.visuwall.hudsonclient;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Date;
-
-import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
-import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
-import net.awired.visuwall.hudsonclient.domain.HudsonProject;
-
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.mockito.Mockito;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandler;
-import com.sun.jersey.api.client.config.ClientConfig;
 
 public class HudsonTest {
 
-	private static final int FLUXX_BUILT_WITH_COMMITERS = 273;
+//	private static final int FLUXX_BUILT_WITH_COMMITERS = 273;
 
-	private static final String HUDSON_URL = "http://fluxx.fr.cr:8080/hudson";
+//	private static final String HUDSON_URL = "http://fluxx.fr.cr:8080/hudson";
 
-	private static final int INVALID_XML = 0;
+//	private static final int INVALID_XML = 0;
 
-	HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(HUDSON_URL);
+//	HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(HUDSON_URL);
 
-	private Hudson hudson;
-
+//	private Hudson hudson;
+/*
 	@Before
 	public void init() throws ArtifactIdNotFoundException {
 		HudsonFinder hudsonFinder = new HudsonFinder(hudsonUrlBuilder) {
@@ -78,38 +58,9 @@ public class HudsonTest {
 		Mockito.when(hudsonRootModuleFinder.findArtifactId(Mockito.anyString())).thenReturn("groupId:artifactId");
 		hudson = new Hudson(HUDSON_URL, hudsonUrlBuilder, hudsonFinder);
 	}
-
-	@Test
-	public void should_retrieve_projects_with_building_status() throws HudsonProjectNotFoundException {
-		assertTrue(hudson.findProject("fluxx").isBuilding());
-		assertFalse(hudson.findProject("dev-radar").isBuilding());
-	}
-
-	@Test
-	public void should_retrieve_build_with_last_commiters() throws HudsonBuildNotFoundException,
-	        HudsonProjectNotFoundException {
-		HudsonBuild build = hudson.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
-		assertEquals("Julien Smadja", build.getCommiters()[0]);
-		assertEquals("Arnaud Lemaire", build.getCommiters()[1]);
-	}
-
-	@Test
-	public void should_retrieve_build_with_status() throws HudsonProjectNotFoundException {
-		HudsonBuild build = hudson.findProject("dev-radar").getCompletedBuild();
-		assertTrue(build.isSuccessful());
-	}
-
-	@Test
-	public void should_retrieve_build_start_time() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
-		HudsonBuild build = hudson.findBuild("fluxx", FLUXX_BUILT_WITH_COMMITERS);
-		assertEquals(1298022037803L, build.getStartTime().getTime());
-	}
-
-	@Test
-	public void should_retrieve_artifact_id() throws HudsonProjectNotFoundException {
-		String artifactId = hudson.findProject("fluxx").getArtifactId();
-		assertEquals("fr.fluxx:fluxx", artifactId);
-	}
+*/
+	
+	/*
 
 	@Test
 	public void should_retrieve_projects_with_description() throws HudsonProjectNotFoundException {
@@ -175,4 +126,5 @@ public class HudsonTest {
 		String state = hudson.getState("projectName");
 		assertEquals("UNSTABLE", state);
 	}
+	*/
 }

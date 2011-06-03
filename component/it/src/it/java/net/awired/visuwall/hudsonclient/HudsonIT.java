@@ -28,6 +28,8 @@ import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
+import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 
 import org.junit.Ignore;
 import org.junit.Test;
