@@ -16,64 +16,94 @@
 
 package net.awired.visuwall.cli;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.security.ProtectionDomain;
+
+import net.awired.visuwall.cli.common.ApplicationHelper;
 
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
+import com.google.common.io.Files;
+
 public class Main {
-	
-	public static final String HOME_KEY = "VISUWALL_HOME";
-	
-    private final ArgumentManager argManager;
 
-    
-    public static void main(String[] args) {
-        new Main().run(args);
-    }
+	private final ArgumentManager argManager = new ArgumentManager(this);
 
-    public Main() {
-        argManager = new ArgumentManager(this);
-    }
+	public static void main(String[] args) {
+		new Main().run(args);
+	}
 
-    public void run(String[] args) {
-        argManager.parse(args);
-        
-        if (argManager.rootFolder.isSet()) {
-	        System.setProperty(HOME_KEY, argManager.rootFolder.getParamOneValue());
-        }
-        
-        final Server server = new Server();
-        SocketConnector connector = new SocketConnector();
+	public void run(String[] args) {
+		argManager.parse(args);
 
-        // Set some timeout options to make debugging easier.
-        connector.setMaxIdleTime(1000 * 60 * 60);
-        connector.setSoLingerTime(-1);
-        connector.setPort(argManager.portArg.getParamOneValue());
-        server.setConnectors(new Connector[] { connector });
+		if (argManager.displayFile.isSet()) {
+			argManager.displayFile.getParamOneValue().display();
+			System.exit(0);
+		}
 
-        WebAppContext context = new WebAppContext();
-        context.setServer(server);
-        context.setContextPath(argManager.contextPath.getParamOneValue());
+		
+		if (argManager.info.isSet()) {
+			printInfo();
+			System.exit(0);
+		}
 
-        ProtectionDomain protectionDomain = Main.class.getProtectionDomain();
-        URL location = protectionDomain.getCodeSource().getLocation();
-        System.out.println("Starting to load :" + location);
-        context.setDescriptor(location.toExternalForm() + "/WEB-INF/web.xml");
-        context.setWar(location.toExternalForm());
+		if (argManager.clearDb.isSet()) {
+			cleanDB();
+			System.exit(0);
+		}
+		runServer();
+	}
 
-        server.addHandler(context);
-        try {
-            server.start();
-            server.setStopAtShutdown(true);
-            server.join();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(100);
-        }
+	public void cleanDB() {
+		String home = ApplicationHelper.findHomeDir();
+		try {
+			System.out.println("clearing database in home folder : " + home);
+			Files.deleteRecursively(new File(home + "/db"));
+		} catch (IOException e) {
+		}
+		System.exit(0);
+	}
 
-    }
+	public void printInfo() {
+		System.out.println("Visuall version : "
+				+ ApplicationHelper.findVersion(null));
+		System.out.println("Visuall home : " + ApplicationHelper.findHomeDir());
+		// TODO list plugin founds
+	}
+
+	public void runServer() {
+		final Server server = new Server();
+		SocketConnector connector = new SocketConnector();
+
+		// Set some timeout options to make debugging easier.
+		connector.setMaxIdleTime(1000 * 60 * 60);
+		connector.setSoLingerTime(-1);
+		connector.setPort(argManager.portArg.getParamOneValue());
+		server.setConnectors(new Connector[] { connector });
+
+		WebAppContext context = new WebAppContext();
+		context.setServer(server);
+		context.setContextPath(argManager.contextPath.getParamOneValue());
+
+		ProtectionDomain protectionDomain = Main.class.getProtectionDomain();
+		URL location = protectionDomain.getCodeSource().getLocation();
+		System.out.println("Starting to load :" + location);
+		context.setDescriptor(location.toExternalForm() + "/WEB-INF/web.xml");
+		context.setWar(location.toExternalForm());
+
+		server.addHandler(context);
+		try {
+			server.start();
+			server.setStopAtShutdown(true);
+			server.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(100);
+		}
+	}
 }

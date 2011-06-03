@@ -39,9 +39,9 @@
 		<module>plugins/bamboo-plugin</module>
 		<module>plugins/jenkins-plugin</module>
 
-
 		<module>component/core</module>
 		<module>component/cli</module>
+		<module>component/cli-common</module>
 		<module>component/web</module>
 		<module>component/api</module>
 		<module>component/it</module>
@@ -102,7 +102,7 @@
 			</dependency>
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
-				<artifactId>visuwall-classes</artifactId>
+				<artifactId>visuwall-cli-common</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

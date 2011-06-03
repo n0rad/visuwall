@@ -16,124 +16,79 @@
 
 package net.awired.visuwall.server.application;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Enumeration;
 import java.util.Properties;
-import java.util.jar.Manifest;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+
+import net.awired.visuwall.cli.common.ApplicationHelper;
+import net.awired.visuwall.cli.enumeration.LogLevelEnum;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 
 @Component
 public class VisuwallApplication implements ServletContextAware {
 
-    public static final String HOME_KEY = "VISUWALL_HOME";
+	private ServletContext context;
+	protected String version;
+	protected String home;
+	protected Level logLvl;
 
-    private ServletContext context;
+	// @PostConstruct
+	public void init() {
+		try {
+			home = ApplicationHelper.findHomeDir();
+			version = ApplicationHelper.findVersion(context
+					.getResourceAsStream("META-INF/MANIFEST.MF"));
+			logLvl = findLogLevelFromSystem();
 
-    protected String version = "Unknow Version";
+			System.out.println("######################################");
+			System.out.println("version : " + version);
+			System.out.println("home : " + home);
+			System.out.println("######################################");
+		} catch (Exception e) {
+			// e.printStackTrace();
+		}
 
-    protected String home;
+		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+		System.out.println("Change log level to :" + logLvl);
+		root.setLevel(logLvl);
+	}
 
-    //	@PostConstruct
-    public void init() {
-        try {
-            findVersion(version);
-            home = getHomeDir();
+	public Level findLogLevelFromSystem() {
+		LogLevelEnum cliLvl = ApplicationHelper.findLogLvl();
+		switch (cliLvl) {
+		case trace:
+			return Level.TRACE;
+		case info:
+			return Level.INFO;
+		case debug:
+			return Level.DEBUG;
+		case error:
+			return Level.ERROR;
+		case warn:
+			return Level.WARN;
+		default:
+			throw new RuntimeException("log level not managed");
+		}
+	}
+	
+	public Properties visuwallProperties() {
+		Properties prop = new Properties();
+		prop.setProperty(ApplicationHelper.HOME_KEY, home);
+		return prop;
+	}
 
-            System.out.println("######################################");
-            System.out.println("version : " + version);
-            System.out.println("home : " + home);
-            System.out.println("######################################");
-        } catch (Exception e) {
-            // e.printStackTrace();
-        }
-    }
+	public String getVersion() {
+		return version;
+	}
 
-    public Properties visuwallProperties() {
-        Properties prop = new Properties();
-
-        if (home == null) {
-            home = "/tmp";
-        }
-
-        prop.setProperty(HOME_KEY, home);
-        return prop;
-    }
-
-
-    public void findVersion(String fallback) throws IOException {
-        // runnnable war
-        Enumeration<URL> manifests = VisuwallApplication.class.getClassLoader()
-        .getResources("META-INF/MANIFEST.MF");
-        while (manifests.hasMoreElements()) {
-            URL res = manifests.nextElement();
-            Manifest manifest = new Manifest(res.openStream());
-            String versionManifest = manifest.getMainAttributes().getValue("VisuwallVersion");
-            if (versionManifest != null) {
-            	this.version = 'V' + versionManifest;
-            	return;
-            }
-        }
-        
-        // tomcat like
-        Manifest manifest = new Manifest(
-                context.getResourceAsStream("META-INF/MANIFEST.MF"));
-        String versionManifest = manifest.getMainAttributes().getValue("VisuwallVersion");
-        if (versionManifest != null) {
-        	this.version = 'V' + versionManifest;
-        }
-    }
-
-    public static String getHomeDir() {
-        // check JNDI for the home directory first
-        try {
-            InitialContext iniCtxt = new InitialContext();
-            Context env = (Context) iniCtxt.lookup("java:comp/env");
-            String value = (String) env.lookup(HOME_KEY);
-            if (value != null && value.trim().length() > 0)
-                return value.trim();
-
-            value = (String) iniCtxt.lookup(HOME_KEY);
-            if (value != null && value.trim().length() > 0)
-                return value.trim();
-        } catch (NamingException e) {
-            // ignore
-        }
-
-        // finally check the system property
-        String sysProp = System.getProperty(HOME_KEY);
-        if (sysProp != null)
-            return sysProp.trim();
-
-        // look at the env var next
-        try {
-            String env = System.getenv(HOME_KEY);
-            if (env != null)
-                return env.trim();
-        } catch (Throwable _) {
-            // when this code runs on JDK1.4, this method fails
-            // fall through to the next method
-        }
-
-        // if for some reason we can't put it within the webapp, use home
-        // directory.
-        return System.getProperty("user.home") + "/.visuwall";
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    @Override
-    public void setServletContext(ServletContext servletContext) {
-        this.context = servletContext;
-        init();
-    }
+	@Override
+	public void setServletContext(ServletContext servletContext) {
+		this.context = servletContext;
+		init();
+	}
 }
