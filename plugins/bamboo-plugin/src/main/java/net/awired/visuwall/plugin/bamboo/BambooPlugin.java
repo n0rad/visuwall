@@ -19,6 +19,8 @@ package net.awired.visuwall.plugin.bamboo;
 import java.net.URL;
 import java.util.Properties;
 
+import net.awired.visuwall.api.domain.PluginInfo;
+import net.awired.visuwall.api.domain.SoftwareInfo;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
@@ -30,18 +32,17 @@ public class BambooPlugin implements VisuwallPlugin {
 	}
 
 	@Override
-	public String getName() {
-		return "Bamboo";
+	public PluginInfo getInfo() {
+		PluginInfo pluginInfo = new PluginInfo();
+		pluginInfo.setName("Bamboo Plugin");
+		pluginInfo.setVersion(1.0f);
+		return pluginInfo;
 	}
-
+	
 	@Override
-	public int getVersion() {
-		return 1;
-	}
-
-	@Override
-	public boolean isManageable(URL url) {
-		return true;
+	public SoftwareInfo isManageable(URL url) {
+		SoftwareInfo softwareInfo = new SoftwareInfo();
+		return softwareInfo;
 	}
 
 }

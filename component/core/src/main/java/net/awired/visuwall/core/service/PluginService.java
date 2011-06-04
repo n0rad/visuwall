@@ -23,12 +23,12 @@ import java.util.List;
 import java.util.Properties;
 import java.util.ServiceLoader;
 
+import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.plugin.BuildConnectionPlugin;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.core.domain.PluginHolder;
-import net.awired.visuwall.core.domain.PluginInfo;
 import net.awired.visuwall.core.domain.SoftwareAccess;
 
 import org.springframework.stereotype.Service;
@@ -43,18 +43,20 @@ public class PluginService {
     public PluginInfo getPluginInfoFromManagableUrl(URL url) {
     	List<VisuwallPlugin> visuwallPlugins = getPlugins();
     	for (VisuwallPlugin visuwallPlugin : visuwallPlugins) {
-    		if (visuwallPlugin.isManageable(url)) {
-    			return getPluginInfo(visuwallPlugin);
-    		}
+//TODO
+    		//    		if (visuwallPlugin.isManageable(url)) {
+//    			return getPluginInfo(visuwallPlugin);
+//    		}
     	}
     	throw new RuntimeException("no plugin to manage url " + url);
     }
     
     public PluginInfo getPluginInfo(VisuwallPlugin visuwallPlugin) {
 		PluginInfo pluginInfo = new PluginInfo();
-		pluginInfo.setClassName(visuwallPlugin.getClass().getName());
-		pluginInfo.setVersion(visuwallPlugin.getVersion());
-		pluginInfo.setName(visuwallPlugin.getName());
+//TODO
+		//		pluginInfo.setClassName(visuwallPlugin.getClass().getName());
+//		pluginInfo.setVersion(visuwallPlugin.getVersion());
+//		pluginInfo.setName(visuwallPlugin.getName());
 		return pluginInfo;
     }
     

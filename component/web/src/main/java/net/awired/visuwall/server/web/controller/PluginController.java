@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.List;
 
 import net.awired.ajsl.web.service.interfaces.JsService;
-import net.awired.visuwall.core.domain.PluginInfo;
+import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.core.service.PluginService;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -27,11 +27,11 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus;
 import net.awired.visuwall.core.domain.PluginHolder;
-import net.awired.visuwall.core.domain.PluginInfo;
 import net.awired.visuwall.core.domain.SoftwareAccess;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;

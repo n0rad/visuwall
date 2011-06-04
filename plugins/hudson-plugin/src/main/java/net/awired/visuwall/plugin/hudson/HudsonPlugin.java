@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
+import net.awired.visuwall.api.domain.PluginInfo;
+import net.awired.visuwall.api.domain.SoftwareInfo;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
@@ -38,27 +40,27 @@ public class HudsonPlugin implements VisuwallPlugin {
     }
 
     @Override
-    public String getName() {
-        return "Hudson";
+    public PluginInfo getInfo() {
+    	PluginInfo pluginInfo = new PluginInfo();
+    	pluginInfo.setName("Hudson plugin");
+    	pluginInfo.setVersion(1.0f);
+    	return pluginInfo;
     }
-
+    
     @Override
-    public int getVersion() {
-        return 1;
-    }
-
-    @Override
-    public boolean isManageable(URL url) {
+    public SoftwareInfo isManageable(URL url) {
         Preconditions.checkNotNull(url, "url is mandatory");
+        SoftwareInfo softwareInfo = new SoftwareInfo();
         InputStream stream = null;
         try {
             url = new URL(url.toString() + "/api/");
             stream = url.openStream();
             byte[] content = ByteStreams.toByteArray(stream);
             String xml = new String(content);
-            return xml.contains("Remote API [Hudson]");
+//            return xml.contains("Remote API [Hudson]");
+            return softwareInfo;
         } catch (IOException e) {
-            return false;
+        	return null;
         } finally {
             Closeables.closeQuietly(stream);
         }

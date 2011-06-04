@@ -18,14 +18,15 @@ package net.awired.visuwall.api.plugin;
 
 import java.net.URL;
 
+import net.awired.visuwall.api.domain.PluginInfo;
+import net.awired.visuwall.api.domain.SoftwareInfo;
+
 public interface VisuwallPlugin {
 
     ConnectionPlugin getConnection(String url, java.util.Properties info);
 
-    String getName();
+    PluginInfo getInfo();
     
-    int getVersion();
-
-    boolean isManageable(URL url);
+    SoftwareInfo isManageable(URL url);
 
 }
