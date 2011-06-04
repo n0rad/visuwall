@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
@@ -66,7 +67,9 @@ public final class SonarConnectionPlugin implements QualityConnectionPlugin {
             measureFinder = new MeasureFinder(url, login, password);
             MetricFinder metricListBuilder = new MetricFinder(url);
             metricsMap = metricListBuilder.findMetrics();
-            metricKeys = metricsMap.keySet().toArray(new String[] {});
+            Set<String> metricKeysSet = metricsMap.keySet();
+            int countMetricKeys = metricKeysSet.size();
+            metricKeys = metricKeysSet.toArray(new String[countMetricKeys]);
             connected = true;
         } catch (SonarMetricsNotFoundException e) {
             throw new RuntimeException(e);

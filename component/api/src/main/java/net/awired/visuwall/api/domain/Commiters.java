@@ -42,15 +42,23 @@ public class Commiters {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || !(o instanceof Commiters))
+        if (!(o instanceof Commiters))
             return false;
         Commiters commiters2 = (Commiters) o;
-        if (commiters.size() != commiters2.commiters.size())
+        if (commiters.size() != commiters2.commiters.size()) {
             return false;
-        for (Commiter commiter : commiters)
-            if (!commiters2.contains(commiter))
+        }
+        for (Commiter commiter : commiters) {
+            if (!commiters2.contains(commiter)) {
                 return false;
+            }
+        }
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(commiters);
     }
 
     public boolean contains(Commiter commiter) {
