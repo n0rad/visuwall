@@ -21,13 +21,15 @@ import java.util.List;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelJob;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
-import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonModelUserProperty;
 
 import org.w3c.dom.Node;
 
 import com.google.common.base.Preconditions;
 
 public class HudsonXmlHelper {
+
+    private HudsonXmlHelper() {
+    }
 
     public static boolean isSuccessful(HudsonMavenMavenModuleSetBuild setBuild) {
         checkSetBuild(setBuild);
@@ -47,25 +49,17 @@ public class HudsonXmlHelper {
         return commiters;
     }
 
-    private static String email(HudsonModelUser hudsonModelUser) {
-        for (HudsonModelUserProperty property : hudsonModelUser.getProperty()) {
-            String propertyValue = property.toString();
-            if (propertyValue != null && propertyValue.length() > 0)
-                return propertyValue;
-        }
-        return null;
-    }
-
     public static String getState(HudsonMavenMavenModuleSetBuild setBuild) {
         checkSetBuild(setBuild);
         Node result = (Node) setBuild.getResult();
-        if (result == null)
+        if (result == null) {
             return "UNKNOWN";
+        }
         Node firstChild = result.getFirstChild();
-        if (firstChild == null)
+        if (firstChild == null) {
             return "UNKNOWN";
-        String state = firstChild.getNodeValue();
-        return state;
+        }
+        return firstChild.getNodeValue();
     }
 
     public static boolean getIsBuilding(HudsonModelJob modelJob) {
