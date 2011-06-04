@@ -14,30 +14,27 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.bambooclient.rest;
+package net.awired.visuwall.plugin.hudson;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import static org.junit.Assert.assertFalse;
 
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "plan")
-public class Plan {
+import java.net.MalformedURLException;
+import java.net.URL;
 
-    @XmlAttribute
-    public Boolean enabled;
+import org.junit.Test;
 
-    @XmlAttribute
-    public String type;
+public class HudsonPluginTest {
 
-    @XmlAttribute
-    public String name;
+    @Test(expected = NullPointerException.class)
+    public void should_throw_exception_when_passing_null_to_is_sonar_instance() {
+        new HudsonPlugin().isManageable(null);
+    }
 
-    @XmlAttribute
-    public String key;
-
-    public Link link;
-
-    public Boolean isBuilding;
+    @Test
+    public void should_not_fail_if_url_is_not_manageable() throws MalformedURLException {
+        HudsonPlugin hudsonPlugin = new HudsonPlugin();
+        String url = "http://www.google.fr";
+        boolean manageable = hudsonPlugin.isManageable(new URL(url));
+        assertFalse(manageable);
+    }
 }

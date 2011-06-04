@@ -1,61 +1,67 @@
 /**
- * Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
+ *     Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *             http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
  */
 
 package net.awired.visuwall.plugin.sonar;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
-
-import com.google.common.base.Preconditions;
-import com.google.common.io.ByteStreams;
 
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
+import com.google.common.base.Preconditions;
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Closeables;
+
 public class SonarPlugin implements VisuwallPlugin {
 
-	@Override
-	public ConnectionPlugin getConnection(String url, Properties info) {
-		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
-		sonarConnectionPlugin.connect(url);
-		return sonarConnectionPlugin;
-	}
+    @Override
+    public ConnectionPlugin getConnection(String url, Properties info) {
+        SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
+        sonarConnectionPlugin.connect(url);
+        return sonarConnectionPlugin;
+    }
 
-	@Override
-	public String getName() {
-		return "Sonar";
-	}
+    @Override
+    public String getName() {
+        return "Sonar";
+    }
 
-	@Override
-	public int getVersion() {
-		return 1;
-	}
+    @Override
+    public int getVersion() {
+        return 1;
+    }
 
-	@Override
-	public boolean isManageable(URL url) {
-		try {
-			url = new URL(url.toString() + "/api/properties");
-			byte[] content = ByteStreams.toByteArray(url.openStream());
-			String xml = new String(content);
-			return xml.contains("sonar.core.version");
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
+    @Override
+    public boolean isManageable(URL url) {
+        Preconditions.checkNotNull(url, "url is mandatory");
+        InputStream stream = null;
+        try {
+            url = new URL(url.toString() + "/api/properties");
+            stream = url.openStream();
+            byte[] content = ByteStreams.toByteArray(stream);
+            String xml = new String(content);
+            return xml.contains("sonar.core.version");
+        } catch (IOException e) {
+            return false;
+        } finally {
+            Closeables.closeQuietly(stream);
+        }
+    }
 
 }
