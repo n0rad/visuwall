@@ -36,10 +36,13 @@
 	<modules>
 		<module>plugins/bambooclient</module>
 		<module>plugins/hudsonclient</module>
+		<module>plugins/teamcityclient</module>
+
 		<module>plugins/sonar-plugin</module>
 		<module>plugins/hudson-plugin</module>
 		<module>plugins/bamboo-plugin</module>
 		<module>plugins/jenkins-plugin</module>
+		<module>plugins/teamcity-plugin</module>
 
 		<module>component/core</module>
 		<module>component/cli</module>
@@ -91,6 +94,7 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- visuwall core modules -->
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-core</artifactId>
@@ -101,6 +105,23 @@
 				<artifactId>visuwall-web</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+                        <dependency>
+                                <groupId>net.awired.visuwall</groupId>
+                                <artifactId>visuwall-api</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
+                        <dependency>
+                                <groupId>net.awired.visuwall</groupId>
+                                <artifactId>visuwall-cli</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
+                        <dependency>
+                                <groupId>net.awired.visuwall</groupId>
+                                <artifactId>visuwall-it</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
+
+			<!-- clients -->
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-hudsonclient</artifactId>
@@ -111,16 +132,11 @@
 				<artifactId>visuwall-bambooclient</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>net.awired.visuwall</groupId>
-				<artifactId>visuwall-api</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>net.awired.visuwall</groupId>
-				<artifactId>visuwall-cli</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+                        <dependency>
+                                <groupId>net.awired.visuwall</groupId>
+                                <artifactId>visuwall-teamcityclient</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
 
 			<!-- plugins -->
 			<dependency>
@@ -138,11 +154,11 @@
 				<artifactId>visuwall-plugin-bamboo</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>net.awired.visuwall</groupId>
-				<artifactId>visuwall-it</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+                        <dependency>
+                                <groupId>net.awired.visuwall</groupId>
+                                <artifactId>visuwall-plugin-teamcity</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-plugin-jenkins</artifactId>
