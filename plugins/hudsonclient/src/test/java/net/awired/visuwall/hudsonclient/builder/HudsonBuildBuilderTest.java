@@ -50,9 +50,6 @@ public class HudsonBuildBuilderTest {
         Date startTime = new Date();
         String state = "UNKNOWN";
 
-        HudsonUserBuilder hudsonUserBuilder = mock(HudsonUserBuilder.class);
-        when(hudsonUserBuilder.getCommiters(new String[] { "dude", "sweet" })).thenReturn(commiters);
-
         TestResultBuilder testResultBuilder = mock(TestResultBuilder.class);
         when(testResultBuilder.buildIntegrationTestResult(any(HudsonMavenReportersSurefireAggregatedReport.class)))
                 .thenReturn(integrationTests);
@@ -73,8 +70,8 @@ public class HudsonBuildBuilderTest {
 
         HudsonMavenReportersSurefireAggregatedReport surefireReport = mock(HudsonMavenReportersSurefireAggregatedReport.class);
 
-        HudsonBuildBuilder hudsonBuildBuilder = new HudsonBuildBuilder(testResultBuilder, hudsonUserBuilder);
-        HudsonBuild hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport);
+        HudsonBuildBuilder hudsonBuildBuilder = new HudsonBuildBuilder(testResultBuilder);
+        HudsonBuild hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport, commiters);
 
         assertEquals(duration, hudsonBuild.getDuration());
         assertEquals(buildNumber, hudsonBuild.getBuildNumber());

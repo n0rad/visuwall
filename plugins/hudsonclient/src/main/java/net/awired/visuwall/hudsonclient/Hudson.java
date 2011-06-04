@@ -26,6 +26,7 @@ import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
