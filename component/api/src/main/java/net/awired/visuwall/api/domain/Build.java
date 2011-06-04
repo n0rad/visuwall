@@ -41,7 +41,7 @@ public final class Build {
 	public void setCommiters(String[] commiters) {
 		if (commiters != null) {
 			this.commiters = commiters.clone();
-		}
+		} //TODO else ?
 	}
 
 	public long getDuration() {

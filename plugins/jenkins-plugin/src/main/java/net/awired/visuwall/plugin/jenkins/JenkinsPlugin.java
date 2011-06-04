@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
+import net.awired.visuwall.api.domain.SoftwareInfo;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 

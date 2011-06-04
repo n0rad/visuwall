@@ -23,7 +23,7 @@
 			
 			var result = {};
 			if (request) {
-				var controllers = request.split('|');
+				var controllers = request.split(';');
 		       	for (var i = 0; i < controllers.length; i++) {
 		       		var ctrl = this._queryBuilderObj._parseController(controllers[i]);
 		       		result[ctrl.ctrl] = ctrl;
@@ -78,7 +78,7 @@
 				var res = '';
 				for (var ctrl in this._data) {
 					if (res) {
-						res += '|';
+						res += ';';
 					}
 					res += ctrl;
 					var ctrlVars = this._data[ctrl].ctrlVars.join('/');

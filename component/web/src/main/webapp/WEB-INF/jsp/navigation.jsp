@@ -28,6 +28,7 @@
 		</li>
 		<li><div id="fontSizeSlider"></div></li>
 		<li><button id="refresh">Refresh</button></li>
+		<li id="helper"><img id="helperimg" src="res/img/helpS.png"></li>
 		<li id="about"><a href="http://visuwall.awired.net/"
 			title="Visuwall">${version}</a></li>
 	</ul>
