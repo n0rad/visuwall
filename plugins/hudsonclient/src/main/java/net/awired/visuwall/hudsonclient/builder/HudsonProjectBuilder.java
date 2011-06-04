@@ -18,13 +18,13 @@ package net.awired.visuwall.hudsonclient.builder;
 
 import java.util.List;
 
-import net.awired.visuwall.hudsonclient.ArtifactIdNotFoundException;
-import net.awired.visuwall.hudsonclient.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.HudsonFinder;
-import net.awired.visuwall.hudsonclient.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.HudsonRootModuleFinder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
+import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelJob;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelRun;
@@ -42,11 +42,11 @@ public class HudsonProjectBuilder {
 
 	private HudsonRootModuleFinder hudsonRootModuleFinder;
 
-	private HudsonFinder hudsonBuildFinder;
+	private HudsonFinder hudsonFinder;
 
-	public HudsonProjectBuilder(HudsonUrlBuilder hudsonUrlBuilder, HudsonFinder hudsonBuildFinder) {
+	public HudsonProjectBuilder(HudsonUrlBuilder hudsonUrlBuilder, HudsonFinder hudsonFinder) {
 		hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
-		this.hudsonBuildFinder = hudsonBuildFinder;
+		this.hudsonFinder = hudsonFinder;
 	}
 
 	public HudsonProject createHudsonProjectFrom(
@@ -65,7 +65,7 @@ public class HudsonProjectBuilder {
 			currentBuildNumber = currentHudsonRun.getNumber();
 		}
 		if (currentBuildNumber != UNBUILT_PROJECT) {
-			currentHudsonBuild = hudsonBuildFinder.find(name, currentBuildNumber);
+			currentHudsonBuild = hudsonFinder.find(name, currentBuildNumber);
 		}
 
 		// last complete build number
@@ -80,7 +80,7 @@ public class HudsonProjectBuilder {
 			lastCompleteBuildNumber = lastCompletedHudsonRun.getNumber();
 		}
 		if (lastCompleteBuildNumber != UNBUILT_PROJECT) {
-			lastCompletedHudsonBuild = hudsonBuildFinder.find(name, lastCompleteBuildNumber);
+			lastCompletedHudsonBuild = hudsonFinder.find(name, lastCompleteBuildNumber);
 		}
 
 		HudsonProject hudsonProject = new HudsonProject();

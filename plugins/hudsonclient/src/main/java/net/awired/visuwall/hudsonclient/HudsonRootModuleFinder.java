@@ -16,77 +16,62 @@
 
 package net.awired.visuwall.hudsonclient;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
+import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Preconditions;
 
 public class HudsonRootModuleFinder {
 
-	private HudsonUrlBuilder hudsonUrlBuilder;
+    @VisibleForTesting
+    HudsonUrlBuilder hudsonUrlBuilder;
 
-	public HudsonRootModuleFinder(HudsonUrlBuilder hudsonUrlBuilder) {
-		this.hudsonUrlBuilder = hudsonUrlBuilder;
-	}
+    @VisibleForTesting
+    DocumentLoader documentLoader = new DocumentLoader();
 
-	public String findArtifactId(String jobName) throws ArtifactIdNotFoundException {
-		String pomUrl = hudsonUrlBuilder.getPomUrl(jobName);
-
-		String logMessage = "Can't find artifactId, job : " + jobName + " at url :'" + pomUrl + "'";
-		try {
-			return createArtifactIdFrom(pomUrl);
-		} catch (MalformedURLException e) {
-			throw new ArtifactIdNotFoundException(logMessage, e);
-		} catch (IOException e) {
-			throw new ArtifactIdNotFoundException(logMessage, e);
-		} catch (SAXException e) {
-			throw new ArtifactIdNotFoundException(logMessage, e);
-		} catch (ParserConfigurationException e) {
-			throw new ArtifactIdNotFoundException(logMessage, e);
-		}
-	}
-
-	private String createArtifactIdFrom(String pomUrl) throws MalformedURLException, IOException, SAXException,
-            ParserConfigurationException {
-	    Document doc = loadPom(pomUrl);
-	    String groupId = findValueInFirstLevel(doc, "groupId");
-	    String artifactId = findValueInFirstLevel(doc, "artifactId");
-	    return groupId + ":" + artifactId;
+    public HudsonRootModuleFinder(HudsonUrlBuilder hudsonUrlBuilder) {
+        this.hudsonUrlBuilder = hudsonUrlBuilder;
     }
 
-	private Document loadPom(String pomUrl) throws MalformedURLException, IOException, SAXException,
-	        ParserConfigurationException {
-		URL url = new URL(pomUrl);
-		InputStream stream = url.openStream();
-		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
-		stream.close();
-		return doc;
-	}
+    public String findArtifactId(String jobName) throws ArtifactIdNotFoundException {
+        Preconditions.checkNotNull(jobName, "jobName is mandatory");
+        String pomUrl = hudsonUrlBuilder.getPomUrl(jobName);
+        try {
+            return createArtifactIdFrom(pomUrl);
+        } catch (Exception e) {
+            String logMessage = "Can't find artifactId, job : " + jobName + " at url :'" + pomUrl + "'";
+            throw new ArtifactIdNotFoundException(logMessage, e);
+        }
+    }
 
-	private String findValueInFirstLevel(Document doc, String tagName) {
-		NodeList artifactIds = doc.getElementsByTagName(tagName);
-		for (int i = 0; i < artifactIds.getLength(); i++) {
-			Node artifactId = artifactIds.item(i);
-			String parentName = artifactId.getParentNode().getNodeName();
-			if (isFirstLevel(parentName)) {
-				return artifactId.getTextContent();
-			}
-		}
-		return null;
-	}
+    private String createArtifactIdFrom(String pomUrl) throws Exception {
+        Document doc = documentLoader.loadFromUrl(pomUrl);
+        String groupId = findValueInFirstLevel(doc, "groupId");
+        String artifactId = findValueInFirstLevel(doc, "artifactId");
+        if (groupId == null || artifactId == null)
+            return null;
+        return groupId + ":" + artifactId;
+    }
 
-	private boolean isFirstLevel(String parentName) {
-	    return "project".equals(parentName);
+    private String findValueInFirstLevel(Document doc, String tagName) {
+        NodeList artifactIds = doc.getElementsByTagName(tagName);
+        for (int i = 0; i < artifactIds.getLength(); i++) {
+            Node artifactId = artifactIds.item(i);
+            String parentName = artifactId.getParentNode().getNodeName();
+            if (isFirstLevel(parentName)) {
+                return artifactId.getTextContent();
+            }
+        }
+        return null;
+    }
+
+    private boolean isFirstLevel(String parentName) {
+        return "project".equals(parentName);
     }
 
 }

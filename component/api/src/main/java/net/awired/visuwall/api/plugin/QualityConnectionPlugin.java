@@ -16,18 +16,47 @@
 
 package net.awired.visuwall.api.plugin;
 
+import java.util.List;
+import java.util.Map;
+
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
+import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 
 public interface QualityConnectionPlugin extends ConnectionPlugin {
 
+	/**
+	 * Generate a complete quality reporting for a project defined by <code>projectId</code>
+	 * @param projectId
+	 * @param metrics You can specify the metrics you only want to analyze.
+	 * @return
+	 */
 	QualityResult analyzeQuality(ProjectId projectId, String... metrics);
 
+	/**
+	 * Generate the unit tests reporting
+	 * @param projectId
+	 * @return
+	 */
 	TestResult analyzeUnitTests(ProjectId projectId);
 
+	/**
+	 * Generate the integration tests reporting
+	 * @param projectId
+	 * @return
+	 */
 	TestResult analyzeIntegrationTests(ProjectId projectId);
 
+	/**
+	 * @param projectId
+	 * @returntrue if the project is in the Quality Software
+	 */
 	boolean contains(ProjectId projectId);
+	
+	/**
+	 * @return Quality Metrics sorted by category
+	 */
+	Map<String, List<QualityMetric>> getMetricsByCategory();
 
 }

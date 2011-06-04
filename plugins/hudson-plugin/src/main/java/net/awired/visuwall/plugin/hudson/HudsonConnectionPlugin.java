@@ -30,10 +30,10 @@ import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.BuildConnectionPlugin;
 import net.awired.visuwall.hudsonclient.Hudson;
-import net.awired.visuwall.hudsonclient.HudsonBuildNotFoundException;
-import net.awired.visuwall.hudsonclient.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
+import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

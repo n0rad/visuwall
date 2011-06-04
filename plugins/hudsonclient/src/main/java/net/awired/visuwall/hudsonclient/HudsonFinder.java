@@ -16,22 +16,27 @@
 
 package net.awired.visuwall.hudsonclient;
 
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 
-import net.awired.visuwall.api.domain.TestResult;
+import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
+import net.awired.visuwall.hudsonclient.builder.HudsonProjectBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.builder.TestResultBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
+import net.awired.visuwall.hudsonclient.domain.HudsonProject;
+import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
+import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelJob;
+import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelRun;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
-import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
+import net.awired.visuwall.hudsonclient.helper.HudsonXmlHelper;
+import net.awired.visuwall.hudsonclient.helper.MavenHelper;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -41,254 +46,180 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
 import com.google.common.base.Preconditions;
-import com.google.common.io.ByteStreams;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 public class HudsonFinder {
 
-	private static final Logger LOG = LoggerFactory.getLogger(HudsonFinder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HudsonFinder.class);
 
-	private TestResultBuilder hudsonTestService = new TestResultBuilder();
+    private HudsonUrlBuilder hudsonUrlBuilder;
+    private HudsonJerseyClient hudsonJerseyClient;
 
-	private HudsonUrlBuilder hudsonUrlBuilder;
+    private Cache cache;
 
-	private Cache cache;
+    private HudsonBuildBuilder hudsonBuildBuilder;
 
-	private Client client;
+    public HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder, HudsonJerseyClient hudsonJerseyClient,
+            TestResultBuilder testResultBuilder, HudsonBuildBuilder hudsonBuildBuilder) {
+        this.hudsonJerseyClient = hudsonJerseyClient;
+        this.hudsonUrlBuilder = hudsonUrlBuilder;
+        this.hudsonBuildBuilder = hudsonBuildBuilder;
+        CacheManager cacheManager = CacheManager.create();
+        cache = cacheManager.getCache("hudson_projects_cache");
+    }
 
-	public HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder) {
-		this.hudsonUrlBuilder = hudsonUrlBuilder;
-		CacheManager cacheManager = CacheManager.create();
-		cache = cacheManager.getCache("hudson_projects_cache");
-		ClientConfig clientConfig = new DefaultClientConfig();
-		clientConfig.getClasses();
-		client = buildJerseyClient(clientConfig);
-	}
+    public HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder, HudsonJerseyClient hudsonJerseyClient) {
+        this(hudsonUrlBuilder, hudsonJerseyClient, new TestResultBuilder(), new HudsonBuildBuilder());
+    }
 
-	Client buildJerseyClient(ClientConfig clientConfig) {
-		return Client.create(clientConfig);
-	}
+    public HudsonBuild find(String projectName, int buildNumber) throws HudsonBuildNotFoundException,
+            HudsonProjectNotFoundException {
+        checkProjectName(projectName);
+        checkBuildNumber(buildNumber);
+        try {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Find build with project name [" + projectName + "] and buildNumber [" + buildNumber + "]");
+            }
+            HudsonMavenMavenModuleSetBuild setBuild = findBuildByProjectNameAndBuildNumber(projectName, buildNumber);
+            String cacheKey = "hudsonbuild_" + projectName + "_" + buildNumber;
+            Element element = cache.get(cacheKey);
+            if (element != null) {
+                return (HudsonBuild) element.getObjectValue();
+            }
 
-	public HudsonBuild find(String projectName, int buildNumber) throws HudsonBuildNotFoundException,
-	        HudsonProjectNotFoundException {
-		Preconditions.checkNotNull(projectName, "projectName is mandatory");
-		Preconditions.checkArgument(buildNumber >= 0, "buidNumber must be positive");
+            String testResultUrl = hudsonUrlBuilder.getTestResultUrl(projectName, setBuild.getNumber());
+            HudsonMavenReportersSurefireAggregatedReport surefireReport = hudsonJerseyClient
+                    .getSurefireReport(testResultUrl);
 
-		try {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Find build with project name [" + projectName + "] and buildNumber [" + buildNumber + "]");
-			}
+            HudsonBuild hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport);
+            cache.put(new Element(cacheKey, hudsonBuild));
+            return hudsonBuild;
+        } catch (UniformInterfaceException e) {
+            String message = "No build #" + buildNumber + " for project " + projectName;
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(message, e);
+            }
+            throw new HudsonBuildNotFoundException(message, e);
+        } catch (WebApplicationException e) {
+            String message = "Error while loading build #" + buildNumber + " for project " + projectName;
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(message, e);
+            }
+            throw new HudsonBuildNotFoundException(message, e);
+        }
+    }
 
-			HudsonMavenMavenModuleSetBuild setBuild = findBuildByProjectNameAndBuildNumber(projectName, buildNumber);
-			return createHudsonBuildFrom(projectName, buildNumber, setBuild);
-		} catch (UniformInterfaceException e) {
-			String message = "No build #" + buildNumber + " for project " + projectName;
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(message, e);
-			}
-			throw new HudsonBuildNotFoundException(message, e);
-		} catch (WebApplicationException e) {
-			String message = "Error while loading build #" + buildNumber + " for project " + projectName;
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(message, e);
-			}
-			throw new HudsonBuildNotFoundException(message, e);
-		}
-	}
+    public HudsonMavenMavenModuleSetBuild findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber)
+            throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+        checkProjectName(projectName);
+        checkBuildNumber(buildNumber);
+        String cacheKey = "build_" + projectName + "_" + buildNumber;
+        Element element = cache.get(cacheKey);
+        if (element != null) {
+            return (HudsonMavenMavenModuleSetBuild) element.getObjectValue();
+        }
+        try {
+            String buildUrl = hudsonUrlBuilder.getBuildUrl(projectName, buildNumber);
+            HudsonMavenMavenModuleSetBuild setBuild = hudsonJerseyClient.getModuleSetBuild(buildUrl);
+            cache.put(new Element(cacheKey, setBuild));
+            return setBuild;
+        } catch (UniformInterfaceException e) {
+            if (projectExists(projectName)) {
+                throw new HudsonBuildNotFoundException("Build #" + buildNumber + " not found for project "
+                        + projectName, e);
+            } else {
+                throw new HudsonProjectNotFoundException("Project " + projectName + " not found", e);
+            }
+        }
+    }
 
-	private HudsonBuild createHudsonBuildFrom(String projectName, int buildNumber,
-	        HudsonMavenMavenModuleSetBuild setBuild) {
-		String cacheKey = "hudsonbuild_" + projectName + "_" + buildNumber;
-		Element element = cache.get(cacheKey);
-		if (element != null) {
-			return (HudsonBuild) element.getObjectValue();
-		}
-		String testResultUrl = hudsonUrlBuilder.getTestResultUrl(projectName, buildNumber);
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Test result url : " + testResultUrl);
-		}
-		HudsonBuild hudsonBuild = new HudsonBuild();
-		hudsonBuild.setState(getState(setBuild));
-		hudsonBuild.setDuration(setBuild.getDuration());
-		hudsonBuild.setStartTime(new Date(setBuild.getTimestamp()));
-		hudsonBuild.setSuccessful(isSuccessful(setBuild));
-		hudsonBuild.setCommiters(getCommiters(setBuild));
-		hudsonBuild.setBuildNumber(buildNumber);
-		insertTestsResults(testResultUrl, hudsonBuild);
-		cache.put(new Element(cacheKey, hudsonBuild));
-		return hudsonBuild;
-	}
+    public List<String> findProjectNames() {
+        List<String> projectNames = new ArrayList<String>();
+        String projectsUrl = hudsonUrlBuilder.getAllProjectsUrl();
+        HudsonModelHudson hudson = hudsonJerseyClient.getHudsonJobs(projectsUrl);
+        for (Object job : hudson.getJob()) {
+            Node element = (Node) job;
+            String name = getProjectName(element);
+            projectNames.add(name);
+        }
+        return projectNames;
+    }
 
-	private void insertTestsResults(String testResultUrl, HudsonBuild hudsonBuild) {
-		WebResource testResultResource = client.resource(testResultUrl);
-		try {
-			HudsonMavenReportersSurefireAggregatedReport surefireReport = testResultResource
-			        .get(HudsonMavenReportersSurefireAggregatedReport.class);
+    public boolean projectExists(String projectName) {
+        checkProjectName(projectName);
+        try {
+            String projectUrl = hudsonUrlBuilder.getProjectUrl(projectName);
+            if (MavenHelper.isNotMavenProject(projectUrl))
+                throw new HudsonProjectNotFoundException(projectName + " is not a maven project");
+            hudsonJerseyClient.getModuleSet(projectUrl);
+        } catch (UniformInterfaceException e) {
+            return false;
+        } catch (HudsonProjectNotFoundException e) {
+            return false;
+        }
+        return true;
+    }
 
-			TestResult unitTestResult = hudsonTestService.buildUnitTestResult(surefireReport);
-			TestResult integrationTestResult = hudsonTestService.buildIntegrationTestResult(surefireReport);
-			hudsonBuild.setUnitTestResult(unitTestResult);
-			hudsonBuild.setIntegrationTestResult(integrationTestResult);
-		} catch (UniformInterfaceException e) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("no test result for " + testResultResource.getURI().toString());
-			}
-		} catch (ClientHandlerException e) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("no test result " + testResultResource.getURI().toString());
-			}
-		}
-	}
+    private String getProjectName(Node node) {
+        Node firstChild = node.getFirstChild();
+        Node firstChild2 = firstChild.getFirstChild();
+        String projectName = firstChild2.getNodeValue();
+        return projectName;
+    }
 
-	HudsonMavenMavenModuleSetBuild findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber)
-	        throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
-		Preconditions.checkNotNull(projectName, "projectName is mandatory");
-		Preconditions.checkArgument(buildNumber >= 0, "buidNumber must be positive");
+    public HudsonProject findProject(String projectName) throws HudsonProjectNotFoundException {
+        try {
+            HudsonMavenMavenModuleSet moduleSet = findJobByProjectName(projectName);
+            HudsonProjectBuilder hudsonProjectBuilder = new HudsonProjectBuilder(hudsonUrlBuilder, this);
+            return hudsonProjectBuilder.createHudsonProjectFrom(moduleSet);
+        } catch (HudsonBuildNotFoundException e) {
+            throw new HudsonProjectNotFoundException(e);
+        }
+    }
 
-		String cacheKey = "build_" + projectName + "_" + buildNumber;
-		Element element = cache.get(cacheKey);
-		if (element != null) {
-			return (HudsonMavenMavenModuleSetBuild) element.getObjectValue();
-		}
-		HudsonMavenMavenModuleSetBuild setBuild = findSetBuild(projectName, buildNumber);
-		cache.put(new Element(cacheKey, setBuild));
-		return setBuild;
-	}
+    public int getLastBuildNumber(String projectName) throws HudsonProjectNotFoundException,
+            HudsonBuildNotFoundException {
+        checkProjectName(projectName);
+        HudsonMavenMavenModuleSet job = findJobByProjectName(projectName);
+        HudsonModelRun run = job.getLastBuild();
+        if (run == null) {
+            throw new HudsonBuildNotFoundException("Project " + projectName + " has no last build");
+        }
+        return run.getNumber();
+    }
 
-	private String[] getCommiters(HudsonMavenMavenModuleSetBuild setBuild) {
-		List<HudsonModelUser> users = setBuild.getCulprit();
-		String[] commiters = new String[users.size()];
-		for (int i = 0; i < users.size(); i++) {
-			commiters[i] = users.get(i).getFullName();
-		}
-		return commiters;
-	}
+    public boolean isBuilding(String projectName) throws HudsonProjectNotFoundException {
+        checkProjectName(projectName);
+        HudsonModelJob job = findJobByProjectName(projectName);
+        return HudsonXmlHelper.getIsBuilding(job);
+    }
 
-	private boolean isSuccessful(HudsonMavenMavenModuleSetBuild job) {
-		Node element = (org.w3c.dom.Element) job.getResult();
+    public String getStateOf(String projectName, int buildNumber) throws HudsonBuildNotFoundException,
+            HudsonProjectNotFoundException {
+        checkProjectName(projectName);
+        checkBuildNumber(buildNumber);
+        HudsonMavenMavenModuleSetBuild build = findBuildByProjectNameAndBuildNumber(projectName, buildNumber);
+        return HudsonXmlHelper.getState(build);
+    }
 
-		if (element == null) {
-			return false;
-		}
+    private HudsonMavenMavenModuleSet findJobByProjectName(String projectName) throws HudsonProjectNotFoundException {
+        try {
+            String projectUrl = hudsonUrlBuilder.getProjectUrl(projectName);
+            if (MavenHelper.isNotMavenProject(projectUrl))
+                throw new HudsonProjectNotFoundException(projectName + " is not a maven project");
+            HudsonMavenMavenModuleSet moduleSet = hudsonJerseyClient.getModuleSet(projectUrl);
+            return moduleSet;
+        } catch (UniformInterfaceException e) {
+            throw new HudsonProjectNotFoundException(e);
+        }
+    }
 
-		Node result = element.getFirstChild();
-		if (result == null) {
-			return false;
-		}
+    private void checkBuildNumber(int buildNumber) {
+        Preconditions.checkArgument(buildNumber >= 0, "buidNumber must be positive");
+    }
 
-		return "SUCCESS".equals(result.getNodeValue());
-	}
+    private void checkProjectName(String projectName) {
+        Preconditions.checkNotNull(projectName, "projectName is mandatory");
+    }
 
-	private HudsonMavenMavenModuleSetBuild findSetBuild(String projectName, int buildNumber)
-	        throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
-		String buildUrl = hudsonUrlBuilder.getBuildUrl(projectName, buildNumber);
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Build url : " + buildUrl);
-		}
-		WebResource jobResource = client.resource(buildUrl);
-		HudsonMavenMavenModuleSetBuild setBuild;
-		try {
-			setBuild = jobResource.get(HudsonMavenMavenModuleSetBuild.class);
-		} catch (UniformInterfaceException e) {
-			if (projectExists(projectName)) {
-				throw new HudsonBuildNotFoundException("Build #" + buildNumber + " not found for project "
-				        + projectName, e);
-			} else {
-				throw new HudsonProjectNotFoundException("Project " + projectName + " not found", e);
-			}
-		}
-		return setBuild;
-	}
-
-	private boolean projectExists(String projectName) {
-		try {
-			findJobByProjectName(projectName);
-		} catch (HudsonProjectNotFoundException e) {
-			return false;
-		}
-		return true;
-	}
-
-	HudsonMavenMavenModuleSet findJobByProjectName(String projectName) throws HudsonProjectNotFoundException {
-		Preconditions.checkNotNull(projectName, "projectName is mandatory");
-		Element element = cache.get(projectName);
-		if (element != null) {
-			return (HudsonMavenMavenModuleSet) element.getObjectValue();
-		}
-		try {
-			String projectUrl = hudsonUrlBuilder.getProjectUrl(projectName);
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Project url : " + projectUrl);
-			}
-			if (isNotMavenProject(projectUrl))
-				throw new HudsonProjectNotFoundException(projectName + " is not a maven project");
-			WebResource projectResource = client.resource(projectUrl);
-			HudsonMavenMavenModuleSet moduleSet = projectResource.get(HudsonMavenMavenModuleSet.class);
-			cache.put(new Element(projectName, moduleSet));
-			return moduleSet;
-		} catch (UniformInterfaceException e) {
-			throw new HudsonProjectNotFoundException(e);
-		}
-	}
-
-	private boolean isNotMavenProject(String projectUrl) {
-		try {
-			byte[] bytes = ByteStreams.toByteArray(new URL(projectUrl).openStream());
-			String content = new String(bytes);
-			return !content.startsWith("<mavenModuleSet>");
-		} catch (Exception e) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Can't define if " + projectUrl + " is a maven project, cause: " + e.getCause());
-			}
-			return true;
-		}
-	}
-
-	public List<String> findProjectNames() {
-		List<String> projectNames = new ArrayList<String>();
-		String projectsUrl = hudsonUrlBuilder.getAllProjectsUrl();
-		WebResource hudsonResource = client.resource(projectsUrl);
-		HudsonModelHudson hudson = hudsonResource.get(HudsonModelHudson.class);
-		for (Object job : hudson.getJob()) {
-			org.w3c.dom.Element element = (org.w3c.dom.Element) job;
-			String name = getProjectName(element);
-			projectNames.add(name);
-		}
-		return projectNames;
-	}
-
-	String getProjectName(Node element) {
-		return element.getFirstChild().getFirstChild().getNodeValue();
-	}
-
-	public List<Object> findHudsonProjects() {
-		String projectsUrl = hudsonUrlBuilder.getAllProjectsUrl();
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("All project url : " + projectsUrl);
-		}
-		WebResource hudsonResource = client.resource(projectsUrl);
-		HudsonModelHudson hudson = hudsonResource.get(HudsonModelHudson.class);
-		List<Object> hudsonProjects = hudson.getJob();
-		if (LOG.isDebugEnabled()) {
-			LOG.debug(hudsonProjects.size() + " projects to update");
-		}
-		return hudsonProjects;
-	}
-
-	String getState(HudsonMavenMavenModuleSetBuild setBuild) {
-		if (setBuild == null) {
-			return "NEW";
-		}
-		org.w3c.dom.Element element = (org.w3c.dom.Element) setBuild.getResult();
-		if (element == null) {
-			return "NEW";
-		}
-
-		return element.getFirstChild().getNodeValue();
-	}
 }

@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package net.awired.visuwall.hudsonclient;
+package net.awired.visuwall.hudsonclient.exception;
 
+public final class HudsonBuildNotFoundException extends Exception {
 
-public class HudsonProjectNotFoundException extends Exception {
+    private static final long serialVersionUID = -6609238015272249116L;
 
-    private static final long serialVersionUID = 4159195103131261896L;
+    public HudsonBuildNotFoundException(String cause, Throwable t) {
+        super(cause, t);
+    }
 
-    public HudsonProjectNotFoundException(Throwable cause) {
+    public HudsonBuildNotFoundException(String cause) {
         super(cause);
     }
 
-    public HudsonProjectNotFoundException(String cause) {
-        super(cause);
-    }
-
-    public HudsonProjectNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

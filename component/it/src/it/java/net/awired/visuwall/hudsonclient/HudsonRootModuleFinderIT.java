@@ -18,6 +18,7 @@ package net.awired.visuwall.hudsonclient;
 
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
+import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 
 import org.junit.Assert;
 import org.junit.Test;

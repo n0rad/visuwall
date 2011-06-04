@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-package net.awired.visuwall.hudsonclient;
+package net.awired.visuwall.hudsonclient.util;
 
-public class NotMavenProjectException extends Exception {
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
-	private static final long serialVersionUID = 6123323199073340395L;
+public class ClasspathFiles {
 
-	public NotMavenProjectException(String message) {
-		super(message);
-	}
-
+    public static String getAbsolutePathFile(String fileName) {
+        try {
+            Class<?> clazz = ClasspathFiles.class;
+            ClassLoader classLoader = clazz.getClassLoader();
+            URL resource = classLoader.getResource(fileName);
+            URI uri = resource.toURI();
+            String pomUrl = "file://" + uri.getPath();
+            return pomUrl;
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
