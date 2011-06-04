@@ -14,9 +14,10 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.hudsonclient;
+package net.awired.visuwall.hudsonclient.loader;
 
 import static org.junit.Assert.assertNotNull;
+import net.awired.visuwall.hudsonclient.loader.DocumentLoader;
 import net.awired.visuwall.hudsonclient.util.ClasspathFiles;
 
 import org.junit.Test;

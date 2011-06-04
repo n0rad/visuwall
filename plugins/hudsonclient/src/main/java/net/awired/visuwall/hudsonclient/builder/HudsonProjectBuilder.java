@@ -18,13 +18,13 @@ package net.awired.visuwall.hudsonclient.builder;
 
 import java.util.List;
 
-import net.awired.visuwall.hudsonclient.HudsonFinder;
-import net.awired.visuwall.hudsonclient.HudsonRootModuleFinder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
+import net.awired.visuwall.hudsonclient.finder.HudsonRootModuleFinder;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelJob;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelRun;

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.hudsonclient;
+package net.awired.visuwall.hudsonclient.loader;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -29,7 +29,7 @@ import com.google.common.io.Closeables;
 
 public class DocumentLoader {
 
-    Document loadFromUrl(String strUrl) throws Exception {
+    public Document loadFromUrl(String strUrl) throws Exception {
         Preconditions.checkNotNull(strUrl, "strUrl is mandatory");
         InputStream stream = null;
         try {

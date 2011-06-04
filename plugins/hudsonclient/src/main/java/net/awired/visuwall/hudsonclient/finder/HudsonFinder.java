@@ -14,21 +14,24 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.hudsonclient;
+package net.awired.visuwall.hudsonclient.finder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 
+import net.awired.visuwall.api.domain.Commiter;
+import net.awired.visuwall.api.domain.Commiters;
+import net.awired.visuwall.hudsonclient.HudsonJerseyClient;
 import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonProjectBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
-import net.awired.visuwall.hudsonclient.builder.HudsonUserBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+import net.awired.visuwall.hudsonclient.generated.hudson.HudsonUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelJob;
@@ -70,8 +73,7 @@ public class HudsonFinder {
     public HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder) {
         this.hudsonJerseyClient = new HudsonJerseyClient();
         this.hudsonUrlBuilder = hudsonUrlBuilder;
-        HudsonUserBuilder hudsonUserBuilder = new HudsonUserBuilder(hudsonUrlBuilder, hudsonJerseyClient);
-        this.hudsonBuildBuilder = new HudsonBuildBuilder(hudsonUserBuilder);
+        this.hudsonBuildBuilder = new HudsonBuildBuilder();
         initCache();
     }
 
@@ -99,7 +101,9 @@ public class HudsonFinder {
             HudsonMavenReportersSurefireAggregatedReport surefireReport = hudsonJerseyClient
                     .getSurefireReport(testResultUrl);
 
-            HudsonBuild hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport);
+            String[] commiterNames = HudsonXmlHelper.getCommiterNames(setBuild);
+            Commiters commiters = findCommiters(commiterNames);
+            HudsonBuild hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport, commiters);
             cache.put(new Element(cacheKey, hudsonBuild));
             return hudsonBuild;
         } catch (UniformInterfaceException e) {
@@ -200,6 +204,20 @@ public class HudsonFinder {
         checkProjectName(projectName);
         HudsonModelJob job = findJobByProjectName(projectName);
         return HudsonXmlHelper.getIsBuilding(job);
+    }
+
+    public Commiters findCommiters(String[] commiterNames) {
+        Preconditions.checkNotNull(commiterNames, "commiterNames is mandatory");
+        Commiters commiters = new Commiters();
+        for (String commiterName : commiterNames) {
+            String url = hudsonUrlBuilder.getUserUrl(commiterName);
+            HudsonUser hudsonUser = hudsonJerseyClient.getHudsonUser(url);
+            Commiter commiter = new Commiter(hudsonUser.getId());
+            commiter.setName(commiterName);
+            commiter.setEmail(hudsonUser.getEmail());
+            commiters.addCommiter(commiter);
+        }
+        return commiters;
     }
 
     public String getStateOf(String projectName, int buildNumber) throws HudsonBuildNotFoundException,

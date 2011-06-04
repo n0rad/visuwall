@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.hudsonclient;
+package net.awired.visuwall.hudsonclient.finder;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
@@ -22,6 +22,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
+import net.awired.visuwall.hudsonclient.finder.HudsonRootModuleFinder;
+import net.awired.visuwall.hudsonclient.loader.DocumentLoader;
 import net.awired.visuwall.hudsonclient.util.ClasspathFiles;
 
 import org.junit.Test;

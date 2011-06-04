@@ -39,79 +39,96 @@ public final class QualityMetric {
     public String getKey() {
         return key;
     }
+
     public void setKey(String key) {
         this.key = key;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
     public String getDomain() {
         return domain;
     }
+
     public void setDomain(String domain) {
         this.domain = domain;
     }
+
     public Boolean getQualitative() {
         return qualitative;
     }
+
     public void setQualitative(Boolean qualitative) {
         this.qualitative = qualitative;
     }
+
     public Integer getDirection() {
         return direction;
     }
+
     public void setDirection(Integer direction) {
         this.direction = direction;
     }
+
     public Boolean getUserManaged() {
         return userManaged;
     }
+
     public void setUserManaged(Boolean userManaged) {
         this.userManaged = userManaged;
     }
+
     public String getValTyp() {
         return valTyp;
     }
+
     public void setValTyp(String valTyp) {
         this.valTyp = valTyp;
     }
+
     public Boolean getHidden() {
         return hidden;
     }
+
     public void setHidden(Boolean hidden) {
         this.hidden = hidden;
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this) //
-        .add("description", description)
-        .add("direction", direction)
-        .add("domain", domain)
-        .add("hidden", hidden)
-        .add("key", key)
-        .add("name", name)
-        .add("qualitative", qualitative)
-        .add("userManaged", userManaged)
-        .add("valTyp", valTyp)
-        .toString();
+        return Objects
+                .toStringHelper(this)
+                //
+                .add("description", description).add("direction", direction).add("domain", domain)
+                .add("hidden", hidden).add("key", key).add("name", name).add("qualitative", qualitative)
+                .add("userManaged", userManaged).add("valTyp", valTyp).toString();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o != null && o instanceof QualityMetric) {
-            return Objects.equal(key, ((QualityMetric)o).key);
+        if (o instanceof QualityMetric) {
+            return Objects.equal(key, ((QualityMetric) o).key);
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(description, domain, key, name);
     }
 }

@@ -29,10 +29,10 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
 
-import net.awired.visuwall.hudsonclient.HudsonFinder;
-import net.awired.visuwall.hudsonclient.HudsonRootModuleFinder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
+import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
+import net.awired.visuwall.hudsonclient.finder.HudsonRootModuleFinder;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
 import net.awired.visuwall.hudsonclient.util.ClasspathFiles;
 

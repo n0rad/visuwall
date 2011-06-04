@@ -38,28 +38,22 @@ public class HudsonBuildBuilder {
 
     private TestResultBuilder testResultBuilder;
 
-    private HudsonUserBuilder hudsonUserBuilder;
-
-    public HudsonBuildBuilder(HudsonUserBuilder hudsonUserBuilder) {
+    public HudsonBuildBuilder() {
         this.testResultBuilder = new TestResultBuilder();
-        this.hudsonUserBuilder = hudsonUserBuilder;
     }
 
-    public HudsonBuildBuilder(TestResultBuilder testResultBuilder, HudsonUserBuilder hudsonUserBuilder) {
+    public HudsonBuildBuilder(TestResultBuilder testResultBuilder) {
         this.testResultBuilder = testResultBuilder;
-        this.hudsonUserBuilder = hudsonUserBuilder;
     }
 
     public HudsonBuild createHudsonBuild(HudsonMavenMavenModuleSetBuild setBuild,
-            HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+            HudsonMavenReportersSurefireAggregatedReport surefireReport, Commiters commiters) {
         Preconditions.checkNotNull(setBuild, "setBuild is mandatory");
         HudsonBuild hudsonBuild = new HudsonBuild();
         hudsonBuild.setState(HudsonXmlHelper.getState(setBuild));
         hudsonBuild.setDuration(setBuild.getDuration());
         hudsonBuild.setStartTime(new Date(setBuild.getTimestamp()));
         hudsonBuild.setSuccessful(HudsonXmlHelper.isSuccessful(setBuild));
-        String[] commiterNames = HudsonXmlHelper.getCommiterNames(setBuild);
-        Commiters commiters = hudsonUserBuilder.getCommiters(commiterNames);
         hudsonBuild.setCommiters(commiters);
         hudsonBuild.setBuildNumber(setBuild.getNumber());
         addTestResults(setBuild, surefireReport, hudsonBuild);

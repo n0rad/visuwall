@@ -14,10 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.hudsonclient;
+package net.awired.visuwall.hudsonclient.finder;
 
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
+import net.awired.visuwall.hudsonclient.loader.DocumentLoader;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -32,7 +33,7 @@ public class HudsonRootModuleFinder {
     HudsonUrlBuilder hudsonUrlBuilder;
 
     @VisibleForTesting
-    DocumentLoader documentLoader = new DocumentLoader();
+    public DocumentLoader documentLoader = new DocumentLoader();
 
     public HudsonRootModuleFinder(HudsonUrlBuilder hudsonUrlBuilder) {
         this.hudsonUrlBuilder = hudsonUrlBuilder;

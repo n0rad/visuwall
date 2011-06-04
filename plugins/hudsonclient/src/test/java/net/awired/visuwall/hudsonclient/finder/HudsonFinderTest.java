@@ -14,8 +14,9 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.hudsonclient;
+package net.awired.visuwall.hudsonclient.finder;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -29,12 +30,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
+import net.awired.visuwall.api.domain.Commiter;
+import net.awired.visuwall.api.domain.Commiters;
+import net.awired.visuwall.hudsonclient.HudsonJerseyClient;
 import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.builder.TestResultBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
+import net.awired.visuwall.hudsonclient.generated.hudson.HudsonUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
@@ -67,12 +73,30 @@ public class HudsonFinderTest {
     }
 
     @Test
+    public void testFindCommiters() {
+        HudsonUser user = new HudsonUser();
+        user.setId("jsmadja");
+        user.setName("Julien Smadja");
+        user.setEmail("jsmadja@xebia.fr");
+
+        when(hudsonJerseyClient.getHudsonUser(anyString())).thenReturn(user);
+
+        Commiters commiters = hudsonFinder.findCommiters(new String[] { "Julien Smadja" });
+
+        Commiter commiter = commiters.asSet().iterator().next();
+        assertEquals("jsmadja", commiter.getId());
+        assertEquals("Julien Smadja", commiter.getName());
+        assertEquals("jsmadja@xebia.fr", commiter.getEmail());
+    }
+
+    @Test
     public void testFind() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
         when(hudsonJerseyClient.getModuleSetBuild(anyString())).thenReturn(moduleSetBuild);
         when(hudsonJerseyClient.getSurefireReport(anyString())).thenReturn(surefireReport);
         when(
                 hudsonBuildBuilder.createHudsonBuild(any(HudsonMavenMavenModuleSetBuild.class),
-                        any(HudsonMavenReportersSurefireAggregatedReport.class))).thenReturn(new HudsonBuild());
+                        any(HudsonMavenReportersSurefireAggregatedReport.class), any(Commiters.class))).thenReturn(
+                new HudsonBuild());
 
         HudsonBuild hudsonBuild = hudsonFinder.find("projectName", 5);
 
