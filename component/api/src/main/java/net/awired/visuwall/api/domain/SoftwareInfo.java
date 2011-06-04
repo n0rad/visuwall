@@ -7,14 +7,12 @@ public class SoftwareInfo {
 	private String[] warnings;
 	private PluginInfo pluginInfo;
 
+	// ////////////////////////////////
 	
-	void setPluginInfo(PluginInfo pluginInfo) {
+	public void setPluginInfo(PluginInfo pluginInfo) {
 		this.pluginInfo = pluginInfo;
 	}
 
-	
-	//////////////////////////////////
-	
 	public String getName() {
 		return name;
 	}

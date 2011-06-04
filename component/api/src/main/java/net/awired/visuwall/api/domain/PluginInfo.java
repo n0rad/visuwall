@@ -21,13 +21,13 @@ public class PluginInfo {
 	private String name;
 	private float version;
 	private String className;
-	
-	void setClassName(String className) {
+
+	// //////////////////////
+
+	public void setClassName(String className) {
 		this.className = className;
 	}
-	
-	////////////////////////
-	
+
 	public String getName() {
 		return name;
 	}

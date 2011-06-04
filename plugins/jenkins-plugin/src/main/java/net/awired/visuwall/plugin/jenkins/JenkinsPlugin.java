@@ -44,6 +44,7 @@ public class JenkinsPlugin implements VisuwallPlugin {
     	PluginInfo pluginInfo = new PluginInfo();
     	pluginInfo.setName("Jenkins plugin");
     	pluginInfo.setVersion(1.0f);
+    	pluginInfo.setClassName(this.getClass().getName());
     	return pluginInfo;
     }
 
@@ -51,6 +52,7 @@ public class JenkinsPlugin implements VisuwallPlugin {
     public SoftwareInfo isManageable(URL url) {
         Preconditions.checkNotNull(url, "url is mandatory");
         SoftwareInfo softwareInfo = new SoftwareInfo();
+        softwareInfo.setPluginInfo(getInfo());
         InputStream stream = null;
         try {
             url = new URL(url.toString() + "/api/");
