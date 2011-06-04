@@ -17,6 +17,7 @@
 package net.awired.visuwall.plugin.jenkins;
 
 import net.awired.visuwall.api.domain.Build;
+import net.awired.visuwall.api.domain.Commiters;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.domain.TestResult;
@@ -64,7 +65,8 @@ public class ProjectBuilder {
 			build.setIntegrationTestResult(integrationTestResult);
 		}
 
-		build.setCommiters(hudsonBuild.getCommiters());
+		Commiters commiters = hudsonBuild.getCommiters();
+        build.setCommiters(commiters);
 		build.setDuration(hudsonBuild.getDuration());
 		build.setStartTime(hudsonBuild.getStartTime());
 		build.setBuildNumber(hudsonBuild.getBuildNumber());

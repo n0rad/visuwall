@@ -16,7 +16,6 @@
 
 package net.awired.visuwall.hudsonclient.helper;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -52,17 +51,21 @@ public class HudsonXmlHelperTest {
     @Test
     public void testGetCommiters() {
         List<HudsonModelUser> users = new ArrayList<HudsonModelUser>();
-        users.add(new HudsonModelUser());
-        users.add(new HudsonModelUser());
-        users.get(0).setFullName("dude");
-        users.get(1).setFullName("sweet");
+        HudsonModelUser user1 = new HudsonModelUser();
+        HudsonModelUser user2 = new HudsonModelUser();
+
+        user1.setFullName("dude");
+        user2.setFullName("sweet");
+
+        users.add(user1);
+        users.add(user2);
 
         HudsonMavenMavenModuleSetBuild setBuild = mock(HudsonMavenMavenModuleSetBuild.class);
         when(setBuild.getCulprit()).thenReturn(users);
 
-        String[] usersFromModel = HudsonXmlHelper.getCommiters(setBuild);
-
-        assertArrayEquals(new String[] { "dude", "sweet" }, usersFromModel);
+        String[] commiters = HudsonXmlHelper.getCommiterNames(setBuild);
+        assertEquals("dude", commiters[0]);
+        assertEquals("sweet", commiters[1]);
     }
 
     @Test

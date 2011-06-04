@@ -21,6 +21,7 @@ import java.util.List;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelJob;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
+import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonModelUserProperty;
 
 import org.w3c.dom.Node;
 
@@ -34,14 +35,25 @@ public class HudsonXmlHelper {
         return "SUCCESS".equals(state);
     }
 
-    public static String[] getCommiters(HudsonMavenMavenModuleSetBuild setBuild) {
+    public static String[] getCommiterNames(HudsonMavenMavenModuleSetBuild setBuild) {
         checkSetBuild(setBuild);
         List<HudsonModelUser> users = setBuild.getCulprit();
         String[] commiters = new String[users.size()];
         for (int i = 0; i < users.size(); i++) {
-            commiters[i] = users.get(i).getFullName();
+            HudsonModelUser hudsonModelUser = users.get(i);
+            String name = hudsonModelUser.getFullName();
+            commiters[i] = name;
         }
         return commiters;
+    }
+
+    private static String email(HudsonModelUser hudsonModelUser) {
+        for (HudsonModelUserProperty property : hudsonModelUser.getProperty()) {
+            String propertyValue = property.toString();
+            if (propertyValue != null && propertyValue.length() > 0)
+                return propertyValue;
+        }
+        return null;
     }
 
     public static String getState(HudsonMavenMavenModuleSetBuild setBuild) {

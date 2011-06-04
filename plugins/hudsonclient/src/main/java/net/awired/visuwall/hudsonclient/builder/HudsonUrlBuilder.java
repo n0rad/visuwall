@@ -25,6 +25,7 @@ public class HudsonUrlBuilder {
     private static final String API_XML = "/api/xml";
     private static final String ALL_JOBS_URI = "";
     private static final String JOB_URI = "/job";
+    private static final String USER_URI = "/user";
 
     public HudsonUrlBuilder(String hudsonUrl) {
         Preconditions.checkNotNull(hudsonUrl);
@@ -86,4 +87,8 @@ public class HudsonUrlBuilder {
         Preconditions.checkArgument(buildNumber >= 0, "buidNumber must be positive");
     }
 
+    public String getUserUrl(String userName) {
+        Preconditions.checkNotNull(userName, "userName is mandatory");
+        return hudsonUrl + USER_URI + "/" + encode(userName) + API_XML;
+    }
 }

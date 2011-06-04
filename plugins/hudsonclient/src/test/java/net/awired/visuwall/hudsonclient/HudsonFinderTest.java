@@ -63,7 +63,7 @@ public class HudsonFinderTest {
         testResultBuilder = mock(TestResultBuilder.class);
         hudsonJerseyClient = mock(HudsonJerseyClient.class);
         hudsonBuildBuilder = mock(HudsonBuildBuilder.class);
-        hudsonFinder = new HudsonFinder(hudsonUrlBuilder, hudsonJerseyClient, testResultBuilder, hudsonBuildBuilder);
+        hudsonFinder = new HudsonFinder(hudsonUrlBuilder, hudsonJerseyClient, hudsonBuildBuilder);
     }
 
     @Test

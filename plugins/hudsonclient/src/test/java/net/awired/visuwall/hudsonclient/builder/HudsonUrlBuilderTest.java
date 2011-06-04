@@ -66,4 +66,10 @@ public class HudsonUrlBuilderTest {
     public void should_not_accept_negative_numbers_as_build_number() {
         hudsonUrlBuilder.getBuildUrl("struts", -1);
     }
+
+    @Test
+    public void should_create_user_url() {
+        String userUrl = hudsonUrlBuilder.getUserUrl("Julien Smadja");
+        assertEquals("http://ci.visuwall.awired.net/user/Julien%20Smadja/api/xml", userUrl);
+    }
 }

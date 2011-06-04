@@ -17,12 +17,6 @@
 package net.awired.visuwall.cli;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.jar.Manifest;
-import java.util.logging.Level;
 
 import net.awired.aclm.argument.CliArgumentManager;
 import net.awired.aclm.argument.CliArgumentParseException;
@@ -38,90 +32,86 @@ import net.awired.visuwall.core.application.enumeration.LogLevelEnum;
 
 class ArgumentManager extends CliArgumentManager {
 
-	public final CliOneParamArgument<Integer> portArg;
+    public final CliOneParamArgument<Integer> portArg;
 
-	public final CliOneParamArgument<String> contextPath;
+    public final CliOneParamArgument<String> contextPath;
 
-	public final CliNoParamArgument info;
+    public final CliNoParamArgument info;
 
-	public final CliOneParamArgument<File> rootFolder;
+    public final CliOneParamArgument<File> rootFolder;
 
-	public final CliNoParamArgument clearDb;
+    public final CliNoParamArgument clearDb;
 
-	public final CliOneParamArgument<LogLevelEnum> logLevel;
+    public final CliOneParamArgument<LogLevelEnum> logLevel;
 
-	public final CliOneParamArgument<FileInfoEnum> displayFile;
+    public final CliOneParamArgument<FileInfoEnum> displayFile;
 
-	public ArgumentManager(Main main) {
-		super("visuwall");
+    public ArgumentManager(Main main) {
+        super("visuwall");
 
-		// -d
-		displayFile = new CliOneParamArgument<FileInfoEnum>('d',
-				new CliParamEnum<FileInfoEnum>("file", FileInfoEnum.class));
-		displayFile.setDescription("Display an information file and exit");
-		displayFile.setName("display");
-		addArg(displayFile);
+        // -d
+        displayFile = new CliOneParamArgument<FileInfoEnum>('d', new CliParamEnum<FileInfoEnum>("file",
+                FileInfoEnum.class));
+        displayFile.setDescription("Display an information file and exit");
+        displayFile.setName("display");
+        addArg(displayFile);
 
-		// -C
-		clearDb = new CliNoParamArgument('C');
-		clearDb.setName("clear");
-		clearDb.setDescription("Clear database and exit");
-		addArg(clearDb);
+        // -C
+        clearDb = new CliNoParamArgument('C');
+        clearDb.setName("clear");
+        clearDb.setDescription("Clear database and exit");
+        addArg(clearDb);
 
-		// -p
-		CliParamInt portParam = new CliParamInt("port");
-		portParam.setNegativable(false);
-		portParam.setZeroable(false);
-		portArg = new CliOneParamArgument<Integer>('p', portParam);
-		portArg.setParamOneDefValue(8081);
-		portArg.setName("port");
-		portArg.setDescription("Port for servlet Contrainer");
-		addArg(portArg);
+        // -p
+        CliParamInt portParam = new CliParamInt("port");
+        portParam.setNegativable(false);
+        portParam.setZeroable(false);
+        portArg = new CliOneParamArgument<Integer>('p', portParam);
+        portArg.setParamOneDefValue(8081);
+        portArg.setName("port");
+        portArg.setDescription("Port for servlet Contrainer");
+        addArg(portArg);
 
-		// -c
-		contextPath = new CliOneParamArgument<String>('c', new CliParamString(
-				"contextPath"));
-		contextPath.setParamOneDefValue("/");
-		contextPath.setName("contextpath");
-		contextPath.setDescription("Context path to access the application");
-		addArg(contextPath);
+        // -c
+        contextPath = new CliOneParamArgument<String>('c', new CliParamString("contextPath"));
+        contextPath.setParamOneDefValue("/");
+        contextPath.setName("contextpath");
+        contextPath.setDescription("Context path to access the application");
+        addArg(contextPath);
 
-		// -i
-		info = new CliNoParamArgument('i');
-		info.setName("info");
-		info.setDescription("Print Visuwall information and exit");
-		addArg(info);
+        // -i
+        info = new CliNoParamArgument('i');
+        info.setName("info");
+        info.setDescription("Print Visuwall information and exit");
+        addArg(info);
 
-		// -r
-		rootFolder = new CliOneParamArgument<File>('r',
-				new CliParamFile("home") {
-					@Override
-					public File parse(String param)
-							throws CliArgumentParseException {
-						File res = super.parse(param);
-						System.setProperty(ApplicationHelper.HOME_KEY, param);
-						return res;
-					}
-				});
-		rootFolder.setParamOneDefValue(new File("~/.visuwall"));
-		rootFolder.setName("home");
-		rootFolder.setDescription("Visuwall root folder");
-		addArg(rootFolder);
+        // -r
+        rootFolder = new CliOneParamArgument<File>('r', new CliParamFile("home") {
+            @Override
+            public File parse(String param) throws CliArgumentParseException {
+                File res = super.parse(param);
+                System.setProperty(ApplicationHelper.HOME_KEY, param);
+                return res;
+            }
+        });
+        rootFolder.setParamOneDefValue(new File("~/.visuwall"));
+        rootFolder.setName("home");
+        rootFolder.setDescription("Visuwall root folder");
+        addArg(rootFolder);
 
-		// -l
-		logLevel = new CliOneParamArgument<LogLevelEnum>('l',
-				new CliParamEnum<LogLevelEnum>("level", LogLevelEnum.class) {
-			@Override
-			public LogLevelEnum parse(String param)
-					throws CliArgumentParseException {
-				LogLevelEnum res = super.parse(param);
-				System.setProperty(ApplicationHelper.LOG_LVL_KEY, param);
-				return res;
-			}
-		});
-		logLevel.setDescription("Change log level");
-		logLevel.setParamOneDefValue(LogLevelEnum.warn);
-		logLevel.setName("level");
-		addArg(logLevel);
-	}
+        // -l
+        logLevel = new CliOneParamArgument<LogLevelEnum>('l', new CliParamEnum<LogLevelEnum>("level",
+                LogLevelEnum.class) {
+            @Override
+            public LogLevelEnum parse(String param) throws CliArgumentParseException {
+                LogLevelEnum res = super.parse(param);
+                System.setProperty(ApplicationHelper.LOG_LVL_KEY, param);
+                return res;
+            }
+        });
+        logLevel.setDescription("Change log level");
+        logLevel.setParamOneDefValue(LogLevelEnum.warn);
+        logLevel.setName("level");
+        addArg(logLevel);
+    }
 }

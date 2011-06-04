@@ -16,7 +16,6 @@
 
 package net.awired.visuwall.api.domain;
 
-import java.util.Arrays;
 import java.util.Date;
 
 import net.awired.visuwall.api.domain.ProjectStatus.State;
@@ -26,93 +25,97 @@ import com.google.common.base.Objects.ToStringHelper;
 
 public final class Build {
 
-	private State state = State.UNKNOWN;
-	private String[] commiters;
-	private long duration;
-	private Date startTime;
-	private TestResult unitTestResult = new TestResult();
-	private TestResult integrationTestResult = new TestResult();
-	private int buildNumber;
+    private State state = State.UNKNOWN;
+    private Commiters commiters = new Commiters();
+    private long duration;
+    private Date startTime;
+    private TestResult unitTestResult = new TestResult();
+    private TestResult integrationTestResult = new TestResult();
+    private int buildNumber;
 
-	public String[] getCommiters() {
-		return commiters;
-	}
+    public Commiters getCommiters() {
+        return commiters;
+    }
 
-	public void setCommiters(String[] commiters) {
-		if (commiters != null) {
-			this.commiters = commiters.clone();
-		} //TODO else ?
-	}
+    public void addCommiter(Commiter commiter) {
+        commiters.addCommiter(commiter);
+    }
 
-	public long getDuration() {
-		return duration;
-	}
+    public long getDuration() {
+        return duration;
+    }
 
-	public void setDuration(long duration) {
-		this.duration = duration;
-	}
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
 
-	public Date getStartTime() {
-		return startTime;
-	}
+    public Date getStartTime() {
+        return startTime;
+    }
 
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
 
-	public TestResult getUnitTestResult() {
-		return unitTestResult;
-	}
+    public TestResult getUnitTestResult() {
+        return unitTestResult;
+    }
 
-	public TestResult getIntegrationTestResult() {
-		return integrationTestResult;
-	}
+    public TestResult getIntegrationTestResult() {
+        return integrationTestResult;
+    }
 
-	public State getState() {
-		return state;
-	}
+    public State getState() {
+        return state;
+    }
 
-	public void setState(State state) {
-		this.state = state;
-	}
+    public void setState(State state) {
+        this.state = state;
+    }
 
-	public int getBuildNumber() {
-		return buildNumber;
-	}
+    public int getBuildNumber() {
+        return buildNumber;
+    }
 
-	public void setBuildNumber(int buildNumber) {
-		this.buildNumber = buildNumber;
-	}
+    public void setBuildNumber(int buildNumber) {
+        this.buildNumber = buildNumber;
+    }
 
-	@Override
-	public String toString() {
-		ToStringHelper toString = Objects.toStringHelper(this) //
-		        .add("builder number", buildNumber) //
-		        .add("state", state) //
-		        .add("commiters", Arrays.toString(commiters)) //
-		        .add("duration", duration) //
-		        .add("startTime", startTime);
-		if (unitTestResult != null) {
-			toString.add("unit test result", unitTestResult.toString());
-		}
-		if (integrationTestResult != null) {
-			toString.add("integration test result", integrationTestResult.toString());
-		}
-		return toString.toString();
-	}
+    @Override
+    public String toString() {
+        ToStringHelper toString = Objects.toStringHelper(this) //
+                .add("builder number", buildNumber) //
+                .add("state", state) //
+                .add("commiters", commiters) //
+                .add("duration", duration) //
+                .add("startTime", startTime);
+        if (unitTestResult != null) {
+            toString.add("unit test result", unitTestResult.toString());
+        }
+        if (integrationTestResult != null) {
+            toString.add("integration test result", integrationTestResult.toString());
+        }
+        return toString.toString();
+    }
 
-	public void setIntegrationTestResult(TestResult integrationTestResult) {
-		setTestResult(integrationTestResult, this.integrationTestResult);
-	}
+    public void setIntegrationTestResult(TestResult integrationTestResult) {
+        setTestResult(integrationTestResult, this.integrationTestResult);
+    }
 
-	public void setUnitTestResult(TestResult unitTestResult) {
-		setTestResult(unitTestResult, this.unitTestResult);
-	}
+    public void setUnitTestResult(TestResult unitTestResult) {
+        setTestResult(unitTestResult, this.unitTestResult);
+    }
 
-	private void setTestResult(TestResult from, TestResult to) {
-		to.setCoverage(from.getCoverage());
-		to.setFailCount(from.getFailCount());
-		to.setPassCount(from.getPassCount());
-		to.setSkipCount(from.getSkipCount());
-	}
+    private void setTestResult(TestResult from, TestResult to) {
+        to.setCoverage(from.getCoverage());
+        to.setFailCount(from.getFailCount());
+        to.setPassCount(from.getPassCount());
+        to.setSkipCount(from.getSkipCount());
+    }
+
+    public void setCommiters(Commiters commiters) {
+        for (Commiter commiter : commiters.asSet()) {
+            addCommiter(commiter);
+        }
+    }
 }

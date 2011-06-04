@@ -24,7 +24,7 @@ import javax.ws.rs.WebApplicationException;
 import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonProjectBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
-import net.awired.visuwall.hudsonclient.builder.TestResultBuilder;
+import net.awired.visuwall.hudsonclient.builder.HudsonUserBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
@@ -60,16 +60,24 @@ public class HudsonFinder {
     private HudsonBuildBuilder hudsonBuildBuilder;
 
     public HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder, HudsonJerseyClient hudsonJerseyClient,
-            TestResultBuilder testResultBuilder, HudsonBuildBuilder hudsonBuildBuilder) {
+            HudsonBuildBuilder hudsonBuildBuilder) {
         this.hudsonJerseyClient = hudsonJerseyClient;
         this.hudsonUrlBuilder = hudsonUrlBuilder;
         this.hudsonBuildBuilder = hudsonBuildBuilder;
-        CacheManager cacheManager = CacheManager.create();
-        cache = cacheManager.getCache("hudson_projects_cache");
+        initCache();
     }
 
-    public HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder, HudsonJerseyClient hudsonJerseyClient) {
-        this(hudsonUrlBuilder, hudsonJerseyClient, new TestResultBuilder(), new HudsonBuildBuilder());
+    public HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder) {
+        this.hudsonJerseyClient = new HudsonJerseyClient();
+        this.hudsonUrlBuilder = hudsonUrlBuilder;
+        HudsonUserBuilder hudsonUserBuilder = new HudsonUserBuilder(hudsonUrlBuilder, hudsonJerseyClient);
+        this.hudsonBuildBuilder = new HudsonBuildBuilder(hudsonUserBuilder);
+        initCache();
+    }
+
+    private void initCache() {
+        CacheManager cacheManager = CacheManager.create();
+        cache = cacheManager.getCache("hudson_projects_cache");
     }
 
     public HudsonBuild find(String projectName, int buildNumber) throws HudsonBuildNotFoundException,
