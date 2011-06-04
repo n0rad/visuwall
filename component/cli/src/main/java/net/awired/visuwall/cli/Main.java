@@ -21,12 +21,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.ProtectionDomain;
 
-import net.awired.visuwall.cli.common.ApplicationHelper;
+import net.awired.visuwall.core.application.common.ApplicationHelper;
 
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
+
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+
 
 import com.google.common.io.Files;
 
@@ -41,12 +46,14 @@ public class Main {
 	public void run(String[] args) {
 		argManager.parse(args);
 
+		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+		root.setLevel(argManager.logLevel.getParamOneValue().getLevel());
+
 		if (argManager.displayFile.isSet()) {
 			argManager.displayFile.getParamOneValue().display();
 			System.exit(0);
 		}
 
-		
 		if (argManager.info.isSet()) {
 			printInfo();
 			System.exit(0);
@@ -92,7 +99,6 @@ public class Main {
 
 		ProtectionDomain protectionDomain = Main.class.getProtectionDomain();
 		URL location = protectionDomain.getCodeSource().getLocation();
-		System.out.println("Starting to load :" + location);
 		context.setDescriptor(location.toExternalForm() + "/WEB-INF/web.xml");
 		context.setWar(location.toExternalForm());
 

@@ -17,7 +17,7 @@
 
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
 	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+		<listener-class>net.awired.visuwall.server.application.VisuwallContextLoaderListener</listener-class>
 	</listener>
 
 	<!-- Processes application requests -->

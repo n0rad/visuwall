@@ -32,9 +32,9 @@ import net.awired.aclm.param.CliParamEnum;
 import net.awired.aclm.param.CliParamFile;
 import net.awired.aclm.param.CliParamInt;
 import net.awired.aclm.param.CliParamString;
-import net.awired.visuwall.cli.common.ApplicationHelper;
-import net.awired.visuwall.cli.enumeration.FileInfoEnum;
-import net.awired.visuwall.cli.enumeration.LogLevelEnum;
+import net.awired.visuwall.core.application.common.ApplicationHelper;
+import net.awired.visuwall.core.application.enumeration.FileInfoEnum;
+import net.awired.visuwall.core.application.enumeration.LogLevelEnum;
 
 class ArgumentManager extends CliArgumentManager {
 

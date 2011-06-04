@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.cli.common;
+package net.awired.visuwall.core.application.common;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +26,9 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import net.awired.visuwall.cli.enumeration.LogLevelEnum;
+import ch.qos.logback.classic.Level;
+
+import net.awired.visuwall.core.application.enumeration.LogLevelEnum;
 
 public class ApplicationHelper {
 
@@ -63,19 +65,28 @@ public class ApplicationHelper {
 		}
 		return "Unknow Version";
 	}
-	
-	public static LogLevelEnum findLogLvl() {
+
+	public static Level findLogLvl() {
 		String logLvl = System.getProperty(LOG_LVL_KEY);
-		return LogLevelEnum.valueOf(logLvl);
+		LogLevelEnum logLevelEnum = null;
+		if (logLvl != null) {
+			logLevelEnum = LogLevelEnum.valueOf(logLvl);
+		}
+		if (logLevelEnum != null) {
+			return logLevelEnum.getLevel();
+		} else {
+			return Level.INFO;
+		}
 	}
 
 	public static String findHomeDir() {
 
-		//TODO redirect to tmp or $TMP or check at start in cli if home is not writable  
-		//		if (home == null) {
-//			home = "/tmp";
-//		}
-		
+		// TODO redirect to tmp or $TMP or check at start in cli if home is not
+		// writable
+		// if (home == null) {
+		// home = "/tmp";
+		// }
+
 		// check JNDI for the home directory first
 		try {
 			InitialContext iniCtxt = new InitialContext();

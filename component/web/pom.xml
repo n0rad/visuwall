@@ -38,10 +38,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>
-			<artifactId>visuwall-cli-common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-core</artifactId>
 		</dependency>
 		<dependency>
