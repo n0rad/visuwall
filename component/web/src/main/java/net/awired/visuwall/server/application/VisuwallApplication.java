@@ -19,13 +19,16 @@ package net.awired.visuwall.server.application;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
 
-import net.awired.visuwall.cli.common.ApplicationHelper;
-import net.awired.visuwall.cli.enumeration.LogLevelEnum;
+import net.awired.visuwall.core.application.common.ApplicationHelper;
+import net.awired.visuwall.core.application.enumeration.LogLevelEnum;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.ServletContextAware;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.ServletContextAware;
+
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 
@@ -35,15 +38,14 @@ public class VisuwallApplication implements ServletContextAware {
 	private ServletContext context;
 	protected String version;
 	protected String home;
-	protected Level logLvl;
 
+	
 	// @PostConstruct
 	public void init() {
 		try {
 			home = ApplicationHelper.findHomeDir();
 			version = ApplicationHelper.findVersion(context
 					.getResourceAsStream("META-INF/MANIFEST.MF"));
-			logLvl = findLogLevelFromSystem();
 
 			System.out.println("######################################");
 			System.out.println("version : " + version);
@@ -53,33 +55,7 @@ public class VisuwallApplication implements ServletContextAware {
 			// e.printStackTrace();
 		}
 
-		if (logLvl != null) {
-			Logger root = (Logger) LoggerFactory
-					.getLogger(Logger.ROOT_LOGGER_NAME);
-			System.out.println("Change log level to :" + logLvl);
-			root.setLevel(logLvl);
-		}
-	}
 
-	public Level findLogLevelFromSystem() {
-		LogLevelEnum cliLvl = ApplicationHelper.findLogLvl();
-		if (cliLvl == null) {
-			return null;
-		}
-		switch (cliLvl) {
-		case trace:
-			return Level.TRACE;
-		case info:
-			return Level.INFO;
-		case debug:
-			return Level.DEBUG;
-		case error:
-			return Level.ERROR;
-		case warn:
-			return Level.WARN;
-		default:
-			throw new RuntimeException("log level not managed");
-		}
 	}
 
 	public Properties visuwallProperties() {
