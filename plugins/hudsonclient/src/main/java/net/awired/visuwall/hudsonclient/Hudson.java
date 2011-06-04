@@ -231,8 +231,7 @@ public class Hudson {
 
     public Hudson(String hudsonUrl) {
         HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(hudsonUrl);
-        HudsonJerseyClient hudsonJerseyClient = new HudsonJerseyClient();
-        hudsonFinder = new HudsonFinder(hudsonUrlBuilder, hudsonJerseyClient);
+        hudsonFinder = new HudsonFinder(hudsonUrlBuilder);
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize hudson with url " + hudsonUrl);
         }

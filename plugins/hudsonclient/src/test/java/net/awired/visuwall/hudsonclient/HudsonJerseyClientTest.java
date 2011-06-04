@@ -206,6 +206,7 @@ package net.awired.visuwall.hudsonclient;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
+import net.awired.visuwall.hudsonclient.generated.hudson.HudsonUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
@@ -245,6 +246,13 @@ public class HudsonJerseyClientTest {
         HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonModelHudson());
         HudsonModelHudson hudsonModel = hudsonJerseyClient.getHudsonJobs("url");
         assertNotNull(hudsonModel);
+    }
+
+    @Test
+    public void testGetHudsonUser() {
+        HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonUser());
+        HudsonUser hudsonUser = hudsonJerseyClient.getHudsonUser("url");
+        assertNotNull(hudsonUser);
     }
 
     private HudsonJerseyClient prepareClientFor(Object o) {

@@ -204,6 +204,7 @@
 
 package net.awired.visuwall.hudsonclient;
 
+import net.awired.visuwall.hudsonclient.generated.hudson.HudsonUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
@@ -262,6 +263,13 @@ public class HudsonJerseyClient {
 
     private void checkUrl(String url) {
         Preconditions.checkNotNull(url, "url is mandatory");
+    }
+
+    public HudsonUser getHudsonUser(String url) {
+        checkUrl(url);
+        WebResource hudsonResource = client.resource(url);
+        HudsonUser user = hudsonResource.get(HudsonUser.class);
+        return user;
     }
 
 }

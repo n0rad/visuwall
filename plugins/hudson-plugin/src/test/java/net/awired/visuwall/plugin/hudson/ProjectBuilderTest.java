@@ -206,7 +206,9 @@ package net.awired.visuwall.plugin.hudson;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import net.awired.visuwall.api.domain.Build;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
@@ -252,11 +254,14 @@ public class ProjectBuilderTest {
 
     @Test
     public void should_add_current_build_and_completed_build() {
+        Commiter commiter1 = new Commiter("commiter1");
+        Commiter commiter2 = new Commiter("commiter2");
+
         HudsonBuild currentBuild = new HudsonBuild();
-        currentBuild.setCommiters(new String[]{"commiter1"});
+        currentBuild.addCommiter(commiter1);
 
         HudsonBuild completedBuild = new HudsonBuild();
-        completedBuild.setCommiters(new String[]{"commiter2"});
+        completedBuild.addCommiter(commiter2);
 
         HudsonProject hudsonProject = new HudsonProject();
         hudsonProject.setCurrentBuild(currentBuild);
@@ -265,8 +270,8 @@ public class ProjectBuilderTest {
         Project project = new Project("");
         projectBuilder.addCurrentAndCompletedBuilds(project, hudsonProject);
 
-        assertEquals("commiter1", project.getCurrentBuild().getCommiters()[0]);
-        assertEquals("commiter2", project.getCompletedBuild().getCommiters()[0]);
+        assertTrue(project.getCurrentBuild().getCommiters().contains(commiter1));
+        assertTrue(project.getCompletedBuild().getCommiters().contains(commiter2));
     }
 
     @Test
@@ -274,8 +279,8 @@ public class ProjectBuilderTest {
         HudsonProject hudsonProject = new HudsonProject();
         hudsonProject.setDescription("description");
         hudsonProject.setName("name");
-        int[] buildNumbers = new int[]{1,2,3};
-        hudsonProject.setBuildNumbers(buildNumbers );
+        int[] buildNumbers = new int[] { 1, 2, 3 };
+        hudsonProject.setBuildNumbers(buildNumbers);
 
         Project project = projectBuilder.buildProjectFrom(hudsonProject);
 

@@ -206,6 +206,7 @@ package net.awired.visuwall.hudsonclient.builder;
 
 import java.util.Date;
 
+import net.awired.visuwall.api.domain.Commiters;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
@@ -225,12 +226,16 @@ public class HudsonBuildBuilder {
 
     private TestResultBuilder testResultBuilder;
 
-    public HudsonBuildBuilder() {
+    private HudsonUserBuilder hudsonUserBuilder;
+
+    public HudsonBuildBuilder(HudsonUserBuilder hudsonUserBuilder) {
         this.testResultBuilder = new TestResultBuilder();
+        this.hudsonUserBuilder = hudsonUserBuilder;
     }
 
-    public HudsonBuildBuilder(TestResultBuilder testResultBuilder) {
+    public HudsonBuildBuilder(TestResultBuilder testResultBuilder, HudsonUserBuilder hudsonUserBuilder) {
         this.testResultBuilder = testResultBuilder;
+        this.hudsonUserBuilder = hudsonUserBuilder;
     }
 
     public HudsonBuild createHudsonBuild(HudsonMavenMavenModuleSetBuild setBuild,
@@ -241,7 +246,9 @@ public class HudsonBuildBuilder {
         hudsonBuild.setDuration(setBuild.getDuration());
         hudsonBuild.setStartTime(new Date(setBuild.getTimestamp()));
         hudsonBuild.setSuccessful(HudsonXmlHelper.isSuccessful(setBuild));
-        hudsonBuild.setCommiters(HudsonXmlHelper.getCommiters(setBuild));
+        String[] commiterNames = HudsonXmlHelper.getCommiterNames(setBuild);
+        Commiters commiters = hudsonUserBuilder.getCommiters(commiterNames);
+        hudsonBuild.setCommiters(commiters);
         hudsonBuild.setBuildNumber(setBuild.getNumber());
         addTestResults(setBuild, surefireReport, hudsonBuild);
         return hudsonBuild;

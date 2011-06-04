@@ -204,7 +204,6 @@
 
 package net.awired.visuwall.hudsonclient.builder;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -214,6 +213,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import net.awired.visuwall.api.domain.Commiter;
+import net.awired.visuwall.api.domain.Commiters;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
@@ -228,11 +229,17 @@ public class HudsonBuildBuilderTest {
     public void should_create_valid_hudson_build() {
         long duration = 123L;
         int buildNumber = 34;
-        String[] commiters = new String[] { "dude", "sweet" };
+        Commiters commiters = new Commiters();
+        commiters.addCommiter(new Commiter("dude"));
+        commiters.addCommiter(new Commiter("sweet"));
+
         TestResult integrationTests = new TestResult();
         TestResult unitTests = new TestResult();
         Date startTime = new Date();
         String state = "UNKNOWN";
+
+        HudsonUserBuilder hudsonUserBuilder = mock(HudsonUserBuilder.class);
+        when(hudsonUserBuilder.getCommiters(new String[] { "dude", "sweet" })).thenReturn(commiters);
 
         TestResultBuilder testResultBuilder = mock(TestResultBuilder.class);
         when(testResultBuilder.buildIntegrationTestResult(any(HudsonMavenReportersSurefireAggregatedReport.class)))
@@ -254,12 +261,12 @@ public class HudsonBuildBuilderTest {
 
         HudsonMavenReportersSurefireAggregatedReport surefireReport = mock(HudsonMavenReportersSurefireAggregatedReport.class);
 
-        HudsonBuildBuilder hudsonBuildBuilder = new HudsonBuildBuilder(testResultBuilder);
+        HudsonBuildBuilder hudsonBuildBuilder = new HudsonBuildBuilder(testResultBuilder, hudsonUserBuilder);
         HudsonBuild hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport);
 
         assertEquals(duration, hudsonBuild.getDuration());
         assertEquals(buildNumber, hudsonBuild.getBuildNumber());
-        assertArrayEquals(commiters, hudsonBuild.getCommiters());
+        assertEquals(commiters, hudsonBuild.getCommiters());
         assertEquals(startTime, hudsonBuild.getStartTime());
         assertEquals(state, hudsonBuild.getState());
         assertEquals(integrationTests, hudsonBuild.getIntegrationTestResult());
