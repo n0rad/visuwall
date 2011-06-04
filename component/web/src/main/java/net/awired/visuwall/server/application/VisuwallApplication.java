@@ -241,13 +241,19 @@ public class VisuwallApplication implements ServletContextAware {
 			// e.printStackTrace();
 		}
 
-		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		System.out.println("Change log level to :" + logLvl);
-		root.setLevel(logLvl);
+		if (logLvl != null) {
+			Logger root = (Logger) LoggerFactory
+					.getLogger(Logger.ROOT_LOGGER_NAME);
+			System.out.println("Change log level to :" + logLvl);
+			root.setLevel(logLvl);
+		}
 	}
 
 	public Level findLogLevelFromSystem() {
 		LogLevelEnum cliLvl = ApplicationHelper.findLogLvl();
+		if (cliLvl == null) {
+			return null;
+		}
 		switch (cliLvl) {
 		case trace:
 			return Level.TRACE;
@@ -263,7 +269,7 @@ public class VisuwallApplication implements ServletContextAware {
 			throw new RuntimeException("log level not managed");
 		}
 	}
-	
+
 	public Properties visuwallProperties() {
 		Properties prop = new Properties();
 		prop.setProperty(ApplicationHelper.HOME_KEY, home);
