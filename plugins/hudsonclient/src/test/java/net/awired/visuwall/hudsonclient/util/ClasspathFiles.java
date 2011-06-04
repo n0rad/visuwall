@@ -22,12 +22,16 @@ import java.net.URL;
 
 public class ClasspathFiles {
 
-    public static String getAbsolutePathFile(String fileName) throws URISyntaxException {
-        Class<?> clazz = ClasspathFiles.class;
-        ClassLoader classLoader = clazz.getClassLoader();
-        URL resource = classLoader.getResource(fileName);
-        URI uri = resource.toURI();
-        String pomUrl = "file://" + uri.getPath();
-        return pomUrl;
+    public static String getAbsolutePathFile(String fileName) {
+        try {
+            Class<?> clazz = ClasspathFiles.class;
+            ClassLoader classLoader = clazz.getClassLoader();
+            URL resource = classLoader.getResource(fileName);
+            URI uri = resource.toURI();
+            String pomUrl = "file://" + uri.getPath();
+            return pomUrl;
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

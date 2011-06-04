@@ -16,6 +16,9 @@
 
 package net.awired.visuwall.hudsonclient;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -35,10 +38,10 @@ import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
+import net.awired.visuwall.hudsonclient.util.ClasspathFiles;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -68,25 +71,14 @@ public class HudsonFinderTest {
         when(hudsonJerseyClient.getModuleSetBuild(anyString())).thenReturn(moduleSetBuild);
         when(hudsonJerseyClient.getSurefireReport(anyString())).thenReturn(surefireReport);
         when(
-                hudsonBuildBuilder.createHudsonBuild(Mockito.any(HudsonMavenMavenModuleSetBuild.class),
-                        Mockito.any(HudsonMavenReportersSurefireAggregatedReport.class))).thenReturn(new HudsonBuild());
+                hudsonBuildBuilder.createHudsonBuild(any(HudsonMavenMavenModuleSetBuild.class),
+                        any(HudsonMavenReportersSurefireAggregatedReport.class))).thenReturn(new HudsonBuild());
 
         HudsonBuild hudsonBuild = hudsonFinder.find("projectName", 5);
 
-        Assert.assertNotNull(hudsonBuild);
+        assertNotNull(hudsonBuild);
         verify(hudsonUrlBuilder).getBuildUrl(anyString(), anyInt());
         verify(hudsonJerseyClient).getModuleSetBuild(anyString());
-    }
-
-    @Test
-    public void testFindHudsonProject() {
-        HudsonModelHudson jobs = mock(HudsonModelHudson.class);
-        when(jobs.getJob()).thenReturn(new ArrayList<Object>());
-
-        when(hudsonJerseyClient.getHudsonJobs(anyString())).thenReturn(jobs);
-
-        hudsonFinder.findHudsonProjects();
-        verify(hudsonJerseyClient).getHudsonJobs(anyString());
     }
 
     @Test
@@ -119,8 +111,10 @@ public class HudsonFinderTest {
 
     @Test
     public void testProjectExists() {
+        String absolutePathFile = ClasspathFiles.getAbsolutePathFile("hudson/fluxx.xml");
+        when(hudsonUrlBuilder.getProjectUrl(anyString())).thenReturn(absolutePathFile);
         boolean found = hudsonFinder.projectExists("projectName");
-        Assert.assertFalse(found);
+        assertTrue(found);
     }
 
 }

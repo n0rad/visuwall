@@ -16,7 +16,8 @@
 
 package net.awired.visuwall.hudsonclient;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
@@ -34,36 +35,36 @@ public class HudsonJerseyClientTest {
     public void testGetSurefireReport() {
         HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonMavenReportersSurefireAggregatedReport());
         HudsonMavenReportersSurefireAggregatedReport surefireReport = hudsonJerseyClient.getSurefireReport("url");
-        Assert.assertNotNull(surefireReport);
+        assertNotNull(surefireReport);
     }
 
     @Test
     public void testGetModuleSetBuild() {
         HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonMavenMavenModuleSetBuild());
         HudsonMavenMavenModuleSetBuild moduleSetBuild = hudsonJerseyClient.getModuleSetBuild("url");
-        Assert.assertNotNull(moduleSetBuild);
+        assertNotNull(moduleSetBuild);
     }
 
     @Test
     public void testGetModuleSet() {
         HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonMavenMavenModuleSet());
         HudsonMavenMavenModuleSet moduleSet = hudsonJerseyClient.getModuleSet("url");
-        Assert.assertNotNull(moduleSet);
+        assertNotNull(moduleSet);
     }
 
     @Test
     public void testGetHudsonJobs() {
         HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonModelHudson());
         HudsonModelHudson hudsonModel = hudsonJerseyClient.getHudsonJobs("url");
-        Assert.assertNotNull(hudsonModel);
+        assertNotNull(hudsonModel);
     }
 
     private HudsonJerseyClient prepareClientFor(Object o) {
         WebResource resource = Mockito.mock(WebResource.class);
-        Mockito.when(resource.get(Mockito.any(Class.class))).thenReturn(o);
+        when(resource.get(Mockito.any(Class.class))).thenReturn(o);
 
         Client client = Mockito.mock(Client.class);
-        Mockito.when(client.resource(Mockito.anyString())).thenReturn(resource);
+        when(client.resource(Mockito.anyString())).thenReturn(resource);
 
         HudsonJerseyClient hudsonJerseyClient = new HudsonJerseyClient(client);
         return hudsonJerseyClient;

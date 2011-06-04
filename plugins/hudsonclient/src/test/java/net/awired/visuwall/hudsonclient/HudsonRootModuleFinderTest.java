@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.hudsonclient;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,7 +24,6 @@ import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.util.ClasspathFiles;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
@@ -41,7 +41,7 @@ public class HudsonRootModuleFinderTest {
         hudsonRootModuleFinder.documentLoader = documentLoader;
 
         String artifactId = hudsonRootModuleFinder.findArtifactId("test-project");
-        Assert.assertEquals("net.awired.visuwall:visuwall-hudsonclient", artifactId);
+        assertEquals("net.awired.visuwall:visuwall-hudsonclient", artifactId);
     }
 
     @Test(expected = ArtifactIdNotFoundException.class)

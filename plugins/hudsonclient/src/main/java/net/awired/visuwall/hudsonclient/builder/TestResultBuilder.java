@@ -27,6 +27,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.google.common.base.Preconditions;
+
 /**
  * TestResultBuilder is used to manipulate Hudson Test data
  */
@@ -43,13 +45,19 @@ public class TestResultBuilder {
     }
 
     public TestResult buildUnitTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+        checkSurefireReport(surefireReport);
         TestResult unitTestResult = new TestResult();
         List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
         countUnitTests(unitTestResult, tests);
         return unitTestResult;
     }
 
+    private void checkSurefireReport(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+        Preconditions.checkNotNull(surefireReport, "surefireReport is mandatory");
+    }
+
     public TestResult buildIntegrationTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+        checkSurefireReport(surefireReport);
         TestResult integrationTestResult = new TestResult();
         List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
         countIntegrationTests(integrationTestResult, tests);

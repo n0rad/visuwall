@@ -23,6 +23,7 @@ import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedrepor
 
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
@@ -57,7 +58,7 @@ public class HudsonJerseyClient {
         return setBuild;
     }
 
-    public HudsonMavenMavenModuleSet getModuleSet(String url) {
+    public HudsonMavenMavenModuleSet getModuleSet(String url) throws UniformInterfaceException {
         checkUrl(url);
         WebResource projectResource = client.resource(url);
         HudsonMavenMavenModuleSet moduleSet = projectResource.get(HudsonMavenMavenModuleSet.class);

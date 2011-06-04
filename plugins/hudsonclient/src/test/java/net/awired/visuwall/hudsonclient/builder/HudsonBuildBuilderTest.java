@@ -16,6 +16,8 @@
 
 package net.awired.visuwall.hudsonclient.builder;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -30,7 +32,6 @@ import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.Hud
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class HudsonBuildBuilderTest {
@@ -43,7 +44,7 @@ public class HudsonBuildBuilderTest {
         TestResult integrationTests = new TestResult();
         TestResult unitTests = new TestResult();
         Date startTime = new Date();
-        String state = "NEW";
+        String state = "UNKNOWN";
 
         TestResultBuilder testResultBuilder = mock(TestResultBuilder.class);
         when(testResultBuilder.buildIntegrationTestResult(any(HudsonMavenReportersSurefireAggregatedReport.class)))
@@ -68,12 +69,12 @@ public class HudsonBuildBuilderTest {
         HudsonBuildBuilder hudsonBuildBuilder = new HudsonBuildBuilder(testResultBuilder);
         HudsonBuild hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport);
 
-        Assert.assertEquals(duration, hudsonBuild.getDuration());
-        Assert.assertEquals(buildNumber, hudsonBuild.getBuildNumber());
-        Assert.assertArrayEquals(commiters, hudsonBuild.getCommiters());
-        Assert.assertEquals(startTime, hudsonBuild.getStartTime());
-        Assert.assertEquals(state, hudsonBuild.getState());
-        Assert.assertEquals(integrationTests, hudsonBuild.getIntegrationTestResult());
-        Assert.assertEquals(unitTests, hudsonBuild.getUnitTestResult());
+        assertEquals(duration, hudsonBuild.getDuration());
+        assertEquals(buildNumber, hudsonBuild.getBuildNumber());
+        assertArrayEquals(commiters, hudsonBuild.getCommiters());
+        assertEquals(startTime, hudsonBuild.getStartTime());
+        assertEquals(state, hudsonBuild.getState());
+        assertEquals(integrationTests, hudsonBuild.getIntegrationTestResult());
+        assertEquals(unitTests, hudsonBuild.getUnitTestResult());
     }
 }

@@ -22,12 +22,17 @@ import java.util.List;
 import javax.ws.rs.WebApplicationException;
 
 import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
+import net.awired.visuwall.hudsonclient.builder.HudsonProjectBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.builder.TestResultBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
+import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
+import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
+import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelJob;
+import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelRun;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import net.awired.visuwall.hudsonclient.helper.HudsonXmlHelper;
@@ -38,6 +43,7 @@ import net.sf.ehcache.Element;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Node;
 
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.UniformInterfaceException;
@@ -127,20 +133,13 @@ public class HudsonFinder {
         }
     }
 
-    public List<Object> findHudsonProjects() {
-        String projectsUrl = hudsonUrlBuilder.getAllProjectsUrl();
-        HudsonModelHudson hudson = hudsonJerseyClient.getHudsonJobs(projectsUrl);
-        List<Object> hudsonProjects = hudson.getJob();
-        return hudsonProjects;
-    }
-
     public List<String> findProjectNames() {
         List<String> projectNames = new ArrayList<String>();
         String projectsUrl = hudsonUrlBuilder.getAllProjectsUrl();
         HudsonModelHudson hudson = hudsonJerseyClient.getHudsonJobs(projectsUrl);
         for (Object job : hudson.getJob()) {
-            org.w3c.dom.Element element = (org.w3c.dom.Element) job;
-            String name = HudsonXmlHelper.getProjectName(element);
+            Node element = (Node) job;
+            String name = getProjectName(element);
             projectNames.add(name);
         }
         return projectNames;
@@ -153,10 +152,66 @@ public class HudsonFinder {
             if (MavenHelper.isNotMavenProject(projectUrl))
                 throw new HudsonProjectNotFoundException(projectName + " is not a maven project");
             hudsonJerseyClient.getModuleSet(projectUrl);
+        } catch (UniformInterfaceException e) {
+            return false;
         } catch (HudsonProjectNotFoundException e) {
             return false;
         }
         return true;
+    }
+
+    private String getProjectName(Node node) {
+        Node firstChild = node.getFirstChild();
+        Node firstChild2 = firstChild.getFirstChild();
+        String projectName = firstChild2.getNodeValue();
+        return projectName;
+    }
+
+    public HudsonProject findProject(String projectName) throws HudsonProjectNotFoundException {
+        try {
+            HudsonMavenMavenModuleSet moduleSet = findJobByProjectName(projectName);
+            HudsonProjectBuilder hudsonProjectBuilder = new HudsonProjectBuilder(hudsonUrlBuilder, this);
+            return hudsonProjectBuilder.createHudsonProjectFrom(moduleSet);
+        } catch (HudsonBuildNotFoundException e) {
+            throw new HudsonProjectNotFoundException(e);
+        }
+    }
+
+    public int getLastBuildNumber(String projectName) throws HudsonProjectNotFoundException,
+            HudsonBuildNotFoundException {
+        checkProjectName(projectName);
+        HudsonMavenMavenModuleSet job = findJobByProjectName(projectName);
+        HudsonModelRun run = job.getLastBuild();
+        if (run == null) {
+            throw new HudsonBuildNotFoundException("Project " + projectName + " has no last build");
+        }
+        return run.getNumber();
+    }
+
+    public boolean isBuilding(String projectName) throws HudsonProjectNotFoundException {
+        checkProjectName(projectName);
+        HudsonModelJob job = findJobByProjectName(projectName);
+        return HudsonXmlHelper.getIsBuilding(job);
+    }
+
+    public String getStateOf(String projectName, int buildNumber) throws HudsonBuildNotFoundException,
+            HudsonProjectNotFoundException {
+        checkProjectName(projectName);
+        checkBuildNumber(buildNumber);
+        HudsonMavenMavenModuleSetBuild build = findBuildByProjectNameAndBuildNumber(projectName, buildNumber);
+        return HudsonXmlHelper.getState(build);
+    }
+
+    private HudsonMavenMavenModuleSet findJobByProjectName(String projectName) throws HudsonProjectNotFoundException {
+        try {
+            String projectUrl = hudsonUrlBuilder.getProjectUrl(projectName);
+            if (MavenHelper.isNotMavenProject(projectUrl))
+                throw new HudsonProjectNotFoundException(projectName + " is not a maven project");
+            HudsonMavenMavenModuleSet moduleSet = hudsonJerseyClient.getModuleSet(projectUrl);
+            return moduleSet;
+        } catch (UniformInterfaceException e) {
+            throw new HudsonProjectNotFoundException(e);
+        }
     }
 
     private void checkBuildNumber(int buildNumber) {
