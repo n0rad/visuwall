@@ -18,11 +18,12 @@ package net.awired.visuwall.hudsonclient.finder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.ws.rs.WebApplicationException;
 
 import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.Commiters;
 import net.awired.visuwall.hudsonclient.HudsonJerseyClient;
 import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonProjectBuilder;
@@ -102,7 +103,7 @@ public class HudsonFinder {
                     .getSurefireReport(testResultUrl);
 
             String[] commiterNames = HudsonXmlHelper.getCommiterNames(setBuild);
-            Commiters commiters = findCommiters(commiterNames);
+            Set<Commiter> commiters = findCommiters(commiterNames);
             HudsonBuild hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport, commiters);
             cache.put(new Element(cacheKey, hudsonBuild));
             return hudsonBuild;
@@ -206,16 +207,16 @@ public class HudsonFinder {
         return HudsonXmlHelper.getIsBuilding(job);
     }
 
-    public Commiters findCommiters(String[] commiterNames) {
+    public Set<Commiter> findCommiters(String[] commiterNames) {
         Preconditions.checkNotNull(commiterNames, "commiterNames is mandatory");
-        Commiters commiters = new Commiters();
+        Set<Commiter> commiters = new TreeSet<Commiter>();
         for (String commiterName : commiterNames) {
             String url = hudsonUrlBuilder.getUserUrl(commiterName);
             HudsonUser hudsonUser = hudsonJerseyClient.getHudsonUser(url);
             Commiter commiter = new Commiter(hudsonUser.getId());
             commiter.setName(commiterName);
             commiter.setEmail(hudsonUser.getEmail());
-            commiters.addCommiter(commiter);
+            commiters.add(commiter);
         }
         return commiters;
     }

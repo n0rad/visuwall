@@ -17,8 +17,9 @@
 package net.awired.visuwall.hudsonclient.builder;
 
 import java.util.Date;
+import java.util.Set;
 
-import net.awired.visuwall.api.domain.Commiters;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
@@ -47,7 +48,7 @@ public class HudsonBuildBuilder {
     }
 
     public HudsonBuild createHudsonBuild(HudsonMavenMavenModuleSetBuild setBuild,
-            HudsonMavenReportersSurefireAggregatedReport surefireReport, Commiters commiters) {
+            HudsonMavenReportersSurefireAggregatedReport surefireReport, Set<Commiter> commiters) {
         Preconditions.checkNotNull(setBuild, "setBuild is mandatory");
         HudsonBuild hudsonBuild = new HudsonBuild();
         hudsonBuild.setState(HudsonXmlHelper.getState(setBuild));

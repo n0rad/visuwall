@@ -17,9 +17,10 @@
 package net.awired.visuwall.hudsonclient.domain;
 
 import java.util.Date;
+import java.util.Set;
+import java.util.TreeSet;
 
 import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.Commiters;
 import net.awired.visuwall.api.domain.TestResult;
 
 import com.google.common.base.Objects;
@@ -27,102 +28,103 @@ import com.google.common.base.Objects.ToStringHelper;
 
 public final class HudsonBuild {
 
-    private boolean successful;
-    private Commiters commiters = new Commiters();
-    private long duration;
-    private Date startTime;
-    private TestResult unitTestResult;
-    private TestResult integrationTestResult;
-    private String state;
-    private int buildNumber;
+	private boolean successful;
+	private Set<Commiter> commiters = new TreeSet<Commiter>();
+	private long duration;
+	private Date startTime;
+	private TestResult unitTestResult;
+	private TestResult integrationTestResult;
+	private String state;
+	private int buildNumber;
 
-    public boolean isSuccessful() {
-        return successful;
-    }
+	public void addCommiter(Commiter commiter) {
+		commiters.add(commiter);
+	}
 
-    public void setSuccessful(boolean successful) {
-        this.successful = successful;
-    }
+	
+	public boolean isSuccessful() {
+		return successful;
+	}
 
-    public Commiters getCommiters() {
-        return commiters;
-    }
+	public void setSuccessful(boolean successful) {
+		this.successful = successful;
+	}
 
-    public void addCommiter(Commiter commiter) {
-        commiters.addCommiter(commiter);
-    }
+	public Set<Commiter> getCommiters() {
+		return commiters;
+	}
 
-    public long getDuration() {
-        return duration;
-    }
 
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
+	public long getDuration() {
+		return duration;
+	}
 
-    public Date getStartTime() {
-        return startTime;
-    }
+	public void setDuration(long duration) {
+		this.duration = duration;
+	}
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
+	public Date getStartTime() {
+		return startTime;
+	}
 
-    public TestResult getUnitTestResult() {
-        return unitTestResult;
-    }
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
 
-    public void setUnitTestResult(TestResult testResult) {
-        this.unitTestResult = testResult;
-    }
+	public TestResult getUnitTestResult() {
+		return unitTestResult;
+	}
 
-    public TestResult getIntegrationTestResult() {
-        return integrationTestResult;
-    }
+	public void setUnitTestResult(TestResult testResult) {
+		this.unitTestResult = testResult;
+	}
 
-    public void setIntegrationTestResult(TestResult testResult) {
-        this.integrationTestResult = testResult;
-    }
+	public TestResult getIntegrationTestResult() {
+		return integrationTestResult;
+	}
 
-    public String getState() {
-        return state;
-    }
+	public void setIntegrationTestResult(TestResult testResult) {
+		this.integrationTestResult = testResult;
+	}
 
-    public void setState(String state) {
-        this.state = state;
-    }
+	public String getState() {
+		return state;
+	}
 
-    public int getBuildNumber() {
-        return buildNumber;
-    }
+	public void setState(String state) {
+		this.state = state;
+	}
 
-    public void setBuildNumber(int buildNumber) {
-        this.buildNumber = buildNumber;
-    }
+	public int getBuildNumber() {
+		return buildNumber;
+	}
 
-    @Override
-    public String toString() {
-        ToStringHelper toString = Objects.toStringHelper(this) //
-                .add("build number", buildNumber) //
-                .add("status", successful) //
-                .add("commiters", commiters) //
-                .add("duration", duration) //
-                .add("startTime", startTime) //
-                .add("state", state); //
-        if (unitTestResult != null) {
-            toString.add("unit test result", unitTestResult.toString());
-        }
-        if (integrationTestResult != null) {
-            toString.add("integration test result", integrationTestResult.toString());
-        }
-        return toString.toString();
-    }
+	public void setBuildNumber(int buildNumber) {
+		this.buildNumber = buildNumber;
+	}
 
-    public void setCommiters(Commiters commiters) {
-        if (commiters != null) {
-            for (Commiter commiter : commiters.asSet()) {
-                this.commiters.addCommiter(commiter);
-            }
-        }
-    }
+	@Override
+	public String toString() {
+		ToStringHelper toString = Objects.toStringHelper(this) //
+				.add("build number", buildNumber) //
+				.add("status", successful) //
+				.add("commiters", commiters) //
+				.add("duration", duration) //
+				.add("startTime", startTime) //
+				.add("state", state); //
+		if (unitTestResult != null) {
+			toString.add("unit test result", unitTestResult.toString());
+		}
+		if (integrationTestResult != null) {
+			toString.add("integration test result",
+					integrationTestResult.toString());
+		}
+		return toString.toString();
+	}
+
+	public void setCommiters(Set<Commiter> commiters) {
+		if (commiters != null) {
+			this.commiters.addAll(commiters);
+		}
+	}
 }
