@@ -59,7 +59,9 @@ public class SonarPlugin implements VisuwallPlugin {
             stream = url.openStream();
             byte[] content = ByteStreams.toByteArray(stream);
             String xml = new String(content);
-//            return xml.contains("sonar.core.version");
+            if (!xml.contains("sonar.core.version")) {
+            	return null;
+            }
             return softwareInfo;
         } catch (IOException e) {
             return null;

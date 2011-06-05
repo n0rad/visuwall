@@ -51,7 +51,8 @@ public class PluginController {
 	@RequestMapping(value = "managable", method = RequestMethod.GET)
 	public @ResponseBody
 	SoftwareInfo getManageableUrl(@RequestParam String url) throws MalformedURLException {
-		return pluginService.getSoftwareInfoFromManagableUrl(new URL(url));
+		SoftwareInfo softwareInfo = pluginService.getSoftwareInfoFromManagableUrl(new URL(url));
+		return softwareInfo;
 	}
 
 }

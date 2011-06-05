@@ -90,7 +90,7 @@
 <!-- 			<input id="delete" type="button" value="Delete"/>  -->
 		</form>	
 	</div>
-	<div style="display:none"  id="helperdiv">
+	<div style="display:none" id="helperdiv">
 		<table>
 			<thead>
 				<tr>

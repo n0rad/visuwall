@@ -4,7 +4,7 @@ public class SoftwareInfo {
 
 	private String name;
 	private String version;
-	private String[] warnings;
+	private String warnings;
 	private PluginInfo pluginInfo;
 
 	// ////////////////////////////////
@@ -29,11 +29,11 @@ public class SoftwareInfo {
 		this.version = version;
 	}
 
-	public String[] getWarnings() {
+	public String getWarnings() {
 		return warnings;
 	}
 
-	public void setWarnings(String[] warnings) {
+	public void setWarnings(String warnings) {
 		this.warnings = warnings;
 	}
 

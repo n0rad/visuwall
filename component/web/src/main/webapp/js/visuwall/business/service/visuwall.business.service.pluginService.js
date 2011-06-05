@@ -27,8 +27,8 @@ visuwall.business.service.pluginService = {
 			  url: 'plugin/managable',
 			  dataType: 'json',
 			  data: {url : url},
-			  success: function(pluginInfo) {
-					success(pluginInfo);
+			  success: function(softwareInfo) {
+					success(softwareInfo);
 				},
 			  error: function() {
 				  failure();

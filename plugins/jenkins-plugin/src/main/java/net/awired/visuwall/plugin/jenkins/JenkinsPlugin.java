@@ -52,6 +52,7 @@ public class JenkinsPlugin implements VisuwallPlugin {
     public SoftwareInfo isManageable(URL url) {
         Preconditions.checkNotNull(url, "url is mandatory");
         SoftwareInfo softwareInfo = new SoftwareInfo();
+        softwareInfo.setWarnings("This jenkins version has a bug with git project. Git project wont be display.");
         softwareInfo.setPluginInfo(getInfo());
         InputStream stream = null;
         try {
@@ -59,7 +60,9 @@ public class JenkinsPlugin implements VisuwallPlugin {
             stream = url.openStream();
             byte[] content = ByteStreams.toByteArray(stream);
             String xml = new String(content);
-//            return xml.contains("Remote API [Jenkins]");
+            if (!xml.contains("Remote API [Jenkins]")) {
+            	return null;
+            }
             return softwareInfo;
         } catch (IOException e) {
             return null;

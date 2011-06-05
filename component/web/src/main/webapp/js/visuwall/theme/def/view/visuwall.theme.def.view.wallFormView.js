@@ -24,7 +24,7 @@ visuwall.theme.def.view.wallFormView = new function() {
 	this.softTabsCount = 1;
 	
 	this.context;
-	
+		
 	this.getFormData = function(callback) {
 		//TODO get form from server instead of html dom element
 		if (!$this.wallFormData) {

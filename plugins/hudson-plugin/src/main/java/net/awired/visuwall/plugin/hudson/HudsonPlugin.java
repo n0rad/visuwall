@@ -59,7 +59,9 @@ public class HudsonPlugin implements VisuwallPlugin {
             stream = url.openStream();
             byte[] content = ByteStreams.toByteArray(stream);
             String xml = new String(content);
-//            return xml.contains("Remote API [Hudson]");
+            if (!xml.contains("Remote API [Hudson]")) {
+            	return null;
+            }
             return softwareInfo;
         } catch (IOException e) {
         	return null;
