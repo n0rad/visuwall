@@ -18,6 +18,7 @@ package net.awired.visuwall.hudsonclient;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
+import net.awired.visuwall.hudsonclient.exception.ResourceNotFoundException;
 import net.awired.visuwall.hudsonclient.generated.hudson.HudsonUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
@@ -33,7 +34,7 @@ import com.sun.jersey.api.client.WebResource;
 public class HudsonJerseyClientTest {
 
     @Test
-    public void testGetSurefireReport() {
+    public void testGetSurefireReport() throws ResourceNotFoundException {
         HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonMavenReportersSurefireAggregatedReport());
         HudsonMavenReportersSurefireAggregatedReport surefireReport = hudsonJerseyClient.getSurefireReport("url");
         assertNotNull(surefireReport);

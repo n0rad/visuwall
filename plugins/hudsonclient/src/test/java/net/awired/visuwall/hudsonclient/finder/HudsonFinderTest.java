@@ -37,8 +37,6 @@ import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.builder.TestResultBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
-import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
-import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.generated.hudson.HudsonUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
@@ -89,7 +87,7 @@ public class HudsonFinderTest {
     }
 
     @Test
-    public void testFind() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+    public void testFind() throws Exception {
         when(hudsonJerseyClient.getModuleSetBuild(anyString())).thenReturn(moduleSetBuild);
         when(hudsonJerseyClient.getSurefireReport(anyString())).thenReturn(surefireReport);
         when(

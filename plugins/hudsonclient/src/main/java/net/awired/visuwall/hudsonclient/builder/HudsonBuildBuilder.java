@@ -49,7 +49,14 @@ public class HudsonBuildBuilder {
 
     public HudsonBuild createHudsonBuild(HudsonMavenMavenModuleSetBuild setBuild,
             HudsonMavenReportersSurefireAggregatedReport surefireReport, Set<Commiter> commiters) {
-        Preconditions.checkNotNull(setBuild, "setBuild is mandatory");
+        checkSetBuild(setBuild);
+        HudsonBuild hudsonBuild = createHudsonBuild(setBuild, commiters);
+        addTestResults(setBuild, surefireReport, hudsonBuild);
+        return hudsonBuild;
+    }
+
+    public HudsonBuild createHudsonBuild(HudsonMavenMavenModuleSetBuild setBuild, Set<Commiter> commiters) {
+        checkSetBuild(setBuild);
         HudsonBuild hudsonBuild = new HudsonBuild();
         hudsonBuild.setState(HudsonXmlHelper.getState(setBuild));
         hudsonBuild.setDuration(setBuild.getDuration());
@@ -57,7 +64,6 @@ public class HudsonBuildBuilder {
         hudsonBuild.setSuccessful(HudsonXmlHelper.isSuccessful(setBuild));
         hudsonBuild.setCommiters(commiters);
         hudsonBuild.setBuildNumber(setBuild.getNumber());
-        addTestResults(setBuild, surefireReport, hudsonBuild);
         return hudsonBuild;
     }
 
@@ -77,6 +83,10 @@ public class HudsonBuildBuilder {
                 LOG.debug("no test result " + setBuild.getFullDisplayName());
             }
         }
+    }
+
+    private void checkSetBuild(HudsonMavenMavenModuleSetBuild setBuild) {
+        Preconditions.checkNotNull(setBuild, "setBuild is mandatory");
     }
 
 }

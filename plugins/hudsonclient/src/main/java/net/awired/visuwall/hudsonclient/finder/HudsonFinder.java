@@ -32,6 +32,7 @@ import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.ResourceNotFoundException;
 import net.awired.visuwall.hudsonclient.generated.hudson.HudsonUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
@@ -98,13 +99,15 @@ public class HudsonFinder {
                 return (HudsonBuild) element.getObjectValue();
             }
 
-            String testResultUrl = hudsonUrlBuilder.getTestResultUrl(projectName, setBuild.getNumber());
-            HudsonMavenReportersSurefireAggregatedReport surefireReport = hudsonJerseyClient
-                    .getSurefireReport(testResultUrl);
-
             String[] commiterNames = HudsonXmlHelper.getCommiterNames(setBuild);
             Set<Commiter> commiters = findCommiters(commiterNames);
-            HudsonBuild hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport, commiters);
+            HudsonMavenReportersSurefireAggregatedReport surefireReport = findSurefireReport(projectName, setBuild);
+            HudsonBuild hudsonBuild;
+            if (surefireReport == null) {
+                hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, commiters);
+            } else {
+                hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport, commiters);
+            }
             cache.put(new Element(cacheKey, hudsonBuild));
             return hudsonBuild;
         } catch (UniformInterfaceException e) {
@@ -120,6 +123,21 @@ public class HudsonFinder {
             }
             throw new HudsonBuildNotFoundException(message, e);
         }
+    }
+
+    private HudsonMavenReportersSurefireAggregatedReport findSurefireReport(String projectName,
+            HudsonMavenMavenModuleSetBuild setBuild) {
+        String testResultUrl = hudsonUrlBuilder.getTestResultUrl(projectName, setBuild.getNumber());
+        try {
+            HudsonMavenReportersSurefireAggregatedReport surefireReport = hudsonJerseyClient
+                    .getSurefireReport(testResultUrl);
+            return surefireReport;
+        } catch (ResourceNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(e.getMessage());
+            }
+        }
+        return null;
     }
 
     public HudsonMavenMavenModuleSetBuild findBuildByProjectNameAndBuildNumber(String projectName, int buildNumber)

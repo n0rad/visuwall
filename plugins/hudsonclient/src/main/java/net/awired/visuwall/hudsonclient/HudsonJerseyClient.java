@@ -16,11 +16,15 @@
 
 package net.awired.visuwall.hudsonclient;
 
+import net.awired.visuwall.hudsonclient.exception.ResourceNotFoundException;
 import net.awired.visuwall.hudsonclient.generated.hudson.HudsonUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.Client;
@@ -30,6 +34,8 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 public class HudsonJerseyClient {
+
+    private static final Logger LOG = LoggerFactory.getLogger(HudsonJerseyClient.class);
 
     private Client client;
 
@@ -44,12 +50,16 @@ public class HudsonJerseyClient {
         client = Client.create(clientConfig);
     }
 
-    public HudsonMavenReportersSurefireAggregatedReport getSurefireReport(String url) {
+    public HudsonMavenReportersSurefireAggregatedReport getSurefireReport(String url) throws ResourceNotFoundException {
         checkUrl(url);
-        WebResource testResultResource = client.resource(url);
-        HudsonMavenReportersSurefireAggregatedReport surefireReport = testResultResource
-                .get(HudsonMavenReportersSurefireAggregatedReport.class);
-        return surefireReport;
+        try {
+            WebResource testResultResource = client.resource(url);
+            HudsonMavenReportersSurefireAggregatedReport surefireReport = testResultResource
+                    .get(HudsonMavenReportersSurefireAggregatedReport.class);
+            return surefireReport;
+        } catch (UniformInterfaceException e) {
+            throw new ResourceNotFoundException("No resource found at " + url);
+        }
     }
 
     public HudsonMavenMavenModuleSetBuild getModuleSetBuild(String url) {
