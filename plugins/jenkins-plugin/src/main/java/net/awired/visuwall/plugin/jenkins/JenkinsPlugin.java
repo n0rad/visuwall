@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
+import net.awired.visuwall.api.domain.PluginInfo;
+import net.awired.visuwall.api.domain.SoftwareInfo;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
@@ -36,29 +38,34 @@ public class JenkinsPlugin implements VisuwallPlugin {
         jenkinsConnectionPlugin.connect(url);
         return jenkinsConnectionPlugin;
     }
-
+    
     @Override
-    public String getName() {
-        return "Jenkins";
+    public PluginInfo getInfo() {
+    	PluginInfo pluginInfo = new PluginInfo();
+    	pluginInfo.setName("Jenkins plugin");
+    	pluginInfo.setVersion(1.0f);
+    	pluginInfo.setClassName(this.getClass().getName());
+    	return pluginInfo;
     }
 
     @Override
-    public int getVersion() {
-        return 1;
-    }
-
-    @Override
-    public boolean isManageable(URL url) {
+    public SoftwareInfo isManageable(URL url) {
         Preconditions.checkNotNull(url, "url is mandatory");
+        SoftwareInfo softwareInfo = new SoftwareInfo();
+        softwareInfo.setWarnings("This jenkins version has a bug with git project. Git project wont be display.");
+        softwareInfo.setPluginInfo(getInfo());
         InputStream stream = null;
         try {
             url = new URL(url.toString() + "/api/");
             stream = url.openStream();
             byte[] content = ByteStreams.toByteArray(stream);
             String xml = new String(content);
-            return xml.contains("Remote API [Jenkins]");
+            if (!xml.contains("Remote API [Jenkins]")) {
+            	return null;
+            }
+            return softwareInfo;
         } catch (IOException e) {
-            return false;
+            return null;
         } finally {
             Closeables.closeQuietly(stream);
         }

@@ -24,9 +24,10 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.Commiters;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
@@ -41,9 +42,9 @@ public class HudsonBuildBuilderTest {
     public void should_create_valid_hudson_build() {
         long duration = 123L;
         int buildNumber = 34;
-        Commiters commiters = new Commiters();
-        commiters.addCommiter(new Commiter("dude"));
-        commiters.addCommiter(new Commiter("sweet"));
+        Set<Commiter> commiters = new TreeSet<Commiter>();
+        commiters.add(new Commiter("dude"));
+        commiters.add(new Commiter("sweet"));
 
         TestResult integrationTests = new TestResult();
         TestResult unitTests = new TestResult();

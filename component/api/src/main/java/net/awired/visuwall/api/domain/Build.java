@@ -17,6 +17,8 @@
 package net.awired.visuwall.api.domain;
 
 import java.util.Date;
+import java.util.Set;
+import java.util.TreeSet;
 
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 
@@ -26,21 +28,13 @@ import com.google.common.base.Objects.ToStringHelper;
 public final class Build {
 
     private State state = State.UNKNOWN;
-    private Commiters commiters = new Commiters();
+    private Set<Commiter> commiters = new TreeSet<Commiter>();
     private long duration;
     private Date startTime;
     private TestResult unitTestResult = new TestResult();
     private TestResult integrationTestResult = new TestResult();
     private int buildNumber;
-
-    public Commiters getCommiters() {
-        return commiters;
-    }
-
-    public void addCommiter(Commiter commiter) {
-        commiters.addCommiter(commiter);
-    }
-
+    
     public long getDuration() {
         return duration;
     }
@@ -113,9 +107,11 @@ public final class Build {
         to.setSkipCount(from.getSkipCount());
     }
 
-    public void setCommiters(Commiters commiters) {
-        for (Commiter commiter : commiters.asSet()) {
-            addCommiter(commiter);
-        }
-    }
+	public Set<Commiter> getCommiters() {
+		return commiters;
+	}
+
+	public void setCommiters(Set<Commiter> commiters) {
+		this.commiters = commiters;
+	}
 }

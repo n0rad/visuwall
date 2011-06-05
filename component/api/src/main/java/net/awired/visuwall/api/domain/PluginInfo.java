@@ -14,13 +14,19 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.domain;
+package net.awired.visuwall.api.domain;
 
 public class PluginInfo {
 
 	private String name;
 	private float version;
 	private String className;
+
+	// //////////////////////
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
 
 	public String getName() {
 		return name;
@@ -40,10 +46,6 @@ public class PluginInfo {
 
 	public String getClassName() {
 		return className;
-	}
-
-	public void setClassName(String className) {
-		this.className = className;
 	}
 
 }

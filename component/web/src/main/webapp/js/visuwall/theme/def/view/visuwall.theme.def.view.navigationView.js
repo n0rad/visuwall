@@ -58,7 +58,13 @@ visuwall.theme.def.view.navigationView = new function() {
 			title: title,
 			resizable: false,
 			modal: true,
+			dragStart: function(event, ui) {
+				var v = $('LABEL:regex(id,softwareAccesses.*\.urlcheck)');
+				v.mouseout();
+			},
 			close: function(event, ui) {
+				var v = $('LABEL:regex(id,softwareAccesses.*\.urlcheck)');
+				v.mouseout();
 				$.history.queryBuilder().removeController(closeController).load();
 			}
 		});

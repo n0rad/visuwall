@@ -51,6 +51,10 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 					remove : function(event, ui) {
 						// removeFunction(event, ui.panel);
 					},
+					select: function(event, ui) {
+						var v = $('LABEL:regex(id,softwareAccesses.*\.urlcheck)');
+						v.mouseout();
+					},
 					preremove : function(event, ui) {
 						if ($this.tabs.tabs('length') > 1) {
 							return false;
@@ -82,6 +86,10 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 	this["#wallForm|submit"] = function() {
 		$("#modal .success").empty();
 		$("#modal .failure").empty();
+		if ($('#wallForm INPUT#name').val().trim() == "") {
+			$("#modal .failure").html("Wall name is mandatory");
+			return false;
+		}
 		$("#wallForm .loader").empty().html('<img src="res/img/ajax-loader.gif" />');
 		$this.wallFormController.submitWallData(this, function() { // success
 			$("#wallForm .loader").empty();
@@ -130,7 +138,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 
 		////////////
 		
-		var classes = ['failureCheck', 'successCheck', 'loadingCheck'];
+		var classes = ['failureCheck', 'successCheck', 'loadingCheck', 'warningCheck'];
 		var domObj = $('#' + $(this).attr('id').replace(".", "\\.") + "check", $(this).parent());
 		
 		if (!$(this).val().trim()) {
@@ -139,9 +147,77 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 		}
 		
 		domObj.switchClasses(classes, 'loadingCheck', 1);
-		$this.pluginService.manageable($(this).val(), function(pluginInfo) {
-			//success
-			domObj.switchClasses(classes, 'successCheck', 1);			
+		$this.pluginService.manageable($(this).val(), function(softwareInfo) {
+			if (softwareInfo.warnings) {
+				//success
+				domObj.switchClasses(classes, 'warningCheck', 1);				
+				
+
+var ff = '				<table class="softwareInfo">'
++'				<th colspan="2">Plugin</th>'
++'				<tr>'
++'					<td class="label">name :</td>'
++'					<td>' + softwareInfo.pluginInfo.name + '</td>'
++'				</tr>'
++'				<tr>'
++'					<td class="label">version :</td>'
++'					<td>' + softwareInfo.pluginInfo.version + '</td>'
++'				</tr>'
++'			</table>'	
++'			<table class="softwareInfo">'
++'				<th colspan="2">Software</th>'
++'				<tr>'
++'					<td class="label">name :</td>'
++'					<td>' + softwareInfo.name + '</td>'
++'				</tr>'
++'				<tr>'
++'					<td class="label">version :</td>'
++'					<td>' + softwareInfo.version + '</td>'
++'				</tr>'
++'				<tr>'
++'					<td colspan="2">' + softwareInfo.warnings + '</td>'
++'				</tr>'
++'			</table>';
+				
+				domObj.qtip({
+					content : ff,
+					position : {
+						corner : {
+							tooltip : 'topLeft',
+							target : 'bottomRight'
+						}
+					},
+//					show : {
+//						when : 'click',
+//						solo : true
+//					},
+//		            hide: false, // Don't specify a hide event
+		            style: {
+//		               width: {
+//		            	   min: 300
+//		               },
+//		               height: {
+//		            	   min: 300
+//		               },
+		               border: {
+		                  width: 5,
+		                  radius: 2
+		               },
+		               padding: 10, 
+		               textAlign: 'center',
+		               tip: true, // Give it a speech bubble tip with automatic corner detection
+		               name: 'cream' // Style it according to the preset 'cream' style
+		            }
+				});
+				
+//				domObj.qtip("show");
+				domObj.mouseover();
+				
+				
+			} else {
+				//success
+				domObj.switchClasses(classes, 'successCheck', 1);				
+			}
 		}, function() {
 			// fail
 			domObj.switchClasses(classes, 'failureCheck', 1);			

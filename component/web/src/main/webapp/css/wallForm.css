@@ -14,6 +14,30 @@
  *     limitations under the License.
  */
 
+TABLE.softwareInfo {
+	border-collapse: separate;
+	border-spacing: 1px;
+	width: 100%;
+}
+
+TABLE.softwareInfo TH, TABLE.softwareInfo TD {
+	background-color: #EBE79A;
+	padding: 2px;
+}
+
+TABLE.softwareInfo TH {
+	font-weight: bold;
+	text-align: center;
+}
+
+TABLE.softwareInfo TD {
+	text-align: left;
+}
+
+TABLE.softwareInfo .label {
+	font-weight: bold;
+}
+
 #wallForm .loader {
 	display: inline;
 	float:left;
@@ -113,6 +137,11 @@ DIV#softAdd {
 #modal LABEL.failureCheck {
 	background: transparent url('../img/tick-no.png') no-repeat;
 }
+
+#modal LABEL.warningCheck {
+	background: transparent url('../img/warning.png') no-repeat;
+}
+
 
 #modal INPUT.url {
 	width: 500px !important;

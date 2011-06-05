@@ -108,7 +108,7 @@ public class HudsonIT {
     @Test
     public void should_retrieve_commiter_email() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
         HudsonBuild build = hudson.findBuild("successproject", 9);
-        Set<Commiter> set = build.getCommiters().asSet();
+        Set<Commiter> set = build.getCommiters();
         Commiter commiter = set.iterator().next();
 
         assertEquals("Arnaud LEMAIRE", commiter.getId());
