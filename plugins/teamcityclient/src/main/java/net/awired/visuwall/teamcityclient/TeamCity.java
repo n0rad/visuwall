@@ -19,6 +19,9 @@ package net.awired.visuwall.teamcityclient;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
+import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -31,7 +34,7 @@ public class TeamCity {
         List<String> projectNames = new ArrayList<String>();
         List<TeamCityProject> projects = teamcityJerseyClient.getProjects();
         for (TeamCityProject project : projects) {
-            projectNames.add(project.name);
+			projectNames.add(project.getName());
         }
         return projectNames;
     }
@@ -41,8 +44,18 @@ public class TeamCity {
     }
 
     public TeamCityProject findProject(String projectId) {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+        checkProjectId(projectId);
         return teamcityJerseyClient.getProject(projectId);
+    }
+
+	public TeamCityBuild findBuild(String projectId, int buildNumber) {
+		checkProjectId(projectId);
+		Preconditions.checkArgument(buildNumber >= 0, "buildNumber must be >= 0");
+		return teamcityJerseyClient.getBuild(projectId, buildNumber);
+	}
+
+	private void checkProjectId(String projectId) {
+	    Preconditions.checkNotNull(projectId, "projectId is mandatory");
     }
 
 }

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.teamcityclient;
+package net.awired.visuwall.teamcityclient.resource;
 
 import java.util.List;
 
@@ -29,6 +29,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class TeamCityProjects {
 
     @XmlElements(value = { @XmlElement(name = "project") })
-    public List<TeamCityProject> projects;
+	private List<TeamCityProject> projects;
+
+	public List<TeamCityProject> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(List<TeamCityProject> projects) {
+		this.projects = projects;
+	}
 
 }

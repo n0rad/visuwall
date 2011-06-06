@@ -14,11 +14,14 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.teamcityclient;
+package net.awired.visuwall.teamcityclient.resource;
+
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "project")
@@ -26,21 +29,76 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class TeamCityProject {
 
     @XmlAttribute
-    String name;
+	private String name;
 
     @XmlAttribute
-    public String id;
+	private String id;
 
     @XmlAttribute
-    public String href;
+	private String href;
 
     @XmlAttribute
-    public String webUrl;
+	private String webUrl;
 
     @XmlAttribute
-    public String description;
+	private String description;
 
     @XmlAttribute
-    public boolean archived;
+	private boolean archived;
+
+	@XmlElement
+	private TeamCityBuildTypes buildTypes;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getHref() {
+		return href;
+	}
+
+	public void setHref(String href) {
+		this.href = href;
+	}
+
+	public String getWebUrl() {
+		return webUrl;
+	}
+
+	public void setWebUrl(String webUrl) {
+		this.webUrl = webUrl;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public boolean isArchived() {
+		return archived;
+	}
+
+	public void setArchived(boolean archived) {
+		this.archived = archived;
+	}
+
+	public List<TeamCityBuildType> getBuildTypes() {
+		return buildTypes.getBuildTypes();
+	}
 
 }

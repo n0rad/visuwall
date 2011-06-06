@@ -26,9 +26,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import ch.qos.logback.classic.Level;
-
 import net.awired.visuwall.core.application.enumeration.LogLevelEnum;
+import ch.qos.logback.classic.Level;
 
 public class ApplicationHelper {
 
@@ -75,7 +74,7 @@ public class ApplicationHelper {
 		if (logLevelEnum != null) {
 			return logLevelEnum.getLevel();
 		} else {
-			return Level.INFO;
+			return Level.DEBUG;
 		}
 	}
 

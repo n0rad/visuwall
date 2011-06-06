@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<agents>
+	<agent name="ubuntu-10.10-i-096ee067" id="1329"
+		href="/app/rest/agents/id:1329" />
+	<agent name="win-6-m-i-ffef6791" id="1336" href="/app/rest/agents/id:1336" />
+</agents>
