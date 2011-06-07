@@ -1,0 +1,2096 @@
+
+<!DOCTYPE html>
+<html id="htmlId">
+
+  <div id="loadingWarning" style="
+    text-align: center;
+    background-color: #fff;
+    border: 5px solid #c6c6c6;
+    padding: 10px;
+    position: absolute;
+    display: none;
+    top: 37%;
+    left: 35%;
+    z-index: 1000;
+    width: 12em;
+    color: #868686;
+    font-family: tahoma, verdana, arial, sans-serif;
+    font-size: 20px;
+  ">
+    LOADING...
+  </div>
+
+  <script type="text/javascript" xml:space="preserve">
+    function getLoadingDiv() {
+      return document.getElementById('loadingWarning');
+    }
+
+    var loadingTimeout = setTimeout(function(){
+      var div = getLoadingDiv();
+      if (div != null) {
+        div.style.display = 'block';
+      }
+    }, 500);
+  </script>
+
+  <head>
+
+  <title>Projects -- TeamCity</title>
+    <!-- :linkCSS --><style type="text/css">
+  @import "/res/4454888366958844024.css?v=1306408611917";
+</style>
+<!--[if IE]>
+    <style type="text/css">
+      body {
+        font-family: helvetica neue, arial, sans-serif;
+      }
+    </style>
+<![endif]-->
+    <script type="text/javascript">
+  var base_uri=window.location.protocol+"//"+window.location.host+"";
+</script>
+
+    
+    <!-- :linkScript --><script type="text/javascript" src="/res/-831807088880509184.js?v=1306408611917"></script>
+
+    <script type="text/javascript">
+      <!--
+      window.$j = jQuery.noConflict();
+      BS.jQueryDropdown.setJQueryOptions(jQuery);
+
+      
+      var topNavPane = new TabbedPane();
+
+      topNavPane.addTab("overview", {
+        caption: "Projects",
+        url: "/overview.html"
+      });
+      
+
+      topNavPane.addTab("agents", {
+        caption: "Agents (4)",
+        url: "/agents.html"
+      });
+
+      
+      topNavPane.addTab("queue", {
+        caption: "Build Queue (7)",
+        url: "/queue.html"
+      });
+      
+
+      function initPage() {
+        
+        if (document.location.href.indexOf('#') == -1) {
+          restoreScrolling();
+        }
+        
+
+        if (typeof BS == "undefined") return;
+        BS.initReloadBlocker();
+      }
+
+      Behaviour.addLoadEvent(initPage);
+
+      Behaviour.addLoadEvent(function() {
+        if (typeof BS == "undefined") return;
+
+        BS.WindowFocusMonitor.startMonitor();
+
+        BS.StatisticsMonitor.start("/serverStatistics.html");
+        BS.EventTracker.startTracking("/eventTracker.html");
+      });
+
+      
+        Behaviour.addLoadEvent(function() {
+          clearTimeout(loadingTimeout);
+          var div = getLoadingDiv();
+          if (div != null) {
+            BS.Util.hide(div);
+          }
+        });
+      
+
+      Event.observe(window, "unload", function() {
+        rememberScrolling();
+        if (typeof BS == "undefined") return;
+        BS.blockRefreshPermanently();
+        BS.EventTracker.dispose();
+      });
+
+      BS.ServerLink = OO.extend(BS.AbstractModalDialog, {
+        _failuresNum: 0,
+
+        getContainer: function() {
+          return $('shutdownDialog');
+        },
+
+        onShutdown: function() {
+          if (this.isVisible() || this._wasClosed) return;
+          BS.Util.hide($('onCommunicationFailure'));
+          BS.Util.show($('onServerShutdown'));
+          $('shutdownDetails').innerHTML = "Server is unavailable since " + new Date().toLocaleString();
+          this.showCentered();
+        },
+
+        onFailure: function(ex) {
+          if (this.isVisible() || this._wasClosed) return;
+          if (++this._failuresNum > 5) {
+            BS.Util.hide($('onServerShutdown'));
+            BS.Util.show($('onCommunicationFailure'));
+            $('shutdownDetails').innerHTML = "Server is unavailable since " + new Date().toLocaleString();
+            this.showCentered();
+          }
+        },
+
+        isConnectionAvailable : function() {
+          return this._failuresNum == 0
+        },
+
+        onSuccess: function() {
+          this._failuresNum = 0;
+          this._wasClosed = false;
+          this.doClose();
+        },
+
+        close: function() {
+          this._wasClosed = true;
+          this.doClose();
+        }
+      });
+
+      window._tc_es = function(e) {Event.stop(e);};
+      //-->
+    </script>
+
+  <!-- :linkCSS --><style type="text/css">
+  @import "/res/1405159448790075677.css?v=1306408611917";
+</style>
+  <!-- :linkScript --><script type="text/javascript" src="/res/-5359394318216259576.js?v=1306408611917"></script>
+  <script type="text/javascript">
+    <!--
+    Behaviour.addLoadEvent(function() {
+      BS.RunningBuilds.startUpdates();
+      BS.SystemProblems.startUpdates();
+    });
+
+    topNavPane.setActiveCaption('overview');
+    //-->
+  </script>
+
+  
+<link rel="Shortcut Icon" href="/favicon20.ico" type="image/x-icon"/>
+
+<meta name="application-name" content="TeamCity (Projects -- TeamCity)"/>
+<meta name="description" content="Powerful Continuous Integration and Build Server"/>
+<link rel="icon" href="/img/icons/TeamCity512.png" sizes="512x512"/>
+<link rel="icon" href="/img/icons/TeamCity128.png" sizes="128x128"/>
+
+<link rel="icon" href="/img/icons/TeamCity48.png" sizes="48x48"/>
+<link rel="icon" href="/img/icons/TeamCity32.png" sizes="32x32"/>
+
+<link rel="icon" href="/img/icons/TeamCity16.png" sizes="16x16"/>
+
+
+  <!-- :linkCSS --><style type="text/css">
+  @import "/res/4239851527364970342.css?v=1306408611917";
+</style><!-- :linkScript --><script type="text/javascript" src="/res/-2223765811167872118.js?v=1306408611917"></script>
+<!-- START EXTENSION CONTENT jetbrains.buildServer.web.openapi.SimplePageExtension: /plugins/searchBuildByNumber/input.jsp -->
+
+
+<div id="inputIdF" style="display: none;">
+  <input class="quickSearchQuery quickSearchQueryUnfocused"
+       id="searchField"
+       value=""
+       onfocus="BS_search_onfocus(this);"
+       onblur="BS_search_onblur(this);"
+       onkeydown="BS.Tooltip.hidePopup();return true;"
+       onkeypress="{
+        if (event.keyCode == 13) {
+          BS_search_go(event.shiftKey);
+        }
+      }"
+  />
+<a href="#" onclick="BS_search_go(false);" class="quickSearchButton" title="Search"><img src='/plugins/searchBuildByNumber/searchIcon.png'/></a>
+
+<script type="text/javascript">
+  function BS_setHideForeverCookie() {
+    setCookie("n_s_h", 'true', 60);
+    BS.Tooltip.hidePopup();
+  }
+  function BS_search_onfocus(field) {
+    Element.addClassName(field, 'quickSearchQueryFocused');
+    Element.removeClassName(field, 'quickSearchQueryUnfocused');
+    if (false && (field.id=="headerSearchField") && getCookie('n_s_h') != 'true') {
+      BS.Tooltip.showMessage(field, {shift: {x: -220, y: 20}, width: "300px"}, 'Search builds by build number, tag, or build configuration name.<br/>'+
+                                          'Specify several keywords to get more precise results, for example: '+
+                                          '<tt>#3453 Selena</tt>.<br /><a style="font-size: 80%" href=\'#\' '+
+                                          'onclick=\'BS_setHideForeverCookie();\'>hide and don\'t show again</a>');
+      setTimeout(function() {
+        field.select();
+      }, 20)
+    }
+  }
+  function BS_search_onblur(field) {
+    Element.removeClassName(field, 'quickSearchQueryFocused');
+    Element.addClassName(field, 'quickSearchQueryUnfocused');
+  }
+  function BS_search_go(newPage) {
+    var url = '/searchResults.html?query='
+        + encodeURIComponent($("searchField") ? $("searchField").value : $("headerSearchField").value)
+        + '&buildTypeId='
+        + '&byTime=' + ($('searchByTime') ? $('searchByTime').value : false);
+    if(newPage) window.open(url);
+    else document.location.href = url;
+  }
+</script>
+</div>
+<script type="text/javascript">
+  function installSearchField() {
+    Element.cleanWhitespace('userPanel');
+    Element.cleanWhitespace('inputIdF');
+    $('inputIdF').firstChild.id = 'headerSearchField';
+    $('userPanel').innerHTML += "<span class='search'>" + $('inputIdF').innerHTML + "</span>";
+    $('inputIdF').innerHTML ='';
+    $('headerSearchField').onkeypress = function(event) {
+      if (BS_search_timer) clearTimeout(BS_search_timer);
+      var url = BS_search_getUrl();
+      if (event.keyCode == Event.KEY_RETURN) {
+        if(event.shiftKey) {
+          document.location.href = url;
+        } else {
+          BS_search_showPopup(url);
+        }
+      } else if (event.keyCode == Event.KEY_ESC) {
+        return false;
+      } else {
+        BS_search_timer = setTimeout(function () { BS_search_showPopup(BS_search_getUrl()); }, 700);
+      }
+    }.bindAsEventListener();
+  }
+
+  BS_search_getUrl = function() {
+    return '/searchResults.html?query='
+        + encodeURIComponent($('headerSearchField').value)
+        + '&buildTypeId=';
+  };
+
+  var BS_search_timer;
+
+  function BS_search_showPopup(url) {
+    new BS.Popup('searchResultsPopup', {
+      delay: 0,
+      shift: {x: -150, y: 22},
+      hideOnMouseOut: false,
+      loadingText: "Loading search results ...",
+      url: url + '&popupMode=true',
+      afterShowFunc: function(popup) {
+      }
+    }).showPopupNearElement('headerSearchField');
+  }
+
+  // Tricky part - insert search field into existing tag - userPanel (top right navigation)
+  BS.WaitFor(function() {
+    return $('header-ready');
+  }, installSearchField);
+
+</script>
+
+<!-- END EXTENSION CONTENT jetbrains.buildServer.web.openapi.SimplePageExtension -->
+
+<!--[if IE]>
+    <style type="text/css">
+      .modalDialog {
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#7f515255, endColorstr=#7f515255);       /* For IE 5.5 - 7 */
+        -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#7f515255, endColorstr=#7f515255)"; /* For IE 8 */
+        background: transparent;
+      }
+    </style>
+<![endif]-->
+<!--[if lte IE 7]>
+    <style type="text/css">
+      @import /css/ie7_fix.css;
+    </style>
+<![endif]-->
+  </head>
+
+  <body>
+  <div id="topWrapper">
+
+    <div class="headBG">
+      <div class="fixedWidth">
+
+        <a href="/" class="headerLogo"><img src="/img/icons/TeamCity32.png" alt="Logo"/></a>
+
+        <div id="tabsContainer"></div>
+        <div id="userPanel">
+          
+          <div class="info"><p>Welcome,
+            
+            <script type="text/javascript">BS.usernamePopup_h = new BS.Popup("usernamePopupContent",{shift: {x: -120, y: 15}});</script>
+<span class="pc "  onmouseover="BS.usernamePopup_h.stopHidingPopup()"><a href='/profile.html?init=1'>Guest user</a><img id="usernamePopup" src="/img/popUpControl.gif" onmouseover="BS.usernamePopup_h.showPopupNearElement(this);_pc_over(this,'BS.usernamePopup_h.hidePopup(300)')" onclick="_tc_es(event)"/></span><script type="text/javascript">
+  window._pc_over = function(img, hidePopupCode) {
+    img.src=img.src.replace('.gif', '_hover.gif');
+    img.onmouseout = img.parentNode.onmouseout = function() { if (hidePopupCode) eval(hidePopupCode); _pc_out(this) }.bind(img);
+  };
+  window._pc_out = function(img) {img.src=img.src.replace('_hover', '');};
+
+</script><div id="usernamePopupContent" class="popupDiv">
+                
+                <div onclick="BS.Logout('/ajax.html?logout=1');">
+                  <a class="logout" href="javascript://" onclick="BS.Logout('/ajax.html?logout=1');">Logout</a>
+                </div></div></div>
+          
+          
+        </div>
+      </div>
+      <div id="header-ready" class="clr"></div>
+    </div>
+    <script type="text/javascript">
+      <!--
+      if (topNavPane) {
+        topNavPane.showIn('tabsContainer');
+        jQuery("#tabsContainer li").each(function() {
+          var self = jQuery(this);
+          if (!self.hasClass("first")) {
+            self.addClass("leftBorder")
+          }
+        });
+        BS.AllProjectsPopup.install();
+      }
+      // -->
+    </script>
+
+    <div class="fixedWidth">
+      
+    <div id="toolbar">
+      <div class="toolbar-left">
+        <a href="javascript://" onclick="BS.CollapsableBlocks.collapseAll(true)" title="Click to collapse all builds">Collapse All</a>
+        | <a href="javascript://" onclick="BS.CollapsableBlocks.expandAll(true)" title="Click to expand all builds">Expand All</a>
+      </div>
+      <div class="toolbar-right">
+
+        
+
+        
+          
+        
+      </div>
+      <div class="clr"></div>
+    </div>
+  
+      <div class="quickLinks">
+        
+      </div>
+      <script type="text/javascript">
+        <!--
+        BS.Navigation.writeBreadcrumbs();
+        // -->
+      </script>
+      <div class="clr"></div>
+    </div>
+
+  </div>
+  <div class="fixedWidth">
+
+    
+
+
+<!-- include PlaceId.BEFORE_CONTENT -->
+
+<!-- START EXTENSION CONTENT jetbrains.buildServer.controllers.CriticalErrorsPageExtension: /pageBeforeContentCriticalErrors.jsp -->
+
+
+
+
+
+  
+<!-- END EXTENSION CONTENT jetbrains.buildServer.controllers.CriticalErrorsPageExtension -->
+
+<!-- end of include PlaceId.BEFORE_CONTENT -->
+
+
+    
+    <table class="tabsTable">
+      <tr>
+        <td>
+          <div id="tabsContainer3" class="simpleTabs"></div>
+        </td>
+        <td class="besideContent">
+          
+        </td>
+
+      </tr>
+    </table>
+  </div>
+
+  <div id="archivedProjectsContent" class="popupDiv" style="display:none;">    
+  </div>
+  <div id="buildResultsSummaryTemplate" style="display:none">
+    <div class="summaryContainer">
+      <span id="detailedSummary:##BUILD_ID##">
+        <table cellspacing="0">
+
+        <tr>
+          <td>
+            <div class="header">Build shortcuts</div>
+            <ul class="bsLinks">
+              <li style="white-space: nowrap;">
+                Log:
+                <span style="display: none;" data-vis="##SHOW_IF_RUNNING##">
+                  <a href="/viewLog.html?tab=buildLog&buildTypeId=##BUILD_TYPE_ID##&buildId=##BUILD_ID##&tail=true"
+                         title="View log messages">tail</a> |
+                </span>
+
+                <span style="display: none;" data-vis="##SHOW_IF_FINISHED##">
+                  <a href="/viewLog.html?tab=buildLog&buildTypeId=##BUILD_TYPE_ID##&buildId=##BUILD_ID##&tree=true"
+                         title="View log messages as tree">tree</a> |
+                </span>
+                <a href="/viewLog.html?tab=buildLog&buildTypeId=##BUILD_TYPE_ID##&buildId=##BUILD_ID##"
+                       title="View important messages">short</a> |
+                <a href="/viewLog.html?tab=buildLog&buildTypeId=##BUILD_TYPE_ID##&buildId=##BUILD_ID##&all=true"
+                       title="View all messages">full</a>
+              </li>
+              <li><a href="/viewLog.html?tab=buildParameters&buildTypeId=##BUILD_TYPE_ID##&buildId=##BUILD_ID##"
+                     title="View build parameters">Parameters</a></li>
+
+              <li><span id="summaryProgress:##BUILD_ID##" style="font-weight: normal"></span></li>
+            </ul>
+          </td>
+        </tr>
+        </table>
+      </span>
+    </div>
+  </div>
+  <div id="buildTypeMenuTemplate" style="display:none">
+
+    <div class="summaryContainer">
+    
+    <ul class="menuList">
+      
+      <li self_element="true" onclick="return BS.openUrl(event, '/project.html?projectId=##PROJECT_ID##');" class="menuItem" onmouseover="this.className = 'menuItemSelected'" onmouseout="this.className = 'menuItem'">
+        <a href="/project.html?projectId=##PROJECT_ID##" title="Project home page">Project Home</a>
+      </li>
+      
+      <li self_element="true" onclick="return BS.openUrl(event, '/viewType.html?buildTypeId=##BUILD_TYPE_ID##');"
+          style="padding-bottom: 4px; border-bottom: 1px solid #E7E7E7;" class="menuItem" onmouseover="this.className = 'menuItemSelected'" onmouseout="this.className = 'menuItem'">
+        <a href="/viewType.html?buildTypeId=##BUILD_TYPE_ID##" title="Build configuration home page">Build Configuration Home</a>
+      </li>
+
+      
+      <li onclick="return BS.openUrl(event, '/viewType.html?buildTypeId=##BUILD_TYPE_ID##&tab=buildTypeHistoryList');" class="menuItem" onmouseover="this.className = 'menuItemSelected'" onmouseout="this.className = 'menuItem'">
+        <a href="/viewType.html?buildTypeId=##BUILD_TYPE_ID##&tab=buildTypeHistoryList" title="Build history for the configuration">History</a>
+      </li>
+      
+      <li onclick="return BS.openUrl(event, '/viewType.html?buildTypeId=##BUILD_TYPE_ID##&tab=buildTypeChangeLog');" class="menuItem" onmouseover="this.className = 'menuItemSelected'" onmouseout="this.className = 'menuItem'">
+        <a href="/viewType.html?buildTypeId=##BUILD_TYPE_ID##&tab=buildTypeChangeLog" title="View user changes">Change Log</a>
+      </li>
+      <li responsibility="true" onclick="BS.ResponsibilityDialog.loadTakeResponsibilityDialog('##BUILD_TYPE_ID##', '##BUILD_TYPE_NAME##'); return false;"
+          class="menuItem" onmouseover="this.className = 'menuItemSelected'" onmouseout="this.className = 'menuItem'">
+        <a href="#" onclick="BS.ResponsibilityDialog.loadTakeResponsibilityDialog('##BUILD_TYPE_ID##', '##BUILD_TYPE_NAME##'); return false;"
+           title="Assign a user to investigate problems in the configuration">Start Investigation...</a>
+
+      </li>
+      <li class="menuItem" onmouseover="this.className = 'menuItemSelected'" onmouseout="this.className = 'menuItem'" admin_element="true" onclick="return BS.openUrl(event, jQuery(this).children('a').attr('href'));">
+        <a href="/admin/editBuild.html?init=1&id=buildType:##BUILD_TYPE_ID##" onmouseover="" onmouseout="" title="Edit build configuration settings" style="">Edit Settings</a>
+      </li>
+    </ul>
+    </div>
+  </div>
+  <div id="issueDetailsTemplate" style="display:none">
+
+    <span id="detailedSummary:##ISSUE_ID##">
+      <img src="/img/ajax-loader.gif" width="16" height="16" alt="*"/>
+    </span>
+  </div>
+
+  <div id="mainContent" class="fixedWidth">
+    <div id="content">
+      
+      
+    
+      <script type="text/javascript">var handler = function() {BS.reload();};BS.EventTracker.subscribeOnEvent('o', 35, handler);BS.EventTracker.subscribeOnEvent('p', 0, handler);BS.EventTracker.subscribeOnEvent('q', 0, handler);</script>
+      <div id="buildTypes">
+
+  <div class="clr"></div
+>
+    
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project54', true);};BS.EventTracker.subscribeOnProjectEvent('a', 2, 'project54', handler);BS.EventTracker.subscribeOnProjectEvent('b', 2, 'project54', handler);BS.EventTracker.subscribeOnProjectEvent('c', 2, 'project54', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project54', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project54', handler);BS.EventTracker.subscribeOnProjectEvent('t', 2, 'project54', handler);BS.EventTracker.subscribeOnProjectEvent('u', 2, 'project54', handler);BS.EventTracker.subscribeOnProjectEvent('r', 3, 'project54', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project54', handler);BS.EventTracker.subscribeOnProjectEvent('x', 13, 'project54', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project54', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project54', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project54', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project54', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project54', handler);</script><div class="build " id="p_project54">
+  <span style="display:none;"><!-- ================ Project block header: -->Amazon API client</span>
+  <div class="projectHeader exp">
+   <table>
+     <tr>
+       <td class="projectName">
+
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project is successful. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project54" />
+         <a href="/project.html?projectId=project54&tab=projectOverview" title="Go to the project page">Amazon API client</a>
+         <span class="projectDescription">typica &amp; maragogype</span>
+       </td>
+       <td class="projectStatus"><div class="successful">3 successful</div><div class="failing"></div>
+       </td>
+
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project54">
+  
+<!-- Start of BC caption Amazon API client :: Build --> <div class="tableCaption" id="bt297-div" > <div class="relative"> <a href="#" onclick="return BS.hideBuildType('project54', 'bt297');" class="close-bt">&nbsp;</a> </div> <table class="runTable"> <tr> <td class="runningStatus"> <span class="runningStatus"><img src="/img/buildStates/empty.gif" class="icon " /></span> <span class="runningStatus">Idle</span> </td> <td class="runButton"> </td> </tr> </table> <img src="/img/eluruDesign/projectExpanded.gif" title="Click to collapse/expand details" class="handle" id="blockHandlebt297" /> <span class="pc " onmouseover="BS.BuildTypeSummary.stopHidingPopup();"><a class="buildTypeName" style="padding-left:0px;" href="/viewType.html?buildTypeId=bt297&tab=buildTypeStatusDiv" title="Click to open &quot;Build&quot; home page">Build</a><img id="btppbt297" src="/img/popUpControl.gif" onmouseover="BS.BuildTypeSummary.showSummaryPopup(this, 'bt297', 'project54', false, false, false, 'Build');;_pc_over(this,'BS.BuildTypeSummary.hidePopup();')" onclick="_tc_es(event)"/></span> <span class="addMessage lastBuilt"> Last built: <span class="date" title="02&nbsp;Mar&nbsp;11&nbsp;17:20">3 months ago</span> </span> <span id="buildType:1302c0ce1e5:systemProblems" class="systemProblemsBar" style="display:none;" onclick="_tc_es(event)"> <span id="buildType:1302c0ce1e5:systemProblemsText" data-maxWidth="40">Configuration problems found</span> <div class="sep1"></div><div class="sep2"></div> <a title="View more information" href="#" onclick="BS.SystemProblemsPopup.showDetails('bt297', '', '', true, this); return false;">details &raquo;</a> </span> <script type="text/javascript">BS.SystemProblems.registerProblemId('bt297', '1302c0ce1e5');</script> </div> <!-- End of BC caption Amazon API client :: Build --> <!-- Start of builds for Amazon API client :: Build --> <div class="overviewTypeTableCont" id="btbbt297" style=""> <div class="bt-separator"></div> <table cellspacing="0" class="overviewTypeTable"> <tr><td class=" buildNumber"> <span>#6 </span> </td> <td class=" status"> <img src="/img/buildStates/buildSuccessful.gif" id="build:47068:img" class="icon" onmouseover='BS.Tooltip.showMessageFromContainer(this, {shift:{x:10, y:5}, hideDelay: 10}, "dataHover_47068");' onmouseout='BS.Tooltip.hidePopup()' /><div id="dataHover_47068" style="display: none;">Build was successful<br/>Build agent: <a href="/agentDetails.html?name=win-6-m-i-b97d43d5&agentTypeId=90" title="Click to view &quot;win-6-m-i-b97d43d5&quot; agent details">win-6-m-i-b97d43d5</a></div> <script type="text/javascript"> if (!BS.res47068_handle) { BS.res47068_handle = new BS.BuildResultsSummary(47068, 'bt297', true, 'true'); } </script> <span class="pc " style="white-space: normal;" onmouseover="BS.res47068_handle.stopHidingPopup();"><a href="/viewLog.html?buildId=47068&tab=buildResultsDiv&buildTypeId=bt297" title="View build results" ><span id="build:47068:text">Success</span></a><img id="results:47068" src="/img/popUpControl.gif" onmouseover="BS.res47068_handle.showPopupNearElement(this);;_pc_over(this,'BS.res47068_handle.hidePopup();')" onclick="_tc_es(event)"/></span> </td> <td class=" link artifactsLink"><span id="build:47068:artifactsLink"><span class="pc " onmouseover="BS.ArtifactsPopup.stopHidingPopup()"><a href="/viewLog.html?buildId=47068&tab=artifacts&buildTypeId=bt297" title="View build artifacts" >Artifacts</a><img id="artifacts:47068" src="/img/popUpControl.gif" onmouseover="BS.ArtifactsPopup.showArtifactsPopup(this, 'bt297', 47068);_pc_over(this,'BS.ArtifactsPopup.hidePopup()')" onclick="_tc_es(event)"/></span></span> </td> <td class=" link changesLink"><span class="pc " onmouseover="BS.ChangesPopup.stopHidingPopup();"><span class="commentText">No changes</span><img id="changes:53203" src="/img/popUpControl.gif" onmouseover="BS.ChangesPopup.showBuildChangesPopup(this, 53203);;_pc_over(this,'BS.ChangesPopup.hidePopup();')" onclick="_tc_es(event)"/></span></td> <td class=" progressTd"><p class="hidden" id="aName:47068">win-6-m-i-b97d43d5</p> <span class="date" title="02&nbsp;Mar&nbsp;11&nbsp;17:20">3 months ago</span> <span class="progressDuration" title="Build duration">(<span id="build:47068:duration">20s</span>)</span> </td> <td class=" stopBuild"></td></tr> </table> <script type="text/javascript"> BS.Blocks._saved['btbt297']=''; BS.CollapsableBlocks.registerBlock(new BS.BuildTypeBlock("bt", 'bt297', 'eluruDesign/projectSuccessful.gif')); </script> </div> <!-- End of builds for Amazon API client :: Build -->
+
+<!-- Start of BC caption Amazon API client :: Download missing jar --> <div class="tableCaption" id="bt296-div" > <div class="relative"> <a href="#" onclick="return BS.hideBuildType('project54', 'bt296');" class="close-bt">&nbsp;</a> </div> <table class="runTable"> <tr> <td class="runningStatus"> <span class="runningStatus"><img src="/img/buildStates/empty.gif" class="icon " /></span> <span class="runningStatus">Idle</span> </td> <td class="runButton"> </td> </tr> </table> <img src="/img/eluruDesign/projectExpanded.gif" title="Click to collapse/expand details" class="handle" id="blockHandlebt296" /> <span class="pc " onmouseover="BS.BuildTypeSummary.stopHidingPopup();"><a class="buildTypeName" style="padding-left:0px;" href="/viewType.html?buildTypeId=bt296&tab=buildTypeStatusDiv" title="Click to open &quot;Download missing jar&quot; home page">Download missing jar</a><img id="btppbt296" src="/img/popUpControl.gif" onmouseover="BS.BuildTypeSummary.showSummaryPopup(this, 'bt296', 'project54', false, false, false, 'Download missing jar');;_pc_over(this,'BS.BuildTypeSummary.hidePopup();')" onclick="_tc_es(event)"/></span> <span class="addMessage lastBuilt"> Last built: <span class="date" title="02&nbsp;Mar&nbsp;11&nbsp;17:15">3 months ago</span> </span> <span id="buildType:1302c0ce1e6:systemProblems" class="systemProblemsBar" style="display:none;" onclick="_tc_es(event)"> <span id="buildType:1302c0ce1e6:systemProblemsText" data-maxWidth="40">Configuration problems found</span> <div class="sep1"></div><div class="sep2"></div> <a title="View more information" href="#" onclick="BS.SystemProblemsPopup.showDetails('bt296', '', '', true, this); return false;">details &raquo;</a> </span> <script type="text/javascript">BS.SystemProblems.registerProblemId('bt296', '1302c0ce1e6');</script> </div> <!-- End of BC caption Amazon API client :: Download missing jar --> <!-- Start of builds for Amazon API client :: Download missing jar --> <div class="overviewTypeTableCont" id="btbbt296" style=""> <div class="bt-separator"></div> <table cellspacing="0" class="overviewTypeTable"> <tr><td class=" buildNumber"> <span>#6 </span> </td> <td class=" status"> <img src="/img/buildStates/buildSuccessful.gif" id="build:47062:img" class="icon" onmouseover='BS.Tooltip.showMessageFromContainer(this, {shift:{x:10, y:5}, hideDelay: 10}, "dataHover_47062");' onmouseout='BS.Tooltip.hidePopup()' /><div id="dataHover_47062" style="display: none;">Build was successful<br/>Build agent: <a href="/agentDetails.html?name=ubuntu-10.10-i-2179474d&agentTypeId=86" title="Click to view &quot;ubuntu-10.10-i-2179474d&quot; agent details">ubuntu-10.10-i-2179474d</a></div> <script type="text/javascript"> if (!BS.res47062_handle) { BS.res47062_handle = new BS.BuildResultsSummary(47062, 'bt296', true, 'true'); } </script> <span class="pc " style="white-space: normal;" onmouseover="BS.res47062_handle.stopHidingPopup();"><a href="/viewLog.html?buildId=47062&tab=buildResultsDiv&buildTypeId=bt296" title="View build results" ><span id="build:47062:text">Success</span></a><img id="results:47062" src="/img/popUpControl.gif" onmouseover="BS.res47062_handle.showPopupNearElement(this);;_pc_over(this,'BS.res47062_handle.hidePopup();')" onclick="_tc_es(event)"/></span> </td> <td class=" link artifactsLink"><span id="build:47062:artifactsLink"><span class="pc " onmouseover="BS.ArtifactsPopup.stopHidingPopup()"><a href="/viewLog.html?buildId=47062&tab=artifacts&buildTypeId=bt296" title="View build artifacts" >Artifacts</a><img id="artifacts:47062" src="/img/popUpControl.gif" onmouseover="BS.ArtifactsPopup.showArtifactsPopup(this, 'bt296', 47062);_pc_over(this,'BS.ArtifactsPopup.hidePopup()')" onclick="_tc_es(event)"/></span></span> </td> <td class=" link changesLink"><span class="pc " onmouseover="BS.ChangesPopup.stopHidingPopup();"><span class="commentText">No changes</span><img id="changes:53197" src="/img/popUpControl.gif" onmouseover="BS.ChangesPopup.showBuildChangesPopup(this, 53197);;_pc_over(this,'BS.ChangesPopup.hidePopup();')" onclick="_tc_es(event)"/></span></td> <td class=" progressTd"><p class="hidden" id="aName:47062">ubuntu-10.10-i-2179474d</p> <span class="date" title="02&nbsp;Mar&nbsp;11&nbsp;17:15">3 months ago</span> <span class="progressDuration" title="Build duration">(<span id="build:47062:duration">2s</span>)</span> </td> <td class=" stopBuild"></td></tr> </table> <script type="text/javascript"> BS.Blocks._saved['btbt296']=''; BS.CollapsableBlocks.registerBlock(new BS.BuildTypeBlock("bt", 'bt296', 'eluruDesign/projectSuccessful.gif')); </script> </div> <!-- End of builds for Amazon API client :: Download missing jar -->
+
+<!-- Start of BC caption Amazon API client :: maragogype --> <div class="tableCaption" id="bt298-div" > <div class="relative"> <a href="#" onclick="return BS.hideBuildType('project54', 'bt298');" class="close-bt">&nbsp;</a> </div> <table class="runTable"> <tr> <td class="runningStatus"> <span class="runningStatus"><img src="/img/buildStates/empty.gif" class="icon " /></span> <span class="runningStatus">Idle</span> </td> <td class="runButton"> </td> </tr> </table> <img src="/img/eluruDesign/projectExpanded.gif" title="Click to collapse/expand details" class="handle" id="blockHandlebt298" /> <span class="pc " onmouseover="BS.BuildTypeSummary.stopHidingPopup();"><a class="buildTypeName" style="padding-left:0px;" href="/viewType.html?buildTypeId=bt298&tab=buildTypeStatusDiv" title="Click to open &quot;maragogype&quot; home page">maragogype</a><img id="btppbt298" src="/img/popUpControl.gif" onmouseover="BS.BuildTypeSummary.showSummaryPopup(this, 'bt298', 'project54', false, false, false, 'maragogype');;_pc_over(this,'BS.BuildTypeSummary.hidePopup();')" onclick="_tc_es(event)"/></span> <span class="addMessage lastBuilt"> Last built: <span class="date" title="26&nbsp;May&nbsp;11&nbsp;20:52">one week ago</span> </span> <span id="buildType:1302c0ce1e7:systemProblems" class="systemProblemsBar" style="display:none;" onclick="_tc_es(event)"> <span id="buildType:1302c0ce1e7:systemProblemsText" data-maxWidth="40">Configuration problems found</span> <div class="sep1"></div><div class="sep2"></div> <a title="View more information" href="#" onclick="BS.SystemProblemsPopup.showDetails('bt298', '', '', true, this); return false;">details &raquo;</a> </span> <script type="text/javascript">BS.SystemProblems.registerProblemId('bt298', '1302c0ce1e7');</script> </div> <!-- End of BC caption Amazon API client :: maragogype --> <!-- Start of builds for Amazon API client :: maragogype --> <div class="overviewTypeTableCont" id="btbbt298" style=""> <div class="bt-separator"></div> <table cellspacing="0" class="overviewTypeTable"> <tr><td class=" buildNumber"> <span>#2.0.39 </span> </td> <td class=" status"> <img src="/img/buildStates/buildSuccessful.gif" id="build:51319:img" class="icon" onmouseover='BS.Tooltip.showMessageFromContainer(this, {shift:{x:10, y:5}, hideDelay: 10}, "dataHover_51319");' onmouseout='BS.Tooltip.hidePopup()' /><div id="dataHover_51319" style="display: none;">Build was successful<br/>Build agent: <a href="/agentDetails.html?name=win-6-m-i-e1a3798f&agentTypeId=90" title="Click to view &quot;win-6-m-i-e1a3798f&quot; agent details">win-6-m-i-e1a3798f</a></div> <script type="text/javascript"> if (!BS.res51319_handle) { BS.res51319_handle = new BS.BuildResultsSummary(51319, 'bt298', true, 'true'); } </script> <span class="pc " style="white-space: normal;" onmouseover="BS.res51319_handle.stopHidingPopup();"><a href="/viewLog.html?buildId=51319&tab=buildResultsDiv&buildTypeId=bt298" title="View build results" ><span id="build:51319:text">Success</span></a><img id="results:51319" src="/img/popUpControl.gif" onmouseover="BS.res51319_handle.showPopupNearElement(this);;_pc_over(this,'BS.res51319_handle.hidePopup();')" onclick="_tc_es(event)"/></span> </td> <td class=" link artifactsLink"><span id="build:51319:artifactsLink"><span class="pc " onmouseover="BS.ArtifactsPopup.stopHidingPopup()"><a href="/viewLog.html?buildId=51319&tab=artifacts&buildTypeId=bt298" title="View build artifacts" >Artifacts</a><img id="artifacts:51319" src="/img/popUpControl.gif" onmouseover="BS.ArtifactsPopup.showArtifactsPopup(this, 'bt298', 51319);_pc_over(this,'BS.ArtifactsPopup.hidePopup()')" onclick="_tc_es(event)"/></span></span> </td> <td class=" link changesLink"><span class="pc " onmouseover="BS.ChangesPopup.stopHidingPopup();"><a href="/viewLog.html?buildId=51319&tab=buildChangesDiv&buildTypeId=bt298" title="" id='changes:57678'>Changes (8)</a><img id="changes:57678" src="/img/popUpControl.gif" onmouseover="BS.ChangesPopup.showBuildChangesPopup(this, 57678);;_pc_over(this,'BS.ChangesPopup.hidePopup();')" onclick="_tc_es(event)"/></span></td> <td class=" progressTd"><p class="hidden" id="aName:51319">win-6-m-i-e1a3798f</p> <span class="date" title="26&nbsp;May&nbsp;11&nbsp;20:52">one week ago</span> <span class="progressDuration" title="Build duration">(<span id="build:51319:duration">53s</span>)</span> </td> <td class=" stopBuild"></td></tr> </table> <script type="text/javascript"> BS.Blocks._saved['btbt298']=''; BS.CollapsableBlocks.registerBlock(new BS.BuildTypeBlock("bt", 'bt298', 'eluruDesign/projectSuccessful.gif')); </script> </div> <!-- End of builds for Amazon API client :: maragogype -->
+
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project54']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project54', "eluruDesign/projectSuccessful.gif", false));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Amazon API client</span>
+  <script type="text/javascript">
+    jQuery("#p_project54 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+<form id="pauseBuildTypeForm" action="/action.html" method="post" onsubmit="return BS.PauseBuildTypeDialog.submit();" style="margin: 0; padding: 0;" autocomplete="off">
+  <div id="pauseBuildTypeFormDialog" class="pauseBuildTypeFormDialog modalDialog">
+  <div class="dialogHeader">
+
+    <div class="closeWindow">
+      <a title="Close dialog window" href="javascript://" onclick="BS.PauseBuildTypeDialog.close();" >
+        <img src='/img/close.gif'/>
+      </a>
+    </div>
+    <h3 class="dialogTitle" id="pauseBuildTypeFormTitle">Pause build configuration</h3>
+  </div>
+  <div class="modalDialogBody">
+
+    
+  <textarea name="pauseComment" rows="5" cols="46" class="commentTextArea"
+            onclick="if (this.value == this.defaultValue) this.value = '';">&lt;your comment here></textarea>
+  <input type="hidden" name="pauseBuildType" value=""/>
+  <input type="hidden" name="pause" value=""/>
+                             
+  <div class="popupSaveButtonsBlock">
+    <a href="javascript://" onclick="BS.PauseBuildTypeDialog.close()" class="cancel">Cancel</a>
+    <input class="submitButton" type="submit" value="Pause" id="PauseSubmitButton"/>
+    <img id="pauseProgressIcon" style="display: none; padding-top: 0.1em; float: right;" src="/img/ajax-loader.gif" width="16" height="16" alt="Please wait..." title="Please wait..."/>
+    <br clear="all"/>
+
+  </div>
+  <br/>
+  </div>
+</div></form>
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project28', false);};BS.EventTracker.subscribeOnProjectEvent('a', 10, 'project28', handler);BS.EventTracker.subscribeOnProjectEvent('b', 10, 'project28', handler);BS.EventTracker.subscribeOnProjectEvent('c', 10, 'project28', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project28', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project28', handler);BS.EventTracker.subscribeOnProjectEvent('t', 10, 'project28', handler);BS.EventTracker.subscribeOnProjectEvent('u', 10, 'project28', handler);BS.EventTracker.subscribeOnProjectEvent('r', 7, 'project28', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project28', handler);BS.EventTracker.subscribeOnProjectEvent('x', 14, 'project28', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project28', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project28', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project28', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project28', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project28', handler);</script><div class="build " id="p_project28">
+  <span style="display:none;"><!-- ================ Project block header: -->Apache Ant</span>
+  <div class="projectHeader ">
+   <table>
+
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project28" />
+         <a href="/project.html?projectId=project28&tab=projectOverview" title="Go to the project page">Apache Ant</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful">3 successful</div><div class="failing">3 failing</div>
+       </td>
+
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project28">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project28']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project28', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Apache Ant</span>
+  <script type="text/javascript">
+    jQuery("#p_project28 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project27', false);};BS.EventTracker.subscribeOnProjectEvent('a', 9, 'project27', handler);BS.EventTracker.subscribeOnProjectEvent('b', 9, 'project27', handler);BS.EventTracker.subscribeOnProjectEvent('c', 9, 'project27', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project27', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project27', handler);BS.EventTracker.subscribeOnProjectEvent('t', 9, 'project27', handler);BS.EventTracker.subscribeOnProjectEvent('u', 9, 'project27', handler);BS.EventTracker.subscribeOnProjectEvent('r', 4, 'project27', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project27', handler);BS.EventTracker.subscribeOnProjectEvent('x', 12, 'project27', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project27', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project27', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project27', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project27', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project27', handler);</script><div class="build " id="p_project27">
+  <span style="display:none;"><!-- ================ Project block header: -->Apache Ivy</span>
+
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project27" />
+         <a href="/project.html?projectId=project27&tab=projectOverview" title="Go to the project page">Apache Ivy</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful">1 successful</div><div class="failing">3 failing</div>
+
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project27">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project27']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project27', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Apache Ivy</span>
+  <script type="text/javascript">
+    jQuery("#p_project27 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project35', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project35', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project35', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project35', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project35', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project35', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project35', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project35', handler);BS.EventTracker.subscribeOnProjectEvent('r', 2, 'project35', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project35', handler);BS.EventTracker.subscribeOnProjectEvent('x', 10, 'project35', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project35', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project35', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project35', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project35', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project35', handler);</script><div class="build " id="p_project35">
+  <span style="display:none;"><!-- ================ Project block header: -->Artifactory Plugin for TeamCity</span>
+
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project is successful. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project35" />
+         <a href="/project.html?projectId=project35&tab=projectOverview" title="Go to the project page">Artifactory Plugin for TeamCity</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful">2 successful</div><div class="failing"></div>
+
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project35">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project35']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project35', "eluruDesign/projectSuccessful.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Artifactory Plugin for TeamCity</span>
+  <script type="text/javascript">
+    jQuery("#p_project35 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project37', false);};BS.EventTracker.subscribeOnProjectEvent('a', 24, 'project37', handler);BS.EventTracker.subscribeOnProjectEvent('b', 24, 'project37', handler);BS.EventTracker.subscribeOnProjectEvent('c', 24, 'project37', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project37', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project37', handler);BS.EventTracker.subscribeOnProjectEvent('t', 35, 'project37', handler);BS.EventTracker.subscribeOnProjectEvent('u', 35, 'project37', handler);BS.EventTracker.subscribeOnProjectEvent('r', 3, 'project37', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project37', handler);BS.EventTracker.subscribeOnProjectEvent('x', 6, 'project37', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project37', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project37', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project37', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project37', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project37', handler);</script><div class="build " id="p_project37">
+  <span style="display:none;"><!-- ================ Project block header: -->Bundler</span>
+
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project37" />
+         <a href="/project.html?projectId=project37&tab=projectOverview" title="Go to the project page">Bundler</a>
+         <span class="projectDescription">Bundler gem (<a target="_blank" title="Click to open this link in a new window" href="http://github.com/carlhuda/bundler.git">http://github.com/carlhuda/bundler.git</a>)</span>
+
+       </td>
+       <td class="projectStatus"><div class="successful"></div><div class="failing">3 failing</div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+
+  </div>
+  <div id="btbovr_project37">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project37']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project37', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Bundler</span>
+  <script type="text/javascript">
+    jQuery("#p_project37 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project39', false);};BS.EventTracker.subscribeOnProjectEvent('a', 5, 'project39', handler);BS.EventTracker.subscribeOnProjectEvent('b', 5, 'project39', handler);BS.EventTracker.subscribeOnProjectEvent('c', 5, 'project39', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project39', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project39', handler);BS.EventTracker.subscribeOnProjectEvent('t', 6, 'project39', handler);BS.EventTracker.subscribeOnProjectEvent('u', 5, 'project39', handler);BS.EventTracker.subscribeOnProjectEvent('r', 4, 'project39', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project39', handler);BS.EventTracker.subscribeOnProjectEvent('x', 108, 'project39', handler);BS.EventTracker.subscribeOnProjectEvent('m', 1, 'project39', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project39', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project39', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project39', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project39', handler);</script><div class="build " id="p_project39">
+  <span style="display:none;"><!-- ================ Project block header: -->Cucumber</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project39" />
+
+         <a href="/project.html?projectId=project39&tab=projectOverview" title="Go to the project page">Cucumber</a>
+         <span class="projectDescription">Cucumber BDD Framework (<a target="_blank" title="Click to open this link in a new window" href="http://cukes.info">http://cukes.info</a>)</span>
+       </td>
+       <td class="projectStatus"><div class="successful"></div><div class="failing">4 failing</div>
+       </td>
+       <td class="hideProject">
+
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project39">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project39']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project39', "eluruDesign/projectFailing.gif", true));
+    </script>
+
+  <span style="display:none;"><!-- ================ END Project build types for: -->Cucumber</span>
+  <script type="text/javascript">
+    jQuery("#p_project39 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project46', false);};BS.EventTracker.subscribeOnProjectEvent('a', 8, 'project46', handler);BS.EventTracker.subscribeOnProjectEvent('b', 8, 'project46', handler);BS.EventTracker.subscribeOnProjectEvent('c', 8, 'project46', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project46', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project46', handler);BS.EventTracker.subscribeOnProjectEvent('t', 8, 'project46', handler);BS.EventTracker.subscribeOnProjectEvent('u', 8, 'project46', handler);BS.EventTracker.subscribeOnProjectEvent('r', 5, 'project46', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project46', handler);BS.EventTracker.subscribeOnProjectEvent('x', 16, 'project46', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project46', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project46', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project46', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project46', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project46', handler);</script><div class="build " id="p_project46">
+  <span style="display:none;"><!-- ================ Project block header: -->Genome Query</span>
+  <div class="projectHeader ">
+
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project46" />
+         <a href="/project.html?projectId=project46&tab=projectOverview" title="Go to the project page">Genome Query</a>
+         <span class="projectDescription"><a target="_blank" title="Click to open this link in a new window" href="http://confluence.jetbrains.net/display/GQRY/Genome+Query">http://confluence.jetbrains.net/display/GQRY/Genome+Query</a></span>
+       </td>
+       <td class="projectStatus"><div class="successful">2 successful</div><div class="failing">3 failing</div>
+
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project46">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project46']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project46', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Genome Query</span>
+  <script type="text/javascript">
+    jQuery("#p_project46 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project14', false);};BS.EventTracker.subscribeOnProjectEvent('a', 85, 'project14', handler);BS.EventTracker.subscribeOnProjectEvent('b', 85, 'project14', handler);BS.EventTracker.subscribeOnProjectEvent('c', 83, 'project14', handler);BS.EventTracker.subscribeOnProjectEvent('e', 1, 'project14', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project14', handler);BS.EventTracker.subscribeOnProjectEvent('t', 85, 'project14', handler);BS.EventTracker.subscribeOnProjectEvent('u', 85, 'project14', handler);BS.EventTracker.subscribeOnProjectEvent('r', 3, 'project14', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project14', handler);BS.EventTracker.subscribeOnProjectEvent('x', 162, 'project14', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project14', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project14', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project14', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project14', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project14', handler);</script><div class="build " id="p_project14">
+  <span style="display:none;"><!-- ================ Project block header: -->Google Web Toolkit</span>
+
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project14" />
+         <a href="/project.html?projectId=project14&tab=projectOverview" title="Go to the project page">Google Web Toolkit</a>
+         <span class="projectDescription">Google Web Toolkit - Trunk</span>
+       </td>
+
+       <td class="projectStatus"><div class="successful">1 successful</div><div class="failing">2 failing</div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+
+  <div id="btbovr_project14">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project14']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project14', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Google Web Toolkit</span>
+  <script type="text/javascript">
+    jQuery("#p_project14 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project22', false);};BS.EventTracker.subscribeOnProjectEvent('a', 43, 'project22', handler);BS.EventTracker.subscribeOnProjectEvent('b', 43, 'project22', handler);BS.EventTracker.subscribeOnProjectEvent('c', 43, 'project22', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project22', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project22', handler);BS.EventTracker.subscribeOnProjectEvent('t', 43, 'project22', handler);BS.EventTracker.subscribeOnProjectEvent('u', 43, 'project22', handler);BS.EventTracker.subscribeOnProjectEvent('r', 6, 'project22', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project22', handler);BS.EventTracker.subscribeOnProjectEvent('x', 340, 'project22', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project22', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project22', handler);</script>
+
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project22', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project22', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project22', handler);</script><div class="build " id="p_project22">
+  <span style="display:none;"><!-- ================ Project block header: -->Gradle</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project22" />
+         <a href="/project.html?projectId=project22&tab=projectOverview" title="Go to the project page">Gradle</a>
+
+         
+       </td>
+       <td class="projectStatus"><div class="successful">3 successful</div><div class="failing">3 failing</div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+
+  </div>
+  <div id="btbovr_project22">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project22']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project22', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Gradle</span>
+  <script type="text/javascript">
+    jQuery("#p_project22 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project12', false);};BS.EventTracker.subscribeOnProjectEvent('a', 21, 'project12', handler);BS.EventTracker.subscribeOnProjectEvent('b', 21, 'project12', handler);BS.EventTracker.subscribeOnProjectEvent('c', 21, 'project12', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project12', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project12', handler);BS.EventTracker.subscribeOnProjectEvent('t', 21, 'project12', handler);BS.EventTracker.subscribeOnProjectEvent('u', 21, 'project12', handler);BS.EventTracker.subscribeOnProjectEvent('r', 3, 'project12', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project12', handler);BS.EventTracker.subscribeOnProjectEvent('x', 24, 'project12', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project12', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project12', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project12', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project12', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project12', handler);</script><div class="build " id="p_project12">
+  <span style="display:none;"><!-- ================ Project block header: -->Groovy</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project12" />
+
+         <a href="/project.html?projectId=project12&tab=projectOverview" title="Go to the project page">Groovy</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful"></div><div class="failing">3 failing</div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+
+   </table>
+  </div>
+  <div id="btbovr_project12">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project12']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project12', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Groovy</span>
+  <script type="text/javascript">
+    jQuery("#p_project12 .tableCaption:first").addClass("firstRow");
+  </script>
+
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project55', false);};BS.EventTracker.subscribeOnProjectEvent('a', 1, 'project55', handler);BS.EventTracker.subscribeOnProjectEvent('b', 1, 'project55', handler);BS.EventTracker.subscribeOnProjectEvent('c', 1, 'project55', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project55', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project55', handler);BS.EventTracker.subscribeOnProjectEvent('t', 1, 'project55', handler);BS.EventTracker.subscribeOnProjectEvent('u', 1, 'project55', handler);BS.EventTracker.subscribeOnProjectEvent('r', 1, 'project55', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project55', handler);BS.EventTracker.subscribeOnProjectEvent('x', 1, 'project55', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project55', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project55', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project55', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project55', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project55', handler);</script><div class="build " id="p_project55">
+  <span style="display:none;"><!-- ================ Project block header: -->IdeaVIM</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project is successful. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project55" />
+         <a href="/project.html?projectId=project55&tab=projectOverview" title="Go to the project page">IdeaVIM</a>
+         <span class="projectDescription">Vim emulation plugin for the IntelliJ platform products</span>
+       </td>
+       <td class="projectStatus"><div class="successful">1 successful</div><div class="failing"></div>
+       </td>
+       <td class="hideProject">
+
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project55">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project55']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project55', "eluruDesign/projectSuccessful.gif", true));
+    </script>
+
+  <span style="display:none;"><!-- ================ END Project build types for: -->IdeaVIM</span>
+  <script type="text/javascript">
+    jQuery("#p_project55 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project24', false);};BS.EventTracker.subscribeOnProjectEvent('a', 1, 'project24', handler);BS.EventTracker.subscribeOnProjectEvent('b', 1, 'project24', handler);BS.EventTracker.subscribeOnProjectEvent('c', 1, 'project24', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project24', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project24', handler);BS.EventTracker.subscribeOnProjectEvent('t', 1, 'project24', handler);BS.EventTracker.subscribeOnProjectEvent('u', 1, 'project24', handler);BS.EventTracker.subscribeOnProjectEvent('r', 8, 'project24', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project24', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project24', handler);BS.EventTracker.subscribeOnProjectEvent('m', 5, 'project24', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project24', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project24', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project24', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project24', handler);</script><div class="build " id="p_project24">
+  <span style="display:none;"><!-- ================ Project block header: -->JetBrains Dependency Retrieve</span>
+  <div class="projectHeader ">
+
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project24" />
+         <a href="/project.html?projectId=project24&tab=projectOverview" title="Go to the project page">JetBrains Dependency Retrieve</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful">7 successful</div><div class="failing">1 failing</div>
+
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project24">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project24']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project24', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->JetBrains Dependency Retrieve</span>
+  <script type="text/javascript">
+    jQuery("#p_project24 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project33', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project33', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project33', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project33', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project33', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project33', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project33', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project33', handler);BS.EventTracker.subscribeOnProjectEvent('r', 2, 'project33', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project33', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project33', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project33', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project33', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project33', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project33', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project33', handler);</script><div class="build " id="p_project33">
+  <span style="display:none;"><!-- ================ Project block header: -->JGit</span>
+
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project is successful. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project33" />
+         <a href="/project.html?projectId=project33&tab=projectOverview" title="Go to the project page">JGit</a>
+         <span class="projectDescription">Building JGit library</span>
+       </td>
+
+       <td class="projectStatus"><div class="successful">2 successful</div><div class="failing"></div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+
+  <div id="btbovr_project33">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project33']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project33', "eluruDesign/projectSuccessful.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->JGit</span>
+  <script type="text/javascript">
+    jQuery("#p_project33 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project2', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project2', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project2', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project2', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project2', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project2', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project2', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project2', handler);BS.EventTracker.subscribeOnProjectEvent('r', 2, 'project2', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project2', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project2', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project2', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project2', handler);</script>
+
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project2', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project2', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project2', handler);</script><div class="build " id="p_project2">
+  <span style="display:none;"><!-- ================ Project block header: -->JMock 2</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project2" />
+         <a href="/project.html?projectId=project2&tab=projectOverview" title="Go to the project page">JMock 2</a>
+
+         
+       </td>
+       <td class="projectStatus"><div class="successful"></div><div class="failing">2 failing</div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+
+  </div>
+  <div id="btbovr_project2">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project2']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project2', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->JMock 2</span>
+  <script type="text/javascript">
+    jQuery("#p_project2 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project6', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project6', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project6', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project6', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project6', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project6', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project6', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project6', handler);BS.EventTracker.subscribeOnProjectEvent('r', 1, 'project6', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project6', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project6', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project6', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project6', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project6', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project6', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project6', handler);</script><div class="build " id="p_project6">
+  <span style="display:none;"><!-- ================ Project block header: -->joustim</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project6" />
+
+         <a href="/project.html?projectId=project6&tab=projectOverview" title="Go to the project page">joustim</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful"></div><div class="failing">1 failing</div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+
+   </table>
+  </div>
+  <div id="btbovr_project6">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project6']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project6', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->joustim</span>
+  <script type="text/javascript">
+    jQuery("#p_project6 .tableCaption:first").addClass("firstRow");
+  </script>
+
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project7', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project7', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project7', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project7', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project7', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project7', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project7', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project7', handler);BS.EventTracker.subscribeOnProjectEvent('r', 1, 'project7', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project7', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project7', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project7', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project7', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project7', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project7', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project7', handler);</script><div class="build " id="p_project7">
+  <span style="display:none;"><!-- ================ Project block header: -->joustsim</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project7" />
+         <a href="/project.html?projectId=project7&tab=projectOverview" title="Go to the project page">joustsim</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful"></div><div class="failing">1 failing</div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project7">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project7']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project7', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->joustsim</span>
+
+  <script type="text/javascript">
+    jQuery("#p_project7 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project16', false);};BS.EventTracker.subscribeOnProjectEvent('a', 22, 'project16', handler);BS.EventTracker.subscribeOnProjectEvent('b', 22, 'project16', handler);BS.EventTracker.subscribeOnProjectEvent('c', 22, 'project16', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project16', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project16', handler);BS.EventTracker.subscribeOnProjectEvent('t', 22, 'project16', handler);BS.EventTracker.subscribeOnProjectEvent('u', 22, 'project16', handler);BS.EventTracker.subscribeOnProjectEvent('r', 3, 'project16', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project16', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project16', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project16', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project16', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project16', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project16', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project16', handler);</script><div class="build " id="p_project16">
+  <span style="display:none;"><!-- ================ Project block header: -->Juxy</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project16" />
+         <a href="/project.html?projectId=project16&tab=projectOverview" title="Go to the project page">Juxy</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful">1 successful</div><div class="failing">2 failing</div>
+       </td>
+       <td class="hideProject">
+
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project16">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project16']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project16', "eluruDesign/projectFailing.gif", true));
+    </script>
+
+  <span style="display:none;"><!-- ================ END Project build types for: -->Juxy</span>
+  <script type="text/javascript">
+    jQuery("#p_project16 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project45', false);};BS.EventTracker.subscribeOnProjectEvent('a', 3, 'project45', handler);BS.EventTracker.subscribeOnProjectEvent('b', 3, 'project45', handler);BS.EventTracker.subscribeOnProjectEvent('c', 3, 'project45', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project45', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project45', handler);BS.EventTracker.subscribeOnProjectEvent('t', 3, 'project45', handler);BS.EventTracker.subscribeOnProjectEvent('u', 3, 'project45', handler);BS.EventTracker.subscribeOnProjectEvent('r', 6, 'project45', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project45', handler);BS.EventTracker.subscribeOnProjectEvent('x', 6, 'project45', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project45', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project45', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project45', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project45', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project45', handler);</script><div class="build " id="p_project45">
+  <span style="display:none;"><!-- ================ Project block header: -->NUnit v2</span>
+  <div class="projectHeader ">
+
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project45" />
+         <a href="/project.html?projectId=project45&tab=projectOverview" title="Go to the project page">NUnit v2</a>
+         <span class="projectDescription"><a title="External link" href="http://launchpad.net/nunitv2">home</a></span>
+       </td>
+       <td class="projectStatus"><div class="successful">2 successful</div><div class="failing">4 failing</div>
+
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project45">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project45']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project45', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->NUnit v2</span>
+  <script type="text/javascript">
+    jQuery("#p_project45 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project3', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project3', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project3', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project3', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project3', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project3', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project3', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project3', handler);BS.EventTracker.subscribeOnProjectEvent('r', 1, 'project3', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project3', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project3', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project3', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project3', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project3', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project3', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project3', handler);</script><div class="build " id="p_project3">
+  <span style="display:none;"><!-- ================ Project block header: -->Picocontainer</span>
+
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project3" />
+         <a href="/project.html?projectId=project3&tab=projectOverview" title="Go to the project page">Picocontainer</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful"></div><div class="failing">1 failing</div>
+
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project3">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project3']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project3', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Picocontainer</span>
+  <script type="text/javascript">
+    jQuery("#p_project3 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project51', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project51', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project51', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project51', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project51', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project51', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project51', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project51', handler);BS.EventTracker.subscribeOnProjectEvent('r', 5, 'project51', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project51', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project51', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project51', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project51', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project51', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project51', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project51', handler);</script><div class="build " id="p_project51">
+  <span style="display:none;"><!-- ================ Project block header: -->Ruby-Debug Gem</span>
+
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project is successful. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project51" />
+         <a href="/project.html?projectId=project51&tab=projectOverview" title="Go to the project page">Ruby-Debug Gem</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful">5 successful</div><div class="failing"></div>
+
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project51">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project51']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project51', "eluruDesign/projectSuccessful.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Ruby-Debug Gem</span>
+  <script type="text/javascript">
+    jQuery("#p_project51 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project30', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project30', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project30', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project30', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project30', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project30', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project30', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project30', handler);BS.EventTracker.subscribeOnProjectEvent('r', 2, 'project30', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project30', handler);BS.EventTracker.subscribeOnProjectEvent('x', 58, 'project30', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project30', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project30', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project30', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project30', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project30', handler);</script><div class="build " id="p_project30">
+  <span style="display:none;"><!-- ================ Project block header: -->Scala</span>
+
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project30" />
+         <a href="/project.html?projectId=project30&tab=projectOverview" title="Go to the project page">Scala</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful"></div><div class="failing">2 failing</div>
+
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project30">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project30']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project30', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Scala</span>
+  <script type="text/javascript">
+    jQuery("#p_project30 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project8', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project8', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project8', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project8', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project8', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project8', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project8', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project8', handler);BS.EventTracker.subscribeOnProjectEvent('r', 2, 'project8', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project8', handler);BS.EventTracker.subscribeOnProjectEvent('x', 2, 'project8', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project8', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project8', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project8', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project8', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project8', handler);</script><div class="build " id="p_project8">
+  <span style="display:none;"><!-- ================ Project block header: -->Smack</span>
+
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project8" />
+         <a href="/project.html?projectId=project8&tab=projectOverview" title="Go to the project page">Smack</a>
+         <span class="projectDescription">Easy to use Java XMPP client library.</span>
+       </td>
+
+       <td class="projectStatus"><div class="successful">1 successful</div><div class="failing">1 failing</div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+
+  <div id="btbovr_project8">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project8']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project8', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Smack</span>
+  <script type="text/javascript">
+    jQuery("#p_project8 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project15', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project15', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project15', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project15', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project15', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project15', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project15', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project15', handler);BS.EventTracker.subscribeOnProjectEvent('r', 1, 'project15', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project15', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project15', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project15', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project15', handler);</script>
+
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project15', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project15', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project15', handler);</script><div class="build " id="p_project15">
+  <span style="display:none;"><!-- ================ Project block header: -->Spring Framework</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project is successful. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project15" />
+         <a href="/project.html?projectId=project15&tab=projectOverview" title="Go to the project page">Spring Framework</a>
+
+         
+       </td>
+       <td class="projectStatus"><div class="successful">1 successful</div><div class="failing"></div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+
+  </div>
+  <div id="btbovr_project15">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project15']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project15', "eluruDesign/projectSuccessful.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Spring Framework</span>
+  <script type="text/javascript">
+    jQuery("#p_project15 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project29', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project29', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project29', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project29', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project29', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project29', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project29', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project29', handler);BS.EventTracker.subscribeOnProjectEvent('r', 1, 'project29', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project29', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project29', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project29', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project29', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project29', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project29', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project29', handler);</script><div class="build " id="p_project29">
+  <span style="display:none;"><!-- ================ Project block header: -->TeamCity Accurev Support</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project is successful. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project29" />
+
+         <a href="/project.html?projectId=project29&tab=projectOverview" title="Go to the project page">TeamCity Accurev Support</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful">1 successful</div><div class="failing"></div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+
+   </table>
+  </div>
+  <div id="btbovr_project29">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project29']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project29', "eluruDesign/projectSuccessful.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->TeamCity Accurev Support</span>
+  <script type="text/javascript">
+    jQuery("#p_project29 .tableCaption:first").addClass("firstRow");
+  </script>
+
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project44', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project44', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project44', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project44', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project44', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project44', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project44', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project44', handler);BS.EventTracker.subscribeOnProjectEvent('r', 3, 'project44', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project44', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project44', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project44', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project44', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project44', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project44', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project44', handler);</script><div class="build " id="p_project44">
+  <span style="display:none;"><!-- ================ Project block header: -->TeamCity C# runner plugin</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project is successful. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project44" />
+         <a href="/project.html?projectId=project44&tab=projectOverview" title="Go to the project page">TeamCity C# runner plugin</a>
+         <span class="projectDescription"><a title="External link" href="http://http://code.google.com/p/teamcitycsharprunner">plugin page</a></span>
+       </td>
+       <td class="projectStatus"><div class="successful">3 successful</div><div class="failing"></div>
+       </td>
+       <td class="hideProject">
+
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project44">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project44']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project44', "eluruDesign/projectSuccessful.gif", true));
+    </script>
+
+  <span style="display:none;"><!-- ================ END Project build types for: -->TeamCity C# runner plugin</span>
+  <script type="text/javascript">
+    jQuery("#p_project44 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project25', false);};BS.EventTracker.subscribeOnProjectEvent('a', 14, 'project25', handler);BS.EventTracker.subscribeOnProjectEvent('b', 13, 'project25', handler);BS.EventTracker.subscribeOnProjectEvent('c', 12, 'project25', handler);BS.EventTracker.subscribeOnProjectEvent('e', 2, 'project25', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project25', handler);BS.EventTracker.subscribeOnProjectEvent('t', 14, 'project25', handler);BS.EventTracker.subscribeOnProjectEvent('u', 14, 'project25', handler);BS.EventTracker.subscribeOnProjectEvent('r', 35, 'project25', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project25', handler);BS.EventTracker.subscribeOnProjectEvent('x', 5, 'project25', handler);BS.EventTracker.subscribeOnProjectEvent('m', 31, 'project25', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project25', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project25', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project25', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project25', handler);</script><div class="build " id="p_project25">
+  <span style="display:none;"><!-- ================ Project block header: -->TeamCity Plugins by JetBrains</span>
+  <div class="projectHeader ">
+
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project25" />
+         <a href="/project.html?projectId=project25&tab=projectOverview" title="Go to the project page">TeamCity Plugins by JetBrains</a>
+         <span class="projectDescription"><a title="External link" href="http://www.jetbrains.net/confluence/display/TW/TeamCity+Plugins">plugins list</a></span>
+       </td>
+       <td class="projectStatus"><div class="successful">32 successful</div><div class="failing">3 failing</div>
+
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project25">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project25']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project25', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->TeamCity Plugins by JetBrains</span>
+  <script type="text/javascript">
+    jQuery("#p_project25 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project21', false);};BS.EventTracker.subscribeOnProjectEvent('a', 2, 'project21', handler);BS.EventTracker.subscribeOnProjectEvent('b', 2, 'project21', handler);BS.EventTracker.subscribeOnProjectEvent('c', 2, 'project21', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project21', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project21', handler);BS.EventTracker.subscribeOnProjectEvent('t', 2, 'project21', handler);BS.EventTracker.subscribeOnProjectEvent('u', 2, 'project21', handler);BS.EventTracker.subscribeOnProjectEvent('r', 2, 'project21', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project21', handler);BS.EventTracker.subscribeOnProjectEvent('x', 3, 'project21', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project21', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project21', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project21', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project21', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project21', handler);</script><div class="build " id="p_project21">
+  <span style="display:none;"><!-- ================ Project block header: -->Teamcity Rake Runner</span>
+
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project21" />
+         <a href="/project.html?projectId=project21&tab=projectOverview" title="Go to the project page">Teamcity Rake Runner</a>
+         <span class="projectDescription">This plugin allows Teamcity to Run Rake tasks, Test::Unit and RSpec tests</span>
+       </td>
+
+       <td class="projectStatus"><div class="successful">1 successful</div><div class="failing">1 failing</div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+
+  <div id="btbovr_project21">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project21']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project21', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->Teamcity Rake Runner</span>
+  <script type="text/javascript">
+    jQuery("#p_project21 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project23', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project23', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project23', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project23', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project23', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project23', handler);BS.EventTracker.subscribeOnProjectEvent('t', 1, 'project23', handler);BS.EventTracker.subscribeOnProjectEvent('u', 2, 'project23', handler);BS.EventTracker.subscribeOnProjectEvent('r', 8, 'project23', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project23', handler);BS.EventTracker.subscribeOnProjectEvent('x', 2, 'project23', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project23', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project23', handler);</script>
+
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project23', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project23', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project23', handler);</script><div class="build " id="p_project23">
+  <span style="display:none;"><!-- ================ Project block header: -->TeamCity Rake Runner Demo</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project23" />
+         <a href="/project.html?projectId=project23&tab=projectOverview" title="Go to the project page">TeamCity Rake Runner Demo</a>
+
+         <span class="projectDescription">This project shows TeamCity Rake Runner Plugin in action. See (<a target="_blank" title="Click to open this link in a new window" href="http://www.jetbrains.net/confluence/display/RUBYDEV/TeamCity+Rake+Runner">http://www.jetbrains.net/confluence/display/RUBYDEV/TeamCity+Rake+Runner</a>)</span>
+       </td>
+       <td class="projectStatus"><div class="successful">1 successful</div><div class="failing">1 failing</div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project23">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project23']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project23', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->TeamCity Rake Runner Demo</span>
+
+  <script type="text/javascript">
+    jQuery("#p_project23 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project56', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project56', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project56', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project56', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project56', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project56', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project56', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project56', handler);BS.EventTracker.subscribeOnProjectEvent('r', 1, 'project56', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project56', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project56', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project56', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project56', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project56', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project56', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project56', handler);</script><div class="build " id="p_project56">
+  <span style="display:none;"><!-- ================ Project block header: -->TeamCity Redmine plugin</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project is successful. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project56" />
+         <a href="/project.html?projectId=project56&tab=projectOverview" title="Go to the project page">TeamCity Redmine plugin</a>
+         <span class="projectDescription">by <a target="_blank" title="Click to open this link in a new window" href="https://github.com/milgner/TeamCityRedmine">https://github.com/milgner/TeamCityRedmine</a></span>
+       </td>
+       <td class="projectStatus"><div class="successful">1 successful</div><div class="failing"></div>
+       </td>
+
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project56">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project56']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project56', "eluruDesign/projectSuccessful.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->TeamCity Redmine plugin</span>
+  <script type="text/javascript">
+    jQuery("#p_project56 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project50', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project50', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project50', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project50', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project50', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project50', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project50', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project50', handler);BS.EventTracker.subscribeOnProjectEvent('r', 2, 'project50', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project50', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project50', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project50', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project50', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project50', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project50', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project50', handler);</script><div class="build " id="p_project50">
+  <span style="display:none;"><!-- ================ Project block header: -->TeamCity TFS Issue Tracker integration plugin</span>
+
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project is successful. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project50" />
+         <a href="/project.html?projectId=project50&tab=projectOverview" title="Go to the project page">TeamCity TFS Issue Tracker integration plugin</a>
+         <span class="projectDescription"><a title="External link" href="http://tfsteamcity.codeplex.com/">plugin page</a></span>
+       </td>
+
+       <td class="projectStatus"><div class="successful">2 successful</div><div class="failing"></div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+
+  <div id="btbovr_project50">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project50']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project50', "eluruDesign/projectSuccessful.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->TeamCity TFS Issue Tracker integration plugin</span>
+  <script type="text/javascript">
+    jQuery("#p_project50 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project9', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project9', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project9', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project9', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project9', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project9', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project9', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project9', handler);BS.EventTracker.subscribeOnProjectEvent('r', 1, 'project9', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project9', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project9', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project9', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project9', handler);</script>
+
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project9', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project9', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project9', handler);</script><div class="build " id="p_project9">
+  <span style="display:none;"><!-- ================ Project block header: -->TestNG</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project9" />
+         <a href="/project.html?projectId=project9&tab=projectOverview" title="Go to the project page">TestNG</a>
+
+         
+       </td>
+       <td class="projectStatus"><div class="successful"></div><div class="failing">1 failing</div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+
+  </div>
+  <div id="btbovr_project9">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project9']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project9', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->TestNG</span>
+  <script type="text/javascript">
+    jQuery("#p_project9 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project20', false);};BS.EventTracker.subscribeOnProjectEvent('a', 2, 'project20', handler);BS.EventTracker.subscribeOnProjectEvent('b', 2, 'project20', handler);BS.EventTracker.subscribeOnProjectEvent('c', 2, 'project20', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project20', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project20', handler);BS.EventTracker.subscribeOnProjectEvent('t', 2, 'project20', handler);BS.EventTracker.subscribeOnProjectEvent('u', 2, 'project20', handler);BS.EventTracker.subscribeOnProjectEvent('r', 5, 'project20', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project20', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project20', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project20', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project20', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project20', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project20', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project20', handler);</script><div class="build " id="p_project20">
+  <span style="display:none;"><!-- ================ Project block header: -->TestNG Test Project</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project20" />
+
+         <a href="/project.html?projectId=project20&tab=projectOverview" title="Go to the project page">TestNG Test Project</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful">1 successful</div><div class="failing">4 failing</div>
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project20">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project20']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project20', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->TestNG Test Project</span>
+
+  <script type="text/javascript">
+    jQuery("#p_project20 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project32', false);};BS.EventTracker.subscribeOnProjectEvent('a', 0, 'project32', handler);BS.EventTracker.subscribeOnProjectEvent('b', 0, 'project32', handler);BS.EventTracker.subscribeOnProjectEvent('c', 0, 'project32', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project32', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project32', handler);BS.EventTracker.subscribeOnProjectEvent('t', 0, 'project32', handler);BS.EventTracker.subscribeOnProjectEvent('u', 0, 'project32', handler);BS.EventTracker.subscribeOnProjectEvent('r', 13, 'project32', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project32', handler);BS.EventTracker.subscribeOnProjectEvent('x', 0, 'project32', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project32', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project32', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project32', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project32', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project32', handler);</script><div class="build " id="p_project32">
+  <span style="display:none;"><!-- ================ Project block header: -->WebHooks and other plugins</span>
+  <div class="projectHeader ">
+   <table>
+     <tr>
+
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project32" />
+         <a href="/project.html?projectId=project32&tab=projectOverview" title="Go to the project page">WebHooks and other plugins</a>
+         <span class="projectDescription">Trigger a WebHook POST from a build event in TeamCity, <a target="_blank" title="Click to open this link in a new window" href="http://netwolfuk.wordpress.com/teamcity-plugins/">http://netwolfuk.wordpress.com/teamcity-plugins/</a></span>
+       </td>
+       <td class="projectStatus"><div class="successful">12 successful</div><div class="failing">1 failing</div>
+
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project32">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project32']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project32', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->WebHooks and other plugins</span>
+  <script type="text/javascript">
+    jQuery("#p_project32 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+<script type="text/javascript"
+  >var handler = function() {
+    BS.Projects.updateProjectView('project4', false);};BS.EventTracker.subscribeOnProjectEvent('a', 1, 'project4', handler);BS.EventTracker.subscribeOnProjectEvent('b', 1, 'project4', handler);BS.EventTracker.subscribeOnProjectEvent('c', 1, 'project4', handler);BS.EventTracker.subscribeOnProjectEvent('e', 0, 'project4', handler);BS.EventTracker.subscribeOnProjectEvent('v', 0, 'project4', handler);BS.EventTracker.subscribeOnProjectEvent('t', 1, 'project4', handler);BS.EventTracker.subscribeOnProjectEvent('u', 1, 'project4', handler);BS.EventTracker.subscribeOnProjectEvent('r', 1, 'project4', handler);BS.EventTracker.subscribeOnProjectEvent('s', 0, 'project4', handler);BS.EventTracker.subscribeOnProjectEvent('x', 1, 'project4', handler);BS.EventTracker.subscribeOnProjectEvent('m', 0, 'project4', handler);BS.EventTracker.subscribeOnProjectEvent('l', 0, 'project4', handler);</script>
+<script type="text/javascript"
+  >var handler = function() {BS.reload();};BS.EventTracker.subscribeOnProjectEvent('n', 0, 'project4', handler);BS.EventTracker.subscribeOnProjectEvent('p', 0, 'project4', handler);BS.EventTracker.subscribeOnProjectEvent('q', 0, 'project4', handler);</script><div class="build " id="p_project4">
+  <span style="display:none;"><!-- ================ Project block header: -->XStream</span>
+
+  <div class="projectHeader ">
+   <table>
+     <tr>
+       <td class="projectName">
+         <img src="/img/eluruDesign/projectExpanded.gif" title="Project has failing build configurations. Click to expand / collapse details" class="handle"
+       style="margin-right: 3px;" id="blockHandleovr_project4" />
+         <a href="/project.html?projectId=project4&tab=projectOverview" title="Go to the project page">XStream</a>
+         
+       </td>
+       <td class="projectStatus"><div class="successful"></div><div class="failing">1 failing</div>
+
+       </td>
+       <td class="hideProject">
+         &nbsp;
+       </td>
+     </tr>
+   </table>
+  </div>
+  <div id="btbovr_project4">
+  
+  </div>
+
+  <script type="text/javascript">
+      BS.Blocks._saved['t_ovr_project4']='';
+      
+      BS.CollapsableBlocks.registerBlock(new BS.ProjectBlock("t_", 'ovr_project4', "eluruDesign/projectFailing.gif", true));
+    </script>
+  <span style="display:none;"><!-- ================ END Project build types for: -->XStream</span>
+  <script type="text/javascript">
+    jQuery("#p_project4 .tableCaption:first").addClass("firstRow");
+  </script>
+</div>
+
+  </div>
+      
+    
+    
+  
+  <div id="projects_visibleDialogContainer" style="margin: 0; padding: 0;"></div>
+  <div id="bt_visibleDialogContainer" style="margin: 0; padding: 0;"></div>
+
+  
+    </div>
+    <div class="clr"></div>
+  </div>
+
+  
+
+
+<script type="text/javascript">
+  var addr = "teamcity" + "-" + "feedback" + "@" + "jetbrains.com";
+  var version = "6.5 (build 17795)";
+</script>
+
+<div class="footerExtensions fixedWidth">
+<!-- START EXTENSION CONTENT jetbrains.buildServer.usageStatistics.impl.providers.WebPagesUsageStatisticsProvider$2: /plugins/usage-statistics/empty.jsp -->
+
+<!-- END EXTENSION CONTENT jetbrains.buildServer.usageStatistics.impl.providers.WebPagesUsageStatisticsProvider$2 -->
+</div>
+
+<div id="footer">
+  <div class="fixedWidth">
+    <div class="column1">
+      <a class="helpLink" target="_blank" href="http://www.jetbrains.net/confluence/display/TCD65"> Help</a>
+      <script type="text/javascript">document.write('<a class="feedbackLink" target="_blank" href="http://www.jetbrains.com/teamcity/feedback?source=footer&version=6.5 (build 17795)&build=17795&mode=ent">Feedback</a>');</script>
+    </div>
+
+    <div class="column2">
+
+      <a target="_blank" href="http://www.jetbrains.com/teamcity/?fromServer">TeamCity Enterprise</a> <span class="versionTag"><span class="vWord">Version</span> 6.5 (build 17795)</span>
+
+    </div>
+
+    <div class="column3">
+      <a onclick="BS.Util.popupWindow('/showAgreement.html', 'agreement');" href="javascript://">License agreement</a>
+      
+    </div>
+
+    <div class="clr"></div>
+  </div>
+</div>
+
+
+  <script type="text/javascript">var handler = function() {BS.ServerLink.onShutdown();};BS.EventTracker.subscribeOnEvent('H', 0, handler);</script>
+
+  <form id="testResponsibilityForm" action="#" method="post" onsubmit="return BS.TestResponsibilityDialog.submit();;" style="margin: 0; padding: 0;" autocomplete="off">
+  <div id="testResponsibilityFormDialog" class="testResponsibilityFormDialog modalDialog">
+  <div class="dialogHeader">
+
+    <div class="closeWindow">
+      <a title="Close dialog window" href="javascript://" onclick="BS.TestResponsibilityDialog.close();" >
+        <img src='/img/close.gif'/>
+      </a>
+    </div>
+    <h3 class="dialogTitle" id="testResponsibilityFormTitle"></h3>
+  </div>
+  <div class="modalDialogBody">
+    
+    <div id="testResponsibilityDialog"></div>
+
+  
+  </div>
+</div></form>
+
+  <form id="muteTestsForm" action="#" method="post" onsubmit="return BS.BulkInvestigateDialog.submit();;" style="margin: 0; padding: 0;" autocomplete="off">
+  <div id="muteTestsFormDialog" class="muteTestsFormDialog modalDialog">
+  <div class="dialogHeader">
+    <div class="closeWindow">
+      <a title="Close dialog window" href="javascript://" onclick="BS.BulkInvestigateDialog.close();" >
+        <img src='/img/close.gif'/>
+      </a>
+
+    </div>
+    <h3 class="dialogTitle" id="muteTestsFormTitle">Mute test</h3>
+  </div>
+  <div class="modalDialogBody">
+    
+    <div id="mute-dialog-container"></div>
+    <div><img id="mute-dialog-progress" style="display: none; float: none;" src="/img/ajax-loader.gif" width="16" height="16" alt="Please wait..." title="Please wait..."/></div>
+  
+  </div>
+</div></form>
+
+  <div id="shutdownDialog" class=" modalDialog">
+  <div class="dialogHeader">
+    <div class="closeWindow">
+      <a title="Close dialog window" href="javascript://" onclick="BS.ServerLink.close()" >
+        <img src='/img/close.gif'/>
+      </a>
+    </div>
+    <h3 class="dialogTitle" id="shutdownDialogTitle">Server communication failure</h3>
+
+  </div>
+  <div class="modalDialogBody">
+    
+    <strong id="shutdownDetails">Server is unavailable</strong>
+    <p id="onCommunicationFailure">Server stopped or communication with the server is not possible due to network failure.</p>
+    <p id="onServerShutdown">Server shutdown started.</p>
+  
+  </div>
+</div>
+
+  <span id="runBuildContainer"></span>
+
+  <form id="stopBuildForm" action="/ajax.html" method="post" onsubmit="return BS.StopBuildDialog.killBuild();;" style="margin: 0; padding: 0;" autocomplete="off">
+  <div id="stopBuildFormDialog" class="stopBuildFormDialog modalDialog">
+  <div class="dialogHeader">
+    <div class="closeWindow">
+      <a title="Close dialog window" href="javascript://" onclick="BS.StopBuildDialog.close()" >
+        <img src='/img/close.gif'/>
+      </a>
+
+    </div>
+    <h3 class="dialogTitle" id="stopBuildFormTitle">TODO</h3>
+  </div>
+  <div class="modalDialogBody">
+    
+  <textarea id="removeQueuedBuildComment" name="comment" rows="3" cols="46" class="commentTextArea" onclick="if (this.value == this.defaultValue) this.value = '';">&lt;your comment here></textarea>
+  <input type="hidden" name="kill" value=""/>
+
+  <div id="moreToStop">
+
+    Loading related builds...
+    <img id="moreToStopLoader" style="display: none; float: none;" src="/img/ajax-loader.gif" width="16" height="16" alt="Loading related builds to stop ..." title="Loading related builds to stop ..."/>
+  </div>
+  <span id="moreToStopFragment"></span>
+
+  <div class="popupSaveButtonsBlock">
+    <a href="javascript://" onclick="BS.StopBuildDialog.close()" class="cancel" id="cancelRemoveQueuedBuild">Cancel</a>
+    <input class="submitButton" type="submit" name="submit" value="Stop" id="submitRemoveQueuedBuild"/>
+    <img id="saving" style="display: none; padding-top: 0.1em; float: right;" src="/img/ajax-loader.gif" width="16" height="16" alt="Please wait..." title="Please wait..."/>
+
+    <br clear="all"/>
+  </div>
+  <br/>
+
+  </div>
+</div></form>
+
+  <form id="ResponsibilityForm" action="/action.html" method="post" onsubmit="return BS.ResponsibilityDialog.submit();" style="margin: 0; padding: 0;" autocomplete="off">
+  <div id="ResponsibilityFormDialog" class="ResponsibilityFormDialog modalDialog">
+  <div class="dialogHeader">
+
+    <div class="closeWindow">
+      <a title="Close dialog window" href="javascript://" onclick="BS.ResponsibilityDialog.close();" >
+        <img src='/img/close.gif'/>
+      </a>
+    </div>
+    <h3 class="dialogTitle" id="ResponsibilityFormTitle">Responsibility</h3>
+  </div>
+  <div class="modalDialogBody">
+
+    
+  </div>
+</div></form>
+  </body>
+</html>
