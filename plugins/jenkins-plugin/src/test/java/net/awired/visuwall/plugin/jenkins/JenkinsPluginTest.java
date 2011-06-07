@@ -16,29 +16,16 @@
 
 package net.awired.visuwall.plugin.jenkins;
 
-import static org.junit.Assert.assertFalse;
+import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import net.awired.visuwall.api.domain.SoftwareInfo;
-
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class JenkinsPluginTest {
 
     @Test(expected = NullPointerException.class)
-    public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance() {
-        new JenkinsPlugin().isManageable(null);
+	public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance()
+	        throws IncompatibleSoftwareException {
+        new JenkinsPlugin().getSoftwareInfo(null);
     }
 
-    @Ignore
-    @Test
-    public void should_not_fail_if_url_is_not_manageable() throws MalformedURLException {
-        JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-        String url = "http://www.google.fr";
-        SoftwareInfo softwareInfo = jenkinsPlugin.isManageable(new URL(url));
-//        assertFalse(manageable);
-    }
 }

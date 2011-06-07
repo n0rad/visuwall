@@ -17,25 +17,44 @@
 package net.awired.visuwall.plugin.sonar;
 
 import static net.awired.visuwall.IntegrationTestData.SONAR_URL;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
+import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
-import org.junit.Ignore;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class SonarPluginIT {
 
-	@Ignore
+	static PluginInfo pluginInfo = new PluginInfo();
+
+	@BeforeClass
+	public static void init() {
+		pluginInfo.setName("Sonar plugin");
+		pluginInfo.setVersion(1.0f);
+		pluginInfo.setClassName(SonarPlugin.class.getName());
+	}
+
 	@Test
-	public void should_recognize_sonar_instance_with_valid_url()
-			throws MalformedURLException {
+	public void should_recognize_sonar_instance_with_valid_url() throws Exception {
 		SonarPlugin sonarPlugin = new SonarPlugin();
-		SoftwareInfo softwareInfo = sonarPlugin
-				.isManageable(new URL(SONAR_URL));
-		// assertTrue(isSonarInstance);
+		SoftwareInfo softwareInfo = sonarPlugin.getSoftwareInfo(new URL(SONAR_URL));
+
+		assertEquals("Sonar", softwareInfo.getName());
+		assertEquals(pluginInfo, softwareInfo.getPluginInfo());
+		assertEquals("2.8", softwareInfo.getVersion());
+		assertNull(softwareInfo.getWarnings());
+	}
+
+	@Test(expected = IncompatibleSoftwareException.class)
+	public void should_not_fail_if_url_is_not_manageable() throws Exception {
+		SonarPlugin sonarPlugin = new SonarPlugin();
+		String url = "http://www.google.fr";
+		sonarPlugin.getSoftwareInfo(new URL(url));
 	}
 }

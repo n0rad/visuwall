@@ -20,6 +20,7 @@ import java.net.URL;
 
 import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
 public interface VisuwallPlugin {
 
@@ -27,6 +28,6 @@ public interface VisuwallPlugin {
 
     PluginInfo getInfo();
     
-    SoftwareInfo isManageable(URL url);
+	SoftwareInfo getSoftwareInfo(URL url) throws IncompatibleSoftwareException;
 
 }

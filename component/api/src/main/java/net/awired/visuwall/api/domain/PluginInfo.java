@@ -16,6 +16,8 @@
 
 package net.awired.visuwall.api.domain;
 
+import com.google.common.base.Objects;
+
 public class PluginInfo {
 
 	private String name;
@@ -48,4 +50,19 @@ public class PluginInfo {
 		return className;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof PluginInfo) {
+			PluginInfo pi = (PluginInfo) obj;
+			return Objects.equal(name, pi.name) && //
+			        Objects.equal(version, pi.version) && //
+			        Objects.equal(className, pi.className);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(name, version, className);
+	}
 }

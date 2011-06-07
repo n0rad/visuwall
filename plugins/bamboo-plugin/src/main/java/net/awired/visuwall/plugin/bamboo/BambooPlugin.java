@@ -40,7 +40,7 @@ public class BambooPlugin implements VisuwallPlugin {
 	}
 	
 	@Override
-	public SoftwareInfo isManageable(URL url) {
+	public SoftwareInfo getSoftwareInfo(URL url) {
 		SoftwareInfo softwareInfo = new SoftwareInfo();
 		return softwareInfo;
 	}

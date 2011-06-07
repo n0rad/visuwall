@@ -16,29 +16,15 @@
 
 package net.awired.visuwall.plugin.hudson;
 
-import static org.junit.Assert.assertFalse;
+import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import net.awired.visuwall.api.domain.SoftwareInfo;
-
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class HudsonPluginTest {
 
     @Test(expected = NullPointerException.class)
-    public void should_throw_exception_when_passing_null_to_is_sonar_instance() {
-        new HudsonPlugin().isManageable(null);
+	public void should_throw_exception_when_passing_null_to_hudson_instance() throws IncompatibleSoftwareException {
+        new HudsonPlugin().getSoftwareInfo(null);
     }
 
-    @Ignore
-    @Test
-    public void should_not_fail_if_url_is_not_manageable() throws MalformedURLException {
-        HudsonPlugin hudsonPlugin = new HudsonPlugin();
-        String url = "http://www.google.fr";
-        SoftwareInfo softwareInfo = hudsonPlugin.isManageable(new URL(url));
-        //assertFalse(manageable);
-    }
 }

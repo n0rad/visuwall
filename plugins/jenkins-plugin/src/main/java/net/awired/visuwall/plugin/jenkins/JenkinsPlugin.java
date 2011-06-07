@@ -23,14 +23,20 @@ import java.util.Properties;
 
 import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 
 public class JenkinsPlugin implements VisuwallPlugin {
+
+	private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
 
     @Override
     public ConnectionPlugin getConnection(String url, Properties info) {
@@ -49,25 +55,59 @@ public class JenkinsPlugin implements VisuwallPlugin {
     }
 
     @Override
-    public SoftwareInfo isManageable(URL url) {
+	public SoftwareInfo getSoftwareInfo(URL url) throws IncompatibleSoftwareException {
         Preconditions.checkNotNull(url, "url is mandatory");
-        SoftwareInfo softwareInfo = new SoftwareInfo();
-//        softwareInfo.setWarnings("This jenkins version has a bug with git project. Git project wont be display.");
-        softwareInfo.setPluginInfo(getInfo());
-        InputStream stream = null;
-        try {
-            url = new URL(url.toString() + "/api/");
-            stream = url.openStream();
-            byte[] content = ByteStreams.toByteArray(stream);
-            String xml = new String(content);
-            if (!xml.contains("Remote API [Jenkins]")) {
-            	return null;
-            }
-            return softwareInfo;
-        } catch (IOException e) {
-            return null;
-        } finally {
-            Closeables.closeQuietly(stream);
-        }
+		String xml = getContent(url);
+		if (isManageable(xml)) {
+			return createSoftwareInfo(xml);
+		}
+		throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Jenkins");
     }
+
+	private SoftwareInfo createSoftwareInfo(String xml) {
+	    SoftwareInfo softwareInfo = new SoftwareInfo();
+	    softwareInfo.setPluginInfo(getInfo());
+		softwareInfo.setName("Jenkins");
+	    String strVersion = getVersion(xml);
+	    softwareInfo.setVersion(strVersion);
+	    addWarnings(softwareInfo, strVersion);
+	    return softwareInfo;
+    }
+
+	private void addWarnings(SoftwareInfo softwareInfo, String strVersion) {
+		double version = Double.parseDouble(strVersion);
+		if (version < 1.405)
+			addWarningForVersionBefore1405(softwareInfo);
+	}
+
+	private void addWarningForVersionBefore1405(SoftwareInfo softwareInfo) {
+	    softwareInfo
+	            .setWarnings("This jenkins version has a bug with git project. Git project wont be display.");
+    }
+
+	private String getVersion(String xml) {
+		return new JenkinsVersionExtractor(xml).version();
+	}
+
+	private boolean isManageable(String xml) {
+		return xml.contains("Remote API [Jenkins]");
+    }
+
+	private String getContent(URL url) {
+		InputStream stream = null;
+		try {
+			url = new URL(url.toString() + "/api/");
+			stream = url.openStream();
+			byte[] content = ByteStreams.toByteArray(stream);
+			String xml = new String(content);
+			return xml;
+		} catch (IOException e) {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Can't get content of " + url, e);
+			}
+			return "";
+		} finally {
+			Closeables.closeQuietly(stream);
+		}
+	}
 }

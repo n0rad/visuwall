@@ -17,32 +17,56 @@
 package net.awired.visuwall.plugin.jenkins;
 
 import static net.awired.visuwall.IntegrationTestData.JENKINS_URL;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
+import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
-import org.junit.Ignore;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class JenkinsPluginIT {
 	
-	@Ignore
-	@Test
-	public void should_recognize_jenkins_instance_with_valid_url() throws MalformedURLException {
-		JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-		SoftwareInfo softwareInfo = jenkinsPlugin.isManageable(new URL(JENKINS_URL));
-//		assertTrue(isJenkinsInstance);
+	static PluginInfo pluginInfo = new PluginInfo();
+
+	@BeforeClass
+	public static void init() {
+		pluginInfo.setName("Jenkins plugin");
+		pluginInfo.setVersion(1.0f);
+		pluginInfo.setClassName(JenkinsPlugin.class.getName());
 	}
 
-	@Ignore
 	@Test
-	public void should_recognize_jenkins_instance_with_https() throws MalformedURLException {
+	public void should_recognize_jenkins_instance_with_valid_url() throws Exception {
 		JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-		SoftwareInfo softwareInfo = jenkinsPlugin.isManageable(new URL("https://builds.apache.org"));
-//		assertTrue(isJenkinsInstance);
+		SoftwareInfo softwareInfo = jenkinsPlugin.getSoftwareInfo(new URL(JENKINS_URL));
+
+		assertEquals("Jenkins", softwareInfo.getName());
+		assertEquals(pluginInfo, softwareInfo.getPluginInfo());
+		assertEquals("1.407", softwareInfo.getVersion());
+		assertNull(softwareInfo.getWarnings());
+	}
+
+	@Test
+	public void should_recognize_jenkins_instance_with_https() throws Exception {
+		JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
+		SoftwareInfo softwareInfo = jenkinsPlugin.getSoftwareInfo(new URL("https://builds.apache.org"));
+
+		assertEquals("Jenkins", softwareInfo.getName());
+		assertEquals(pluginInfo, softwareInfo.getPluginInfo());
+		assertEquals("1.413", softwareInfo.getVersion());
+		assertNull(softwareInfo.getWarnings());
+	}
+
+	@Test(expected = IncompatibleSoftwareException.class)
+	public void should_not_fail_if_url_is_not_manageable() throws Exception {
+		JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
+		String url = "http://www.google.fr";
+		jenkinsPlugin.getSoftwareInfo(new URL(url));
 	}
 
 }

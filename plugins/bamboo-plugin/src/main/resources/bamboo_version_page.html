@@ -1,0 +1,434 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Dashboard - Bamboo test</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta name="robots" content="all" />
+	<meta name="MSSmartTagsPreventParsing" content="true" />
+
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
+
+    <link rel="shortcut icon" href="/s/2101/1/_/images/icons/favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="/s/2101/1/_/images/icons/favicon.png" type="image/png" />
+
+    <link type="text/css" rel="stylesheet" href="/s/2101/1/_/styles/yui-2.6.0/grids.css" />
+
+   
+   
+   
+   
+   <link type="text/css" rel="stylesheet" href="/s/2101/1/1.0/_/download/batch/bamboo.web.resources:mainStyles/bamboo.web.resources:mainStyles.css" media="all">
+<!--[if IE]>
+<link type="text/css" rel="stylesheet" href="/s/2101/1/1.0/_/download/batch/bamboo.web.resources:mainStyles/bamboo.web.resources:mainStyles.css?ieonly=true" media="all">
+<![endif]-->
+<link type="text/css" rel="stylesheet" href="/s/2101/1/3.0.6/_/download/batch/com.atlassian.auiplugin:ajs/com.atlassian.auiplugin:ajs.css" media="all">
+<!--[if IE]>
+<link type="text/css" rel="stylesheet" href="/s/2101/1/3.0.6/_/download/batch/com.atlassian.auiplugin:ajs/com.atlassian.auiplugin:ajs.css?ieonly=true" media="all">
+<![endif]-->
+<link type="text/css" rel="stylesheet" href="/s/2101/1/1.0/_/download/batch/bamboo.web.resources:auiOverrides/bamboo.web.resources:auiOverrides.css" media="all">
+<script type="text/javascript" src="/s/2101/1/3.0.6/_/download/batch/com.atlassian.auiplugin:ajs/com.atlassian.auiplugin:ajs.js" ></script>
+
+<script type="text/javascript" src="/s/2101/1/3.0.6/_/download/batch/com.atlassian.auiplugin:hotkeys/com.atlassian.auiplugin:hotkeys.js" ></script>
+<script type="text/javascript" src="/s/2101/1/3.0.6/_/download/batch/com.atlassian.auiplugin:keyboardshortcuts/com.atlassian.auiplugin:keyboardshortcuts.js" ></script>
+<script type="text/javascript" src="/s/2101/1/1.0/_/download/batch/bamboo.web.resources:bamboojs/bamboo.web.resources:bamboojs.js" ></script>
+<script type="text/javascript" src="/s/2101/1/1.0/_/download/batch/bamboo.web.resources:extraJQuery/bamboo.web.resources:extraJQuery.js" ></script>
+
+
+    <script type="text/javascript">
+        var BAMBOO = new Object();
+        BAMBOO.reloadDashboardTimeout = 20;
+        BAMBOO.contextPath = '';
+        addUniversalOnload(addConfirmationToLinks);
+    </script>
+
+</head>
+<body class="dec_main">
+
+<div id="container">
+    <ul id="top">
+        <li id="skipNav">
+            <a href="#menu">Skip to navigation</a>
+        </li>
+        <li>
+            <a href="#content">Skip to content</a>
+        </li>
+
+    </ul>
+    <div id="nonFooter">
+
+<div id="hd">
+
+<div id="header">
+    <div id="logo">
+        <a href="/start.action"><img src="/images/bamboo_header_logo.gif" alt="Atlassian Bamboo" height="36" width="118" /></a>
+    </div>
+    <ul id="userOptions">
+        <li id="userInfo">
+
+            User: <strong><a href="/browse/user/admin">    admin
+</a></strong>
+        </li>
+        <li id="profileLink">
+            <a id="profile" href="/profile/userProfile.action">Profile</a>
+        </li>
+        <li id="logoutLink">
+            <a id="logout" href="/userLogout.action">Log out</a>
+
+        </li>
+        <li id="helpLink">
+            <a id="help" href="http://confluence.atlassian.com/display/BAMBOO">Help</a>
+        </li>
+    </ul>
+</div> <!-- END #header -->
+
+<div id="menu">
+    <ul>
+
+        <li ><a id="home" href="/start.action" title="Atlassian Bamboo" accesskey="H"><u>H</u>ome</a></li>
+            <li ><a id="authors" href="/authors/gotoAuthorReport.action" accesskey="U">A<u>u</u>thors</a></li>
+            <li ><a id="reports" href="/reports/viewReport.action" accesskey="R"><u>R</u>eports</a></li>
+            <li ><a id="createPlanLink"  accesskey="C" href="/build/admin/create/addPlan.action"><u>C</u>reate Plan</a></li>
+
+            <li ><a id="admin" accesskey="A" href="/admin/administer.action"><u>A</u>dministration</a></li>
+    </ul>
+</div> <!-- END #menu -->
+
+</div> <!-- END #hd -->
+<div id="content">
+<h1>Bamboo test</h1>
+
+            <div id='buildSummaryTabs' class='dashboardTab'>
+
+                <ul class="tabs tabsSubmenu">
+                    <li >
+                       <a id="myTab" href='/start.action?selectedTab=myTab'>
+                           My Bamboo
+                       </a>
+                    </li>
+                    <li class="on">
+                       <a id="allPlansTab" href='/start.action?selectedTab=allPlansTab'>
+                           All Plans
+                       </a>
+
+                    </li>
+                    <li >
+                       <a id="currentTab" href='/start.action?selectedTab=currentTab'>
+                           Current Activity
+                       </a>
+                    </li>
+                </ul>
+                <div class="section">
+
+
+<div id="allPlansToggler">
+    <a href="#" class="collapseAll">Collapse All</a> | <a href="#" class="expandAll">Expand All</a>
+</div>
+<script type="text/javascript">
+   addUniversalOnload(function(){
+      AJS.$("#allPlansToggler a.collapseAll").bind("click", collapseAll);
+      AJS.$("#allPlansToggler a.expandAll").bind("click", expandAll);
+      AJS.$("#allPlansToggler").show();
+       AJS.$("#allPlansSection a.projectLabel").each(function(){
+           restoreTogglesFromCookie(this.id);
+           AJS.$("#" + this.id + "_toggler_on").bind("click", function(){
+               AJS.$(this).hide();
+               AJS.$(this).siblings(".headerClosed").show();
+               AJS.$(this).siblings(".buildList").hide();
+               saveToConglomerateCookie(BAMBOO_DASH_DISPLAY_TOGGLES, this.id.replace("_toggler_on", ""), '0');
+           });
+           AJS.$("#" + this.id + "_toggler_off").bind("click", function(){
+               AJS.$(this).hide();
+               AJS.$(this).siblings(".headerOpen").show();
+               AJS.$(this).siblings(".buildList").show();
+               saveToConglomerateCookie(BAMBOO_DASH_DISPLAY_TOGGLES, this.id.replace("_toggler_off", ""), '1');
+           });
+       });
+   });
+</script>
+<div id="allPlansSection">
+<div id="ajaxErrorHolder" class="hidden">
+    <div class="warningBox">
+            Background page refresh cannot contact server. Please ensure Bamboo server is available and <a href="">reload the page</a>.  The error was:             <span class="ajaxErrorMessage"></span>
+
+    </div>
+</div><script type="text/javascript">
+    AJS.$(function() {
+        AsynchronousRequestManager.init(".asynchronous", null, function() { window.location.reload(); } );
+    });
+</script>
+
+<div class="widePlanList">
+
+
+<div id="project_262145_section" class="projectSection">
+
+     <a id="262145" class="projectLabel" name="ajsl"></a>
+
+        <div id="262145_toggler_on" class="projectHeaderSection headerOpen" style="">
+            <a id="viewProject:AJSL" href="/browse/AJSL" title="Project Summary" class="projectLink alwaysFollow">
+
+                ajsl
+            </a>
+        </div> 
+
+        <div id="262145_toggler_off" class="projectHeaderSection headerClosed" style="display:none"> <!--to prevent flicking -->
+            <div class="totalPlans">Total plans: 1</div>
+
+            <a id="viewProject:AJSL" href="/browse/AJSL"
+               class="projectLink alwaysFollow" title="Project Summary">
+                ajsl
+            </a>
+            <div class="statusMessage project_success"><strong>1 successful plan</strong></div>
+
+        </div> 
+
+        <ul class="buildList" id="262145_target" style="">
+
+<li id="buildPlan0" class="buildPlan">
+
+<div class="planOperations">
+    <!-- operations -->
+                    <a class="build-stop asynchronous" id="stopBuild_AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6" style="display:none;" href="/build/admin/ajax/stopPlan.action?planKey=AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6" title="Stop 'ajsl - Awired Java Standard Library 1.0-ALPHA6'">Stop Build</a>
+            <a class="build-run asynchronous" id="manualBuild_AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6"  href="/build/admin/triggerManualBuild.action?buildKey=AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6" title="Checkout & Build">Run</a>
+        <a class="build-edit" id="editBuild:AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6" href="/chain/admin/config/editChainConfiguration.action?buildKey=AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6" title="Edit 'ajsl - Awired Java Standard Library 1.0-ALPHA6'">Edit Build</a>
+
+<a class="build-favourite-off" href="/build/label/setFavourite.action?planKey=AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6&amp;returnUrl=%2Fstart.action&amp;newFavStatus=true" class="internalLink" id="toggleFavourite_AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6" title="Mark as Favourite">Favourite</a></div>
+
+    <span class="buildSummaryDetails">
+            <!-- Last Build Time-->
+                    <span id="lastBuiltSummaryAJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6" title="01:15 AM, mar., 22 mars">Ran: 2 months ago</span>
+
+        <!-- Reason -->
+        <span id="reasonSummaryAJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6">Initial clean build</span>
+
+        <!-- Duration -->
+        <span id="durationSummaryAJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6">Duration: 1 minute</span>
+
+        <!-- test count summary -->
+        <span id="testSummaryAJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6" class="last">Tests: 18 passed</span>
+
+
+
+    </span>
+
+    <!-- summary icon -->
+<a id="statusSectionAJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6"class="statusIcon"href="/browse/AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6"> <img src="/s/2101/1/_/images/jt/icn_plan_passed.gif" alt="Last build was successful" title="Last build was successful" width="14" height="15" /></a>
+    <div class="planKeySection Successful">
+        <!-- plan -->
+        <a id="viewBuild:AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6"
+           href="/browse/AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6" title="">Awired Java Standard Library 1.0-ALPHA6</a>
+        <!-- latest build -->
+        <span>&gt;</span>
+            <a id="latestBuildAJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6" href="/browse/AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6/latest" title="Latest build">AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6-1</a>
+
+    </div>
+</li> 
+
+      </ul>
+  </div> 
+
+<div id="project_262146_section" class="projectSection">
+
+     <a id="262146" class="projectLabel" name="struts"></a>
+
+        <div id="262146_toggler_on" class="projectHeaderSection headerOpen" style="">
+            <a id="viewProject:STRUTS" href="/browse/STRUTS" title="Project Summary" class="projectLink alwaysFollow">
+                struts
+            </a>
+
+        </div> 
+
+        <div id="262146_toggler_off" class="projectHeaderSection headerClosed" style="display:none"> <!--to prevent flicking -->
+            <div class="totalPlans">Total plans: 1</div>
+
+            <a id="viewProject:STRUTS" href="/browse/STRUTS"
+               class="projectLink alwaysFollow" title="Project Summary">
+                struts
+            </a>
+            <div class="statusMessage project_success"><strong>1 successful plan</strong></div>
+        </div> 
+
+        <ul class="buildList" id="262146_target" style="">
+
+<li id="buildPlan1" class="buildPlan">
+
+<div class="planOperations">
+    <!-- operations -->
+                    <a class="build-stop asynchronous" id="stopBuild_STRUTS-STRUTS" style="display:none;" href="/build/admin/ajax/stopPlan.action?planKey=STRUTS-STRUTS" title="Stop 'struts - struts'">Stop Build</a>
+            <a class="build-run asynchronous" id="manualBuild_STRUTS-STRUTS"  href="/build/admin/triggerManualBuild.action?buildKey=STRUTS-STRUTS" title="Checkout & Build">Run</a>
+        <a class="build-edit" id="editBuild:STRUTS-STRUTS" href="/chain/admin/config/editChainConfiguration.action?buildKey=STRUTS-STRUTS" title="Edit 'struts - struts'">Edit Build</a>
+<a class="build-favourite-off" href="/build/label/setFavourite.action?planKey=STRUTS-STRUTS&amp;returnUrl=%2Fstart.action&amp;newFavStatus=true" class="internalLink" id="toggleFavourite_STRUTS-STRUTS" title="Mark as Favourite">Favourite</a></div>
+
+    <span class="buildSummaryDetails">
+            <!-- Last Build Time-->
+                    <span id="lastBuiltSummarySTRUTS-STRUTS" title="07:04 PM, ven., 8 avr.">Ran: 1 month ago</span>
+
+        <!-- Reason -->
+        <span id="reasonSummarySTRUTS-STRUTS"><span>Manual build by</span> <a href="http://bamboo.visuwall.awired.net/browse/user/admin">admin</a></span>
+
+        <!-- Duration -->
+        <span id="durationSummarySTRUTS-STRUTS">Duration: 30 seconds</span>
+
+        <!-- test count summary -->
+        <span id="testSummarySTRUTS-STRUTS" class="last">Tests: 331 passed</span>
+
+
+
+    </span>
+
+    <!-- summary icon -->
+<a id="statusSectionSTRUTS-STRUTS"class="statusIcon"href="/browse/STRUTS-STRUTS"> <img src="/s/2101/1/_/images/jt/icn_plan_passed.gif" alt="Last build was successful" title="Last build was successful" width="14" height="15" /></a>
+    <div class="planKeySection Successful">
+        <!-- plan -->
+        <a id="viewBuild:STRUTS-STRUTS"
+           href="/browse/STRUTS-STRUTS" title="this is the struts project">struts</a>
+        <!-- latest build -->
+        <span>&gt;</span>
+            <a id="latestBuildSTRUTS-STRUTS" href="/browse/STRUTS-STRUTS/latest" title="Latest build">STRUTS-STRUTS-3</a>
+
+    </div>
+</li> 
+
+      </ul>
+  </div> 
+
+<div id="project_262147_section" class="projectSection">
+
+     <a id="262147" class="projectLabel" name="struts 2 instable"></a>
+
+        <div id="262147_toggler_on" class="projectHeaderSection headerOpen" style="">
+            <a id="viewProject:STRUTS2INSTABLE" href="/browse/STRUTS2INSTABLE" title="Project Summary" class="projectLink alwaysFollow">
+                struts 2 instable
+            </a>
+
+        </div> 
+
+        <div id="262147_toggler_off" class="projectHeaderSection headerClosed" style="display:none"> <!--to prevent flicking -->
+            <div class="totalPlans">Total plans: 1</div>
+
+            <a id="viewProject:STRUTS2INSTABLE" href="/browse/STRUTS2INSTABLE"
+               class="projectLink alwaysFollow" title="Project Summary">
+                struts 2 instable
+            </a>
+            <div class="statusMessage project_fail"><strong>1 failed plan</strong></div>
+        </div> 
+
+        <ul class="buildList" id="262147_target" style="">
+
+<li id="buildPlan2" class="buildPlan">
+
+<div class="planOperations">
+    <!-- operations -->
+                    <a class="build-stop asynchronous" id="stopBuild_STRUTS2INSTABLE-STRUTS2INSTABLE" style="display:none;" href="/build/admin/ajax/stopPlan.action?planKey=STRUTS2INSTABLE-STRUTS2INSTABLE" title="Stop 'struts 2 instable - struts_2_instable'">Stop Build</a>
+            <a class="build-run asynchronous" id="manualBuild_STRUTS2INSTABLE-STRUTS2INSTABLE"  href="/build/admin/triggerManualBuild.action?buildKey=STRUTS2INSTABLE-STRUTS2INSTABLE" title="Checkout & Build">Run</a>
+        <a class="build-edit" id="editBuild:STRUTS2INSTABLE-STRUTS2INSTABLE" href="/chain/admin/config/editChainConfiguration.action?buildKey=STRUTS2INSTABLE-STRUTS2INSTABLE" title="Edit 'struts 2 instable - struts_2_instable'">Edit Build</a>
+<a class="build-favourite-off" href="/build/label/setFavourite.action?planKey=STRUTS2INSTABLE-STRUTS2INSTABLE&amp;returnUrl=%2Fstart.action&amp;newFavStatus=true" class="internalLink" id="toggleFavourite_STRUTS2INSTABLE-STRUTS2INSTABLE" title="Mark as Favourite">Favourite</a></div>
+
+    <span class="buildSummaryDetails">
+            <!-- Last Build Time-->
+                    <span id="lastBuiltSummarySTRUTS2INSTABLE-STRUTS2INSTABLE" title="08:59 PM, ven., 8 avr.">Ran: 1 month ago</span>
+
+        <!-- Reason -->
+        <span id="reasonSummarySTRUTS2INSTABLE-STRUTS2INSTABLE"><span>Manual build by</span> <a href="http://bamboo.visuwall.awired.net/browse/user/admin">admin</a></span>
+
+        <!-- Duration -->
+        <span id="durationSummarySTRUTS2INSTABLE-STRUTS2INSTABLE">Duration: 4 minutes</span>
+
+        <!-- test count summary -->
+        <span id="testSummarySTRUTS2INSTABLE-STRUTS2INSTABLE" class="last">Tests: 6 of 1541 failed</span>
+
+
+
+    </span>
+
+    <!-- summary icon -->
+<a id="statusSectionSTRUTS2INSTABLE-STRUTS2INSTABLE"class="statusIcon"href="/browse/STRUTS2INSTABLE-STRUTS2INSTABLE"> <img src="/s/2101/1/_/images/jt/icn_plan_failed.gif" alt="The last build failed" title="The last build failed" width="14" height="15" /></a>
+    <div class="planKeySection Failed">
+        <!-- plan -->
+        <a id="viewBuild:STRUTS2INSTABLE-STRUTS2INSTABLE"
+           href="/browse/STRUTS2INSTABLE-STRUTS2INSTABLE" title="">struts_2_instable</a>
+        <!-- latest build -->
+        <span>&gt;</span>
+            <a id="latestBuildSTRUTS2INSTABLE-STRUTS2INSTABLE" href="/browse/STRUTS2INSTABLE-STRUTS2INSTABLE/latest" title="Latest build">STRUTS2INSTABLE-STRUTS2INSTABLE-3</a>
+
+    </div>
+</li> 
+ 
+
+    </ul>
+     </div> 
+</div> 
+
+<script type="text/javascript">
+    addUniversalOnload(function() {
+    });
+</script>
+
+<div class="clearer"></div>
+</div>
+<p>Successful builds are <span class="successfulLabel">green</span>, failed builds are <span class="failedLabel">red</span>.</p>
+
+<p>
+   <a href="/rss/createAllBuildsRssFeed.action?feedType=rssAll&os_authType=basic"><img src="/images/rss.gif" border="0" hspace="2" align="absmiddle" title="Point your rss reader at this link"></a>
+    Feed for <a href="/rss/createAllBuildsRssFeed.action?feedType=rssAll&os_authType=basic">all builds</a> or <a href="/rss/createAllBuildsRssFeed.action?feedType=rssFailed&os_authType=basic">all failed builds</a>.
+</p>
+<p>
+   <a href="/telemetry.action"><img src="/images/display.png" border="0" hspace="2" align="absmiddle" ></a>
+   View plans in <a href="/telemetry.action" title="This allows you to see the latest plan statuses at a glance">status summary screen</a>.
+
+</p>
+
+
+
+
+<script type="text/javascript">
+    setTimeout("updatePlans(0);", BAMBOO.reloadDashboardTimeout * 1000);    
+    BAMBOO.reloadDashboard = true;
+</script>
+
+<div class="paddedClearer"></div>
+        
+                </div>
+            </div>
+        <script type="text/javascript">
+            AJS.$(function() {
+                AsynchronousRequestManager.init(".asynchronous", null, function () {
+                                                        updatePlans();
+                                                });
+            });
+        </script>
+    <div class="clearer" ></div>
+
+</div>
+    </div> <!-- END #nonFooter -->
+    <div id="ft">
+        <div id="footer">
+            <p>
+                Powered by <a href="http://www.atlassian.com/software/bamboo/">Atlassian Bamboo</a> version 2.7.1 build 2101 -
+
+                <span title="18:39:06 10 nov. 2010">10 nov. 10</span>
+
+            </p>
+            <ul>
+                <li class="first">
+                    <a href="https://support.atlassian.com/secure/CreateIssue.jspa?pid=10060&amp;issuetype=1">Report a problem</a>
+                </li>
+                <li>
+                    <a href="http://jira.atlassian.com/secure/CreateIssue.jspa?pid=11011&amp;issuetype=4">Request a feature</a>
+                </li>
+
+                <li>
+                    <a href="http://www.atlassian.com/about/contact.jsp">Contact Atlassian</a>
+                </li>
+                <li>
+                    <a href="/viewAdministrators.action">Contact Administrators</a>
+                </li>
+            </ul>
+        </div> <!-- END #footer -->
+
+    </div> <!-- END #ft -->
+</div> <!-- END #container -->
+</body>
+</html>
