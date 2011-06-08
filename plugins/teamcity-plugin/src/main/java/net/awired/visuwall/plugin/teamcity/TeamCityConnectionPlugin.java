@@ -16,7 +16,7 @@
 
 package net.awired.visuwall.plugin.teamcity;
 
-import net.awired.visuwall.api.plugin.DefaultConnectionPlugin;
+import net.awired.visuwall.api.plugin.EmptyConnectionPlugin;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.annotations.VisibleForTesting;
 
-public class TeamCityConnectionPlugin extends DefaultConnectionPlugin {
+public class TeamCityConnectionPlugin extends EmptyConnectionPlugin {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TeamCityConnectionPlugin.class);
 

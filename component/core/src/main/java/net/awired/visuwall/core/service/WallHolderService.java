@@ -31,8 +31,7 @@ import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus;
-import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.core.domain.PluginHolder;
+import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.core.domain.SoftwareAccess;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
@@ -132,7 +131,6 @@ public class WallHolderService implements WallService {
 		return WALLS.keySet();
 	}
 
-	// ////////////////////////////////////////////////////////////////////////////////
 
 	@Scheduled(fixedDelay = THIRTY_SECONDS)
 	public void refreshWalls() {
@@ -152,9 +150,9 @@ public class WallHolderService implements WallService {
 		List<SoftwareAccess> softwareAccesses = wall.getSoftwareAccesses();
 		reconstructSoftwareAccesses(softwareAccesses);
 		if (softwareAccesses != null) {
-			PluginHolder pluginHolder = pluginService
-					.getPluginHolderFromSoftwares(softwareAccesses);
-			wall.setPluginHolder(pluginHolder);
+			List<ConnectionPlugin> connectionPlugins = pluginService
+					.getConnectionPluginsFromSoftwares(softwareAccesses);
+			wall.setConnectionPlugin(connectionPlugins);
 		}
 		projectService.updateWallProjects(wall);
 		if (LOG.isInfoEnabled()) {
@@ -190,7 +188,7 @@ public class WallHolderService implements WallService {
 			Project project = iter.next();
 			ProjectStatus status = new ProjectStatus();
 
-			PluginHolder pluginHolder = wall.getPluginHolder();
+			List<ConnectionPlugin> pluginHolder = wall.getConnectionPlugin();
 			ProjectId projectId = project.getProjectId();
 
 			status.setBuilding(projectService.isBuilding(pluginHolder,

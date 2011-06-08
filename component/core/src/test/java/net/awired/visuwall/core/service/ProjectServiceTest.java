@@ -21,14 +21,9 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
-import net.awired.visuwall.api.plugin.BuildConnectionPlugin;
-import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
-import net.awired.visuwall.core.domain.PluginHolder;
+import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
 
@@ -51,41 +46,39 @@ public class ProjectServiceTest {
 	@Test(expected = NullPointerException.class)
 	public void should_not_accept_null_parameter() throws NotCreatedException {
 		projectService.updateProject(null, new Project("test"));
-		projectService.updateProject(new PluginHolder(), null);
+		projectService.updateProject(new ArrayList<ConnectionPlugin>(), null);
 	}
 
-	public PluginHolder getPluginHolder() {
-		PluginHolder pluginHolder = new PluginHolder();
-		BuildConnectionPlugin buildConnectionPlugin = Mockito.mock(BuildConnectionPlugin.class);
-		QualityConnectionPlugin qualityConnectionPlugin = Mockito.mock(QualityConnectionPlugin.class);
-		pluginHolder.addBuildService(buildConnectionPlugin);
-		pluginHolder.addQualityService(qualityConnectionPlugin);
+	public List<ConnectionPlugin> getConnectionPlugins() {
+		List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>();
+		ConnectionPlugin connectionPlugin = Mockito.mock(ConnectionPlugin.class);
+		connectionPlugins.add(connectionPlugin);
 
 		List<ProjectId> projectIds = new ArrayList<ProjectId>();
 		projectIds.add(new ProjectId());
 		projectIds.add(new ProjectId());
-		when(buildConnectionPlugin.findAllProjects()).thenReturn(projectIds);
-		return pluginHolder;
+		when(connectionPlugin.findAllProjects()).thenReturn(projectIds);
+		return connectionPlugins;
 	}
 
 	@Ignore
 	@Test
 	public void test() {
 		Wall wall = new Wall();
-		wall.setPluginHolder(getPluginHolder());
+		wall.setConnectionPlugin(getConnectionPlugins());
 		projectService.updateWallProjects(wall);
 	}
 
 	@Test
 	public void should_call_merge_for_plugins() {
-		PluginHolder pluginHolder = getPluginHolder();
+		List<ConnectionPlugin> connectionPlugins = getConnectionPlugins();
 		Project project = new Project("test");
-		projectService.updateProject(pluginHolder, project);
+		projectService.updateProject(connectionPlugins, project);
 
 		Mockito.verify(projectService.projectEnhancerService).enhanceWithBuildInformations(project,
-		        pluginHolder.getBuildServices().iterator().next());
+		        connectionPlugins.iterator().next());
 		Mockito.verify(projectService.projectEnhancerService).enhanceWithQualityAnalysis(project,
-		        pluginHolder.getQualityServices().iterator().next(), projectService.metrics);
+				connectionPlugins.iterator().next(), projectService.metrics);
 	}
 
 }

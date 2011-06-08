@@ -70,7 +70,22 @@ public class WallServiceImpl implements WallService {
 	@SuppressWarnings("unchecked")
 	public List<Wall> getWalls() {
 		Query query = entityManager.createNamedQuery(Wall.QUERY_WALLS);
-		return query.getResultList();
+		List<Wall> resultList = query.getResultList();
+		
+		for (Wall wall : resultList) {
+			// TODO replace with lazy load with extended entityManager or eager request 
+			for (SoftwareAccess softwareInfo : wall.getSoftwareAccesses()) {
+				List<String> projectNames = softwareInfo.getProjectNames();
+				for (String string : projectNames) {
+					
+				}
+				List<String> projectViews = softwareInfo.getViewNames();
+				for (String string : projectViews) {
+					
+				}
+			}
+		}
+		return resultList;
 	}
 
 	@VisibleForTesting
@@ -81,6 +96,12 @@ public class WallServiceImpl implements WallService {
 	@Override
 	public Wall find(String wallName) throws NotFoundException {
 		Wall wall = entityManager.find(Wall.class, wallName);
+
+		// TODO replace with lazy load with extended entityManager or eager request 
+		for (SoftwareAccess softwareInfo : wall.getSoftwareAccesses()) {
+			softwareInfo.getProjectNames();
+			softwareInfo.getViewNames();
+		}
 		return wall;
 	}
 

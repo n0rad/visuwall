@@ -23,7 +23,6 @@ import java.util.List;
 
 import net.awired.ajsl.web.service.interfaces.JsService;
 import net.awired.visuwall.api.domain.PluginInfo;
-import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.core.domain.SoftwareInfo;
 import net.awired.visuwall.core.service.PluginService;
 
@@ -41,9 +40,6 @@ public class PluginController {
 	@Autowired
 	private PluginService pluginService;
 
-	@Autowired
-	JsService jsService;
-
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	List<PluginInfo> getPluginList() {
@@ -57,11 +53,7 @@ public class PluginController {
 		SoftwareInfo softwareInfo = pluginService
 				.getSoftwareInfoFromUrl(new URL(url));
 		
-		ArrayList<String> projectNames = new ArrayList<String>();
-		projectNames.add("visuwall");
-		projectNames.add("ajsl");
-		projectNames.add("aclm");
-		softwareInfo.setProjectNames(projectNames);
+		
 		return softwareInfo;
 	}
 

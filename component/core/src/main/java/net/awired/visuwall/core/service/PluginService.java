@@ -26,11 +26,8 @@ import java.util.ServiceLoader;
 import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
-import net.awired.visuwall.api.plugin.BuildConnectionPlugin;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
-import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
-import net.awired.visuwall.core.domain.PluginHolder;
 import net.awired.visuwall.core.domain.SoftwareAccess;
 import net.awired.visuwall.core.domain.SoftwareInfo;
 
@@ -41,7 +38,8 @@ import com.google.common.base.Preconditions;
 @Service
 public class PluginService {
 
-	private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader.load(VisuwallPlugin.class);
+	private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader
+			.load(VisuwallPlugin.class);
 
 	public PluginInfo getPluginInfoFromUrl(URL url) {
 		List<VisuwallPlugin> visuwallPlugins = getPlugins();
@@ -50,7 +48,7 @@ public class PluginService {
 				visuwallPlugin.isManageable(url);
 				return visuwallPlugin.getInfo();
 			} catch (IncompatibleSoftwareException e) {
-				// what do you want to log?
+				// TODO what do you want to log?
 			}
 		}
 		throw new RuntimeException("no plugin to manage url " + url);
@@ -67,13 +65,10 @@ public class PluginService {
 					softwareInfo.setSoftwareId(softwareId);
 					softwareInfo.setPluginInfo(visuwallPlugin.getInfo());
 					// TODO change that null
-					ConnectionPlugin connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
-					// TODO change instanceof
-					if (connectionPlugin instanceof BuildConnectionPlugin) {
-						softwareInfo.setProjectNames(((BuildConnectionPlugin) connectionPlugin).findProjectNames());
-					} else if (connectionPlugin instanceof QualityConnectionPlugin) {
-
-					}
+					ConnectionPlugin connectionPlugin = visuwallPlugin
+							.getConnection(url.toString(), null);
+					softwareInfo.setProjectNames(connectionPlugin
+							.findProjectNames());
 					return softwareInfo;
 				}
 			} catch (IncompatibleSoftwareException e) {
@@ -91,7 +86,8 @@ public class PluginService {
 
 	public List<PluginInfo> getPluginsInfo() {
 		List<VisuwallPlugin> visuwallPlugins = getPlugins();
-		List<PluginInfo> pluginInfos = new ArrayList<PluginInfo>(visuwallPlugins.size());
+		List<PluginInfo> pluginInfos = new ArrayList<PluginInfo>(
+				visuwallPlugins.size());
 		for (VisuwallPlugin visuwallPlugin : visuwallPlugins) {
 			PluginInfo pluginInfo = getPluginInfo(visuwallPlugin);
 			pluginInfos.add(pluginInfo);
@@ -113,8 +109,10 @@ public class PluginService {
 		pluginLoader.reload();
 	}
 
-	public PluginHolder getPluginHolderFromSoftwares(List<SoftwareAccess> softwareAccesses) {
-		PluginHolder pluginHolder = new PluginHolder();
+	public List<ConnectionPlugin> getConnectionPluginsFromSoftwares(
+			List<SoftwareAccess> softwareAccesses) {
+		List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>(
+				softwareAccesses.size());
 		for (SoftwareAccess softwareAccess : softwareAccesses) {
 			// TODO refactor as we recreate a connection
 			VisuwallPlugin plugin = getPluginFromSoftware(softwareAccess);
@@ -123,26 +121,22 @@ public class PluginService {
 			Properties properties = new Properties();
 			// properties.put("login", softwareAccess.getLogin());
 			// properties.put("password", softwareAccess.getPassword());
-			ConnectionPlugin connection = plugin.getConnection(softwareAccess.getUrl(), properties);
-
-			if (connection instanceof BuildConnectionPlugin) {
-				pluginHolder.addBuildService((BuildConnectionPlugin) connection);
-			} else if (connection instanceof QualityConnectionPlugin) {
-				pluginHolder.addQualityService((QualityConnectionPlugin) connection);
-			} else {
-				throw new RuntimeException("Unknow plugin connection type : " + connection);
-			}
+			ConnectionPlugin connection = plugin.getConnection(
+					softwareAccess.getUrl(), properties);
+			connectionPlugins.add(connection);
 		}
-		return pluginHolder;
+		return connectionPlugins;
 	}
 
 	public VisuwallPlugin getPluginFromSoftware(SoftwareAccess softwareAccess) {
-		Preconditions.checkNotNull(softwareAccess.getPluginClassName(), "softwareAccess.getPluginClassName");
+		Preconditions.checkNotNull(softwareAccess.getPluginClassName(),
+				"softwareAccess.getPluginClassName");
 
 		List<VisuwallPlugin> plugins = getPlugins();
 		for (VisuwallPlugin plugin : plugins) {
 			// TODO manage version
-			if (softwareAccess.getPluginClassName().equals(plugin.getClass().getName())) {
+			if (softwareAccess.getPluginClassName().equals(
+					plugin.getClass().getName())) {
 				return plugin;
 			}
 		}

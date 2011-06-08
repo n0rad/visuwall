@@ -27,8 +27,7 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.BuildConnectionPlugin;
-import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
+import net.awired.visuwall.api.plugin.ConnectionPlugin;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -42,7 +41,7 @@ public class ProjectEnhancerService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ProjectEnhancerService.class);
 
-	public void enhanceWithBuildInformations(Project projectToMerge, BuildConnectionPlugin buildPlugin) {
+	public void enhanceWithBuildInformations(Project projectToMerge, ConnectionPlugin buildPlugin) {
 		ProjectId projectId = projectToMerge.getProjectId();
 		Preconditions.checkState(projectId != null, "projectToComplete must have a projectId");
 		try {
@@ -91,7 +90,7 @@ public class ProjectEnhancerService {
 		}
 	}
 
-	public void enhanceWithQualityAnalysis(Project analyzedProject, QualityConnectionPlugin qualityPlugin,
+	public void enhanceWithQualityAnalysis(Project analyzedProject, ConnectionPlugin qualityPlugin,
 	        String... metrics) {
 		ProjectId projectId = analyzedProject.getProjectId();
 		Build build = analyzedProject.getCompletedBuild();

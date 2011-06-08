@@ -32,7 +32,7 @@ import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
-public class DefaultConnectionPlugin implements VisuwallConnectionPlugin {
+public class EmptyConnectionPlugin implements ConnectionPlugin {
 
 	private List<ProjectId> projects = new ArrayList<ProjectId>();
 	private List<String> projectNames = new ArrayList<String>();

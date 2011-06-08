@@ -25,7 +25,7 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
+import net.awired.visuwall.api.plugin.ConnectionPlugin;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +50,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 
 	@Test
 	public void should_merge_with_one_build_plugin() throws ProjectNotFoundException {
-		QualityConnectionPlugin qualityPlugin = Mockito.mock(QualityConnectionPlugin.class);
+		ConnectionPlugin qualityPlugin = Mockito.mock(ConnectionPlugin.class);
 
 		QualityResult qualityResult = new QualityResult();
 		QualityMeasure coverage = new QualityMeasure();
@@ -68,8 +68,8 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 
 	@Test
 	public void should_merge_with_two_build_plugins() throws ProjectNotFoundException {
-		QualityConnectionPlugin qualityPlugin1 = Mockito.mock(QualityConnectionPlugin.class);
-		QualityConnectionPlugin qualityPlugin2 = Mockito.mock(QualityConnectionPlugin.class);
+		ConnectionPlugin qualityPlugin1 = Mockito.mock(ConnectionPlugin.class);
+		ConnectionPlugin qualityPlugin2 = Mockito.mock(ConnectionPlugin.class);
 
 		QualityResult qualityResult1 = new QualityResult();
 		QualityMeasure coverage = new QualityMeasure();
@@ -97,8 +97,8 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 
 	@Test
 	public void last_plugin_is_always_right() throws ProjectNotFoundException {
-		QualityConnectionPlugin qualityPlugin1 = Mockito.mock(QualityConnectionPlugin.class);
-		QualityConnectionPlugin qualityPlugin2 = Mockito.mock(QualityConnectionPlugin.class);
+		ConnectionPlugin qualityPlugin1 = Mockito.mock(ConnectionPlugin.class);
+		ConnectionPlugin qualityPlugin2 = Mockito.mock(ConnectionPlugin.class);
 
 		QualityResult qualityResult1 = new QualityResult();
 		QualityMeasure coverage = new QualityMeasure();
@@ -131,7 +131,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 		testResult.setPassCount(2);
 		testResult.setSkipCount(3);
 
-		QualityConnectionPlugin qualityPlugin = Mockito.mock(QualityConnectionPlugin.class);
+		ConnectionPlugin qualityPlugin = Mockito.mock(ConnectionPlugin.class);
 		when(qualityPlugin.analyzeUnitTests(projectToEnhance.getProjectId())).thenReturn(testResult);
 
 		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin);
@@ -153,7 +153,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 		testResult.setPassCount(2);
 		testResult.setSkipCount(3);
 
-		QualityConnectionPlugin qualityPlugin = Mockito.mock(QualityConnectionPlugin.class);
+		ConnectionPlugin qualityPlugin = Mockito.mock(ConnectionPlugin.class);
 		when(qualityPlugin.analyzeIntegrationTests(projectToEnhance.getProjectId())).thenReturn(testResult);
 
 		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin);

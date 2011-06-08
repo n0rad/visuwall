@@ -29,7 +29,7 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.plugin.DefaultConnectionPlugin;
+import net.awired.visuwall.api.plugin.EmptyConnectionPlugin;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
@@ -41,7 +41,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
 
-public final class SonarConnectionPlugin extends DefaultConnectionPlugin {
+public final class SonarConnectionPlugin extends EmptyConnectionPlugin {
 
     private static final Logger LOG = LoggerFactory.getLogger(SonarConnectionPlugin.class);
 

@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.core.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -33,6 +34,7 @@ import javax.persistence.Transient;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.core.utils.ShrinkList;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -70,7 +72,7 @@ public final class Wall {
 
 	@Transient
 	@JsonIgnore
-	private PluginHolder pluginHolder;
+	private List<ConnectionPlugin> connectionPlugin = new ArrayList<ConnectionPlugin>();
 
 	public Wall() {
 	}
@@ -140,22 +142,22 @@ public final class Wall {
 		this.projects = projects;
 	}
 
-	@JsonIgnore
-	public PluginHolder getPluginHolder() {
-		return pluginHolder;
-	}
-
-	@JsonIgnore
-	public void setPluginHolder(PluginHolder pluginHolder) {
-		this.pluginHolder = pluginHolder;
-	}
-
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	@JsonIgnore
+	public List<ConnectionPlugin> getConnectionPlugin() {
+		return connectionPlugin;
+	}
+
+	@JsonIgnore
+	public void setConnectionPlugin(List<ConnectionPlugin> connectionPlugin) {
+		this.connectionPlugin = connectionPlugin;
 	}
 
 }

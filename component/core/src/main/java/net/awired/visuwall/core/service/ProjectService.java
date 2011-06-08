@@ -27,9 +27,7 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.BuildConnectionPlugin;
-import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
-import net.awired.visuwall.core.domain.PluginHolder;
+import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.core.domain.Wall;
 
 import org.slf4j.Logger;
@@ -55,7 +53,7 @@ public class ProjectService {
 	public void updateWallProjects(Wall wall) {
 		Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
 
-		for (BuildConnectionPlugin buildService : wall.getPluginHolder().getBuildServices()) {
+		for (ConnectionPlugin buildService : wall.getConnectionPlugin()) {
 			List<ProjectId> discoveredProjects = buildService.findAllProjects();
 			for (ProjectId discoveredProjectId : discoveredProjects) {
 
@@ -67,7 +65,7 @@ public class ProjectService {
 					wall.getProjects().add(project);
 				}
 
-				updateProject(wall.getPluginHolder(), project);
+				updateProject(wall.getConnectionPlugin(), project);
 			}
 		}
 	}
@@ -77,14 +75,12 @@ public class ProjectService {
 		Preconditions.checkNotNull(projectName, "projectName is a mandatory parameter");
 
 		Project project = wall.getProjectByName(projectName);
-		updateProject(wall.getPluginHolder(), project);
+		updateProject(wall.getConnectionPlugin(), project);
 	}
 
-	void updateProject(PluginHolder pluginHolder, Project project) {
-		for (BuildConnectionPlugin service : pluginHolder.getBuildServices()) {
+	void updateProject(List<ConnectionPlugin> connectionPlugins, Project project) {
+		for (ConnectionPlugin service : connectionPlugins) {
 			projectEnhancerService.enhanceWithBuildInformations(project, service);
-		}
-		for (QualityConnectionPlugin service : pluginHolder.getQualityServices()) {
 			projectEnhancerService.enhanceWithQualityAnalysis(project, service, metrics);
 		}
 		if (LOG.isDebugEnabled()) {
@@ -101,7 +97,7 @@ public class ProjectService {
 		Preconditions.checkNotNull(projectName, "projectName is a mandatory parameter");
 
 		ProjectId projectId = wall.getProjectByName(projectName).getProjectId();
-		for (BuildConnectionPlugin service : wall.getPluginHolder().getBuildServices()) {
+		for (ConnectionPlugin service : wall.getConnectionPlugin()) {
 			try {
 				Date estimatedFinishTime = service.getEstimatedFinishTime(projectId);
 				if (estimatedFinishTime != null) {
@@ -116,11 +112,11 @@ public class ProjectService {
 		return null;
 	}
 
-	public int getLastBuildNumber(PluginHolder pluginHolder, ProjectId projectId) {
-		Preconditions.checkNotNull(pluginHolder, "pluginHolder is a mandatory parameter");
+	public int getLastBuildNumber(List<ConnectionPlugin> connectionPlugins, ProjectId projectId) {
+		Preconditions.checkNotNull(connectionPlugins, "connectionPlugins is a mandatory parameter");
 		Preconditions.checkNotNull(projectId, "projectId is a mandatory parameter");
 
-		for (BuildConnectionPlugin service : pluginHolder.getBuildServices()) {
+		for (ConnectionPlugin service : connectionPlugins) {
 			try {
 				return service.getLastBuildNumber(projectId);
 			} catch (ProjectNotFoundException e) {
@@ -136,11 +132,11 @@ public class ProjectService {
 		return PROJECT_NOT_BUILT_ID;
 	}
 
-	public State getState(PluginHolder pluginHolder, ProjectId projectId) {
-		Preconditions.checkNotNull(pluginHolder, "pluginHolder is a mandatory parameter");
+	public State getState(List<ConnectionPlugin> connectionPlugins, ProjectId projectId) {
+		Preconditions.checkNotNull(connectionPlugins, "connectionPlugins is a mandatory parameter");
 		Preconditions.checkNotNull(projectId, "projectId is a mandatory parameter");
 
-		for (BuildConnectionPlugin service : pluginHolder.getBuildServices()) {
+		for (ConnectionPlugin service : connectionPlugins) {
 			try {
 				return service.getState(projectId);
 			} catch (ProjectNotFoundException e) {
@@ -149,14 +145,14 @@ public class ProjectService {
 				}
 			}
 		}
-		throw new RuntimeException("Project " + projectId + " must have a state. It can't be found in " + pluginHolder);
+		throw new RuntimeException("Project " + projectId + " must have a state. It can't be found in " + connectionPlugins);
 	}
 
-	public boolean isBuilding(PluginHolder pluginHolder, ProjectId projectId) {
-		Preconditions.checkNotNull(pluginHolder, "pluginHolder is a mandatory parameter");
+	public boolean isBuilding(List<ConnectionPlugin> connectionPlugins, ProjectId projectId) {
+		Preconditions.checkNotNull(connectionPlugins, "connectionPlugins is a mandatory parameter");
 		Preconditions.checkNotNull(projectId, "projectId is a mandatory parameter");
 
-		for (BuildConnectionPlugin service : pluginHolder.getBuildServices()) {
+		for (ConnectionPlugin service : connectionPlugins) {
 			try {
 				return service.isBuilding(projectId);
 			} catch (ProjectNotFoundException e) {
@@ -174,7 +170,7 @@ public class ProjectService {
 		Preconditions.checkNotNull(projectName, "projectName is a mandatory parameter");
 
 		ProjectId projectId = wall.getProjectByName(projectName).getProjectId();
-		for (BuildConnectionPlugin service : wall.getPluginHolder().getBuildServices()) {
+		for (ConnectionPlugin service : wall.getConnectionPlugin()) {
 			try {
 				Build build = service.findBuildByBuildNumber(projectId, buildNumber);
 				if (build != null) {
