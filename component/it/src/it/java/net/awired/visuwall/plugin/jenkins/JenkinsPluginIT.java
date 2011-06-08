@@ -27,6 +27,7 @@ import net.awired.visuwall.api.domain.SoftwareInfo;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class JenkinsPluginIT {
@@ -51,6 +52,7 @@ public class JenkinsPluginIT {
 		assertNull(softwareInfo.getWarnings());
 	}
 
+	@Ignore("apache site is down")
 	@Test
 	public void should_recognize_jenkins_instance_with_https() throws Exception {
 		JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();

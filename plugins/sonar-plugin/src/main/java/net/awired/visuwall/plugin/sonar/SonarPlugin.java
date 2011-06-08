@@ -16,30 +16,33 @@
 
 package net.awired.visuwall.plugin.sonar;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.util.Properties;
+
+import javax.ws.rs.core.MediaType;
 
 import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.SoftwareInfo;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
+import net.awired.visuwall.plugin.sonar.resource.Properties;
+import net.awired.visuwall.plugin.sonar.resource.Property;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.io.ByteStreams;
-import com.google.common.io.Closeables;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.UniformInterfaceException;
+import com.sun.jersey.api.client.WebResource;
 
 public class SonarPlugin implements VisuwallPlugin {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SonarPlugin.class);
 
-	@Override
-	public ConnectionPlugin getConnection(String url, Properties info) {
+	private static final String SONAR_CORE_VERSION_KEY = "sonar.core.version";
+
+	public ConnectionPlugin getConnection(String url, java.util.Properties info) {
 		SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
 		sonarConnectionPlugin.connect(url);
 		return sonarConnectionPlugin;
@@ -57,40 +60,34 @@ public class SonarPlugin implements VisuwallPlugin {
 	@Override
 	public SoftwareInfo getSoftwareInfo(URL url) throws IncompatibleSoftwareException {
 		Preconditions.checkNotNull(url, "url is mandatory");
-		String xml = getContent(url);
-		if (isManageable(xml)) {
-			SoftwareInfo softwareInfo = new SoftwareInfo();
-			softwareInfo.setName("Sonar");
-			softwareInfo.setVersion(getVersion(xml));
-			softwareInfo.setPluginInfo(getInfo());
-			return softwareInfo;
-		}
-		throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Sonar");
-	}
-
-	private String getVersion(String xml) {
-		return new SonarVersionExtractor(xml).version();
-	}
-
-	private boolean isManageable(String xml) {
-		return xml.contains("sonar.core.version");
-	}
-
-	private String getContent(URL url) {
-		InputStream stream = null;
 		try {
-			url = new URL(url.toString() + "/api/properties");
-			stream = url.openStream();
-			byte[] content = ByteStreams.toByteArray(stream);
-			String xml = new String(content);
-			return xml;
-		} catch (IOException e) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Can't get content of " + url, e);
+			Client client = Client.create();
+			WebResource resource = client.resource(url.toString() + "/api/properties");
+			Properties properties = resource.accept(MediaType.APPLICATION_XML).get(Properties.class);
+			if (isManageable(properties)) {
+				SoftwareInfo softwareInfo = new SoftwareInfo();
+				softwareInfo.setName("Sonar");
+				softwareInfo.setVersion(getVersion(properties));
+				softwareInfo.setPluginInfo(getInfo());
+				return softwareInfo;
 			}
-			return "";
-		} finally {
-			Closeables.closeQuietly(stream);
+			throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Sonar");
+		} catch (UniformInterfaceException e) {
+			throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Sonar");
 		}
 	}
+
+	private String getVersion(Properties properties) {
+		return new SonarVersionExtractor(properties).version();
+	}
+
+	private boolean isManageable(Properties properties) {
+		for (Property property : properties.getProperties()) {
+			if (property.isKey(SONAR_CORE_VERSION_KEY)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

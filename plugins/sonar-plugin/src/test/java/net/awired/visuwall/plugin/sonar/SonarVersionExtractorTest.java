@@ -5,9 +5,12 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.junit.Test;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 
-import com.google.common.io.ByteStreams;
+import net.awired.visuwall.plugin.sonar.resource.Properties;
+
+import org.junit.Test;
 
 public class SonarVersionExtractorTest {
 
@@ -16,10 +19,19 @@ public class SonarVersionExtractorTest {
 		Class<? extends SonarVersionExtractorTest> clazz = this.getClass();
 		ClassLoader classLoader = clazz.getClassLoader();
 		InputStream stream = classLoader.getResourceAsStream("sonar_version_page.xml");
-		byte[] data = ByteStreams.toByteArray(stream);
-		SonarVersionExtractor sve = new SonarVersionExtractor(new String(data));
+		SonarVersionExtractor sve = new SonarVersionExtractor(loadProperties(stream));
 
 		String version = sve.version();
 		assertEquals("2.8", version);
+	}
+
+	private Properties loadProperties(InputStream is) {
+		try {
+			JAXBContext newInstance = JAXBContext.newInstance(Properties.class);
+			Unmarshaller unmarshaller = newInstance.createUnmarshaller();
+			return (Properties) unmarshaller.unmarshal(is);
+		} catch (Exception t) {
+			throw new RuntimeException(t);
+		}
 	}
 }

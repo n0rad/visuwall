@@ -25,12 +25,14 @@ import java.net.URL;
 import net.awired.visuwall.api.domain.SoftwareInfo;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TeamCityPluginIT {
 	
+	@Ignore("teamcity plugin is not finished")
 	@Test
-	public void should_recognize_jenkins_instance_with_valid_url() throws Exception {
+	public void should_recognize_teamcity_instance_with_valid_url() throws Exception {
 		TeamCityPlugin teamcityPlugin = new TeamCityPlugin();
 		SoftwareInfo softwareInfo = teamcityPlugin.getSoftwareInfo(new URL(TEAMCITY_URL));
 		assertEquals("TeamCity", softwareInfo.getName());

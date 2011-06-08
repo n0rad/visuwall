@@ -28,7 +28,7 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.BuildConnectionPlugin;
+import net.awired.visuwall.api.plugin.DefaultConnectionPlugin;
 import net.awired.visuwall.hudsonclient.Hudson;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
-public final class HudsonConnectionPlugin implements BuildConnectionPlugin {
+public final class HudsonConnectionPlugin extends DefaultConnectionPlugin {
 
 	private static final Logger LOG = LoggerFactory.getLogger(HudsonConnectionPlugin.class);
 
