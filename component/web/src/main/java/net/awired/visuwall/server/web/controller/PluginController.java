@@ -18,11 +18,13 @@ package net.awired.visuwall.server.web.controller;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.awired.ajsl.web.service.interfaces.JsService;
 import net.awired.visuwall.api.domain.PluginInfo;
-import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
+import net.awired.visuwall.core.domain.SoftwareInfo;
 import net.awired.visuwall.core.service.PluginService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +46,22 @@ public class PluginController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
-	List<PluginInfo> getSoftwareList() {
+	List<PluginInfo> getPluginList() {
 		return pluginService.getPluginsInfo();
 	}
 
 	@RequestMapping(value = "managable", method = RequestMethod.GET)
 	public @ResponseBody
-	SoftwareInfo getManageableUrl(@RequestParam String url) throws MalformedURLException {
-		SoftwareInfo softwareInfo = pluginService.getSoftwareInfoFromManagableUrl(new URL(url));
+	SoftwareInfo getSoftwareInfo(@RequestParam String url)
+			throws MalformedURLException {
+		SoftwareInfo softwareInfo = pluginService
+				.getSoftwareInfoFromUrl(new URL(url));
+		
+		ArrayList<String> projectNames = new ArrayList<String>();
+		projectNames.add("visuwall");
+		projectNames.add("ajsl");
+		projectNames.add("aclm");
+		softwareInfo.setProjectNames(projectNames);
 		return softwareInfo;
 	}
 

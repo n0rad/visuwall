@@ -31,7 +31,7 @@ import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus;
-import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.core.domain.PluginHolder;
 import net.awired.visuwall.core.domain.SoftwareAccess;
 import net.awired.visuwall.core.domain.Wall;
@@ -167,10 +167,10 @@ public class WallHolderService implements WallService {
 			List<SoftwareAccess> softwareAccesses) {
 		for (SoftwareAccess softwareAccess : softwareAccesses) {
 			try {
-				SoftwareInfo softwareInfo = pluginService
-						.getSoftwareInfoFromManagableUrl(new URL(softwareAccess
+				PluginInfo pluginInfo = pluginService
+						.getPluginInfoFromUrl(new URL(softwareAccess
 								.getUrl()));
-				softwareAccess.setPluginClassName(softwareInfo.getPluginInfo().getClassName());
+				softwareAccess.setPluginClassName(pluginInfo.getClassName());
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

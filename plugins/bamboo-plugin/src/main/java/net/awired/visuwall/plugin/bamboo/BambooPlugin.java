@@ -20,7 +20,7 @@ import java.net.URL;
 import java.util.Properties;
 
 import net.awired.visuwall.api.domain.PluginInfo;
-import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
@@ -40,9 +40,9 @@ public class BambooPlugin implements VisuwallPlugin {
 	}
 	
 	@Override
-	public SoftwareInfo getSoftwareInfo(URL url) {
-		SoftwareInfo softwareInfo = new SoftwareInfo();
-		return softwareInfo;
+	public SoftwareId isManageable(URL url) {
+		SoftwareId softwareId = new SoftwareId();
+		return softwareId;
 	}
 
 }

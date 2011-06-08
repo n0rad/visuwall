@@ -26,6 +26,21 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 	
 	
 	this.init = function() {
+		$(".projects", this).accordion({
+//			fillSpace: true,
+			autoHeight: false,
+//			collapsible: true
+			navigation: true
+		});
+//		$("select", this).multiselect();
+		
+		
+//		$(".projects", this).accordion({
+//			fillSpace: true,
+//			autoHeight: false,
+//			collapsible: true
+////			navigation: true
+//		});
 		$this.tabs = $("#softTabs", this);
 		var context = this;
 		
@@ -218,6 +233,17 @@ var ff = '				<table class="softwareInfo">'
 				//success
 				domObj.switchClasses(classes, 'successCheck', 1);				
 			}
+			
+			
+			var projectNamesFormElem = $('SELECT:regex(id,softwareAccesses.*\.projectNames)');
+			
+			var oldVal = projectNamesFormElem.val();
+			projectNamesFormElem.empty();
+			for (var i = 0; i < softwareInfo.projectNames.length; i++) {
+				var projectName = softwareInfo.projectNames[i];
+				projectNamesFormElem.append($("<option></option>").attr("value",projectName).text(projectName));
+			}
+			projectNamesFormElem.val(oldVal);
 		}, function() {
 			// fail
 			domObj.switchClasses(classes, 'failureCheck', 1);			

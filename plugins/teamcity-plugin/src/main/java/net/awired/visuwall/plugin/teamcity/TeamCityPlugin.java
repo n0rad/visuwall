@@ -7,7 +7,7 @@ import java.net.URL;
 import java.util.Properties;
 
 import net.awired.visuwall.api.domain.PluginInfo;
-import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
@@ -38,12 +38,12 @@ public class TeamCityPlugin implements VisuwallPlugin {
 	}
 
 	@Override
-	public SoftwareInfo getSoftwareInfo(URL url) throws IncompatibleSoftwareException {
+	public SoftwareId isManageable(URL url) throws IncompatibleSoftwareException {
 		Preconditions.checkNotNull(url, "url is mandatory");
 		String xml = getContent(url);
 		if (isManageable(xml)) {
 			try {
-				return createSoftwareInfo(url);
+				return createSoftwareId(url);
 			} catch (MalformedURLException e) {
 				throw new IncompatibleSoftwareException("Url " + url + " is not compatible with TeamCity", e);
 			}
@@ -51,13 +51,12 @@ public class TeamCityPlugin implements VisuwallPlugin {
 		throw new IncompatibleSoftwareException("Url " + url + " is not compatible with TeamCity");
 	}
 
-	private SoftwareInfo createSoftwareInfo(URL url) throws MalformedURLException {
-		SoftwareInfo softwareInfo = new SoftwareInfo();
-		softwareInfo.setPluginInfo(getInfo());
-		softwareInfo.setName("TeamCity");
+	private SoftwareId createSoftwareId(URL url) throws MalformedURLException {
+		SoftwareId softwareId = new SoftwareId();
+		softwareId.setName("TeamCity");
 		String strVersion = getVersion(url);
-		softwareInfo.setVersion(strVersion);
-		return softwareInfo;
+		softwareId.setVersion(strVersion);
+		return softwareId;
 	}
 
 	private String getVersion(URL url) throws MalformedURLException {

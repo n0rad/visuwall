@@ -21,15 +21,12 @@ import java.net.URL;
 import javax.ws.rs.core.MediaType;
 
 import net.awired.visuwall.api.domain.PluginInfo;
-import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.plugin.sonar.resource.Properties;
 import net.awired.visuwall.plugin.sonar.resource.Property;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.Client;
@@ -37,8 +34,6 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 public class SonarPlugin implements VisuwallPlugin {
-
-	private static final Logger LOG = LoggerFactory.getLogger(SonarPlugin.class);
 
 	private static final String SONAR_CORE_VERSION_KEY = "sonar.core.version";
 
@@ -58,18 +53,17 @@ public class SonarPlugin implements VisuwallPlugin {
 	}
 
 	@Override
-	public SoftwareInfo getSoftwareInfo(URL url) throws IncompatibleSoftwareException {
+	public SoftwareId isManageable(URL url) throws IncompatibleSoftwareException {
 		Preconditions.checkNotNull(url, "url is mandatory");
 		try {
 			Client client = Client.create();
 			WebResource resource = client.resource(url.toString() + "/api/properties");
 			Properties properties = resource.accept(MediaType.APPLICATION_XML).get(Properties.class);
 			if (isManageable(properties)) {
-				SoftwareInfo softwareInfo = new SoftwareInfo();
-				softwareInfo.setName("Sonar");
-				softwareInfo.setVersion(getVersion(properties));
-				softwareInfo.setPluginInfo(getInfo());
-				return softwareInfo;
+				SoftwareId softwareId = new SoftwareId();
+				softwareId.setName("Sonar");
+				softwareId.setVersion(getVersion(properties));
+				return softwareId;
 			}
 			throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Sonar");
 		} catch (UniformInterfaceException e) {

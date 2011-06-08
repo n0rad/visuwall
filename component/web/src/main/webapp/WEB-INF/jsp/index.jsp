@@ -57,30 +57,32 @@
 				</li> 
 			</ul> 
 			<div id="tabs-0"> 
-		<input id="softwareAccesses0.id" name="softwareAccesses[0].id" type="hidden" value=""/> 
-		<label for="softwareAccesses0.url">Url</label> 
-		<label id="softwareAccesses0.urlcheck" class="check"></label>
-		<input id="softwareAccesses0.url" name="softwareAccesses[0].url" class="ui-widget-content ui-corner-all url" type="text" value=""/>
-		<label for="softwareAccesses0.login">Login</label> 
-		<input id="softwareAccesses0.login" name="softwareAccesses[0].login" class="ui-widget-content ui-corner-all disabled" type="text" value="" disabled="disabled"/> 
-		<label for="softwareAccesses0.password">Password</label> 
-		<input id="softwareAccesses0.password" name="softwareAccesses[0].password" class="ui-widget-content ui-corner-all disabled" type="password" value="" disabled="disabled"/> 
+				<input id="softwareAccesses0.id" name="softwareAccesses[0].id" type="hidden" value=""/> 
+				<label for="softwareAccesses0.url">Url</label> 
+				<label id="softwareAccesses0.urlcheck" class="check"></label>
+				<input id="softwareAccesses0.url" name="softwareAccesses[0].url" class="ui-widget-content ui-corner-all url" type="text" value=""/>
+				<label for="softwareAccesses0.login">Login</label> 
 
-		<!-- 
-		<ol class="projects ui-widget-content ui-corner-all">
-			<li>proj1</li>
-			<li>proj1</li>
-			<li>proj1</li>
-			<li>proj1</li>
-			<li>proj1</li>
-			<li>proj1</li>
-			<li>proj1</li>
-			<li>proj1</li>
-			<li>proj1</li>
-			<li>proj1</li>
-			<li>proj1</li>
-			<li>proj2</li>
-		</ol> --> 
+				<div class="projects">
+					<h3><a href="#">Select Projects</a></h3> 
+					<div> 
+						<select id="softwareAccesses0.projectNames" name="softwareAccesses[0].projectNames" multiple="multiple" size="5">
+						</select>
+					</div> 
+					<h3><a href="#">Select views</a></h3> 
+					<div> 
+						<select id="softwareAccesses0.viewNames" name="softwareAccesses[0].viewNames" multiple="multiple" size="5">
+						</select>
+					</div> 
+				</div> 
+
+				<input id="softwareAccesses0.login" name="softwareAccesses[0].login" class="ui-widget-content ui-corner-all disabled" type="text" value="" disabled="disabled"/> 
+				<label for="softwareAccesses0.password">Password</label> 
+				<input id="softwareAccesses0.password" name="softwareAccesses[0].password" class="ui-widget-content ui-corner-all disabled" type="password" value="" disabled="disabled"/> 
+				<label for="sofwareAccesses0.allProject">All Projects</label> 
+				<input type="checkbox" id="sofwareAccesses0.allProject" name="sofwareAccesses[0].allProject" /> 
+
+
 			</div> 
 		</div>
 			<input class="submit" type="submit" value="Save"/> 

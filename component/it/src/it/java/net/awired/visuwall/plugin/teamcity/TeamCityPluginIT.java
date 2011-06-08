@@ -18,11 +18,10 @@ package net.awired.visuwall.plugin.teamcity;
 
 import static net.awired.visuwall.IntegrationTestData.TEAMCITY_URL;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.net.URL;
 
-import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
 import org.junit.Ignore;
@@ -34,17 +33,16 @@ public class TeamCityPluginIT {
 	@Test
 	public void should_recognize_teamcity_instance_with_valid_url() throws Exception {
 		TeamCityPlugin teamcityPlugin = new TeamCityPlugin();
-		SoftwareInfo softwareInfo = teamcityPlugin.getSoftwareInfo(new URL(TEAMCITY_URL));
-		assertEquals("TeamCity", softwareInfo.getName());
-		assertNotNull(softwareInfo.getPluginInfo());
-		assertEquals("6.5", softwareInfo.getVersion());
+		SoftwareId softwareId = teamcityPlugin.isManageable(new URL(TEAMCITY_URL));
+		assertEquals("TeamCity", softwareId.getName());
+		assertEquals("6.5", softwareId.getVersion());
 	}
 
 	@Test(expected = IncompatibleSoftwareException.class)
 	public void should_not_fail_if_url_is_not_manageable() throws Exception {
 		TeamCityPlugin teamcityPlugin = new TeamCityPlugin();
 		String url = "http://www.google.fr";
-		teamcityPlugin.getSoftwareInfo(new URL(url));
+		teamcityPlugin.isManageable(new URL(url));
 	}
 
 }

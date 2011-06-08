@@ -19,15 +19,16 @@ package net.awired.visuwall.api.plugin;
 import java.net.URL;
 
 import net.awired.visuwall.api.domain.PluginInfo;
-import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
 public interface VisuwallPlugin {
 
+	//TODO change url to URL type
     ConnectionPlugin getConnection(String url, java.util.Properties info);
 
     PluginInfo getInfo();
     
-	SoftwareInfo getSoftwareInfo(URL url) throws IncompatibleSoftwareException;
+	SoftwareId isManageable(URL url) throws IncompatibleSoftwareException;
 
 }

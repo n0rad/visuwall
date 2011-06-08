@@ -1,17 +1,12 @@
 package net.awired.visuwall.api.domain;
 
-public class SoftwareInfo {
+public class SoftwareId {
 
 	private String name;
 	private String version;
 	private String warnings;
-	private PluginInfo pluginInfo;
 
 	// ////////////////////////////////
-	
-	public void setPluginInfo(PluginInfo pluginInfo) {
-		this.pluginInfo = pluginInfo;
-	}
 
 	public String getName() {
 		return name;
@@ -37,7 +32,4 @@ public class SoftwareInfo {
 		this.warnings = warnings;
 	}
 
-	public PluginInfo getPluginInfo() {
-		return pluginInfo;
-	}
 }

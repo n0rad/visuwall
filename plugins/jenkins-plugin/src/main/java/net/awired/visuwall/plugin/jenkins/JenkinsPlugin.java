@@ -22,7 +22,7 @@ import java.net.URL;
 import java.util.Properties;
 
 import net.awired.visuwall.api.domain.PluginInfo;
-import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
@@ -55,32 +55,31 @@ public class JenkinsPlugin implements VisuwallPlugin {
     }
 
     @Override
-	public SoftwareInfo getSoftwareInfo(URL url) throws IncompatibleSoftwareException {
+	public SoftwareId isManageable(URL url) throws IncompatibleSoftwareException {
         Preconditions.checkNotNull(url, "url is mandatory");
 		String xml = getContent(url);
 		if (isManageable(xml)) {
-			return createSoftwareInfo(xml);
+			return createSoftwareId(xml);
 		}
 		throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Jenkins");
     }
 
-	private SoftwareInfo createSoftwareInfo(String xml) {
-	    SoftwareInfo softwareInfo = new SoftwareInfo();
-	    softwareInfo.setPluginInfo(getInfo());
-		softwareInfo.setName("Jenkins");
+	private SoftwareId createSoftwareId(String xml) {
+	    SoftwareId softwareId = new SoftwareId();
+		softwareId.setName("Jenkins");
 	    String strVersion = getVersion(xml);
-	    softwareInfo.setVersion(strVersion);
-	    addWarnings(softwareInfo, strVersion);
-	    return softwareInfo;
+	    softwareId.setVersion(strVersion);
+	    addWarnings(softwareId, strVersion);
+	    return softwareId;
     }
 
-	private void addWarnings(SoftwareInfo softwareInfo, String strVersion) {
+	private void addWarnings(SoftwareId softwareInfo, String strVersion) {
 		double version = Double.parseDouble(strVersion);
 		if (version < 1.405)
 			addWarningForVersionBefore1405(softwareInfo);
 	}
 
-	private void addWarningForVersionBefore1405(SoftwareInfo softwareInfo) {
+	private void addWarningForVersionBefore1405(SoftwareId softwareInfo) {
 	    softwareInfo
 	            .setWarnings("This jenkins version has a bug with git project. Git project wont be display.");
     }
