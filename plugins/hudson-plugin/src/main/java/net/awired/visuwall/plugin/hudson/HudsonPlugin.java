@@ -22,7 +22,7 @@ import java.net.URL;
 import java.util.Properties;
 
 import net.awired.visuwall.api.domain.PluginInfo;
-import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
@@ -49,10 +49,9 @@ public class HudsonPlugin implements VisuwallPlugin {
     }
     
     @Override
-    public SoftwareInfo isManageable(URL url) {
+    public SoftwareId isManageable(URL url) {
         Preconditions.checkNotNull(url, "url is mandatory");
-        SoftwareInfo softwareInfo = new SoftwareInfo();
-        softwareInfo.setPluginInfo(getInfo());
+        SoftwareId softwareInfo = new SoftwareId();
         InputStream stream = null;
         try {
             url = new URL(url.toString() + "/api/");

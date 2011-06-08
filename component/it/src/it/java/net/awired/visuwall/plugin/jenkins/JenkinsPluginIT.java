@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class JenkinsPluginIT {
 	@Test
 	public void should_recognize_jenkins_instance_with_valid_url() throws MalformedURLException {
 		JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-		SoftwareInfo softwareInfo = jenkinsPlugin.isManageable(new URL(JENKINS_URL));
+		SoftwareId softwareInfo = jenkinsPlugin.isManageable(new URL(JENKINS_URL));
 //		assertTrue(isJenkinsInstance);
 	}
 
@@ -41,7 +41,7 @@ public class JenkinsPluginIT {
 	@Test
 	public void should_recognize_jenkins_instance_with_https() throws MalformedURLException {
 		JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-		SoftwareInfo softwareInfo = jenkinsPlugin.isManageable(new URL("https://builds.apache.org"));
+		SoftwareId softwareInfo = jenkinsPlugin.isManageable(new URL("https://builds.apache.org"));
 //		assertTrue(isJenkinsInstance);
 	}
 

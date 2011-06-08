@@ -72,46 +72,14 @@ TABLE.softwareInfo .label {
 	background-color: grey;
 } 
 
-
-
-
 #modal DIV#softTabs INPUT, #modal DIV#softTabs LABEL {
 	display: block;
 	width: 200px;
 }
 
-OL.projects .ui-selecting {
-	background: #FECA40;
-}
-
-OL.projects .ui-selected {
-	background: #F39814;
-	color: white;
-}
-
-OL.projects {
-	float: right;
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	overflow-y: visible;
-	overflow-x: hidden;
-	position: absolute;	
-	bottom: 1em;
-	right: 1.4em;
-
-	width: 320px;
-	height: 160px;
-}
-
 INPUT.disabled {
 	color: grey;
 	background-color: #F0F0F0;
-}
-
-OL.projects li {
-	margin: 0.2em;
-	padding: 0.3em;
 }
 
 DIV#softAdd {
@@ -169,4 +137,11 @@ DIV#softAdd {
 	float: left;
 	margin: 0.4em 0.2em 0 0;
 	cursor: pointer;
+}
+
+DIV.projects {
+	width: 300px;
+	height: 300px;
+	position: absolute;
+	right: 20px;
 }

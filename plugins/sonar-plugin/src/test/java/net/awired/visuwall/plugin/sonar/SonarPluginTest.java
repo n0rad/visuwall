@@ -21,7 +21,7 @@ import static org.junit.Assert.assertFalse;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class SonarPluginTest {
     public void should_not_fail_if_url_is_not_manageable() throws MalformedURLException {
         SonarPlugin sonarPlugin = new SonarPlugin();
         String url = "http://www.google.fr";
-        SoftwareInfo softwareInfo = sonarPlugin.isManageable(new URL(url));
+        SoftwareId softwareInfo = sonarPlugin.isManageable(new URL(url));
 //        assertFalse(manageable);
     }
 

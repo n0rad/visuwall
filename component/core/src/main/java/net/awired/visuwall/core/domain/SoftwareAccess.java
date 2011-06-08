@@ -16,10 +16,24 @@
 
 package net.awired.visuwall.core.domain;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+
+import net.awired.visuwall.api.domain.Project;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CollectionOfElements;
+import org.hibernate.annotations.Type;
+import org.springframework.util.AutoPopulatingList;
 
 @Entity
 public class SoftwareAccess {
@@ -35,9 +49,15 @@ public class SoftwareAccess {
 	@Transient
 	private String pluginClassName;
 
-	// TODO on next version
-	// private boolean allProject;
-	// private List<ProjectId> projectIds;
+	private boolean allProject;
+
+	@CollectionOfElements
+	private List<String> projectNames = new AutoPopulatingList<String>(
+			String.class);
+
+	@CollectionOfElements
+	private List<String> viewNames = new AutoPopulatingList<String>(
+			String.class);
 
 	public SoftwareAccess() {
 
@@ -120,5 +140,29 @@ public class SoftwareAccess {
 
 	public void setPluginClassName(String pluginClassName) {
 		this.pluginClassName = pluginClassName;
+	}
+
+	public boolean isAllProject() {
+		return allProject;
+	}
+
+	public void setAllProject(boolean allProject) {
+		this.allProject = allProject;
+	}
+
+	public List<String> getProjectNames() {
+		return projectNames;
+	}
+
+	public void setProjectNames(List<String> projectNames) {
+		this.projectNames = projectNames;
+	}
+
+	public List<String> getViewNames() {
+		return viewNames;
+	}
+
+	public void setViewNames(List<String> viewNames) {
+		this.viewNames = viewNames;
 	}
 }

@@ -24,13 +24,14 @@ import java.util.Properties;
 import java.util.ServiceLoader;
 
 import net.awired.visuwall.api.domain.PluginInfo;
-import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.plugin.BuildConnectionPlugin;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.QualityConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.core.domain.PluginHolder;
 import net.awired.visuwall.core.domain.SoftwareAccess;
+import net.awired.visuwall.core.domain.SoftwareInfo;
 
 import org.springframework.stereotype.Service;
 
@@ -42,12 +43,34 @@ public class PluginService {
 	private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader
 			.load(VisuwallPlugin.class);
 
-	public SoftwareInfo getSoftwareInfoFromManagableUrl(URL url) {
+	public PluginInfo getPluginInfoFromUrl(URL url) {
 		List<VisuwallPlugin> visuwallPlugins = getPlugins();
 		for (VisuwallPlugin visuwallPlugin : visuwallPlugins) {
-			SoftwareInfo softwareInfo = visuwallPlugin.isManageable(url);
+			SoftwareId softwareId = visuwallPlugin.isManageable(url);
+			if (softwareId != null) {
+				return visuwallPlugin.getInfo();
+			}
+		}
+		throw new RuntimeException("no plugin to manage url " + url);		
+	}
+	
+	public SoftwareInfo getSoftwareInfoFromUrl(URL url) {
+		List<VisuwallPlugin> visuwallPlugins = getPlugins();
+		for (VisuwallPlugin visuwallPlugin : visuwallPlugins) {
+			SoftwareId softwareId = visuwallPlugin.isManageable(url);
 			// TODO check values return in sofwareInfo 
-			if (softwareInfo != null) {
+			if (softwareId != null) {
+				SoftwareInfo softwareInfo = new SoftwareInfo();
+				softwareInfo.setSoftwareId(softwareId);
+				softwareInfo.setPluginInfo(visuwallPlugin.getInfo());
+				// TODO change that null
+				ConnectionPlugin connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
+				// TODO change instanceof 
+				if (connectionPlugin instanceof BuildConnectionPlugin) {
+					softwareInfo.setProjectNames(((BuildConnectionPlugin)connectionPlugin).findProjectNames());
+				} else if (connectionPlugin instanceof QualityConnectionPlugin) {
+					
+				}
 				return softwareInfo;
 			}
 		}

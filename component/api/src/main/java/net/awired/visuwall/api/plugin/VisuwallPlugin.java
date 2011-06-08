@@ -19,14 +19,15 @@ package net.awired.visuwall.api.plugin;
 import java.net.URL;
 
 import net.awired.visuwall.api.domain.PluginInfo;
-import net.awired.visuwall.api.domain.SoftwareInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
 
 public interface VisuwallPlugin {
 
+	//TODO change url to URL type
     ConnectionPlugin getConnection(String url, java.util.Properties info);
 
     PluginInfo getInfo();
     
-    SoftwareInfo isManageable(URL url);
+    SoftwareId isManageable(URL url);
 
 }
