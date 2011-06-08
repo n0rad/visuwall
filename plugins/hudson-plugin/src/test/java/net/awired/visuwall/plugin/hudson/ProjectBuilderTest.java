@@ -18,12 +18,12 @@ package net.awired.visuwall.plugin.hudson;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
+import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 
 import org.junit.Test;
@@ -66,14 +66,14 @@ public class ProjectBuilderTest {
 
     @Test
     public void should_add_current_build_and_completed_build() {
-        Commiter commiter1 = new Commiter("commiter1");
-        Commiter commiter2 = new Commiter("commiter2");
+		HudsonCommiter commiterInCurrentBuild = new HudsonCommiter("commiter1");
+		HudsonCommiter commiterInCompletedBuild = new HudsonCommiter("commiter2");
 
         HudsonBuild currentBuild = new HudsonBuild();
-        currentBuild.addCommiter(commiter1);
+        currentBuild.addCommiter(commiterInCurrentBuild);
 
         HudsonBuild completedBuild = new HudsonBuild();
-        completedBuild.addCommiter(commiter2);
+        completedBuild.addCommiter(commiterInCompletedBuild);
 
         HudsonProject hudsonProject = new HudsonProject();
         hudsonProject.setCurrentBuild(currentBuild);
@@ -82,8 +82,11 @@ public class ProjectBuilderTest {
         Project project = new Project("");
         projectBuilder.addCurrentAndCompletedBuilds(project, hudsonProject);
 
-        assertTrue(project.getCurrentBuild().getCommiters().contains(commiter1));
-        assertTrue(project.getCompletedBuild().getCommiters().contains(commiter2));
+		Commiter createdCommiterInCurrentBuild = project.getCurrentBuild().getCommiters().iterator().next();
+		Commiter createdCommiterInCompletedBuild = project.getCompletedBuild().getCommiters().iterator().next();
+
+		assertEquals(commiterInCurrentBuild.getName(), createdCommiterInCurrentBuild.getName());
+		assertEquals(commiterInCompletedBuild.getName(), createdCommiterInCompletedBuild.getName());
     }
 
     @Test

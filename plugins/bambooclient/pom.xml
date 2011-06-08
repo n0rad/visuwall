@@ -33,10 +33,6 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
-			<artifactId>visuwall-api</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.1</version>
@@ -45,7 +41,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>r07</version>
+			<version>r09</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>

@@ -23,11 +23,11 @@ import java.util.TreeSet;
 
 import javax.ws.rs.WebApplicationException;
 
-import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.hudsonclient.HudsonJerseyClient;
 import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonProjectBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
+import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
@@ -100,7 +100,7 @@ public class HudsonFinder {
             }
 
             String[] commiterNames = HudsonXmlHelper.getCommiterNames(setBuild);
-            Set<Commiter> commiters = findCommiters(commiterNames);
+            Set<HudsonCommiter> commiters = findCommiters(commiterNames);
             HudsonMavenReportersSurefireAggregatedReport surefireReport = findSurefireReport(projectName, setBuild);
             HudsonBuild hudsonBuild;
             if (surefireReport == null) {
@@ -225,13 +225,13 @@ public class HudsonFinder {
         return HudsonXmlHelper.getIsBuilding(job);
     }
 
-    public Set<Commiter> findCommiters(String[] commiterNames) {
+    public Set<HudsonCommiter> findCommiters(String[] commiterNames) {
         Preconditions.checkNotNull(commiterNames, "commiterNames is mandatory");
-        Set<Commiter> commiters = new TreeSet<Commiter>();
+        Set<HudsonCommiter> commiters = new TreeSet<HudsonCommiter>();
         for (String commiterName : commiterNames) {
             String url = hudsonUrlBuilder.getUserUrl(commiterName);
             HudsonUser hudsonUser = hudsonJerseyClient.getHudsonUser(url);
-            Commiter commiter = new Commiter(hudsonUser.getId());
+            HudsonCommiter commiter = new HudsonCommiter(hudsonUser.getId());
             commiter.setName(commiterName);
             commiter.setEmail(hudsonUser.getEmail());
             commiters.add(commiter);

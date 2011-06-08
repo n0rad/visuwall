@@ -27,9 +27,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.TestResult;
+import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
+import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
@@ -42,12 +42,12 @@ public class HudsonBuildBuilderTest {
     public void should_create_valid_hudson_build() {
         long duration = 123L;
         int buildNumber = 34;
-        Set<Commiter> commiters = new TreeSet<Commiter>();
-        commiters.add(new Commiter("dude"));
-        commiters.add(new Commiter("sweet"));
+        Set<HudsonCommiter> commiters = new TreeSet<HudsonCommiter>();
+        commiters.add(new HudsonCommiter("dude"));
+        commiters.add(new HudsonCommiter("sweet"));
 
-        TestResult integrationTests = new TestResult();
-        TestResult unitTests = new TestResult();
+        HudsonTestResult integrationTests = new HudsonTestResult();
+        HudsonTestResult unitTests = new HudsonTestResult();
         Date startTime = new Date();
         String state = "UNKNOWN";
 

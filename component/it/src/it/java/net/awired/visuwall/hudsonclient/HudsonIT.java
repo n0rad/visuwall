@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.Set;
 
 import net.awired.visuwall.IntegrationTestData;
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
+import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
+import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 
@@ -63,8 +63,8 @@ public class HudsonIT {
     public void should_count_it_and_ut() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
         Hudson hudson = new Hudson("http://fluxx.fr.cr:8080/hudson");
         HudsonBuild build = hudson.findBuild("itcoverage-project", 17);
-        TestResult unitTestResult = build.getUnitTestResult();
-        TestResult integrationTestResult = build.getIntegrationTestResult();
+		HudsonTestResult unitTestResult = build.getUnitTestResult();
+		HudsonTestResult integrationTestResult = build.getIntegrationTestResult();
 
         assertEquals(1, unitTestResult.getFailCount());
         assertEquals(5, unitTestResult.getSkipCount());
@@ -108,8 +108,8 @@ public class HudsonIT {
     @Test
     public void should_retrieve_commiter_email() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
         HudsonBuild build = hudson.findBuild("successproject", 9);
-        Set<Commiter> set = build.getCommiters();
-        Commiter commiter = set.iterator().next();
+		Set<HudsonCommiter> set = build.getCommiters();
+		HudsonCommiter commiter = set.iterator().next();
 
         assertEquals("Arnaud LEMAIRE", commiter.getId());
         assertEquals("Arnaud LEMAIRE", commiter.getName());

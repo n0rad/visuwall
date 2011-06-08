@@ -20,24 +20,21 @@ import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
 
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.TestResult;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
 public final class HudsonBuild {
 
 	private boolean successful;
-	private Set<Commiter> commiters = new TreeSet<Commiter>();
+	private Set<HudsonCommiter> commiters = new TreeSet<HudsonCommiter>();
 	private long duration;
 	private Date startTime;
-	private TestResult unitTestResult;
-	private TestResult integrationTestResult;
+	private HudsonTestResult unitTestResult;
+	private HudsonTestResult integrationTestResult;
 	private String state;
 	private int buildNumber;
 
-	public void addCommiter(Commiter commiter) {
+	public void addCommiter(HudsonCommiter commiter) {
 		commiters.add(commiter);
 	}
 
@@ -50,7 +47,7 @@ public final class HudsonBuild {
 		this.successful = successful;
 	}
 
-	public Set<Commiter> getCommiters() {
+	public Set<HudsonCommiter> getCommiters() {
 		return commiters;
 	}
 
@@ -71,19 +68,19 @@ public final class HudsonBuild {
 		this.startTime = startTime;
 	}
 
-	public TestResult getUnitTestResult() {
+	public HudsonTestResult getUnitTestResult() {
 		return unitTestResult;
 	}
 
-	public void setUnitTestResult(TestResult testResult) {
+	public void setUnitTestResult(HudsonTestResult testResult) {
 		this.unitTestResult = testResult;
 	}
 
-	public TestResult getIntegrationTestResult() {
+	public HudsonTestResult getIntegrationTestResult() {
 		return integrationTestResult;
 	}
 
-	public void setIntegrationTestResult(TestResult testResult) {
+	public void setIntegrationTestResult(HudsonTestResult testResult) {
 		this.integrationTestResult = testResult;
 	}
 
@@ -122,7 +119,7 @@ public final class HudsonBuild {
 		return toString.toString();
 	}
 
-	public void setCommiters(Set<Commiter> commiters) {
+	public void setCommiters(Set<HudsonCommiter> commiters) {
 		if (commiters != null) {
 			this.commiters.addAll(commiters);
 		}

@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.plugin.jenkins;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import net.awired.visuwall.api.domain.Build;
@@ -24,7 +25,9 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
+import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
+import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 
 import com.google.common.base.Preconditions;
 
@@ -57,17 +60,20 @@ public class ProjectBuilder {
 		Preconditions.checkNotNull(hudsonBuild, "hudsonBuild");
 		Build build = new Build();
 
-		TestResult unitTestResult = hudsonBuild.getUnitTestResult();
-		TestResult integrationTestResult = hudsonBuild.getIntegrationTestResult();
+		HudsonTestResult hudsonUnitTestResult = hudsonBuild.getUnitTestResult();
+		HudsonTestResult hudsonIntegrationTestResult = hudsonBuild.getIntegrationTestResult();
 
-		if (unitTestResult != null) {
+		if (hudsonUnitTestResult != null) {
+			TestResult unitTestResult = createTestResult(hudsonUnitTestResult);
 			build.setUnitTestResult(unitTestResult);
 		}
-		if (integrationTestResult != null) {
+		if (hudsonIntegrationTestResult != null) {
+			TestResult integrationTestResult = createTestResult(hudsonUnitTestResult);
 			build.setIntegrationTestResult(integrationTestResult);
 		}
 
-		Set<Commiter> commiters = hudsonBuild.getCommiters();
+		Set<HudsonCommiter> hudsonCommiters = hudsonBuild.getCommiters();
+		Set<Commiter> commiters = createCommiters(hudsonCommiters);
         build.setCommiters(commiters);
 		build.setDuration(hudsonBuild.getDuration());
 		build.setStartTime(hudsonBuild.getStartTime());
@@ -77,5 +83,28 @@ public class ProjectBuilder {
 		build.setState(State.getStateByName(hudsonBuildState));
 
 		return build;
+	}
+
+	private Set<Commiter> createCommiters(Set<HudsonCommiter> hudsonCommiters) {
+		Set<Commiter> commiters = new HashSet<Commiter>();
+		for (HudsonCommiter hudsonCommiter : hudsonCommiters) {
+			commiters.add(createCommiter(hudsonCommiter));
+		}
+		return commiters;
+	}
+
+	private Commiter createCommiter(HudsonCommiter hudsonCommiter) {
+		Commiter commiter = new Commiter(hudsonCommiter.getId());
+		commiter.setEmail(hudsonCommiter.getEmail());
+		commiter.setName(hudsonCommiter.getName());
+		return commiter;
+	}
+
+	private TestResult createTestResult(HudsonTestResult hudsonTestResult) {
+		TestResult testResult = new TestResult();
+		testResult.setFailCount(hudsonTestResult.getFailCount());
+		testResult.setPassCount(hudsonTestResult.getPassCount());
+		testResult.setSkipCount(hudsonTestResult.getSkipCount());
+		return testResult;
 	}
 }

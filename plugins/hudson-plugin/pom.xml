@@ -43,6 +43,10 @@
 		</dependency>
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-hudsonclient</artifactId>
 		</dependency>
 		<dependency>

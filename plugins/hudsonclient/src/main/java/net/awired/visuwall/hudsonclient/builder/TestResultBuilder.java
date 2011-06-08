@@ -19,7 +19,7 @@ package net.awired.visuwall.hudsonclient.builder;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.awired.visuwall.api.domain.TestResult;
+import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonTasksTestAggregatedTestResultActionChildReport;
 
@@ -44,9 +44,9 @@ public class TestResultBuilder {
         }
     }
 
-    public TestResult buildUnitTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+    public HudsonTestResult buildUnitTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
         checkSurefireReport(surefireReport);
-        TestResult unitTestResult = new TestResult();
+        HudsonTestResult unitTestResult = new HudsonTestResult();
         List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
         countUnitTests(unitTestResult, tests);
         return unitTestResult;
@@ -56,15 +56,15 @@ public class TestResultBuilder {
         Preconditions.checkNotNull(surefireReport, "surefireReport is mandatory");
     }
 
-    public TestResult buildIntegrationTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+    public HudsonTestResult buildIntegrationTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
         checkSurefireReport(surefireReport);
-        TestResult integrationTestResult = new TestResult();
+        HudsonTestResult integrationTestResult = new HudsonTestResult();
         List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
         countIntegrationTests(integrationTestResult, tests);
         return integrationTestResult;
     }
 
-    private void countUnitTests(TestResult unitTestsResult,
+    private void countUnitTests(HudsonTestResult unitTestsResult,
             List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
         List<Test> tests = createTestsFrom(testReport);
         for (Test test : tests) {
@@ -74,7 +74,7 @@ public class TestResultBuilder {
         }
     }
 
-    private void countIntegrationTests(TestResult integrationTestsResult,
+    private void countIntegrationTests(HudsonTestResult integrationTestsResult,
             List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
         List<Test> tests = createTestsFrom(testReport);
         for (Test test : tests) {
@@ -84,7 +84,7 @@ public class TestResultBuilder {
         }
     }
 
-    private void updateTestResult(TestResult unitTestsResult, Test test) {
+    private void updateTestResult(HudsonTestResult unitTestsResult, Test test) {
         String status = test.status;
         if ("FAILED".equals(status))
             unitTestsResult.setFailCount(unitTestsResult.getFailCount() + 1);

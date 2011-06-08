@@ -31,11 +31,11 @@ import java.util.List;
 import java.util.Set;
 
 import junit.framework.Assert;
-import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.hudsonclient.HudsonJerseyClient;
 import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.builder.TestResultBuilder;
+import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.HudsonUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
@@ -78,9 +78,9 @@ public class HudsonFinderTest {
 
         when(hudsonJerseyClient.getHudsonUser(anyString())).thenReturn(user);
 
-        Set<Commiter> commiters = hudsonFinder.findCommiters(new String[] { "Julien Smadja" });
+        Set<HudsonCommiter> commiters = hudsonFinder.findCommiters(new String[] { "Julien Smadja" });
 
-        Commiter commiter = commiters.iterator().next();
+        HudsonCommiter commiter = commiters.iterator().next();
         assertEquals("jsmadja", commiter.getId());
         assertEquals("Julien Smadja", commiter.getName());
         assertEquals("jsmadja@xebia.fr", commiter.getEmail());

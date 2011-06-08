@@ -20,10 +20,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
+import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
@@ -185,8 +185,8 @@ public class Hudson {
         HudsonProject project = findProject(projectName);
         HudsonBuild build = project.getCompletedBuild();
         if (build != null) {
-            TestResult unitTestResult = build.getUnitTestResult();
-            TestResult integrationTestResult = build.getIntegrationTestResult();
+            HudsonTestResult unitTestResult = build.getUnitTestResult();
+            HudsonTestResult integrationTestResult = build.getIntegrationTestResult();
             int passedUnitTests = unitTestResult == null ? 0 : unitTestResult.getPassCount();
             int passedIntegrationTests = integrationTestResult == null ? 0 : integrationTestResult.getPassCount();
             return (passedUnitTests + passedIntegrationTests) > 0;

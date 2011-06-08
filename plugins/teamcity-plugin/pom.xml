@@ -37,6 +37,10 @@
 			<artifactId>visuwall-teamcityclient</artifactId>
 		</dependency>
 		<dependency>
+		<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>1.8.5</version>

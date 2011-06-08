@@ -19,9 +19,9 @@ package net.awired.visuwall.hudsonclient.builder;
 import java.util.Date;
 import java.util.Set;
 
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.TestResult;
+import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
+import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import net.awired.visuwall.hudsonclient.helper.HudsonXmlHelper;
@@ -48,14 +48,14 @@ public class HudsonBuildBuilder {
     }
 
     public HudsonBuild createHudsonBuild(HudsonMavenMavenModuleSetBuild setBuild,
-            HudsonMavenReportersSurefireAggregatedReport surefireReport, Set<Commiter> commiters) {
+            HudsonMavenReportersSurefireAggregatedReport surefireReport, Set<HudsonCommiter> commiters) {
         checkSetBuild(setBuild);
         HudsonBuild hudsonBuild = createHudsonBuild(setBuild, commiters);
         addTestResults(setBuild, surefireReport, hudsonBuild);
         return hudsonBuild;
     }
 
-    public HudsonBuild createHudsonBuild(HudsonMavenMavenModuleSetBuild setBuild, Set<Commiter> commiters) {
+    public HudsonBuild createHudsonBuild(HudsonMavenMavenModuleSetBuild setBuild, Set<HudsonCommiter> commiters) {
         checkSetBuild(setBuild);
         HudsonBuild hudsonBuild = new HudsonBuild();
         hudsonBuild.setState(HudsonXmlHelper.getState(setBuild));
@@ -70,8 +70,8 @@ public class HudsonBuildBuilder {
     private void addTestResults(HudsonMavenMavenModuleSetBuild setBuild,
             HudsonMavenReportersSurefireAggregatedReport surefireReport, HudsonBuild hudsonBuild) {
         try {
-            TestResult unitTestResult = testResultBuilder.buildUnitTestResult(surefireReport);
-            TestResult integrationTestResult = testResultBuilder.buildIntegrationTestResult(surefireReport);
+            HudsonTestResult unitTestResult = testResultBuilder.buildUnitTestResult(surefireReport);
+            HudsonTestResult integrationTestResult = testResultBuilder.buildIntegrationTestResult(surefireReport);
             hudsonBuild.setUnitTestResult(unitTestResult);
             hudsonBuild.setIntegrationTestResult(integrationTestResult);
         } catch (UniformInterfaceException e) {

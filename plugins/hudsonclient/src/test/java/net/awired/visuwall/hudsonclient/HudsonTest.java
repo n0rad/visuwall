@@ -29,10 +29,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
+import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
@@ -153,9 +153,9 @@ public class HudsonTest {
     @Test
     public void should_get_unstable_state_if_tests_pass() throws HudsonProjectNotFoundException,
             HudsonBuildNotFoundException {
-        TestResult unitTests = new TestResult();
+        HudsonTestResult unitTests = new HudsonTestResult();
         unitTests.setPassCount(1);
-        TestResult integrationTests = new TestResult();
+        HudsonTestResult integrationTests = new HudsonTestResult();
         integrationTests.setPassCount(1);
 
         HudsonBuild completedBuild = new HudsonBuild();
