@@ -52,6 +52,10 @@
 			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-plugin-jenkins</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-plugin-teamcity</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>net.awired.ajsl</groupId>

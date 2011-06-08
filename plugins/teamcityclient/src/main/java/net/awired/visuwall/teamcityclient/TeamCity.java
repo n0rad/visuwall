@@ -48,10 +48,9 @@ public class TeamCity {
         return teamcityJerseyClient.getProject(projectId);
     }
 
-	public TeamCityBuild findBuild(String projectId, int buildNumber) {
-		checkProjectId(projectId);
+	public TeamCityBuild findBuild(int buildNumber) {
 		Preconditions.checkArgument(buildNumber >= 0, "buildNumber must be >= 0");
-		return teamcityJerseyClient.getBuild(projectId, buildNumber);
+		return teamcityJerseyClient.getBuild(buildNumber);
 	}
 
 	private void checkProjectId(String projectId) {

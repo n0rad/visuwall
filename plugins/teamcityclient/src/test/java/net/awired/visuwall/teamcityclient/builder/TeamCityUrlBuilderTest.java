@@ -23,9 +23,21 @@ public class TeamCityUrlBuilderTest {
 	}
 
 	@Test
-	public void should_create_valid_build_url() {
+	public void should_create_valid_build_type_url() {
 		String buildTypeUrl = builder.getBuildType("bt296");
 		assertEquals(TEAM_CITY_URL + "/app/rest/buildTypes/id:bt296", buildTypeUrl);
+	}
+
+	@Test
+	public void should_create_valid_build_url() {
+		String buildTypeUrl = builder.getBuild(47068);
+		assertEquals(TEAM_CITY_URL + "/app/rest/builds/id:47068", buildTypeUrl);
+	}
+
+	@Test
+	public void should_create_valid_builds_list() {
+		String buildListUrl = builder.getBuildList(297);
+		assertEquals(TEAM_CITY_URL + "/app/rest/buildTypes/id:bt297/builds", buildListUrl);
 	}
 
 }

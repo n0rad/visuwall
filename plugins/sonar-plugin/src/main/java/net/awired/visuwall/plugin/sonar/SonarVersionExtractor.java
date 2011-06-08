@@ -1,53 +1,46 @@
 package net.awired.visuwall.plugin.sonar;
 
-import java.io.IOException;
 import java.io.StringReader;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import net.awired.visuwall.plugin.sonar.resource.Properties;
+import net.awired.visuwall.plugin.sonar.resource.Property;
+
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import com.google.common.base.Preconditions;
 
 public class SonarVersionExtractor {
 
 	private static final String SONAR_CORE_VERSION_KEY = "sonar.core.version";
-	private final Document document;
+
+	private Properties properties;
 
 	public SonarVersionExtractor(String content) {
-		try {
-			Preconditions.checkNotNull(content, "content is mandatory");
-			DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
-			InputSource is = new InputSource();
-			is.setCharacterStream(new StringReader(content));
-			document = documentBuilder.parse(is);
-		} catch (ParserConfigurationException e) {
-			throw new RuntimeException(e);
-		} catch (SAXException e) {
-			throw new RuntimeException(e);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		Preconditions.checkNotNull(content, "content is mandatory");
+		InputSource is = new InputSource();
+		is.setCharacterStream(new StringReader(content));
+		properties = loadProperties(is);
 	}
 
 	public String version() {
-		Node root = document.getFirstChild();
-		NodeList properties = root.getChildNodes();
-		for (int i = 0; i < properties.getLength(); i++) {
-			Node property = properties.item(i);
-			String value = property.getTextContent();
-			if (value.contains(SONAR_CORE_VERSION_KEY)) {
-				String version = value.replace(SONAR_CORE_VERSION_KEY, "");
-				return version.trim();
+		for (Property property : properties.getProperties()) {
+			if (property.isKey(SONAR_CORE_VERSION_KEY)) {
+				return property.getValue();
 			}
 		}
 		return "unknown";
+	}
+
+	private Properties loadProperties(InputSource is) {
+		try {
+			JAXBContext newInstance = JAXBContext.newInstance(Properties.class);
+			Unmarshaller unmarshaller = newInstance.createUnmarshaller();
+			return (Properties) unmarshaller.unmarshal(is);
+		} catch (Exception t) {
+			throw new RuntimeException(t);
+		}
 	}
 }

@@ -74,7 +74,7 @@ public class ApplicationHelper {
 		if (logLevelEnum != null) {
 			return logLevelEnum.getLevel();
 		} else {
-			return Level.DEBUG;
+			return Level.INFO;
 		}
 	}
 

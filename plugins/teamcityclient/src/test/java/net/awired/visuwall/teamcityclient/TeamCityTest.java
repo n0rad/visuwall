@@ -20,6 +20,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.net.URL;
@@ -31,7 +34,9 @@ import javax.xml.bind.Unmarshaller;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
 import net.awired.visuwall.teamcityclient.resource.TeamCityAgent;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
+import net.awired.visuwall.teamcityclient.resource.TeamCityBuildItem;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuildType;
+import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
 import net.awired.visuwall.teamcityclient.resource.TeamCityChanges;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProjects;
@@ -41,21 +46,12 @@ import net.awired.visuwall.teamcityclient.resource.TeamCityRevision;
 import net.awired.visuwall.teamcityclient.resource.TeamCityTag;
 import net.awired.visuwall.teamcityclient.resource.TeamCityVcsRoot;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 
 public class TeamCityTest {
-
-	static TeamCityUrlBuilder teamCityUrlBuilder;
-
-	@BeforeClass
-	public static void init() {
-		teamCityUrlBuilder = Mockito.mock(TeamCityUrlBuilder.class);
-	}
 
     @Test
     public void should_list_all_project_names() {
@@ -136,10 +132,10 @@ public class TeamCityTest {
 		TeamCity teamcity = new TeamCity();
 		teamcity.teamcityJerseyClient = prepareClientFor(teamcityBuild);
 
-		TeamCityBuild build = teamcity.findBuild("project54", 47068);
+		TeamCityBuild build = teamcity.findBuild(47068);
 
 		assertEquals("47068", build.getId());
-		assertEquals(6, build.getNumber());
+		assertEquals("6", build.getNumber());
 		assertEquals("SUCCESS", build.getStatus());
 		assertEquals("/app/rest/builds/id:47068", build.getHref());
 		assertEquals("http://teamcity.jetbrains.com/viewLog.html?buildId=47068&buildTypeId=bt297",
@@ -188,15 +184,37 @@ public class TeamCityTest {
 		assertTrue(relatedIssues.isEmpty());
 	}
 
+	@Test
+	public void should_load_build_type_with_builds() {
+		TeamCityBuilds builds = createBuilds();
+
+		assertEquals("/app/rest/builds?count=100&start=100", builds.getNextHref());
+		assertEquals(100, builds.getCount());
+
+		List<TeamCityBuildItem> buildList = builds.getBuilds();
+		assertEquals(100, buildList.size());
+
+		TeamCityBuildItem build = buildList.get(0);
+		assertEquals("51753", build.getId());
+		assertEquals("421", build.getNumber());
+		assertEquals("ERROR", build.getStatus());
+		assertEquals("bt213", build.getBuildTypeId());
+		assertNotNull(build.getStartDate());
+		assertEquals("/app/rest/builds/id:51753", build.getHref());
+		assertEquals("http://teamcity.jetbrains.com/viewLog.html?buildId=51753&buildTypeId=bt213", build.getWebUrl());
+	}
+
 	@SuppressWarnings("unchecked")
 	private TeamCityJerseyClient prepareClientFor(Object o) {
-        WebResource resource = Mockito.mock(WebResource.class);
-        when(resource.get(Mockito.any(Class.class))).thenReturn(o);
+		WebResource resource = mock(WebResource.class);
+		when(resource.get(any(Class.class))).thenReturn(o);
 
-        Client client = Mockito.mock(Client.class);
-        when(client.resource(Mockito.anyString())).thenReturn(resource);
+        Client client = mock(Client.class);
+		when(client.resource(anyString())).thenReturn(resource);
 
-        return new TeamCityJerseyClient(client);
+		TeamCityUrlBuilder teamCityUrlBuilder = mock(TeamCityUrlBuilder.class);
+
+		return new TeamCityJerseyClient(client, teamCityUrlBuilder);
     }
 
 	private TeamCityBuild createBuild() {
@@ -210,6 +228,10 @@ public class TeamCityTest {
     private TeamCityProject createProject() {
 		return (TeamCityProject) load("app/rest/projects/id:project54.xml", TeamCityProject.class);
     }
+
+	private TeamCityBuilds createBuilds() {
+		return (TeamCityBuilds) load("app/rest/builds.xml", TeamCityBuilds.class);
+	}
 
 	private Object load(String fileName, Class<?> clazz) {
 		try {

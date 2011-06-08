@@ -17,7 +17,7 @@ public class TeamCityUrlBuilder {
 	}
 
 	public String getProject(String projectId) {
-		Preconditions.checkNotNull(projectId, "projectId is mandatory");
+		checkProjectId(projectId);
 		return build("/projects/id:" + projectId);
 	}
 
@@ -26,8 +26,20 @@ public class TeamCityUrlBuilder {
 		return build("/buildTypes/id:" + buildTypeId);
 	}
 
+	public String getBuild(int buildId) {
+		Preconditions.checkArgument(buildId >= 0, "buildId must be >= 0");
+		return build("/builds/id:" + buildId);
+	}
+
 	private String build(String url) {
 		return teamCityUrl + API_URI + url;
 	}
 
+	public String getBuildList(int buildTypeId) {
+		return build("/buildTypes/id:bt" + buildTypeId + "/builds");
+	}
+
+	private void checkProjectId(String projectId) {
+		Preconditions.checkNotNull(projectId, "projectId is mandatory");
+	}
 }
