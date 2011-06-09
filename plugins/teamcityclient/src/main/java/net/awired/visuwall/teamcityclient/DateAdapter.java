@@ -21,17 +21,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateAdapter {
-	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmssZ");
+	private static final SimpleDateFormat TEAMCITY_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmssZ");
+
+	private DateAdapter() {
+	}
 
 	public static Date parseDate(String s) {
 		try {
-			return sdf.parse(s);
+			return TEAMCITY_DATE_FORMAT.parse(s);
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	public static String printDate(Date dt) {
-		return sdf.format(dt);
+		return TEAMCITY_DATE_FORMAT.format(dt);
 	}
 }

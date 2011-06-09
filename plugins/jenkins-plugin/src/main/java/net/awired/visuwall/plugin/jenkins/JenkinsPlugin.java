@@ -75,8 +75,9 @@ public class JenkinsPlugin implements VisuwallPlugin {
 
 	private void addWarnings(SoftwareId softwareInfo, String strVersion) {
 		double version = Double.parseDouble(strVersion);
-		if (version < 1.405)
+		if (version < 1.405) {
 			addWarningForVersionBefore1405(softwareInfo);
+		}
 	}
 
 	private void addWarningForVersionBefore1405(SoftwareId softwareInfo) {

@@ -38,7 +38,7 @@ import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 
-public final class Bamboo {
+public class Bamboo {
 
 	private Client client;
 
@@ -136,7 +136,7 @@ public final class Bamboo {
 	}
 
 	public int getLastBuildNumber(String projectName) {
-		Preconditions.checkNotNull(projectName, "projectName");
+		checkProjectName(projectName);
 
 		String lastBuildUrl = bambooUrlBuilder.getLatestBuildResult(projectName);
 		if (LOG.isDebugEnabled()) {
@@ -148,8 +148,7 @@ public final class Bamboo {
 	}
 
 	public BambooBuild findBuild(String projectName, int buildNumber) throws BambooBuildNotFoundException {
-		Preconditions.checkNotNull(projectName, "projectName");
-
+		checkProjectName(projectName);
 		String buildUrl = bambooUrlBuilder.getBuildUrl(projectName, buildNumber);
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Build url : " + buildUrl);
@@ -158,6 +157,10 @@ public final class Bamboo {
 		Result result = bambooResource.get(Result.class);
 		BambooBuild build = createBuildFrom(result);
 		return build;
+	}
+
+	private void checkProjectName(String projectName) {
+		Preconditions.checkNotNull(projectName, "projectName");
 	}
 
 	private BambooBuild createBuildFrom(Result result) {
@@ -172,7 +175,7 @@ public final class Bamboo {
 	}
 
 	public String getState(String projectName) {
-		Preconditions.checkNotNull(projectName, "projectName");
+		checkProjectName(projectName);
 
 		String lastBuildUrl = bambooUrlBuilder.getLastBuildUrl();
 		if (LOG.isDebugEnabled()) {
@@ -194,7 +197,7 @@ public final class Bamboo {
 	}
 
 	public Date getEstimatedFinishTime(String projectName) throws BambooProjectNotFoundException {
-		Preconditions.checkNotNull(projectName, "projectName");
+		checkProjectName(projectName);
 
 		BambooProject project = findProject(projectName);
 		BambooBuild build = project.getCurrentBuild();
@@ -209,7 +212,7 @@ public final class Bamboo {
 		return estimatedFinishTime.toDate();
 	}
 
-	public final long getAverageBuildDurationTime(String projectName) throws BambooProjectNotFoundException {
+	public long getAverageBuildDurationTime(String projectName) throws BambooProjectNotFoundException {
 		BambooProject bambooProject = findProject(projectName);
 
 		long averageTime;

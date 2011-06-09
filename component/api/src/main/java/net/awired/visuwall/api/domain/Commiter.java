@@ -64,7 +64,7 @@ public class Commiter implements Comparable<Commiter> {
 
 	@Override
 	public boolean equals(Object o) {
-		if (o != null && o instanceof Commiter) {
+		if (o instanceof Commiter) {
 			return Objects.equal(id, ((Commiter) o).id);
 		}
 		return false;

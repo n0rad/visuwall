@@ -22,6 +22,9 @@ import java.net.URL;
 
 public class ClasspathFiles {
 
+	private ClasspathFiles() {
+	}
+
 	public static String getAbsolutePathFile(String fileName) {
 		try {
 			Class<?> clazz = ClasspathFiles.class;

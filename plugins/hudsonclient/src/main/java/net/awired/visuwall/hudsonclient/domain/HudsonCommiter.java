@@ -64,7 +64,7 @@ public class HudsonCommiter implements Comparable<HudsonCommiter> {
 
 	@Override
 	public boolean equals(Object o) {
-		if (o != null && o instanceof HudsonCommiter) {
+		if (o instanceof HudsonCommiter) {
 			return Objects.equal(id, ((HudsonCommiter) o).id);
 		}
 		return false;
