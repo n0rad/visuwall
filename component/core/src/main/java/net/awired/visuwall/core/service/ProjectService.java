@@ -26,6 +26,7 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.NotImplementedOperationException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.core.domain.Wall;
@@ -54,6 +55,7 @@ public class ProjectService {
 		Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
 
 		for (ConnectionPlugin buildService : wall.getConnectionPlugin()) {
+			try {
 			List<ProjectId> discoveredProjects = buildService.findAllProjects();
 			for (ProjectId discoveredProjectId : discoveredProjects) {
 
@@ -66,6 +68,9 @@ public class ProjectService {
 				}
 
 				updateProject(wall.getConnectionPlugin(), project);
+			}
+			} catch (NotImplementedOperationException e) {
+				// TODO NotImplementedOperationException
 			}
 		}
 	}
@@ -107,6 +112,8 @@ public class ProjectService {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug(e.getMessage());
 				}
+			} catch (NotImplementedOperationException e) {
+				// TODO NotImplementedOperationException
 			}
 		}
 		return null;
@@ -127,6 +134,8 @@ public class ProjectService {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug(e.getMessage());
 				}
+			} catch (NotImplementedOperationException e) {
+				// TODO NotImplementedOperationException
 			}
 		}
 		return PROJECT_NOT_BUILT_ID;
@@ -143,6 +152,8 @@ public class ProjectService {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug(e.getMessage());
 				}
+			} catch (NotImplementedOperationException e) {
+				// TODO NotImplementedOperationException
 			}
 		}
 		throw new RuntimeException("Project " + projectId + " must have a state. It can't be found in " + connectionPlugins);
@@ -159,6 +170,8 @@ public class ProjectService {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug(e.getMessage());
 				}
+			} catch (NotImplementedOperationException e) {
+				// TODO NotImplementedOperationException
 			}
 		}
 		return false;
@@ -184,6 +197,8 @@ public class ProjectService {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug(e.getMessage());
 				}
+			} catch (NotImplementedOperationException e) {
+				// TODO NotImplementedOperationException
 			}
 		}
 		throw new BuildNotFoundException("No build #" + buildNumber + " for project " + projectId);

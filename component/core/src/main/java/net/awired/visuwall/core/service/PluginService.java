@@ -26,6 +26,7 @@ import java.util.ServiceLoader;
 import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.NotImplementedOperationException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.core.domain.SoftwareAccess;
@@ -38,8 +39,7 @@ import com.google.common.base.Preconditions;
 @Service
 public class PluginService {
 
-	private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader
-			.load(VisuwallPlugin.class);
+	private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader.load(VisuwallPlugin.class);
 
 	public PluginInfo getPluginInfoFromUrl(URL url) {
 		List<VisuwallPlugin> visuwallPlugins = getPlugins();
@@ -65,13 +65,13 @@ public class PluginService {
 					softwareInfo.setSoftwareId(softwareId);
 					softwareInfo.setPluginInfo(visuwallPlugin.getInfo());
 					// TODO change that null
-					ConnectionPlugin connectionPlugin = visuwallPlugin
-							.getConnection(url.toString(), null);
-					softwareInfo.setProjectNames(connectionPlugin
-							.findProjectNames());
+					ConnectionPlugin connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
+					softwareInfo.setProjectNames(connectionPlugin.findProjectNames());
 					return softwareInfo;
 				}
 			} catch (IncompatibleSoftwareException e) {
+				// log ?
+			} catch (NotImplementedOperationException e) {
 				// log ?
 			}
 		}
@@ -86,8 +86,7 @@ public class PluginService {
 
 	public List<PluginInfo> getPluginsInfo() {
 		List<VisuwallPlugin> visuwallPlugins = getPlugins();
-		List<PluginInfo> pluginInfos = new ArrayList<PluginInfo>(
-				visuwallPlugins.size());
+		List<PluginInfo> pluginInfos = new ArrayList<PluginInfo>(visuwallPlugins.size());
 		for (VisuwallPlugin visuwallPlugin : visuwallPlugins) {
 			PluginInfo pluginInfo = getPluginInfo(visuwallPlugin);
 			pluginInfos.add(pluginInfo);
@@ -109,10 +108,8 @@ public class PluginService {
 		pluginLoader.reload();
 	}
 
-	public List<ConnectionPlugin> getConnectionPluginsFromSoftwares(
-			List<SoftwareAccess> softwareAccesses) {
-		List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>(
-				softwareAccesses.size());
+	public List<ConnectionPlugin> getConnectionPluginsFromSoftwares(List<SoftwareAccess> softwareAccesses) {
+		List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>(softwareAccesses.size());
 		for (SoftwareAccess softwareAccess : softwareAccesses) {
 			// TODO refactor as we recreate a connection
 			VisuwallPlugin plugin = getPluginFromSoftware(softwareAccess);
@@ -121,22 +118,19 @@ public class PluginService {
 			Properties properties = new Properties();
 			// properties.put("login", softwareAccess.getLogin());
 			// properties.put("password", softwareAccess.getPassword());
-			ConnectionPlugin connection = plugin.getConnection(
-					softwareAccess.getUrl(), properties);
+			ConnectionPlugin connection = plugin.getConnection(softwareAccess.getUrl(), properties);
 			connectionPlugins.add(connection);
 		}
 		return connectionPlugins;
 	}
 
 	public VisuwallPlugin getPluginFromSoftware(SoftwareAccess softwareAccess) {
-		Preconditions.checkNotNull(softwareAccess.getPluginClassName(),
-				"softwareAccess.getPluginClassName");
+		Preconditions.checkNotNull(softwareAccess.getPluginClassName(), "softwareAccess.getPluginClassName");
 
 		List<VisuwallPlugin> plugins = getPlugins();
 		for (VisuwallPlugin plugin : plugins) {
 			// TODO manage version
-			if (softwareAccess.getPluginClassName().equals(
-					plugin.getClass().getName())) {
+			if (softwareAccess.getPluginClassName().equals(plugin.getClass().getName())) {
 				return plugin;
 			}
 		}

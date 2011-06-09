@@ -23,6 +23,7 @@ import java.util.List;
 
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.exception.NotImplementedOperationException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
@@ -49,7 +50,7 @@ public class ProjectServiceTest {
 		projectService.updateProject(new ArrayList<ConnectionPlugin>(), null);
 	}
 
-	public List<ConnectionPlugin> getConnectionPlugins() {
+	public List<ConnectionPlugin> getConnectionPlugins() throws NotImplementedOperationException {
 		List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>();
 		ConnectionPlugin connectionPlugin = Mockito.mock(ConnectionPlugin.class);
 		connectionPlugins.add(connectionPlugin);
@@ -63,14 +64,14 @@ public class ProjectServiceTest {
 
 	@Ignore
 	@Test
-	public void test() {
+	public void test() throws NotImplementedOperationException {
 		Wall wall = new Wall();
 		wall.setConnectionPlugin(getConnectionPlugins());
 		projectService.updateWallProjects(wall);
 	}
 
 	@Test
-	public void should_call_merge_for_plugins() {
+	public void should_call_merge_for_plugins() throws NotImplementedOperationException {
 		List<ConnectionPlugin> connectionPlugins = getConnectionPlugins();
 		Project project = new Project("test");
 		projectService.updateProject(connectionPlugins, project);
