@@ -27,26 +27,26 @@ import com.google.common.base.Preconditions;
 
 public class TeamCity {
 
-    @VisibleForTesting
-    TeamCityJerseyClient teamcityJerseyClient;
+	@VisibleForTesting
+	TeamCityJerseyClient teamcityJerseyClient;
 
-    public List<String> findProjectNames() {
-        List<String> projectNames = new ArrayList<String>();
-        List<TeamCityProject> projects = teamcityJerseyClient.getProjects();
-        for (TeamCityProject project : projects) {
+	public List<String> findProjectNames() {
+		List<String> projectNames = new ArrayList<String>();
+		List<TeamCityProject> projects = teamcityJerseyClient.getProjects();
+		for (TeamCityProject project : projects) {
 			projectNames.add(project.getName());
-        }
-        return projectNames;
-    }
+		}
+		return projectNames;
+	}
 
-    public List<TeamCityProject> findAllProjects() {
-        return teamcityJerseyClient.getProjects();
-    }
+	public List<TeamCityProject> findAllProjects() {
+		return teamcityJerseyClient.getProjects();
+	}
 
-    public TeamCityProject findProject(String projectId) {
-        checkProjectId(projectId);
-        return teamcityJerseyClient.getProject(projectId);
-    }
+	public TeamCityProject findProject(String projectId) {
+		checkProjectId(projectId);
+		return teamcityJerseyClient.getProject(projectId);
+	}
 
 	public TeamCityBuild findBuild(int buildNumber) {
 		Preconditions.checkArgument(buildNumber >= 0, "buildNumber must be >= 0");
@@ -54,7 +54,7 @@ public class TeamCity {
 	}
 
 	private void checkProjectId(String projectId) {
-	    Preconditions.checkNotNull(projectId, "projectId is mandatory");
-    }
+		Preconditions.checkNotNull(projectId, "projectId is mandatory");
+	}
 
 }

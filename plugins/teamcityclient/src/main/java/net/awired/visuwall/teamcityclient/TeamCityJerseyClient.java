@@ -28,28 +28,28 @@ import com.sun.jersey.api.client.WebResource;
 
 public class TeamCityJerseyClient {
 
-    private Client client;
+	private Client client;
 
 	private TeamCityUrlBuilder urlBuilder;
 
 	public TeamCityJerseyClient(Client client, TeamCityUrlBuilder urlBuilder) {
-        this.client = client;
+		this.client = client;
 		this.urlBuilder = urlBuilder;
-    }
+	}
 
-    public List<TeamCityProject> getProjects() {
+	public List<TeamCityProject> getProjects() {
 		String projectsUrl = urlBuilder.getProjects();
 		WebResource resource = client.resource(projectsUrl);
-        TeamCityProjects teamCityProjects = resource.get(TeamCityProjects.class);
+		TeamCityProjects teamCityProjects = resource.get(TeamCityProjects.class);
 		return teamCityProjects.getProjects();
-    }
+	}
 
-    public TeamCityProject getProject(String projectId) {
+	public TeamCityProject getProject(String projectId) {
 		String projectUrl = urlBuilder.getProject(projectId);
 		WebResource resource = client.resource(projectUrl);
-        TeamCityProject teamCityProject = resource.get(TeamCityProject.class);
-        return teamCityProject;
-    }
+		TeamCityProject teamCityProject = resource.get(TeamCityProject.class);
+		return teamCityProject;
+	}
 
 	public TeamCityBuild getBuild(int buildNumber) {
 		String buildUrl = urlBuilder.getBuild(buildNumber);

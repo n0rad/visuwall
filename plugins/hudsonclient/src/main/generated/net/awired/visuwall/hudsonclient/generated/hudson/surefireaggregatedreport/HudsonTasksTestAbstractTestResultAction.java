@@ -21,7 +21,6 @@
 // Generated on: 2011.02.20 at 04:00:50 PM CET 
 //
 
-
 package net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,11 +28,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for hudson.tasks.test.AbstractTestResultAction complex type.
+ * <p>
+ * Java class for hudson.tasks.test.AbstractTestResultAction complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="hudson.tasks.test.AbstractTestResultAction">
@@ -53,92 +53,83 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "hudson.tasks.test.AbstractTestResultAction", propOrder = {
-    "failCount",
-    "skipCount",
-    "totalCount",
-    "urlName"
-})
-@XmlSeeAlso({
-    HudsonTasksTestAggregatedTestResultAction.class
-})
+@XmlType(name = "hudson.tasks.test.AbstractTestResultAction", propOrder = { "failCount", "skipCount", "totalCount",
+        "urlName" })
+@XmlSeeAlso({ HudsonTasksTestAggregatedTestResultAction.class })
 public class HudsonTasksTestAbstractTestResultAction {
 
-    protected int failCount;
-    protected int skipCount;
-    protected int totalCount;
-    protected String urlName;
+	protected int failCount;
+	protected int skipCount;
+	protected int totalCount;
+	protected String urlName;
 
-    /**
-     * Gets the value of the failCount property.
-     * 
-     */
-    public int getFailCount() {
-        return failCount;
-    }
+	/**
+	 * Gets the value of the failCount property.
+	 * 
+	 */
+	public int getFailCount() {
+		return failCount;
+	}
 
-    /**
-     * Sets the value of the failCount property.
-     * 
-     */
-    public void setFailCount(int value) {
-        this.failCount = value;
-    }
+	/**
+	 * Sets the value of the failCount property.
+	 * 
+	 */
+	public void setFailCount(int value) {
+		this.failCount = value;
+	}
 
-    /**
-     * Gets the value of the skipCount property.
-     * 
-     */
-    public int getSkipCount() {
-        return skipCount;
-    }
+	/**
+	 * Gets the value of the skipCount property.
+	 * 
+	 */
+	public int getSkipCount() {
+		return skipCount;
+	}
 
-    /**
-     * Sets the value of the skipCount property.
-     * 
-     */
-    public void setSkipCount(int value) {
-        this.skipCount = value;
-    }
+	/**
+	 * Sets the value of the skipCount property.
+	 * 
+	 */
+	public void setSkipCount(int value) {
+		this.skipCount = value;
+	}
 
-    /**
-     * Gets the value of the totalCount property.
-     * 
-     */
-    public int getTotalCount() {
-        return totalCount;
-    }
+	/**
+	 * Gets the value of the totalCount property.
+	 * 
+	 */
+	public int getTotalCount() {
+		return totalCount;
+	}
 
-    /**
-     * Sets the value of the totalCount property.
-     * 
-     */
-    public void setTotalCount(int value) {
-        this.totalCount = value;
-    }
+	/**
+	 * Sets the value of the totalCount property.
+	 * 
+	 */
+	public void setTotalCount(int value) {
+		this.totalCount = value;
+	}
 
-    /**
-     * Gets the value of the urlName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getUrlName() {
-        return urlName;
-    }
+	/**
+	 * Gets the value of the urlName property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getUrlName() {
+		return urlName;
+	}
 
-    /**
-     * Sets the value of the urlName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setUrlName(String value) {
-        this.urlName = value;
-    }
+	/**
+	 * Sets the value of the urlName property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setUrlName(String value) {
+		this.urlName = value;
+	}
 
 }

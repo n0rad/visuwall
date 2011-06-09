@@ -29,20 +29,20 @@ import com.google.common.io.Closeables;
 
 public class DocumentLoader {
 
-    public Document loadFromUrl(String strUrl) throws Exception {
-        Preconditions.checkNotNull(strUrl, "strUrl is mandatory");
-        InputStream stream = null;
-        try {
-            URL url = new URL(strUrl);
-            stream = url.openStream();
-            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
-            Document doc = documentBuilder.parse(stream);
-            return doc;
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            Closeables.closeQuietly(stream);
-        }
-    }
+	public Document loadFromUrl(String strUrl) throws Exception {
+		Preconditions.checkNotNull(strUrl, "strUrl is mandatory");
+		InputStream stream = null;
+		try {
+			URL url = new URL(strUrl);
+			stream = url.openStream();
+			DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
+			Document doc = documentBuilder.parse(stream);
+			return doc;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			Closeables.closeQuietly(stream);
+		}
+	}
 }

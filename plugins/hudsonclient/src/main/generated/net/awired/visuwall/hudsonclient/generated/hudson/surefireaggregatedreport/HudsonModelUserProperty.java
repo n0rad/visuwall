@@ -21,18 +21,18 @@
 // Generated on: 2011.02.20 at 04:00:50 PM CET 
 //
 
-
 package net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for hudson.model.UserProperty complex type.
+ * <p>
+ * Java class for hudson.model.UserProperty complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="hudson.model.UserProperty">
@@ -50,6 +50,5 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "hudson.model.UserProperty")
 public class HudsonModelUserProperty {
-
 
 }

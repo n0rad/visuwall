@@ -24,7 +24,6 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 
 import org.junit.Before;
@@ -49,7 +48,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 	}
 
 	@Test
-	public void should_merge_with_one_build_plugin() throws ProjectNotFoundException {
+	public void should_merge_with_one_build_plugin() throws Exception {
 		ConnectionPlugin qualityPlugin = Mockito.mock(ConnectionPlugin.class);
 
 		QualityResult qualityResult = new QualityResult();
@@ -67,7 +66,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 	}
 
 	@Test
-	public void should_merge_with_two_build_plugins() throws ProjectNotFoundException {
+	public void should_merge_with_two_build_plugins() throws Exception {
 		ConnectionPlugin qualityPlugin1 = Mockito.mock(ConnectionPlugin.class);
 		ConnectionPlugin qualityPlugin2 = Mockito.mock(ConnectionPlugin.class);
 
@@ -96,7 +95,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 	}
 
 	@Test
-	public void last_plugin_is_always_right() throws ProjectNotFoundException {
+	public void last_plugin_is_always_right() throws Exception {
 		ConnectionPlugin qualityPlugin1 = Mockito.mock(ConnectionPlugin.class);
 		ConnectionPlugin qualityPlugin2 = Mockito.mock(ConnectionPlugin.class);
 
@@ -124,7 +123,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 	}
 
 	@Test
-	public void should_enhance_unit_test_results() {
+	public void should_enhance_unit_test_results() throws Exception {
 		TestResult testResult = new TestResult();
 		testResult.setCoverage(4);
 		testResult.setFailCount(1);
@@ -146,7 +145,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 	}
 
 	@Test
-	public void should_enhance_integration_test_results() {
+	public void should_enhance_integration_test_results() throws Exception {
 		TestResult testResult = new TestResult();
 		testResult.setCoverage(4);
 		testResult.setFailCount(1);

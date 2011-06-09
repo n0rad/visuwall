@@ -28,7 +28,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 public class TeamCityPluginIT {
-	
+
 	@Ignore("teamcity plugin is not finished")
 	@Test
 	public void should_recognize_teamcity_instance_with_valid_url() throws Exception {

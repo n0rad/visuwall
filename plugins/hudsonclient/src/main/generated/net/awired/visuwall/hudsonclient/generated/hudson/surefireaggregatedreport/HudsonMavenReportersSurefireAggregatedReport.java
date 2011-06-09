@@ -21,18 +21,18 @@
 // Generated on: 2011.02.20 at 04:00:50 PM CET 
 //
 
-
 package net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for hudson.maven.reporters.SurefireAggregatedReport complex type.
+ * <p>
+ * Java class for hudson.maven.reporters.SurefireAggregatedReport complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="hudson.maven.reporters.SurefireAggregatedReport">
@@ -49,9 +49,6 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "hudson.maven.reporters.SurefireAggregatedReport")
-public class HudsonMavenReportersSurefireAggregatedReport
-    extends HudsonTasksTestAggregatedTestResultAction
-{
-
+public class HudsonMavenReportersSurefireAggregatedReport extends HudsonTasksTestAggregatedTestResultAction {
 
 }

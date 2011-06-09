@@ -35,58 +35,58 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class HudsonBuildBuilder {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HudsonBuildBuilder.class);
+	private static final Logger LOG = LoggerFactory.getLogger(HudsonBuildBuilder.class);
 
-    private TestResultBuilder testResultBuilder;
+	private TestResultBuilder testResultBuilder;
 
-    public HudsonBuildBuilder() {
-        this.testResultBuilder = new TestResultBuilder();
-    }
+	public HudsonBuildBuilder() {
+		this.testResultBuilder = new TestResultBuilder();
+	}
 
-    public HudsonBuildBuilder(TestResultBuilder testResultBuilder) {
-        this.testResultBuilder = testResultBuilder;
-    }
+	public HudsonBuildBuilder(TestResultBuilder testResultBuilder) {
+		this.testResultBuilder = testResultBuilder;
+	}
 
-    public HudsonBuild createHudsonBuild(HudsonMavenMavenModuleSetBuild setBuild,
-            HudsonMavenReportersSurefireAggregatedReport surefireReport, Set<HudsonCommiter> commiters) {
-        checkSetBuild(setBuild);
-        HudsonBuild hudsonBuild = createHudsonBuild(setBuild, commiters);
-        addTestResults(setBuild, surefireReport, hudsonBuild);
-        return hudsonBuild;
-    }
+	public HudsonBuild createHudsonBuild(HudsonMavenMavenModuleSetBuild setBuild,
+	        HudsonMavenReportersSurefireAggregatedReport surefireReport, Set<HudsonCommiter> commiters) {
+		checkSetBuild(setBuild);
+		HudsonBuild hudsonBuild = createHudsonBuild(setBuild, commiters);
+		addTestResults(setBuild, surefireReport, hudsonBuild);
+		return hudsonBuild;
+	}
 
-    public HudsonBuild createHudsonBuild(HudsonMavenMavenModuleSetBuild setBuild, Set<HudsonCommiter> commiters) {
-        checkSetBuild(setBuild);
-        HudsonBuild hudsonBuild = new HudsonBuild();
-        hudsonBuild.setState(HudsonXmlHelper.getState(setBuild));
-        hudsonBuild.setDuration(setBuild.getDuration());
-        hudsonBuild.setStartTime(new Date(setBuild.getTimestamp()));
-        hudsonBuild.setSuccessful(HudsonXmlHelper.isSuccessful(setBuild));
-        hudsonBuild.setCommiters(commiters);
-        hudsonBuild.setBuildNumber(setBuild.getNumber());
-        return hudsonBuild;
-    }
+	public HudsonBuild createHudsonBuild(HudsonMavenMavenModuleSetBuild setBuild, Set<HudsonCommiter> commiters) {
+		checkSetBuild(setBuild);
+		HudsonBuild hudsonBuild = new HudsonBuild();
+		hudsonBuild.setState(HudsonXmlHelper.getState(setBuild));
+		hudsonBuild.setDuration(setBuild.getDuration());
+		hudsonBuild.setStartTime(new Date(setBuild.getTimestamp()));
+		hudsonBuild.setSuccessful(HudsonXmlHelper.isSuccessful(setBuild));
+		hudsonBuild.setCommiters(commiters);
+		hudsonBuild.setBuildNumber(setBuild.getNumber());
+		return hudsonBuild;
+	}
 
-    private void addTestResults(HudsonMavenMavenModuleSetBuild setBuild,
-            HudsonMavenReportersSurefireAggregatedReport surefireReport, HudsonBuild hudsonBuild) {
-        try {
-            HudsonTestResult unitTestResult = testResultBuilder.buildUnitTestResult(surefireReport);
-            HudsonTestResult integrationTestResult = testResultBuilder.buildIntegrationTestResult(surefireReport);
-            hudsonBuild.setUnitTestResult(unitTestResult);
-            hudsonBuild.setIntegrationTestResult(integrationTestResult);
-        } catch (UniformInterfaceException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("no test result for " + setBuild.getFullDisplayName());
-            }
-        } catch (ClientHandlerException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("no test result " + setBuild.getFullDisplayName());
-            }
-        }
-    }
+	private void addTestResults(HudsonMavenMavenModuleSetBuild setBuild,
+	        HudsonMavenReportersSurefireAggregatedReport surefireReport, HudsonBuild hudsonBuild) {
+		try {
+			HudsonTestResult unitTestResult = testResultBuilder.buildUnitTestResult(surefireReport);
+			HudsonTestResult integrationTestResult = testResultBuilder.buildIntegrationTestResult(surefireReport);
+			hudsonBuild.setUnitTestResult(unitTestResult);
+			hudsonBuild.setIntegrationTestResult(integrationTestResult);
+		} catch (UniformInterfaceException e) {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("no test result for " + setBuild.getFullDisplayName());
+			}
+		} catch (ClientHandlerException e) {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("no test result " + setBuild.getFullDisplayName());
+			}
+		}
+	}
 
-    private void checkSetBuild(HudsonMavenMavenModuleSetBuild setBuild) {
-        Preconditions.checkNotNull(setBuild, "setBuild is mandatory");
-    }
+	private void checkSetBuild(HudsonMavenMavenModuleSetBuild setBuild) {
+		Preconditions.checkNotNull(setBuild, "setBuild is mandatory");
+	}
 
 }

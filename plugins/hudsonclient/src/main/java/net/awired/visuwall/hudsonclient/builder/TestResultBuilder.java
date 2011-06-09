@@ -34,101 +34,101 @@ import com.google.common.base.Preconditions;
  */
 public class TestResultBuilder {
 
-    class Test {
-        public String className;
-        public String status;
+	class Test {
+		public String className;
+		public String status;
 
-        @Override
-        public String toString() {
-            return className + ":" + status;
-        }
-    }
+		@Override
+		public String toString() {
+			return className + ":" + status;
+		}
+	}
 
-    public HudsonTestResult buildUnitTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
-        checkSurefireReport(surefireReport);
-        HudsonTestResult unitTestResult = new HudsonTestResult();
-        List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
-        countUnitTests(unitTestResult, tests);
-        return unitTestResult;
-    }
+	public HudsonTestResult buildUnitTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+		checkSurefireReport(surefireReport);
+		HudsonTestResult unitTestResult = new HudsonTestResult();
+		List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
+		countUnitTests(unitTestResult, tests);
+		return unitTestResult;
+	}
 
-    private void checkSurefireReport(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
-        Preconditions.checkNotNull(surefireReport, "surefireReport is mandatory");
-    }
+	private void checkSurefireReport(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+		Preconditions.checkNotNull(surefireReport, "surefireReport is mandatory");
+	}
 
-    public HudsonTestResult buildIntegrationTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
-        checkSurefireReport(surefireReport);
-        HudsonTestResult integrationTestResult = new HudsonTestResult();
-        List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
-        countIntegrationTests(integrationTestResult, tests);
-        return integrationTestResult;
-    }
+	public HudsonTestResult buildIntegrationTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+		checkSurefireReport(surefireReport);
+		HudsonTestResult integrationTestResult = new HudsonTestResult();
+		List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
+		countIntegrationTests(integrationTestResult, tests);
+		return integrationTestResult;
+	}
 
-    private void countUnitTests(HudsonTestResult unitTestsResult,
-            List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
-        List<Test> tests = createTestsFrom(testReport);
-        for (Test test : tests) {
-            if (isUnitTest(test)) {
-                updateTestResult(unitTestsResult, test);
-            }
-        }
-    }
+	private void countUnitTests(HudsonTestResult unitTestsResult,
+	        List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
+		List<Test> tests = createTestsFrom(testReport);
+		for (Test test : tests) {
+			if (isUnitTest(test)) {
+				updateTestResult(unitTestsResult, test);
+			}
+		}
+	}
 
-    private void countIntegrationTests(HudsonTestResult integrationTestsResult,
-            List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
-        List<Test> tests = createTestsFrom(testReport);
-        for (Test test : tests) {
-            if (isIntegrationTest(test)) {
-                updateTestResult(integrationTestsResult, test);
-            }
-        }
-    }
+	private void countIntegrationTests(HudsonTestResult integrationTestsResult,
+	        List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
+		List<Test> tests = createTestsFrom(testReport);
+		for (Test test : tests) {
+			if (isIntegrationTest(test)) {
+				updateTestResult(integrationTestsResult, test);
+			}
+		}
+	}
 
-    private void updateTestResult(HudsonTestResult unitTestsResult, Test test) {
-        String status = test.status;
-        if ("FAILED".equals(status))
-            unitTestsResult.setFailCount(unitTestsResult.getFailCount() + 1);
-        if ("SKIPPED".equals(status))
-            unitTestsResult.setSkipCount(unitTestsResult.getSkipCount() + 1);
-        if ("PASSED".equals(status))
-            unitTestsResult.setPassCount(unitTestsResult.getPassCount() + 1);
-    }
+	private void updateTestResult(HudsonTestResult unitTestsResult, Test test) {
+		String status = test.status;
+		if ("FAILED".equals(status))
+			unitTestsResult.setFailCount(unitTestsResult.getFailCount() + 1);
+		if ("SKIPPED".equals(status))
+			unitTestsResult.setSkipCount(unitTestsResult.getSkipCount() + 1);
+		if ("PASSED".equals(status))
+			unitTestsResult.setPassCount(unitTestsResult.getPassCount() + 1);
+	}
 
-    private boolean isUnitTest(Test test) {
-        return !isIntegrationTest(test);
-    }
+	private boolean isUnitTest(Test test) {
+		return !isIntegrationTest(test);
+	}
 
-    private List<Test> createTestsFrom(List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
-        List<Test> tests = new ArrayList<Test>();
-        for (HudsonTasksTestAggregatedTestResultActionChildReport childReport : testReport) {
-            Element childReportResult = (Element) childReport.getResult();
-            NodeList cases = childReportResult.getElementsByTagName("case");
-            for (int i = 0; i < cases.getLength(); i++) {
-                Node testNode = cases.item(i);
-                Test test = createTestFrom(testNode);
-                tests.add(test);
-            }
-        }
-        return tests;
-    }
+	private List<Test> createTestsFrom(List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
+		List<Test> tests = new ArrayList<Test>();
+		for (HudsonTasksTestAggregatedTestResultActionChildReport childReport : testReport) {
+			Element childReportResult = (Element) childReport.getResult();
+			NodeList cases = childReportResult.getElementsByTagName("case");
+			for (int i = 0; i < cases.getLength(); i++) {
+				Node testNode = cases.item(i);
+				Test test = createTestFrom(testNode);
+				tests.add(test);
+			}
+		}
+		return tests;
+	}
 
-    private Test createTestFrom(Node testNode) {
-        Test test = new Test();
-        NodeList testAttributes = testNode.getChildNodes();
-        for (int j = 0; j < testAttributes.getLength(); j++) {
-            Node attributeNode = testAttributes.item(j);
-            String attributeName = attributeNode.getNodeName();
-            String attributeValue = attributeNode.getTextContent();
-            if ("className".equals(attributeName))
-                test.className = attributeValue;
-            else if ("status".equals(attributeName))
-                test.status = attributeValue;
-        }
-        return test;
-    }
+	private Test createTestFrom(Node testNode) {
+		Test test = new Test();
+		NodeList testAttributes = testNode.getChildNodes();
+		for (int j = 0; j < testAttributes.getLength(); j++) {
+			Node attributeNode = testAttributes.item(j);
+			String attributeName = attributeNode.getNodeName();
+			String attributeValue = attributeNode.getTextContent();
+			if ("className".equals(attributeName))
+				test.className = attributeValue;
+			else if ("status".equals(attributeName))
+				test.status = attributeValue;
+		}
+		return test;
+	}
 
-    private boolean isIntegrationTest(Test test) {
-        String testName = test.className;
-        return testName.endsWith("ITTest") || testName.contains(".it.") || testName.endsWith("IT");
-    }
+	private boolean isIntegrationTest(Test test) {
+		String testName = test.className;
+		return testName.endsWith("ITTest") || testName.contains(".it.") || testName.endsWith("IT");
+	}
 }

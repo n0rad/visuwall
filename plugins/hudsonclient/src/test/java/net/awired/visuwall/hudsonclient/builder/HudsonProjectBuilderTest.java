@@ -40,37 +40,37 @@ import org.junit.Test;
 
 public class HudsonProjectBuilderTest {
 
-    @Test
-    public void should_create_valid_hudson_project() throws Exception {
-        HudsonRootModuleFinder hudsonRootModuleFinder = mock(HudsonRootModuleFinder.class);
-        when(hudsonRootModuleFinder.findArtifactId(anyString())).thenReturn("fr.kaddath.apps.fluxx:fluxx");
+	@Test
+	public void should_create_valid_hudson_project() throws Exception {
+		HudsonRootModuleFinder hudsonRootModuleFinder = mock(HudsonRootModuleFinder.class);
+		when(hudsonRootModuleFinder.findArtifactId(anyString())).thenReturn("fr.kaddath.apps.fluxx:fluxx");
 
-        HudsonFinder hudsonFinder = mock(HudsonFinder.class);
-        HudsonBuild hudsonBuild = new HudsonBuild();
-        when(hudsonFinder.find(anyString(), anyInt())).thenReturn(hudsonBuild);
+		HudsonFinder hudsonFinder = mock(HudsonFinder.class);
+		HudsonBuild hudsonBuild = new HudsonBuild();
+		when(hudsonFinder.find(anyString(), anyInt())).thenReturn(hudsonBuild);
 
-        HudsonUrlBuilder hudsonUrlBuilder = mock(HudsonUrlBuilder.class);
-        HudsonProjectBuilder hudsonProjectBuilder = new HudsonProjectBuilder(hudsonUrlBuilder, hudsonFinder);
-        hudsonProjectBuilder.setHudsonRootModuleFinder(hudsonRootModuleFinder);
+		HudsonUrlBuilder hudsonUrlBuilder = mock(HudsonUrlBuilder.class);
+		HudsonProjectBuilder hudsonProjectBuilder = new HudsonProjectBuilder(hudsonUrlBuilder, hudsonFinder);
+		hudsonProjectBuilder.setHudsonRootModuleFinder(hudsonRootModuleFinder);
 
-        HudsonMavenMavenModuleSet moduleSet = createModuleSetFrom("fluxx.xml");
-        HudsonProject hudsonProject = hudsonProjectBuilder.createHudsonProjectFrom(moduleSet);
+		HudsonMavenMavenModuleSet moduleSet = createModuleSetFrom("fluxx.xml");
+		HudsonProject hudsonProject = hudsonProjectBuilder.createHudsonProjectFrom(moduleSet);
 
-        assertEquals("fluxx", hudsonProject.getName());
-        assertEquals("Fluxx, aggrégez vos flux RSS!", hudsonProject.getDescription());
-        assertEquals("fr.kaddath.apps.fluxx:fluxx", hudsonProject.getArtifactId());
-        assertArrayEquals(new int[] { 102, 101 }, hudsonProject.getBuildNumbers());
-        assertEquals(hudsonBuild, hudsonProject.getCompletedBuild());
-        assertEquals(hudsonBuild, hudsonProject.getCurrentBuild());
-    }
+		assertEquals("fluxx", hudsonProject.getName());
+		assertEquals("Fluxx, aggrégez vos flux RSS!", hudsonProject.getDescription());
+		assertEquals("fr.kaddath.apps.fluxx:fluxx", hudsonProject.getArtifactId());
+		assertArrayEquals(new int[] { 102, 101 }, hudsonProject.getBuildNumbers());
+		assertEquals(hudsonBuild, hudsonProject.getCompletedBuild());
+		assertEquals(hudsonBuild, hudsonProject.getCurrentBuild());
+	}
 
-    private HudsonMavenMavenModuleSet createModuleSetFrom(String fileName) throws Exception {
-        String file = ClasspathFiles.getAbsolutePathFile("hudson/" + fileName);
-        URL url = new URL(file);
-        JAXBContext newInstance = JAXBContext.newInstance(HudsonMavenMavenModuleSet.class);
-        Unmarshaller unmarshaller = newInstance.createUnmarshaller();
-        JAXBElement<HudsonMavenMavenModuleSet> element = (JAXBElement<HudsonMavenMavenModuleSet>) unmarshaller
-                .unmarshal(url);
-        return element.getValue();
-    }
+	private HudsonMavenMavenModuleSet createModuleSetFrom(String fileName) throws Exception {
+		String file = ClasspathFiles.getAbsolutePathFile("hudson/" + fileName);
+		URL url = new URL(file);
+		JAXBContext newInstance = JAXBContext.newInstance(HudsonMavenMavenModuleSet.class);
+		Unmarshaller unmarshaller = newInstance.createUnmarshaller();
+		JAXBElement<HudsonMavenMavenModuleSet> element = (JAXBElement<HudsonMavenMavenModuleSet>) unmarshaller
+		        .unmarshal(url);
+		return element.getValue();
+	}
 }

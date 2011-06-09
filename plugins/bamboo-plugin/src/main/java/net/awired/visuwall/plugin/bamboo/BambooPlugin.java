@@ -38,7 +38,7 @@ public class BambooPlugin implements VisuwallPlugin {
 		pluginInfo.setVersion(1.0f);
 		return pluginInfo;
 	}
-	
+
 	@Override
 	public SoftwareId isManageable(URL url) {
 		SoftwareId softwareId = new SoftwareId();

@@ -21,7 +21,6 @@
 // Generated on: 2011.02.21 at 12:21:30 PM CET 
 //
 
-
 package net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,11 +28,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for hudson.maven.AbstractMavenBuild complex type.
+ * <p>
+ * Java class for hudson.maven.AbstractMavenBuild complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="hudson.maven.AbstractMavenBuild">
@@ -50,12 +50,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "hudson.maven.AbstractMavenBuild")
-@XmlSeeAlso({
-    HudsonMavenMavenModuleSetBuild.class
-})
-public class HudsonMavenAbstractMavenBuild
-    extends HudsonModelAbstractBuild
-{
-
+@XmlSeeAlso({ HudsonMavenMavenModuleSetBuild.class })
+public class HudsonMavenAbstractMavenBuild extends HudsonModelAbstractBuild {
 
 }

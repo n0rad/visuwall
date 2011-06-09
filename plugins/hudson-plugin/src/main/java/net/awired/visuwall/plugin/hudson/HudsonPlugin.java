@@ -38,25 +38,25 @@ public class HudsonPlugin implements VisuwallPlugin {
 
 	private static final Logger LOG = LoggerFactory.getLogger(HudsonPlugin.class);
 
-    @Override
-    public ConnectionPlugin getConnection(String url, Properties info) {
-        HudsonConnectionPlugin hudsonConnectionPlugin = new HudsonConnectionPlugin();
-        hudsonConnectionPlugin.connect(url);
-        return hudsonConnectionPlugin;
-    }
+	@Override
+	public ConnectionPlugin getConnection(String url, Properties info) {
+		HudsonConnectionPlugin hudsonConnectionPlugin = new HudsonConnectionPlugin();
+		hudsonConnectionPlugin.connect(url);
+		return hudsonConnectionPlugin;
+	}
 
-    @Override
-    public PluginInfo getInfo() {
-    	PluginInfo pluginInfo = new PluginInfo();
-    	pluginInfo.setName("Hudson plugin");
-    	pluginInfo.setVersion(1.0f);
-    	pluginInfo.setClassName(this.getClass().getName());
-    	return pluginInfo;
-    }
-    
-    @Override
+	@Override
+	public PluginInfo getInfo() {
+		PluginInfo pluginInfo = new PluginInfo();
+		pluginInfo.setName("Hudson plugin");
+		pluginInfo.setVersion(1.0f);
+		pluginInfo.setClassName(this.getClass().getName());
+		return pluginInfo;
+	}
+
+	@Override
 	public SoftwareId isManageable(URL url) throws IncompatibleSoftwareException {
-        Preconditions.checkNotNull(url, "url is mandatory");
+		Preconditions.checkNotNull(url, "url is mandatory");
 		String xml = getContent(url);
 		if (isManageable(xml)) {
 			return createSoftwareId(xml);
@@ -78,7 +78,7 @@ public class HudsonPlugin implements VisuwallPlugin {
 
 	private boolean isManageable(String xml) {
 		return xml.contains("Remote API [Hudson]");
-    }
+	}
 
 	private String getContent(URL url) {
 		InputStream stream = null;

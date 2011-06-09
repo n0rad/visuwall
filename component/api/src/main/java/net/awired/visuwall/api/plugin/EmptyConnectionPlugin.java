@@ -16,9 +16,7 @@
 
 package net.awired.visuwall.api.plugin;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,86 +28,97 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.NotImplementedOperationException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.exception.ViewNotFoundException;
 
 public class EmptyConnectionPlugin implements ConnectionPlugin {
 
-	private List<ProjectId> projects = new ArrayList<ProjectId>();
-	private List<String> projectNames = new ArrayList<String>();
-	private QualityResult qualityResult = new QualityResult();
-	private TestResult unitTestResult = new TestResult();
-	private TestResult integrationTestResult = new TestResult();
-	private HashMap<String, List<QualityMetric>> metricsByCategory = new HashMap<String, List<QualityMetric>>();
+	NotImplementedOperationException notImplementedOperationException = new NotImplementedOperationException(
+	        "This operation is implemented in this plugin");
 
 	@Override
-	public List<ProjectId> findAllProjects() {
-		return projects;
+	public QualityResult analyzeQuality(ProjectId projectId, String... metrics) throws NotImplementedOperationException {
+		throw notImplementedOperationException;
 	}
 
 	@Override
-	public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
-		throw new ProjectNotFoundException("projectId: " + projectId + " not found");
+	public TestResult analyzeUnitTests(ProjectId projectId) throws NotImplementedOperationException {
+		throw notImplementedOperationException;
 	}
 
 	@Override
-	public Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
+	public TestResult analyzeIntegrationTests(ProjectId projectId) throws NotImplementedOperationException {
+		throw notImplementedOperationException;
+	}
+
+	@Override
+	public boolean contains(ProjectId projectId) throws NotImplementedOperationException {
+		throw notImplementedOperationException;
+	}
+
+	@Override
+	public Map<String, List<QualityMetric>> getMetricsByCategory() throws NotImplementedOperationException {
+		throw notImplementedOperationException;
+	}
+
+	@Override
+	public List<ProjectId> findAllProjects() throws NotImplementedOperationException {
+		throw notImplementedOperationException;
+	}
+
+	@Override
+	public Project findProject(ProjectId projectId) throws NotImplementedOperationException, ProjectNotFoundException {
+		throw notImplementedOperationException;
+	}
+
+	@Override
+	public Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws NotImplementedOperationException,
+	        BuildNotFoundException, ProjectNotFoundException {
+		throw notImplementedOperationException;
+	}
+
+	@Override
+	public void populate(Project project) throws NotImplementedOperationException, ProjectNotFoundException {
+		throw notImplementedOperationException;
+	}
+
+	@Override
+	public Date getEstimatedFinishTime(ProjectId projectId) throws NotImplementedOperationException,
 	        ProjectNotFoundException {
-		throw new BuildNotFoundException("build #" + buildNumber + " of projectId:" + projectId + " not found");
+		throw notImplementedOperationException;
 	}
 
 	@Override
-	public void populate(Project project) throws ProjectNotFoundException {
-		throw new ProjectNotFoundException("project: " + project + " not found");
+	public boolean isBuilding(ProjectId projectId) throws NotImplementedOperationException, ProjectNotFoundException {
+		throw notImplementedOperationException;
 	}
 
 	@Override
-	public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
-		throw new ProjectNotFoundException("projectId: " + projectId + " not found");
+	public State getState(ProjectId projectId) throws NotImplementedOperationException, ProjectNotFoundException {
+		throw notImplementedOperationException;
 	}
 
 	@Override
-	public boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException {
-		throw new ProjectNotFoundException("projectId: " + projectId + " not found");
+	public int getLastBuildNumber(ProjectId projectId) throws NotImplementedOperationException,
+	        ProjectNotFoundException, BuildNotFoundException {
+		throw notImplementedOperationException;
 	}
 
 	@Override
-	public State getState(ProjectId projectId) throws ProjectNotFoundException {
-		throw new ProjectNotFoundException("projectId: " + projectId + " not found");
+	public List<String> findProjectNames() throws NotImplementedOperationException {
+		throw notImplementedOperationException;
 	}
 
 	@Override
-	public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
-		throw new ProjectNotFoundException("projectId: " + projectId + " not found");
+	public List<String> findViews() throws NotImplementedOperationException {
+		throw notImplementedOperationException;
 	}
 
 	@Override
-	public List<String> findProjectNames() {
-		return projectNames;
-	}
-
-	@Override
-	public QualityResult analyzeQuality(ProjectId projectId, String... metrics) {
-		return qualityResult;
-	}
-
-	@Override
-	public TestResult analyzeUnitTests(ProjectId projectId) {
-		return unitTestResult;
-	}
-
-	@Override
-	public TestResult analyzeIntegrationTests(ProjectId projectId) {
-		return integrationTestResult;
-	}
-
-	@Override
-	public boolean contains(ProjectId projectId) {
-		return false;
-	}
-
-	@Override
-	public Map<String, List<QualityMetric>> getMetricsByCategory() {
-		return metricsByCategory;
+	public List<String> findProjectsByView(String viewName) throws NotImplementedOperationException,
+	        ViewNotFoundException {
+		throw notImplementedOperationException;
 	}
 
 }

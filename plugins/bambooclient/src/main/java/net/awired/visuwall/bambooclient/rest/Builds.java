@@ -26,8 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "builds")
 public class Builds {
 
-    public List<Builds> builds;
+	public List<Builds> builds;
 
-    public List<Build> build;
+	public List<Build> build;
 
 }

@@ -21,7 +21,6 @@
 // Generated on: 2011.02.21 at 12:25:24 PM CET 
 //
 
-
 package net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,11 +28,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for hudson.model.LoadStatistics complex type.
+ * <p>
+ * Java class for hudson.model.LoadStatistics complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="hudson.model.LoadStatistics">
@@ -52,90 +52,75 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "hudson.model.LoadStatistics", propOrder = {
-    "busyExecutors",
-    "queueLength",
-    "totalExecutors"
-})
-@XmlSeeAlso({
-    HudsonModelOverallLoadStatistics.class
-})
+@XmlType(name = "hudson.model.LoadStatistics", propOrder = { "busyExecutors", "queueLength", "totalExecutors" })
+@XmlSeeAlso({ HudsonModelOverallLoadStatistics.class })
 public class HudsonModelLoadStatistics {
 
-    protected HudsonModelMultiStageTimeSeries busyExecutors;
-    protected HudsonModelMultiStageTimeSeries queueLength;
-    protected HudsonModelMultiStageTimeSeries totalExecutors;
+	protected HudsonModelMultiStageTimeSeries busyExecutors;
+	protected HudsonModelMultiStageTimeSeries queueLength;
+	protected HudsonModelMultiStageTimeSeries totalExecutors;
 
-    /**
-     * Gets the value of the busyExecutors property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HudsonModelMultiStageTimeSeries }
-     *     
-     */
-    public HudsonModelMultiStageTimeSeries getBusyExecutors() {
-        return busyExecutors;
-    }
+	/**
+	 * Gets the value of the busyExecutors property.
+	 * 
+	 * @return possible object is {@link HudsonModelMultiStageTimeSeries }
+	 * 
+	 */
+	public HudsonModelMultiStageTimeSeries getBusyExecutors() {
+		return busyExecutors;
+	}
 
-    /**
-     * Sets the value of the busyExecutors property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HudsonModelMultiStageTimeSeries }
-     *     
-     */
-    public void setBusyExecutors(HudsonModelMultiStageTimeSeries value) {
-        this.busyExecutors = value;
-    }
+	/**
+	 * Sets the value of the busyExecutors property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link HudsonModelMultiStageTimeSeries }
+	 * 
+	 */
+	public void setBusyExecutors(HudsonModelMultiStageTimeSeries value) {
+		this.busyExecutors = value;
+	}
 
-    /**
-     * Gets the value of the queueLength property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HudsonModelMultiStageTimeSeries }
-     *     
-     */
-    public HudsonModelMultiStageTimeSeries getQueueLength() {
-        return queueLength;
-    }
+	/**
+	 * Gets the value of the queueLength property.
+	 * 
+	 * @return possible object is {@link HudsonModelMultiStageTimeSeries }
+	 * 
+	 */
+	public HudsonModelMultiStageTimeSeries getQueueLength() {
+		return queueLength;
+	}
 
-    /**
-     * Sets the value of the queueLength property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HudsonModelMultiStageTimeSeries }
-     *     
-     */
-    public void setQueueLength(HudsonModelMultiStageTimeSeries value) {
-        this.queueLength = value;
-    }
+	/**
+	 * Sets the value of the queueLength property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link HudsonModelMultiStageTimeSeries }
+	 * 
+	 */
+	public void setQueueLength(HudsonModelMultiStageTimeSeries value) {
+		this.queueLength = value;
+	}
 
-    /**
-     * Gets the value of the totalExecutors property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HudsonModelMultiStageTimeSeries }
-     *     
-     */
-    public HudsonModelMultiStageTimeSeries getTotalExecutors() {
-        return totalExecutors;
-    }
+	/**
+	 * Gets the value of the totalExecutors property.
+	 * 
+	 * @return possible object is {@link HudsonModelMultiStageTimeSeries }
+	 * 
+	 */
+	public HudsonModelMultiStageTimeSeries getTotalExecutors() {
+		return totalExecutors;
+	}
 
-    /**
-     * Sets the value of the totalExecutors property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HudsonModelMultiStageTimeSeries }
-     *     
-     */
-    public void setTotalExecutors(HudsonModelMultiStageTimeSeries value) {
-        this.totalExecutors = value;
-    }
+	/**
+	 * Sets the value of the totalExecutors property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link HudsonModelMultiStageTimeSeries }
+	 * 
+	 */
+	public void setTotalExecutors(HudsonModelMultiStageTimeSeries value) {
+		this.totalExecutors = value;
+	}
 
 }

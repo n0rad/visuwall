@@ -49,9 +49,8 @@ public class HudsonProjectBuilder {
 		this.hudsonFinder = hudsonFinder;
 	}
 
-	public HudsonProject createHudsonProjectFrom(
-			HudsonMavenMavenModuleSet moduleSet)
-			throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+	public HudsonProject createHudsonProjectFrom(HudsonMavenMavenModuleSet moduleSet)
+	        throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
 		HudsonBuild lastCompletedHudsonBuild = null, currentHudsonBuild = null;
 
 		int lastCompleteBuildNumber = UNBUILT_PROJECT, currentBuildNumber = UNBUILT_PROJECT;
@@ -110,13 +109,12 @@ public class HudsonProjectBuilder {
 			artifactId = hudsonRootModuleFinder.findArtifactId(name);
 		} catch (ArtifactIdNotFoundException e) {
 			if (LOG.isDebugEnabled()) {
-				LOG.debug("can't find the artifactId for project " + name
-						+ " cause:" + e.getCause());
+				LOG.debug("can't find the artifactId for project " + name + " cause:" + e.getCause());
 			}
 		}
 		return artifactId;
 	}
-	
+
 	private boolean getIsBuilding(HudsonModelJob modelJob) {
 		String color = modelJob.getColor().value();
 		return color.endsWith("_anime");

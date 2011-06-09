@@ -29,7 +29,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class HudsonPluginIT {
-	
+
 	static PluginInfo pluginInfo = new PluginInfo();
 
 	@BeforeClass

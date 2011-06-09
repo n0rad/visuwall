@@ -53,54 +53,54 @@ import com.sun.jersey.api.client.WebResource;
 
 public class TeamCityTest {
 
-    @Test
-    public void should_list_all_project_names() {
-        TeamCityProjects teamcityProjects = createProjects();
-        TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProjects);
+	@Test
+	public void should_list_all_project_names() {
+		TeamCityProjects teamcityProjects = createProjects();
+		TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProjects);
 
-        TeamCity teamcity = new TeamCity();
-        teamcity.teamcityJerseyClient = teamcityJerseyClient;
+		TeamCity teamcity = new TeamCity();
+		teamcity.teamcityJerseyClient = teamcityJerseyClient;
 
-        List<String> projectNames = teamcity.findProjectNames();
-        assertFalse(projectNames.isEmpty());
-        for (String s : projectNames) {
-            assertNotNull(s);
-        }
-    }
+		List<String> projectNames = teamcity.findProjectNames();
+		assertFalse(projectNames.isEmpty());
+		for (String s : projectNames) {
+			assertNotNull(s);
+		}
+	}
 
-    @Test
-    public void should_find_all_project() {
-        TeamCityProjects teamcityProjects = createProjects();
-        TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProjects);
+	@Test
+	public void should_find_all_project() {
+		TeamCityProjects teamcityProjects = createProjects();
+		TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProjects);
 
-        TeamCity teamcity = new TeamCity();
-        teamcity.teamcityJerseyClient = teamcityJerseyClient;
+		TeamCity teamcity = new TeamCity();
+		teamcity.teamcityJerseyClient = teamcityJerseyClient;
 
-        List<TeamCityProject> projects = teamcity.findAllProjects();
-        assertFalse(projects.isEmpty());
-        for (TeamCityProject project : projects) {
+		List<TeamCityProject> projects = teamcity.findAllProjects();
+		assertFalse(projects.isEmpty());
+		for (TeamCityProject project : projects) {
 			assertNotNull(project.getName());
 			assertNotNull(project.getId());
 			assertNotNull(project.getHref());
-        }
-    }
+		}
+	}
 
-    @Test
-    public void should_load_project() {
-        TeamCityProject teamcityProject = createProject();
-        TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProject);
+	@Test
+	public void should_load_project() {
+		TeamCityProject teamcityProject = createProject();
+		TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProject);
 
-        TeamCity teamcity = new TeamCity();
-        teamcity.teamcityJerseyClient = teamcityJerseyClient;
+		TeamCity teamcity = new TeamCity();
+		teamcity.teamcityJerseyClient = teamcityJerseyClient;
 
-        TeamCityProject project = teamcity.findProject("project54");
+		TeamCityProject project = teamcity.findProject("project54");
 		assertEquals("http://teamcity.jetbrains.com/project.html?projectId=project54", project.getWebUrl());
 		assertEquals("typica & maragogype", project.getDescription());
 		assertFalse(project.isArchived());
 		assertEquals("Amazon API client", project.getName());
 		assertEquals("project54", project.getId());
 		assertEquals("/app/rest/projects/id:project54", project.getHref());
-    }
+	}
 
 	@Test
 	public void should_load_project_with_build_types() {
@@ -138,8 +138,7 @@ public class TeamCityTest {
 		assertEquals("6", build.getNumber());
 		assertEquals("SUCCESS", build.getStatus());
 		assertEquals("/app/rest/builds/id:47068", build.getHref());
-		assertEquals("http://teamcity.jetbrains.com/viewLog.html?buildId=47068&buildTypeId=bt297",
-		        build.getWebUrl());
+		assertEquals("http://teamcity.jetbrains.com/viewLog.html?buildId=47068&buildTypeId=bt297", build.getWebUrl());
 		assertFalse(build.isPersonal());
 		assertFalse(build.isHistory());
 		assertFalse(build.isPinned());
@@ -209,13 +208,13 @@ public class TeamCityTest {
 		WebResource resource = mock(WebResource.class);
 		when(resource.get(any(Class.class))).thenReturn(o);
 
-        Client client = mock(Client.class);
+		Client client = mock(Client.class);
 		when(client.resource(anyString())).thenReturn(resource);
 
 		TeamCityUrlBuilder teamCityUrlBuilder = mock(TeamCityUrlBuilder.class);
 
 		return new TeamCityJerseyClient(client, teamCityUrlBuilder);
-    }
+	}
 
 	private TeamCityBuild createBuild() {
 		return (TeamCityBuild) load("app/rest/builds/id:47068.xml", TeamCityBuild.class);
@@ -223,11 +222,11 @@ public class TeamCityTest {
 
 	private TeamCityProjects createProjects() {
 		return (TeamCityProjects) load("app/rest/projects.xml", TeamCityProjects.class);
-    }
+	}
 
-    private TeamCityProject createProject() {
+	private TeamCityProject createProject() {
 		return (TeamCityProject) load("app/rest/projects/id:project54.xml", TeamCityProject.class);
-    }
+	}
 
 	private TeamCityBuilds createBuilds() {
 		return (TeamCityBuilds) load("app/rest/builds.xml", TeamCityBuilds.class);

@@ -26,6 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "metrics")
 public final class Metrics {
 
-    protected List<QualityMetric> metrics;
+	protected List<QualityMetric> metrics;
 
 }
