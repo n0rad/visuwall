@@ -72,4 +72,10 @@ public class HudsonUrlBuilderTest {
         String userUrl = hudsonUrlBuilder.getUserUrl("Julien Smadja");
         assertEquals("http://ci.visuwall.awired.net/user/Julien%20Smadja/api/xml", userUrl);
     }
+
+	@Test
+    public void should_create_view_url() {
+    	String viewUrl = hudsonUrlBuilder.getViewUrl("android");
+		assertEquals("http://ci.visuwall.awired.net/view/android/api/xml", viewUrl);
+    }
 }

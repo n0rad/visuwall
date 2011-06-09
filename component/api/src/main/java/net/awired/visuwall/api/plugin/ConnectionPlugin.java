@@ -23,12 +23,13 @@ import java.util.Map;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.exception.ViewNotFoundException;
 
 public interface ConnectionPlugin {
 
@@ -101,5 +102,21 @@ public interface ConnectionPlugin {
 			throws ProjectNotFoundException, BuildNotFoundException;
 
 	List<String> findProjectNames();
+
+	/**
+	 * Software can sort projects by views, or graphically by tabs. If so, plugin can list these views.
+	 * 
+	 * @return List of view names
+	 */
+	List<String> findViews();
+
+	/**
+	 * If software sorts its projects by view, you should be able to retrieve project names by view name
+	 * 
+	 * @param viewName
+	 * @return List of project names contained in view
+	 * @throws ViewNotFoundException
+	 */
+	List<String> findProjectsByView(String viewName) throws ViewNotFoundException;
 
 }

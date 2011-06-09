@@ -16,15 +16,14 @@
 
 package net.awired.visuwall.hudsonclient;
 
+import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.ResourceNotFoundException;
 import net.awired.visuwall.hudsonclient.generated.hudson.HudsonUser;
+import net.awired.visuwall.hudsonclient.generated.hudson.HudsonView;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.Client;
@@ -34,8 +33,6 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 public class HudsonJerseyClient {
-
-    private static final Logger LOG = LoggerFactory.getLogger(HudsonJerseyClient.class);
 
     private Client client;
 
@@ -94,4 +91,23 @@ public class HudsonJerseyClient {
         return user;
     }
 
+	public HudsonView getHudsonView(String url) throws HudsonViewNotFoundException {
+		checkUrl(url);
+		try {
+			WebResource hudsonResource = resource(url);
+			HudsonView view = hudsonResource.get(HudsonView.class);
+			return view;
+		} catch (ResourceNotFoundException e) {
+			throw new HudsonViewNotFoundException("can't find view at " + url, e);
+		}
+	}
+
+	private WebResource resource(String url) throws ResourceNotFoundException {
+		try {
+			return client.resource(url);
+		} catch (UniformInterfaceException e) {
+			throw new ResourceNotFoundException(e);
+		}
+	}
+	
 }

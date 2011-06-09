@@ -31,6 +31,7 @@ import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.exception.ViewNotFoundException;
 
 public class EmptyConnectionPlugin implements ConnectionPlugin {
 
@@ -40,6 +41,7 @@ public class EmptyConnectionPlugin implements ConnectionPlugin {
 	private TestResult unitTestResult = new TestResult();
 	private TestResult integrationTestResult = new TestResult();
 	private HashMap<String, List<QualityMetric>> metricsByCategory = new HashMap<String, List<QualityMetric>>();
+	private List<String> views = new ArrayList<String>();
 
 	@Override
 	public List<ProjectId> findAllProjects() {
@@ -110,6 +112,16 @@ public class EmptyConnectionPlugin implements ConnectionPlugin {
 	@Override
 	public Map<String, List<QualityMetric>> getMetricsByCategory() {
 		return metricsByCategory;
+	}
+
+	@Override
+	public List<String> findViews() {
+		return views;
+	}
+
+	@Override
+	public List<String> findProjectsByView(String viewName) throws ViewNotFoundException {
+		throw new ViewNotFoundException("view called " + viewName + " not found");
 	}
 
 }

@@ -26,6 +26,7 @@ public class HudsonUrlBuilder {
     private static final String ALL_JOBS_URI = "";
     private static final String JOB_URI = "/job";
     private static final String USER_URI = "/user";
+	private static final String VIEW_URI = "/view";
 
     public HudsonUrlBuilder(String hudsonUrl) {
         Preconditions.checkNotNull(hudsonUrl);
@@ -90,5 +91,10 @@ public class HudsonUrlBuilder {
     public String getUserUrl(String userName) {
         Preconditions.checkNotNull(userName, "userName is mandatory");
         return hudsonUrl + USER_URI + "/" + encode(userName) + API_XML;
+    }
+
+	public String getViewUrl(String viewName) {
+		Preconditions.checkNotNull(viewName, "viewName is mandatory");
+		return hudsonUrl + VIEW_URI + "/" + encode(viewName) + API_XML;
     }
 }

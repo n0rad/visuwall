@@ -27,14 +27,17 @@ import net.awired.visuwall.hudsonclient.HudsonJerseyClient;
 import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonProjectBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
-import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
+import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.ResourceNotFoundException;
 import net.awired.visuwall.hudsonclient.generated.hudson.HudsonUser;
+import net.awired.visuwall.hudsonclient.generated.hudson.HudsonView;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
+import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelView;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelJob;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelRun;
@@ -174,6 +177,35 @@ public class HudsonFinder {
             projectNames.add(name);
         }
         return projectNames;
+    }
+
+	public List<String> findProjectNamesByView(String viewName) throws HudsonViewNotFoundException {
+		Preconditions.checkNotNull(viewName, "viewName is mandatory");
+		List<String> projectNames = new ArrayList<String>();
+
+		String viewUrl = hudsonUrlBuilder.getViewUrl(viewName);
+		HudsonView view = hudsonJerseyClient.getHudsonView(viewUrl);
+		for (HudsonModelJob job : view.getJobs()) {
+			projectNames.add(job.getName());
+		}
+		return projectNames;
+	}
+
+	public List<String> findViews() {
+		List<String> views = new ArrayList<String>();
+		String projectsUrl = hudsonUrlBuilder.getAllProjectsUrl();
+		HudsonModelHudson hudson = hudsonJerseyClient.getHudsonJobs(projectsUrl);
+		for (HudsonModelView view : hudson.getView()) {
+			addValidViewNAme(views, view);
+		}
+		return views;
+	}
+
+	private void addValidViewNAme(List<String> views, HudsonModelView view) {
+	    String viewName = view.getName();
+	    if (!"All".equals(viewName)) {
+	    	views.add(viewName);
+	    }
     }
 
     public boolean projectExists(String projectName) {

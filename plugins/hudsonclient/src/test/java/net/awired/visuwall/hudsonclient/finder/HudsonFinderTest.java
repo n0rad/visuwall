@@ -26,18 +26,25 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 
 import junit.framework.Assert;
 import net.awired.visuwall.hudsonclient.HudsonJerseyClient;
 import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.builder.TestResultBuilder;
-import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
+import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
+import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
 import net.awired.visuwall.hudsonclient.generated.hudson.HudsonUser;
+import net.awired.visuwall.hudsonclient.generated.hudson.HudsonView;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
@@ -137,5 +144,42 @@ public class HudsonFinderTest {
         boolean found = hudsonFinder.projectExists("projectName");
         assertTrue(found);
     }
+
+	@Test
+	public void should_return_all_views() {
+		HudsonModelHudson viewsResource = (HudsonModelHudson) load("hudson/views.xml", HudsonModelHudson.class);
+		when(hudsonJerseyClient.getHudsonJobs(anyString())).thenReturn(viewsResource);
+		List<String> views = hudsonFinder.findViews();
+		assertEquals(4, views.size());
+		List<String> expectedViews = Arrays.asList("android", "on", "on-tools", "synthesis");
+		for (String expectedView : expectedViews) {
+			assertTrue(views.contains(expectedView));
+		}
+	}
+
+	@Test
+	public void should_return_all_projects_of_a_view() throws HudsonViewNotFoundException {
+		HudsonView viewResource = (HudsonView) load("hudson/view.xml", HudsonView.class);
+		when(hudsonJerseyClient.getHudsonView(anyString())).thenReturn(viewResource);
+		List<String> projectNames = hudsonFinder.findProjectNamesByView("android");
+		assertEquals(4, projectNames.size());
+		List<String> expectedProjects = Arrays.asList("android-1.11", "android-1.11-daily", "android-trunk",
+		        "android-trunk-daily");
+		for (String expectedProject : expectedProjects) {
+			assertTrue(projectNames.contains(expectedProject));
+		}
+	}
+
+	private Object load(String fileName, Class<?> clazz) {
+		try {
+			String file = ClasspathFiles.getAbsolutePathFile(fileName);
+			URL url = new URL(file);
+			JAXBContext newInstance = JAXBContext.newInstance(clazz);
+			Unmarshaller unmarshaller = newInstance.createUnmarshaller();
+			return unmarshaller.unmarshal(url);
+		} catch (Exception t) {
+			throw new RuntimeException(t);
+		}
+	}
 
 }

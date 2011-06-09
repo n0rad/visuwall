@@ -28,12 +28,14 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.EmptyConnectionPlugin;
 import net.awired.visuwall.hudsonclient.Hudson;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -209,14 +211,29 @@ public final class JenkinsConnectionPlugin extends EmptyConnectionPlugin {
 		}
 	}
 
-	@VisibleForTesting
-	void setHudson(Hudson hudson) {
-		this.hudson = hudson;
-	}
-
 	@Override
 	public List<String> findProjectNames() {
 		return hudson.findProjectNames();
+	}
+
+	@Override
+	public List<String> findViews() {
+		return hudson.findViews();
+	}
+
+	@Override
+	public List<String> findProjectsByView(String viewName) throws ViewNotFoundException {
+		Preconditions.checkNotNull(viewName, "viewName is mandatory");
+		try {
+			return hudson.findProjectNameByView(viewName);
+		} catch (HudsonViewNotFoundException e) {
+			throw new ViewNotFoundException("can't find view named :" + viewName, e);
+		}
+	}
+
+	@VisibleForTesting
+	void setHudson(Hudson hudson) {
+		this.hudson = hudson;
 	}
 
 }

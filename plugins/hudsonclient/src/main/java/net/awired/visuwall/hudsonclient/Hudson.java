@@ -26,6 +26,7 @@ import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
 import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
 
 import org.joda.time.DateTime;
@@ -180,6 +181,15 @@ public class Hudson {
         List<String> projectNames = hudsonFinder.findProjectNames();
         return projectNames;
     }
+
+	public List<String> findViews() {
+		return hudsonFinder.findViews();
+	}
+	
+	public List<String> findProjectNameByView(String viewName) throws HudsonViewNotFoundException {
+		Preconditions.checkNotNull(viewName, "viewName is mandatory");
+		return hudsonFinder.findProjectNamesByView(viewName);
+	}
 
     private boolean hasPassedTests(String projectName) throws HudsonProjectNotFoundException {
         HudsonProject project = findProject(projectName);
