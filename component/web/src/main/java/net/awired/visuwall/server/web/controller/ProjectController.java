@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
+import net.awired.visuwall.core.domain.ConnectedProject;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotFoundException;
 import net.awired.visuwall.core.service.ProjectService;
@@ -44,7 +45,7 @@ public class ProjectController {
     ProjectService projectService;
     
     @RequestMapping
-    public @ResponseBody Collection<Project> getWallProjects(@PathVariable String wallName) throws NotFoundException {
+    public @ResponseBody Collection<ConnectedProject> getWallProjects(@PathVariable String wallName) throws NotFoundException {
         Wall wall = wallService.find(wallName);
     	return wall.getProjects();
     }
@@ -52,7 +53,8 @@ public class ProjectController {
     @RequestMapping("{projectName}")
     public @ResponseBody Project getProject(@PathVariable String wallName, @PathVariable String projectName) throws Exception {
         Wall wall = wallService.find(wallName);
-        projectService.updateWallProject(wall, projectName);
+        ConnectedProject project = wall.getProjectByName(projectName);
+        projectService.updateProject(project);
         return wall.getProjectByName(projectName);
     }
 

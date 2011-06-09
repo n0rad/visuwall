@@ -21,10 +21,10 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.NotImplementedOperationException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.core.domain.ConnectedProject;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
 
@@ -46,8 +46,7 @@ public class ProjectServiceTest {
 
 	@Test(expected = NullPointerException.class)
 	public void should_not_accept_null_parameter() throws NotCreatedException {
-		projectService.updateProject(null, new Project("test"));
-		projectService.updateProject(new ArrayList<ConnectionPlugin>(), null);
+		projectService.updateProject(null);
 	}
 
 	public List<ConnectionPlugin> getConnectionPlugins() throws NotImplementedOperationException {
@@ -62,19 +61,12 @@ public class ProjectServiceTest {
 		return connectionPlugins;
 	}
 
-	@Ignore
-	@Test
-	public void test() throws NotImplementedOperationException {
-		Wall wall = new Wall();
-		wall.setConnectionPlugin(getConnectionPlugins());
-		projectService.updateWallProjects(wall);
-	}
-
 	@Test
 	public void should_call_merge_for_plugins() throws NotImplementedOperationException {
 		List<ConnectionPlugin> connectionPlugins = getConnectionPlugins();
-		Project project = new Project("test");
-		projectService.updateProject(connectionPlugins, project);
+		ConnectedProject project = new ConnectedProject("test");
+		project.setConnectionPlugins(connectionPlugins);
+		projectService.updateProject(project);
 
 		Mockito.verify(projectService.projectEnhancerService).enhanceWithBuildInformations(project,
 		        connectionPlugins.iterator().next());

@@ -16,7 +16,6 @@
 
 package net.awired.visuwall.core.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -31,13 +30,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.core.utils.ShrinkList;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Cascade;
 import org.springframework.util.AutoPopulatingList;
 
@@ -68,11 +64,7 @@ public final class Wall {
 			SoftwareAccess.class);
 
 	@Transient
-	private List<Project> projects = new AutoPopulatingList<Project>(Project.class);
-
-	@Transient
-	@JsonIgnore
-	private List<ConnectionPlugin> connectionPlugin = new ArrayList<ConnectionPlugin>();
+	private List<ConnectedProject> projects = new AutoPopulatingList<ConnectedProject>(ConnectedProject.class);
 
 	public Wall() {
 	}
@@ -81,9 +73,9 @@ public final class Wall {
 		this.name = name;
 	}
 
-	public Project getProjectByProjectId(ProjectId projectId) throws ProjectNotFoundException {
+	public ConnectedProject getProjectByProjectId(ProjectId projectId) throws ProjectNotFoundException {
 		Preconditions.checkNotNull(projectId, "projectId is mandatory");
-		for (Project project : projects) {
+		for (ConnectedProject project : projects) {
 			if (projectId.equals(project.getProjectId())) {
 				return project;
 			}
@@ -91,9 +83,9 @@ public final class Wall {
 		throw new ProjectNotFoundException("project with this id not found : " + projectId);
 	}
 
-	public Project getProjectByName(String name) throws ProjectNotFoundException {
+	public ConnectedProject getProjectByName(String name) throws ProjectNotFoundException {
 		Preconditions.checkNotNull(name, "name is mandatory");
-		for (Project project : projects) {
+		for (ConnectedProject project : projects) {
 			if (name.equals(project.getName())) {
 				return project;
 			}
@@ -134,11 +126,11 @@ public final class Wall {
 		this.softwareAccesses = softwareAccesses;
 	}
 
-	public List<Project> getProjects() {
+	public List<ConnectedProject> getProjects() {
 		return projects;
 	}
 
-	public void setProjects(List<Project> projects) {
+	public void setProjects(List<ConnectedProject> projects) {
 		this.projects = projects;
 	}
 
@@ -150,14 +142,5 @@ public final class Wall {
 		this.id = id;
 	}
 
-	@JsonIgnore
-	public List<ConnectionPlugin> getConnectionPlugin() {
-		return connectionPlugin;
-	}
-
-	@JsonIgnore
-	public void setConnectionPlugin(List<ConnectionPlugin> connectionPlugin) {
-		this.connectionPlugin = connectionPlugin;
-	}
 
 }

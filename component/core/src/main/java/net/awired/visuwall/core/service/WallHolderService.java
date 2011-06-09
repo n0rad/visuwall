@@ -28,10 +28,10 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import net.awired.visuwall.api.domain.PluginInfo;
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.core.domain.ConnectedProject;
 import net.awired.visuwall.core.domain.SoftwareAccess;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
@@ -149,12 +149,10 @@ public class WallHolderService implements WallService {
 	private void reconstructWall(Wall wall) {
 		List<SoftwareAccess> softwareAccesses = wall.getSoftwareAccesses();
 		reconstructSoftwareAccesses(softwareAccesses);
-		if (softwareAccesses != null) {
-			List<ConnectionPlugin> connectionPlugins = pluginService
-					.getConnectionPluginsFromSoftwares(softwareAccesses);
-			wall.setConnectionPlugin(connectionPlugins);
-		}
-		projectService.updateWallProjects(wall);
+		List<ConnectionPlugin> connectionPlugins = pluginService
+				.getConnectionPluginsFromSoftwares(softwareAccesses);
+
+		projectService.updateWallProjects(connectionPlugins, wall);
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Done refreshing wall : " + wall + " and its "
 					+ wall.getProjects().size() + " projects");
@@ -183,22 +181,21 @@ public class WallHolderService implements WallService {
 		Preconditions.checkNotNull(wall, "wall not found for name", wallName);
 
 		List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
-		Iterator<Project> iter = wall.getProjects().iterator();
+		Iterator<ConnectedProject> iter = wall.getProjects().iterator();
 		while (iter.hasNext()) {
-			Project project = iter.next();
+			ConnectedProject project = iter.next();
 			ProjectStatus status = new ProjectStatus();
-
-			List<ConnectionPlugin> pluginHolder = wall.getConnectionPlugin();
+			List<ConnectionPlugin> connectionPlugin = project.getConnectionPlugins();
 			ProjectId projectId = project.getProjectId();
 
-			status.setBuilding(projectService.isBuilding(pluginHolder,
+			status.setBuilding(projectService.isBuilding(connectionPlugin,
 					projectId));
 			status.setLastBuildId(projectService.getLastBuildNumber(
-					pluginHolder, projectId));
+					connectionPlugin, projectId));
 			status.setName(projectId.getName());
 			try {
 				status.setState(projectService
-						.getState(pluginHolder, projectId));
+						.getState(connectionPlugin, projectId));
 			} catch (Exception e) {
 				LOG.debug("state of project not found", e);
 				iter.remove();
