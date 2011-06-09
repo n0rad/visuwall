@@ -16,7 +16,6 @@
 
 package net.awired.visuwall.plugin.sonar.exception;
 
-
 public class SonarMeasureNotFoundException extends Exception {
 
 	private static final long serialVersionUID = -7205356356110212352L;

@@ -20,81 +20,81 @@ import com.google.common.base.Preconditions;
 
 public class HudsonUrlBuilder {
 
-    private final String hudsonUrl;
+	private final String hudsonUrl;
 
-    private static final String API_XML = "/api/xml";
-    private static final String ALL_JOBS_URI = "";
-    private static final String JOB_URI = "/job";
-    private static final String USER_URI = "/user";
+	private static final String API_XML = "/api/xml";
+	private static final String ALL_JOBS_URI = "";
+	private static final String JOB_URI = "/job";
+	private static final String USER_URI = "/user";
 	private static final String VIEW_URI = "/view";
 
-    public HudsonUrlBuilder(String hudsonUrl) {
-        Preconditions.checkNotNull(hudsonUrl);
-        this.hudsonUrl = hudsonUrl;
-    }
+	public HudsonUrlBuilder(String hudsonUrl) {
+		Preconditions.checkNotNull(hudsonUrl);
+		this.hudsonUrl = hudsonUrl;
+	}
 
-    /**
-     * @param jobName
-     * @param buildNumber
-     * @return Hudson Url to obtain test informations of a job
-     */
-    public String getTestResultUrl(String jobName, int buildNumber) {
-        checkJobName(jobName);
-        checkBuildNumber(buildNumber);
-        return hudsonUrl + JOB_URI + "/" + encode(jobName) + "/" + buildNumber + "/testReport" + API_XML;
-    }
+	/**
+	 * @param jobName
+	 * @param buildNumber
+	 * @return Hudson Url to obtain test informations of a job
+	 */
+	public String getTestResultUrl(String jobName, int buildNumber) {
+		checkJobName(jobName);
+		checkBuildNumber(buildNumber);
+		return hudsonUrl + JOB_URI + "/" + encode(jobName) + "/" + buildNumber + "/testReport" + API_XML;
+	}
 
-    public String getPomUrl(String jobName) {
-        checkJobName(jobName);
-        return hudsonUrl + JOB_URI + "/" + encode(jobName) + "/ws/pom.xml";
-    }
+	public String getPomUrl(String jobName) {
+		checkJobName(jobName);
+		return hudsonUrl + JOB_URI + "/" + encode(jobName) + "/ws/pom.xml";
+	}
 
-    /**
-     * @return Hudson Url to obtain all jobs
-     */
-    public String getAllProjectsUrl() {
-        return hudsonUrl + ALL_JOBS_URI + API_XML;
-    }
+	/**
+	 * @return Hudson Url to obtain all jobs
+	 */
+	public String getAllProjectsUrl() {
+		return hudsonUrl + ALL_JOBS_URI + API_XML;
+	}
 
-    /**
-     * @param jobName
-     * @return Hudson Url to obtain informations of a job
-     */
-    public String getProjectUrl(String jobName) {
-        checkJobName(jobName);
-        return hudsonUrl + JOB_URI + "/" + encode(jobName) + API_XML;
-    }
+	/**
+	 * @param jobName
+	 * @return Hudson Url to obtain informations of a job
+	 */
+	public String getProjectUrl(String jobName) {
+		checkJobName(jobName);
+		return hudsonUrl + JOB_URI + "/" + encode(jobName) + API_XML;
+	}
 
-    /**
-     * @param jobName
-     * @param buildNumber
-     * @return Hudson Url to obtain detailed informations of a job
-     */
-    public String getBuildUrl(String jobName, int buildNumber) {
-        checkJobName(jobName);
-        checkBuildNumber(buildNumber);
-        return hudsonUrl + JOB_URI + "/" + encode(jobName) + "/" + buildNumber + API_XML;
-    }
+	/**
+	 * @param jobName
+	 * @param buildNumber
+	 * @return Hudson Url to obtain detailed informations of a job
+	 */
+	public String getBuildUrl(String jobName, int buildNumber) {
+		checkJobName(jobName);
+		checkBuildNumber(buildNumber);
+		return hudsonUrl + JOB_URI + "/" + encode(jobName) + "/" + buildNumber + API_XML;
+	}
 
-    private String encode(String url) {
-        return url.replaceAll(" ", "%20");
-    }
+	private String encode(String url) {
+		return url.replaceAll(" ", "%20");
+	}
 
-    private void checkJobName(String jobName) {
-        Preconditions.checkNotNull(jobName, "jobName is mandatory");
-    }
+	private void checkJobName(String jobName) {
+		Preconditions.checkNotNull(jobName, "jobName is mandatory");
+	}
 
-    private void checkBuildNumber(int buildNumber) {
-        Preconditions.checkArgument(buildNumber >= 0, "buidNumber must be positive");
-    }
+	private void checkBuildNumber(int buildNumber) {
+		Preconditions.checkArgument(buildNumber >= 0, "buidNumber must be positive");
+	}
 
-    public String getUserUrl(String userName) {
-        Preconditions.checkNotNull(userName, "userName is mandatory");
-        return hudsonUrl + USER_URI + "/" + encode(userName) + API_XML;
-    }
+	public String getUserUrl(String userName) {
+		Preconditions.checkNotNull(userName, "userName is mandatory");
+		return hudsonUrl + USER_URI + "/" + encode(userName) + API_XML;
+	}
 
 	public String getViewUrl(String viewName) {
 		Preconditions.checkNotNull(viewName, "viewName is mandatory");
 		return hudsonUrl + VIEW_URI + "/" + encode(viewName) + API_XML;
-    }
+	}
 }

@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TeamCityProjects {
 
-    @XmlElements(value = { @XmlElement(name = "project") })
+	@XmlElements(value = { @XmlElement(name = "project") })
 	private List<TeamCityProject> projects;
 
 	public List<TeamCityProject> getProjects() {

@@ -27,85 +27,85 @@ import com.google.common.base.Objects.ToStringHelper;
 
 public final class Build {
 
-    private State state = State.UNKNOWN;
-    private Set<Commiter> commiters = new TreeSet<Commiter>();
-    private long duration;
-    private Date startTime;
-    private TestResult unitTestResult = new TestResult();
-    private TestResult integrationTestResult = new TestResult();
-    private int buildNumber;
-    
-    public long getDuration() {
-        return duration;
-    }
+	private State state = State.UNKNOWN;
+	private Set<Commiter> commiters = new TreeSet<Commiter>();
+	private long duration;
+	private Date startTime;
+	private TestResult unitTestResult = new TestResult();
+	private TestResult integrationTestResult = new TestResult();
+	private int buildNumber;
 
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
+	public long getDuration() {
+		return duration;
+	}
 
-    public Date getStartTime() {
-        return startTime;
-    }
+	public void setDuration(long duration) {
+		this.duration = duration;
+	}
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
+	public Date getStartTime() {
+		return startTime;
+	}
 
-    public TestResult getUnitTestResult() {
-        return unitTestResult;
-    }
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
 
-    public TestResult getIntegrationTestResult() {
-        return integrationTestResult;
-    }
+	public TestResult getUnitTestResult() {
+		return unitTestResult;
+	}
 
-    public State getState() {
-        return state;
-    }
+	public TestResult getIntegrationTestResult() {
+		return integrationTestResult;
+	}
 
-    public void setState(State state) {
-        this.state = state;
-    }
+	public State getState() {
+		return state;
+	}
 
-    public int getBuildNumber() {
-        return buildNumber;
-    }
+	public void setState(State state) {
+		this.state = state;
+	}
 
-    public void setBuildNumber(int buildNumber) {
-        this.buildNumber = buildNumber;
-    }
+	public int getBuildNumber() {
+		return buildNumber;
+	}
 
-    @Override
-    public String toString() {
-        ToStringHelper toString = Objects.toStringHelper(this) //
-                .add("builder number", buildNumber) //
-                .add("state", state) //
-                .add("commiters", commiters) //
-                .add("duration", duration) //
-                .add("startTime", startTime);
-        if (unitTestResult != null) {
-            toString.add("unit test result", unitTestResult.toString());
-        }
-        if (integrationTestResult != null) {
-            toString.add("integration test result", integrationTestResult.toString());
-        }
-        return toString.toString();
-    }
+	public void setBuildNumber(int buildNumber) {
+		this.buildNumber = buildNumber;
+	}
 
-    public void setIntegrationTestResult(TestResult integrationTestResult) {
-        setTestResult(integrationTestResult, this.integrationTestResult);
-    }
+	@Override
+	public String toString() {
+		ToStringHelper toString = Objects.toStringHelper(this) //
+		        .add("builder number", buildNumber) //
+		        .add("state", state) //
+		        .add("commiters", commiters) //
+		        .add("duration", duration) //
+		        .add("startTime", startTime);
+		if (unitTestResult != null) {
+			toString.add("unit test result", unitTestResult.toString());
+		}
+		if (integrationTestResult != null) {
+			toString.add("integration test result", integrationTestResult.toString());
+		}
+		return toString.toString();
+	}
 
-    public void setUnitTestResult(TestResult unitTestResult) {
-        setTestResult(unitTestResult, this.unitTestResult);
-    }
+	public void setIntegrationTestResult(TestResult integrationTestResult) {
+		setTestResult(integrationTestResult, this.integrationTestResult);
+	}
 
-    private void setTestResult(TestResult from, TestResult to) {
-        to.setCoverage(from.getCoverage());
-        to.setFailCount(from.getFailCount());
-        to.setPassCount(from.getPassCount());
-        to.setSkipCount(from.getSkipCount());
-    }
+	public void setUnitTestResult(TestResult unitTestResult) {
+		setTestResult(unitTestResult, this.unitTestResult);
+	}
+
+	private void setTestResult(TestResult from, TestResult to) {
+		to.setCoverage(from.getCoverage());
+		to.setFailCount(from.getFailCount());
+		to.setPassCount(from.getPassCount());
+		to.setSkipCount(from.getSkipCount());
+	}
 
 	public Set<Commiter> getCommiters() {
 		return commiters;

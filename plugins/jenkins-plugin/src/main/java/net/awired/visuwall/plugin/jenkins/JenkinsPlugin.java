@@ -38,40 +38,40 @@ public class JenkinsPlugin implements VisuwallPlugin {
 
 	private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
 
-    @Override
-    public ConnectionPlugin getConnection(String url, Properties info) {
-        JenkinsConnectionPlugin jenkinsConnectionPlugin = new JenkinsConnectionPlugin();
-        jenkinsConnectionPlugin.connect(url);
-        return jenkinsConnectionPlugin;
-    }
-    
-    @Override
-    public PluginInfo getInfo() {
-    	PluginInfo pluginInfo = new PluginInfo();
-    	pluginInfo.setName("Jenkins plugin");
-    	pluginInfo.setVersion(1.0f);
-    	pluginInfo.setClassName(this.getClass().getName());
-    	return pluginInfo;
-    }
+	@Override
+	public ConnectionPlugin getConnection(String url, Properties info) {
+		JenkinsConnectionPlugin jenkinsConnectionPlugin = new JenkinsConnectionPlugin();
+		jenkinsConnectionPlugin.connect(url);
+		return jenkinsConnectionPlugin;
+	}
 
-    @Override
+	@Override
+	public PluginInfo getInfo() {
+		PluginInfo pluginInfo = new PluginInfo();
+		pluginInfo.setName("Jenkins plugin");
+		pluginInfo.setVersion(1.0f);
+		pluginInfo.setClassName(this.getClass().getName());
+		return pluginInfo;
+	}
+
+	@Override
 	public SoftwareId isManageable(URL url) throws IncompatibleSoftwareException {
-        Preconditions.checkNotNull(url, "url is mandatory");
+		Preconditions.checkNotNull(url, "url is mandatory");
 		String xml = getContent(url);
 		if (isManageable(xml)) {
 			return createSoftwareId(xml);
 		}
 		throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Jenkins");
-    }
+	}
 
 	private SoftwareId createSoftwareId(String xml) {
-	    SoftwareId softwareId = new SoftwareId();
+		SoftwareId softwareId = new SoftwareId();
 		softwareId.setName("Jenkins");
-	    String strVersion = getVersion(xml);
-	    softwareId.setVersion(strVersion);
-	    addWarnings(softwareId, strVersion);
-	    return softwareId;
-    }
+		String strVersion = getVersion(xml);
+		softwareId.setVersion(strVersion);
+		addWarnings(softwareId, strVersion);
+		return softwareId;
+	}
 
 	private void addWarnings(SoftwareId softwareInfo, String strVersion) {
 		double version = Double.parseDouble(strVersion);
@@ -80,9 +80,8 @@ public class JenkinsPlugin implements VisuwallPlugin {
 	}
 
 	private void addWarningForVersionBefore1405(SoftwareId softwareInfo) {
-	    softwareInfo
-	            .setWarnings("This jenkins version has a bug with git project. Git project wont be display.");
-    }
+		softwareInfo.setWarnings("This jenkins version has a bug with git project. Git project wont be display.");
+	}
 
 	private String getVersion(String xml) {
 		return new JenkinsVersionExtractor(xml).version();
@@ -90,7 +89,7 @@ public class JenkinsPlugin implements VisuwallPlugin {
 
 	private boolean isManageable(String xml) {
 		return xml.contains("Remote API [Jenkins]");
-    }
+	}
 
 	private String getContent(URL url) {
 		InputStream stream = null;

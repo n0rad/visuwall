@@ -38,7 +38,6 @@ public final class HudsonBuild {
 		commiters.add(commiter);
 	}
 
-	
 	public boolean isSuccessful() {
 		return successful;
 	}
@@ -50,7 +49,6 @@ public final class HudsonBuild {
 	public Set<HudsonCommiter> getCommiters() {
 		return commiters;
 	}
-
 
 	public long getDuration() {
 		return duration;
@@ -103,18 +101,17 @@ public final class HudsonBuild {
 	@Override
 	public String toString() {
 		ToStringHelper toString = Objects.toStringHelper(this) //
-				.add("build number", buildNumber) //
-				.add("status", successful) //
-				.add("commiters", commiters) //
-				.add("duration", duration) //
-				.add("startTime", startTime) //
-				.add("state", state); //
+		        .add("build number", buildNumber) //
+		        .add("status", successful) //
+		        .add("commiters", commiters) //
+		        .add("duration", duration) //
+		        .add("startTime", startTime) //
+		        .add("state", state); //
 		if (unitTestResult != null) {
 			toString.add("unit test result", unitTestResult.toString());
 		}
 		if (integrationTestResult != null) {
-			toString.add("integration test result",
-					integrationTestResult.toString());
+			toString.add("integration test result", integrationTestResult.toString());
 		}
 		return toString.toString();
 	}

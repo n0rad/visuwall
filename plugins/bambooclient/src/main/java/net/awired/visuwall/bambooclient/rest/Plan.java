@@ -25,19 +25,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "plan")
 public class Plan {
 
-    @XmlAttribute
-    public Boolean enabled;
+	@XmlAttribute
+	public Boolean enabled;
 
-    @XmlAttribute
-    public String type;
+	@XmlAttribute
+	public String type;
 
-    @XmlAttribute
-    public String name;
+	@XmlAttribute
+	public String name;
 
-    @XmlAttribute
-    public String key;
+	@XmlAttribute
+	public String key;
 
-    public Link link;
+	public Link link;
 
-    public Boolean isBuilding;
+	public Boolean isBuilding;
 }

@@ -22,60 +22,60 @@ import org.junit.Test;
 
 public class HudsonUrlBuilderTest {
 
-    private static final String HUDSON_URL = "http://ci.visuwall.awired.net";
+	private static final String HUDSON_URL = "http://ci.visuwall.awired.net";
 
-    HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(HUDSON_URL);
-
-    @Test
-    public void should_create_good_pom_url() {
-        String pomUrl = hudsonUrlBuilder.getPomUrl("struts");
-        assertEquals("http://ci.visuwall.awired.net/job/struts/ws/pom.xml", pomUrl);
-    }
-
-    @Test
-    public void should_create_good_test_url() {
-        String testUrl = hudsonUrlBuilder.getTestResultUrl("struts", 5);
-        assertEquals("http://ci.visuwall.awired.net/job/struts/5/testReport/api/xml", testUrl);
-    }
-
-    @Test
-    public void should_create_good_all_projects_url() {
-        String testUrl = hudsonUrlBuilder.getAllProjectsUrl();
-        assertEquals("http://ci.visuwall.awired.net/api/xml", testUrl);
-    }
-
-    @Test
-    public void should_create_good_build_url() {
-        String testUrl = hudsonUrlBuilder.getBuildUrl("struts", 7);
-        assertEquals("http://ci.visuwall.awired.net/job/struts/7/api/xml", testUrl);
-    }
-
-    @Test
-    public void should_create_good_project_url() {
-        String testUrl = hudsonUrlBuilder.getProjectUrl("struts");
-        assertEquals("http://ci.visuwall.awired.net/job/struts/api/xml", testUrl);
-    }
-
-    @Test
-    public void should_create_good_url_with_spaces() {
-        String testUrl = hudsonUrlBuilder.getBuildUrl("struts 2", 7);
-        assertEquals("http://ci.visuwall.awired.net/job/struts%202/7/api/xml", testUrl);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void should_not_accept_negative_numbers_as_build_number() {
-        hudsonUrlBuilder.getBuildUrl("struts", -1);
-    }
-
-    @Test
-    public void should_create_user_url() {
-        String userUrl = hudsonUrlBuilder.getUserUrl("Julien Smadja");
-        assertEquals("http://ci.visuwall.awired.net/user/Julien%20Smadja/api/xml", userUrl);
-    }
+	HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(HUDSON_URL);
 
 	@Test
-    public void should_create_view_url() {
-    	String viewUrl = hudsonUrlBuilder.getViewUrl("android");
+	public void should_create_good_pom_url() {
+		String pomUrl = hudsonUrlBuilder.getPomUrl("struts");
+		assertEquals("http://ci.visuwall.awired.net/job/struts/ws/pom.xml", pomUrl);
+	}
+
+	@Test
+	public void should_create_good_test_url() {
+		String testUrl = hudsonUrlBuilder.getTestResultUrl("struts", 5);
+		assertEquals("http://ci.visuwall.awired.net/job/struts/5/testReport/api/xml", testUrl);
+	}
+
+	@Test
+	public void should_create_good_all_projects_url() {
+		String testUrl = hudsonUrlBuilder.getAllProjectsUrl();
+		assertEquals("http://ci.visuwall.awired.net/api/xml", testUrl);
+	}
+
+	@Test
+	public void should_create_good_build_url() {
+		String testUrl = hudsonUrlBuilder.getBuildUrl("struts", 7);
+		assertEquals("http://ci.visuwall.awired.net/job/struts/7/api/xml", testUrl);
+	}
+
+	@Test
+	public void should_create_good_project_url() {
+		String testUrl = hudsonUrlBuilder.getProjectUrl("struts");
+		assertEquals("http://ci.visuwall.awired.net/job/struts/api/xml", testUrl);
+	}
+
+	@Test
+	public void should_create_good_url_with_spaces() {
+		String testUrl = hudsonUrlBuilder.getBuildUrl("struts 2", 7);
+		assertEquals("http://ci.visuwall.awired.net/job/struts%202/7/api/xml", testUrl);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void should_not_accept_negative_numbers_as_build_number() {
+		hudsonUrlBuilder.getBuildUrl("struts", -1);
+	}
+
+	@Test
+	public void should_create_user_url() {
+		String userUrl = hudsonUrlBuilder.getUserUrl("Julien Smadja");
+		assertEquals("http://ci.visuwall.awired.net/user/Julien%20Smadja/api/xml", userUrl);
+	}
+
+	@Test
+	public void should_create_view_url() {
+		String viewUrl = hudsonUrlBuilder.getViewUrl("android");
 		assertEquals("http://ci.visuwall.awired.net/view/android/api/xml", viewUrl);
-    }
+	}
 }

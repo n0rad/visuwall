@@ -28,22 +28,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TeamCityProject {
 
-    @XmlAttribute
+	@XmlAttribute
 	private String name;
 
-    @XmlAttribute
+	@XmlAttribute
 	private String id;
 
-    @XmlAttribute
+	@XmlAttribute
 	private String href;
 
-    @XmlAttribute
+	@XmlAttribute
 	private String webUrl;
 
-    @XmlAttribute
+	@XmlAttribute
 	private String description;
 
-    @XmlAttribute
+	@XmlAttribute
 	private boolean archived;
 
 	@XmlElement

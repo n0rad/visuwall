@@ -24,11 +24,11 @@ import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
 public interface VisuwallPlugin {
 
-	//TODO change url to URL type
-    ConnectionPlugin getConnection(String url, java.util.Properties info);
+	// TODO change url to URL type
+	ConnectionPlugin getConnection(String url, java.util.Properties info);
 
-    PluginInfo getInfo();
-    
+	PluginInfo getInfo();
+
 	SoftwareId isManageable(URL url) throws IncompatibleSoftwareException;
 
 }

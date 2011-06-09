@@ -24,11 +24,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 
-
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "metrics")
 public class SonarMetrics {
 
-    public List<QualityMetric> metric;
+	public List<QualityMetric> metric;
 
 }

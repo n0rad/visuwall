@@ -33,49 +33,49 @@ import com.sun.jersey.api.client.WebResource;
 
 public class HudsonJerseyClientTest {
 
-    @Test
-    public void testGetSurefireReport() throws ResourceNotFoundException {
-        HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonMavenReportersSurefireAggregatedReport());
-        HudsonMavenReportersSurefireAggregatedReport surefireReport = hudsonJerseyClient.getSurefireReport("url");
-        assertNotNull(surefireReport);
-    }
+	@Test
+	public void testGetSurefireReport() throws ResourceNotFoundException {
+		HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonMavenReportersSurefireAggregatedReport());
+		HudsonMavenReportersSurefireAggregatedReport surefireReport = hudsonJerseyClient.getSurefireReport("url");
+		assertNotNull(surefireReport);
+	}
 
-    @Test
-    public void testGetModuleSetBuild() {
-        HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonMavenMavenModuleSetBuild());
-        HudsonMavenMavenModuleSetBuild moduleSetBuild = hudsonJerseyClient.getModuleSetBuild("url");
-        assertNotNull(moduleSetBuild);
-    }
+	@Test
+	public void testGetModuleSetBuild() {
+		HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonMavenMavenModuleSetBuild());
+		HudsonMavenMavenModuleSetBuild moduleSetBuild = hudsonJerseyClient.getModuleSetBuild("url");
+		assertNotNull(moduleSetBuild);
+	}
 
-    @Test
-    public void testGetModuleSet() {
-        HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonMavenMavenModuleSet());
-        HudsonMavenMavenModuleSet moduleSet = hudsonJerseyClient.getModuleSet("url");
-        assertNotNull(moduleSet);
-    }
+	@Test
+	public void testGetModuleSet() {
+		HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonMavenMavenModuleSet());
+		HudsonMavenMavenModuleSet moduleSet = hudsonJerseyClient.getModuleSet("url");
+		assertNotNull(moduleSet);
+	}
 
-    @Test
-    public void testGetHudsonJobs() {
-        HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonModelHudson());
-        HudsonModelHudson hudsonModel = hudsonJerseyClient.getHudsonJobs("url");
-        assertNotNull(hudsonModel);
-    }
+	@Test
+	public void testGetHudsonJobs() {
+		HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonModelHudson());
+		HudsonModelHudson hudsonModel = hudsonJerseyClient.getHudsonJobs("url");
+		assertNotNull(hudsonModel);
+	}
 
-    @Test
-    public void testGetHudsonUser() {
-        HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonUser());
-        HudsonUser hudsonUser = hudsonJerseyClient.getHudsonUser("url");
-        assertNotNull(hudsonUser);
-    }
+	@Test
+	public void testGetHudsonUser() {
+		HudsonJerseyClient hudsonJerseyClient = prepareClientFor(new HudsonUser());
+		HudsonUser hudsonUser = hudsonJerseyClient.getHudsonUser("url");
+		assertNotNull(hudsonUser);
+	}
 
-    private HudsonJerseyClient prepareClientFor(Object o) {
-        WebResource resource = Mockito.mock(WebResource.class);
-        when(resource.get(Mockito.any(Class.class))).thenReturn(o);
+	private HudsonJerseyClient prepareClientFor(Object o) {
+		WebResource resource = Mockito.mock(WebResource.class);
+		when(resource.get(Mockito.any(Class.class))).thenReturn(o);
 
-        Client client = Mockito.mock(Client.class);
-        when(client.resource(Mockito.anyString())).thenReturn(resource);
+		Client client = Mockito.mock(Client.class);
+		when(client.resource(Mockito.anyString())).thenReturn(resource);
 
-        HudsonJerseyClient hudsonJerseyClient = new HudsonJerseyClient(client);
-        return hudsonJerseyClient;
-    }
+		HudsonJerseyClient hudsonJerseyClient = new HudsonJerseyClient(client);
+		return hudsonJerseyClient;
+	}
 }

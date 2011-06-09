@@ -34,62 +34,62 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 public class HudsonJerseyClient {
 
-    private Client client;
+	private Client client;
 
-    public HudsonJerseyClient(Client client) {
-        Preconditions.checkNotNull(client, "client is mandatory");
-        this.client = client;
-    }
+	public HudsonJerseyClient(Client client) {
+		Preconditions.checkNotNull(client, "client is mandatory");
+		this.client = client;
+	}
 
-    public HudsonJerseyClient() {
-        ClientConfig clientConfig = new DefaultClientConfig();
-        clientConfig.getClasses();
-        client = Client.create(clientConfig);
-    }
+	public HudsonJerseyClient() {
+		ClientConfig clientConfig = new DefaultClientConfig();
+		clientConfig.getClasses();
+		client = Client.create(clientConfig);
+	}
 
-    public HudsonMavenReportersSurefireAggregatedReport getSurefireReport(String url) throws ResourceNotFoundException {
-        checkUrl(url);
-        try {
-            WebResource testResultResource = client.resource(url);
-            HudsonMavenReportersSurefireAggregatedReport surefireReport = testResultResource
-                    .get(HudsonMavenReportersSurefireAggregatedReport.class);
-            return surefireReport;
-        } catch (UniformInterfaceException e) {
-            throw new ResourceNotFoundException("No resource found at " + url);
-        }
-    }
+	public HudsonMavenReportersSurefireAggregatedReport getSurefireReport(String url) throws ResourceNotFoundException {
+		checkUrl(url);
+		try {
+			WebResource testResultResource = client.resource(url);
+			HudsonMavenReportersSurefireAggregatedReport surefireReport = testResultResource
+			        .get(HudsonMavenReportersSurefireAggregatedReport.class);
+			return surefireReport;
+		} catch (UniformInterfaceException e) {
+			throw new ResourceNotFoundException("No resource found at " + url);
+		}
+	}
 
-    public HudsonMavenMavenModuleSetBuild getModuleSetBuild(String url) {
-        checkUrl(url);
-        WebResource jobResource = client.resource(url);
-        HudsonMavenMavenModuleSetBuild setBuild = jobResource.get(HudsonMavenMavenModuleSetBuild.class);
-        return setBuild;
-    }
+	public HudsonMavenMavenModuleSetBuild getModuleSetBuild(String url) {
+		checkUrl(url);
+		WebResource jobResource = client.resource(url);
+		HudsonMavenMavenModuleSetBuild setBuild = jobResource.get(HudsonMavenMavenModuleSetBuild.class);
+		return setBuild;
+	}
 
-    public HudsonMavenMavenModuleSet getModuleSet(String url) throws UniformInterfaceException {
-        checkUrl(url);
-        WebResource projectResource = client.resource(url);
-        HudsonMavenMavenModuleSet moduleSet = projectResource.get(HudsonMavenMavenModuleSet.class);
-        return moduleSet;
-    }
+	public HudsonMavenMavenModuleSet getModuleSet(String url) throws UniformInterfaceException {
+		checkUrl(url);
+		WebResource projectResource = client.resource(url);
+		HudsonMavenMavenModuleSet moduleSet = projectResource.get(HudsonMavenMavenModuleSet.class);
+		return moduleSet;
+	}
 
-    public HudsonModelHudson getHudsonJobs(String url) {
-        checkUrl(url);
-        WebResource hudsonResource = client.resource(url);
-        HudsonModelHudson hudson = hudsonResource.get(HudsonModelHudson.class);
-        return hudson;
-    }
+	public HudsonModelHudson getHudsonJobs(String url) {
+		checkUrl(url);
+		WebResource hudsonResource = client.resource(url);
+		HudsonModelHudson hudson = hudsonResource.get(HudsonModelHudson.class);
+		return hudson;
+	}
 
-    private void checkUrl(String url) {
-        Preconditions.checkNotNull(url, "url is mandatory");
-    }
+	private void checkUrl(String url) {
+		Preconditions.checkNotNull(url, "url is mandatory");
+	}
 
-    public HudsonUser getHudsonUser(String url) {
-        checkUrl(url);
-        WebResource hudsonResource = client.resource(url);
-        HudsonUser user = hudsonResource.get(HudsonUser.class);
-        return user;
-    }
+	public HudsonUser getHudsonUser(String url) {
+		checkUrl(url);
+		WebResource hudsonResource = client.resource(url);
+		HudsonUser user = hudsonResource.get(HudsonUser.class);
+		return user;
+	}
 
 	public HudsonView getHudsonView(String url) throws HudsonViewNotFoundException {
 		checkUrl(url);
@@ -109,5 +109,5 @@ public class HudsonJerseyClient {
 			throw new ResourceNotFoundException(e);
 		}
 	}
-	
+
 }

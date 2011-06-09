@@ -74,7 +74,7 @@ public class ProjectBuilder {
 
 		Set<HudsonCommiter> hudsonCommiters = hudsonBuild.getCommiters();
 		Set<Commiter> commiters = createCommiters(hudsonCommiters);
-        build.setCommiters(commiters);
+		build.setCommiters(commiters);
 		build.setDuration(hudsonBuild.getDuration());
 		build.setStartTime(hudsonBuild.getStartTime());
 		build.setBuildNumber(hudsonBuild.getBuildNumber());
