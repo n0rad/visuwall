@@ -34,8 +34,7 @@ import net.awired.visuwall.api.exception.ViewNotFoundException;
 public interface ConnectionPlugin {
 
 	/**
-	 * Generate a complete quality reporting for a project defined by
-	 * <code>projectId</code>
+	 * Generate a complete quality reporting for a project defined by <code>projectId</code>
 	 * 
 	 * @param projectId
 	 * @param metrics
@@ -71,36 +70,89 @@ public interface ConnectionPlugin {
 	 */
 	Map<String, List<QualityMetric>> getMetricsByCategory();
 
+	/**
+	 * Return the full list of project id contained in the software
+	 * 
+	 * @return
+	 */
 	List<ProjectId> findAllProjects();
 
+	/**
+	 * Plugin should be able to retrieve projects by theirs projectId. ProjectId are filled when you call
+	 * findAllProjects for example
+	 * 
+	 * @param projectId
+	 * @return
+	 * @throws ProjectNotFoundException
+	 */
 	Project findProject(ProjectId projectId) throws ProjectNotFoundException;
 
-	Build findBuildByBuildNumber(ProjectId projectId, int buildNumber)
-			throws BuildNotFoundException, ProjectNotFoundException;
+	/**
+	 * Build software can order their builds by number, plugin should be able to retrieve builds by number too
+	 * 
+	 * @param projectId
+	 * @param buildNumber
+	 * @return
+	 * @throws BuildNotFoundException
+	 * @throws ProjectNotFoundException
+	 */
+	Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
+	        ProjectNotFoundException;
 
 	/**
-	 * Populating a project means fill its attributes with all data that you can
-	 * fetch from your system If you can fetch State or Build informations, add
-	 * it in <code>project</code>!
+	 * Populating a project means fill its attributes with all data that you can fetch from your system If you can fetch
+	 * State or Build informations, add it in <code>project</code>!
 	 * 
 	 * @param project
 	 *            Project to populate
 	 * @throws ProjectNotFoundException
-	 *             Throw this exception if you can't find this project in your
-	 *             system
+	 *             Throw this exception if you can't find this project in your system
 	 */
 	void populate(Project project) throws ProjectNotFoundException;
 
-	Date getEstimatedFinishTime(ProjectId projectId)
-			throws ProjectNotFoundException;
+	/**
+	 * If a project is building, plugin can calculate the estimated finish time
+	 * 
+	 * @param projectId
+	 * @return
+	 * @throws ProjectNotFoundException
+	 */
+	Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException;
 
+	/**
+	 * Return true if project is building
+	 * 
+	 * @param projectId
+	 * @return
+	 * @throws ProjectNotFoundException
+	 */
 	boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException;
 
+	/**
+	 * Project are in a certain state which may vary between software You'll have to try to associate them with common
+	 * States
+	 * 
+	 * @param projectId
+	 * @return
+	 * @throws ProjectNotFoundException
+	 */
 	State getState(ProjectId projectId) throws ProjectNotFoundException;
 
-	int getLastBuildNumber(ProjectId projectId)
-			throws ProjectNotFoundException, BuildNotFoundException;
+	/**
+	 * Return the last build number of a project
+	 * 
+	 * @param projectId
+	 * @return
+	 * @throws ProjectNotFoundException
+	 * @throws BuildNotFoundException
+	 */
+	int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException;
 
+	/**
+	 * Find all project names of projects handle by the software
+	 * 
+	 * @return
+	 */
 	List<String> findProjectNames();
 
 	/**
