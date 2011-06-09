@@ -27,12 +27,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-teamcityclient</artifactId>
 		</dependency>
@@ -40,10 +34,17 @@
 		<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-api</artifactId>
 		</dependency>
+	
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
-			<version>1.8.5</version>
+			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
