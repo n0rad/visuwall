@@ -39,7 +39,7 @@ public class WallTest {
         projectId.setName("name");
 
         Wall wall = new Wall();
-        Project project = new Project(projectId);
+        ConnectedProject project = new ConnectedProject(projectId);
         wall.getProjects().add(project);
 
         Project foundProject = wall.getProjectByProjectId(projectId);
@@ -59,7 +59,7 @@ public class WallTest {
         projectId.setName("name");
 
         Wall wall = new Wall();
-        Project project = new Project(projectId);
+        ConnectedProject project = new ConnectedProject(projectId);
         wall.getProjects().add(project);
 
         Project foundProject = wall.getProjectByName("name");

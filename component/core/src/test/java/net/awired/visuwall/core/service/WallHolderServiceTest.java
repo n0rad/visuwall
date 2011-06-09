@@ -27,15 +27,14 @@ import java.util.Set;
 
 import javax.persistence.Query;
 
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectStatus;
+import net.awired.visuwall.core.domain.ConnectedProject;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -125,7 +124,7 @@ public class WallHolderServiceTest {
 		wallHolderService.persist(wall2);
 
 		Wall wall = wallHolderService.find("wall1");
-		Project project = new Project("test");
+		ConnectedProject project = new ConnectedProject("test");
 		wall.getProjects().add(project);
 
 		List<ProjectStatus> status = wallHolderService.getStatus("wall1");

@@ -22,12 +22,12 @@ import java.util.List;
 import javax.persistence.Transient;
 
 import net.awired.visuwall.api.domain.Build;
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.core.domain.ConnectedProject;
 import net.awired.visuwall.core.domain.Wall;
 
 import org.slf4j.Logger;
@@ -50,36 +50,28 @@ public class ProjectService {
 	@Transient
 	String[] metrics = new String[] { "coverage", "ncloc", "violations_density", "it_coverage" };
 
-	public void updateWallProjects(Wall wall) {
+	public void updateWallProjects(List<ConnectionPlugin> connectionPlugins, Wall wall) {
 		Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
 
-		for (ConnectionPlugin buildService : wall.getConnectionPlugin()) {
+		for (ConnectionPlugin buildService : connectionPlugins) {
 			List<ProjectId> discoveredProjects = buildService.findAllProjects();
 			for (ProjectId discoveredProjectId : discoveredProjects) {
-
-				Project project;
+				ConnectedProject project;
 				try {
 					project = wall.getProjectByProjectId(discoveredProjectId);
 				} catch (ProjectNotFoundException e) {
-					project = new Project(discoveredProjectId);
+					project = new ConnectedProject(discoveredProjectId);
+					project.setConnectionPlugins(connectionPlugins);
 					wall.getProjects().add(project);
 				}
-
-				updateProject(wall.getConnectionPlugin(), project);
+				updateProject(project);
 			}
 		}
 	}
 
-	public void updateWallProject(Wall wall, String projectName) throws ProjectNotFoundException {
-		Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
-		Preconditions.checkNotNull(projectName, "projectName is a mandatory parameter");
-
-		Project project = wall.getProjectByName(projectName);
-		updateProject(wall.getConnectionPlugin(), project);
-	}
-
-	void updateProject(List<ConnectionPlugin> connectionPlugins, Project project) {
-		for (ConnectionPlugin service : connectionPlugins) {
+	public void updateProject(ConnectedProject project) {
+		Preconditions.checkNotNull(project, "project is a mandatory parameter");
+		for (ConnectionPlugin service : project.getConnectionPlugins()) {
 			projectEnhancerService.enhanceWithBuildInformations(project, service);
 			projectEnhancerService.enhanceWithQualityAnalysis(project, service, metrics);
 		}
@@ -96,10 +88,10 @@ public class ProjectService {
 		Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
 		Preconditions.checkNotNull(projectName, "projectName is a mandatory parameter");
 
-		ProjectId projectId = wall.getProjectByName(projectName).getProjectId();
-		for (ConnectionPlugin service : wall.getConnectionPlugin()) {
+		ConnectedProject project = wall.getProjectByName(projectName);
+		for (ConnectionPlugin service : project.getConnectionPlugins()) {
 			try {
-				Date estimatedFinishTime = service.getEstimatedFinishTime(projectId);
+				Date estimatedFinishTime = service.getEstimatedFinishTime(project.getProjectId());
 				if (estimatedFinishTime != null) {
 					return estimatedFinishTime;
 				}
@@ -169,10 +161,10 @@ public class ProjectService {
 		Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
 		Preconditions.checkNotNull(projectName, "projectName is a mandatory parameter");
 
-		ProjectId projectId = wall.getProjectByName(projectName).getProjectId();
-		for (ConnectionPlugin service : wall.getConnectionPlugin()) {
+		ConnectedProject project = wall.getProjectByName(projectName);
+		for (ConnectionPlugin service : project.getConnectionPlugins()) {
 			try {
-				Build build = service.findBuildByBuildNumber(projectId, buildNumber);
+				Build build = service.findBuildByBuildNumber(project.getProjectId(), buildNumber);
 				if (build != null) {
 					return build;
 				}
@@ -186,7 +178,7 @@ public class ProjectService {
 				}
 			}
 		}
-		throw new BuildNotFoundException("No build #" + buildNumber + " for project " + projectId);
+		throw new BuildNotFoundException("No build #" + buildNumber + " for project " + project.getProjectId());
 	}
 
 }
