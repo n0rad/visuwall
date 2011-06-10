@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.teamcityclient;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -25,7 +26,7 @@ public class ClasspathFiles {
 	private ClasspathFiles() {
 	}
 
-	public static String getAbsolutePathFile(String fileName) {
+	public static String getUrlFile(String fileName) {
 		try {
 			Class<?> clazz = ClasspathFiles.class;
 			ClassLoader classLoader = clazz.getClassLoader();
@@ -34,6 +35,15 @@ public class ClasspathFiles {
 			String pomUrl = "file://" + uri.getPath();
 			return pomUrl;
 		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static URL getUrl(String fileName) {
+		try {
+			String strUrl = getUrlFile(fileName);
+			return new URL(strUrl);
+		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
 		}
 	}

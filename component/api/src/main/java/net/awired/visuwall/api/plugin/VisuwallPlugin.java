@@ -29,6 +29,6 @@ public interface VisuwallPlugin {
 
 	PluginInfo getInfo();
 
-	SoftwareId isManageable(URL url) throws IncompatibleSoftwareException;
+	SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException;
 
 }

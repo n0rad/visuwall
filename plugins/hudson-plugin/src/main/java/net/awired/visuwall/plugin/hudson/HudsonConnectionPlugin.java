@@ -111,21 +111,6 @@ public final class HudsonConnectionPlugin extends EmptyConnectionPlugin {
 	}
 
 	@Override
-	public void populate(Project project) throws ProjectNotFoundException {
-		Preconditions.checkNotNull(project, "project is mandatory");
-		checkConnected();
-		try {
-			HudsonProject hudsonProject = hudson.findProject(project.getName());
-			projectBuilder.addCurrentAndCompletedBuilds(project, hudsonProject);
-			if (project.getCompletedBuild() != null) {
-				project.setState(project.getCompletedBuild().getState());
-			}
-		} catch (HudsonProjectNotFoundException e) {
-			throw new ProjectNotFoundException(e);
-		}
-	}
-
-	@Override
 	public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
 		checkProjectId(projectId);
 		checkConnected();

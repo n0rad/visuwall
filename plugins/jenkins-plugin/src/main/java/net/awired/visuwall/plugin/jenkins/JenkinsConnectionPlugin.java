@@ -119,26 +119,6 @@ public final class JenkinsConnectionPlugin extends EmptyConnectionPlugin {
 	}
 
 	@Override
-	public void populate(Project project) throws ProjectNotFoundException {
-		checkProject(project);
-		checkConnected();
-
-		try {
-			HudsonProject hudsonProject = hudson.findProject(project.getName());
-			projectCreator.addCurrentAndCompletedBuilds(project, hudsonProject);
-			if (project.getCompletedBuild() != null) {
-				project.setState(project.getCompletedBuild().getState());
-			}
-		} catch (HudsonProjectNotFoundException e) {
-			throw new ProjectNotFoundException(e);
-		}
-	}
-
-	private void checkProject(Project project) {
-	    Preconditions.checkNotNull(project, "project is mandatory");
-    }
-
-	@Override
 	public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
 		checkProjectId(projectId);
 		checkConnected();

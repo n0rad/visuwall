@@ -24,7 +24,7 @@ public class SonarPluginTest {
 
 	@Test(expected = NullPointerException.class)
 	public void should_throw_exception_when_passing_null_to_is_sonar_instance() throws IncompatibleSoftwareException {
-		new SonarPlugin().isManageable(null);
+		new SonarPlugin().getSoftwareId(null);
 	}
 
 }

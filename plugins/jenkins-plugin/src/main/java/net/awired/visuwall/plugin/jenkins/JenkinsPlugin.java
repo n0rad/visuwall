@@ -55,7 +55,7 @@ public class JenkinsPlugin implements VisuwallPlugin {
 	}
 
 	@Override
-	public SoftwareId isManageable(URL url) throws IncompatibleSoftwareException {
+	public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
 		Preconditions.checkNotNull(url, "url is mandatory");
 		String xml = getContent(url);
 		if (isManageable(xml)) {

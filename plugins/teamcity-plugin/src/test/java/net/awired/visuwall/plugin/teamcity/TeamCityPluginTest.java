@@ -17,17 +17,27 @@
 package net.awired.visuwall.plugin.teamcity;
 
 import static org.junit.Assert.assertEquals;
-import net.awired.visuwall.api.domain.PluginInfo;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.when;
 
+import java.net.URL;
+
+import net.awired.visuwall.api.domain.PluginInfo;
+import net.awired.visuwall.api.domain.SoftwareId;
+import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.teamcityclient.ClasspathFiles;
+import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
+
+import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class TeamCityPluginTest {
 
 	@Test(expected = NullPointerException.class)
 	public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance()
 	        throws IncompatibleSoftwareException {
-		new TeamCityPlugin().isManageable(null);
+		new TeamCityPlugin().getSoftwareId(null);
 	}
 
 	@Test
@@ -40,6 +50,37 @@ public class TeamCityPluginTest {
 		PluginInfo info = new TeamCityPlugin().getInfo();
 
 		assertEquals(expectedInfo, info);
+	}
+
+	@Ignore
+	@Test
+	public void should_be_manageable() throws Exception {
+		String strUrl = ClasspathFiles.getUrlFile("teamcity_version_page.xml");
+		URL url = new URL(strUrl);
+		TeamCityUrlBuilder urlBuilder = Mockito.mock(TeamCityUrlBuilder.class);
+		when(urlBuilder.getVersion()).thenReturn(url.toString());
+
+		TeamCityPlugin plugin = new TeamCityPlugin();
+		plugin.urlBuilder = urlBuilder;
+
+		SoftwareId softwareId = plugin.getSoftwareId(url);
+
+		assertEquals("TeamCity", softwareId.getName());
+		assertEquals("6.5", softwareId.getVersion());
+		assertNull(softwareId.getWarnings());
+	}
+
+	@Ignore
+	@Test(expected = IncompatibleSoftwareException.class)
+	public void should_not_be_manageable() throws Exception {
+		URL url = ClasspathFiles.getUrl("simple-text-file.txt");
+		TeamCityUrlBuilder urlBuilder = Mockito.mock(TeamCityUrlBuilder.class);
+		when(urlBuilder.getVersion()).thenReturn(url.toString());
+
+		TeamCityPlugin plugin = new TeamCityPlugin();
+		plugin.urlBuilder = urlBuilder;
+
+		plugin.getSoftwareId(url);
 	}
 
 }

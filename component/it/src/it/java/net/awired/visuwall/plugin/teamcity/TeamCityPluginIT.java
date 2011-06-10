@@ -33,7 +33,7 @@ public class TeamCityPluginIT {
 	@Test
 	public void should_recognize_teamcity_instance_with_valid_url() throws Exception {
 		TeamCityPlugin teamcityPlugin = new TeamCityPlugin();
-		SoftwareId softwareId = teamcityPlugin.isManageable(new URL(TEAMCITY_URL));
+		SoftwareId softwareId = teamcityPlugin.getSoftwareId(new URL(TEAMCITY_URL));
 		assertEquals("TeamCity", softwareId.getName());
 		assertEquals("6.5", softwareId.getVersion());
 	}
@@ -42,7 +42,7 @@ public class TeamCityPluginIT {
 	public void should_not_fail_if_url_is_not_manageable() throws Exception {
 		TeamCityPlugin teamcityPlugin = new TeamCityPlugin();
 		String url = "http://www.google.fr";
-		teamcityPlugin.isManageable(new URL(url));
+		teamcityPlugin.getSoftwareId(new URL(url));
 	}
 
 }
