@@ -38,6 +38,7 @@ public class TeamCityPluginIT {
 		assertEquals("6.5", softwareId.getVersion());
 	}
 
+	@Ignore
 	@Test(expected = IncompatibleSoftwareException.class)
 	public void should_not_fail_if_url_is_not_manageable() throws Exception {
 		TeamCityPlugin teamcityPlugin = new TeamCityPlugin();
