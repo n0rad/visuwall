@@ -34,6 +34,7 @@ public class SonarPlugin implements VisuwallPlugin {
 
     private static final String SONAR_CORE_VERSION_KEY = "sonar.core.version";
 
+    @Override
     public ConnectionPlugin getConnection(String url, java.util.Properties info) {
         SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
         sonarConnectionPlugin.connect(url);
@@ -50,7 +51,7 @@ public class SonarPlugin implements VisuwallPlugin {
     }
 
     @Override
-    public SoftwareId isManageable(URL url) throws IncompatibleSoftwareException {
+    public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
             Client client = Client.create();

@@ -88,12 +88,13 @@ public final class HudsonConnectionPlugin extends EmptyConnectionPlugin {
 
     @Override
     public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
-        Preconditions.checkState(connected, "You must connect your plugin");
+        checkProjectId(projectId);
+        checkConnected();
         try {
             String projectName = extractProjectNameFrom(projectId);
-            if (projectName == null)
+            if (projectName == null) {
                 throw new ProjectNotFoundException("Project " + projectId + " has no name");
+            }
             HudsonProject hudsonProject = hudson.findProject(projectName);
             Project project = projectBuilder.buildProjectFrom(hudsonProject);
             State state = getState(projectId);
@@ -106,26 +107,9 @@ public final class HudsonConnectionPlugin extends EmptyConnectionPlugin {
     }
 
     @Override
-    public void populate(Project project) throws ProjectNotFoundException {
-        Preconditions.checkNotNull(project, "project is mandatory");
-        Preconditions.checkState(connected, "You must connect your plugin");
-
-        try {
-            HudsonProject hudsonProject = hudson.findProject(project.getName());
-            projectBuilder.addCurrentAndCompletedBuilds(project, hudsonProject);
-            if (project.getCompletedBuild() != null) {
-                project.setState(project.getCompletedBuild().getState());
-            }
-        } catch (HudsonProjectNotFoundException e) {
-            throw new ProjectNotFoundException(e);
-        }
-    }
-
-    @Override
     public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
-        Preconditions.checkState(connected, "You must connect your plugin");
-
+        checkProjectId(projectId);
+        checkConnected();
         try {
             String projectName = extractProjectNameFrom(projectId);
             return hudson.getEstimatedFinishTime(projectName);
@@ -134,15 +118,23 @@ public final class HudsonConnectionPlugin extends EmptyConnectionPlugin {
         }
     }
 
+    private void checkProjectId(ProjectId projectId) {
+        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+    }
+
+    private void checkConnected() {
+        Preconditions.checkState(connected, "You must connect your plugin");
+    }
+
     @Override
     public boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
-        Preconditions.checkState(connected, "You must connect your plugin");
-
+        checkProjectId(projectId);
+        checkConnected();
         try {
             String projectName = extractProjectNameFrom(projectId);
-            if (projectName == null)
+            if (projectName == null) {
                 throw new ProjectNotFoundException("Project " + projectId + " has no name");
+            }
             return hudson.isBuilding(projectName);
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
@@ -151,12 +143,13 @@ public final class HudsonConnectionPlugin extends EmptyConnectionPlugin {
 
     @Override
     public State getState(ProjectId projectId) throws ProjectNotFoundException {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
-        Preconditions.checkState(connected, "You must connect your plugin");
+        checkProjectId(projectId);
+        checkConnected();
         try {
             String projectName = extractProjectNameFrom(projectId);
-            if (projectName == null)
+            if (projectName == null) {
                 throw new ProjectNotFoundException("Project " + projectId + " has no name");
+            }
             String state = hudson.getState(projectName);
             return State.getStateByName(state);
         } catch (HudsonProjectNotFoundException e) {
@@ -170,13 +163,13 @@ public final class HudsonConnectionPlugin extends EmptyConnectionPlugin {
 
     @Override
     public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
-        Preconditions.checkState(connected, "You must connect your plugin");
-
+        checkProjectId(projectId);
+        checkConnected();
         try {
             String projectName = extractProjectNameFrom(projectId);
-            if (projectName == null)
+            if (projectName == null) {
                 throw new ProjectNotFoundException("Project " + projectId + " has no name");
+            }
             return hudson.getLastBuildNumber(projectName);
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
@@ -188,13 +181,13 @@ public final class HudsonConnectionPlugin extends EmptyConnectionPlugin {
     @Override
     public Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
             ProjectNotFoundException {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
-        Preconditions.checkState(connected, "You must connect your plugin");
-
+        checkProjectId(projectId);
+        checkConnected();
         try {
             String projectName = extractProjectNameFrom(projectId);
-            if (projectName == null)
+            if (projectName == null) {
                 throw new BuildNotFoundException("Project " + projectId + " has no name");
+            }
             HudsonBuild build = hudson.findBuild(projectName, buildNumber);
             return projectBuilder.buildBuildFrom(build);
         } catch (HudsonBuildNotFoundException e) {

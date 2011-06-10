@@ -234,7 +234,7 @@ public class TeamCityTest {
 
 	private Object load(String fileName, Class<?> clazz) {
 		try {
-			String file = ClasspathFiles.getAbsolutePathFile(fileName);
+			String file = ClasspathFiles.getUrlFile(fileName);
 			URL url = new URL(file);
 			JAXBContext newInstance = JAXBContext.newInstance(clazz);
 			Unmarshaller unmarshaller = newInstance.createUnmarshaller();

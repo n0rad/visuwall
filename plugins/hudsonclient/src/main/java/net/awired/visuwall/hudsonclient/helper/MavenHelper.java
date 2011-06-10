@@ -26,6 +26,9 @@ public class MavenHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenHelper.class);
 
+    private MavenHelper() {
+    }
+
     public static boolean isMavenProject(String projectUrl) {
         checkProjectUrl(projectUrl);
         try {

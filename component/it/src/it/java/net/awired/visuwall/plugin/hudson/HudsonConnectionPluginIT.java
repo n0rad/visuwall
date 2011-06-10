@@ -86,13 +86,4 @@ public class HudsonConnectionPluginIT {
         assertEquals(State.SUCCESS, state);
     }
 
-    @Test
-    public void should_populate_project() throws ProjectNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "struts");
-        Project project = hudsonConnectionPlugin.findProject(projectId);
-        hudsonConnectionPlugin.populate(project);
-        assertEquals("struts", project.getName());
-    }
-
 }

@@ -79,8 +79,12 @@ public class Hudson {
      */
     public HudsonBuild findBuild(String projectName, int buildNumber) throws HudsonBuildNotFoundException,
             HudsonProjectNotFoundException {
-        Preconditions.checkNotNull(projectName, "projectName is mandatory");
+        checkProjectName(projectName);
         return hudsonFinder.find(projectName, buildNumber);
+    }
+
+    private void checkProjectName(String projectName) {
+        Preconditions.checkNotNull(projectName, "projectName is mandatory");
     }
 
     /**
@@ -89,7 +93,7 @@ public class Hudson {
      * @throws HudsonProjectNotFoundException
      */
     public HudsonProject findProject(String projectName) throws HudsonProjectNotFoundException {
-        Preconditions.checkNotNull(projectName, "projectName is mandatory");
+        checkProjectName(projectName);
         return hudsonFinder.findProject(projectName);
     }
 
@@ -102,7 +106,7 @@ public class Hudson {
      * @throws HudsonProjectNotFoundException
      */
     public long getAverageBuildDurationTime(String projectName) throws HudsonProjectNotFoundException {
-        Preconditions.checkNotNull(projectName, "projectName is mandatory");
+        checkProjectName(projectName);
         HudsonProject hudsonProject = findProject(projectName);
         return computeBuildDurationTime(hudsonProject);
     }
@@ -149,12 +153,12 @@ public class Hudson {
     }
 
     public boolean isBuilding(String projectName) throws HudsonProjectNotFoundException {
-        Preconditions.checkNotNull(projectName, "projectName is mandatory");
+        checkProjectName(projectName);
         return hudsonFinder.isBuilding(projectName);
     }
 
     public String getState(String projectName) throws HudsonProjectNotFoundException {
-        Preconditions.checkNotNull(projectName, "projectName is mandatory");
+        checkProjectName(projectName);
         String state = DEFAULT_STATE;
         try {
             int lastBuildNumber = getLastBuildNumber(projectName);
@@ -170,7 +174,7 @@ public class Hudson {
 
     public int getLastBuildNumber(String projectName) throws HudsonProjectNotFoundException,
             HudsonBuildNotFoundException {
-        Preconditions.checkNotNull(projectName, "projectName is mandatory");
+        checkProjectName(projectName);
         return hudsonFinder.getLastBuildNumber(projectName);
     }
 

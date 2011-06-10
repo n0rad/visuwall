@@ -30,7 +30,7 @@ public class JenkinsPluginIT {
     @Test
     public void should_recognize_jenkins_instance_with_valid_url() throws Exception {
         JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-        SoftwareId softwareId = jenkinsPlugin.isManageable(new URL(JENKINS_URL));
+        SoftwareId softwareId = jenkinsPlugin.getSoftwareId(new URL(JENKINS_URL));
 
         assertEquals("Jenkins", softwareId.getName());
         assertEquals("1.407", softwareId.getVersion());
@@ -41,7 +41,7 @@ public class JenkinsPluginIT {
     @Test
     public void should_recognize_jenkins_instance_with_https() throws Exception {
         JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-        SoftwareId softwareId = jenkinsPlugin.isManageable(new URL("https://builds.apache.org"));
+        SoftwareId softwareId = jenkinsPlugin.getSoftwareId(new URL("https://builds.apache.org"));
 
         assertEquals("Jenkins", softwareId.getName());
         assertEquals("1.413", softwareId.getVersion());
@@ -52,7 +52,7 @@ public class JenkinsPluginIT {
     public void should_not_fail_if_url_is_not_manageable() throws Exception {
         JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
         String url = "http://www.google.fr";
-        jenkinsPlugin.isManageable(new URL(url));
+        jenkinsPlugin.getSoftwareId(new URL(url));
     }
 
 }

@@ -101,18 +101,6 @@ public interface ConnectionPlugin {
             BuildNotFoundException, ProjectNotFoundException;
 
     /**
-     * Populating a project means fill its attributes with all data that you can fetch from your system If you can
-     * fetch
-     * State or Build informations, add it in <code>project</code>!
-     * 
-     * @param project
-     *            Project to populate
-     * @throws ProjectNotFoundException
-     *             Throw this exception if you can't find this project in your system
-     */
-    void populate(Project project) throws NotImplementedOperationException, ProjectNotFoundException;
-
-    /**
      * If a project is building, plugin can calculate the estimated finish time
      * 
      * @param projectId

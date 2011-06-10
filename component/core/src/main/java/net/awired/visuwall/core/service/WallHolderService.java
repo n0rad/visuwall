@@ -82,8 +82,9 @@ public class WallHolderService implements WallService {
         }
     }
 
-    @Override
     // ////////////////////////////////////////////////////////////////////////////////
+
+    @Override
     public List<Wall> getWalls() {
         return new ArrayList<Wall>(WALLS.values());
     }
@@ -141,6 +142,7 @@ public class WallHolderService implements WallService {
         }
     }
 
+<<<<<<< HEAD
     private void updateWallProjects(List<ConnectionPlugin> connectionPlugins, Wall wall) {
         Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
 
@@ -171,11 +173,30 @@ public class WallHolderService implements WallService {
                 VisuwallPlugin plugin = pluginService.getPluginFromUrl(new URL(softwareAccess.getUrl()));
                 ConnectionPlugin connectionPlugin = plugin.getConnection(softwareAccess.getUrl(), null);
                 softwareAccess.setConnectionPlugin(connectionPlugin);
+=======
+    private void reconstructWall(Wall wall) {
+        List<SoftwareAccess> softwareAccesses = wall.getSoftwareAccesses();
+        reconstructSoftwareAccesses(softwareAccesses);
+        List<ConnectionPlugin> connectionPlugins = pluginService.getConnectionPluginsFromSoftwares(softwareAccesses);
+
+        projectService.updateWallProjects(connectionPlugins, wall);
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Done refreshing wall : " + wall + " and its " + wall.getProjects().size() + " projects");
+        }
+    }
+
+    private void reconstructSoftwareAccesses(List<SoftwareAccess> softwareAccesses) {
+        for (SoftwareAccess softwareAccess : softwareAccesses) {
+            try {
+                PluginInfo pluginInfo = pluginService.getPluginInfoFromUrl(new URL(softwareAccess.getUrl()));
+                softwareAccess.setPluginClassName(pluginInfo.getClassName());
+>>>>>>> develop
             } catch (MalformedURLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
+<<<<<<< HEAD
 
         // find projects
         for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
@@ -208,6 +229,8 @@ public class WallHolderService implements WallService {
             return true;
         }
         return false;
+=======
+>>>>>>> develop
     }
 
     public List<ProjectStatus> getStatus(String wallName) {

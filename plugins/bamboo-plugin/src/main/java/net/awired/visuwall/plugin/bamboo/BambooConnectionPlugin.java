@@ -118,12 +118,6 @@ public class BambooConnectionPlugin extends EmptyConnectionPlugin {
     }
 
     @Override
-    public void populate(Project project) throws ProjectNotFoundException {
-        Project bambooProject = findProject(project.getProjectId());
-        project.setName(bambooProject.getName());
-    }
-
-    @Override
     public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
         String projectName = getProjectKey(projectId);
         try {

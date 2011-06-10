@@ -16,6 +16,8 @@
 
 package net.awired.visuwall.teamcityclient.builder;
 
+import java.net.URL;
+
 import com.google.common.base.Preconditions;
 
 public class TeamCityUrlBuilder {
@@ -26,6 +28,11 @@ public class TeamCityUrlBuilder {
 	public TeamCityUrlBuilder(String teamCityUrl) {
 		Preconditions.checkNotNull(teamCityUrl, "teamCityUrl is mandatory");
 		this.teamCityUrl = teamCityUrl;
+	}
+
+	public TeamCityUrlBuilder(URL teamCityUrl) {
+		Preconditions.checkNotNull(teamCityUrl, "teamCityUrl is mandatory");
+		this.teamCityUrl = teamCityUrl.toString();
 	}
 
 	public String getProjects() {
@@ -47,6 +54,9 @@ public class TeamCityUrlBuilder {
 		return build("/builds/id:" + buildId);
 	}
 
+	public String getVersion() {
+		return build("/version");
+	}
 	private String build(String url) {
 		return teamCityUrl + API_URI + url;
 	}
@@ -58,4 +68,5 @@ public class TeamCityUrlBuilder {
 	private void checkProjectId(String projectId) {
 		Preconditions.checkNotNull(projectId, "projectId is mandatory");
 	}
+
 }

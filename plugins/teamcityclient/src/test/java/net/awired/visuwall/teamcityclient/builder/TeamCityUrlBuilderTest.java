@@ -56,4 +56,10 @@ public class TeamCityUrlBuilderTest {
 		assertEquals(TEAM_CITY_URL + "/app/rest/buildTypes/id:bt297/builds", buildListUrl);
 	}
 
+	@Test
+	public void should_create_valid_version() {
+		String versionUrl = builder.getVersion();
+		assertEquals(TEAM_CITY_URL + "/app/rest/version", versionUrl);
+	}
+
 }

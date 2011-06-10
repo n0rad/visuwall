@@ -79,11 +79,6 @@ public class EmptyConnectionPlugin implements ConnectionPlugin {
     }
 
     @Override
-    public void populate(Project project) throws NotImplementedOperationException, ProjectNotFoundException {
-        throw notImplementedOperationException;
-    }
-
-    @Override
     public Date getEstimatedFinishTime(ProjectId projectId) throws NotImplementedOperationException,
             ProjectNotFoundException {
         throw notImplementedOperationException;
