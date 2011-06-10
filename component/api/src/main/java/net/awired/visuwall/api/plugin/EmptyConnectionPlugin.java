@@ -35,7 +35,7 @@ import net.awired.visuwall.api.exception.ViewNotFoundException;
 public class EmptyConnectionPlugin implements ConnectionPlugin {
 
 	NotImplementedOperationException notImplementedOperationException = new NotImplementedOperationException(
-	        "This operation is implemented in this plugin");
+	        "This operation is not implemented in this plugin");
 
 	@Override
 	public QualityResult analyzeQuality(ProjectId projectId, String... metrics) throws NotImplementedOperationException {
