@@ -18,14 +18,14 @@ package net.awired.visuwall.hudsonclient.exception;
 
 public final class HudsonProjectNotCreatedException extends Exception {
 
-	private static final long serialVersionUID = -6952748181282352092L;
+    private static final long serialVersionUID = -6952748181282352092L;
 
-	public HudsonProjectNotCreatedException(Throwable cause) {
-		super(cause);
-	}
+    public HudsonProjectNotCreatedException(Throwable cause) {
+        super(cause);
+    }
 
-	public HudsonProjectNotCreatedException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public HudsonProjectNotCreatedException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

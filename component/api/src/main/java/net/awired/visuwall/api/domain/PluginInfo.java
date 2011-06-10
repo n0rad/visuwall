@@ -20,49 +20,49 @@ import com.google.common.base.Objects;
 
 public class PluginInfo {
 
-	private String name;
-	private float version;
-	private String className;
+    private String name;
+    private float version;
+    private String className;
 
-	// //////////////////////
+    // //////////////////////
 
-	public void setClassName(String className) {
-		this.className = className;
-	}
+    public void setClassName(String className) {
+        this.className = className;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public float getVersion() {
-		return version;
-	}
+    public float getVersion() {
+        return version;
+    }
 
-	public void setVersion(float version) {
-		this.version = version;
-	}
+    public void setVersion(float version) {
+        this.version = version;
+    }
 
-	public String getClassName() {
-		return className;
-	}
+    public String getClassName() {
+        return className;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof PluginInfo) {
-			PluginInfo pi = (PluginInfo) obj;
-			return Objects.equal(name, pi.name) && //
-			        Objects.equal(version, pi.version) && //
-			        Objects.equal(className, pi.className);
-		}
-		return false;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof PluginInfo) {
+            PluginInfo pi = (PluginInfo) obj;
+            return Objects.equal(name, pi.name) && //
+                    Objects.equal(version, pi.version) && //
+                    Objects.equal(className, pi.className);
+        }
+        return false;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(name, version, className);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name, version, className);
+    }
 }
