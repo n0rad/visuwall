@@ -25,10 +25,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "build")
 public class Build {
 
-	@XmlAttribute
-	public String state;
+    @XmlAttribute
+    public String state;
 
-	@XmlAttribute
-	public String key;
+    @XmlAttribute
+    public String key;
 
 }

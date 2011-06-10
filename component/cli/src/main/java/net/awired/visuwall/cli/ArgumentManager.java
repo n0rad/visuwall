@@ -17,7 +17,6 @@
 package net.awired.visuwall.cli;
 
 import java.io.File;
-
 import net.awired.aclm.argument.CliArgumentManager;
 import net.awired.aclm.argument.CliArgumentParseException;
 import net.awired.aclm.argument.args.CliNoParamArgument;

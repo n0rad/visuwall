@@ -20,68 +20,65 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
-
 import org.junit.Test;
 import org.w3c.dom.Node;
 
 public class HudsonXmlHelperTest {
 
-	@Test
-	public void testIsSuccessful() {
-		Node firstChild = mock(Node.class);
-		when(firstChild.getNodeValue()).thenReturn("SUCCESS");
+    @Test
+    public void testIsSuccessful() {
+        Node firstChild = mock(Node.class);
+        when(firstChild.getNodeValue()).thenReturn("SUCCESS");
 
-		Node result = mock(Node.class);
-		when(result.getFirstChild()).thenReturn(firstChild);
+        Node result = mock(Node.class);
+        when(result.getFirstChild()).thenReturn(firstChild);
 
-		HudsonMavenMavenModuleSetBuild job = mock(HudsonMavenMavenModuleSetBuild.class);
-		when(job.getResult()).thenReturn(result);
+        HudsonMavenMavenModuleSetBuild job = mock(HudsonMavenMavenModuleSetBuild.class);
+        when(job.getResult()).thenReturn(result);
 
-		boolean isSuccessful = HudsonXmlHelper.isSuccessful(job);
+        boolean isSuccessful = HudsonXmlHelper.isSuccessful(job);
 
-		assertTrue(isSuccessful);
-	}
+        assertTrue(isSuccessful);
+    }
 
-	@Test
-	public void testGetCommiters() {
-		List<HudsonModelUser> users = new ArrayList<HudsonModelUser>();
-		HudsonModelUser user1 = new HudsonModelUser();
-		HudsonModelUser user2 = new HudsonModelUser();
+    @Test
+    public void testGetCommiters() {
+        List<HudsonModelUser> users = new ArrayList<HudsonModelUser>();
+        HudsonModelUser user1 = new HudsonModelUser();
+        HudsonModelUser user2 = new HudsonModelUser();
 
-		user1.setFullName("dude");
-		user2.setFullName("sweet");
+        user1.setFullName("dude");
+        user2.setFullName("sweet");
 
-		users.add(user1);
-		users.add(user2);
+        users.add(user1);
+        users.add(user2);
 
-		HudsonMavenMavenModuleSetBuild setBuild = mock(HudsonMavenMavenModuleSetBuild.class);
-		when(setBuild.getCulprit()).thenReturn(users);
+        HudsonMavenMavenModuleSetBuild setBuild = mock(HudsonMavenMavenModuleSetBuild.class);
+        when(setBuild.getCulprit()).thenReturn(users);
 
-		String[] commiters = HudsonXmlHelper.getCommiterNames(setBuild);
-		assertEquals("dude", commiters[0]);
-		assertEquals("sweet", commiters[1]);
-	}
+        String[] commiters = HudsonXmlHelper.getCommiterNames(setBuild);
+        assertEquals("dude", commiters[0]);
+        assertEquals("sweet", commiters[1]);
+    }
 
-	@Test
-	public void testGetState() {
-		Node firstChild = mock(Node.class);
-		when(firstChild.getNodeValue()).thenReturn("FAILURE");
+    @Test
+    public void testGetState() {
+        Node firstChild = mock(Node.class);
+        when(firstChild.getNodeValue()).thenReturn("FAILURE");
 
-		Node result = mock(Node.class);
-		when(result.getFirstChild()).thenReturn(firstChild);
+        Node result = mock(Node.class);
+        when(result.getFirstChild()).thenReturn(firstChild);
 
-		HudsonMavenMavenModuleSetBuild setBuild = mock(HudsonMavenMavenModuleSetBuild.class);
-		when(setBuild.getResult()).thenReturn(result);
+        HudsonMavenMavenModuleSetBuild setBuild = mock(HudsonMavenMavenModuleSetBuild.class);
+        when(setBuild.getResult()).thenReturn(result);
 
-		String state = HudsonXmlHelper.getState(setBuild);
+        String state = HudsonXmlHelper.getState(setBuild);
 
-		assertEquals("FAILURE", state);
-	}
+        assertEquals("FAILURE", state);
+    }
 
 }

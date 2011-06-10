@@ -17,7 +17,6 @@
 package net.awired.visuwall.api.domain.quality;
 
 import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,6 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "metrics")
 public final class Metrics {
 
-	protected List<QualityMetric> metrics;
+    protected List<QualityMetric> metrics;
 
 }

@@ -54,34 +54,34 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "hudson.model.labels.LabelAtom", propOrder = { "propertiesList" })
 public class HudsonModelLabelsLabelAtom extends HudsonModelLabel {
 
-	protected List<HudsonModelLabelsLabelAtomProperty> propertiesList;
+    protected List<HudsonModelLabelsLabelAtomProperty> propertiesList;
 
-	/**
-	 * Gets the value of the propertiesList property.
-	 * 
-	 * <p>
-	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to
-	 * the returned list will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for
-	 * the propertiesList property.
-	 * 
-	 * <p>
-	 * For example, to add a new item, do as follows:
-	 * 
-	 * <pre>
-	 * getPropertiesList().add(newItem);
-	 * </pre>
-	 * 
-	 * 
-	 * <p>
-	 * Objects of the following type(s) are allowed in the list {@link HudsonModelLabelsLabelAtomProperty }
-	 * 
-	 * 
-	 */
-	public List<HudsonModelLabelsLabelAtomProperty> getPropertiesList() {
-		if (propertiesList == null) {
-			propertiesList = new ArrayList<HudsonModelLabelsLabelAtomProperty>();
-		}
-		return this.propertiesList;
-	}
+    /**
+     * Gets the value of the propertiesList property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make
+     * to the returned list will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method
+     * for the propertiesList property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * 
+     * <pre>
+     * getPropertiesList().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list {@link HudsonModelLabelsLabelAtomProperty }
+     * 
+     * 
+     */
+    public List<HudsonModelLabelsLabelAtomProperty> getPropertiesList() {
+        if (propertiesList == null) {
+            propertiesList = new ArrayList<HudsonModelLabelsLabelAtomProperty>();
+        }
+        return this.propertiesList;
+    }
 
 }

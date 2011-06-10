@@ -25,9 +25,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "link")
 public class Link {
 
-	@XmlAttribute
-	public String rel;
+    @XmlAttribute
+    public String rel;
 
-	@XmlAttribute
-	public String href;
+    @XmlAttribute
+    public String href;
 }

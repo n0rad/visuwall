@@ -48,14 +48,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum HudsonModelNodeMode {
 
-	NORMAL, EXCLUSIVE;
+    NORMAL, EXCLUSIVE;
 
-	public String value() {
-		return name();
-	}
+    public String value() {
+        return name();
+    }
 
-	public static HudsonModelNodeMode fromValue(String v) {
-		return valueOf(v);
-	}
+    public static HudsonModelNodeMode fromValue(String v) {
+        return valueOf(v);
+    }
 
 }

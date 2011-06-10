@@ -21,11 +21,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
@@ -37,203 +35,202 @@ import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
-
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 public class HudsonConnectionPluginTest {
 
-	@Test
-	public void should_return_state_unknow_if_no_state() throws ProjectNotFoundException,
-	        HudsonProjectNotFoundException {
-		Hudson hudson = Mockito.mock(Hudson.class);
+    @Test
+    public void should_return_state_unknow_if_no_state() throws ProjectNotFoundException,
+            HudsonProjectNotFoundException {
+        Hudson hudson = Mockito.mock(Hudson.class);
 
-		Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("not_valid_state");
+        Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("not_valid_state");
 
-		HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-		hudsonPlugin.connect("url");
-		hudsonPlugin.setHudson(hudson);
+        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
+        hudsonPlugin.connect("url");
+        hudsonPlugin.setHudson(hudson);
 
-		ProjectId projectId = new ProjectId();
-		projectId.addId("HUDSON_ID", "idValue");
-		State state = hudsonPlugin.getState(projectId);
-		assertEquals(State.UNKNOWN, state);
-	}
+        ProjectId projectId = new ProjectId();
+        projectId.addId("HUDSON_ID", "idValue");
+        State state = hudsonPlugin.getState(projectId);
+        assertEquals(State.UNKNOWN, state);
+    }
 
-	@Test
-	public void should_return_state_valid_state() throws ProjectNotFoundException, HudsonProjectNotFoundException {
-		Hudson hudson = Mockito.mock(Hudson.class);
+    @Test
+    public void should_return_state_valid_state() throws ProjectNotFoundException, HudsonProjectNotFoundException {
+        Hudson hudson = Mockito.mock(Hudson.class);
 
-		Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("FAILURE");
+        Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("FAILURE");
 
-		HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-		hudsonPlugin.connect("url");
-		hudsonPlugin.setHudson(hudson);
+        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
+        hudsonPlugin.connect("url");
+        hudsonPlugin.setHudson(hudson);
 
-		ProjectId projectId = new ProjectId();
-		projectId.addId("HUDSON_ID", "idValue");
-		State state = hudsonPlugin.getState(projectId);
-		assertEquals(State.FAILURE, state);
-	}
+        ProjectId projectId = new ProjectId();
+        projectId.addId("HUDSON_ID", "idValue");
+        State state = hudsonPlugin.getState(projectId);
+        assertEquals(State.FAILURE, state);
+    }
 
-	@Test
-	public void should_find_all_projects_from_hudson() {
-		Hudson hudson = Mockito.mock(Hudson.class);
-		List<HudsonProject> hudsonProjects = new ArrayList<HudsonProject>();
-		HudsonProject hudsonProject = new HudsonProject();
-		hudsonProject.setArtifactId("artifactId");
-		hudsonProject.setName("name");
+    @Test
+    public void should_find_all_projects_from_hudson() {
+        Hudson hudson = Mockito.mock(Hudson.class);
+        List<HudsonProject> hudsonProjects = new ArrayList<HudsonProject>();
+        HudsonProject hudsonProject = new HudsonProject();
+        hudsonProject.setArtifactId("artifactId");
+        hudsonProject.setName("name");
 
-		hudsonProjects.add(hudsonProject);
+        hudsonProjects.add(hudsonProject);
 
-		when(hudson.findAllProjects()).thenReturn(hudsonProjects);
+        when(hudson.findAllProjects()).thenReturn(hudsonProjects);
 
-		HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-		hudsonPlugin.connect("url");
-		hudsonPlugin.setHudson(hudson);
+        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
+        hudsonPlugin.connect("url");
+        hudsonPlugin.setHudson(hudson);
 
-		List<ProjectId> projectIds = hudsonPlugin.findAllProjects();
-		ProjectId projectId = projectIds.get(0);
+        List<ProjectId> projectIds = hudsonPlugin.findAllProjects();
+        ProjectId projectId = projectIds.get(0);
 
-		assertEquals("artifactId", projectId.getArtifactId());
-		assertEquals("name", projectId.getId("HUDSON_ID"));
-		assertEquals("name", projectId.getName());
-	}
+        assertEquals("artifactId", projectId.getArtifactId());
+        assertEquals("name", projectId.getId("HUDSON_ID"));
+        assertEquals("name", projectId.getName());
+    }
 
-	@Test
-	public void should_find_project_by_projectId() throws HudsonProjectNotFoundException, ProjectNotFoundException {
-		Hudson hudson = Mockito.mock(Hudson.class);
+    @Test
+    public void should_find_project_by_projectId() throws HudsonProjectNotFoundException, ProjectNotFoundException {
+        Hudson hudson = Mockito.mock(Hudson.class);
 
-		HudsonProject hudsonProject = new HudsonProject();
-		hudsonProject.setName("name");
-		when(hudson.findProject(Matchers.anyString())).thenReturn(hudsonProject);
+        HudsonProject hudsonProject = new HudsonProject();
+        hudsonProject.setName("name");
+        when(hudson.findProject(Matchers.anyString())).thenReturn(hudsonProject);
 
-		HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-		hudsonPlugin.connect("url");
-		hudsonPlugin.setHudson(hudson);
+        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
+        hudsonPlugin.connect("url");
+        hudsonPlugin.setHudson(hudson);
 
-		ProjectId projectId = new ProjectId();
-		projectId.addId("HUDSON_ID", "id");
+        ProjectId projectId = new ProjectId();
+        projectId.addId("HUDSON_ID", "id");
 
-		Project project = hudsonPlugin.findProject(projectId);
+        Project project = hudsonPlugin.findProject(projectId);
 
-		assertEquals(hudsonProject.getName(), project.getName());
-	}
+        assertEquals(hudsonProject.getName(), project.getName());
+    }
 
-	@Test
-	public void should_get_is_building_information() throws HudsonProjectNotFoundException, ProjectNotFoundException {
-		Hudson hudson = Mockito.mock(Hudson.class);
+    @Test
+    public void should_get_is_building_information() throws HudsonProjectNotFoundException, ProjectNotFoundException {
+        Hudson hudson = Mockito.mock(Hudson.class);
 
-		when(hudson.isBuilding("project1")).thenReturn(true);
-		when(hudson.isBuilding("project2")).thenReturn(false);
+        when(hudson.isBuilding("project1")).thenReturn(true);
+        when(hudson.isBuilding("project2")).thenReturn(false);
 
-		HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-		hudsonPlugin.connect("url");
-		hudsonPlugin.setHudson(hudson);
+        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
+        hudsonPlugin.connect("url");
+        hudsonPlugin.setHudson(hudson);
 
-		ProjectId projectId = new ProjectId();
-		projectId.addId("HUDSON_ID", "project1");
+        ProjectId projectId = new ProjectId();
+        projectId.addId("HUDSON_ID", "project1");
 
-		assertTrue(hudsonPlugin.isBuilding(projectId));
+        assertTrue(hudsonPlugin.isBuilding(projectId));
 
-		projectId.addId("HUDSON_ID", "project2");
-		assertFalse(hudsonPlugin.isBuilding(projectId));
-	}
+        projectId.addId("HUDSON_ID", "project2");
+        assertFalse(hudsonPlugin.isBuilding(projectId));
+    }
 
-	@Test
-	public void should_get_estimated_finish_time() throws HudsonProjectNotFoundException, ProjectNotFoundException {
-		Hudson hudson = Mockito.mock(Hudson.class);
+    @Test
+    public void should_get_estimated_finish_time() throws HudsonProjectNotFoundException, ProjectNotFoundException {
+        Hudson hudson = Mockito.mock(Hudson.class);
 
-		Date date = new Date();
-		when(hudson.getEstimatedFinishTime(Matchers.anyString())).thenReturn(date);
+        Date date = new Date();
+        when(hudson.getEstimatedFinishTime(Matchers.anyString())).thenReturn(date);
 
-		HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-		hudsonPlugin.connect("url");
-		hudsonPlugin.setHudson(hudson);
+        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
+        hudsonPlugin.connect("url");
+        hudsonPlugin.setHudson(hudson);
 
-		ProjectId projectId = new ProjectId();
-		projectId.addId("HUDSON_ID", "project1");
+        ProjectId projectId = new ProjectId();
+        projectId.addId("HUDSON_ID", "project1");
 
-		assertEquals(date, hudsonPlugin.getEstimatedFinishTime(projectId));
-	}
+        assertEquals(date, hudsonPlugin.getEstimatedFinishTime(projectId));
+    }
 
-	@Test
-	public void should_find_build_by_number() throws BuildNotFoundException, ProjectNotFoundException,
-	        HudsonBuildNotFoundException, HudsonProjectNotFoundException {
-		Hudson hudson = Mockito.mock(Hudson.class);
+    @Test
+    public void should_find_build_by_number() throws BuildNotFoundException, ProjectNotFoundException,
+            HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+        Hudson hudson = Mockito.mock(Hudson.class);
 
-		HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-		hudsonPlugin.connect("url");
-		hudsonPlugin.setHudson(hudson);
+        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
+        hudsonPlugin.connect("url");
+        hudsonPlugin.setHudson(hudson);
 
-		HudsonBuild hudsonBuild = new HudsonBuild();
+        HudsonBuild hudsonBuild = new HudsonBuild();
 
-		when(hudson.findBuild("project1", 0)).thenReturn(hudsonBuild);
+        when(hudson.findBuild("project1", 0)).thenReturn(hudsonBuild);
 
-		ProjectId projectId = new ProjectId();
-		projectId.addId("HUDSON_ID", "project1");
+        ProjectId projectId = new ProjectId();
+        projectId.addId("HUDSON_ID", "project1");
 
-		Build build = hudsonPlugin.findBuildByBuildNumber(projectId, 0);
+        Build build = hudsonPlugin.findBuildByBuildNumber(projectId, 0);
 
-		assertNotNull(build);
-	}
+        assertNotNull(build);
+    }
 
-	@Test
-	public void should_find_last_build_number() throws HudsonProjectNotFoundException, HudsonBuildNotFoundException,
-	        ProjectNotFoundException, BuildNotFoundException {
-		Hudson hudson = Mockito.mock(Hudson.class);
+    @Test
+    public void should_find_last_build_number() throws HudsonProjectNotFoundException, HudsonBuildNotFoundException,
+            ProjectNotFoundException, BuildNotFoundException {
+        Hudson hudson = Mockito.mock(Hudson.class);
 
-		HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-		hudsonPlugin.connect("url");
-		hudsonPlugin.setHudson(hudson);
+        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
+        hudsonPlugin.connect("url");
+        hudsonPlugin.setHudson(hudson);
 
-		when(hudson.getLastBuildNumber("project1")).thenReturn(5);
+        when(hudson.getLastBuildNumber("project1")).thenReturn(5);
 
-		ProjectId projectId = new ProjectId();
-		projectId.addId("HUDSON_ID", "project1");
+        ProjectId projectId = new ProjectId();
+        projectId.addId("HUDSON_ID", "project1");
 
-		int lastBuildNumber = hudsonPlugin.getLastBuildNumber(projectId);
+        int lastBuildNumber = hudsonPlugin.getLastBuildNumber(projectId);
 
-		assertEquals(5, lastBuildNumber);
-	}
+        assertEquals(5, lastBuildNumber);
+    }
 
-	@Test
-	public void should_populate_project() throws ProjectNotFoundException, HudsonProjectNotFoundException {
-		Hudson hudson = Mockito.mock(Hudson.class);
+    @Test
+    public void should_populate_project() throws ProjectNotFoundException, HudsonProjectNotFoundException {
+        Hudson hudson = Mockito.mock(Hudson.class);
 
-		HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-		hudsonPlugin.connect("url");
-		hudsonPlugin.setHudson(hudson);
+        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
+        hudsonPlugin.connect("url");
+        hudsonPlugin.setHudson(hudson);
 
-		HudsonBuild currentBuild = new HudsonBuild();
+        HudsonBuild currentBuild = new HudsonBuild();
 
-		HudsonBuild completedBuild = new HudsonBuild();
-		completedBuild.setState("failure");
+        HudsonBuild completedBuild = new HudsonBuild();
+        completedBuild.setState("failure");
 
-		HudsonProject hudsonProject = new HudsonProject();
-		hudsonProject.setName("new_name");
-		hudsonProject.setCompletedBuild(completedBuild);
-		hudsonProject.setCurrentBuild(currentBuild);
+        HudsonProject hudsonProject = new HudsonProject();
+        hudsonProject.setName("new_name");
+        hudsonProject.setCompletedBuild(completedBuild);
+        hudsonProject.setCurrentBuild(currentBuild);
 
-		when(hudson.findProject(Matchers.anyString())).thenReturn(hudsonProject);
+        when(hudson.findProject(Matchers.anyString())).thenReturn(hudsonProject);
 
-		Project project = new Project("old_name");
+        Project project = new Project("old_name");
 
-		hudsonPlugin.populate(project);
+        hudsonPlugin.populate(project);
 
-		assertEquals(State.FAILURE, project.getState());
-		assertEquals("old_name", project.getName());
-	}
+        assertEquals(State.FAILURE, project.getState());
+        assertEquals("old_name", project.getName());
+    }
 
-	@Test(expected = IllegalStateException.class)
-	public void should_throw_exception_if_no_url() {
-		new HudsonConnectionPlugin().connect("");
-	}
+    @Test(expected = IllegalStateException.class)
+    public void should_throw_exception_if_no_url() {
+        new HudsonConnectionPlugin().connect("");
+    }
 
-	@Test
-	public void should_create_hudson() {
-		new HudsonConnectionPlugin().connect("url");
-	}
+    @Test
+    public void should_create_hudson() {
+        new HudsonConnectionPlugin().connect("url");
+    }
 
 }
