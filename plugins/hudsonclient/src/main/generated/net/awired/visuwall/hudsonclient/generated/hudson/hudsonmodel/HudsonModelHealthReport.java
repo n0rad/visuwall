@@ -54,66 +54,66 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "hudson.model.HealthReport", propOrder = { "description", "iconUrl", "score" })
 public class HudsonModelHealthReport {
 
-	protected String description;
-	protected String iconUrl;
-	protected int score;
+    protected String description;
+    protected String iconUrl;
+    protected int score;
 
-	/**
-	 * Gets the value of the description property.
-	 * 
-	 * @return possible object is {@link String }
-	 * 
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * Gets the value of the description property.
+     * 
+     * @return possible object is {@link String }
+     * 
+     */
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * Sets the value of the description property.
-	 * 
-	 * @param value
-	 *            allowed object is {@link String }
-	 * 
-	 */
-	public void setDescription(String value) {
-		this.description = value;
-	}
+    /**
+     * Sets the value of the description property.
+     * 
+     * @param value
+     *            allowed object is {@link String }
+     * 
+     */
+    public void setDescription(String value) {
+        this.description = value;
+    }
 
-	/**
-	 * Gets the value of the iconUrl property.
-	 * 
-	 * @return possible object is {@link String }
-	 * 
-	 */
-	public String getIconUrl() {
-		return iconUrl;
-	}
+    /**
+     * Gets the value of the iconUrl property.
+     * 
+     * @return possible object is {@link String }
+     * 
+     */
+    public String getIconUrl() {
+        return iconUrl;
+    }
 
-	/**
-	 * Sets the value of the iconUrl property.
-	 * 
-	 * @param value
-	 *            allowed object is {@link String }
-	 * 
-	 */
-	public void setIconUrl(String value) {
-		this.iconUrl = value;
-	}
+    /**
+     * Sets the value of the iconUrl property.
+     * 
+     * @param value
+     *            allowed object is {@link String }
+     * 
+     */
+    public void setIconUrl(String value) {
+        this.iconUrl = value;
+    }
 
-	/**
-	 * Gets the value of the score property.
-	 * 
-	 */
-	public int getScore() {
-		return score;
-	}
+    /**
+     * Gets the value of the score property.
+     * 
+     */
+    public int getScore() {
+        return score;
+    }
 
-	/**
-	 * Sets the value of the score property.
-	 * 
-	 */
-	public void setScore(int value) {
-		this.score = value;
-	}
+    /**
+     * Sets the value of the score property.
+     * 
+     */
+    public void setScore(int value) {
+        this.score = value;
+    }
 
 }

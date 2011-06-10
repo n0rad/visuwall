@@ -18,38 +18,36 @@ package net.awired.visuwall.core.utils;
 
 import java.util.Iterator;
 import java.util.List;
-
 import org.springframework.util.AutoPopulatingList;
 
 public class ShrinkList<E> extends AutoPopulatingList<E> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ShrinkList(Class<? extends E> elementClass) {
-		super(elementClass);
-	}
+    public ShrinkList(Class<? extends E> elementClass) {
+        super(elementClass);
+    }
 
-	/**
-	 * Decorates list with shrinkable lazy list.
-	 */
-	public static <E> List<E> decorate(Class<E> elementClass) {
-		return new ShrinkList<E>(elementClass);
-	}
+    /**
+     * Decorates list with shrinkable lazy list.
+     */
+    public static <E> List<E> decorate(Class<E> elementClass) {
+        return new ShrinkList<E>(elementClass);
+    }
 
-	public void shrink() {
-		for (Iterator<E> i = super.iterator(); i.hasNext();)
-			if (i.next() == null)
-				i.remove();
-	}
+    public void shrink() {
+        for (Iterator<E> i = super.iterator(); i.hasNext();)
+            if (i.next() == null)
+                i.remove();
+    }
 
-	@Override
-	public Iterator<E> iterator() {
-		shrink();
-		return super.iterator();
-	}
+    @Override
+    public Iterator<E> iterator() {
+        shrink();
+        return super.iterator();
+    }
 
 }
-
 
 //public class BindingList<E extends Markable> extends ArrayList<E> {
 //	Class cls;

@@ -52,27 +52,27 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "hudson.model.OverallLoadStatistics", propOrder = { "totalQueueLength" })
 public class HudsonModelOverallLoadStatistics extends HudsonModelLoadStatistics {
 
-	protected HudsonModelMultiStageTimeSeries totalQueueLength;
+    protected HudsonModelMultiStageTimeSeries totalQueueLength;
 
-	/**
-	 * Gets the value of the totalQueueLength property.
-	 * 
-	 * @return possible object is {@link HudsonModelMultiStageTimeSeries }
-	 * 
-	 */
-	public HudsonModelMultiStageTimeSeries getTotalQueueLength() {
-		return totalQueueLength;
-	}
+    /**
+     * Gets the value of the totalQueueLength property.
+     * 
+     * @return possible object is {@link HudsonModelMultiStageTimeSeries }
+     * 
+     */
+    public HudsonModelMultiStageTimeSeries getTotalQueueLength() {
+        return totalQueueLength;
+    }
 
-	/**
-	 * Sets the value of the totalQueueLength property.
-	 * 
-	 * @param value
-	 *            allowed object is {@link HudsonModelMultiStageTimeSeries }
-	 * 
-	 */
-	public void setTotalQueueLength(HudsonModelMultiStageTimeSeries value) {
-		this.totalQueueLength = value;
-	}
+    /**
+     * Sets the value of the totalQueueLength property.
+     * 
+     * @param value
+     *            allowed object is {@link HudsonModelMultiStageTimeSeries }
+     * 
+     */
+    public void setTotalQueueLength(HudsonModelMultiStageTimeSeries value) {
+        this.totalQueueLength = value;
+    }
 
 }
