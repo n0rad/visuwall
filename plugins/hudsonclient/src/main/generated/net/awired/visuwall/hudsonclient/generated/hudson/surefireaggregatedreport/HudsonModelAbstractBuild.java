@@ -56,78 +56,78 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "hudson.model.AbstractBuild", propOrder = { "builtOn", "changeSet", "culprit" })
 public class HudsonModelAbstractBuild extends HudsonModelRun {
 
-    protected String builtOn;
-    protected HudsonScmChangeLogSet changeSet;
-    protected List<HudsonModelUser> culprit;
+	protected String builtOn;
+	protected HudsonScmChangeLogSet changeSet;
+	protected List<HudsonModelUser> culprit;
 
-    /**
-     * Gets the value of the builtOn property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getBuiltOn() {
-        return builtOn;
-    }
+	/**
+	 * Gets the value of the builtOn property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getBuiltOn() {
+		return builtOn;
+	}
 
-    /**
-     * Sets the value of the builtOn property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setBuiltOn(String value) {
-        this.builtOn = value;
-    }
+	/**
+	 * Sets the value of the builtOn property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setBuiltOn(String value) {
+		this.builtOn = value;
+	}
 
-    /**
-     * Gets the value of the changeSet property.
-     * 
-     * @return possible object is {@link HudsonScmChangeLogSet }
-     * 
-     */
-    public HudsonScmChangeLogSet getChangeSet() {
-        return changeSet;
-    }
+	/**
+	 * Gets the value of the changeSet property.
+	 * 
+	 * @return possible object is {@link HudsonScmChangeLogSet }
+	 * 
+	 */
+	public HudsonScmChangeLogSet getChangeSet() {
+		return changeSet;
+	}
 
-    /**
-     * Sets the value of the changeSet property.
-     * 
-     * @param value
-     *            allowed object is {@link HudsonScmChangeLogSet }
-     * 
-     */
-    public void setChangeSet(HudsonScmChangeLogSet value) {
-        this.changeSet = value;
-    }
+	/**
+	 * Sets the value of the changeSet property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link HudsonScmChangeLogSet }
+	 * 
+	 */
+	public void setChangeSet(HudsonScmChangeLogSet value) {
+		this.changeSet = value;
+	}
 
-    /**
-     * Gets the value of the culprit property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make
-     * to the returned list will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method
-     * for the culprit property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * 
-     * <pre>
-     * getCulprit().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list {@link HudsonModelUser }
-     * 
-     * 
-     */
-    public List<HudsonModelUser> getCulprit() {
-        if (culprit == null) {
-            culprit = new ArrayList<HudsonModelUser>();
-        }
-        return this.culprit;
-    }
+	/**
+	 * Gets the value of the culprit property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to
+	 * the returned list will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for
+	 * the culprit property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getCulprit().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link HudsonModelUser }
+	 * 
+	 * 
+	 */
+	public List<HudsonModelUser> getCulprit() {
+		if (culprit == null) {
+			culprit = new ArrayList<HudsonModelUser>();
+		}
+		return this.culprit;
+	}
 
 }

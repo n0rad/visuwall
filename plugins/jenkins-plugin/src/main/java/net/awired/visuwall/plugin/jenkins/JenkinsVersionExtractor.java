@@ -23,17 +23,17 @@ import com.google.common.base.Preconditions;
  */
 public class JenkinsVersionExtractor {
 
-    private String content;
+	private String content;
 
-    public JenkinsVersionExtractor(String content) {
-        Preconditions.checkNotNull(content, "content is mandatory");
-        this.content = content;
-    }
+	public JenkinsVersionExtractor(String content) {
+		Preconditions.checkNotNull(content, "content is mandatory");
+		this.content = content;
+	}
 
-    public String version() {
-        String right = content.split("Jenkins ver\\.")[1].trim();
-        String version = right.split("<")[0];
-        return version;
-    }
+	public String version() {
+		String right = content.split("Jenkins ver\\.")[1].trim();
+		String version = right.split("<")[0];
+		return version;
+	}
 
 }

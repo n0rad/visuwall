@@ -21,17 +21,18 @@ import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
+
 import org.junit.Test;
 import org.sonar.wsclient.services.Measure;
 
 public class MeasureFinderIT {
 
-    @Test
-    public void should_find_measure() throws SonarMetricNotFoundException, SonarMetricsNotFoundException,
-            SonarMeasureNotFoundException {
-        MeasureFinder measureFinder = new MeasureFinder(IntegrationTestData.SONAR_URL);
-        Measure measure = measureFinder.findMeasure(IntegrationTestData.STRUTS_ARTIFACT_ID, "violations_density");
-        assertTrue(measure.getFormattedValue().length() > 0);
-        assertTrue(measure.getValue() > 0);
-    }
+	@Test
+	public void should_find_measure() throws SonarMetricNotFoundException, SonarMetricsNotFoundException,
+	        SonarMeasureNotFoundException {
+		MeasureFinder measureFinder = new MeasureFinder(IntegrationTestData.SONAR_URL);
+		Measure measure = measureFinder.findMeasure(IntegrationTestData.STRUTS_ARTIFACT_ID, "violations_density");
+		assertTrue(measure.getFormattedValue().length() > 0);
+		assertTrue(measure.getValue() > 0);
+	}
 }

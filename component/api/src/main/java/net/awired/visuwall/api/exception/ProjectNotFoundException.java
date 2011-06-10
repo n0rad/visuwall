@@ -18,13 +18,13 @@ package net.awired.visuwall.api.exception;
 
 public class ProjectNotFoundException extends Exception {
 
-    private static final long serialVersionUID = -3495904360547189671L;
+	private static final long serialVersionUID = -3495904360547189671L;
 
-    public ProjectNotFoundException(Throwable cause) {
-        super(cause);
-    }
+	public ProjectNotFoundException(Throwable cause) {
+		super(cause);
+	}
 
-    public ProjectNotFoundException(String cause) {
-        super(cause);
-    }
+	public ProjectNotFoundException(String cause) {
+		super(cause);
+	}
 }

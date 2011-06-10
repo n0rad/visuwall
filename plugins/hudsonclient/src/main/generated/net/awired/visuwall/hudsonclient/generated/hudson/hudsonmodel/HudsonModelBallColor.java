@@ -59,36 +59,36 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum HudsonModelBallColor {
 
-    @XmlEnumValue("red")
-    RED("red"), @XmlEnumValue("red_anime")
-    RED_ANIME("red_anime"), @XmlEnumValue("yellow")
-    YELLOW("yellow"), @XmlEnumValue("yellow_anime")
-    YELLOW_ANIME("yellow_anime"), @XmlEnumValue("blue")
-    BLUE("blue"), @XmlEnumValue("blue_anime")
-    BLUE_ANIME("blue_anime"), @XmlEnumValue("grey")
-    GREY("grey"), @XmlEnumValue("grey_anime")
-    GREY_ANIME("grey_anime"), @XmlEnumValue("disabled")
-    DISABLED("disabled"), @XmlEnumValue("disabled_anime")
-    DISABLED_ANIME("disabled_anime"), @XmlEnumValue("aborted")
-    ABORTED("aborted"), @XmlEnumValue("aborted_anime")
-    ABORTED_ANIME("aborted_anime");
-    private final String value;
+	@XmlEnumValue("red")
+	RED("red"), @XmlEnumValue("red_anime")
+	RED_ANIME("red_anime"), @XmlEnumValue("yellow")
+	YELLOW("yellow"), @XmlEnumValue("yellow_anime")
+	YELLOW_ANIME("yellow_anime"), @XmlEnumValue("blue")
+	BLUE("blue"), @XmlEnumValue("blue_anime")
+	BLUE_ANIME("blue_anime"), @XmlEnumValue("grey")
+	GREY("grey"), @XmlEnumValue("grey_anime")
+	GREY_ANIME("grey_anime"), @XmlEnumValue("disabled")
+	DISABLED("disabled"), @XmlEnumValue("disabled_anime")
+	DISABLED_ANIME("disabled_anime"), @XmlEnumValue("aborted")
+	ABORTED("aborted"), @XmlEnumValue("aborted_anime")
+	ABORTED_ANIME("aborted_anime");
+	private final String value;
 
-    HudsonModelBallColor(String v) {
-        value = v;
-    }
+	HudsonModelBallColor(String v) {
+		value = v;
+	}
 
-    public String value() {
-        return value;
-    }
+	public String value() {
+		return value;
+	}
 
-    public static HudsonModelBallColor fromValue(String v) {
-        for (HudsonModelBallColor c : HudsonModelBallColor.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+	public static HudsonModelBallColor fromValue(String v) {
+		for (HudsonModelBallColor c : HudsonModelBallColor.values()) {
+			if (c.value.equals(v)) {
+				return c;
+			}
+		}
+		throw new IllegalArgumentException(v);
+	}
 
 }

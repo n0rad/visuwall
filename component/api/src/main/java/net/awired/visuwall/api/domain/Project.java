@@ -18,137 +18,138 @@ package net.awired.visuwall.api.domain;
 
 import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.domain.quality.QualityResult;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Preconditions;
 
 public class Project implements Comparable<Project> {
 
-    private ProjectId projectId;
-    private String description;
-    private QualityResult qualityResult = new QualityResult();
-    private State state;
-    private int[] buildNumbers;
+	private ProjectId projectId;
+	private String description;
+	private QualityResult qualityResult = new QualityResult();
+	private State state;
+	private int[] buildNumbers;
 
-    private Build completedBuild;
-    private Build currentBuild;
+	private Build completedBuild;
+	private Build currentBuild;
 
-    public Project(String name) {
-        Preconditions.checkNotNull(name, "name is a mandatory parameter");
-        projectId = new ProjectId();
-        projectId.setName(name);
-    }
+	public Project(String name) {
+		Preconditions.checkNotNull(name, "name is a mandatory parameter");
+		projectId = new ProjectId();
+		projectId.setName(name);
+	}
 
-    public Project(ProjectId projectId) {
-        Preconditions.checkNotNull(projectId, "projectId is a mandatory parameter");
-        this.projectId = projectId;
-    }
+	public Project(ProjectId projectId) {
+		Preconditions.checkNotNull(projectId, "projectId is a mandatory parameter");
+		this.projectId = projectId;
+	}
 
-    // ////////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////////
 
-    public String getName() {
-        return projectId.getName();
-    }
+	public String getName() {
+		return projectId.getName();
+	}
 
-    public void setName(String name) {
-        projectId.setName(name);
-    }
+	public void setName(String name) {
+		projectId.setName(name);
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public ProjectId getProjectId() {
-        return projectId;
-    }
+	public ProjectId getProjectId() {
+		return projectId;
+	}
 
-    public QualityResult getQualityResult() {
-        return qualityResult;
-    }
+	public QualityResult getQualityResult() {
+		return qualityResult;
+	}
 
-    public State getState() {
-        return state;
-    }
+	public State getState() {
+		return state;
+	}
 
-    public void setState(State state) {
-        this.state = state;
-    }
+	public void setState(State state) {
+		this.state = state;
+	}
 
-    public int[] getBuildNumbers() {
-        return buildNumbers;
-    }
+	public int[] getBuildNumbers() {
+		return buildNumbers;
+	}
 
-    public void setBuildNumbers(int[] buildNumbers) {
-        this.buildNumbers = buildNumbers;
-    }
+	public void setBuildNumbers(int[] buildNumbers) {
+		this.buildNumbers = buildNumbers;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(projectId);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(projectId);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Project)) {
-            return false;
-        }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof Project)) {
+			return false;
+		}
 
-        if (projectId == null) {
-            return false;
-        }
+		if (projectId == null) {
+			return false;
+		}
 
-        Project project = (Project) obj;
-        return projectId.equals(project.projectId);
-    }
+		Project project = (Project) obj;
+		return projectId.equals(project.projectId);
+	}
 
-    public Build getCompletedBuild() {
-        return completedBuild;
-    }
+	public Build getCompletedBuild() {
+		return completedBuild;
+	}
 
-    public void setCompletedBuild(Build completedBuild) {
-        this.completedBuild = completedBuild;
-    }
+	public void setCompletedBuild(Build completedBuild) {
+		this.completedBuild = completedBuild;
+	}
 
-    public Build getCurrentBuild() {
-        return currentBuild;
-    }
+	public Build getCurrentBuild() {
+		return currentBuild;
+	}
 
-    public void setCurrentBuild(Build currentBuild) {
-        this.currentBuild = currentBuild;
-    }
+	public void setCurrentBuild(Build currentBuild) {
+		this.currentBuild = currentBuild;
+	}
 
-    @Override
-    public String toString() {
-        ToStringHelper toString = Objects.toStringHelper(this) //
-                .add("project id", projectId) //
-                .add("name", getName()) //
-                .add("description", description) //
-                .add("state", state) //
-                .add("quality result", qualityResult); //
+	@Override
+	public String toString() {
+		ToStringHelper toString = Objects.toStringHelper(this) //
+		        .add("project id", projectId) //
+		        .add("name", getName()) //
+		        .add("description", description) //
+		        .add("state", state) //
+		        .add("quality result", qualityResult); //
 
-        if (completedBuild != null) {
-            toString.add("completedBuild", completedBuild);
-        }
-        if (currentBuild != null) {
-            toString.add("currentBuild", currentBuild);
-        }
-        toString.addValue("\n");
+		if (completedBuild != null) {
+			toString.add("completedBuild", completedBuild);
+		}
+		if (currentBuild != null) {
+			toString.add("currentBuild", currentBuild);
+		}
+		toString.addValue("\n");
 
-        return toString.toString();
-    }
+		return toString.toString();
+	}
 
-    @Override
-    public int compareTo(Project project) {
-        Preconditions.checkNotNull(project, "project");
-        return getName().compareTo(project.getName());
-    }
+	@Override
+	public int compareTo(Project project) {
+		Preconditions.checkNotNull(project, "project");
+		return getName().compareTo(project.getName());
+	}
 
-    public void addId(String idName, String idValue) {
-        projectId.addId(idName, idValue);
-    }
+	public void addId(String idName, String idValue) {
+		projectId.addId(idName, idValue);
+	}
 
 }

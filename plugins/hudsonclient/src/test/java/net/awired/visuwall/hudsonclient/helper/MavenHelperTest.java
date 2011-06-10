@@ -18,22 +18,23 @@ package net.awired.visuwall.hudsonclient.helper;
 
 import static org.junit.Assert.assertTrue;
 import net.awired.visuwall.hudsonclient.util.ClasspathFiles;
+
 import org.junit.Test;
 
 public class MavenHelperTest {
 
-    @Test
-    public void testIsMaven() {
-        String projectUrl = ClasspathFiles.getAbsolutePathFile("hudson/fluxx.xml");
-        boolean isMavenProject = MavenHelper.isMavenProject(projectUrl);
-        assertTrue(isMavenProject);
-    }
+	@Test
+	public void testIsMaven() {
+		String projectUrl = ClasspathFiles.getAbsolutePathFile("hudson/fluxx.xml");
+		boolean isMavenProject = MavenHelper.isMavenProject(projectUrl);
+		assertTrue(isMavenProject);
+	}
 
-    @Test
-    public void testIsNotMaven() {
-        String projectUrl = ClasspathFiles.getAbsolutePathFile("simple-text-file.txt");
-        boolean isNotMavenProject = MavenHelper.isNotMavenProject(projectUrl);
-        assertTrue(isNotMavenProject);
-    }
+	@Test
+	public void testIsNotMaven() {
+		String projectUrl = ClasspathFiles.getAbsolutePathFile("simple-text-file.txt");
+		boolean isNotMavenProject = MavenHelper.isNotMavenProject(projectUrl);
+		assertTrue(isNotMavenProject);
+	}
 
 }

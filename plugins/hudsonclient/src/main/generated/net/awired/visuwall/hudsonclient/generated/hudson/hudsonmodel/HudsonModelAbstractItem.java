@@ -57,93 +57,93 @@ import javax.xml.bind.annotation.XmlType;
 @XmlSeeAlso({ HudsonModelJob.class })
 public class HudsonModelAbstractItem extends HudsonModelActionable {
 
-    protected String description;
-    protected String displayName;
-    protected String name;
-    protected String url;
+	protected String description;
+	protected String displayName;
+	protected String name;
+	protected String url;
 
-    /**
-     * Gets the value of the description property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getDescription() {
-        return description;
-    }
+	/**
+	 * Gets the value of the description property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getDescription() {
+		return description;
+	}
 
-    /**
-     * Sets the value of the description property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setDescription(String value) {
-        this.description = value;
-    }
+	/**
+	 * Sets the value of the description property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setDescription(String value) {
+		this.description = value;
+	}
 
-    /**
-     * Gets the value of the displayName property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getDisplayName() {
-        return displayName;
-    }
+	/**
+	 * Gets the value of the displayName property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getDisplayName() {
+		return displayName;
+	}
 
-    /**
-     * Sets the value of the displayName property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setDisplayName(String value) {
-        this.displayName = value;
-    }
+	/**
+	 * Sets the value of the displayName property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setDisplayName(String value) {
+		this.displayName = value;
+	}
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Gets the value of the name property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+	/**
+	 * Sets the value of the name property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
 
-    /**
-     * Gets the value of the url property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getUrl() {
-        return url;
-    }
+	/**
+	 * Gets the value of the url property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getUrl() {
+		return url;
+	}
 
-    /**
-     * Sets the value of the url property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setUrl(String value) {
-        this.url = value;
-    }
+	/**
+	 * Sets the value of the url property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setUrl(String value) {
+		this.url = value;
+	}
 
 }

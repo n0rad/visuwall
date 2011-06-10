@@ -25,144 +25,145 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 public class ProjectEnhancerServiceWithQualityPluginTest {
 
-    ProjectEnhancerService projectEnhancerService = new ProjectEnhancerService();
+	ProjectEnhancerService projectEnhancerService = new ProjectEnhancerService();
 
-    Project projectToEnhance;
+	Project projectToEnhance;
 
-    @Before
-    public void init() {
-        ProjectId projectId = new ProjectId();
-        projectId.addId("id", "value");
-        projectToEnhance = new Project(projectId);
+	@Before
+	public void init() {
+		ProjectId projectId = new ProjectId();
+		projectId.addId("id", "value");
+		projectToEnhance = new Project(projectId);
 
-        Build completedBuild = new Build();
+		Build completedBuild = new Build();
 
-        projectToEnhance.setCompletedBuild(completedBuild);
-    }
+		projectToEnhance.setCompletedBuild(completedBuild);
+	}
 
-    @Test
-    public void should_merge_with_one_build_plugin() throws Exception {
-        ConnectionPlugin qualityPlugin = Mockito.mock(ConnectionPlugin.class);
+	@Test
+	public void should_merge_with_one_build_plugin() throws Exception {
+		ConnectionPlugin qualityPlugin = Mockito.mock(ConnectionPlugin.class);
 
-        QualityResult qualityResult = new QualityResult();
-        QualityMeasure coverage = new QualityMeasure();
-        coverage.setName("coverage");
-        coverage.setValue(29D);
-        coverage.setFormattedValue("29%");
-        qualityResult.add("coverage", coverage);
+		QualityResult qualityResult = new QualityResult();
+		QualityMeasure coverage = new QualityMeasure();
+		coverage.setName("coverage");
+		coverage.setValue(29D);
+		coverage.setFormattedValue("29%");
+		qualityResult.add("coverage", coverage);
 
-        ProjectId projectId = projectToEnhance.getProjectId();
-        when(qualityPlugin.analyzeQuality(projectId)).thenReturn(qualityResult);
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin);
+		ProjectId projectId = projectToEnhance.getProjectId();
+		when(qualityPlugin.analyzeQuality(projectId)).thenReturn(qualityResult);
+		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin);
 
-        assertEquals(coverage, projectToEnhance.getQualityResult().getMeasure("coverage"));
-    }
+		assertEquals(coverage, projectToEnhance.getQualityResult().getMeasure("coverage"));
+	}
 
-    @Test
-    public void should_merge_with_two_build_plugins() throws Exception {
-        ConnectionPlugin qualityPlugin1 = Mockito.mock(ConnectionPlugin.class);
-        ConnectionPlugin qualityPlugin2 = Mockito.mock(ConnectionPlugin.class);
+	@Test
+	public void should_merge_with_two_build_plugins() throws Exception {
+		ConnectionPlugin qualityPlugin1 = Mockito.mock(ConnectionPlugin.class);
+		ConnectionPlugin qualityPlugin2 = Mockito.mock(ConnectionPlugin.class);
 
-        QualityResult qualityResult1 = new QualityResult();
-        QualityMeasure coverage = new QualityMeasure();
-        coverage.setName("coverage");
-        coverage.setValue(29D);
-        coverage.setFormattedValue("29%");
-        qualityResult1.add("coverage", coverage);
+		QualityResult qualityResult1 = new QualityResult();
+		QualityMeasure coverage = new QualityMeasure();
+		coverage.setName("coverage");
+		coverage.setValue(29D);
+		coverage.setFormattedValue("29%");
+		qualityResult1.add("coverage", coverage);
 
-        QualityResult qualityResult2 = new QualityResult();
-        QualityMeasure violations = new QualityMeasure();
-        violations.setName("violations");
-        violations.setValue(1D);
-        violations.setFormattedValue("1%");
-        qualityResult2.add("violations", violations);
+		QualityResult qualityResult2 = new QualityResult();
+		QualityMeasure violations = new QualityMeasure();
+		violations.setName("violations");
+		violations.setValue(1D);
+		violations.setFormattedValue("1%");
+		qualityResult2.add("violations", violations);
 
-        ProjectId projectId = projectToEnhance.getProjectId();
-        when(qualityPlugin1.analyzeQuality(projectId)).thenReturn(qualityResult1);
-        when(qualityPlugin2.analyzeQuality(projectId)).thenReturn(qualityResult2);
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin1);
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin2);
+		ProjectId projectId = projectToEnhance.getProjectId();
+		when(qualityPlugin1.analyzeQuality(projectId)).thenReturn(qualityResult1);
+		when(qualityPlugin2.analyzeQuality(projectId)).thenReturn(qualityResult2);
+		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin1);
+		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin2);
 
-        assertEquals(coverage, projectToEnhance.getQualityResult().getMeasure("coverage"));
-        assertEquals(violations, projectToEnhance.getQualityResult().getMeasure("violations"));
-    }
+		assertEquals(coverage, projectToEnhance.getQualityResult().getMeasure("coverage"));
+		assertEquals(violations, projectToEnhance.getQualityResult().getMeasure("violations"));
+	}
 
-    @Test
-    public void last_plugin_is_always_right() throws Exception {
-        ConnectionPlugin qualityPlugin1 = Mockito.mock(ConnectionPlugin.class);
-        ConnectionPlugin qualityPlugin2 = Mockito.mock(ConnectionPlugin.class);
+	@Test
+	public void last_plugin_is_always_right() throws Exception {
+		ConnectionPlugin qualityPlugin1 = Mockito.mock(ConnectionPlugin.class);
+		ConnectionPlugin qualityPlugin2 = Mockito.mock(ConnectionPlugin.class);
 
-        QualityResult qualityResult1 = new QualityResult();
-        QualityMeasure coverage = new QualityMeasure();
-        coverage.setName("coverage");
-        coverage.setValue(29D);
-        coverage.setFormattedValue("29%");
-        qualityResult1.add("coverage", coverage);
+		QualityResult qualityResult1 = new QualityResult();
+		QualityMeasure coverage = new QualityMeasure();
+		coverage.setName("coverage");
+		coverage.setValue(29D);
+		coverage.setFormattedValue("29%");
+		qualityResult1.add("coverage", coverage);
 
-        QualityResult qualityResult2 = new QualityResult();
-        QualityMeasure coverage2 = new QualityMeasure();
-        coverage2.setName("coverage");
-        coverage2.setValue(1D);
-        coverage2.setFormattedValue("1%");
-        qualityResult2.add("coverage", coverage2);
+		QualityResult qualityResult2 = new QualityResult();
+		QualityMeasure coverage2 = new QualityMeasure();
+		coverage2.setName("coverage");
+		coverage2.setValue(1D);
+		coverage2.setFormattedValue("1%");
+		qualityResult2.add("coverage", coverage2);
 
-        ProjectId projectId = projectToEnhance.getProjectId();
-        when(qualityPlugin1.analyzeQuality(projectId)).thenReturn(qualityResult1);
-        when(qualityPlugin2.analyzeQuality(projectId)).thenReturn(qualityResult2);
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin1);
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin2);
+		ProjectId projectId = projectToEnhance.getProjectId();
+		when(qualityPlugin1.analyzeQuality(projectId)).thenReturn(qualityResult1);
+		when(qualityPlugin2.analyzeQuality(projectId)).thenReturn(qualityResult2);
+		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin1);
+		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin2);
 
-        assertEquals(coverage2, projectToEnhance.getQualityResult().getMeasure("coverage"));
-    }
+		assertEquals(coverage2, projectToEnhance.getQualityResult().getMeasure("coverage"));
+	}
 
-    @Test
-    public void should_enhance_unit_test_results() throws Exception {
-        TestResult testResult = new TestResult();
-        testResult.setCoverage(4);
-        testResult.setFailCount(1);
-        testResult.setPassCount(2);
-        testResult.setSkipCount(3);
+	@Test
+	public void should_enhance_unit_test_results() throws Exception {
+		TestResult testResult = new TestResult();
+		testResult.setCoverage(4);
+		testResult.setFailCount(1);
+		testResult.setPassCount(2);
+		testResult.setSkipCount(3);
 
-        ConnectionPlugin qualityPlugin = Mockito.mock(ConnectionPlugin.class);
-        when(qualityPlugin.analyzeUnitTests(projectToEnhance.getProjectId())).thenReturn(testResult);
+		ConnectionPlugin qualityPlugin = Mockito.mock(ConnectionPlugin.class);
+		when(qualityPlugin.analyzeUnitTests(projectToEnhance.getProjectId())).thenReturn(testResult);
 
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin);
+		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin);
 
-        Build build = projectToEnhance.getCompletedBuild();
+		Build build = projectToEnhance.getCompletedBuild();
 
-        TestResult enhancedTestResult = build.getUnitTestResult();
-        assertEquals(1, enhancedTestResult.getFailCount());
-        assertEquals(2, enhancedTestResult.getPassCount());
-        assertEquals(3, enhancedTestResult.getSkipCount());
-        assertEquals(4.0, enhancedTestResult.getCoverage(), 0);
-    }
+		TestResult enhancedTestResult = build.getUnitTestResult();
+		assertEquals(1, enhancedTestResult.getFailCount());
+		assertEquals(2, enhancedTestResult.getPassCount());
+		assertEquals(3, enhancedTestResult.getSkipCount());
+		assertEquals(4.0, enhancedTestResult.getCoverage(), 0);
+	}
 
-    @Test
-    public void should_enhance_integration_test_results() throws Exception {
-        TestResult testResult = new TestResult();
-        testResult.setCoverage(4);
-        testResult.setFailCount(1);
-        testResult.setPassCount(2);
-        testResult.setSkipCount(3);
+	@Test
+	public void should_enhance_integration_test_results() throws Exception {
+		TestResult testResult = new TestResult();
+		testResult.setCoverage(4);
+		testResult.setFailCount(1);
+		testResult.setPassCount(2);
+		testResult.setSkipCount(3);
 
-        ConnectionPlugin qualityPlugin = Mockito.mock(ConnectionPlugin.class);
-        when(qualityPlugin.analyzeIntegrationTests(projectToEnhance.getProjectId())).thenReturn(testResult);
+		ConnectionPlugin qualityPlugin = Mockito.mock(ConnectionPlugin.class);
+		when(qualityPlugin.analyzeIntegrationTests(projectToEnhance.getProjectId())).thenReturn(testResult);
 
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin);
+		projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin);
 
-        Build build = projectToEnhance.getCompletedBuild();
+		Build build = projectToEnhance.getCompletedBuild();
 
-        TestResult enhancedTestResult = build.getIntegrationTestResult();
-        assertEquals(1, enhancedTestResult.getFailCount());
-        assertEquals(2, enhancedTestResult.getPassCount());
-        assertEquals(3, enhancedTestResult.getSkipCount());
-        assertEquals(4.0, enhancedTestResult.getCoverage(), 0);
-    }
+		TestResult enhancedTestResult = build.getIntegrationTestResult();
+		assertEquals(1, enhancedTestResult.getFailCount());
+		assertEquals(2, enhancedTestResult.getPassCount());
+		assertEquals(3, enhancedTestResult.getSkipCount());
+		assertEquals(4.0, enhancedTestResult.getCoverage(), 0);
+	}
 
 }

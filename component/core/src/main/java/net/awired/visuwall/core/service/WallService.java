@@ -18,20 +18,21 @@ package net.awired.visuwall.core.service;
 
 import java.util.List;
 import java.util.Set;
+
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
 
 public interface WallService {
 
-    void persist(Wall wall) throws NotCreatedException;
+	void persist(Wall wall) throws NotCreatedException;
+	
+	List<Wall> getWalls();
+	
+	Set<String> getWallNames();
 
-    List<Wall> getWalls();
-
-    Set<String> getWallNames();
-
-    Wall find(String wallName) throws NotFoundException;
-
+	Wall find(String wallName) throws NotFoundException;
+	
     Wall update(Wall wall);
 
 }

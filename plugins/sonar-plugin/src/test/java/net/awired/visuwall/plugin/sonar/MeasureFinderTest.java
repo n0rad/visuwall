@@ -21,6 +21,7 @@ import static org.mockito.Mockito.when;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
+
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
@@ -31,48 +32,48 @@ import org.sonar.wsclient.services.ResourceQuery;
 
 public class MeasureFinderTest {
 
-    @Test
-    public void should_find_quality_measure() throws SonarMetricNotFoundException, SonarMeasureNotFoundException {
-        Measure coverageMeasure = new Measure();
-        coverageMeasure.setFormattedValue("5%");
-        coverageMeasure.setValue(5D);
-        coverageMeasure.setMetricName("Coverage");
-        coverageMeasure.setMetricKey("coverage");
+	@Test
+	public void should_find_quality_measure() throws SonarMetricNotFoundException, SonarMeasureNotFoundException {
+		Measure coverageMeasure = new Measure();
+		coverageMeasure.setFormattedValue("5%");
+		coverageMeasure.setValue(5D);
+		coverageMeasure.setMetricName("Coverage");
+		coverageMeasure.setMetricKey("coverage");
 
-        Resource resource = Mockito.mock(Resource.class);
-        when(resource.getMeasure(Matchers.anyString())).thenReturn(coverageMeasure);
+		Resource resource = Mockito.mock(Resource.class);
+		when(resource.getMeasure(Matchers.anyString())).thenReturn(coverageMeasure);
 
-        Sonar sonar = Mockito.mock(Sonar.class);
-        when(sonar.find((ResourceQuery) Matchers.anyObject())).thenReturn(resource);
+		Sonar sonar = Mockito.mock(Sonar.class);
+		when(sonar.find((ResourceQuery) Matchers.anyObject())).thenReturn(resource);
 
-        MeasureFinder measureFinder = new MeasureFinder(sonar);
+		MeasureFinder measureFinder = new MeasureFinder(sonar);
 
-        QualityMeasure qualityMeasure = measureFinder.findQualityMeasure("artifactId", "coverage");
+		QualityMeasure qualityMeasure = measureFinder.findQualityMeasure("artifactId", "coverage");
 
-        assertEquals(coverageMeasure.getFormattedValue(), qualityMeasure.getFormattedValue());
-        assertEquals(coverageMeasure.getValue(), qualityMeasure.getValue());
-        assertEquals(coverageMeasure.getMetricKey(), qualityMeasure.getKey());
-    }
+		assertEquals(coverageMeasure.getFormattedValue(), qualityMeasure.getFormattedValue());
+		assertEquals(coverageMeasure.getValue(), qualityMeasure.getValue());
+		assertEquals(coverageMeasure.getMetricKey(), qualityMeasure.getKey());
+	}
 
-    @Test
-    public void should_find_measure() throws SonarMetricNotFoundException, SonarMeasureNotFoundException {
-        Measure coverageMeasure = new Measure();
-        coverageMeasure.setFormattedValue("5%");
-        coverageMeasure.setValue(5D);
-        coverageMeasure.setMetricName("Coverage");
+	@Test
+	public void should_find_measure() throws SonarMetricNotFoundException, SonarMeasureNotFoundException {
+		Measure coverageMeasure = new Measure();
+		coverageMeasure.setFormattedValue("5%");
+		coverageMeasure.setValue(5D);
+		coverageMeasure.setMetricName("Coverage");
 
-        Resource resource = Mockito.mock(Resource.class);
-        when(resource.getMeasure(Matchers.anyString())).thenReturn(coverageMeasure);
+		Resource resource = Mockito.mock(Resource.class);
+		when(resource.getMeasure(Matchers.anyString())).thenReturn(coverageMeasure);
 
-        Sonar sonar = Mockito.mock(Sonar.class);
-        when(sonar.find((ResourceQuery) Matchers.anyObject())).thenReturn(resource);
+		Sonar sonar = Mockito.mock(Sonar.class);
+		when(sonar.find((ResourceQuery) Matchers.anyObject())).thenReturn(resource);
 
-        MeasureFinder measureFinder = new MeasureFinder(sonar);
-        Measure measure = measureFinder.findMeasure("artifactId", "coverage");
+		MeasureFinder measureFinder = new MeasureFinder(sonar);
+		Measure measure = measureFinder.findMeasure("artifactId", "coverage");
 
-        assertEquals(coverageMeasure.getFormattedValue(), measure.getFormattedValue());
-        assertEquals(coverageMeasure.getValue(), measure.getValue());
-        assertEquals(coverageMeasure.getMetricName(), measure.getMetricName());
-    }
+		assertEquals(coverageMeasure.getFormattedValue(), measure.getFormattedValue());
+		assertEquals(coverageMeasure.getValue(), measure.getValue());
+		assertEquals(coverageMeasure.getMetricName(), measure.getMetricName());
+	}
 
 }

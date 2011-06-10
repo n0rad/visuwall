@@ -25,37 +25,38 @@ import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.finder.HudsonRootModuleFinder;
 import net.awired.visuwall.hudsonclient.loader.DocumentLoader;
 import net.awired.visuwall.hudsonclient.util.ClasspathFiles;
+
 import org.junit.Test;
 import org.w3c.dom.Document;
 
 public class HudsonRootModuleFinderTest {
 
-    @Test
-    public void should_find_artifact_id() throws Exception {
-        String pomUrl = ClasspathFiles.getAbsolutePathFile("pom-sample.xml");
-        Document document = new DocumentLoader().loadFromUrl(pomUrl);
-        DocumentLoader documentLoader = mock(DocumentLoader.class);
-        when(documentLoader.loadFromUrl(anyString())).thenReturn(document);
+	@Test
+	public void should_find_artifact_id() throws Exception {
+		String pomUrl = ClasspathFiles.getAbsolutePathFile("pom-sample.xml");
+		Document document = new DocumentLoader().loadFromUrl(pomUrl);
+		DocumentLoader documentLoader = mock(DocumentLoader.class);
+		when(documentLoader.loadFromUrl(anyString())).thenReturn(document);
 
-        HudsonUrlBuilder hudsonUrlBuilder = mock(HudsonUrlBuilder.class);
-        HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
-        hudsonRootModuleFinder.documentLoader = documentLoader;
+		HudsonUrlBuilder hudsonUrlBuilder = mock(HudsonUrlBuilder.class);
+		HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
+		hudsonRootModuleFinder.documentLoader = documentLoader;
 
-        String artifactId = hudsonRootModuleFinder.findArtifactId("test-project");
-        assertEquals("net.awired.visuwall:visuwall-hudsonclient", artifactId);
-    }
+		String artifactId = hudsonRootModuleFinder.findArtifactId("test-project");
+		assertEquals("net.awired.visuwall:visuwall-hudsonclient", artifactId);
+	}
 
-    @Test(expected = ArtifactIdNotFoundException.class)
-    public void should_not_find_artifact_id() throws Exception {
-        DocumentLoader documentLoader = mock(DocumentLoader.class);
-        when(documentLoader.loadFromUrl(anyString())).thenThrow(new Exception("file not found"));
+	@Test(expected = ArtifactIdNotFoundException.class)
+	public void should_not_find_artifact_id() throws Exception {
+		DocumentLoader documentLoader = mock(DocumentLoader.class);
+		when(documentLoader.loadFromUrl(anyString())).thenThrow(new Exception("file not found"));
 
-        HudsonUrlBuilder hudsonUrlBuilder = mock(HudsonUrlBuilder.class);
-        HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
-        hudsonRootModuleFinder.documentLoader = documentLoader;
+		HudsonUrlBuilder hudsonUrlBuilder = mock(HudsonUrlBuilder.class);
+		HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
+		hudsonRootModuleFinder.documentLoader = documentLoader;
 
-        hudsonRootModuleFinder.findArtifactId("test-project");
+		hudsonRootModuleFinder.findArtifactId("test-project");
 
-    }
+	}
 
 }

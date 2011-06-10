@@ -57,122 +57,122 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "hudson.model.Queue-Item", propOrder = { "blocked", "buildable", "params", "stuck", "task", "why" })
 public class HudsonModelQueueItem extends HudsonModelActionable {
 
-    protected boolean blocked;
-    protected boolean buildable;
-    protected String params;
-    protected boolean stuck;
-    protected Object task;
-    protected String why;
+	protected boolean blocked;
+	protected boolean buildable;
+	protected String params;
+	protected boolean stuck;
+	protected Object task;
+	protected String why;
 
-    /**
-     * Gets the value of the blocked property.
-     * 
-     */
-    public boolean isBlocked() {
-        return blocked;
-    }
+	/**
+	 * Gets the value of the blocked property.
+	 * 
+	 */
+	public boolean isBlocked() {
+		return blocked;
+	}
 
-    /**
-     * Sets the value of the blocked property.
-     * 
-     */
-    public void setBlocked(boolean value) {
-        this.blocked = value;
-    }
+	/**
+	 * Sets the value of the blocked property.
+	 * 
+	 */
+	public void setBlocked(boolean value) {
+		this.blocked = value;
+	}
 
-    /**
-     * Gets the value of the buildable property.
-     * 
-     */
-    public boolean isBuildable() {
-        return buildable;
-    }
+	/**
+	 * Gets the value of the buildable property.
+	 * 
+	 */
+	public boolean isBuildable() {
+		return buildable;
+	}
 
-    /**
-     * Sets the value of the buildable property.
-     * 
-     */
-    public void setBuildable(boolean value) {
-        this.buildable = value;
-    }
+	/**
+	 * Sets the value of the buildable property.
+	 * 
+	 */
+	public void setBuildable(boolean value) {
+		this.buildable = value;
+	}
 
-    /**
-     * Gets the value of the params property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getParams() {
-        return params;
-    }
+	/**
+	 * Gets the value of the params property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getParams() {
+		return params;
+	}
 
-    /**
-     * Sets the value of the params property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setParams(String value) {
-        this.params = value;
-    }
+	/**
+	 * Sets the value of the params property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setParams(String value) {
+		this.params = value;
+	}
 
-    /**
-     * Gets the value of the stuck property.
-     * 
-     */
-    public boolean isStuck() {
-        return stuck;
-    }
+	/**
+	 * Gets the value of the stuck property.
+	 * 
+	 */
+	public boolean isStuck() {
+		return stuck;
+	}
 
-    /**
-     * Sets the value of the stuck property.
-     * 
-     */
-    public void setStuck(boolean value) {
-        this.stuck = value;
-    }
+	/**
+	 * Sets the value of the stuck property.
+	 * 
+	 */
+	public void setStuck(boolean value) {
+		this.stuck = value;
+	}
 
-    /**
-     * Gets the value of the task property.
-     * 
-     * @return possible object is {@link Object }
-     * 
-     */
-    public Object getTask() {
-        return task;
-    }
+	/**
+	 * Gets the value of the task property.
+	 * 
+	 * @return possible object is {@link Object }
+	 * 
+	 */
+	public Object getTask() {
+		return task;
+	}
 
-    /**
-     * Sets the value of the task property.
-     * 
-     * @param value
-     *            allowed object is {@link Object }
-     * 
-     */
-    public void setTask(Object value) {
-        this.task = value;
-    }
+	/**
+	 * Sets the value of the task property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link Object }
+	 * 
+	 */
+	public void setTask(Object value) {
+		this.task = value;
+	}
 
-    /**
-     * Gets the value of the why property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getWhy() {
-        return why;
-    }
+	/**
+	 * Gets the value of the why property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getWhy() {
+		return why;
+	}
 
-    /**
-     * Sets the value of the why property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setWhy(String value) {
-        this.why = value;
-    }
+	/**
+	 * Sets the value of the why property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setWhy(String value) {
+		this.why = value;
+	}
 
 }

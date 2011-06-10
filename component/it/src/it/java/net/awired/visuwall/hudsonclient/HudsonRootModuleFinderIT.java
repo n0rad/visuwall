@@ -20,24 +20,25 @@ import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.finder.HudsonRootModuleFinder;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 public class HudsonRootModuleFinderIT {
 
-    @Test
-    public void should_find_synthesis_root_module_from_hudson() throws ArtifactIdNotFoundException {
-        HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(IntegrationTestData.HUDSON_URL);
-        HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
-        String artifactId = hudsonRootModuleFinder.findArtifactId("struts");
-        Assert.assertEquals("org.apache.struts:struts-parent", artifactId);
-    }
+	@Test
+	public void should_find_synthesis_root_module_from_hudson() throws ArtifactIdNotFoundException {
+		HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(IntegrationTestData.HUDSON_URL);
+		HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
+		String artifactId = hudsonRootModuleFinder.findArtifactId("struts");
+		Assert.assertEquals("org.apache.struts:struts-parent", artifactId);
+	}
 
-    @Test
-    public void should_find_synthesis_root_module_from_jenkins() throws ArtifactIdNotFoundException {
-        HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(IntegrationTestData.JENKINS_URL);
-        HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
-        String artifactId = hudsonRootModuleFinder.findArtifactId("struts 2 instable");
-        Assert.assertEquals("org.apache.struts:struts2-parent", artifactId);
-    }
+	@Test
+	public void should_find_synthesis_root_module_from_jenkins() throws ArtifactIdNotFoundException {
+		HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(IntegrationTestData.JENKINS_URL);
+		HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
+		String artifactId = hudsonRootModuleFinder.findArtifactId("struts 2 instable");
+		Assert.assertEquals("org.apache.struts:struts2-parent", artifactId);
+	}
 }

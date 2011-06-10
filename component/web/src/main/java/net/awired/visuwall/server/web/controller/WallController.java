@@ -19,13 +19,16 @@ package net.awired.visuwall.server.web.controller;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
+
 import net.awired.visuwall.api.domain.ProjectStatus;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotFoundException;
 import net.awired.visuwall.core.service.PluginService;
 import net.awired.visuwall.core.service.WallHolderService;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,67 +47,68 @@ import org.springframework.web.context.request.WebRequest;
 @Controller
 @RequestMapping("/wall")
 public class WallController {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(WallController.class);
 
-    private static final Logger LOG = LoggerFactory.getLogger(WallController.class);
+	private static final String WALL_JSP = "wall/wallForm";
 
-    private static final String WALL_JSP = "wall/wallForm";
+	@Autowired
+	private WallHolderService wallService;
 
-    @Autowired
-    private WallHolderService wallService;
+	@Autowired
+	private PluginService pluginService;
 
-    @Autowired
-    private PluginService pluginService;
+	@ExceptionHandler(Exception.class)
+	public void handleAllExceptions(HttpServletResponse response, Exception e) throws IOException {
+		LOG.error("error :", e);
+		response.sendError(500, e.getMessage());
+	}
+	
+	@RequestMapping
+	public String getWallNames(ModelMap modelMap) {
+		Set<String> wallNames = wallService.getWallNames();
+		modelMap.put("data", wallNames);
+		return "wall/wallList";
+	}
 
-    @ExceptionHandler(Exception.class)
-    public void handleAllExceptions(HttpServletResponse response, Exception e) throws IOException {
-        LOG.error("error :", e);
-        response.sendError(500, e.getMessage());
-    }
+	@RequestMapping("{wallName}")
+	public String getProjects(@PathVariable String wallName, ModelMap modelMap)
+			throws NotFoundException {
+		Wall wall = wallService.find(wallName);
+		modelMap.put("data", wall);
+		return WALL_JSP;
+	}
 
-    @RequestMapping
-    public String getWallNames(ModelMap modelMap) {
-        Set<String> wallNames = wallService.getWallNames();
-        modelMap.put("data", wallNames);
-        return "wall/wallList";
-    }
+	@RequestMapping("{wallName}/status")
+	public @ResponseBody
+	List<ProjectStatus> getStatus(@PathVariable String wallName,
+			ModelMap modelMap) throws NotFoundException {
+		List<ProjectStatus> status = wallService.getStatus(wallName);
+		return status;
+	}
 
-    @RequestMapping("{wallName}")
-    public String getProjects(@PathVariable String wallName, ModelMap modelMap) throws NotFoundException {
-        Wall wall = wallService.find(wallName);
-        modelMap.put("data", wall);
-        return WALL_JSP;
-    }
+	@RequestMapping(value = "create", method = RequestMethod.GET)
+	public String getCreate(ModelMap modelMap) {
+		Wall wall = new Wall();
+		modelMap.put("data", wall);
+		modelMap.put("softwares", pluginService.getPluginsInfo());
+		return WALL_JSP;
+	}
 
-    @RequestMapping("{wallName}/status")
-    public @ResponseBody
-    List<ProjectStatus> getStatus(@PathVariable String wallName, ModelMap modelMap) throws NotFoundException {
-        List<ProjectStatus> status = wallService.getStatus(wallName);
-        return status;
-    }
+	@RequestMapping(method = RequestMethod.POST)
+	public @ResponseBody Object update(Wall wall) {
+		wallService.update(wall);
+		return true;
+	}
 
-    @RequestMapping(value = "create", method = RequestMethod.GET)
-    public String getCreate(ModelMap modelMap) {
-        Wall wall = new Wall();
-        modelMap.put("data", wall);
-        modelMap.put("softwares", pluginService.getPluginsInfo());
-        return WALL_JSP;
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    public @ResponseBody
-    Object update(Wall wall) {
-        wallService.update(wall);
-        return true;
-    }
-
-    @RequestMapping(value = "{wallName}", method = RequestMethod.DELETE)
-    public void DeleteWall(@PathVariable String wallName) {
-        throw new NotImplementedException();
-    }
-
-    @InitBinder
-    public void initBinder(WebDataBinder binder, WebRequest request) {
-        binder.setAutoGrowNestedPaths(false);
-    }
+	@RequestMapping(value = "{wallName}", method = RequestMethod.DELETE)
+	public void DeleteWall(@PathVariable String wallName) {
+		throw new NotImplementedException();
+	}
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder, WebRequest request) {
+		binder.setAutoGrowNestedPaths(false);
+	}
 
 }

@@ -17,14 +17,17 @@
 package net.awired.visuwall.core.service;
 
 import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.NotImplementedOperationException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.core.domain.ConnectedProject;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -32,43 +35,43 @@ import org.mockito.Mockito;
 
 public class ProjectServiceTest {
 
-    ProjectService projectService;
+	ProjectService projectService;
 
-    @Before
-    public void init() {
-        projectService = new ProjectService();
-        ProjectEnhancerService projectEnhancerService = Mockito.mock(ProjectEnhancerService.class);
-        projectService.projectEnhancerService = projectEnhancerService;
-    }
+	@Before
+	public void init() {
+		projectService = new ProjectService();
+		ProjectEnhancerService projectEnhancerService = Mockito.mock(ProjectEnhancerService.class);
+		projectService.projectEnhancerService = projectEnhancerService;
+	}
 
-    @Test(expected = NullPointerException.class)
-    public void should_not_accept_null_parameter() throws NotCreatedException {
-        projectService.updateProject(null);
-    }
+	@Test(expected = NullPointerException.class)
+	public void should_not_accept_null_parameter() throws NotCreatedException {
+		projectService.updateProject(null);
+	}
 
-    public List<ConnectionPlugin> getConnectionPlugins() throws NotImplementedOperationException {
-        List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>();
-        ConnectionPlugin connectionPlugin = Mockito.mock(ConnectionPlugin.class);
-        connectionPlugins.add(connectionPlugin);
+	public List<ConnectionPlugin> getConnectionPlugins() throws NotImplementedOperationException {
+		List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>();
+		ConnectionPlugin connectionPlugin = Mockito.mock(ConnectionPlugin.class);
+		connectionPlugins.add(connectionPlugin);
 
-        List<ProjectId> projectIds = new ArrayList<ProjectId>();
-        projectIds.add(new ProjectId());
-        projectIds.add(new ProjectId());
-        when(connectionPlugin.findAllProjects()).thenReturn(projectIds);
-        return connectionPlugins;
-    }
+		List<ProjectId> projectIds = new ArrayList<ProjectId>();
+		projectIds.add(new ProjectId());
+		projectIds.add(new ProjectId());
+		when(connectionPlugin.findAllProjects()).thenReturn(projectIds);
+		return connectionPlugins;
+	}
 
-    @Test
-    public void should_call_merge_for_plugins() throws NotImplementedOperationException {
-        List<ConnectionPlugin> connectionPlugins = getConnectionPlugins();
-        ConnectedProject project = new ConnectedProject("test");
-        project.setConnectionPlugins(connectionPlugins);
-        projectService.updateProject(project);
+	@Test
+	public void should_call_merge_for_plugins() throws NotImplementedOperationException {
+		List<ConnectionPlugin> connectionPlugins = getConnectionPlugins();
+		ConnectedProject project = new ConnectedProject("test");
+		project.setConnectionPlugins(connectionPlugins);
+		projectService.updateProject(project);
 
-        Mockito.verify(projectService.projectEnhancerService).enhanceWithBuildInformations(project,
-                connectionPlugins.iterator().next());
-        Mockito.verify(projectService.projectEnhancerService).enhanceWithQualityAnalysis(project,
-                connectionPlugins.iterator().next(), projectService.metrics);
-    }
+		Mockito.verify(projectService.projectEnhancerService).enhanceWithBuildInformations(project,
+		        connectionPlugins.iterator().next());
+		Mockito.verify(projectService.projectEnhancerService).enhanceWithQualityAnalysis(project,
+				connectionPlugins.iterator().next(), projectService.metrics);
+	}
 
 }

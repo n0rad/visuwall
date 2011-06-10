@@ -18,10 +18,10 @@ package net.awired.visuwall.hudsonclient.exception;
 
 public class NotMavenProjectException extends Exception {
 
-    private static final long serialVersionUID = 6123323199073340395L;
+	private static final long serialVersionUID = 6123323199073340395L;
 
-    public NotMavenProjectException(String message) {
-        super(message);
-    }
+	public NotMavenProjectException(String message) {
+		super(message);
+	}
 
 }

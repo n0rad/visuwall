@@ -61,238 +61,238 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "hudson.model.Run", propOrder = { "artifact", "building", "description", "duration",
-        "fullDisplayName", "id", "keepLog", "number", "result", "timestamp", "url" })
+@XmlType(name = "hudson.model.Run", propOrder = { "artifact", "building", "description", "duration", "fullDisplayName",
+        "id", "keepLog", "number", "result", "timestamp", "url" })
 public class HudsonModelRun extends HudsonModelActionable {
 
-    protected List<HudsonModelRunArtifact> artifact;
-    protected boolean building;
-    protected String description;
-    protected long duration;
-    protected String fullDisplayName;
-    protected String id;
-    protected boolean keepLog;
-    protected int number;
-    protected Object result;
-    protected Long timestamp;
-    protected String url;
+	protected List<HudsonModelRunArtifact> artifact;
+	protected boolean building;
+	protected String description;
+	protected long duration;
+	protected String fullDisplayName;
+	protected String id;
+	protected boolean keepLog;
+	protected int number;
+	protected Object result;
+	protected Long timestamp;
+	protected String url;
 
-    /**
-     * Gets the value of the artifact property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make
-     * to the returned list will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method
-     * for the artifact property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * 
-     * <pre>
-     * getArtifact().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list {@link HudsonModelRunArtifact }
-     * 
-     * 
-     */
-    public List<HudsonModelRunArtifact> getArtifact() {
-        if (artifact == null) {
-            artifact = new ArrayList<HudsonModelRunArtifact>();
-        }
-        return this.artifact;
-    }
+	/**
+	 * Gets the value of the artifact property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to
+	 * the returned list will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for
+	 * the artifact property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getArtifact().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link HudsonModelRunArtifact }
+	 * 
+	 * 
+	 */
+	public List<HudsonModelRunArtifact> getArtifact() {
+		if (artifact == null) {
+			artifact = new ArrayList<HudsonModelRunArtifact>();
+		}
+		return this.artifact;
+	}
 
-    /**
-     * Gets the value of the building property.
-     * 
-     */
-    public boolean isBuilding() {
-        return building;
-    }
+	/**
+	 * Gets the value of the building property.
+	 * 
+	 */
+	public boolean isBuilding() {
+		return building;
+	}
 
-    /**
-     * Sets the value of the building property.
-     * 
-     */
-    public void setBuilding(boolean value) {
-        this.building = value;
-    }
+	/**
+	 * Sets the value of the building property.
+	 * 
+	 */
+	public void setBuilding(boolean value) {
+		this.building = value;
+	}
 
-    /**
-     * Gets the value of the description property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getDescription() {
-        return description;
-    }
+	/**
+	 * Gets the value of the description property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getDescription() {
+		return description;
+	}
 
-    /**
-     * Sets the value of the description property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setDescription(String value) {
-        this.description = value;
-    }
+	/**
+	 * Sets the value of the description property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setDescription(String value) {
+		this.description = value;
+	}
 
-    /**
-     * Gets the value of the duration property.
-     * 
-     */
-    public long getDuration() {
-        return duration;
-    }
+	/**
+	 * Gets the value of the duration property.
+	 * 
+	 */
+	public long getDuration() {
+		return duration;
+	}
 
-    /**
-     * Sets the value of the duration property.
-     * 
-     */
-    public void setDuration(long value) {
-        this.duration = value;
-    }
+	/**
+	 * Sets the value of the duration property.
+	 * 
+	 */
+	public void setDuration(long value) {
+		this.duration = value;
+	}
 
-    /**
-     * Gets the value of the fullDisplayName property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getFullDisplayName() {
-        return fullDisplayName;
-    }
+	/**
+	 * Gets the value of the fullDisplayName property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getFullDisplayName() {
+		return fullDisplayName;
+	}
 
-    /**
-     * Sets the value of the fullDisplayName property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setFullDisplayName(String value) {
-        this.fullDisplayName = value;
-    }
+	/**
+	 * Sets the value of the fullDisplayName property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setFullDisplayName(String value) {
+		this.fullDisplayName = value;
+	}
 
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getId() {
-        return id;
-    }
+	/**
+	 * Gets the value of the id property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getId() {
+		return id;
+	}
 
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setId(String value) {
-        this.id = value;
-    }
+	/**
+	 * Sets the value of the id property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setId(String value) {
+		this.id = value;
+	}
 
-    /**
-     * Gets the value of the keepLog property.
-     * 
-     */
-    public boolean isKeepLog() {
-        return keepLog;
-    }
+	/**
+	 * Gets the value of the keepLog property.
+	 * 
+	 */
+	public boolean isKeepLog() {
+		return keepLog;
+	}
 
-    /**
-     * Sets the value of the keepLog property.
-     * 
-     */
-    public void setKeepLog(boolean value) {
-        this.keepLog = value;
-    }
+	/**
+	 * Sets the value of the keepLog property.
+	 * 
+	 */
+	public void setKeepLog(boolean value) {
+		this.keepLog = value;
+	}
 
-    /**
-     * Gets the value of the number property.
-     * 
-     */
-    public int getNumber() {
-        return number;
-    }
+	/**
+	 * Gets the value of the number property.
+	 * 
+	 */
+	public int getNumber() {
+		return number;
+	}
 
-    /**
-     * Sets the value of the number property.
-     * 
-     */
-    public void setNumber(int value) {
-        this.number = value;
-    }
+	/**
+	 * Sets the value of the number property.
+	 * 
+	 */
+	public void setNumber(int value) {
+		this.number = value;
+	}
 
-    /**
-     * Gets the value of the result property.
-     * 
-     * @return possible object is {@link Object }
-     * 
-     */
-    public Object getResult() {
-        return result;
-    }
+	/**
+	 * Gets the value of the result property.
+	 * 
+	 * @return possible object is {@link Object }
+	 * 
+	 */
+	public Object getResult() {
+		return result;
+	}
 
-    /**
-     * Sets the value of the result property.
-     * 
-     * @param value
-     *            allowed object is {@link Object }
-     * 
-     */
-    public void setResult(Object value) {
-        this.result = value;
-    }
+	/**
+	 * Sets the value of the result property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link Object }
+	 * 
+	 */
+	public void setResult(Object value) {
+		this.result = value;
+	}
 
-    /**
-     * Gets the value of the timestamp property.
-     * 
-     * @return possible object is {@link Long }
-     * 
-     */
-    public Long getTimestamp() {
-        return timestamp;
-    }
+	/**
+	 * Gets the value of the timestamp property.
+	 * 
+	 * @return possible object is {@link Long }
+	 * 
+	 */
+	public Long getTimestamp() {
+		return timestamp;
+	}
 
-    /**
-     * Sets the value of the timestamp property.
-     * 
-     * @param value
-     *            allowed object is {@link Long }
-     * 
-     */
-    public void setTimestamp(Long value) {
-        this.timestamp = value;
-    }
+	/**
+	 * Sets the value of the timestamp property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link Long }
+	 * 
+	 */
+	public void setTimestamp(Long value) {
+		this.timestamp = value;
+	}
 
-    /**
-     * Gets the value of the url property.
-     * 
-     * @return possible object is {@link String }
-     * 
-     */
-    public String getUrl() {
-        return url;
-    }
+	/**
+	 * Gets the value of the url property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getUrl() {
+		return url;
+	}
 
-    /**
-     * Sets the value of the url property.
-     * 
-     * @param value
-     *            allowed object is {@link String }
-     * 
-     */
-    public void setUrl(String value) {
-        this.url = value;
-    }
+	/**
+	 * Sets the value of the url property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setUrl(String value) {
+		this.url = value;
+	}
 
 }

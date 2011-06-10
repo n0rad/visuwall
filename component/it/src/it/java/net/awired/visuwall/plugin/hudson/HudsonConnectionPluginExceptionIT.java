@@ -22,60 +22,61 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class HudsonConnectionPluginExceptionIT {
 
-    static HudsonConnectionPlugin hudsonConnectionPlugin = new HudsonConnectionPlugin();
+	static HudsonConnectionPlugin hudsonConnectionPlugin = new HudsonConnectionPlugin();
 
-    @BeforeClass
-    public static void setUp() {
-        hudsonConnectionPlugin.connect(IntegrationTestData.HUDSON_URL);
-    }
+	@BeforeClass
+	public static void setUp() {
+		hudsonConnectionPlugin.connect(IntegrationTestData.HUDSON_URL);
+	}
 
-    @Test(expected = ProjectNotFoundException.class)
-    public void should_throw_exception_when_searching_inexistant_build() throws BuildNotFoundException,
-            ProjectNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "");
-        hudsonConnectionPlugin.findBuildByBuildNumber(projectId, 0);
-    }
+	@Test(expected = ProjectNotFoundException.class)
+	public void should_throw_exception_when_searching_inexistant_build() throws BuildNotFoundException,
+	        ProjectNotFoundException {
+		ProjectId projectId = new ProjectId();
+		projectId.addId(HUDSON_ID, "");
+		hudsonConnectionPlugin.findBuildByBuildNumber(projectId, 0);
+	}
 
-    @Test(expected = ProjectNotFoundException.class)
-    public void should_throw_exception_when_searching_inexistant_project() throws ProjectNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "");
-        hudsonConnectionPlugin.findProject(projectId);
-    }
+	@Test(expected = ProjectNotFoundException.class)
+	public void should_throw_exception_when_searching_inexistant_project() throws ProjectNotFoundException {
+		ProjectId projectId = new ProjectId();
+		projectId.addId(HUDSON_ID, "");
+		hudsonConnectionPlugin.findProject(projectId);
+	}
 
-    @Test(expected = ProjectNotFoundException.class)
-    public void should_throw_exception_when_searching_estimated_finish_time_of_inexistant_project()
-            throws ProjectNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "");
-        hudsonConnectionPlugin.getEstimatedFinishTime(projectId);
-    }
+	@Test(expected = ProjectNotFoundException.class)
+	public void should_throw_exception_when_searching_estimated_finish_time_of_inexistant_project()
+	        throws ProjectNotFoundException {
+		ProjectId projectId = new ProjectId();
+		projectId.addId(HUDSON_ID, "");
+		hudsonConnectionPlugin.getEstimatedFinishTime(projectId);
+	}
 
-    @Test(expected = ProjectNotFoundException.class)
-    public void should_throw_exception_when_searching_last_build_number_of_inexistant_project()
-            throws BuildNotFoundException, ProjectNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "");
-        hudsonConnectionPlugin.getLastBuildNumber(projectId);
-    }
+	@Test(expected = ProjectNotFoundException.class)
+	public void should_throw_exception_when_searching_last_build_number_of_inexistant_project()
+	        throws BuildNotFoundException, ProjectNotFoundException {
+		ProjectId projectId = new ProjectId();
+		projectId.addId(HUDSON_ID, "");
+		hudsonConnectionPlugin.getLastBuildNumber(projectId);
+	}
 
-    @Test(expected = ProjectNotFoundException.class)
-    public void should_throw_exception_when_searching_is_building_of_inexistant_project()
-            throws ProjectNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "");
-        hudsonConnectionPlugin.isBuilding(projectId);
-    }
+	@Test(expected = ProjectNotFoundException.class)
+	public void should_throw_exception_when_searching_is_building_of_inexistant_project()
+	        throws ProjectNotFoundException {
+		ProjectId projectId = new ProjectId();
+		projectId.addId(HUDSON_ID, "");
+		hudsonConnectionPlugin.isBuilding(projectId);
+	}
 
-    @Test(expected = ProjectNotFoundException.class)
-    public void should_throw_exception_when_populating_inexistant_project() throws ProjectNotFoundException {
-        Project project = new Project("");
-        hudsonConnectionPlugin.populate(project);
-    }
+	@Test(expected = ProjectNotFoundException.class)
+	public void should_throw_exception_when_populating_inexistant_project() throws ProjectNotFoundException {
+		Project project = new Project("");
+		hudsonConnectionPlugin.populate(project);
+	}
 }
