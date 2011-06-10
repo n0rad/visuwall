@@ -40,7 +40,7 @@ public class BambooPlugin implements VisuwallPlugin {
 	}
 
 	@Override
-	public SoftwareId isManageable(URL url) {
+	public SoftwareId getSoftwareId(URL url) {
 		SoftwareId softwareId = new SoftwareId();
 		return softwareId;
 	}

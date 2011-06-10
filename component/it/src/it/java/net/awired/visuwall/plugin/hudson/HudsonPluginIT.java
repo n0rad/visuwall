@@ -42,7 +42,7 @@ public class HudsonPluginIT {
 	@Test
 	public void should_recognize_hudson_instance_with_valid_url() throws Exception {
 		HudsonPlugin hudsonPlugin = new HudsonPlugin();
-		SoftwareId softwareId = hudsonPlugin.isManageable(new URL("http://fluxx.fr.cr:8080/hudson"));
+		SoftwareId softwareId = hudsonPlugin.getSoftwareId(new URL("http://fluxx.fr.cr:8080/hudson"));
 
 		assertEquals("Hudson", softwareId.getName());
 		assertEquals("1.396", softwareId.getVersion());
@@ -53,7 +53,7 @@ public class HudsonPluginIT {
 	public void should_not_fail_if_url_is_not_manageable() throws Exception {
 		HudsonPlugin hudsonPlugin = new HudsonPlugin();
 		String url = "http://www.google.fr";
-		hudsonPlugin.isManageable(new URL(url));
+		hudsonPlugin.getSoftwareId(new URL(url));
 	}
 
 }

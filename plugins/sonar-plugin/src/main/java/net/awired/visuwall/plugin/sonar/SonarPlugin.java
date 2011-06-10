@@ -53,7 +53,7 @@ public class SonarPlugin implements VisuwallPlugin {
 	}
 
 	@Override
-	public SoftwareId isManageable(URL url) throws IncompatibleSoftwareException {
+	public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
 		Preconditions.checkNotNull(url, "url is mandatory");
 		try {
 			Client client = Client.create();

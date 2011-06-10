@@ -32,7 +32,7 @@ public class SonarPluginIT {
 	@Test
 	public void should_recognize_sonar_instance_with_valid_url() throws Exception {
 		SonarPlugin sonarPlugin = new SonarPlugin();
-		SoftwareId softwareId = sonarPlugin.isManageable(new URL(SONAR_URL));
+		SoftwareId softwareId = sonarPlugin.getSoftwareId(new URL(SONAR_URL));
 
 		assertEquals("Sonar", softwareId.getName());
 		assertEquals("2.8", softwareId.getVersion());
@@ -43,6 +43,6 @@ public class SonarPluginIT {
 	public void should_not_fail_if_url_is_not_manageable() throws Exception {
 		SonarPlugin sonarPlugin = new SonarPlugin();
 		String url = "http://www.google.fr";
-		sonarPlugin.isManageable(new URL(url));
+		sonarPlugin.getSoftwareId(new URL(url));
 	}
 }

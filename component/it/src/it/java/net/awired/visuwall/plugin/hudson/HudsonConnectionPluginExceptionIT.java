@@ -18,7 +18,6 @@ package net.awired.visuwall.plugin.hudson;
 
 import static net.awired.visuwall.IntegrationTestData.HUDSON_ID;
 import net.awired.visuwall.IntegrationTestData;
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -72,11 +71,5 @@ public class HudsonConnectionPluginExceptionIT {
 		ProjectId projectId = new ProjectId();
 		projectId.addId(HUDSON_ID, "");
 		hudsonConnectionPlugin.isBuilding(projectId);
-	}
-
-	@Test(expected = ProjectNotFoundException.class)
-	public void should_throw_exception_when_populating_inexistant_project() throws ProjectNotFoundException {
-		Project project = new Project("");
-		hudsonConnectionPlugin.populate(project);
 	}
 }

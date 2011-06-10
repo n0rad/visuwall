@@ -105,9 +105,7 @@ public class ProjectEnhancerService {
 		}
 
 		QualityResult qualityResultToMerge = analyzedProject.getQualityResult();
-
 		addQualityAnalysis(qualityPlugin, projectId, qualityResultToMerge, metrics);
-
 		addUnitTestsAnalysis(qualityPlugin, projectId, unitTestResultToMerge);
 		addIntegrationTestsAnalysis(qualityPlugin, projectId, integrationTestResultToMerge);
 	}

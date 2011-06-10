@@ -198,34 +198,6 @@ public class HudsonConnectionPluginTest {
 		assertEquals(5, lastBuildNumber);
 	}
 
-	@Test
-	public void should_populate_project() throws ProjectNotFoundException, HudsonProjectNotFoundException {
-		Hudson hudson = Mockito.mock(Hudson.class);
-
-		HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-		hudsonPlugin.connect("url");
-		hudsonPlugin.setHudson(hudson);
-
-		HudsonBuild currentBuild = new HudsonBuild();
-
-		HudsonBuild completedBuild = new HudsonBuild();
-		completedBuild.setState("failure");
-
-		HudsonProject hudsonProject = new HudsonProject();
-		hudsonProject.setName("new_name");
-		hudsonProject.setCompletedBuild(completedBuild);
-		hudsonProject.setCurrentBuild(currentBuild);
-
-		when(hudson.findProject(Matchers.anyString())).thenReturn(hudsonProject);
-
-		Project project = new Project("old_name");
-
-		hudsonPlugin.populate(project);
-
-		assertEquals(State.FAILURE, project.getState());
-		assertEquals("old_name", project.getName());
-	}
-
 	@Test(expected = IllegalStateException.class)
 	public void should_throw_exception_if_no_url() {
 		new HudsonConnectionPlugin().connect("");

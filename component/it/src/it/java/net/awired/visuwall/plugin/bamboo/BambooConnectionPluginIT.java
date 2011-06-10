@@ -33,7 +33,6 @@ import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class BambooConnectionPluginIT {
@@ -98,17 +97,6 @@ public class BambooConnectionPluginIT {
 		ProjectId projectId = struts2ProjectId();
 		State state = bambooPlugin.getState(projectId);
 		assertEquals(State.FAILURE, state);
-	}
-
-	@Ignore
-	@Test
-	public void should_populate_project() throws ProjectNotFoundException {
-		ProjectId projectId = strutsProjectId();
-		Project project = bambooPlugin.findProject(projectId);
-		bambooPlugin.populate(project);
-		// I don't know where the description is in bamboo rest api!
-		// assertEquals("this is the struts project", project.getDescription());
-		assertEquals("struts", project.getName());
 	}
 
 	@Test

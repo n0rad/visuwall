@@ -45,7 +45,7 @@ public class PluginService {
 		List<VisuwallPlugin> visuwallPlugins = getPlugins();
 		for (VisuwallPlugin visuwallPlugin : visuwallPlugins) {
 			try {
-				visuwallPlugin.isManageable(url);
+				visuwallPlugin.getSoftwareId(url);
 				return visuwallPlugin.getInfo();
 			} catch (IncompatibleSoftwareException e) {
 				// TODO what do you want to log?
@@ -58,7 +58,7 @@ public class PluginService {
 		List<VisuwallPlugin> visuwallPlugins = getPlugins();
 		for (VisuwallPlugin visuwallPlugin : visuwallPlugins) {
 			try {
-				SoftwareId softwareId = visuwallPlugin.isManageable(url);
+				SoftwareId softwareId = visuwallPlugin.getSoftwareId(url);
 				// TODO check values return in sofwareInfo
 				if (softwareId != null) {
 					SoftwareInfo softwareInfo = new SoftwareInfo();
