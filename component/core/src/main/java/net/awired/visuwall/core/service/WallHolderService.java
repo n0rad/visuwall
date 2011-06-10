@@ -16,8 +16,6 @@
 
 package net.awired.visuwall.core.service;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,21 +25,17 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectStatus;
-import net.awired.visuwall.api.exception.NotImplementedOperationException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
-import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.core.domain.ConnectedProject;
-import net.awired.visuwall.core.domain.SoftwareAccess;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
+import net.awired.visuwall.core.process.WallProcess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 @Service
@@ -53,13 +47,7 @@ public class WallHolderService implements WallService {
     private final static int THIRTY_SECONDS = 30 * 1000;
 
     @Autowired
-    ProjectService projectService;
-
-    @Autowired
-    PluginService pluginService;
-
-    @Autowired
-    ProjectEnhancerService projectEnhancerService;
+    WallProcess wallProcess;
 
     @Autowired
     WallService wallService;
@@ -73,7 +61,7 @@ public class WallHolderService implements WallService {
             List<Wall> walls = wallService.getWalls();
             for (Wall wall : walls) {
                 try {
-                    reconstructWall(wall);
+                    wallProcess.reconstructWallTransientInfo(wall);
                     WALLS.put(wall.getName(), wall);
                 } catch (Exception e) {
                     LOG.error("can not reconstruct wall with name " + wall.getName(), e);
@@ -81,8 +69,6 @@ public class WallHolderService implements WallService {
             }
         }
     }
-
-    // ////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public List<Wall> getWalls() {
@@ -112,14 +98,14 @@ public class WallHolderService implements WallService {
             LOG.error(message, e);
             throw new NotCreatedException(message, e);
         }
-        reconstructWall(wall);
+        wallProcess.reconstructWallTransientInfo(wall);
         WALLS.put(wall.getName(), wall);
     }
 
     @Override
     public Wall update(Wall wall) {
         Wall newWall = wallService.update(wall);
-        reconstructWall(newWall);
+        wallProcess.reconstructWallTransientInfo(newWall);
         WALLS.put(newWall.getName(), newWall);
         return newWall;
     }
@@ -128,6 +114,8 @@ public class WallHolderService implements WallService {
     public Set<String> getWallNames() {
         return WALLS.keySet();
     }
+
+    //////////////////////////////////////////////////////////////
 
     @Scheduled(fixedDelay = THIRTY_SECONDS)
     public void refreshWalls() {
@@ -138,99 +126,8 @@ public class WallHolderService implements WallService {
             if (LOG.isInfoEnabled()) {
                 LOG.info("Refreshing wall : " + wall + " and its " + wall.getProjects().size() + " projects");
             }
-            reconstructWall(wall);
+            wallProcess.reconstructWallTransientInfo(wall);
         }
-    }
-
-<<<<<<< HEAD
-    private void updateWallProjects(List<ConnectionPlugin> connectionPlugins, Wall wall) {
-        Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
-
-        for (ConnectionPlugin connectionPlugin : connectionPlugins) {
-            try {
-                List<ProjectId> discoveredProjects = connectionPlugin.findAllProjects();
-                for (ProjectId discoveredProjectId : discoveredProjects) {
-                    ConnectedProject project;
-                    try {
-                        project = wall.getProjectByProjectId(discoveredProjectId);
-                    } catch (ProjectNotFoundException e) {
-                        project = new ConnectedProject(discoveredProjectId);
-                        project.setConnectionPlugins(connectionPlugins);
-                        wall.getProjects().add(project);
-                    }
-                    updateProject(project);
-                }
-            } catch (NotImplementedOperationException e) {
-            }
-        }
-    }
-
-    private void reconstructWallTransientInfo(Wall wall) {
-        Preconditions.checkNotNull(wall, "Wall is a mandatory parameter");
-        // rebuild ConnectionPlugin for software access
-        for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
-            try {
-                VisuwallPlugin plugin = pluginService.getPluginFromUrl(new URL(softwareAccess.getUrl()));
-                ConnectionPlugin connectionPlugin = plugin.getConnection(softwareAccess.getUrl(), null);
-                softwareAccess.setConnectionPlugin(connectionPlugin);
-=======
-    private void reconstructWall(Wall wall) {
-        List<SoftwareAccess> softwareAccesses = wall.getSoftwareAccesses();
-        reconstructSoftwareAccesses(softwareAccesses);
-        List<ConnectionPlugin> connectionPlugins = pluginService.getConnectionPluginsFromSoftwares(softwareAccesses);
-
-        projectService.updateWallProjects(connectionPlugins, wall);
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Done refreshing wall : " + wall + " and its " + wall.getProjects().size() + " projects");
-        }
-    }
-
-    private void reconstructSoftwareAccesses(List<SoftwareAccess> softwareAccesses) {
-        for (SoftwareAccess softwareAccess : softwareAccesses) {
-            try {
-                PluginInfo pluginInfo = pluginService.getPluginInfoFromUrl(new URL(softwareAccess.getUrl()));
-                softwareAccess.setPluginClassName(pluginInfo.getClassName());
->>>>>>> develop
-            } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-<<<<<<< HEAD
-
-        // find projects
-        for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
-            if (softwareAccess.isAllProject()) {
-                List<ProjectId> projectIds = softwareAccess.getConnectionPlugin().findAllProjects();
-                for (ProjectId projectId : projectIds) {
-                    ConnectedProject connectedProject = new ConnectedProject(projectId);
-                    projectEnhancerService.enhanceWithBuildInformations(connectedProject,
-                            softwareAccess.getConnectionPlugin());
-                    connectedProject.getConnectionPlugins().add(softwareAccess.getConnectionPlugin());
-                    wall.getProjects().add(connectedProject);
-                }
-
-            } else {
-                // look in projectsNames
-                // lokk in views
-            }
-
-            // loop with contains
-        }
-
-        //updateWallProjects(connectionPlugins, wall);
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Done refreshing wall : " + wall + " and its " + wall.getProjects().size() + " projects");
-        }
-    }
-
-    private boolean isProjectListUpdateNeeded(SoftwareAccess softwareAccess) {
-        if (softwareAccess.getViewNames().size() > 0 || softwareAccess.isAllProject()) {
-            return true;
-        }
-        return false;
-=======
->>>>>>> develop
     }
 
     public List<ProjectStatus> getStatus(String wallName) {
@@ -260,18 +157,6 @@ public class WallHolderService implements WallService {
             statusList.add(status);
         }
         return statusList;
-    }
-
-    // //////////////////////////////////////////////////////////////////////
-
-    @VisibleForTesting
-    public void setProjectService(ProjectService projectService) {
-        this.projectService = projectService;
-    }
-
-    @VisibleForTesting
-    public void setPluginService(PluginService pluginService) {
-        this.pluginService = pluginService;
     }
 
 }

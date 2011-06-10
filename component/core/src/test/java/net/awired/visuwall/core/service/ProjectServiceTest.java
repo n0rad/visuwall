@@ -37,7 +37,7 @@ public class ProjectServiceTest {
     @Before
     public void init() {
         projectService = new ProjectService();
-        ProjectEnhancerService projectEnhancerService = Mockito.mock(ProjectEnhancerService.class);
+        ProjectAggregatorService projectEnhancerService = Mockito.mock(ProjectAggregatorService.class);
         projectService.projectEnhancerService = projectEnhancerService;
     }
 

@@ -28,18 +28,14 @@ import net.awired.visuwall.api.exception.NotImplementedOperationException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.core.domain.SoftwareInfo;
-<<<<<<< HEAD
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-=======
->>>>>>> develop
 import org.springframework.stereotype.Service;
 import com.google.common.base.Preconditions;
 
 @Service
 public class PluginService {
 
-<<<<<<< HEAD
     private static final Logger LOG = LoggerFactory.getLogger(PluginService.class);
 
     private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader.load(VisuwallPlugin.class);
@@ -48,18 +44,8 @@ public class PluginService {
         List<VisuwallPlugin> visuwallPlugins = getPlugins();
         for (VisuwallPlugin visuwallPlugin : visuwallPlugins) {
             try {
-                visuwallPlugin.isManageable(url);
-                return visuwallPlugin;
-=======
-    private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader.load(VisuwallPlugin.class);
-
-    public PluginInfo getPluginInfoFromUrl(URL url) {
-        List<VisuwallPlugin> visuwallPlugins = getPlugins();
-        for (VisuwallPlugin visuwallPlugin : visuwallPlugins) {
-            try {
                 visuwallPlugin.getSoftwareId(url);
-                return visuwallPlugin.getInfo();
->>>>>>> develop
+                return visuwallPlugin;
             } catch (IncompatibleSoftwareException e) {
                 // TODO what do you want to log?
             }
@@ -70,10 +56,9 @@ public class PluginService {
     public SoftwareInfo getSoftwareInfoFromUrl(URL url) {
         List<VisuwallPlugin> visuwallPlugins = getPlugins();
         for (VisuwallPlugin visuwallPlugin : visuwallPlugins) {
-<<<<<<< HEAD
             SoftwareId softwareId = null;
             try {
-                softwareId = visuwallPlugin.isManageable(url);
+                softwareId = visuwallPlugin.getSoftwareId(url);
                 Preconditions.checkNotNull(softwareId, "isManageable() should not return null", visuwallPlugin);
             } catch (IncompatibleSoftwareException e) {
                 LOG.debug("plugin [" + visuwallPlugin + "] is not compatible with software at URL : " + url);
@@ -90,25 +75,6 @@ public class PluginService {
                 LOG.debug("plugin [" + visuwallPlugin + "] does not implement findProjectNames");
             }
             return softwareInfo;
-=======
-            try {
-                SoftwareId softwareId = visuwallPlugin.getSoftwareId(url);
-                // TODO check values return in sofwareInfo
-                if (softwareId != null) {
-                    SoftwareInfo softwareInfo = new SoftwareInfo();
-                    softwareInfo.setSoftwareId(softwareId);
-                    softwareInfo.setPluginInfo(visuwallPlugin.getInfo());
-                    // TODO change that null
-                    ConnectionPlugin connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
-                    softwareInfo.setProjectNames(connectionPlugin.findProjectNames());
-                    return softwareInfo;
-                }
-            } catch (IncompatibleSoftwareException e) {
-                // log ?
-            } catch (NotImplementedOperationException e) {
-                // log ?
-            }
->>>>>>> develop
         }
         throw new RuntimeException("no plugin to manage url " + url);
     }
@@ -143,7 +109,6 @@ public class PluginService {
         pluginLoader.reload();
     }
 
-<<<<<<< HEAD
     //    public List<ConnectionPlugin> getConnectionPluginsFromSoftwares(List<SoftwareAccess> softwareAccesses) {
     //        List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>(softwareAccesses.size());
     //        for (SoftwareAccess softwareAccess : softwareAccesses) {
@@ -172,35 +137,5 @@ public class PluginService {
     //        }
     //        throw new RuntimeException("plugin not found");
     //    }
-=======
-    public List<ConnectionPlugin> getConnectionPluginsFromSoftwares(List<SoftwareAccess> softwareAccesses) {
-        List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>(softwareAccesses.size());
-        for (SoftwareAccess softwareAccess : softwareAccesses) {
-            // TODO refactor as we recreate a connection
-            VisuwallPlugin plugin = getPluginFromSoftware(softwareAccess);
-
-            // connect
-            Properties properties = new Properties();
-            // properties.put("login", softwareAccess.getLogin());
-            // properties.put("password", softwareAccess.getPassword());
-            ConnectionPlugin connection = plugin.getConnection(softwareAccess.getUrl(), properties);
-            connectionPlugins.add(connection);
-        }
-        return connectionPlugins;
-    }
-
-    public VisuwallPlugin getPluginFromSoftware(SoftwareAccess softwareAccess) {
-        Preconditions.checkNotNull(softwareAccess.getPluginClassName(), "softwareAccess.getPluginClassName");
-
-        List<VisuwallPlugin> plugins = getPlugins();
-        for (VisuwallPlugin plugin : plugins) {
-            // TODO manage version
-            if (softwareAccess.getPluginClassName().equals(plugin.getClass().getName())) {
-                return plugin;
-            }
-        }
-        throw new RuntimeException("plugin not found");
-    }
->>>>>>> develop
 
 }

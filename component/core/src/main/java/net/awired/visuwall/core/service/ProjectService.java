@@ -40,7 +40,7 @@ public class ProjectService {
     private static final Logger LOG = LoggerFactory.getLogger(ProjectService.class);
 
     @Autowired
-    ProjectEnhancerService projectEnhancerService;
+    ProjectAggregatorService projectEnhancerService;
 
     private static final int PROJECT_NOT_BUILT_ID = -1;
 

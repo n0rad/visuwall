@@ -16,9 +16,6 @@
 
 package net.awired.visuwall;
 
-import net.awired.visuwall.core.domain.SoftwareAccess;
-import net.awired.visuwall.plugin.jenkins.JenkinsPlugin;
-import net.awired.visuwall.plugin.sonar.SonarPlugin;
 
 public interface IntegrationTestData {
     String BAMBOO_URL = "http://bamboo.visuwall.awired.net";
@@ -33,8 +30,5 @@ public interface IntegrationTestData {
 
     String STRUTS_ARTIFACT_ID = "org.apache.struts:struts-core";
     String STRUTS_2_ARTIFACT_ID = "org.apache.struts:struts2-parent";
-
-    SoftwareAccess JENKINS_ACCESS = new SoftwareAccess(JenkinsPlugin.class, JENKINS_URL);
-    SoftwareAccess SONAR_ACCESS = new SoftwareAccess(SonarPlugin.class, SONAR_URL);
 
 }

@@ -22,14 +22,12 @@ import java.util.Map;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.NotImplementedOperationException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.exception.ViewNotFoundException;
 
 public interface ConnectionPlugin {
 
@@ -79,6 +77,13 @@ public interface ConnectionPlugin {
     List<ProjectId> findAllProjects() throws NotImplementedOperationException;
 
     /**
+     * Return a list of project id contained in the software by a list of names
+     * 
+     * @return
+     */
+    List<ProjectId> findProjectsByNames(List<String> names) throws NotImplementedOperationException;
+
+    /**
      * Plugin should be able to retrieve projects by theirs projectId. ProjectId are filled when you call
      * findAllProjects for example
      * 
@@ -120,16 +125,6 @@ public interface ConnectionPlugin {
     boolean isBuilding(ProjectId projectId) throws NotImplementedOperationException, ProjectNotFoundException;
 
     /**
-     * Project are in a certain state which may vary between software You'll have to try to associate them with common
-     * States
-     * 
-     * @param projectId
-     * @return
-     * @throws ProjectNotFoundException
-     */
-    State getState(ProjectId projectId) throws NotImplementedOperationException, ProjectNotFoundException;
-
-    /**
      * Return the last build number of a project
      * 
      * @param projectId
@@ -146,21 +141,5 @@ public interface ConnectionPlugin {
      * @return
      */
     List<String> findProjectNames() throws NotImplementedOperationException;
-
-    /**
-     * Software can sort projects by views, or graphically by tabs. If so, plugin can list these views.
-     * 
-     * @return List of view names
-     */
-    List<String> findViews() throws NotImplementedOperationException;
-
-    /**
-     * If software sorts its projects by view, you should be able to retrieve project names by view name
-     * 
-     * @param viewName
-     * @return List of project names contained in view
-     * @throws ViewNotFoundException
-     */
-    List<String> findProjectsByView(String viewName) throws NotImplementedOperationException, ViewNotFoundException;
 
 }

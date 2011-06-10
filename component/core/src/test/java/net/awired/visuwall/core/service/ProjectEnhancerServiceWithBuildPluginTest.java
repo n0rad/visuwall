@@ -31,7 +31,7 @@ import org.mockito.Mockito;
 
 public class ProjectEnhancerServiceWithBuildPluginTest {
 
-    ProjectEnhancerService projectEnhancerService = new ProjectEnhancerService();
+    ProjectAggregatorService projectEnhancerService = new ProjectAggregatorService();
 
     Project projectToEnhance;
 

@@ -29,6 +29,7 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.EmptyConnectionPlugin;
+import net.awired.visuwall.api.plugin.capability.StatePlugin;
 import net.awired.visuwall.bambooclient.Bamboo;
 import net.awired.visuwall.bambooclient.BambooBuildNotFoundException;
 import net.awired.visuwall.bambooclient.BambooProjectNotFoundException;
@@ -36,7 +37,7 @@ import net.awired.visuwall.bambooclient.domain.BambooBuild;
 import net.awired.visuwall.bambooclient.domain.BambooProject;
 import com.google.common.base.Preconditions;
 
-public class BambooConnectionPlugin extends EmptyConnectionPlugin {
+public class BambooConnectionPlugin extends EmptyConnectionPlugin implements StatePlugin {
 
     private static final String BAMBOO_ID = "BAMBOO_ID";
 

@@ -16,6 +16,8 @@
 
 package net.awired.visuwall.core.domain;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -101,12 +103,16 @@ public class SoftwareAccess {
         this.id = id;
     }
 
-    public String getUrl() {
-        return url;
+    public URL getUrl() {
+        try {
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("software access url is malformed" + this, e);
+        }
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUrl(URL url) {
+        this.url = url.toString();
     }
 
     public String getLogin() {

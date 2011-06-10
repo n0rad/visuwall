@@ -22,7 +22,6 @@ import java.util.Map;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
@@ -86,11 +85,6 @@ public class EmptyConnectionPlugin implements ConnectionPlugin {
 
     @Override
     public boolean isBuilding(ProjectId projectId) throws NotImplementedOperationException, ProjectNotFoundException {
-        throw notImplementedOperationException;
-    }
-
-    @Override
-    public State getState(ProjectId projectId) throws NotImplementedOperationException, ProjectNotFoundException {
         throw notImplementedOperationException;
     }
 
