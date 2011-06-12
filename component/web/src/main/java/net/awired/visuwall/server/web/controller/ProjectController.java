@@ -22,7 +22,7 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.core.domain.ConnectedProject;
 import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotFoundException;
-import net.awired.visuwall.core.service.ProjectService;
+import net.awired.visuwall.core.service.BuildProjectService;
 import net.awired.visuwall.core.service.WallHolderService;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class ProjectController {
     WallHolderService wallService;
 
     @Autowired
-    ProjectService projectService;
+    BuildProjectService projectService;
 
     @RequestMapping
     public @ResponseBody
@@ -68,7 +68,7 @@ public class ProjectController {
     Build getBuild(@PathVariable String wallName, @PathVariable String projectName, @PathVariable int buildId)
             throws Exception {
         Wall wall = wallService.find(wallName);
-        return projectService.findBuildByBuildNumber(wall, projectName, buildId);
+        return projectService.findBuildByBuildNumber(wall.getProjectByName(projectName), buildId);
     }
 
 }

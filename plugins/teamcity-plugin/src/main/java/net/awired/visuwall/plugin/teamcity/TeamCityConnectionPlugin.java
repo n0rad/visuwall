@@ -16,32 +16,99 @@
 
 package net.awired.visuwall.plugin.teamcity;
 
-import net.awired.visuwall.api.plugin.EmptyConnectionPlugin;
-
+import java.util.Date;
+import java.util.List;
+import net.awired.visuwall.api.domain.Build;
+import net.awired.visuwall.api.domain.Project;
+import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.plugin.capability.BuildPlugin;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.common.annotations.VisibleForTesting;
 
-public class TeamCityConnectionPlugin extends EmptyConnectionPlugin {
+public class TeamCityConnectionPlugin implements BuildPlugin {
 
-	private static final Logger LOG = LoggerFactory.getLogger(TeamCityConnectionPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TeamCityConnectionPlugin.class);
 
-	@VisibleForTesting
-	static final String TEAMCITY_ID = "TEAMCITY_ID";
+    @VisibleForTesting
+    static final String TEAMCITY_ID = "TEAMCITY_ID";
 
-	private boolean connected;
+    private boolean connected;
 
-	public void connect(String url, String login, String password) {
-		connect(url);
-	}
+    public void connect(String url, String login, String password) {
+        connect(url);
+    }
 
-	public void connect(String url) {
-		if (StringUtils.isBlank(url)) {
-			throw new IllegalStateException("url can't be null.");
-		}
-		connected = true;
-	}
+    public void connect(String url) {
+        if (StringUtils.isBlank(url)) {
+            throw new IllegalStateException("url can't be null.");
+        }
+        connected = true;
+    }
+
+    @Override
+    public boolean contains(ProjectId projectId) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public List<ProjectId> findAllProjects() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<ProjectId> findProjectsByNames(List<String> names) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<String> findProjectNames() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public State getState(ProjectId projectId) throws ProjectNotFoundException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
+            ProjectNotFoundException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
 }

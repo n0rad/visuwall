@@ -18,10 +18,8 @@ package net.awired.visuwall.plugin.sonar;
 
 import java.net.URL;
 import javax.ws.rs.core.MediaType;
-import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.plugin.sonar.resource.Properties;
 import net.awired.visuwall.plugin.sonar.resource.Property;
@@ -30,24 +28,30 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
-public class SonarPlugin implements VisuwallPlugin {
+public class SonarPlugin implements VisuwallPlugin<SonarConnectionPlugin> {
 
     private static final String SONAR_CORE_VERSION_KEY = "sonar.core.version";
 
     @Override
-    public ConnectionPlugin getConnection(String url, java.util.Properties info) {
+    public SonarConnectionPlugin getConnection(String url, java.util.Properties info) {
         SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
         sonarConnectionPlugin.connect(url);
         return sonarConnectionPlugin;
     }
 
     @Override
-    public PluginInfo getInfo() {
-        PluginInfo pluginInfo = new PluginInfo();
-        pluginInfo.setName("Sonar plugin");
-        pluginInfo.setVersion(1.0f);
-        pluginInfo.setClassName(this.getClass().getName());
-        return pluginInfo;
+    public Class<SonarConnectionPlugin> getConnectionClass() {
+        return SonarConnectionPlugin.class;
+    }
+
+    @Override
+    public String getName() {
+        return "Sonar plugin";
+    }
+
+    @Override
+    public float getVersion() {
+        return 1.0f;
     }
 
     @Override

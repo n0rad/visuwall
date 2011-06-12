@@ -20,10 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
-import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,24 +29,30 @@ import com.google.common.base.Preconditions;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 
-public class JenkinsPlugin implements VisuwallPlugin {
+public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnectionPlugin> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
 
     @Override
-    public ConnectionPlugin getConnection(String url, Properties info) {
+    public JenkinsConnectionPlugin getConnection(String url, Properties info) {
         JenkinsConnectionPlugin jenkinsConnectionPlugin = new JenkinsConnectionPlugin();
         jenkinsConnectionPlugin.connect(url);
         return jenkinsConnectionPlugin;
     }
 
     @Override
-    public PluginInfo getInfo() {
-        PluginInfo pluginInfo = new PluginInfo();
-        pluginInfo.setName("Jenkins plugin");
-        pluginInfo.setVersion(1.0f);
-        pluginInfo.setClassName(this.getClass().getName());
-        return pluginInfo;
+    public Class<JenkinsConnectionPlugin> getConnectionClass() {
+        return JenkinsConnectionPlugin.class;
+    }
+
+    @Override
+    public String getName() {
+        return "Jenkins plugin";
+    }
+
+    @Override
+    public float getVersion() {
+        return 1.0f;
     }
 
     @Override

@@ -20,23 +20,20 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.exception.NotImplementedOperationException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
 import net.awired.visuwall.core.domain.ConnectedProject;
-import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class ProjectServiceTest {
+public class BuildProjectServiceTest {
 
-    ProjectService projectService;
+    BuildProjectService projectService;
 
     @Before
     public void init() {
-        projectService = new ProjectService();
+        projectService = new BuildProjectService();
         ProjectAggregatorService projectEnhancerService = Mockito.mock(ProjectAggregatorService.class);
         projectService.projectEnhancerService = projectEnhancerService;
     }
@@ -46,7 +43,7 @@ public class ProjectServiceTest {
         projectService.updateProject(null);
     }
 
-    public List<ConnectionPlugin> getConnectionPlugins() throws NotImplementedOperationException {
+    public List<ConnectionPlugin> getConnectionPlugins() {
         List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>();
         ConnectionPlugin connectionPlugin = Mockito.mock(ConnectionPlugin.class);
         connectionPlugins.add(connectionPlugin);
@@ -59,7 +56,7 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void should_call_merge_for_plugins() throws NotImplementedOperationException {
+    public void should_call_merge_for_plugins() {
         List<ConnectionPlugin> connectionPlugins = getConnectionPlugins();
         ConnectedProject project = new ConnectedProject("test");
         project.setConnectionPlugins(connectionPlugins);

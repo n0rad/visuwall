@@ -19,9 +19,9 @@ package net.awired.visuwall.plugin.hudson;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import java.net.URL;
-import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.core.domain.PluginInfo;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

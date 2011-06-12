@@ -17,7 +17,6 @@
 package net.awired.visuwall.core.domain;
 
 import java.util.List;
-import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.SoftwareId;
 
 public class SoftwareInfo {

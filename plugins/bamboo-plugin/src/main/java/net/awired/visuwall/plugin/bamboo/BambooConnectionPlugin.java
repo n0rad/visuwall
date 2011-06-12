@@ -28,8 +28,8 @@ import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.EmptyConnectionPlugin;
-import net.awired.visuwall.api.plugin.capability.StatePlugin;
+import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.capability.BuildPlugin;
 import net.awired.visuwall.bambooclient.Bamboo;
 import net.awired.visuwall.bambooclient.BambooBuildNotFoundException;
 import net.awired.visuwall.bambooclient.BambooProjectNotFoundException;
@@ -37,7 +37,7 @@ import net.awired.visuwall.bambooclient.domain.BambooBuild;
 import net.awired.visuwall.bambooclient.domain.BambooProject;
 import com.google.common.base.Preconditions;
 
-public class BambooConnectionPlugin extends EmptyConnectionPlugin implements StatePlugin {
+public class BambooConnectionPlugin implements ConnectionPlugin, BuildPlugin {
 
     private static final String BAMBOO_ID = "BAMBOO_ID";
 
@@ -154,6 +154,18 @@ public class BambooConnectionPlugin extends EmptyConnectionPlugin implements Sta
     @Override
     public List<String> findProjectNames() {
         throw new RuntimeException("Not yet implemented");
+    }
+
+    @Override
+    public boolean contains(ProjectId projectId) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public List<ProjectId> findProjectsByNames(List<String> names) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

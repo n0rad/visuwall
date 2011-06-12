@@ -51,7 +51,7 @@ public class JenkinsConnectionPluginTest {
 
         JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
         jenkinsPlugin.connect("url");
-        jenkinsPlugin.setHudson(hudson);
+        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId(JENKINS_ID, "name");
@@ -67,7 +67,7 @@ public class JenkinsConnectionPluginTest {
 
         JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
         jenkinsPlugin.connect("url");
-        jenkinsPlugin.setHudson(hudson);
+        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId(JENKINS_ID, "name");
@@ -89,7 +89,7 @@ public class JenkinsConnectionPluginTest {
 
         JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
         jenkinsPlugin.connect("url");
-        jenkinsPlugin.setHudson(hudson);
+        jenkinsPlugin.hudson = hudson;
 
         List<ProjectId> projectIds = jenkinsPlugin.findAllProjects();
         ProjectId projectId = projectIds.get(0);
@@ -109,7 +109,7 @@ public class JenkinsConnectionPluginTest {
 
         JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
         jenkinsPlugin.connect("url");
-        jenkinsPlugin.setHudson(hudson);
+        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId(JENKINS_ID, "id");
@@ -128,7 +128,7 @@ public class JenkinsConnectionPluginTest {
 
         JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
         jenkinsPlugin.connect("url");
-        jenkinsPlugin.setHudson(hudson);
+        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId(JENKINS_ID, "project1");
@@ -148,7 +148,7 @@ public class JenkinsConnectionPluginTest {
 
         JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
         jenkinsPlugin.connect("url");
-        jenkinsPlugin.setHudson(hudson);
+        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId(JENKINS_ID, "project1");
@@ -163,7 +163,7 @@ public class JenkinsConnectionPluginTest {
 
         JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
         jenkinsPlugin.connect("url");
-        jenkinsPlugin.setHudson(hudson);
+        jenkinsPlugin.hudson = hudson;
 
         HudsonBuild hudsonBuild = new HudsonBuild();
 
@@ -184,7 +184,7 @@ public class JenkinsConnectionPluginTest {
 
         JenkinsConnectionPlugin jenkinsPlugin = new JenkinsConnectionPlugin();
         jenkinsPlugin.connect("url");
-        jenkinsPlugin.setHudson(hudson);
+        jenkinsPlugin.hudson = hudson;
 
         when(hudson.getLastBuildNumber("project1")).thenReturn(5);
 

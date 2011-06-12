@@ -17,7 +17,7 @@
 package net.awired.visuwall.core.service;
 
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.capability.BuildPlugin;
 import net.awired.visuwall.plugin.jenkins.JenkinsPlugin;
 import org.junit.Test;
 
@@ -27,7 +27,7 @@ public class ProjectServiceIT {
     public void github_issue_35() throws Exception {
         String jenkinsUrl = "http://ci.awired.net/jenkins/";
         JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-        ConnectionPlugin connection = jenkinsPlugin.getConnection(jenkinsUrl, null);
+        BuildPlugin connection = jenkinsPlugin.getConnection(jenkinsUrl, null);
         int buildNumber = 29;
         ProjectId projectId = new ProjectId("Acml");
         projectId.setArtifactId("net.awired.aclm:aclm");

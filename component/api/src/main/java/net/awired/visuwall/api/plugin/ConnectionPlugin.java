@@ -16,72 +16,33 @@
 
 package net.awired.visuwall.api.plugin;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.domain.quality.QualityMetric;
-import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.NotImplementedOperationException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface ConnectionPlugin {
-
-    /**
-     * Generate a complete quality reporting for a project defined by <code>projectId</code>
-     * 
-     * @param projectId
-     * @param metrics
-     *            You can specify the metrics you only want to analyze.
-     * @return
-     */
-    QualityResult analyzeQuality(ProjectId projectId, String... metrics) throws NotImplementedOperationException;
-
-    /**
-     * Generate the unit tests reporting
-     * 
-     * @param projectId
-     * @return
-     */
-    TestResult analyzeUnitTests(ProjectId projectId) throws NotImplementedOperationException;
-
-    /**
-     * Generate the integration tests reporting
-     * 
-     * @param projectId
-     * @return
-     */
-    TestResult analyzeIntegrationTests(ProjectId projectId) throws NotImplementedOperationException;
 
     /**
      * @param projectId
      * @throws NotImplementedOperationException
      * @returntrue if the project is in the Quality Software
      */
-    boolean contains(ProjectId projectId) throws NotImplementedOperationException;
-
-    /**
-     * @return Quality Metrics sorted by category
-     */
-    Map<String, List<QualityMetric>> getMetricsByCategory() throws NotImplementedOperationException;
+    boolean contains(ProjectId projectId);
 
     /**
      * Return the full list of project id contained in the software
      * 
      * @return
      */
-    List<ProjectId> findAllProjects() throws NotImplementedOperationException;
+    List<ProjectId> findAllProjects();
 
     /**
      * Return a list of project id contained in the software by a list of names
      * 
      * @return
      */
-    List<ProjectId> findProjectsByNames(List<String> names) throws NotImplementedOperationException;
+    List<ProjectId> findProjectsByNames(List<String> names);
 
     /**
      * Plugin should be able to retrieve projects by theirs projectId. ProjectId are filled when you call
@@ -91,55 +52,13 @@ public interface ConnectionPlugin {
      * @return
      * @throws ProjectNotFoundException
      */
-    Project findProject(ProjectId projectId) throws NotImplementedOperationException, ProjectNotFoundException;
-
-    /**
-     * Build software can order their builds by number, plugin should be able to retrieve builds by number too
-     * 
-     * @param projectId
-     * @param buildNumber
-     * @return
-     * @throws BuildNotFoundException
-     * @throws ProjectNotFoundException
-     */
-    Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws NotImplementedOperationException,
-            BuildNotFoundException, ProjectNotFoundException;
-
-    /**
-     * If a project is building, plugin can calculate the estimated finish time
-     * 
-     * @param projectId
-     * @return
-     * @throws ProjectNotFoundException
-     */
-    Date getEstimatedFinishTime(ProjectId projectId) throws NotImplementedOperationException,
-            ProjectNotFoundException;
-
-    /**
-     * Return true if project is building
-     * 
-     * @param projectId
-     * @return
-     * @throws ProjectNotFoundException
-     */
-    boolean isBuilding(ProjectId projectId) throws NotImplementedOperationException, ProjectNotFoundException;
-
-    /**
-     * Return the last build number of a project
-     * 
-     * @param projectId
-     * @return
-     * @throws ProjectNotFoundException
-     * @throws BuildNotFoundException
-     */
-    int getLastBuildNumber(ProjectId projectId) throws NotImplementedOperationException, ProjectNotFoundException,
-            BuildNotFoundException;
+    Project findProject(ProjectId projectId) throws ProjectNotFoundException;
 
     /**
      * Find all project names of projects handle by the software
      * 
      * @return
      */
-    List<String> findProjectNames() throws NotImplementedOperationException;
+    List<String> findProjectNames();
 
 }

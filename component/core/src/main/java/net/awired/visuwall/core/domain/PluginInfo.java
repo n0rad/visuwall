@@ -14,8 +14,9 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.domain;
+package net.awired.visuwall.core.domain;
 
+import java.util.List;
 import com.google.common.base.Objects;
 
 public class PluginInfo {
@@ -23,6 +24,8 @@ public class PluginInfo {
     private String name;
     private float version;
     private String className;
+    private Class connectionClass;
+    private List<String> capabilities;
 
     // //////////////////////
 
@@ -64,5 +67,21 @@ public class PluginInfo {
     @Override
     public int hashCode() {
         return Objects.hashCode(name, version, className);
+    }
+
+    public void setConnectionClass(Class connectionClass) {
+        this.connectionClass = connectionClass;
+    }
+
+    public Class getConnectionClass() {
+        return connectionClass;
+    }
+
+    public List<String> getCapabilities() {
+        return capabilities;
+    }
+
+    public void setCapabilities(List<String> capabilities) {
+        this.capabilities = capabilities;
     }
 }

@@ -25,9 +25,10 @@ import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.exception.NotImplementedOperationException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.capability.MetricPlugin;
+import net.awired.visuwall.api.plugin.capability.TestsPlugin;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,12 +86,10 @@ public class ProjectAggregatorService {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(e.getMessage());
             }
-        } catch (NotImplementedOperationException e) {
-            // TODO NotImplementedOperationException
         }
     }
 
-    public void enhanceWithQualityAnalysis(Project analyzedProject, ConnectionPlugin qualityPlugin, String... metrics) {
+    public void enhanceWithQualityAnalysis(Project analyzedProject, ConnectionPlugin plugin, String... metrics) {
         ProjectId projectId = analyzedProject.getProjectId();
         Build build = analyzedProject.getCompletedBuild();
 
@@ -102,46 +101,37 @@ public class ProjectAggregatorService {
         }
 
         QualityResult qualityResultToMerge = analyzedProject.getQualityResult();
-        addQualityAnalysis(qualityPlugin, projectId, qualityResultToMerge, metrics);
-        addUnitTestsAnalysis(qualityPlugin, projectId, unitTestResultToMerge);
-        addIntegrationTestsAnalysis(qualityPlugin, projectId, integrationTestResultToMerge);
+        if (plugin instanceof MetricPlugin) {
+            addQualityAnalysis((MetricPlugin) plugin, projectId, qualityResultToMerge, metrics);
+        }
+        if (plugin instanceof TestsPlugin) {
+            addUnitTestsAnalysis((TestsPlugin) plugin, projectId, unitTestResultToMerge);
+            addIntegrationTestsAnalysis((TestsPlugin) plugin, projectId, integrationTestResultToMerge);
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////
 
-    private void addIntegrationTestsAnalysis(ConnectionPlugin qualityPlugin, ProjectId projectId,
+    private void addIntegrationTestsAnalysis(TestsPlugin testsPlugin, ProjectId projectId,
             TestResult integrationTestResultToMerge) {
-        try {
-            TestResult integrationTestsAnalysis = qualityPlugin.analyzeIntegrationTests(projectId);
-            if (integrationTestsAnalysis != null && integrationTestResultToMerge != null) {
-                mergeTestAnalysis(integrationTestResultToMerge, integrationTestsAnalysis);
-            }
-        } catch (NotImplementedOperationException e) {
-            // TODO NotImplementedOperationException
+        TestResult integrationTestsAnalysis = testsPlugin.analyzeIntegrationTests(projectId);
+        if (integrationTestsAnalysis != null && integrationTestResultToMerge != null) {
+            mergeTestAnalysis(integrationTestResultToMerge, integrationTestsAnalysis);
         }
     }
 
-    private void addUnitTestsAnalysis(ConnectionPlugin qualityPlugin, ProjectId projectId,
-            TestResult unitTestResultToMerge) {
-        try {
-            TestResult unitTestsAnalysis = qualityPlugin.analyzeUnitTests(projectId);
-            if (unitTestsAnalysis != null && unitTestResultToMerge != null) {
-                mergeTestAnalysis(unitTestResultToMerge, unitTestsAnalysis);
-            }
-        } catch (NotImplementedOperationException e) {
-            // TODO NotImplementedOperationException
+    private void addUnitTestsAnalysis(TestsPlugin testsPlugin, ProjectId projectId, TestResult unitTestResultToMerge) {
+        TestResult unitTestsAnalysis = testsPlugin.analyzeUnitTests(projectId);
+        if (unitTestsAnalysis != null && unitTestResultToMerge != null) {
+            mergeTestAnalysis(unitTestResultToMerge, unitTestsAnalysis);
         }
     }
 
-    private void addQualityAnalysis(ConnectionPlugin qualityPlugin, ProjectId projectId,
+    private void addQualityAnalysis(MetricPlugin metricPlugin, ProjectId projectId,
             QualityResult qualityResultToMerge, String... metrics) {
-        try {
-            QualityResult qualityAnalysis = qualityPlugin.analyzeQuality(projectId, metrics);
-            if (qualityAnalysis != null) {
-                mergeQualityAnalysis(qualityResultToMerge, qualityAnalysis);
-            }
-        } catch (NotImplementedOperationException e) {
-            // TODO NotImplementedOperationException
+        QualityResult qualityAnalysis = metricPlugin.analyzeQuality(projectId, metrics);
+        if (qualityAnalysis != null) {
+            mergeQualityAnalysis(qualityResultToMerge, qualityAnalysis);
         }
     }
 

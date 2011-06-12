@@ -18,7 +18,7 @@ package net.awired.visuwall.server.web.controller;
 
 import java.util.Date;
 import net.awired.visuwall.core.domain.Wall;
-import net.awired.visuwall.core.service.ProjectService;
+import net.awired.visuwall.core.service.BuildProjectService;
 import net.awired.visuwall.core.service.WallHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,12 +34,12 @@ public class ProcessingController {
     private WallHolderService wallService;
 
     @Autowired
-    private ProjectService projectService;
+    private BuildProjectService projectService;
 
     @RequestMapping("finishTime")
     public @ResponseBody
     Date getFinishTime(@RequestParam String wallName, @RequestParam String projectName) throws Exception {
         Wall wall = wallService.find(wallName);
-        return projectService.getEstimatedFinishTime(wall, projectName);
+        return projectService.getEstimatedFinishTime(wall.getProjectByName(projectName));
     }
 }

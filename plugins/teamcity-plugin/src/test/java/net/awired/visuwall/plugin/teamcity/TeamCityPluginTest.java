@@ -19,68 +19,52 @@ package net.awired.visuwall.plugin.teamcity;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
-
 import java.net.URL;
-
-import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.teamcityclient.ClasspathFiles;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 public class TeamCityPluginTest {
 
-	@Test(expected = NullPointerException.class)
-	public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance()
-	        throws IncompatibleSoftwareException {
-		new TeamCityPlugin().getSoftwareId(null);
-	}
+    @Test(expected = NullPointerException.class)
+    public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance()
+            throws IncompatibleSoftwareException {
+        new TeamCityPlugin().getSoftwareId(null);
+    }
 
-	@Test
-	public void should_return_plugin_info() {
-		PluginInfo expectedInfo = new PluginInfo();
-		expectedInfo.setClassName(PluginInfo.class.getName());
-		expectedInfo.setName("TeamCity plugin");
-		expectedInfo.setVersion(1.0f);
+    @Ignore
+    @Test
+    public void should_be_manageable() throws Exception {
+        String strUrl = ClasspathFiles.getUrlFile("teamcity_version_page.xml");
+        URL url = new URL(strUrl);
+        TeamCityUrlBuilder urlBuilder = Mockito.mock(TeamCityUrlBuilder.class);
+        when(urlBuilder.getVersion()).thenReturn(url.toString());
 
-		PluginInfo info = new TeamCityPlugin().getInfo();
+        TeamCityPlugin plugin = new TeamCityPlugin();
+        plugin.urlBuilder = urlBuilder;
 
-		assertEquals(expectedInfo, info);
-	}
+        SoftwareId softwareId = plugin.getSoftwareId(url);
 
-	@Ignore
-	@Test
-	public void should_be_manageable() throws Exception {
-		String strUrl = ClasspathFiles.getUrlFile("teamcity_version_page.xml");
-		URL url = new URL(strUrl);
-		TeamCityUrlBuilder urlBuilder = Mockito.mock(TeamCityUrlBuilder.class);
-		when(urlBuilder.getVersion()).thenReturn(url.toString());
+        assertEquals("TeamCity", softwareId.getName());
+        assertEquals("6.5", softwareId.getVersion());
+        assertNull(softwareId.getWarnings());
+    }
 
-		TeamCityPlugin plugin = new TeamCityPlugin();
-		plugin.urlBuilder = urlBuilder;
+    @Ignore
+    @Test(expected = IncompatibleSoftwareException.class)
+    public void should_not_be_manageable() throws Exception {
+        URL url = ClasspathFiles.getUrl("simple-text-file.txt");
+        TeamCityUrlBuilder urlBuilder = Mockito.mock(TeamCityUrlBuilder.class);
+        when(urlBuilder.getVersion()).thenReturn(url.toString());
 
-		SoftwareId softwareId = plugin.getSoftwareId(url);
+        TeamCityPlugin plugin = new TeamCityPlugin();
+        plugin.urlBuilder = urlBuilder;
 
-		assertEquals("TeamCity", softwareId.getName());
-		assertEquals("6.5", softwareId.getVersion());
-		assertNull(softwareId.getWarnings());
-	}
-
-	@Ignore
-	@Test(expected = IncompatibleSoftwareException.class)
-	public void should_not_be_manageable() throws Exception {
-		URL url = ClasspathFiles.getUrl("simple-text-file.txt");
-		TeamCityUrlBuilder urlBuilder = Mockito.mock(TeamCityUrlBuilder.class);
-		when(urlBuilder.getVersion()).thenReturn(url.toString());
-
-		TeamCityPlugin plugin = new TeamCityPlugin();
-		plugin.urlBuilder = urlBuilder;
-
-		plugin.getSoftwareId(url);
-	}
+        plugin.getSoftwareId(url);
+    }
 
 }

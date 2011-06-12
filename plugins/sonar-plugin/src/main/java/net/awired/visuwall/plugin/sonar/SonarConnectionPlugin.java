@@ -23,12 +23,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.plugin.EmptyConnectionPlugin;
+import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.capability.MetricPlugin;
+import net.awired.visuwall.api.plugin.capability.TestsPlugin;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 import org.slf4j.Logger;
@@ -38,7 +42,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
 
-public final class SonarConnectionPlugin extends EmptyConnectionPlugin {
+public final class SonarConnectionPlugin implements ConnectionPlugin, MetricPlugin, TestsPlugin {
 
     private static final Logger LOG = LoggerFactory.getLogger(SonarConnectionPlugin.class);
 
@@ -209,6 +213,7 @@ public final class SonarConnectionPlugin extends EmptyConnectionPlugin {
         }
     }
 
+    @Override
     public Map<String, List<QualityMetric>> getMetricsByCategory() {
         Map<String, List<QualityMetric>> metricsByDomain = new HashMap<String, List<QualityMetric>>();
         for (QualityMetric metricValue : metricsMap.values()) {
@@ -229,6 +234,30 @@ public final class SonarConnectionPlugin extends EmptyConnectionPlugin {
 
     private void checkConnected() {
         Preconditions.checkState(connected, "You must connect your plugin");
+    }
+
+    @Override
+    public List<ProjectId> findAllProjects() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<ProjectId> findProjectsByNames(List<String> names) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<String> findProjectNames() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

@@ -49,13 +49,11 @@ public class WallHolderServiceTest {
         // when(entityManager.createNamedQuery(Matchers.anyString())).thenReturn(query);
 
         WallService wallService = Mockito.mock(WallService.class);
-        ProjectService projectService = Mockito.mock(ProjectService.class);
+        BuildProjectService projectService = Mockito.mock(BuildProjectService.class);
         PluginService pluginService = Mockito.mock(PluginService.class);
 
         wallHolderService = new WallHolderService();
         wallHolderService.wallService = wallService;
-        wallHolderService.projectService = projectService;
-        wallHolderService.pluginService = pluginService;
         wallHolderService.init();
     }
 

@@ -27,8 +27,9 @@ import net.awired.visuwall.api.domain.ProjectStatus.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
-import net.awired.visuwall.api.plugin.EmptyConnectionPlugin;
-import net.awired.visuwall.api.plugin.capability.StatePlugin;
+import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.capability.BuildPlugin;
+import net.awired.visuwall.api.plugin.capability.ViewPlugin;
 import net.awired.visuwall.hudsonclient.Hudson;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
@@ -40,13 +41,14 @@ import org.slf4j.LoggerFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
-public final class HudsonConnectionPlugin extends EmptyConnectionPlugin implements StatePlugin {
+public final class HudsonConnectionPlugin implements ConnectionPlugin, BuildPlugin, ViewPlugin {
 
     private static final Logger LOG = LoggerFactory.getLogger(HudsonConnectionPlugin.class);
 
     private static final String HUDSON_ID = "HUDSON_ID";
 
-    private Hudson hudson;
+    @VisibleForTesting
+    Hudson hudson;
 
     private ProjectBuilder projectBuilder = new ProjectBuilder();
 
@@ -218,9 +220,22 @@ public final class HudsonConnectionPlugin extends EmptyConnectionPlugin implemen
         }
     }
 
-    @VisibleForTesting
-    void setHudson(Hudson hudson) {
-        this.hudson = hudson;
+    @Override
+    public List<ProjectId> findProjectsByViews(List<String> views) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean contains(ProjectId projectId) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public List<ProjectId> findProjectsByNames(List<String> names) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

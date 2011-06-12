@@ -24,7 +24,8 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.capability.MetricPlugin;
+import net.awired.visuwall.api.plugin.capability.TestsPlugin;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -48,7 +49,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 
     @Test
     public void should_merge_with_one_build_plugin() throws Exception {
-        ConnectionPlugin qualityPlugin = Mockito.mock(ConnectionPlugin.class);
+        MetricPlugin metricPlugin = Mockito.mock(MetricPlugin.class);
 
         QualityResult qualityResult = new QualityResult();
         QualityMeasure coverage = new QualityMeasure();
@@ -58,16 +59,16 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
         qualityResult.add("coverage", coverage);
 
         ProjectId projectId = projectToEnhance.getProjectId();
-        when(qualityPlugin.analyzeQuality(projectId)).thenReturn(qualityResult);
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin);
+        when(metricPlugin.analyzeQuality(projectId)).thenReturn(qualityResult);
+        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, metricPlugin);
 
         assertEquals(coverage, projectToEnhance.getQualityResult().getMeasure("coverage"));
     }
 
     @Test
     public void should_merge_with_two_build_plugins() throws Exception {
-        ConnectionPlugin qualityPlugin1 = Mockito.mock(ConnectionPlugin.class);
-        ConnectionPlugin qualityPlugin2 = Mockito.mock(ConnectionPlugin.class);
+        MetricPlugin metricPlugin1 = Mockito.mock(MetricPlugin.class);
+        MetricPlugin metricPlugin2 = Mockito.mock(MetricPlugin.class);
 
         QualityResult qualityResult1 = new QualityResult();
         QualityMeasure coverage = new QualityMeasure();
@@ -84,10 +85,10 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
         qualityResult2.add("violations", violations);
 
         ProjectId projectId = projectToEnhance.getProjectId();
-        when(qualityPlugin1.analyzeQuality(projectId)).thenReturn(qualityResult1);
-        when(qualityPlugin2.analyzeQuality(projectId)).thenReturn(qualityResult2);
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin1);
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin2);
+        when(metricPlugin1.analyzeQuality(projectId)).thenReturn(qualityResult1);
+        when(metricPlugin2.analyzeQuality(projectId)).thenReturn(qualityResult2);
+        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, metricPlugin1);
+        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, metricPlugin2);
 
         assertEquals(coverage, projectToEnhance.getQualityResult().getMeasure("coverage"));
         assertEquals(violations, projectToEnhance.getQualityResult().getMeasure("violations"));
@@ -95,8 +96,8 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 
     @Test
     public void last_plugin_is_always_right() throws Exception {
-        ConnectionPlugin qualityPlugin1 = Mockito.mock(ConnectionPlugin.class);
-        ConnectionPlugin qualityPlugin2 = Mockito.mock(ConnectionPlugin.class);
+        MetricPlugin metricPlugin1 = Mockito.mock(MetricPlugin.class);
+        MetricPlugin metricPlugin2 = Mockito.mock(MetricPlugin.class);
 
         QualityResult qualityResult1 = new QualityResult();
         QualityMeasure coverage = new QualityMeasure();
@@ -113,10 +114,10 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
         qualityResult2.add("coverage", coverage2);
 
         ProjectId projectId = projectToEnhance.getProjectId();
-        when(qualityPlugin1.analyzeQuality(projectId)).thenReturn(qualityResult1);
-        when(qualityPlugin2.analyzeQuality(projectId)).thenReturn(qualityResult2);
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin1);
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin2);
+        when(metricPlugin1.analyzeQuality(projectId)).thenReturn(qualityResult1);
+        when(metricPlugin2.analyzeQuality(projectId)).thenReturn(qualityResult2);
+        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, metricPlugin1);
+        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, metricPlugin2);
 
         assertEquals(coverage2, projectToEnhance.getQualityResult().getMeasure("coverage"));
     }
@@ -129,10 +130,10 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
         testResult.setPassCount(2);
         testResult.setSkipCount(3);
 
-        ConnectionPlugin qualityPlugin = Mockito.mock(ConnectionPlugin.class);
-        when(qualityPlugin.analyzeUnitTests(projectToEnhance.getProjectId())).thenReturn(testResult);
+        TestsPlugin testsPlugin = Mockito.mock(TestsPlugin.class);
+        when(testsPlugin.analyzeUnitTests(projectToEnhance.getProjectId())).thenReturn(testResult);
 
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin);
+        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, testsPlugin);
 
         Build build = projectToEnhance.getCompletedBuild();
 
@@ -151,10 +152,10 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
         testResult.setPassCount(2);
         testResult.setSkipCount(3);
 
-        ConnectionPlugin qualityPlugin = Mockito.mock(ConnectionPlugin.class);
-        when(qualityPlugin.analyzeIntegrationTests(projectToEnhance.getProjectId())).thenReturn(testResult);
+        TestsPlugin testPlugin = Mockito.mock(TestsPlugin.class);
+        when(testPlugin.analyzeIntegrationTests(projectToEnhance.getProjectId())).thenReturn(testResult);
 
-        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, qualityPlugin);
+        projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, testPlugin);
 
         Build build = projectToEnhance.getCompletedBuild();
 

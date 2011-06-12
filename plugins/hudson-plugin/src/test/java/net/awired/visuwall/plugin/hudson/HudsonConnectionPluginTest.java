@@ -49,7 +49,7 @@ public class HudsonConnectionPluginTest {
         Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("not_valid_state");
         HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
         hudsonPlugin.connect("url");
-        hudsonPlugin.setHudson(hudson);
+        hudsonPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId("HUDSON_ID", "idValue");
@@ -65,7 +65,7 @@ public class HudsonConnectionPluginTest {
 
         HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
         hudsonPlugin.connect("url");
-        hudsonPlugin.setHudson(hudson);
+        hudsonPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId("HUDSON_ID", "idValue");
@@ -87,7 +87,7 @@ public class HudsonConnectionPluginTest {
 
         HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
         hudsonPlugin.connect("url");
-        hudsonPlugin.setHudson(hudson);
+        hudsonPlugin.hudson = hudson;
 
         List<ProjectId> projectIds = hudsonPlugin.findAllProjects();
         ProjectId projectId = projectIds.get(0);
@@ -107,7 +107,7 @@ public class HudsonConnectionPluginTest {
 
         HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
         hudsonPlugin.connect("url");
-        hudsonPlugin.setHudson(hudson);
+        hudsonPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId("HUDSON_ID", "id");
@@ -126,7 +126,7 @@ public class HudsonConnectionPluginTest {
 
         HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
         hudsonPlugin.connect("url");
-        hudsonPlugin.setHudson(hudson);
+        hudsonPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId("HUDSON_ID", "project1");
@@ -146,7 +146,7 @@ public class HudsonConnectionPluginTest {
 
         HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
         hudsonPlugin.connect("url");
-        hudsonPlugin.setHudson(hudson);
+        hudsonPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId("HUDSON_ID", "project1");
@@ -161,7 +161,7 @@ public class HudsonConnectionPluginTest {
 
         HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
         hudsonPlugin.connect("url");
-        hudsonPlugin.setHudson(hudson);
+        hudsonPlugin.hudson = hudson;
 
         HudsonBuild hudsonBuild = new HudsonBuild();
 
@@ -182,7 +182,7 @@ public class HudsonConnectionPluginTest {
 
         HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
         hudsonPlugin.connect("url");
-        hudsonPlugin.setHudson(hudson);
+        hudsonPlugin.hudson = hudson;
 
         when(hudson.getLastBuildNumber("project1")).thenReturn(5);
 
