@@ -18,42 +18,39 @@ package net.awired.visuwall.plugin.hudson;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-
 import java.net.URL;
-
-import net.awired.visuwall.api.domain.PluginInfo;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
-
+import net.awired.visuwall.core.domain.PluginInfo;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class HudsonPluginIT {
 
-	static PluginInfo pluginInfo = new PluginInfo();
+    static PluginInfo pluginInfo = new PluginInfo();
 
-	@BeforeClass
-	public static void init() {
-		pluginInfo.setName("Hudson plugin");
-		pluginInfo.setVersion(1.0f);
-		pluginInfo.setClassName(HudsonPlugin.class.getName());
-	}
+    @BeforeClass
+    public static void init() {
+        pluginInfo.setName("Hudson plugin");
+        pluginInfo.setVersion(1.0f);
+        pluginInfo.setClassName(HudsonPlugin.class.getName());
+    }
 
-	@Test
-	public void should_recognize_hudson_instance_with_valid_url() throws Exception {
-		HudsonPlugin hudsonPlugin = new HudsonPlugin();
-		SoftwareId softwareId = hudsonPlugin.getSoftwareId(new URL("http://fluxx.fr.cr:8080/hudson"));
+    @Test
+    public void should_recognize_hudson_instance_with_valid_url() throws Exception {
+        HudsonPlugin hudsonPlugin = new HudsonPlugin();
+        SoftwareId softwareId = hudsonPlugin.getSoftwareId(new URL("http://fluxx.fr.cr:8080/hudson"));
 
-		assertEquals("Hudson", softwareId.getName());
-		assertEquals("1.396", softwareId.getVersion());
-		assertNull(softwareId.getWarnings());
-	}
+        assertEquals("Hudson", softwareId.getName());
+        assertEquals("1.396", softwareId.getVersion());
+        assertNull(softwareId.getWarnings());
+    }
 
-	@Test(expected = IncompatibleSoftwareException.class)
-	public void should_not_fail_if_url_is_not_manageable() throws Exception {
-		HudsonPlugin hudsonPlugin = new HudsonPlugin();
-		String url = "http://www.google.fr";
-		hudsonPlugin.getSoftwareId(new URL(url));
-	}
+    @Test(expected = IncompatibleSoftwareException.class)
+    public void should_not_fail_if_url_is_not_manageable() throws Exception {
+        HudsonPlugin hudsonPlugin = new HudsonPlugin();
+        String url = "http://www.google.fr";
+        hudsonPlugin.getSoftwareId(new URL(url));
+    }
 
 }

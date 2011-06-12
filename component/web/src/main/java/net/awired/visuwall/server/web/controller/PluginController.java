@@ -20,12 +20,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.awired.ajsl.web.service.interfaces.JsService;
-import net.awired.visuwall.api.domain.PluginInfo;
+import net.awired.visuwall.core.domain.PluginInfo;
 import net.awired.visuwall.core.domain.SoftwareInfo;
 import net.awired.visuwall.core.service.PluginService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,24 +35,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/plugin")
 public class PluginController {
 
-	@Autowired
-	private PluginService pluginService;
+    @Autowired
+    private PluginService pluginService;
 
-	@RequestMapping(method = RequestMethod.GET)
-	public @ResponseBody
-	List<PluginInfo> getPluginList() {
-		return pluginService.getPluginsInfo();
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    public @ResponseBody
+    List<PluginInfo> getPluginList() {
+        return pluginService.getPluginsInfo();
+    }
 
-	@RequestMapping(value = "managable", method = RequestMethod.GET)
-	public @ResponseBody
-	SoftwareInfo getSoftwareInfo(@RequestParam String url)
-			throws MalformedURLException {
-		SoftwareInfo softwareInfo = pluginService
-				.getSoftwareInfoFromUrl(new URL(url));
-		
-		
-		return softwareInfo;
-	}
+    @RequestMapping(value = "managable", method = RequestMethod.GET)
+    public @ResponseBody
+    SoftwareInfo getSoftwareInfo(@RequestParam String url) throws MalformedURLException {
+        SoftwareInfo softwareInfo = pluginService.getSoftwareInfoFromUrl(new URL(url));
+
+        return softwareInfo;
+    }
 
 }

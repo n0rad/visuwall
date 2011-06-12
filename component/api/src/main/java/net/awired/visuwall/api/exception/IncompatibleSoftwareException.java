@@ -18,14 +18,14 @@ package net.awired.visuwall.api.exception;
 
 public class IncompatibleSoftwareException extends Exception {
 
-	private static final long serialVersionUID = -8159361336473718472L;
+    private static final long serialVersionUID = -8159361336473718472L;
 
-	public IncompatibleSoftwareException(String msg) {
-		super(msg);
-	}
+    public IncompatibleSoftwareException(String msg) {
+        super(msg);
+    }
 
-	public IncompatibleSoftwareException(String msg, Exception cause) {
-		super(msg, cause);
-	}
+    public IncompatibleSoftwareException(String msg, Exception cause) {
+        super(msg, cause);
+    }
 
 }

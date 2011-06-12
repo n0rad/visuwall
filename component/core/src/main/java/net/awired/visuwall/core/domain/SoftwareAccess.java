@@ -16,153 +16,160 @@
 
 package net.awired.visuwall.core.domain;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
 import javax.persistence.Transient;
-
-import net.awired.visuwall.api.domain.Project;
-
-import org.hibernate.annotations.Cascade;
+import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.CollectionOfElements;
-import org.hibernate.annotations.Type;
 import org.springframework.util.AutoPopulatingList;
 
 @Entity
 public class SoftwareAccess {
 
-	@Id
-	@GeneratedValue
-	private Long id;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-	private String url;
-	private String login;
-	private String password;
+    private String url;
+    private String login;
+    private String password;
+    private boolean allProject;
+    private int refreshTimeSecond;
 
-	@Transient
-	private String pluginClassName;
+    @CollectionOfElements
+    private List<String> projectNames = new AutoPopulatingList<String>(String.class);
+    @CollectionOfElements
+    private List<String> viewNames = new AutoPopulatingList<String>(String.class);
 
-	private boolean allProject;
+    @Transient
+    private ConnectionPlugin connectionPlugin;
 
-	@CollectionOfElements
-	private List<String> projectNames = new AutoPopulatingList<String>(
-			String.class);
+    public SoftwareAccess() {
 
-	@CollectionOfElements
-	private List<String> viewNames = new AutoPopulatingList<String>(
-			String.class);
+    }
 
-	public SoftwareAccess() {
+    public SoftwareAccess(String url) {
+        this.url = url;
+    }
 
-	}
+    public SoftwareAccess(String url, String login, String password) {
+        this(url);
+        this.login = login;
+        this.password = password;
+    }
 
-	public SoftwareAccess(Class<?> plugin, String url) {
-		this.pluginClassName = plugin.getName();
-		this.url = url;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
 
-	public SoftwareAccess(Class<?> plugin, String url, String login,
-			String password) {
-		this(plugin, url);
-		this.login = login;
-		this.password = password;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        SoftwareAccess other = (SoftwareAccess) obj;
+        if (id == null) {
+            if (other.id != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
+    // ///////////////////////////////////////////////////////////
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SoftwareAccess other = (SoftwareAccess) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	// ///////////////////////////////////////////////////////////
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public URL getUrl() {
+        try {
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("software access url is malformed" + this, e);
+        }
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setUrl(URL url) {
+        this.url = url.toString();
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public String getLogin() {
+        return login;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setLogin(String login) {
+        this.login = login;
+    }
 
-	public String getLogin() {
-		return login;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setLogin(String login) {
-		this.login = login;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public boolean isAllProject() {
+        return allProject;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setAllProject(boolean allProject) {
+        this.allProject = allProject;
+    }
 
-	public String getPluginClassName() {
-		return pluginClassName;
-	}
+    public List<String> getProjectNames() {
+        return projectNames;
+    }
 
-	public void setPluginClassName(String pluginClassName) {
-		this.pluginClassName = pluginClassName;
-	}
+    public void setProjectNames(List<String> projectNames) {
+        this.projectNames = projectNames;
+    }
 
-	public boolean isAllProject() {
-		return allProject;
-	}
+    public List<String> getViewNames() {
+        return viewNames;
+    }
 
-	public void setAllProject(boolean allProject) {
-		this.allProject = allProject;
-	}
+    public void setViewNames(List<String> viewNames) {
+        this.viewNames = viewNames;
+    }
 
-	public List<String> getProjectNames() {
-		return projectNames;
-	}
+    public int getRefreshTimeSecond() {
+        return refreshTimeSecond;
+    }
 
-	public void setProjectNames(List<String> projectNames) {
-		this.projectNames = projectNames;
-	}
+    public void setRefreshTimeSecond(int refreshTimeSecond) {
+        this.refreshTimeSecond = refreshTimeSecond;
+    }
 
-	public List<String> getViewNames() {
-		return viewNames;
-	}
+    @JsonIgnore
+    public ConnectionPlugin getConnectionPlugin() {
+        return connectionPlugin;
+    }
 
-	public void setViewNames(List<String> viewNames) {
-		this.viewNames = viewNames;
-	}
+    @JsonIgnore
+    public void setConnectionPlugin(ConnectionPlugin connectionPlugin) {
+        this.connectionPlugin = connectionPlugin;
+    }
 }

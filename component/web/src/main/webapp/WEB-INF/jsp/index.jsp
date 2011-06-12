@@ -79,10 +79,9 @@
 				<input id="softwareAccesses0.login" name="softwareAccesses[0].login" class="ui-widget-content ui-corner-all disabled" type="text" value="" disabled="disabled"/> 
 				<label for="softwareAccesses0.password">Password</label> 
 				<input id="softwareAccesses0.password" name="softwareAccesses[0].password" class="ui-widget-content ui-corner-all disabled" type="password" value="" disabled="disabled"/> 
-				<label for="sofwareAccesses0.allProject">All Projects</label> 
-				<input type="checkbox" id="sofwareAccesses0.allProject" name="sofwareAccesses[0].allProject" /> 
-
-
+				<label for="softwareAccesses0.allProject">All Projects</label> 
+				<input type="checkbox" id="softwareAccesses0.allProject" name="softwareAccesses[0].allProject" value="true" /> 
+				<input type="hidden" id="_softwareAccesses0.allProject" name="_softwareAccesses[0].allProject" value="true" />
 			</div> 
 		</div>
 			<input class="submit" type="submit" value="Save"/> 

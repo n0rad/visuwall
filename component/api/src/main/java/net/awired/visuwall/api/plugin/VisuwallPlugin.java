@@ -17,18 +17,21 @@
 package net.awired.visuwall.api.plugin;
 
 import java.net.URL;
-
-import net.awired.visuwall.api.domain.PluginInfo;
+import java.util.Properties;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
-public interface VisuwallPlugin {
+public interface VisuwallPlugin<T extends ConnectionPlugin> {
 
-	// TODO change url to URL type
-	ConnectionPlugin getConnection(String url, java.util.Properties info);
+    // TODO change url to URL type
+    T getConnection(String url, Properties info);
 
-	PluginInfo getInfo();
+    Class<T> getConnectionClass();
 
-	SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException;
+    float getVersion();
+
+    String getName();
+
+    SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException;
 
 }

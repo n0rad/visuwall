@@ -41,113 +41,113 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-	private final static QName _SurefireAggregatedReport_QNAME = new QName("", "SurefireAggregatedReport");
+    private final static QName _SurefireAggregatedReport_QNAME = new QName("", "SurefireAggregatedReport");
 
-	/**
-	 * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package:
-	 * com.jsmadja.wall.projectwall.generated.hudson.surefireaggregatedreport
-	 * 
-	 */
-	public ObjectFactory() {
-	}
+    /**
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package:
+     * com.jsmadja.wall.projectwall.generated.hudson.surefireaggregatedreport
+     * 
+     */
+    public ObjectFactory() {
+    }
 
-	/**
-	 * Create an instance of {@link HudsonTasksTestAggregatedTestResultAction }
-	 * 
-	 */
-	public HudsonTasksTestAggregatedTestResultAction createHudsonTasksTestAggregatedTestResultAction() {
-		return new HudsonTasksTestAggregatedTestResultAction();
-	}
+    /**
+     * Create an instance of {@link HudsonTasksTestAggregatedTestResultAction }
+     * 
+     */
+    public HudsonTasksTestAggregatedTestResultAction createHudsonTasksTestAggregatedTestResultAction() {
+        return new HudsonTasksTestAggregatedTestResultAction();
+    }
 
-	/**
-	 * Create an instance of {@link HudsonTasksTestAbstractTestResultAction }
-	 * 
-	 */
-	public HudsonTasksTestAbstractTestResultAction createHudsonTasksTestAbstractTestResultAction() {
-		return new HudsonTasksTestAbstractTestResultAction();
-	}
+    /**
+     * Create an instance of {@link HudsonTasksTestAbstractTestResultAction }
+     * 
+     */
+    public HudsonTasksTestAbstractTestResultAction createHudsonTasksTestAbstractTestResultAction() {
+        return new HudsonTasksTestAbstractTestResultAction();
+    }
 
-	/**
-	 * Create an instance of {@link HudsonModelActionable }
-	 * 
-	 */
-	public HudsonModelActionable createHudsonModelActionable() {
-		return new HudsonModelActionable();
-	}
+    /**
+     * Create an instance of {@link HudsonModelActionable }
+     * 
+     */
+    public HudsonModelActionable createHudsonModelActionable() {
+        return new HudsonModelActionable();
+    }
 
-	/**
-	 * Create an instance of {@link HudsonScmChangeLogSet }
-	 * 
-	 */
-	public HudsonScmChangeLogSet createHudsonScmChangeLogSet() {
-		return new HudsonScmChangeLogSet();
-	}
+    /**
+     * Create an instance of {@link HudsonScmChangeLogSet }
+     * 
+     */
+    public HudsonScmChangeLogSet createHudsonScmChangeLogSet() {
+        return new HudsonScmChangeLogSet();
+    }
 
-	/**
-	 * Create an instance of {@link HudsonMavenReportersSurefireAggregatedReport }
-	 * 
-	 */
-	public HudsonMavenReportersSurefireAggregatedReport createHudsonMavenReportersSurefireAggregatedReport() {
-		return new HudsonMavenReportersSurefireAggregatedReport();
-	}
+    /**
+     * Create an instance of {@link HudsonMavenReportersSurefireAggregatedReport }
+     * 
+     */
+    public HudsonMavenReportersSurefireAggregatedReport createHudsonMavenReportersSurefireAggregatedReport() {
+        return new HudsonMavenReportersSurefireAggregatedReport();
+    }
 
-	/**
-	 * Create an instance of {@link HudsonModelRun }
-	 * 
-	 */
-	public HudsonModelRun createHudsonModelRun() {
-		return new HudsonModelRun();
-	}
+    /**
+     * Create an instance of {@link HudsonModelRun }
+     * 
+     */
+    public HudsonModelRun createHudsonModelRun() {
+        return new HudsonModelRun();
+    }
 
-	/**
-	 * Create an instance of {@link HudsonModelUserProperty }
-	 * 
-	 */
-	public HudsonModelUserProperty createHudsonModelUserProperty() {
-		return new HudsonModelUserProperty();
-	}
+    /**
+     * Create an instance of {@link HudsonModelUserProperty }
+     * 
+     */
+    public HudsonModelUserProperty createHudsonModelUserProperty() {
+        return new HudsonModelUserProperty();
+    }
 
-	/**
-	 * Create an instance of {@link HudsonModelUser }
-	 * 
-	 */
-	public HudsonModelUser createHudsonModelUser() {
-		return new HudsonModelUser();
-	}
+    /**
+     * Create an instance of {@link HudsonModelUser }
+     * 
+     */
+    public HudsonModelUser createHudsonModelUser() {
+        return new HudsonModelUser();
+    }
 
-	/**
-	 * Create an instance of {@link HudsonTasksTestAggregatedTestResultActionChildReport }
-	 * 
-	 */
-	public HudsonTasksTestAggregatedTestResultActionChildReport createHudsonTasksTestAggregatedTestResultActionChildReport() {
-		return new HudsonTasksTestAggregatedTestResultActionChildReport();
-	}
+    /**
+     * Create an instance of {@link HudsonTasksTestAggregatedTestResultActionChildReport }
+     * 
+     */
+    public HudsonTasksTestAggregatedTestResultActionChildReport createHudsonTasksTestAggregatedTestResultActionChildReport() {
+        return new HudsonTasksTestAggregatedTestResultActionChildReport();
+    }
 
-	/**
-	 * Create an instance of {@link HudsonModelAbstractBuild }
-	 * 
-	 */
-	public HudsonModelAbstractBuild createHudsonModelAbstractBuild() {
-		return new HudsonModelAbstractBuild();
-	}
+    /**
+     * Create an instance of {@link HudsonModelAbstractBuild }
+     * 
+     */
+    public HudsonModelAbstractBuild createHudsonModelAbstractBuild() {
+        return new HudsonModelAbstractBuild();
+    }
 
-	/**
-	 * Create an instance of {@link HudsonModelRunArtifact }
-	 * 
-	 */
-	public HudsonModelRunArtifact createHudsonModelRunArtifact() {
-		return new HudsonModelRunArtifact();
-	}
+    /**
+     * Create an instance of {@link HudsonModelRunArtifact }
+     * 
+     */
+    public HudsonModelRunArtifact createHudsonModelRunArtifact() {
+        return new HudsonModelRunArtifact();
+    }
 
-	/**
-	 * Create an instance of {@link JAXBElement }{@code <}{@link HudsonMavenReportersSurefireAggregatedReport }{@code >}
-	 * 
-	 */
-	@XmlElementDecl(namespace = "", name = "SurefireAggregatedReport")
-	public JAXBElement<HudsonMavenReportersSurefireAggregatedReport> createSurefireAggregatedReport(
-	        HudsonMavenReportersSurefireAggregatedReport value) {
-		return new JAXBElement<HudsonMavenReportersSurefireAggregatedReport>(_SurefireAggregatedReport_QNAME,
-		        HudsonMavenReportersSurefireAggregatedReport.class, null, value);
-	}
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link HudsonMavenReportersSurefireAggregatedReport }{@code >}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "SurefireAggregatedReport")
+    public JAXBElement<HudsonMavenReportersSurefireAggregatedReport> createSurefireAggregatedReport(
+            HudsonMavenReportersSurefireAggregatedReport value) {
+        return new JAXBElement<HudsonMavenReportersSurefireAggregatedReport>(_SurefireAggregatedReport_QNAME,
+                HudsonMavenReportersSurefireAggregatedReport.class, null, value);
+    }
 
 }

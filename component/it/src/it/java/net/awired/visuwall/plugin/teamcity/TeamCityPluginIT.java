@@ -24,23 +24,26 @@ import java.net.URL;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TeamCityPluginIT {
 
-	@Test
-	public void should_recognize_teamcity_instance_with_valid_url() throws Exception {
-		TeamCityPlugin teamcityPlugin = new TeamCityPlugin();
-		SoftwareId softwareId = teamcityPlugin.getSoftwareId(new URL(TEAMCITY_URL));
-		assertEquals("TeamCity", softwareId.getName());
-		assertEquals("6.5", softwareId.getVersion());
-	}
+    @Ignore("teamcity plugin is not finished")
+    @Test
+    public void should_recognize_teamcity_instance_with_valid_url() throws Exception {
+        TeamCityPlugin teamcityPlugin = new TeamCityPlugin();
+        SoftwareId softwareId = teamcityPlugin.getSoftwareId(new URL(TEAMCITY_URL));
+        assertEquals("TeamCity", softwareId.getName());
+        assertEquals("6.5", softwareId.getVersion());
+    }
 
-	@Test(expected = IncompatibleSoftwareException.class)
-	public void should_not_fail_if_url_is_not_manageable() throws Exception {
-		TeamCityPlugin teamcityPlugin = new TeamCityPlugin();
-		String url = "http://www.google.fr";
-		teamcityPlugin.getSoftwareId(new URL(url));
-	}
+    @Ignore
+    @Test(expected = IncompatibleSoftwareException.class)
+    public void should_not_fail_if_url_is_not_manageable() throws Exception {
+        TeamCityPlugin teamcityPlugin = new TeamCityPlugin();
+        String url = "http://www.google.fr";
+        teamcityPlugin.getSoftwareId(new URL(url));
+    }
 
 }

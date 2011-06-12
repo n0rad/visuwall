@@ -20,68 +20,68 @@ import java.util.Date;
 
 public class BambooBuild {
 
-	private int buildNumber;
+    private int buildNumber;
 
-	private long duration;
+    private long duration;
 
-	private Date startTime;
+    private Date startTime;
 
-	private String state;
+    private String state;
 
-	private int failCount;
+    private int failCount;
 
-	private int passCount;
+    private int passCount;
 
-	public int getBuildNumber() {
-		return buildNumber;
-	}
+    public int getBuildNumber() {
+        return buildNumber;
+    }
 
-	public void setBuildNumber(int buildNumber) {
-		this.buildNumber = buildNumber;
-	}
+    public void setBuildNumber(int buildNumber) {
+        this.buildNumber = buildNumber;
+    }
 
-	public long getDuration() {
-		return duration;
-	}
+    public long getDuration() {
+        return duration;
+    }
 
-	public void setDuration(long duration) {
-		this.duration = duration;
-	}
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
 
-	public Date getStartTime() {
-		return startTime;
-	}
+    public Date getStartTime() {
+        return startTime;
+    }
 
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
 
-	public String getState() {
-		return state;
-	}
+    public String getState() {
+        return state;
+    }
 
-	public void setState(String state) {
-		this.state = state;
-	}
+    public void setState(String state) {
+        this.state = state;
+    }
 
-	public int getFailCount() {
-		return failCount;
-	}
+    public int getFailCount() {
+        return failCount;
+    }
 
-	public void setFailCount(int failCount) {
-		this.failCount = failCount;
-	}
+    public void setFailCount(int failCount) {
+        this.failCount = failCount;
+    }
 
-	public int getPassCount() {
-		return passCount;
-	}
+    public int getPassCount() {
+        return passCount;
+    }
 
-	public void setPassCount(int passCount) {
-		this.passCount = passCount;
-	}
+    public void setPassCount(int passCount) {
+        this.passCount = passCount;
+    }
 
-	public boolean isSuccessful() {
-		return "Successful".equals(state);
-	}
+    public boolean isSuccessful() {
+        return "Successful".equals(state);
+    }
 
 }

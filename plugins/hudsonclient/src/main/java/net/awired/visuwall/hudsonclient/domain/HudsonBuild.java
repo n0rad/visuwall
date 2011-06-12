@@ -19,106 +19,105 @@ package net.awired.visuwall.hudsonclient.domain;
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
 public final class HudsonBuild {
 
-	private boolean successful;
-	private Set<HudsonCommiter> commiters = new TreeSet<HudsonCommiter>();
-	private long duration;
-	private Date startTime;
-	private HudsonTestResult unitTestResult;
-	private HudsonTestResult integrationTestResult;
-	private String state;
-	private int buildNumber;
+    private boolean successful;
+    private Set<HudsonCommiter> commiters = new TreeSet<HudsonCommiter>();
+    private long duration;
+    private Date startTime;
+    private HudsonTestResult unitTestResult;
+    private HudsonTestResult integrationTestResult;
+    private String state;
+    private int buildNumber;
 
-	public void addCommiter(HudsonCommiter commiter) {
-		commiters.add(commiter);
-	}
+    public void addCommiter(HudsonCommiter commiter) {
+        commiters.add(commiter);
+    }
 
-	public boolean isSuccessful() {
-		return successful;
-	}
+    public boolean isSuccessful() {
+        return successful;
+    }
 
-	public void setSuccessful(boolean successful) {
-		this.successful = successful;
-	}
+    public void setSuccessful(boolean successful) {
+        this.successful = successful;
+    }
 
-	public Set<HudsonCommiter> getCommiters() {
-		return commiters;
-	}
+    public Set<HudsonCommiter> getCommiters() {
+        return commiters;
+    }
 
-	public long getDuration() {
-		return duration;
-	}
+    public long getDuration() {
+        return duration;
+    }
 
-	public void setDuration(long duration) {
-		this.duration = duration;
-	}
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
 
-	public Date getStartTime() {
-		return startTime;
-	}
+    public Date getStartTime() {
+        return startTime;
+    }
 
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
 
-	public HudsonTestResult getUnitTestResult() {
-		return unitTestResult;
-	}
+    public HudsonTestResult getUnitTestResult() {
+        return unitTestResult;
+    }
 
-	public void setUnitTestResult(HudsonTestResult testResult) {
-		this.unitTestResult = testResult;
-	}
+    public void setUnitTestResult(HudsonTestResult testResult) {
+        this.unitTestResult = testResult;
+    }
 
-	public HudsonTestResult getIntegrationTestResult() {
-		return integrationTestResult;
-	}
+    public HudsonTestResult getIntegrationTestResult() {
+        return integrationTestResult;
+    }
 
-	public void setIntegrationTestResult(HudsonTestResult testResult) {
-		this.integrationTestResult = testResult;
-	}
+    public void setIntegrationTestResult(HudsonTestResult testResult) {
+        this.integrationTestResult = testResult;
+    }
 
-	public String getState() {
-		return state;
-	}
+    public String getState() {
+        return state;
+    }
 
-	public void setState(String state) {
-		this.state = state;
-	}
+    public void setState(String state) {
+        this.state = state;
+    }
 
-	public int getBuildNumber() {
-		return buildNumber;
-	}
+    public int getBuildNumber() {
+        return buildNumber;
+    }
 
-	public void setBuildNumber(int buildNumber) {
-		this.buildNumber = buildNumber;
-	}
+    public void setBuildNumber(int buildNumber) {
+        this.buildNumber = buildNumber;
+    }
 
-	@Override
-	public String toString() {
-		ToStringHelper toString = Objects.toStringHelper(this) //
-		        .add("build number", buildNumber) //
-		        .add("status", successful) //
-		        .add("commiters", commiters) //
-		        .add("duration", duration) //
-		        .add("startTime", startTime) //
-		        .add("state", state); //
-		if (unitTestResult != null) {
-			toString.add("unit test result", unitTestResult.toString());
-		}
-		if (integrationTestResult != null) {
-			toString.add("integration test result", integrationTestResult.toString());
-		}
-		return toString.toString();
-	}
+    @Override
+    public String toString() {
+        ToStringHelper toString = Objects.toStringHelper(this) //
+                .add("build number", buildNumber) //
+                .add("status", successful) //
+                .add("commiters", commiters) //
+                .add("duration", duration) //
+                .add("startTime", startTime) //
+                .add("state", state); //
+        if (unitTestResult != null) {
+            toString.add("unit test result", unitTestResult.toString());
+        }
+        if (integrationTestResult != null) {
+            toString.add("integration test result", integrationTestResult.toString());
+        }
+        return toString.toString();
+    }
 
-	public void setCommiters(Set<HudsonCommiter> commiters) {
-		if (commiters != null) {
-			this.commiters.addAll(commiters);
-		}
-	}
+    public void setCommiters(Set<HudsonCommiter> commiters) {
+        if (commiters != null) {
+            this.commiters.addAll(commiters);
+        }
+    }
 }

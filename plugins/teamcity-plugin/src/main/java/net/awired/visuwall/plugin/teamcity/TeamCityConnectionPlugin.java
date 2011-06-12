@@ -17,12 +17,16 @@
 package net.awired.visuwall.plugin.teamcity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.EmptyConnectionPlugin;
+import net.awired.visuwall.api.plugin.capability.BuildPlugin;
 import net.awired.visuwall.teamcityclient.TeamCity;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
 
@@ -33,27 +37,71 @@ import org.slf4j.LoggerFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
-public class TeamCityConnectionPlugin extends EmptyConnectionPlugin {
+public class TeamCityConnectionPlugin implements BuildPlugin {
 
-	private static final Logger LOG = LoggerFactory.getLogger(TeamCityConnectionPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TeamCityConnectionPlugin.class);
 
-	@VisibleForTesting
-	static final String TEAM_CITY_ID = "TEAMCITY_ID";
+    @VisibleForTesting
+    static final String TEAMCITY_ID = "TEAMCITY_ID";
 
-	private boolean connected;
+    private boolean connected;
 
-	@VisibleForTesting
 	TeamCity teamCity;
 
-	public void connect(String url, String login, String password) {
-		connect(url);
-	}
+    public void connect(String url, String login, String password) {
+        connect(url);
+    }
 
-	public void connect(String url) {
-		Preconditions.checkArgument(StringUtils.isNotBlank(url), "url can't be null");
-		teamCity = new TeamCity();
-		connected = true;
-	}
+    public void connect(String url) {
+		Preconditions.checkNotNull(url, "url is mandatory");
+        if (StringUtils.isBlank(url)) {
+			throw new IllegalArgumentException("url can't be null.");
+        }
+        connected = true;
+    }
+
+    @Override
+    public boolean contains(ProjectId projectId) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public List<ProjectId> findProjectsByNames(List<String> names) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public State getState(ProjectId projectId) throws ProjectNotFoundException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
+            ProjectNotFoundException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
 	@Override
 	public List<String> findProjectNames() {
@@ -68,7 +116,7 @@ public class TeamCityConnectionPlugin extends EmptyConnectionPlugin {
 		List<TeamCityProject> teamCityProjects = teamCity.findAllProjects();
 		for (TeamCityProject teamCityProject : teamCityProjects) {
 			ProjectId projectId = new ProjectId(teamCityProject.getName());
-			projectId.addId(TEAM_CITY_ID, teamCityProject.getId());
+			projectId.addId(TEAMCITY_ID, teamCityProject.getId());
 			projectIds.add(projectId);
 		}
 		return projectIds;
@@ -77,7 +125,7 @@ public class TeamCityConnectionPlugin extends EmptyConnectionPlugin {
 	@Override
 	public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
 		checkConnected();
-		String id = projectId.getId(TEAM_CITY_ID);
+		String id = projectId.getId(TEAMCITY_ID);
 		TeamCityProject project = teamCity.findProject(id);
 		return createProject(project);
 	}

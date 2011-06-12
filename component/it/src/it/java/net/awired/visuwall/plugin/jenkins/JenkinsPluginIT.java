@@ -19,43 +19,40 @@ package net.awired.visuwall.plugin.jenkins;
 import static net.awired.visuwall.IntegrationTestData.JENKINS_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-
 import java.net.URL;
-
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
-
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class JenkinsPluginIT {
 
-	@Test
-	public void should_recognize_jenkins_instance_with_valid_url() throws Exception {
-		JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-		SoftwareId softwareId = jenkinsPlugin.getSoftwareId(new URL(JENKINS_URL));
+    @Test
+    public void should_recognize_jenkins_instance_with_valid_url() throws Exception {
+        JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
+        SoftwareId softwareId = jenkinsPlugin.getSoftwareId(new URL(JENKINS_URL));
 
-		assertEquals("Jenkins", softwareId.getName());
-		assertEquals("1.407", softwareId.getVersion());
-		assertNull(softwareId.getWarnings());
-	}
+        assertEquals("Jenkins", softwareId.getName());
+        assertEquals("1.407", softwareId.getVersion());
+        assertNull(softwareId.getWarnings());
+    }
 
-	@Ignore("apache site is down")
-	@Test
-	public void should_recognize_jenkins_instance_with_https() throws Exception {
-		JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-		SoftwareId softwareId = jenkinsPlugin.getSoftwareId(new URL("https://builds.apache.org"));
+    @Ignore("apache site is down")
+    @Test
+    public void should_recognize_jenkins_instance_with_https() throws Exception {
+        JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
+        SoftwareId softwareId = jenkinsPlugin.getSoftwareId(new URL("https://builds.apache.org"));
 
-		assertEquals("Jenkins", softwareId.getName());
-		assertEquals("1.413", softwareId.getVersion());
-		assertNull(softwareId.getWarnings());
-	}
+        assertEquals("Jenkins", softwareId.getName());
+        assertEquals("1.413", softwareId.getVersion());
+        assertNull(softwareId.getWarnings());
+    }
 
-	@Test(expected = IncompatibleSoftwareException.class)
-	public void should_not_fail_if_url_is_not_manageable() throws Exception {
-		JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-		String url = "http://www.google.fr";
-		jenkinsPlugin.getSoftwareId(new URL(url));
-	}
+    @Test(expected = IncompatibleSoftwareException.class)
+    public void should_not_fail_if_url_is_not_manageable() throws Exception {
+        JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
+        String url = "http://www.google.fr";
+        jenkinsPlugin.getSoftwareId(new URL(url));
+    }
 
 }
