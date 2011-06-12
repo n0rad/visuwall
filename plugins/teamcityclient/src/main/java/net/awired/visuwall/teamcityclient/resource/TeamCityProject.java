@@ -101,4 +101,7 @@ public class TeamCityProject {
 		return buildTypes.getBuildTypes();
 	}
 
+	public void setBuildTypes(TeamCityBuildTypes buildTypes) {
+		this.buildTypes = buildTypes;
+	}
 }

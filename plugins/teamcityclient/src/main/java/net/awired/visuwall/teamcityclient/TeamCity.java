@@ -19,16 +19,28 @@ package net.awired.visuwall.teamcityclient;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
+import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
+import com.sun.jersey.api.client.Client;
 
 public class TeamCity {
 
 	@VisibleForTesting
 	TeamCityJerseyClient teamcityJerseyClient;
+
+	public TeamCity() {
+	}
+
+	public TeamCity(String url) {
+		TeamCityUrlBuilder urlBuilder = new TeamCityUrlBuilder(url);
+		Client client = Client.create();
+		teamcityJerseyClient = new TeamCityJerseyClient(client, urlBuilder);
+	}
 
 	public List<String> findProjectNames() {
 		List<String> projectNames = new ArrayList<String>();
@@ -55,6 +67,11 @@ public class TeamCity {
 
 	private void checkProjectId(String projectId) {
 		Preconditions.checkNotNull(projectId, "projectId is mandatory");
+	}
+
+	public TeamCityBuilds findBuildList(String buildTypeId) {
+		Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
+		return teamcityJerseyClient.getBuildList(buildTypeId);
 	}
 
 }

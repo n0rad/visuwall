@@ -66,7 +66,6 @@ public class TeamCityPlugin implements VisuwallPlugin {
 	public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
 		Preconditions.checkNotNull(url, "url is mandatory");
 		String xml = getContent(url);
-		System.err.println(xml);
 		if (isTeamcityVersionPage(xml)) {
 			try {
 				return createSoftwareId(url);
@@ -95,7 +94,7 @@ public class TeamCityPlugin implements VisuwallPlugin {
 		List<String> keywords = Arrays.asList("server", "versionMinor", "versionMajor", "version", "startTime",
 		        "currentTime", "buildNumber");
 		for (String keyword : keywords) {
-			if (xml.contains(keyword)) {
+			if (!xml.contains(keyword)) {
 				return false;
 			}
 		}

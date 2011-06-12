@@ -20,6 +20,7 @@ import java.util.List;
 
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
+import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProjects;
 
@@ -56,6 +57,13 @@ public class TeamCityJerseyClient {
 		WebResource resource = client.resource(buildUrl);
 		TeamCityBuild teamCityBuild = resource.get(TeamCityBuild.class);
 		return teamCityBuild;
+	}
+
+	public TeamCityBuilds getBuildList(String buildTypeId) {
+		String buildListUrl = urlBuilder.getBuildList(buildTypeId);
+		WebResource resource = client.resource(buildListUrl);
+		TeamCityBuilds teamCityBuilds = resource.get(TeamCityBuilds.class);
+		return teamCityBuilds;
 	}
 
 }

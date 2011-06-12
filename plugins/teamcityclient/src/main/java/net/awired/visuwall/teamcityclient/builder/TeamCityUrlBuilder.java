@@ -61,7 +61,8 @@ public class TeamCityUrlBuilder {
 		return teamCityUrl + API_URI + url;
 	}
 
-	public String getBuildList(int buildTypeId) {
+	public String getBuildList(String buildTypeId) {
+		Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
 		return build("/buildTypes/id:bt" + buildTypeId + "/builds");
 	}
 
