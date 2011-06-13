@@ -35,7 +35,7 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-public class SonarConnectionPluginTest {
+public class SonarConnectionTest {
 
     Map<String, QualityMetric> metricList = createMetricList();
 
@@ -59,7 +59,7 @@ public class SonarConnectionPluginTest {
         coverageMeasure.setKey("coverage");
         when(measureFinder.findQualityMeasure("artifactId", "coverage")).thenReturn(coverageMeasure);
 
-        SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
+        SonarConnection sonarPlugin = new SonarConnection(measureFinder, metricFinder);
 
         QualityResult qualityResult = sonarPlugin.analyzeQuality(projectId);
         QualityMeasure freshCoverageMeasure = qualityResult.getMeasure("coverage");
@@ -72,7 +72,7 @@ public class SonarConnectionPluginTest {
 
     @Test
     public void should_find_project() {
-        SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
+        SonarConnection sonarPlugin = new SonarConnection(measureFinder, metricFinder);
 
         ProjectId projectId = new ProjectId();
         projectId.setArtifactId("artifactId");
@@ -82,7 +82,7 @@ public class SonarConnectionPluginTest {
 
     @Test
     public void should_not_find_project() throws SonarMeasureNotFoundException {
-        SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
+        SonarConnection sonarPlugin = new SonarConnection(measureFinder, metricFinder);
 
         when(measureFinder.findMeasure(Matchers.anyString(), Matchers.anyString())).thenThrow(
                 new SonarMeasureNotFoundException(""));
@@ -95,13 +95,13 @@ public class SonarConnectionPluginTest {
 
     @Test
     public void should_return_false_when_no_artifact_id_found() {
-        SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
+        SonarConnection sonarPlugin = new SonarConnection(measureFinder, metricFinder);
         assertFalse(sonarPlugin.contains(new ProjectId()));
     }
 
     @Test
     public void should_build_valid_unit_test_result() throws SonarMeasureNotFoundException {
-        SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
+        SonarConnection sonarPlugin = new SonarConnection(measureFinder, metricFinder);
 
         when(measureFinder.findMeasureValue("artifactId", "coverage")).thenReturn(8D);
 
@@ -115,7 +115,7 @@ public class SonarConnectionPluginTest {
 
     @Test
     public void should_build_valid_integration_test_result() throws SonarMeasureNotFoundException {
-        SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
+        SonarConnection sonarPlugin = new SonarConnection(measureFinder, metricFinder);
 
         when(measureFinder.findMeasureValue("artifactId", "it_coverage")).thenReturn(8D);
 
@@ -157,7 +157,7 @@ public class SonarConnectionPluginTest {
         qualityMetrics.put("size", generatedLinesMetric);
         when(metricFinder.findMetrics()).thenReturn(qualityMetrics);
 
-        SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin(measureFinder, metricFinder);
+        SonarConnection sonarPlugin = new SonarConnection(measureFinder, metricFinder);
         Map<String, List<QualityMetric>> metrics = sonarPlugin.getMetricsByCategory();
         List<QualityMetric> sizeMetrics = metrics.get("Size");
 

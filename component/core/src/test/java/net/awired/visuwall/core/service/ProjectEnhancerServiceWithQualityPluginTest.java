@@ -24,8 +24,8 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.plugin.capability.MetricPlugin;
-import net.awired.visuwall.api.plugin.capability.TestsPlugin;
+import net.awired.visuwall.api.plugin.capability.MetricCapability;
+import net.awired.visuwall.api.plugin.capability.TestsCapability;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -49,7 +49,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 
     @Test
     public void should_merge_with_one_build_plugin() throws Exception {
-        MetricPlugin metricPlugin = Mockito.mock(MetricPlugin.class);
+        MetricCapability metricPlugin = Mockito.mock(MetricCapability.class);
 
         QualityResult qualityResult = new QualityResult();
         QualityMeasure coverage = new QualityMeasure();
@@ -67,8 +67,8 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 
     @Test
     public void should_merge_with_two_build_plugins() throws Exception {
-        MetricPlugin metricPlugin1 = Mockito.mock(MetricPlugin.class);
-        MetricPlugin metricPlugin2 = Mockito.mock(MetricPlugin.class);
+        MetricCapability metricPlugin1 = Mockito.mock(MetricCapability.class);
+        MetricCapability metricPlugin2 = Mockito.mock(MetricCapability.class);
 
         QualityResult qualityResult1 = new QualityResult();
         QualityMeasure coverage = new QualityMeasure();
@@ -96,8 +96,8 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
 
     @Test
     public void last_plugin_is_always_right() throws Exception {
-        MetricPlugin metricPlugin1 = Mockito.mock(MetricPlugin.class);
-        MetricPlugin metricPlugin2 = Mockito.mock(MetricPlugin.class);
+        MetricCapability metricPlugin1 = Mockito.mock(MetricCapability.class);
+        MetricCapability metricPlugin2 = Mockito.mock(MetricCapability.class);
 
         QualityResult qualityResult1 = new QualityResult();
         QualityMeasure coverage = new QualityMeasure();
@@ -130,7 +130,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
         testResult.setPassCount(2);
         testResult.setSkipCount(3);
 
-        TestsPlugin testsPlugin = Mockito.mock(TestsPlugin.class);
+        TestsCapability testsPlugin = Mockito.mock(TestsCapability.class);
         when(testsPlugin.analyzeUnitTests(projectToEnhance.getProjectId())).thenReturn(testResult);
 
         projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, testsPlugin);
@@ -152,7 +152,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
         testResult.setPassCount(2);
         testResult.setSkipCount(3);
 
-        TestsPlugin testPlugin = Mockito.mock(TestsPlugin.class);
+        TestsCapability testPlugin = Mockito.mock(TestsCapability.class);
         when(testPlugin.analyzeIntegrationTests(projectToEnhance.getProjectId())).thenReturn(testResult);
 
         projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, testPlugin);

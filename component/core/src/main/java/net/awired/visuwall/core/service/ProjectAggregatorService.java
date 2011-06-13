@@ -21,14 +21,14 @@ import java.util.Map.Entry;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
-import net.awired.visuwall.api.plugin.capability.MetricPlugin;
-import net.awired.visuwall.api.plugin.capability.TestsPlugin;
+import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.api.plugin.capability.MetricCapability;
+import net.awired.visuwall.api.plugin.capability.TestsCapability;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class ProjectAggregatorService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProjectAggregatorService.class);
 
-    public void enhanceWithBuildInformations(Project projectToMerge, ConnectionPlugin buildPlugin) {
+    public void enhanceWithBuildInformations(Project projectToMerge, Connection buildPlugin) {
         ProjectId projectId = projectToMerge.getProjectId();
         Preconditions.checkState(projectId != null, "projectToComplete must have a projectId");
         try {
@@ -89,7 +89,7 @@ public class ProjectAggregatorService {
         }
     }
 
-    public void enhanceWithQualityAnalysis(Project analyzedProject, ConnectionPlugin plugin, String... metrics) {
+    public void enhanceWithQualityAnalysis(Project analyzedProject, Connection plugin, String... metrics) {
         ProjectId projectId = analyzedProject.getProjectId();
         Build build = analyzedProject.getCompletedBuild();
 
@@ -101,18 +101,18 @@ public class ProjectAggregatorService {
         }
 
         QualityResult qualityResultToMerge = analyzedProject.getQualityResult();
-        if (plugin instanceof MetricPlugin) {
-            addQualityAnalysis((MetricPlugin) plugin, projectId, qualityResultToMerge, metrics);
+        if (plugin instanceof MetricCapability) {
+            addQualityAnalysis((MetricCapability) plugin, projectId, qualityResultToMerge, metrics);
         }
-        if (plugin instanceof TestsPlugin) {
-            addUnitTestsAnalysis((TestsPlugin) plugin, projectId, unitTestResultToMerge);
-            addIntegrationTestsAnalysis((TestsPlugin) plugin, projectId, integrationTestResultToMerge);
+        if (plugin instanceof TestsCapability) {
+            addUnitTestsAnalysis((TestsCapability) plugin, projectId, unitTestResultToMerge);
+            addIntegrationTestsAnalysis((TestsCapability) plugin, projectId, integrationTestResultToMerge);
         }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////
 
-    private void addIntegrationTestsAnalysis(TestsPlugin testsPlugin, ProjectId projectId,
+    private void addIntegrationTestsAnalysis(TestsCapability testsPlugin, ProjectId projectId,
             TestResult integrationTestResultToMerge) {
         TestResult integrationTestsAnalysis = testsPlugin.analyzeIntegrationTests(projectId);
         if (integrationTestsAnalysis != null && integrationTestResultToMerge != null) {
@@ -120,14 +120,14 @@ public class ProjectAggregatorService {
         }
     }
 
-    private void addUnitTestsAnalysis(TestsPlugin testsPlugin, ProjectId projectId, TestResult unitTestResultToMerge) {
+    private void addUnitTestsAnalysis(TestsCapability testsPlugin, ProjectId projectId, TestResult unitTestResultToMerge) {
         TestResult unitTestsAnalysis = testsPlugin.analyzeUnitTests(projectId);
         if (unitTestsAnalysis != null && unitTestResultToMerge != null) {
             mergeTestAnalysis(unitTestResultToMerge, unitTestsAnalysis);
         }
     }
 
-    private void addQualityAnalysis(MetricPlugin metricPlugin, ProjectId projectId,
+    private void addQualityAnalysis(MetricCapability metricPlugin, ProjectId projectId,
             QualityResult qualityResultToMerge, String... metrics) {
         QualityResult qualityAnalysis = metricPlugin.analyzeQuality(projectId, metrics);
         if (qualityAnalysis != null) {

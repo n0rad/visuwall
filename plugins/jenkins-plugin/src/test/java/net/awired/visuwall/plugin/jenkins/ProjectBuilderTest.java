@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.Project;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
@@ -91,14 +91,12 @@ public class ProjectBuilderTest {
     @Test
     public void should_build_valid_project() {
         HudsonProject hudsonProject = new HudsonProject();
-        hudsonProject.setDescription("description");
         hudsonProject.setName("name");
         int[] buildNumbers = new int[] { 1, 2, 3 };
         hudsonProject.setBuildNumbers(buildNumbers);
 
         Project project = projectBuilder.buildProjectFrom(hudsonProject);
 
-        assertEquals(hudsonProject.getDescription(), project.getDescription());
         assertEquals(hudsonProject.getName(), project.getName());
         assertArrayEquals(buildNumbers, project.getBuildNumbers());
     }

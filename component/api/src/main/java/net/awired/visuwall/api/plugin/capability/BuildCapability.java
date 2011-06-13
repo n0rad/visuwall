@@ -3,12 +3,12 @@ package net.awired.visuwall.api.plugin.capability;
 import java.util.Date;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.Connection;
 
-public interface BuildPlugin extends ConnectionPlugin {
+public interface BuildCapability extends Connection {
 
     /**
      * Project are in a certain state which may vary between software You'll have to try to associate them with common

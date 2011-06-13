@@ -24,12 +24,12 @@ import java.util.Map;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
-import net.awired.visuwall.api.plugin.capability.BuildPlugin;
+import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.bambooclient.Bamboo;
 import net.awired.visuwall.bambooclient.BambooBuildNotFoundException;
 import net.awired.visuwall.bambooclient.BambooProjectNotFoundException;
@@ -37,7 +37,7 @@ import net.awired.visuwall.bambooclient.domain.BambooBuild;
 import net.awired.visuwall.bambooclient.domain.BambooProject;
 import com.google.common.base.Preconditions;
 
-public class BambooConnectionPlugin implements ConnectionPlugin, BuildPlugin {
+public class BambooConnection implements Connection, BuildCapability {
 
     private static final String BAMBOO_ID = "BAMBOO_ID";
 
@@ -50,11 +50,11 @@ public class BambooConnectionPlugin implements ConnectionPlugin, BuildPlugin {
         STATE_MAPPING.put("Failed", State.FAILURE);
     }
 
-    public BambooConnectionPlugin(String url, String login, String password) {
+    public BambooConnection(String url, String login, String password) {
         this(url);
     }
 
-    public BambooConnectionPlugin(String url) {
+    public BambooConnection(String url) {
         Preconditions.checkNotNull(url, "Use setUrl() before calling init method");
         bamboo = new Bamboo(url);
     }

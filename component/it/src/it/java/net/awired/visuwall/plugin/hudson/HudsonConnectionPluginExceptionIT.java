@@ -26,7 +26,7 @@ import org.junit.Test;
 
 public class HudsonConnectionPluginExceptionIT {
 
-    static HudsonConnectionPlugin hudsonConnectionPlugin = new HudsonConnectionPlugin();
+    static HudsonConnection hudsonConnectionPlugin = new HudsonConnection();
 
     @BeforeClass
     public static void setUp() {

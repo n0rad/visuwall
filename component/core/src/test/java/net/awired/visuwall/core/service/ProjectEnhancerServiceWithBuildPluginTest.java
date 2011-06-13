@@ -22,9 +22,9 @@ import static org.mockito.Mockito.when;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.Connection;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -44,7 +44,7 @@ public class ProjectEnhancerServiceWithBuildPluginTest {
 
     @Test
     public void should_merge_with_one_build_plugin() throws Exception {
-        ConnectionPlugin buildPlugin = Mockito.mock(ConnectionPlugin.class);
+        Connection buildPlugin = Mockito.mock(Connection.class);
 
         Build completedBuild = new Build();
         Build currentBuild = new Build();
@@ -70,8 +70,8 @@ public class ProjectEnhancerServiceWithBuildPluginTest {
 
     @Test
     public void should_merge_with_two_build_plugins() throws Exception {
-        ConnectionPlugin buildPlugin1 = Mockito.mock(ConnectionPlugin.class);
-        ConnectionPlugin buildPlugin2 = Mockito.mock(ConnectionPlugin.class);
+        Connection buildPlugin1 = Mockito.mock(Connection.class);
+        Connection buildPlugin2 = Mockito.mock(Connection.class);
 
         Project projectFromBuildPlugin1 = new Project("name1");
         projectFromBuildPlugin1.setDescription("description");
@@ -91,8 +91,8 @@ public class ProjectEnhancerServiceWithBuildPluginTest {
 
     @Test
     public void last_plugin_is_always_right() throws Exception {
-        ConnectionPlugin buildPlugin1 = Mockito.mock(ConnectionPlugin.class);
-        ConnectionPlugin buildPlugin2 = Mockito.mock(ConnectionPlugin.class);
+        Connection buildPlugin1 = Mockito.mock(Connection.class);
+        Connection buildPlugin2 = Mockito.mock(Connection.class);
 
         Project projectFromBuildPlugin1 = new Project("name1");
         projectFromBuildPlugin1.setDescription("description1");
@@ -112,7 +112,7 @@ public class ProjectEnhancerServiceWithBuildPluginTest {
 
     @Test
     public void should_not_fail_if_project_is_not_found() throws Exception {
-        ConnectionPlugin buildPlugin = Mockito.mock(ConnectionPlugin.class);
+        Connection buildPlugin = Mockito.mock(Connection.class);
         ProjectId projectId = projectToEnhance.getProjectId();
         when(buildPlugin.findProject(projectId)).thenThrow(new ProjectNotFoundException("project not found"));
         projectEnhancerService.enhanceWithBuildInformations(projectToEnhance, buildPlugin);

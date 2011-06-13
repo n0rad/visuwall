@@ -21,16 +21,16 @@ import java.util.Properties;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
-public class BambooPlugin implements VisuwallPlugin<BambooConnectionPlugin> {
+public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
 
     @Override
-    public BambooConnectionPlugin getConnection(String url, Properties info) {
-        return new BambooConnectionPlugin(url, null, null);
+    public BambooConnection getConnection(String url, Properties info) {
+        return new BambooConnection(url, null, null);
     }
 
     @Override
-    public Class<BambooConnectionPlugin> getConnectionClass() {
-        return BambooConnectionPlugin.class;
+    public Class<BambooConnection> getConnectionClass() {
+        return BambooConnection.class;
     }
 
     @Override

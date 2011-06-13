@@ -17,7 +17,7 @@
 package net.awired.visuwall.server.web.controller;
 
 import java.util.Date;
-import net.awired.visuwall.core.domain.Wall;
+import net.awired.visuwall.core.persistence.entity.Wall;
 import net.awired.visuwall.core.service.BuildProjectService;
 import net.awired.visuwall.core.service.WallHolderService;
 import org.springframework.beans.factory.annotation.Autowired;

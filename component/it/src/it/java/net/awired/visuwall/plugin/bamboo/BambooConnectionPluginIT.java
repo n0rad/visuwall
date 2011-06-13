@@ -25,7 +25,7 @@ import java.util.List;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -36,7 +36,7 @@ public class BambooConnectionPluginIT {
 
     private static final String BAMBOO_ID = "BAMBOO_ID";
 
-    static BambooConnectionPlugin bambooPlugin = new BambooConnectionPlugin(BAMBOO_URL);
+    static BambooConnection bambooPlugin = new BambooConnection(BAMBOO_URL);
 
     @Test
     public void should_find_all_projects() {

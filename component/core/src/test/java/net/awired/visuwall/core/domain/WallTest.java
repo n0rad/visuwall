@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.core.persistence.entity.Wall;
 import org.junit.Test;
 
 public class WallTest {

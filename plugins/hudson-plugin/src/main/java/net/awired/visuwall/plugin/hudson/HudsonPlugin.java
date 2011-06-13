@@ -29,20 +29,20 @@ import com.google.common.base.Preconditions;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 
-public class HudsonPlugin implements VisuwallPlugin<HudsonConnectionPlugin> {
+public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
 
     private static final Logger LOG = LoggerFactory.getLogger(HudsonPlugin.class);
 
     @Override
-    public HudsonConnectionPlugin getConnection(String url, Properties info) {
-        HudsonConnectionPlugin hudsonConnectionPlugin = new HudsonConnectionPlugin();
+    public HudsonConnection getConnection(String url, Properties info) {
+        HudsonConnection hudsonConnectionPlugin = new HudsonConnection();
         hudsonConnectionPlugin.connect(url);
         return hudsonConnectionPlugin;
     }
 
     @Override
-    public Class<HudsonConnectionPlugin> getConnectionClass() {
-        return HudsonConnectionPlugin.class;
+    public Class<HudsonConnection> getConnectionClass() {
+        return HudsonConnection.class;
     }
 
     @Override

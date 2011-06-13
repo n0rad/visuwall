@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.ServiceLoader;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.core.domain.PluginInfo;
 import net.awired.visuwall.core.domain.SoftwareInfo;
@@ -40,9 +40,9 @@ public class PluginService {
     @SuppressWarnings("rawtypes")
     private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader.load(VisuwallPlugin.class);
 
-    public VisuwallPlugin<ConnectionPlugin> getPluginFromUrl(URL url) {
-        List<VisuwallPlugin<ConnectionPlugin>> visuwallPlugins = getPlugins();
-        for (VisuwallPlugin<ConnectionPlugin> visuwallPlugin : visuwallPlugins) {
+    public VisuwallPlugin<Connection> getPluginFromUrl(URL url) {
+        List<VisuwallPlugin<Connection>> visuwallPlugins = getPlugins();
+        for (VisuwallPlugin<Connection> visuwallPlugin : visuwallPlugins) {
             try {
                 visuwallPlugin.getSoftwareId(url);
                 return visuwallPlugin;
@@ -54,8 +54,8 @@ public class PluginService {
     }
 
     public SoftwareInfo getSoftwareInfoFromUrl(URL url) {
-        List<VisuwallPlugin<ConnectionPlugin>> visuwallPlugins = getPlugins();
-        for (VisuwallPlugin<ConnectionPlugin> visuwallPlugin : visuwallPlugins) {
+        List<VisuwallPlugin<Connection>> visuwallPlugins = getPlugins();
+        for (VisuwallPlugin<Connection> visuwallPlugin : visuwallPlugins) {
             SoftwareId softwareId = null;
             try {
                 softwareId = visuwallPlugin.getSoftwareId(url);
@@ -68,14 +68,14 @@ public class PluginService {
             softwareInfo.setSoftwareId(softwareId);
             softwareInfo.setPluginInfo(getPluginInfo(visuwallPlugin));
             // TODO change that null
-            ConnectionPlugin connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
+            Connection connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
             softwareInfo.setProjectNames(connectionPlugin.findProjectNames());
             return softwareInfo;
         }
         throw new RuntimeException("no plugin to manage url " + url);
     }
 
-    public PluginInfo getPluginInfo(VisuwallPlugin<ConnectionPlugin> visuwallPlugin) {
+    public PluginInfo getPluginInfo(VisuwallPlugin<Connection> visuwallPlugin) {
         PluginInfo pluginInfo = new PluginInfo();
         pluginInfo.setName(visuwallPlugin.getName());
         pluginInfo.setVersion(visuwallPlugin.getVersion());
@@ -85,22 +85,22 @@ public class PluginService {
     }
 
     public List<PluginInfo> getPluginsInfo() {
-        List<VisuwallPlugin<ConnectionPlugin>> visuwallPlugins = getPlugins();
+        List<VisuwallPlugin<Connection>> visuwallPlugins = getPlugins();
         List<PluginInfo> pluginInfos = new ArrayList<PluginInfo>(visuwallPlugins.size());
-        for (VisuwallPlugin<ConnectionPlugin> visuwallPlugin : visuwallPlugins) {
+        for (VisuwallPlugin<Connection> visuwallPlugin : visuwallPlugins) {
             PluginInfo pluginInfo = getPluginInfo(visuwallPlugin);
             pluginInfos.add(pluginInfo);
         }
         return pluginInfos;
     }
 
-    public List<VisuwallPlugin<ConnectionPlugin>> getPlugins() {
+    public List<VisuwallPlugin<Connection>> getPlugins() {
         @SuppressWarnings("rawtypes")
         Iterator<VisuwallPlugin> pluginIt = pluginLoader.iterator();
-        List<VisuwallPlugin<ConnectionPlugin>> result = new ArrayList<VisuwallPlugin<ConnectionPlugin>>();
+        List<VisuwallPlugin<Connection>> result = new ArrayList<VisuwallPlugin<Connection>>();
         while (pluginIt.hasNext()) {
             @SuppressWarnings("unchecked")
-            VisuwallPlugin<ConnectionPlugin> plugin = pluginIt.next();
+            VisuwallPlugin<Connection> plugin = pluginIt.next();
             result.add(plugin);
         }
         return result;

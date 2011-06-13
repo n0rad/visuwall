@@ -19,7 +19,6 @@ package net.awired.visuwall.api.domain;
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 

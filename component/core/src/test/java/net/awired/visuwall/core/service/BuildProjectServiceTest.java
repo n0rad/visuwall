@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.core.domain.ConnectedProject;
 import net.awired.visuwall.core.exception.NotCreatedException;
 import org.junit.Before;
@@ -43,9 +43,9 @@ public class BuildProjectServiceTest {
         projectService.updateProject(null);
     }
 
-    public List<ConnectionPlugin> getConnectionPlugins() {
-        List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>();
-        ConnectionPlugin connectionPlugin = Mockito.mock(ConnectionPlugin.class);
+    public List<Connection> getConnectionPlugins() {
+        List<Connection> connectionPlugins = new ArrayList<Connection>();
+        Connection connectionPlugin = Mockito.mock(Connection.class);
         connectionPlugins.add(connectionPlugin);
 
         List<ProjectId> projectIds = new ArrayList<ProjectId>();
@@ -57,7 +57,7 @@ public class BuildProjectServiceTest {
 
     @Test
     public void should_call_merge_for_plugins() {
-        List<ConnectionPlugin> connectionPlugins = getConnectionPlugins();
+        List<Connection> connectionPlugins = getConnectionPlugins();
         ConnectedProject project = new ConnectedProject("test");
         project.setConnectionPlugins(connectionPlugins);
         projectService.updateProject(project);

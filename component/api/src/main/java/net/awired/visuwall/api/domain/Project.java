@@ -16,7 +16,10 @@
 
 package net.awired.visuwall.api.domain;
 
-import net.awired.visuwall.api.domain.ProjectStatus.State;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
@@ -24,14 +27,17 @@ import com.google.common.base.Preconditions;
 
 public class Project implements Comparable<Project> {
 
+    private final String id = new BigInteger(42, new SecureRandom()).toString(36);
     private ProjectId projectId;
     private String description;
     private QualityResult qualityResult = new QualityResult();
     private State state;
     private int[] buildNumbers;
 
-    private Build completedBuild;
-    private Build currentBuild;
+    private Map<Integer, Build> builds = new HashMap<Integer, Build>();
+
+    private int completedBuildId;
+    private int currentBuildId;
 
     public Project(String name) {
         Preconditions.checkNotNull(name, "name is a mandatory parameter");
@@ -44,6 +50,65 @@ public class Project implements Comparable<Project> {
         this.projectId = projectId;
     }
 
+    public Build getCompletedBuild() {
+        return builds.get(completedBuildId);
+    }
+
+    public void setCompletedBuild(Build completedBuild) {
+        this.builds.put(completedBuild.getBuildNumber(), completedBuild);
+        this.completedBuildId = completedBuild.getBuildNumber();
+    }
+
+    public Build getCurrentBuild() {
+        return builds.get(getCurrentBuildId());
+    }
+
+    public void setCurrentBuild(Build currentBuild) {
+        this.builds.put(currentBuild.getBuildNumber(), currentBuild);
+        this.setCurrentBuildId(currentBuild.getBuildNumber());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(projectId);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Project)) {
+            return false;
+        }
+
+        if (projectId == null) {
+            return false;
+        }
+
+        Project project = (Project) obj;
+        return projectId.equals(project.projectId);
+    }
+
+    @Override
+    public String toString() {
+        //TODO check new info
+        ToStringHelper toString = Objects.toStringHelper(this) //
+                .add("id", id) //
+                .add("projectId", projectId) //
+                .add("name", getName()) //
+                .add("state", state) //
+                .add("quality result", qualityResult); //
+        return toString.toString();
+    }
+
+    @Override
+    public int compareTo(Project project) {
+        Preconditions.checkNotNull(project, "project");
+        return getName().compareTo(project.getName());
+    }
+
+    public void addId(String idName, String idValue) {
+        projectId.addId(idName, idValue);
+    }
+
     // ////////////////////////////////////////////////////////////////
 
     public String getName() {
@@ -52,14 +117,6 @@ public class Project implements Comparable<Project> {
 
     public void setName(String name) {
         projectId.setName(name);
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public ProjectId getProjectId() {
@@ -86,69 +143,28 @@ public class Project implements Comparable<Project> {
         this.buildNumbers = buildNumbers;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(projectId);
+    public int getCompletedBuildId() {
+        return completedBuildId;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Project)) {
-            return false;
-        }
-
-        if (projectId == null) {
-            return false;
-        }
-
-        Project project = (Project) obj;
-        return projectId.equals(project.projectId);
+    public int getCurrentBuildId() {
+        return currentBuildId;
     }
 
-    public Build getCompletedBuild() {
-        return completedBuild;
+    public String getId() {
+        return id;
     }
 
-    public void setCompletedBuild(Build completedBuild) {
-        this.completedBuild = completedBuild;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Build getCurrentBuild() {
-        return currentBuild;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCurrentBuild(Build currentBuild) {
-        this.currentBuild = currentBuild;
-    }
-
-    @Override
-    public String toString() {
-        ToStringHelper toString = Objects.toStringHelper(this) //
-                .add("project id", projectId) //
-                .add("name", getName()) //
-                .add("description", description) //
-                .add("state", state) //
-                .add("quality result", qualityResult); //
-
-        if (completedBuild != null) {
-            toString.add("completedBuild", completedBuild);
-        }
-        if (currentBuild != null) {
-            toString.add("currentBuild", currentBuild);
-        }
-        toString.addValue("\n");
-
-        return toString.toString();
-    }
-
-    @Override
-    public int compareTo(Project project) {
-        Preconditions.checkNotNull(project, "project");
-        return getName().compareTo(project.getName());
-    }
-
-    public void addId(String idName, String idValue) {
-        projectId.addId(idName, idValue);
+    public void setCurrentBuildId(int currentBuildId) {
+        this.currentBuildId = currentBuildId;
     }
 
 }

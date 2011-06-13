@@ -20,6 +20,7 @@ import javax.servlet.ServletContextEvent;
 import net.awired.visuwall.core.application.common.ApplicationHelper;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ContextLoaderListener;
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 
 public class VisuwallContextLoaderListener extends ContextLoaderListener {
@@ -43,7 +44,10 @@ public class VisuwallContextLoaderListener extends ContextLoaderListener {
         //        StatusPrinter.printInCaseOfErrorsOrWarnings(lc);
 
         Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        root.setLevel(ApplicationHelper.findLogLvl());
+        Level loglvl = ApplicationHelper.findLogLvl();
+        if (loglvl != null) {
+            root.setLevel(loglvl);
+        }
         super.contextInitialized(event);
     }
 }

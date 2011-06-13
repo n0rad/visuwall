@@ -23,13 +23,13 @@ import java.util.List;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
-import net.awired.visuwall.api.plugin.capability.BuildPlugin;
-import net.awired.visuwall.api.plugin.capability.ViewPlugin;
+import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.hudsonclient.Hudson;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
@@ -41,9 +41,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
-public final class HudsonConnectionPlugin implements ConnectionPlugin, BuildPlugin, ViewPlugin {
+public final class HudsonConnection implements Connection, BuildCapability, ViewCapability {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HudsonConnectionPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HudsonConnection.class);
 
     private static final String HUDSON_ID = "HUDSON_ID";
 

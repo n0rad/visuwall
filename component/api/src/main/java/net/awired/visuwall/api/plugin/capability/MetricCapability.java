@@ -5,9 +5,9 @@ import java.util.Map;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.Connection;
 
-public interface MetricPlugin extends ConnectionPlugin {
+public interface MetricCapability extends Connection {
 
     /**
      * @return Quality Metrics sorted by category

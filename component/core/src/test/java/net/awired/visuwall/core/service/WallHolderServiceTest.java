@@ -24,11 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Query;
-import net.awired.visuwall.api.domain.ProjectStatus;
 import net.awired.visuwall.core.domain.ConnectedProject;
-import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
+import net.awired.visuwall.core.persistence.dao.WallDAO;
+import net.awired.visuwall.core.persistence.entity.Wall;
+import net.awired.visuwall.server.web.model.ProjectStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class WallHolderServiceTest {
         // EntityManager entityManager = Mockito.mock(EntityManager.class);
         // when(entityManager.createNamedQuery(Matchers.anyString())).thenReturn(query);
 
-        WallService wallService = Mockito.mock(WallService.class);
+        WallDAO wallService = Mockito.mock(WallDAO.class);
         BuildProjectService projectService = Mockito.mock(BuildProjectService.class);
         PluginService pluginService = Mockito.mock(PluginService.class);
 

@@ -9,7 +9,7 @@ import java.util.List;
 
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.teamcityclient.TeamCity;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuildItem;
@@ -22,10 +22,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class TeamCityConnectionPluginTest {
+public class TeamCityConnectionTest {
 
 	private TeamCity teamCity;
-	private TeamCityConnectionPlugin connectionPlugin;
+	private TeamCityConnection connectionPlugin;
 
 	@Before
 	public void init() {
@@ -63,7 +63,7 @@ public class TeamCityConnectionPluginTest {
 		ProjectId projectId = projects.get(0);
 		
 		assertEquals("projectName", projectId.getName());
-		assertEquals("projectId", projectId.getId(TeamCityConnectionPlugin.TEAMCITY_ID));
+		assertEquals("projectId", projectId.getId(TeamCityConnection.TEAMCITY_ID));
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class TeamCityConnectionPluginTest {
 		when(teamCity.findProject("projectId")).thenReturn(teamCityProject);
 
 		ProjectId projectId = new ProjectId();
-		projectId.addId(TeamCityConnectionPlugin.TEAMCITY_ID, "projectId");
+		projectId.addId(TeamCityConnection.TEAMCITY_ID, "projectId");
 		Project project = connectionPlugin.findProject(projectId);
 
 		assertEquals("projectName", project.getName());
@@ -100,14 +100,14 @@ public class TeamCityConnectionPluginTest {
 		when(teamCity.findBuildList("bt297"));
 
 		ProjectId projectId = new ProjectId();
-		projectId.addId(TeamCityConnectionPlugin.TEAMCITY_ID, "projectId");
+		projectId.addId(TeamCityConnection.TEAMCITY_ID, "projectId");
 		Project project = connectionPlugin.findProject(projectId);
 
 		assertEquals(State.SUCCESS, project.getState());
 	}
 
-	private TeamCityConnectionPlugin createConnectionPlugin() {
-	    TeamCityConnectionPlugin connectionPlugin = new TeamCityConnectionPlugin();
+	private TeamCityConnection createConnectionPlugin() {
+	    TeamCityConnection connectionPlugin = new TeamCityConnection();
 		connectionPlugin.connect("http://");
 		connectionPlugin.teamCity = teamCity;
 	    return connectionPlugin;

@@ -14,8 +14,9 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.hudson;
+package net.awired.visuwall.plugin.jenkins;
 
+import static net.awired.visuwall.plugin.jenkins.JenkinsConnection.JENKINS_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -27,7 +28,7 @@ import java.util.List;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.Hudson;
@@ -39,7 +40,7 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-public class HudsonConnectionPluginTest {
+public class JenkinsConnectionTest {
 
     @Test
     public void should_return_state_unknow_if_no_state() throws ProjectNotFoundException,
@@ -47,13 +48,14 @@ public class HudsonConnectionPluginTest {
         Hudson hudson = Mockito.mock(Hudson.class);
 
         Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("not_valid_state");
-        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-        hudsonPlugin.connect("url");
-        hudsonPlugin.hudson = hudson;
+
+        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
+        jenkinsPlugin.connect("url");
+        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "idValue");
-        State state = hudsonPlugin.getState(projectId);
+        projectId.addId(JENKINS_ID, "name");
+        State state = jenkinsPlugin.getState(projectId);
         assertEquals(State.UNKNOWN, state);
     }
 
@@ -63,13 +65,13 @@ public class HudsonConnectionPluginTest {
 
         Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("FAILURE");
 
-        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-        hudsonPlugin.connect("url");
-        hudsonPlugin.hudson = hudson;
+        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
+        jenkinsPlugin.connect("url");
+        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "idValue");
-        State state = hudsonPlugin.getState(projectId);
+        projectId.addId(JENKINS_ID, "name");
+        State state = jenkinsPlugin.getState(projectId);
         assertEquals(State.FAILURE, state);
     }
 
@@ -85,15 +87,15 @@ public class HudsonConnectionPluginTest {
 
         when(hudson.findAllProjects()).thenReturn(hudsonProjects);
 
-        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-        hudsonPlugin.connect("url");
-        hudsonPlugin.hudson = hudson;
+        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
+        jenkinsPlugin.connect("url");
+        jenkinsPlugin.hudson = hudson;
 
-        List<ProjectId> projectIds = hudsonPlugin.findAllProjects();
+        List<ProjectId> projectIds = jenkinsPlugin.findAllProjects();
         ProjectId projectId = projectIds.get(0);
 
         assertEquals("artifactId", projectId.getArtifactId());
-        assertEquals("name", projectId.getId("HUDSON_ID"));
+        assertEquals("name", projectId.getId(JENKINS_ID));
         assertEquals("name", projectId.getName());
     }
 
@@ -105,14 +107,14 @@ public class HudsonConnectionPluginTest {
         hudsonProject.setName("name");
         when(hudson.findProject(Matchers.anyString())).thenReturn(hudsonProject);
 
-        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-        hudsonPlugin.connect("url");
-        hudsonPlugin.hudson = hudson;
+        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
+        jenkinsPlugin.connect("url");
+        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "id");
+        projectId.addId(JENKINS_ID, "id");
 
-        Project project = hudsonPlugin.findProject(projectId);
+        Project project = jenkinsPlugin.findProject(projectId);
 
         assertEquals(hudsonProject.getName(), project.getName());
     }
@@ -124,17 +126,17 @@ public class HudsonConnectionPluginTest {
         when(hudson.isBuilding("project1")).thenReturn(true);
         when(hudson.isBuilding("project2")).thenReturn(false);
 
-        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-        hudsonPlugin.connect("url");
-        hudsonPlugin.hudson = hudson;
+        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
+        jenkinsPlugin.connect("url");
+        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "project1");
+        projectId.addId(JENKINS_ID, "project1");
 
-        assertTrue(hudsonPlugin.isBuilding(projectId));
+        assertTrue(jenkinsPlugin.isBuilding(projectId));
 
-        projectId.addId("HUDSON_ID", "project2");
-        assertFalse(hudsonPlugin.isBuilding(projectId));
+        projectId.addId(JENKINS_ID, "project2");
+        assertFalse(jenkinsPlugin.isBuilding(projectId));
     }
 
     @Test
@@ -144,14 +146,14 @@ public class HudsonConnectionPluginTest {
         Date date = new Date();
         when(hudson.getEstimatedFinishTime(Matchers.anyString())).thenReturn(date);
 
-        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-        hudsonPlugin.connect("url");
-        hudsonPlugin.hudson = hudson;
+        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
+        jenkinsPlugin.connect("url");
+        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "project1");
+        projectId.addId(JENKINS_ID, "project1");
 
-        assertEquals(date, hudsonPlugin.getEstimatedFinishTime(projectId));
+        assertEquals(date, jenkinsPlugin.getEstimatedFinishTime(projectId));
     }
 
     @Test
@@ -159,18 +161,18 @@ public class HudsonConnectionPluginTest {
             HudsonBuildNotFoundException, HudsonProjectNotFoundException {
         Hudson hudson = Mockito.mock(Hudson.class);
 
-        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-        hudsonPlugin.connect("url");
-        hudsonPlugin.hudson = hudson;
+        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
+        jenkinsPlugin.connect("url");
+        jenkinsPlugin.hudson = hudson;
 
         HudsonBuild hudsonBuild = new HudsonBuild();
 
         when(hudson.findBuild("project1", 0)).thenReturn(hudsonBuild);
 
         ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "project1");
+        projectId.addId(JENKINS_ID, "project1");
 
-        Build build = hudsonPlugin.findBuildByBuildNumber(projectId, 0);
+        Build build = jenkinsPlugin.findBuildByBuildNumber(projectId, 0);
 
         assertNotNull(build);
     }
@@ -180,28 +182,28 @@ public class HudsonConnectionPluginTest {
             ProjectNotFoundException, BuildNotFoundException {
         Hudson hudson = Mockito.mock(Hudson.class);
 
-        HudsonConnectionPlugin hudsonPlugin = new HudsonConnectionPlugin();
-        hudsonPlugin.connect("url");
-        hudsonPlugin.hudson = hudson;
+        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
+        jenkinsPlugin.connect("url");
+        jenkinsPlugin.hudson = hudson;
 
         when(hudson.getLastBuildNumber("project1")).thenReturn(5);
 
         ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "project1");
+        projectId.addId(JENKINS_ID, "project1");
 
-        int lastBuildNumber = hudsonPlugin.getLastBuildNumber(projectId);
+        int lastBuildNumber = jenkinsPlugin.getLastBuildNumber(projectId);
 
         assertEquals(5, lastBuildNumber);
     }
 
     @Test(expected = IllegalStateException.class)
     public void should_throw_exception_if_no_url() {
-        new HudsonConnectionPlugin().connect("");
+        new JenkinsConnection().connect("");
     }
 
     @Test
     public void should_create_hudson() {
-        new HudsonConnectionPlugin().connect("url");
+        new JenkinsConnection().connect("url");
     }
 
 }

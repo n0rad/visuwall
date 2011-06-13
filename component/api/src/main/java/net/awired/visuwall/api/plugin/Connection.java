@@ -21,7 +21,7 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
-public interface ConnectionPlugin {
+public interface Connection {
 
     /**
      * @param projectId

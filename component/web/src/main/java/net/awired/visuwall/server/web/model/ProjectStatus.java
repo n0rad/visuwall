@@ -14,48 +14,49 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.domain;
+package net.awired.visuwall.server.web.model;
 
-import javax.persistence.Embeddable;
+import net.awired.visuwall.api.domain.Project;
 import com.google.common.base.Objects;
 
-@Embeddable
-public class Software {
+public final class ProjectStatus {
+    private final String id;
+    private final String name;
+    private boolean building;
+    private int lastBuildId;
 
-    private String className;
-    private float version;
-
-    public Software() {
-    }
-
-    public Software(String className, float version) {
-        this.className = className;
-        this.version = version;
+    public ProjectStatus(Project project) {
+        this.id = project.getId();
+        this.name = project.getProjectId().getName();
     }
 
     @Override
     public String toString() {
         return Objects.toStringHelper(this) //
-                .add("className", className) //
-                .add("version", version) //
+                .add("id", id) //
+                .add("name", name) //
+                .add("last build id", lastBuildId) //
+                .add("building", building) //
                 .toString();
     }
 
-    // ///////////////////////////////////////////////////////////
-
-    public String getClassName() {
-        return className;
+    public boolean isBuilding() {
+        return building;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setBuilding(boolean building) {
+        this.building = building;
     }
 
-    public float getVersion() {
-        return version;
+    public int getLastBuildId() {
+        return lastBuildId;
     }
 
-    public void setVersion(float version) {
-        this.version = version;
+    public void setLastBuildId(int lastBuildId) {
+        this.lastBuildId = lastBuildId;
+    }
+
+    public String getId() {
+        return id;
     }
 }

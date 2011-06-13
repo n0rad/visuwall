@@ -29,20 +29,20 @@ import com.google.common.base.Preconditions;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 
-public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnectionPlugin> {
+public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
 
     @Override
-    public JenkinsConnectionPlugin getConnection(String url, Properties info) {
-        JenkinsConnectionPlugin jenkinsConnectionPlugin = new JenkinsConnectionPlugin();
+    public JenkinsConnection getConnection(String url, Properties info) {
+        JenkinsConnection jenkinsConnectionPlugin = new JenkinsConnection();
         jenkinsConnectionPlugin.connect(url);
         return jenkinsConnectionPlugin;
     }
 
     @Override
-    public Class<JenkinsConnectionPlugin> getConnectionClass() {
-        return JenkinsConnectionPlugin.class;
+    public Class<JenkinsConnection> getConnectionClass() {
+        return JenkinsConnection.class;
     }
 
     @Override

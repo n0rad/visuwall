@@ -30,9 +30,9 @@ import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
-import net.awired.visuwall.api.plugin.capability.MetricPlugin;
-import net.awired.visuwall.api.plugin.capability.TestsPlugin;
+import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.api.plugin.capability.MetricCapability;
+import net.awired.visuwall.api.plugin.capability.TestsCapability;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 import org.slf4j.Logger;
@@ -42,9 +42,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
 
-public final class SonarConnectionPlugin implements ConnectionPlugin, MetricPlugin, TestsPlugin {
+public final class SonarConnection implements Connection, MetricCapability, TestsCapability {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SonarConnectionPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SonarConnection.class);
 
     private MeasureFinder measureFinder;
 
@@ -53,7 +53,7 @@ public final class SonarConnectionPlugin implements ConnectionPlugin, MetricPlug
 
     private boolean connected;
 
-    public SonarConnectionPlugin() {
+    public SonarConnection() {
     }
 
     public void connect(String url) {
@@ -78,7 +78,7 @@ public final class SonarConnectionPlugin implements ConnectionPlugin, MetricPlug
     }
 
     @VisibleForTesting
-    SonarConnectionPlugin(MeasureFinder measureFinder, MetricFinder metricFinder) {
+    SonarConnection(MeasureFinder measureFinder, MetricFinder metricFinder) {
         try {
             this.measureFinder = measureFinder;
             metricsMap = metricFinder.findMetrics();

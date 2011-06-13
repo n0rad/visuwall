@@ -1,23 +1,25 @@
 package net.awired.visuwall.core.process;
 
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ScheduledFuture;
+import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
-import net.awired.visuwall.api.plugin.capability.BuildPlugin;
-import net.awired.visuwall.api.plugin.capability.ViewPlugin;
+import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.domain.ConnectedProject;
-import net.awired.visuwall.core.domain.SoftwareAccess;
-import net.awired.visuwall.core.domain.Wall;
+import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
+import net.awired.visuwall.core.persistence.entity.Wall;
 import net.awired.visuwall.core.service.BuildProjectService;
 import net.awired.visuwall.core.service.PluginService;
 import net.awired.visuwall.core.service.ProjectAggregatorService;
+import net.awired.visuwall.core.service.SoftwareAccessService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
 
 @Component
 public class WallProcess {
@@ -25,37 +27,55 @@ public class WallProcess {
     private static final Logger LOG = LoggerFactory.getLogger(WallProcess.class);
 
     @Autowired
-    @VisibleForTesting
+    TaskScheduler taskScheduler;
+
+    @Autowired
     BuildProjectService projectService;
 
     @Autowired
-    @VisibleForTesting
     PluginService pluginService;
 
     @Autowired
     ProjectAggregatorService projectAggregatorService;
 
-    public void reconstructWallTransientInfo(Wall wall) {
-        Preconditions.checkNotNull(wall, "Wall is a mandatory parameter");
+    @Autowired
+    SoftwareAccessService softwareAccessService;
 
-        this.rebuildConnectionPluginsInSoftwareAccess(wall);
-        this.rebuildProjectsWithAssociatedBuildPlugin(wall);
-        this.associateOtherPluginsWithProjects(wall);
+    ///////////////////////////////////////////////////////////////
 
-        //updateWallProjects(connectionPlugins, wall);
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Done refreshing wall : " + wall + " and its " + wall.getProjects().size() + " projects");
+    public void rebuildFullWallInformations(Wall wall) {
+        rebuildConnectionPluginsInSoftwareAccess(wall);
+
+        for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
+            Runnable task = getDiscoverAndAddProjectsTask(wall, softwareAccess);
+            @SuppressWarnings("unchecked")
+            ScheduledFuture<Object> futur = taskScheduler.scheduleWithFixedDelay(task,
+                    softwareAccess.getProjectFinderDelaySecond() * 1000);
+            softwareAccess.setProjectFinderTask(futur);
+        }
+
+        updatePluginsAssociatedToProjects(wall);
+
+        //TODO
+        //  retreave current project information from softwares in them
+
+        //contains
+    }
+
+    private void rebuildConnectionPluginsInSoftwareAccess(Wall wall) {
+        for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
+            VisuwallPlugin<Connection> plugin = pluginService.getPluginFromUrl(softwareAccess.getUrl());
+            Connection connection = plugin.getConnection(softwareAccess.getUrl().toString(), null);
+            softwareAccess.setConnection(connection);
         }
     }
 
-    ///////////////////////////////////////////////////////////////S
-
-    private void associateOtherPluginsWithProjects(Wall wall) {
+    private void updatePluginsAssociatedToProjects(Wall wall) {
         for (ConnectedProject project : wall.getProjects()) {
             for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
-                ConnectionPlugin connectionPlugin = softwareAccess.getConnectionPlugin();
+                Connection connectionPlugin = softwareAccess.getConnection();
                 if (project.getConnectionPlugins().contains(connectionPlugin)) {
-                    // skip already associated plugin wich is the build one
+                    // skip already associated plugin which is the build one
                     continue;
                 }
 
@@ -66,75 +86,59 @@ public class WallProcess {
         }
     }
 
-    private void rebuildProjectsWithAssociatedBuildPlugin(Wall wall) {
-        for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
-            if (!(softwareAccess.getConnectionPlugin() instanceof BuildPlugin)) {
-                continue;
-            }
-            BuildPlugin buildPlugin = (BuildPlugin) softwareAccess.getConnectionPlugin();
+    private Runnable getDiscoverAndAddProjectsTask(final Wall theWall, final SoftwareAccess theSoftwareAccess) {
+        return new Runnable() {
+            Wall wall = theWall;
+            SoftwareAccess softwareAccess = theSoftwareAccess;
 
-            if (softwareAccess.isAllProject()) {
-                List<ProjectId> projectIds;
-                projectIds = buildPlugin.findAllProjects();
-                insertProjectByIds(wall, projectIds, buildPlugin);
-            } else {
-                List<ProjectId> nameProjectIds = buildPlugin.findProjectsByNames(softwareAccess.getProjectNames());
+            @Override
+            public void run() {
+                LOG.info("Running Project Discover task for " + softwareAccess + " in wall " + theWall);
+                if (softwareAccess.getConnection() instanceof BuildCapability) {
+                    BuildCapability buildPlugin = (BuildCapability) softwareAccess.getConnection();
 
-                if (nameProjectIds == null) {
-                    LOG.warn("plugin return null on findProjectsByNames", buildPlugin);
+                    Set<ProjectId> projectIds = null;
+                    projectIds = softwareAccessService.discoverBuildProjects(softwareAccess);
+
+                    for (ProjectId projectId : projectIds) {
+                        if (containsId(wall.getProjects(), projectId)) {
+                            // this project is already registered in list
+                            continue;
+                        }
+
+                        ConnectedProject connectedProject = new ConnectedProject(projectId);
+                        connectedProject.setBuildPlugin(buildPlugin);
+                        connectedProject.getConnectionPlugins().add(buildPlugin);
+
+                        Runnable statusTask = projectService.getStatusTask(connectedProject);
+                        @SuppressWarnings("unchecked")
+                        ScheduledFuture<Object> scheduleTask = taskScheduler.scheduleAtFixedRate(statusTask,
+                                softwareAccess.getProjectStatusDelaySecond() * 1000);
+                        connectedProject.setProjectStatusTask(scheduleTask);
+                        //TODO MOVE
+                        //                    projectAggregatorService.enhanceWithBuildInformations(connectedProject, buildPlugin);
+                        wall.getProjects().add(connectedProject);
+                    }
                 } else {
-                    insertProjectByIds(wall, nameProjectIds, buildPlugin);
-                }
-
-                if (buildPlugin instanceof ViewPlugin) {
-                    List<ProjectId> viewProjectIds = ((ViewPlugin) buildPlugin).findProjectsByViews(softwareAccess
-                            .getViewNames());
-                    if (nameProjectIds == null) {
-                        LOG.warn("plugin return null on findProjectsByViews", buildPlugin);
-                    } else {
-                        insertProjectByIds(wall, viewProjectIds, buildPlugin);
+                    for (ConnectedProject project : wall.getProjects()) {
+                        if (softwareAccess.getConnection().contains(project.getProjectId())) {
+                            project.getConnectionPlugins().add(softwareAccess.getConnection());
+                        }
                     }
                 }
+
+            }
+        };
+    }
+
+    // TODO move to project lists in wall !?
+    private boolean containsId(List<ConnectedProject> projects, ProjectId projectId) {
+        for (Project project : projects) {
+            if (project.getProjectId().equals(projectId)) {
+                return true;
             }
         }
-    }
-
-    //        projectAggregatorService.enhanceWithBuildInformations(connectedProject,
-    //                softwareAccess.getConnectionPlugin());
-
-    //        for (ConnectionPlugin connectionPlugin : connectionPlugins) {
-    //            try {connect
-    //                List<ProjectId> discoveredProjects = connectionPlugin.findAllProjects();
-    //                for (ProjectId discoveredProjectId : discoveredProjects) {
-    //                    ConnectedProject project;
-    //                    try {
-    //                        project = wall.getProjectByProjectId(discoveredProjectId);
-    //                    } catch (ProjectNotFoundException e) {
-    //                        project = new ConnectedProject(discoveredProjectId);
-    //                        project.setConnectionPlugins(connectionPlugins);
-    //                        wall.getProjects().add(project);
-    //                    }
-    //                    updateProject(project);
-    //                }
-    //            } catch (NotImplementedOperationException e) {
-    //            }
-    //        }
-
-    private void insertProjectByIds(Wall wall, List<ProjectId> projectIds, BuildPlugin buildPlugin) {
-        for (ProjectId projectId : projectIds) {
-            ConnectedProject connectedProject = new ConnectedProject(projectId);
-            connectedProject.setBuildPlugin(buildPlugin);
-            connectedProject.getConnectionPlugins().add(buildPlugin);
-            wall.getProjects().add(connectedProject);
-        }
-    }
-
-    private void rebuildConnectionPluginsInSoftwareAccess(Wall wall) {
-        for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
-            VisuwallPlugin plugin = pluginService.getPluginFromUrl(softwareAccess.getUrl());
-            ConnectionPlugin connectionPlugin = plugin.getConnection(softwareAccess.getUrl().toString(), null);
-            softwareAccess.setConnectionPlugin(connectionPlugin);
-        }
+        return false;
     }
 
 }

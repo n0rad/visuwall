@@ -19,11 +19,10 @@ package net.awired.visuwall.core.service;
 import java.util.Date;
 import javax.persistence.Transient;
 import net.awired.visuwall.api.domain.Build;
-import net.awired.visuwall.api.domain.ProjectStatus;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.core.domain.ConnectedProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +45,7 @@ public class BuildProjectService {
 
     public void updateProject(ConnectedProject project) {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
-        for (ConnectionPlugin service : project.getConnectionPlugins()) {
+        for (Connection service : project.getConnectionPlugins()) {
             projectEnhancerService.enhanceWithBuildInformations(project, service);
             projectEnhancerService.enhanceWithQualityAnalysis(project, service, metrics);
         }
@@ -68,55 +67,19 @@ public class BuildProjectService {
         throw new RuntimeException("estimatedFinishTime null");
     }
 
-    public int getLastBuildNumber(ConnectedProject project) {
-        Preconditions.checkNotNull(project, "project is a mandatory parameter");
-        try {
-            return project.getBuildPlugin().getLastBuildNumber(project.getProjectId());
-        } catch (ProjectNotFoundException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(e.getMessage());
-            }
-        } catch (BuildNotFoundException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(e.getMessage());
-            }
-        }
-        return PROJECT_NOT_BUILT_ID;
-    }
+    public Runnable getStatusTask(final ConnectedProject theProject) {
+        Preconditions.checkNotNull(theProject, "project can not be null");
+        return new Runnable() {
+            ConnectedProject project = theProject;
 
-    public State getState(ConnectedProject project) {
-        Preconditions.checkNotNull(project, "project is a mandatory parameter");
-        try {
-            return project.getBuildPlugin().getState(project.getProjectId());
-        } catch (ProjectNotFoundException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(e.getMessage());
+            @Override
+            public void run() {
+                LOG.info("Running Project status task for " + project);
+                project.setBuilding(isBuilding(project));
+                project.setState(getState(project));
+                project.setCurrentBuildId(getLastBuildNumber(project));
             }
-        }
-        throw new RuntimeException("Project " + project + " must have a state. It can't be found in ");
-    }
-
-    public boolean isBuilding(ConnectedProject project) {
-        Preconditions.checkNotNull(project, "project is a mandatory parameter");
-        try {
-            return project.getBuildPlugin().isBuilding(project.getProjectId());
-        } catch (ProjectNotFoundException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(e.getMessage());
-            }
-        }
-        // TODO exception?
-        return false;
-    }
-
-    public ProjectStatus getUpdatedStatus(ConnectedProject project) throws ProjectNotFoundException {
-        Preconditions.checkNotNull(project, "project can not be null");
-        ProjectStatus status = new ProjectStatus();
-        status.setBuilding(isBuilding(project));
-        status.setLastBuildId(getLastBuildNumber(project));
-        status.setName(project.getProjectId().getName());
-        status.setState(getState(project));
-        return status;
+        };
     }
 
     public Build findBuildByBuildNumber(ConnectedProject project, int buildNumber) throws BuildNotFoundException,
@@ -137,6 +100,49 @@ public class BuildProjectService {
             }
         }
         throw new BuildNotFoundException("No build #" + buildNumber + " for project " + project);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
+
+    private int getLastBuildNumber(ConnectedProject project) {
+        Preconditions.checkNotNull(project, "project is a mandatory parameter");
+        try {
+            return project.getBuildPlugin().getLastBuildNumber(project.getProjectId());
+        } catch (ProjectNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(e.getMessage());
+            }
+        } catch (BuildNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(e.getMessage());
+            }
+        }
+        return PROJECT_NOT_BUILT_ID;
+    }
+
+    private State getState(ConnectedProject project) {
+        Preconditions.checkNotNull(project, "project is a mandatory parameter");
+        try {
+            return project.getBuildPlugin().getState(project.getProjectId());
+        } catch (ProjectNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(e.getMessage());
+            }
+        }
+        throw new RuntimeException("Project " + project + " must have a state. It can't be found in ");
+    }
+
+    private boolean isBuilding(ConnectedProject project) {
+        Preconditions.checkNotNull(project, "project is a mandatory parameter");
+        try {
+            return project.getBuildPlugin().isBuilding(project.getProjectId());
+        } catch (ProjectNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(e.getMessage());
+            }
+        }
+        // TODO exception?
+        return false;
     }
 
 }

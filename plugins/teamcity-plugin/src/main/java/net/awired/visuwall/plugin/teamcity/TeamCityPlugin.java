@@ -37,7 +37,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 
-public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnectionPlugin> {
+public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
 
     private static final Logger LOG = LoggerFactory.getLogger(TeamCityPlugin.class);
 
@@ -45,15 +45,15 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnectionPlugin> 
     TeamCityUrlBuilder urlBuilder;
 
     @Override
-    public TeamCityConnectionPlugin getConnection(String url, Properties info) {
+    public TeamCityConnection getConnection(String url, Properties info) {
         urlBuilder = new TeamCityUrlBuilder(url);
-        TeamCityConnectionPlugin connectionPlugin = new TeamCityConnectionPlugin();
+        TeamCityConnection connectionPlugin = new TeamCityConnection();
         return connectionPlugin;
     }
 
     @Override
-    public Class<TeamCityConnectionPlugin> getConnectionClass() {
-        return TeamCityConnectionPlugin.class;
+    public Class<TeamCityConnection> getConnectionClass() {
+        return TeamCityConnection.class;
     }
 
     @Override

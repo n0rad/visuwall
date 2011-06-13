@@ -82,6 +82,8 @@
 				<label for="softwareAccesses0.allProject">All Projects</label> 
 				<input type="checkbox" id="softwareAccesses0.allProject" name="softwareAccesses[0].allProject" value="true" /> 
 				<input type="hidden" id="_softwareAccesses0.allProject" name="_softwareAccesses[0].allProject" value="true" />
+<!-- 				<label for="softwareAccesses0.refreshTimeSecond">Refresh Time</label>  -->
+<!-- 				<input id="softwareAccesses0.refreshTimeSecond" name="softwareAccesses[0].refreshTimeSecond" class="ui-widget-content ui-corner-all disabled" value=""/>  -->
 			</div> 
 		</div>
 			<input class="submit" type="submit" value="Save"/> 

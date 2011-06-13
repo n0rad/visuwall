@@ -69,9 +69,8 @@ public class ApplicationHelper {
         }
         if (logLevelEnum != null) {
             return logLevelEnum.getLevel();
-        } else {
-            return Level.INFO;
         }
+        return null;
     }
 
     public static String findHomeDir() {
@@ -87,26 +86,30 @@ public class ApplicationHelper {
             InitialContext iniCtxt = new InitialContext();
             Context env = (Context) iniCtxt.lookup("java:comp/env");
             String value = (String) env.lookup(HOME_KEY);
-            if (value != null && value.trim().length() > 0)
+            if (value != null && value.trim().length() > 0) {
                 return value.trim();
+            }
 
             value = (String) iniCtxt.lookup(HOME_KEY);
-            if (value != null && value.trim().length() > 0)
+            if (value != null && value.trim().length() > 0) {
                 return value.trim();
+            }
         } catch (NamingException e) {
             // ignore
         }
 
         // finally check the system property
         String sysProp = System.getProperty(HOME_KEY);
-        if (sysProp != null)
+        if (sysProp != null) {
             return sysProp.trim();
+        }
 
         // look at the env var next
         try {
             String env = System.getenv(HOME_KEY);
-            if (env != null)
+            if (env != null) {
                 return env.trim();
+            }
         } catch (Throwable _) {
             // when this code runs on JDK1.4, this method fails
             // fall through to the next method

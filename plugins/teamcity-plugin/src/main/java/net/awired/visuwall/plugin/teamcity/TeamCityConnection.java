@@ -23,10 +23,10 @@ import java.util.List;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.ProjectStatus.State;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BuildPlugin;
+import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.teamcityclient.TeamCity;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
 
@@ -37,9 +37,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
-public class TeamCityConnectionPlugin implements BuildPlugin {
+public class TeamCityConnection implements BuildCapability {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TeamCityConnectionPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TeamCityConnection.class);
 
     @VisibleForTesting
     static final String TEAMCITY_ID = "TEAMCITY_ID";

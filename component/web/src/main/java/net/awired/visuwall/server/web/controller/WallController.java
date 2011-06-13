@@ -17,15 +17,16 @@
 package net.awired.visuwall.server.web.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-import net.awired.visuwall.api.domain.ProjectStatus;
-import net.awired.visuwall.core.domain.Wall;
+import net.awired.visuwall.core.domain.ConnectedProject;
 import net.awired.visuwall.core.exception.NotFoundException;
+import net.awired.visuwall.core.persistence.entity.Wall;
 import net.awired.visuwall.core.service.PluginService;
 import net.awired.visuwall.core.service.WallHolderService;
+import net.awired.visuwall.server.web.model.ProjectStatus;
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,8 +79,17 @@ public class WallController {
     @RequestMapping("{wallName}/status")
     public @ResponseBody
     List<ProjectStatus> getStatus(@PathVariable String wallName, ModelMap modelMap) throws NotFoundException {
-        List<ProjectStatus> status = wallService.getStatus(wallName);
-        return status;
+        Wall wall = wallService.find(wallName);
+        List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
+        //TODO change connectedProject to project
+        for (ConnectedProject project : wall.getProjects()) {
+            ProjectStatus projectStatus = new ProjectStatus(project);
+            projectStatus.setLastBuildId(project.getCurrentBuildId());
+            //TODO get from current
+            projectStatus.setBuilding(project.isBuilding());
+            statusList.add(projectStatus);
+        }
+        return statusList;
     }
 
     @RequestMapping(value = "create", method = RequestMethod.GET)

@@ -2,22 +2,24 @@ package net.awired.visuwall.core.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
-import net.awired.visuwall.api.plugin.capability.BuildPlugin;
+import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class ConnectedProject extends Project {
 
-    @Transient
-    @JsonIgnore
-    private List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>();
+    private boolean building = false;
 
     @Transient
-    @JsonIgnore
-    private BuildPlugin buildPlugin;
+    private List<Connection> connectionPlugins = new ArrayList<Connection>();
+    @Transient
+    private BuildCapability buildPlugin;
+    @Transient
+    private ScheduledFuture<Object> projectStatusTask;
 
     public ConnectedProject(String name) {
         super(name);
@@ -30,23 +32,41 @@ public class ConnectedProject extends Project {
     /////////////////////////////////
 
     @JsonIgnore
-    public List<ConnectionPlugin> getConnectionPlugins() {
+    public List<Connection> getConnectionPlugins() {
         return connectionPlugins;
     }
 
     @JsonIgnore
-    public void setConnectionPlugins(List<ConnectionPlugin> connectionPlugins) {
+    public void setConnectionPlugins(List<Connection> connectionPlugins) {
         this.connectionPlugins = connectionPlugins;
     }
 
     @JsonIgnore
-    public BuildPlugin getBuildPlugin() {
+    public BuildCapability getBuildPlugin() {
         return buildPlugin;
     }
 
     @JsonIgnore
-    public void setBuildPlugin(BuildPlugin buildPlugin) {
+    public void setBuildPlugin(BuildCapability buildPlugin) {
         this.buildPlugin = buildPlugin;
+    }
+
+    @JsonIgnore
+    public void setProjectStatusTask(ScheduledFuture<Object> projectStatusTask) {
+        this.projectStatusTask = projectStatusTask;
+    }
+
+    @JsonIgnore
+    public ScheduledFuture<Object> getProjectStatusTask() {
+        return projectStatusTask;
+    }
+
+    public void setBuilding(boolean building) {
+        this.building = building;
+    }
+
+    public boolean isBuilding() {
+        return building;
     }
 
 }

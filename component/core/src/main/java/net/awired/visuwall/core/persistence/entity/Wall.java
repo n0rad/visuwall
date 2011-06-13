@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.domain;
+package net.awired.visuwall.core.persistence.entity;
 
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -30,6 +30,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.core.domain.ConnectedProject;
 import net.awired.visuwall.core.utils.ShrinkList;
 import org.hibernate.annotations.Cascade;
 import org.springframework.util.AutoPopulatingList;

@@ -14,19 +14,22 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.domain;
+package net.awired.visuwall.core.persistence.entity;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
-import net.awired.visuwall.api.plugin.ConnectionPlugin;
+import net.awired.visuwall.api.plugin.Connection;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.CollectionOfElements;
 import org.springframework.util.AutoPopulatingList;
+import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 
 @Entity
 public class SoftwareAccess {
@@ -39,7 +42,8 @@ public class SoftwareAccess {
     private String login;
     private String password;
     private boolean allProject;
-    private int refreshTimeSecond;
+    private int projectFinderDelaySecond = 30;
+    private int projectStatusDelaySecond = 10;
 
     @CollectionOfElements
     private List<String> projectNames = new AutoPopulatingList<String>(String.class);
@@ -47,7 +51,9 @@ public class SoftwareAccess {
     private List<String> viewNames = new AutoPopulatingList<String>(String.class);
 
     @Transient
-    private ConnectionPlugin connectionPlugin;
+    private ScheduledFuture<Object> projectFinderTask;
+    @Transient
+    private Connection connection;
 
     public SoftwareAccess() {
 
@@ -91,6 +97,16 @@ public class SoftwareAccess {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        ToStringHelper toString = Objects.toStringHelper(this) //
+                .add("id", id) //
+                .add("url", url) //
+                .add("allProject", allProject) //
+                .add("projectNames", projectNames).add("viewNames", viewNames); //
+        return toString.toString();
     }
 
     // ///////////////////////////////////////////////////////////
@@ -155,21 +171,42 @@ public class SoftwareAccess {
         this.viewNames = viewNames;
     }
 
-    public int getRefreshTimeSecond() {
-        return refreshTimeSecond;
-    }
-
-    public void setRefreshTimeSecond(int refreshTimeSecond) {
-        this.refreshTimeSecond = refreshTimeSecond;
+    @JsonIgnore
+    public Connection getConnection() {
+        return connection;
     }
 
     @JsonIgnore
-    public ConnectionPlugin getConnectionPlugin() {
-        return connectionPlugin;
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
+    public int getProjectFinderDelaySecond() {
+        return projectFinderDelaySecond;
+    }
+
+    public void setProjectFinderDelaySecond(int projectFinderDelaySecond) {
+        this.projectFinderDelaySecond = projectFinderDelaySecond;
     }
 
     @JsonIgnore
-    public void setConnectionPlugin(ConnectionPlugin connectionPlugin) {
-        this.connectionPlugin = connectionPlugin;
+    public ScheduledFuture<Object> getProjectFinderTask() {
+        return projectFinderTask;
     }
+
+    @JsonIgnore
+    public void setProjectFinderTask(ScheduledFuture<Object> projectFinderTask) {
+        this.projectFinderTask = projectFinderTask;
+    }
+
+    @JsonIgnore
+    public void setProjectStatusDelaySecond(int projectStatusDelaySecond) {
+        this.projectStatusDelaySecond = projectStatusDelaySecond;
+    }
+
+    @JsonIgnore
+    public int getProjectStatusDelaySecond() {
+        return projectStatusDelaySecond;
+    }
+
 }

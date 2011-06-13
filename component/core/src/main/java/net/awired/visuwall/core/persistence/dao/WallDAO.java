@@ -14,15 +14,15 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.service;
+package net.awired.visuwall.core.persistence.dao;
 
 import java.util.List;
 import java.util.Set;
-import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
+import net.awired.visuwall.core.persistence.entity.Wall;
 
-public interface WallService {
+public interface WallDAO {
 
     void persist(Wall wall) throws NotCreatedException;
 

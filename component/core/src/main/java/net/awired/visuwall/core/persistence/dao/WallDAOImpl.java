@@ -14,17 +14,17 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.service;
+package net.awired.visuwall.core.persistence.dao;
 
 import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import net.awired.visuwall.core.domain.SoftwareAccess;
-import net.awired.visuwall.core.domain.Wall;
 import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
+import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
+import net.awired.visuwall.core.persistence.entity.Wall;
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +35,9 @@ import com.google.common.base.Preconditions;
 
 @Repository
 @Transactional
-public class WallServiceImpl implements WallService {
+public class WallDAOImpl implements WallDAO {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WallServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WallDAOImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;

@@ -28,20 +28,20 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
-public class SonarPlugin implements VisuwallPlugin<SonarConnectionPlugin> {
+public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
 
     private static final String SONAR_CORE_VERSION_KEY = "sonar.core.version";
 
     @Override
-    public SonarConnectionPlugin getConnection(String url, java.util.Properties info) {
-        SonarConnectionPlugin sonarConnectionPlugin = new SonarConnectionPlugin();
+    public SonarConnection getConnection(String url, java.util.Properties info) {
+        SonarConnection sonarConnectionPlugin = new SonarConnection();
         sonarConnectionPlugin.connect(url);
         return sonarConnectionPlugin;
     }
 
     @Override
-    public Class<SonarConnectionPlugin> getConnectionClass() {
-        return SonarConnectionPlugin.class;
+    public Class<SonarConnection> getConnectionClass() {
+        return SonarConnection.class;
     }
 
     @Override

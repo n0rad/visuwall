@@ -33,11 +33,11 @@ import org.junit.Test;
 
 public class SonarConnectionPluginIT {
 
-    private static SonarConnectionPlugin sonarPlugin;
+    private static SonarConnection sonarPlugin;
 
     @BeforeClass
     public static void init() {
-        sonarPlugin = new SonarConnectionPlugin();
+        sonarPlugin = new SonarConnection();
         sonarPlugin.connect(SONAR_URL);
     }
 
@@ -89,7 +89,7 @@ public class SonarConnectionPluginIT {
         ProjectId projectId = new ProjectId();
         projectId.setArtifactId("fr.xebia.librestry:librestry");
 
-        SonarConnectionPlugin sonarPlugin = new SonarConnectionPlugin();
+        SonarConnection sonarPlugin = new SonarConnection();
         sonarPlugin.connect("http://fluxx.fr.cr:9000");
         TestResult unitTestsAnalysis = sonarPlugin.analyzeUnitTests(projectId);
         assertEquals(18.4, unitTestsAnalysis.getCoverage(), 0);
