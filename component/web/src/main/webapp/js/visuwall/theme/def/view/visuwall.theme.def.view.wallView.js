@@ -30,12 +30,12 @@ visuwall.theme.def.view.wallView = new function() {
 //	});
 
 	
-	this.addProject = function(name) {
-		LOG.info('add project to display : ' + name);
+	this.addProject = function(projectId, name) {
+		LOG.info('add project to display : ' + projectId);
 		
 		var newCss = $this._runResize($('LI.project', $this.table).length + 1);
 		
-		var projectLI = $this._buildProjectTD(name);
+		var projectLI = $this._buildProjectTD(projectId, name);
 		projectLI.css(newCss);
 		$this.table.append(projectLI);
 		projectLI.fadeIn("slow");
@@ -57,15 +57,15 @@ visuwall.theme.def.view.wallView = new function() {
 		return newCss;
 	};
 
-	this.removeProject = function(projectName) {
+	this.removeProject = function(projectId) {
 		$this._runResize($('LI.project', $this.table).length - 1);
-		$this._getElement(projectName).fadeOut("slow").remove();		
+		$this._getElement(projectId).fadeOut("slow").remove();		
 	};
 
-	this.updateCountdown = function(projectName, finishDate) {
-		$this._hideQuality(projectName);
-		$this._hideCommiters(projectName);
-		var countdownElement = $this._getElement(projectName, 'p.timeleft');
+	this.updateCountdown = function(projectId, finishDate) {
+		$this._hideQuality(projectId);
+		$this._hideCommiters(projectId);
+		var countdownElement = $this._getElement(projectId, 'p.timeleft');
 		countdownElement.countdown({
 			until : finishDate,
 			compact : true,
@@ -74,17 +74,17 @@ visuwall.theme.def.view.wallView = new function() {
 				countdownElement.html('N/A');
 			}
 		});
-		$this._showCountdown(projectName);
+		$this._showCountdown(projectId);
 	};
 	
-	this.updateBuildTime = function(projectName, duration) {
+	this.updateBuildTime = function(projectId, duration) {
 		var good = buildVisualDuration(duration);
-		$this._getElement(projectName, 'span.duration').replaceWith(' ~ ' + good);
+		$this._getElement(projectId, 'span.duration').replaceWith(' ~ ' + good);
 	};
 	
-	this.updateQuality = function(projectName, quality) {
+	this.updateQuality = function(projectId, quality) {
 		if (Object.size(quality) == 0) {
-			$this._hideQuality(projectName);
+			$this._hideQuality(projectId);
 			return;
 		}
 		var qualityLi = '';
@@ -93,28 +93,28 @@ visuwall.theme.def.view.wallView = new function() {
 			   var value = quality[i].value.formattedValue;
 			   qualityLi += '<li>' + name + ': ' + value + '</li>';
 		}
-		$this._getElement(projectName, 'UL.quality').append($(qualityLi)).marquee({
+		$this._getElement(projectId, 'UL.quality').append($(qualityLi)).marquee({
 			yScroll : 'bottom'
 		});
-		$this._showQuality(projectName);
+		$this._showQuality(projectId);
 	};
 
-	this.showBuilding = function(projectName) {
-		$this._getElement(projectName).blink({
+	this.showBuilding = function(projectId) {
+		$this._getElement(projectId).blink({
 			fadeDownSpeed : 2000,
 			fadeUpSpeed : 2000,
 			blinkCount : -1,
 			fadeToOpacity : 0.5
 		});
 	};
-	this.stopBuilding = function(projectName) {
-		$this._getElement(projectName).stopBlink();
-		$this._hideCountDown(projectName);
+	this.stopBuilding = function(projectId) {
+		$this._getElement(projectId).stopBlink();
+		$this._hideCountDown(projectId);
 	};
 
-	this.updateCommiters = function(projectName, commiters) {
+	this.updateCommiters = function(projectId, commiters) {
 		if (commiters.length == 0) {
-			$this._hideCommiters(projectName);
+			$this._hideCommiters(projectId);
 			return;
 		}
 		var commiterString = '';
@@ -122,71 +122,71 @@ visuwall.theme.def.view.wallView = new function() {
 			var commiter = commiters[i];
 			commiterString += '<li>' + commiter + '</li>';
 		}
-		$this._getElement(projectName, 'ul.commiters').html($(commiterString))
+		$this._getElement(projectId, 'ul.commiters').html($(commiterString))
 				.marquee({
 					yScroll : 'bottom'
 				});
-		$this._showCommiters(projectName);
+		$this._showCommiters(projectId);
 	};
 
-	this.displaySuccess = function(projectName) {
-		$this._hideCommiters(projectName);
-		$this._getElement(projectName, '.projectName').switchClasses(
+	this.displaySuccess = function(projectId) {
+		$this._hideCommiters(projectId);
+		$this._getElement(projectId, '.projectId').switchClasses(
 				$this.statusClasses, 'success-state', 3000);
 	};
 
-	this.displayFailure = function(projectName) {
-		$this._getElement(projectName, '.projectName').switchClasses(
+	this.displayFailure = function(projectId) {
+		$this._getElement(projectId, '.projectId').switchClasses(
 				$this.statusClasses, 'failure-state', 3000);
-		$this._hideQuality(projectName);
+		$this._hideQuality(projectId);
 	};
-	this.displayUnstable = function(projectName) {
-		$this._getElement(projectName, '.projectName').switchClasses(
+	this.displayUnstable = function(projectId) {
+		$this._getElement(projectId, '.projectId').switchClasses(
 				$this.statusClasses, 'unstable-state', 3000);
 	};
 	
-	this.displayNew = function(projectName) {
-		$this._getElement(projectName, '.projectName').switchClasses(
+	this.displayNew = function(projectId) {
+		$this._getElement(projectId, '.projectId').switchClasses(
 				$this.statusClasses, 'new-state', 3000);
 	};
 	
-	this.displayAborted = function(projectName) {
-		$this._getElement(projectName, '.projectName').switchClasses(
+	this.displayAborted = function(projectId) {
+		$this._getElement(projectId, '.projectId').switchClasses(
 				$this.statusClasses, 'aborted-state', 3000);
 	};
 	
-	this.displayNotBuilt = function(projectName) {
-		$this._getElement(projectName, '.projectName').switchClasses(
+	this.displayNotBuilt = function(projectId) {
+		$this._getElement(projectId, '.projectId').switchClasses(
 				$this.statusClasses, 'notbuilt-state', 3000);
 	};
 	
-	this.displayUnknown = function(projectName) {
-		$this._getElement(projectName, '.projectName').switchClasses(
+	this.displayUnknown = function(projectId) {
+		$this._getElement(projectId, '.projectId').switchClasses(
 				$this.statusClasses, 'unknown-state', 3000);
 	};
 	
-	this.updateUT = function(projectName, fail, success, skip) {
-		$this._updateTest(projectName, fail, success, skip, 'u');
+	this.updateUT = function(projectId, fail, success, skip) {
+		$this._updateTest(projectId, fail, success, skip, 'u');
 	};
 
-	this.updateIT = function(projectName, fail, success, skip) {
-		$this._updateTest(projectName, fail, success, skip, 'i');
+	this.updateIT = function(projectId, fail, success, skip) {
+		$this._updateTest(projectId, fail, success, skip, 'i');
 	};
 
-	this.updateUTCoverage = function(projectName, coverage) {
-		$this._updateCoverage(projectName, coverage, 'u');
+	this.updateUTCoverage = function(projectId, coverage) {
+		$this._updateCoverage(projectId, coverage, 'u');
 	};
 
-	this.updateITCoverage = function(projectName, coverage) {
-		$this._updateCoverage(projectName, coverage, 'i');
+	this.updateITCoverage = function(projectId, coverage) {
+		$this._updateCoverage(projectId, coverage, 'i');
 	};
 
-	this.updateUTDiff = function(projectName, failDiff, successDiff, skipDiff) {
-		$this._updateTestDiff(projectName, failDiff, successDiff, skipDiff, 'u');
+	this.updateUTDiff = function(projectId, failDiff, successDiff, skipDiff) {
+		$this._updateTestDiff(projectId, failDiff, successDiff, skipDiff, 'u');
 	};
 	
-	this.updateAgo = function(projectName, finishBuild) {
-		var abbr = $this._getElement(projectName, 'abbr.timeago');
+	this.updateAgo = function(projectId, finishBuild) {
+		var abbr = $this._getElement(projectId, 'abbr.timeago');
 		if (finishBuild == 0) {
 			abbr.html('never');
 			return;
@@ -197,23 +197,23 @@ visuwall.theme.def.view.wallView = new function() {
 	
 	// ///////////////////////////////////////////////
 	
-	this._updateTestDiff = function(projectName, failDiff, successDiff, skipDiff, type) {
+	this._updateTestDiff = function(projectId, failDiff, successDiff, skipDiff, type) {
 		if (successDiff) {
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.success SPAN.diff').html(this._getBracketed(this._getSignedInt(successDiff))).fadeIn("slow");
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.success SPAN.diff').html(this._getBracketed(this._getSignedInt(successDiff))).fadeIn("slow");
 		} else {
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.success SPAN.diff').hide();
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.success SPAN.diff').hide();
 		}
 		
 		if (failDiff) {
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure SPAN.diff').html(this._getBracketed(this._getSignedInt(failDiff))).fadeIn("slow");
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.failure SPAN.diff').html(this._getBracketed(this._getSignedInt(failDiff))).fadeIn("slow");
 		} else {
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure SPAN.diff').hide();			
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.failure SPAN.diff').hide();			
 		}
 		
 		if (skipDiff) {
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore SPAN.diff').html(this._getBracketed(this._getSignedInt(skipDiff))).fadeIn("slow");
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.ignore SPAN.diff').html(this._getBracketed(this._getSignedInt(skipDiff))).fadeIn("slow");
 		} else {
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore SPAN.diff').hide();			
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.ignore SPAN.diff').hide();			
 		}
 	};
 	
@@ -235,17 +235,17 @@ visuwall.theme.def.view.wallView = new function() {
 		}
 	};
 	
-	this._updateCoverage = function(projectName, coverage, type) {
+	this._updateCoverage = function(projectId, coverage, type) {
 		var displayCoverage = coverage;
 		if (coverage == undefined || coverage == 0) {
 			displayCoverage = 100;
 		}
-		$this._getElement(projectName, 'TABLE.' + type + 'Test').animate({width : displayCoverage + "%"}, 3000);
+		$this._getElement(projectId, 'TABLE.' + type + 'Test').animate({width : displayCoverage + "%"}, 3000);
 	};
 	
-	this._updateTest = function(projectName, fail, success, skip, type) {
+	this._updateTest = function(projectId, fail, success, skip, type) {
 		if (fail == 0 && success == 0 && skip == 0) {
-			$this['_hide' + type + 'T'](projectName);
+			$this['_hide' + type + 'T'](projectId);
 			return;
 		}	
 		var allTest = fail + success + skip;
@@ -253,43 +253,41 @@ visuwall.theme.def.view.wallView = new function() {
 		var successBar = (success * 100) / allTest;
 		var skipBar = (skip * 100) / allTest;
 		if (success != 0) {
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.success SPAN.num').html(success);
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.success').animate({width: successBar + "%"}, 2000).fadeIn("slow");
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.success SPAN.num').html(success);
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.success').animate({width: successBar + "%"}, 2000).fadeIn("slow");
 		} else {
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.success').hide();
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.success').hide();
 		}
 		if (fail != 0) {
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure SPAN.num').html(fail);
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure').animate({width: failBar + "%"}, 2000).fadeIn("slow");
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.failure SPAN.num').html(fail);
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.failure').animate({width: failBar + "%"}, 2000).fadeIn("slow");
 		} else {
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.failure').hide();
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.failure').hide();
 		}
 		if (skip != 0) {
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore SPAN.num').html(skip);
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore').animate({width: skipBar + "%"}, 2000).fadeIn("slow");
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.ignore SPAN.num').html(skip);
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.ignore').animate({width: skipBar + "%"}, 2000).fadeIn("slow");
 		} else {
-			$this._getElement(projectName, 'TABLE.' + type + 'Test TD.ignore').hide();
+			$this._getElement(projectId, 'TABLE.' + type + 'Test TD.ignore').hide();
 		}
-		$this['_show' + type + 'T'](projectName);
+		$this['_show' + type + 'T'](projectId);
 	};
 
-	this._getElement = function(projectName, suffix) {
-		var request = 'LI[id="' + projectName + '"]';
+	this._getElement = function(projectId, suffix) {
+		var request = 'LI[id="' + projectId + '"]';
 		if (suffix != undefined) {
 			request += ' ' + suffix;
 		}
 		return $(request, $this.table);
 	};
 
-	this._buildProjectTD = function(projectName) {
-		var visualName = projectName;
-
-		var projectTD = $('<li style="display:none" id="' + projectName
+	this._buildProjectTD = function(projectId, projectName) {
+		var projectTD = $('<li style="display:none" id="' + projectId
 				+ '" class="project"></li>');
 		var projectInnerTable = $('<table class="innerTable"><tbody></tbody></table>');
 		projectTD.append(projectInnerTable);
 		
-		projectInnerTable.append($('<tr><td class="projectName">' + visualName
+		projectInnerTable.append($('<tr><td class="projectName">' + projectName
 				+ ' <div class="inlineInfo"><abbr class="timeago" title=""></abbr> <span class="duration"></span><div></td></tr>'));
 		projectInnerTable.append($('<tr style="display:none" class="commitersTR"><td><ul class="commiters marquee"></ul></tr></td>'));
 		projectInnerTable.append($('<tr style="display:none" class="qualityTR"><td><ul class="quality marquee"></ul></tr></td>'));
@@ -299,37 +297,37 @@ visuwall.theme.def.view.wallView = new function() {
 		return projectTD;
 	};
 	
-	this._hideCountDown = function(projectName) {
-		$this._getElement(projectName, 'TR.timeleftTR').hide();
+	this._hideCountDown = function(projectId) {
+		$this._getElement(projectId, 'TR.timeleftTR').hide();
 	};
-	this._hideQuality = function(projectName) {
-		$this._getElement(projectName, 'TR.qualityTR').hide();
+	this._hideQuality = function(projectId) {
+		$this._getElement(projectId, 'TR.qualityTR').hide();
 	};
-	this._showQuality = function(projectName) {
-		$this._getElement(projectName, 'TR.qualityTR').show();
+	this._showQuality = function(projectId) {
+		$this._getElement(projectId, 'TR.qualityTR').show();
 	};
-	this._hideCommiters = function(projectName) {
-		$this._getElement(projectName, "TR.commitersTR").hide();
+	this._hideCommiters = function(projectId) {
+		$this._getElement(projectId, "TR.commitersTR").hide();
 	};
-	this._showCommiters = function(projectName) {
-		$this._getElement(projectName, "TR.commitersTR").show();
+	this._showCommiters = function(projectId) {
+		$this._getElement(projectId, "TR.commitersTR").show();
 	};
-	this._hideiT = function(projectName) {
-		$this._getElement(projectName, "TR.iTestTR").hide();
+	this._hideiT = function(projectId) {
+		$this._getElement(projectId, "TR.iTestTR").hide();
 	};
-	this._hideuT = function(projectName) {
-		$this._getElement(projectName, "TR.uTestTR").hide();
+	this._hideuT = function(projectId) {
+		$this._getElement(projectId, "TR.uTestTR").hide();
 	};
-	this._showiT = function(projectName) {
-		$this._getElement(projectName, "TR.iTestTR").show();
+	this._showiT = function(projectId) {
+		$this._getElement(projectId, "TR.iTestTR").show();
 	};
-	this._showuT = function(projectName) {
-		$this._getElement(projectName, "TR.uTestTR").show();
+	this._showuT = function(projectId) {
+		$this._getElement(projectId, "TR.uTestTR").show();
 	};
-	this._showCountdown = function(projectName) {
-		$this._getElement(projectName, "TR.timeleftTR").show();		
+	this._showCountdown = function(projectId) {
+		$this._getElement(projectId, "TR.timeleftTR").show();		
 	};
-	this._hideCountdown = function(projectName) {
-		$this._getElement(projectName, "TR.timeleftTR").hide();		
+	this._hideCountdown = function(projectId) {
+		$this._getElement(projectId, "TR.timeleftTR").hide();		
 	};
 };
