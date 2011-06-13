@@ -48,27 +48,27 @@ public class ProjectController {
         return wall.getProjects();
     }
 
-    @RequestMapping("{projectName}")
+    @RequestMapping("{projectId}")
     public @ResponseBody
-    Project getProject(@PathVariable String wallName, @PathVariable String projectName) throws Exception {
+    Project getProject(@PathVariable String wallName, @PathVariable String projectId) throws Exception {
         Wall wall = wallService.find(wallName);
-        ConnectedProject project = wall.getProjectByName(projectName);
+        ConnectedProject project = wall.getProjectById(projectId);
         projectService.updateProject(project);
-        return wall.getProjectByName(projectName);
+        return wall.getProjectById(projectId);
     }
 
     @RequestMapping("{projectName}/build")
     public @ResponseBody
-    Build getBuild(@PathVariable String wallName, @PathVariable String projectName) throws Exception {
+    Build getBuild(@PathVariable String wallName, @PathVariable String projectId) throws Exception {
         throw new NotImplementedException();
     }
 
     @RequestMapping("{projectName}/build/{buildId}")
     public @ResponseBody
-    Build getBuild(@PathVariable String wallName, @PathVariable String projectName, @PathVariable int buildId)
+    Build getBuild(@PathVariable String wallName, @PathVariable String projectId, @PathVariable int buildId)
             throws Exception {
         Wall wall = wallService.find(wallName);
-        return projectService.findBuildByBuildNumber(wall.getProjectByName(projectName), buildId);
+        return projectService.findBuildByBuildNumber(wall.getProjectById(projectId), buildId);
     }
 
 }

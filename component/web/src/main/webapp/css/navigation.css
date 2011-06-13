@@ -100,3 +100,6 @@ LI#about A:HOVER {
 	padding: 2px;
 	text-align: left;
 }
+
+#modal {
+	overflow: hidden;

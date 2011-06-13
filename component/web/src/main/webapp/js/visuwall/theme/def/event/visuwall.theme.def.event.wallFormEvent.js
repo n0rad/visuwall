@@ -26,6 +26,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 	
 	
 	this.init = function() {
+		
 		$(".projects", this).accordion({
 //			fillSpace: true,
 			autoHeight: false,
@@ -254,6 +255,21 @@ var ff = '				<table class="softwareInfo">'
 	this['INPUT:regex(id,softwareAccesses.*\.url)|change|live'] = urlFunc;
 	this['INPUT:regex(id,softwareAccesses.*\.url)|blur|live'] = urlFunc;
 
+//	this['INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)|init'] = function() {
+//		$(this).slider({
+//			value:100,
+//			min: 0,
+//			max: 500,
+//			step: 50
+////			,
+////			slide: function( event, ui ) {
+////				$( "#amount" ).val( "$" + ui.value );
+////			}
+//		});
+////		$( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
+//			
+//	};
+	
 	this['DIV#softAdd|click'] = function(event) {
 		$this.wallFormView.addFormSoftwareAccesses();
 	};

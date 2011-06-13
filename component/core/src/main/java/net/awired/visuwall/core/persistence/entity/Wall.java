@@ -77,20 +77,21 @@ public final class Wall {
         throw new ProjectNotFoundException("project with this id not found : " + projectId);
     }
 
-    public ConnectedProject getProjectByName(String name) throws ProjectNotFoundException {
-        Preconditions.checkNotNull(name, "name is mandatory");
+    public ConnectedProject getProjectById(String projectId) throws ProjectNotFoundException {
+        Preconditions.checkNotNull(projectId, "projectId is mandatory");
         for (ConnectedProject project : projects) {
-            if (name.equals(project.getName())) {
+            if (projectId.equals(project.getId())) {
                 return project;
             }
         }
-        throw new ProjectNotFoundException("Project not found for this name : " + name);
+        throw new ProjectNotFoundException("Project not found for this id : " + projectId);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Wall))
+        if (obj == null || !(obj instanceof Wall)) {
             return false;
+        }
         return name == ((Wall) obj).name;
     }
 

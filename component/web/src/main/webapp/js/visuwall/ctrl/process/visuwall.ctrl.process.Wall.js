@@ -23,15 +23,15 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	this.wallName = wallName;
 
 	this.addProject = function(projectData) {
-		$this.projectDAO.isProject(projectData.name, function(result) {
+		$this.projectDAO.isProject(projectData.id, function(result) {
 			if (!result) {
 				$this.projectDAO.saveProject(projectData);
-				$this.projectDAO.getProject(projectData.name, function(project) {
-					$this.wallView.addProject(project.name, project.description);
+				$this.projectDAO.getProject(projectData.id, function(project) {
+					$this.wallView.addProject(project.name);
 					$this._updateProject(project);
 				});				
 			} else {
-				LOG.warn('project with name ', projectData.name, ' already exists');
+				LOG.warn('project with id ', projectData.id, ' already exists');
 			}
 		});
 	};
@@ -42,11 +42,11 @@ visuwall.ctrl.process.Wall = function(wallName) {
 			var projectDone = [];
 			
 			var updateFunc = function(status, projectsStatus) {
-				$this.projectDAO.getProject(status.name, function(project) {
-					LOG.debug('Update status for project ' + status.name);
+				$this.projectDAO.getProject(status.projectId, function(project) {
+					LOG.debug('Update status for project ' + status.projectId);
 					$this._updateBuilding(project, status.building);
 					$this._checkVersionChange(project, status);
-					projectDone.push(status.name);
+					projectDone.push(status.projectId);
 
 					// looking for project to delete only when all done
 					if (projectDone.length == projectsStatus.length) {
@@ -64,12 +64,12 @@ visuwall.ctrl.process.Wall = function(wallName) {
 			for (var i = 0; i < projectsStatus.length; i++) {
 				var status = projectsStatus[i];
 
-				$this.projectDAO.isProject(status.name, function(isProjectRes) {
+				$this.projectDAO.isProject(status.projectId, function(isProjectRes) {
 					var stat = status;
 					if (!isProjectRes) {
 						// this is a new project
 						$this.projectService.project($this.wallName,
-								stat.name, function(newProjectData) {
+								stat.projectId, function(newProjectData) {
 									$this.addProject(newProjectData);
 									updateFunc(stat, projectsStatus);
 								});

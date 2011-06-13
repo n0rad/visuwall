@@ -30,12 +30,12 @@ visuwall.theme.def.view.wallView = new function() {
 //	});
 
 	
-	this.addProject = function(name, description) {
+	this.addProject = function(name) {
 		LOG.info('add project to display : ' + name);
 		
 		var newCss = $this._runResize($('LI.project', $this.table).length + 1);
 		
-		var projectLI = $this._buildProjectTD(name, description);
+		var projectLI = $this._buildProjectTD(name);
 		projectLI.css(newCss);
 		$this.table.append(projectLI);
 		projectLI.fadeIn("slow");
@@ -281,11 +281,8 @@ visuwall.theme.def.view.wallView = new function() {
 		return $(request, $this.table);
 	};
 
-	this._buildProjectTD = function(projectName, description) {
+	this._buildProjectTD = function(projectName) {
 		var visualName = projectName;
-//		if (description && description != '') {
-//			visualName = description;
-//		}
 
 		var projectTD = $('<li style="display:none" id="' + projectName
 				+ '" class="project"></li>');

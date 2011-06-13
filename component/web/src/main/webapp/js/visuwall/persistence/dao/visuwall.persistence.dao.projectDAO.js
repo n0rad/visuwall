@@ -22,49 +22,49 @@ visuwall.persistence.dao.projectDAO = new function() {
 	this._projects = {};
 
 	this.saveProject = function(project) {
-		$this._projects[project.name] = project;
+		$this._projects[project.id] = project;
 	};
 
-	this.removeProject = function(projectName) {
-		delete $this._projects[projectName];
+	this.removeProject = function(id) {
+		delete $this._projects[id];
 	};
 
-	this.isProject = function(projectName, callback) {
-		callback($this._projects[projectName] != undefined);
+	this.isProject = function(id, callback) {
+		callback($this._projects[id] != undefined);
 	};
 
-	this.getProject = function(projectName, callback) {
-		callback($this._projects[projectName]);
+	this.getProject = function(id, callback) {
+		callback($this._projects[id]);
 	};
 
 	this.getProjects = function(callback) {
 		callback($this._projects);
 	};
 
-	this.callbackPreviousCompletedBuild = function(wallName, projectName,
+	this.callbackPreviousCompletedBuild = function(wallName, id,
 			callback) {
-		var buildIdIndex = $this._getPreviousCompletedBuildIdIndex(projectName);
+		var buildIdIndex = $this._getPreviousCompletedBuildIdIndex(id);
 		if (buildIdIndex == null) {
 			return false;
 		}
-		$this._callbackPreviousCompletedBuildRec(wallName, projectName,
+		$this._callbackPreviousCompletedBuildRec(wallName, id,
 				callback, buildIdIndex);
 	};
 
-	this._callbackPreviousCompletedBuildRec = function(wallName, projectName,
+	this._callbackPreviousCompletedBuildRec = function(wallName, id,
 			callback, buildIdIndex) {
-		var project = $this._projects[projectName];
+		var project = $this._projects[id];
 		if (project.buildNumbers[buildIdIndex] == null) {
 			return;
 		}
 
-		$this.projectService.getBuild(wallName, projectName,
+		$this.projectService.getBuild(wallName, id,
 				project.buildNumbers[buildIdIndex], function(buildData) {
 					if (buildData.state != 'ABORTED') {
 						callback(buildData);
 						return;
 					} else {
-						$this._callbackPreviousCompletedBuildRec(wallName, projectName,
+						$this._callbackPreviousCompletedBuildRec(wallName, id,
 								callback, buildIdIndex + 1);
 					}
 				});
@@ -72,8 +72,8 @@ visuwall.persistence.dao.projectDAO = new function() {
 
 	// ///////////////////////////////////
 
-	this._getPreviousCompletedBuildIdIndex = function(projectName) {
-		var project = $this._projects[projectName];
+	this._getPreviousCompletedBuildIdIndex = function(id) {
+		var project = $this._projects[id];
 		var buildNumbers = project.buildNumbers;
 		for ( var i = 0; i < buildNumbers.length; i++) {
 

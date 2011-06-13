@@ -40,6 +40,6 @@ public class ProcessingController {
     public @ResponseBody
     Date getFinishTime(@RequestParam String wallName, @RequestParam String projectName) throws Exception {
         Wall wall = wallService.find(wallName);
-        return projectService.getEstimatedFinishTime(wall.getProjectByName(projectName));
+        return projectService.getEstimatedFinishTime(wall.getProjectById(projectName));
     }
 }

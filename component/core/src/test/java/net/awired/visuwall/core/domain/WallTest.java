@@ -49,7 +49,7 @@ public class WallTest {
     @Test(expected = ProjectNotFoundException.class)
     public void should_not_find_inexistant_project_by_name() throws ProjectNotFoundException {
         Wall wall = new Wall();
-        wall.getProjectByName("not.exist");
+        wall.getProjectById("not.exist");
     }
 
     @Test
@@ -61,7 +61,7 @@ public class WallTest {
         ConnectedProject project = new ConnectedProject(projectId);
         wall.getProjects().add(project);
 
-        Project foundProject = wall.getProjectByName("name");
+        Project foundProject = wall.getProjectById("name");
 
         assertEquals("name", foundProject.getName());
     }

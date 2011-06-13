@@ -20,20 +20,20 @@ import net.awired.visuwall.api.domain.Project;
 import com.google.common.base.Objects;
 
 public final class ProjectStatus {
-    private final String id;
+    private final String projectId;
     private final String name;
     private boolean building;
     private int lastBuildId;
 
     public ProjectStatus(Project project) {
-        this.id = project.getId();
+        this.projectId = project.getId();
         this.name = project.getProjectId().getName();
     }
 
     @Override
     public String toString() {
         return Objects.toStringHelper(this) //
-                .add("id", id) //
+                .add("projectId", getProjectId()) //
                 .add("name", name) //
                 .add("last build id", lastBuildId) //
                 .add("building", building) //
@@ -56,7 +56,8 @@ public final class ProjectStatus {
         this.lastBuildId = lastBuildId;
     }
 
-    public String getId() {
-        return id;
+    public String getProjectId() {
+        return projectId;
     }
+
 }
