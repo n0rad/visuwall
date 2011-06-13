@@ -121,7 +121,8 @@ public class WallProcess {
                     }
                 } else {
                     for (ConnectedProject project : wall.getProjects()) {
-                        if (softwareAccess.getConnection().contains(project.getProjectId())) {
+                        boolean contains = softwareAccess.getConnection().contains(project.getProjectId());
+                        if (contains) {
                             project.getConnectionPlugins().add(softwareAccess.getConnection());
                         }
                     }

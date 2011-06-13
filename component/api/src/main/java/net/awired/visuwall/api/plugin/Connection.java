@@ -24,6 +24,11 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 public interface Connection {
 
     /**
+     * Close the connection to the software
+     */
+    void close();
+
+    /**
      * @param projectId
      * @throws NotImplementedOperationException
      * @returntrue if the project is in the Quality Software

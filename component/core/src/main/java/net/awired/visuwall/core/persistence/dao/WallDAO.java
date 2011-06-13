@@ -17,21 +17,17 @@
 package net.awired.visuwall.core.persistence.dao;
 
 import java.util.List;
-import java.util.Set;
-import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
 import net.awired.visuwall.core.persistence.entity.Wall;
 
 public interface WallDAO {
 
-    void persist(Wall wall) throws NotCreatedException;
-
     List<Wall> getWalls();
-
-    Set<String> getWallNames();
 
     Wall find(String wallName) throws NotFoundException;
 
     Wall update(Wall wall);
+
+    void delete(Wall wall);
 
 }

@@ -245,4 +245,10 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
         return null;
     }
 
+    @Override
+    public void close() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

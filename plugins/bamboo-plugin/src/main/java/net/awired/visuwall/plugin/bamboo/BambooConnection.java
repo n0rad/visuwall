@@ -168,4 +168,10 @@ public class BambooConnection implements Connection, BuildCapability {
         return null;
     }
 
+    @Override
+    public void close() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

@@ -17,21 +17,16 @@
 package net.awired.visuwall.core.persistence.dao;
 
 import java.util.List;
-import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
-import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
 
 @Repository
 @Transactional
@@ -40,21 +35,7 @@ public class WallDAOImpl implements WallDAO {
     private static final Logger LOG = LoggerFactory.getLogger(WallDAOImpl.class);
 
     @PersistenceContext
-    private EntityManager entityManager;
-
-    @Override
-    public void persist(Wall wall) throws NotCreatedException {
-        Preconditions.checkNotNull(wall, "wall parameter is mandatory");
-        Preconditions.checkNotNull(wall.getName(), "wall must have a name");
-
-        try {
-            entityManager.persist(wall);
-        } catch (Throwable e) {
-            String message = "Can't create wall " + wall + " in database";
-            LOG.error(message, e);
-            throw new NotCreatedException(message, e);
-        }
-    }
+    EntityManager entityManager;
 
     @Override
     public Wall update(Wall wall) {
@@ -62,6 +43,7 @@ public class WallDAOImpl implements WallDAO {
         return persistWall;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public List<Wall> getWalls() {
         Query query = entityManager.createNamedQuery(Wall.QUERY_WALLS);
@@ -83,11 +65,6 @@ public class WallDAOImpl implements WallDAO {
         return resultList;
     }
 
-    @VisibleForTesting
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
     @Override
     public Wall find(String wallName) throws NotFoundException {
         Wall wall = entityManager.find(Wall.class, wallName);
@@ -101,8 +78,8 @@ public class WallDAOImpl implements WallDAO {
     }
 
     @Override
-    public Set<String> getWallNames() {
-        throw new NotImplementedException();
+    public void delete(Wall wall) {
+        entityManager.remove(wall);
     }
 
 }

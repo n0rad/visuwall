@@ -260,4 +260,10 @@ public final class SonarConnection implements Connection, MetricCapability, Test
         return null;
     }
 
+    @Override
+    public void close() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

@@ -238,4 +238,10 @@ public final class HudsonConnection implements Connection, BuildCapability, View
         return null;
     }
 
+    @Override
+    public void close() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

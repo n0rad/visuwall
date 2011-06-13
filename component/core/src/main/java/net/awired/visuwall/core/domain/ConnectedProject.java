@@ -21,6 +21,10 @@ public class ConnectedProject extends Project {
     @Transient
     private ScheduledFuture<Object> projectStatusTask;
 
+    public void close() {
+        projectStatusTask.cancel(true);
+    }
+
     public ConnectedProject(String name) {
         super(name);
     }

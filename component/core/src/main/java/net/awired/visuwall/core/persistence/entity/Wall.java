@@ -18,16 +18,15 @@ package net.awired.visuwall.core.persistence.entity;
 
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+import net.awired.ajsl.persistence.entity.implementation.abstracts.IdEntityImpl;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.core.domain.ConnectedProject;
@@ -40,15 +39,14 @@ import com.google.common.base.Preconditions;
 @Entity
 @NamedQueries({ @NamedQuery(name = Wall.QUERY_NAMES, query = "SELECT name FROM Wall"), //
         @NamedQuery(name = Wall.QUERY_WALLS, query = "SELECT w FROM Wall AS w") })
-public final class Wall {
+public final class Wall extends IdEntityImpl<Long> {
+
+    private static final long serialVersionUID = 1L;
 
     public static final String QUERY_NAMES = "wallNames";
     public static final String QUERY_WALLS = "walls";
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+    @Column(nullable = false, unique = true)
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -61,6 +59,16 @@ public final class Wall {
     private List<ConnectedProject> projects = new AutoPopulatingList<ConnectedProject>(ConnectedProject.class);
 
     public Wall() {
+    }
+
+    public void close() {
+        for (ConnectedProject project : projects) {
+            project.close();
+        }
+        for (SoftwareAccess softwareAccess : softwareAccesses) {
+            softwareAccess.getProjectFinderTask().cancel(true);
+            softwareAccess.getConnection().close();
+        }
     }
 
     public Wall(String name) {
@@ -127,14 +135,6 @@ public final class Wall {
 
     public void setProjects(List<ConnectedProject> projects) {
         this.projects = projects;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
 }

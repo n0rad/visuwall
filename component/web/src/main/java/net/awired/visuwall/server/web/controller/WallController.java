@@ -27,7 +27,6 @@ import net.awired.visuwall.core.persistence.entity.Wall;
 import net.awired.visuwall.core.service.PluginService;
 import net.awired.visuwall.core.service.WallHolderService;
 import net.awired.visuwall.server.web.model.ProjectStatus;
-import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +108,12 @@ public class WallController {
 
     @RequestMapping(value = "{wallName}", method = RequestMethod.DELETE)
     public void DeleteWall(@PathVariable String wallName) {
-        throw new NotImplementedException();
+        try {
+            Wall wall = wallService.find(wallName);
+            wallService.delete(wall);
+        } catch (NotFoundException e) {
+            LOG.warn("Trying to delete a not found wall : " + wallName, e);
+        }
     }
 
     @InitBinder

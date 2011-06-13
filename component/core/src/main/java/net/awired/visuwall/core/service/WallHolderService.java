@@ -42,7 +42,7 @@ public class WallHolderService implements WallDAO {
     WallProcess wallProcess;
 
     @Autowired
-    WallDAO wallService;
+    WallDAO wallDAO;
 
     @Autowired
     BuildProjectService buildProjectService;
@@ -53,7 +53,7 @@ public class WallHolderService implements WallDAO {
     void init() throws NotCreatedException {
         if (WALLS == null) {
             WALLS = new HashMap<String, Wall>();
-            List<Wall> walls = wallService.getWalls();
+            List<Wall> walls = wallDAO.getWalls();
             for (Wall wall : walls) {
                 try {
                     wallProcess.rebuildFullWallInformations(wall);
@@ -84,32 +84,22 @@ public class WallHolderService implements WallDAO {
     }
 
     @Override
-    public void persist(Wall wall) throws NotCreatedException {
-        Preconditions.checkNotNull(wall, "wall parameter is mandatory");
-        Preconditions.checkNotNull(wall.getName(), "wall must have a name");
-
-        try {
-            wallService.persist(wall);
-            wallProcess.rebuildFullWallInformations(wall);
-            WALLS.put(wall.getName(), wall);
-        } catch (Throwable e) {
-            String message = "Can't create wall " + wall + " in database";
-            LOG.error(message, e);
-            throw new NotCreatedException(message, e);
-        }
-    }
-
-    @Override
     public Wall update(Wall wall) {
-        Wall newWall = wallService.update(wall);
+        Wall newWall = wallDAO.update(wall);
         wallProcess.rebuildFullWallInformations(newWall);
         WALLS.put(newWall.getName(), newWall);
         return newWall;
     }
 
-    @Override
     public Set<String> getWallNames() {
         return WALLS.keySet();
+    }
+
+    @Override
+    public void delete(Wall wall) {
+        wall.close();
+        WALLS.remove(wall.getName());
+        wallDAO.delete(wall);
     }
 
 }
