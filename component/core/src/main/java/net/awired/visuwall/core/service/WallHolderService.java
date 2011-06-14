@@ -96,10 +96,16 @@ public class WallHolderService implements WallDAO {
     }
 
     @Override
-    public void delete(Wall wall) {
-        wall.close();
-        WALLS.remove(wall.getName());
-        wallDAO.delete(wall);
+    public void deleteWall(String wallName) {
+        LOG.info("Removing wall : " + wallName);
+        try {
+            Wall wall = find(wallName);
+            wall.close();
+            WALLS.remove(wallName);
+            wallDAO.deleteWall(wallName);
+        } catch (NotFoundException e) {
+            LOG.warn("No wall found to delete : " + wallName);
+        }
     }
 
 }

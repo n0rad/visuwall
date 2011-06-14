@@ -37,14 +37,20 @@ import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 @Entity
-@NamedQueries({ @NamedQuery(name = Wall.QUERY_NAMES, query = "SELECT name FROM Wall"), //
-        @NamedQuery(name = Wall.QUERY_WALLS, query = "SELECT w FROM Wall AS w") })
+@NamedQueries({
+        @NamedQuery(name = Wall.QUERY_NAMES, query = "SELECT name FROM Wall"), //
+        @NamedQuery(name = Wall.QUERY_WALLS, query = "SELECT w FROM Wall AS w"), //
+        @NamedQuery(name = Wall.QUERY_WALLBYNAME, query = "select w FROM Wall AS w where w.name = :"
+                + Wall.QUERY_PARAM_NAME) })
 public final class Wall extends IdEntityImpl<Long> {
 
     private static final long serialVersionUID = 1L;
 
     public static final String QUERY_NAMES = "wallNames";
     public static final String QUERY_WALLS = "walls";
+    public static final String QUERY_WALLBYNAME = "wallByName";
+
+    public static final String QUERY_PARAM_NAME = "wallName";
 
     @Column(nullable = false, unique = true)
     private String name;

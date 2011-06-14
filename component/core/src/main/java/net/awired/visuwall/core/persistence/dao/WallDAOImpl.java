@@ -67,7 +67,9 @@ public class WallDAOImpl implements WallDAO {
 
     @Override
     public Wall find(String wallName) throws NotFoundException {
-        Wall wall = entityManager.find(Wall.class, wallName);
+        Query query = entityManager.createNamedQuery(Wall.QUERY_WALLBYNAME);
+        query.setParameter(Wall.QUERY_PARAM_NAME, wallName);
+        Wall wall = (Wall) query.getSingleResult();
 
         // TODO replace with lazy load with extended entityManager or eager request 
         for (SoftwareAccess softwareInfo : wall.getSoftwareAccesses()) {
@@ -78,8 +80,14 @@ public class WallDAOImpl implements WallDAO {
     }
 
     @Override
-    public void delete(Wall wall) {
-        entityManager.remove(wall);
+    public void deleteWall(String wallName) {
+        Wall wall;
+        try {
+            wall = find(wallName);
+            entityManager.remove(wall);
+        } catch (NotFoundException e) {
+            LOG.warn("No wall found in the DB to delete : " + wallName);
+        }
     }
 
 }
