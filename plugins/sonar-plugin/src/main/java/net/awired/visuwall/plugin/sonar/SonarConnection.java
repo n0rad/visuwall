@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
@@ -35,8 +36,10 @@ import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestsCapability;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -119,12 +122,10 @@ public final class SonarConnection implements Connection, MetricCapability, Test
     public boolean contains(ProjectId projectId) {
         checkProjectId(projectId);
         checkConnected();
-
         String artifactId = projectId.getArtifactId();
         if (artifactId == null) {
             return false;
         }
-
         try {
             measureFinder.findMeasure(artifactId, "comment_blank_lines");
         } catch (SonarMeasureNotFoundException e) {
@@ -137,21 +138,20 @@ public final class SonarConnection implements Connection, MetricCapability, Test
     public TestResult analyzeUnitTests(ProjectId projectId) {
         checkProjectId(projectId);
         checkConnected();
-
         TestResult unitTestResult = new TestResult();
         String artifactId = projectId.getArtifactId();
         if (Strings.isNullOrEmpty(artifactId)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("can't analyze project " + projectId + " without artifactId. Is it a maven project ?");
             }
-
         } else {
-            insertUnitTestAnalysis(artifactId, unitTestResult);
+			unitTestResult = createUnitTestAnalysis(artifactId);
         }
         return unitTestResult;
     }
 
-    private void insertUnitTestAnalysis(String artifactId, TestResult unitTestResult) {
+	private TestResult createUnitTestAnalysis(String artifactId) {
+		TestResult unitTestResult = new TestResult();
         try {
             Double coverage = measureFinder.findMeasureValue(artifactId, "coverage");
             Double failures = measureFinder.findMeasureValue(artifactId, "test_failures");
@@ -172,15 +172,14 @@ public final class SonarConnection implements Connection, MetricCapability, Test
                         + ", cause " + e.getMessage());
             }
         }
+		return unitTestResult;
     }
 
     @Override
     public TestResult analyzeIntegrationTests(ProjectId projectId) {
         checkProjectId(projectId);
         checkConnected();
-
         TestResult integrationTestResult = new TestResult();
-
         try {
             String artifactId = projectId.getArtifactId();
             if (Strings.isNullOrEmpty(artifactId)) {
@@ -238,32 +237,26 @@ public final class SonarConnection implements Connection, MetricCapability, Test
 
     @Override
     public List<ProjectId> findAllProjects() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public List<ProjectId> findProjectsByNames(List<String> names) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public List<String> findProjectNames() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public void close() {
-        // TODO Auto-generated method stub
-
     }
 
 }

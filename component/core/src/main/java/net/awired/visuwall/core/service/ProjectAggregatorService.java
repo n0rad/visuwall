@@ -18,6 +18,7 @@ package net.awired.visuwall.core.service;
 
 import java.util.Arrays;
 import java.util.Map.Entry;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
@@ -29,10 +30,12 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestsCapability;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import com.google.common.base.Preconditions;
 
 @Service
@@ -89,7 +92,7 @@ public class ProjectAggregatorService {
         }
     }
 
-    public void enhanceWithQualityAnalysis(Project analyzedProject, Connection plugin, String... metrics) {
+	public void enhanceWithQualityAnalysis(Project analyzedProject, Connection plugin, String... metrics) {
         ProjectId projectId = analyzedProject.getProjectId();
         Build build = analyzedProject.getCompletedBuild();
 

@@ -20,6 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
+import net.awired.visuwall.teamcityclient.exception.TeamCityBuildListNotFoundException;
+import net.awired.visuwall.teamcityclient.exception.TeamCityBuildNotFoundException;
+import net.awired.visuwall.teamcityclient.exception.TeamCityProjectNotFoundException;
+import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
@@ -42,7 +46,7 @@ public class TeamCity {
 		teamcityJerseyClient = new TeamCityJerseyClient(client, urlBuilder);
 	}
 
-	public List<String> findProjectNames() {
+	public List<String> findProjectNames() throws TeamCityProjectsNotFoundException {
 		List<String> projectNames = new ArrayList<String>();
 		List<TeamCityProject> projects = teamcityJerseyClient.getProjects();
 		for (TeamCityProject project : projects) {
@@ -51,27 +55,27 @@ public class TeamCity {
 		return projectNames;
 	}
 
-	public List<TeamCityProject> findAllProjects() {
+	public List<TeamCityProject> findAllProjects() throws TeamCityProjectsNotFoundException {
 		return teamcityJerseyClient.getProjects();
 	}
 
-	public TeamCityProject findProject(String projectId) {
+	public TeamCityProject findProject(String projectId) throws TeamCityProjectNotFoundException {
 		checkProjectId(projectId);
 		return teamcityJerseyClient.getProject(projectId);
 	}
 
-	public TeamCityBuild findBuild(int buildNumber) {
+	public TeamCityBuild findBuild(int buildNumber) throws TeamCityBuildNotFoundException {
 		Preconditions.checkArgument(buildNumber >= 0, "buildNumber must be >= 0");
 		return teamcityJerseyClient.getBuild(buildNumber);
 	}
 
-	private void checkProjectId(String projectId) {
-		Preconditions.checkNotNull(projectId, "projectId is mandatory");
-	}
-
-	public TeamCityBuilds findBuildList(String buildTypeId) {
+	public TeamCityBuilds findBuildList(String buildTypeId) throws TeamCityBuildListNotFoundException {
 		Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
 		return teamcityJerseyClient.getBuildList(buildTypeId);
+	}
+
+	private void checkProjectId(String projectId) {
+		Preconditions.checkNotNull(projectId, "projectId is mandatory");
 	}
 
 }

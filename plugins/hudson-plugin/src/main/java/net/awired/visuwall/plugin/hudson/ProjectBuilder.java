@@ -18,6 +18,7 @@ package net.awired.visuwall.plugin.hudson;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.Project;
@@ -27,6 +28,7 @@ import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
+
 import com.google.common.base.Preconditions;
 
 public class ProjectBuilder {
@@ -35,6 +37,7 @@ public class ProjectBuilder {
         Preconditions.checkNotNull(hudsonProject, "hudsonProject is mandatory");
 
         Project project = new Project(hudsonProject.getName());
+		project.setDescription(hudsonProject.getDescription());
         project.setBuildNumbers(hudsonProject.getBuildNumbers());
 
         addCurrentAndCompletedBuilds(project, hudsonProject);

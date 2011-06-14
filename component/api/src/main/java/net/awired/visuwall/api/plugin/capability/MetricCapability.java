@@ -2,6 +2,7 @@ package net.awired.visuwall.api.plugin.capability;
 
 import java.util.List;
 import java.util.Map;
+
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;

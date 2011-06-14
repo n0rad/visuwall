@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
@@ -35,6 +36,7 @@ import net.awired.visuwall.bambooclient.BambooBuildNotFoundException;
 import net.awired.visuwall.bambooclient.BambooProjectNotFoundException;
 import net.awired.visuwall.bambooclient.domain.BambooBuild;
 import net.awired.visuwall.bambooclient.domain.BambooProject;
+
 import com.google.common.base.Preconditions;
 
 public class BambooConnection implements Connection, BuildCapability {
@@ -103,11 +105,16 @@ public class BambooConnection implements Connection, BuildCapability {
         build.setDuration(bambooBuild.getDuration());
         build.setStartTime(bambooBuild.getStartTime());
         build.setState(getState(bambooBuild.getState()));
-        TestResult unitTestResult = new TestResult();
-        unitTestResult.setFailCount(bambooBuild.getFailCount());
-        unitTestResult.setPassCount(bambooBuild.getPassCount());
+        TestResult unitTestResult = createUnitTestResult(bambooBuild);
         build.setUnitTestResult(unitTestResult);
         return build;
+    }
+
+	private TestResult createUnitTestResult(BambooBuild bambooBuild) {
+	    TestResult unitTestResult = new TestResult();
+        unitTestResult.setFailCount(bambooBuild.getFailCount());
+        unitTestResult.setPassCount(bambooBuild.getPassCount());
+	    return unitTestResult;
     }
 
     private State getState(String bambooState) {
@@ -147,7 +154,6 @@ public class BambooConnection implements Connection, BuildCapability {
         Preconditions.checkNotNull(projectId, "projectId is a mandatory parameter");
         String id = getProjectKey(projectId);
         Preconditions.checkNotNull(id, BAMBOO_ID);
-
         return bamboo.getLastBuildNumber(id);
     }
 
@@ -158,20 +164,16 @@ public class BambooConnection implements Connection, BuildCapability {
 
     @Override
     public boolean contains(ProjectId projectId) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public List<ProjectId> findProjectsByNames(List<String> names) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public void close() {
-        // TODO Auto-generated method stub
-
     }
 
 }

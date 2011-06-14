@@ -1,11 +1,12 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.List;
+
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
-import net.awired.visuwall.api.plugin.Connection;
 
-public interface ViewCapability extends Connection {
+public interface ViewCapability {
+
     /**
      * Return a list of project id contained in the software by view names
      * 
