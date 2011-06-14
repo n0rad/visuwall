@@ -17,9 +17,13 @@
 package net.awired.visuwall.plugin.jenkins;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
@@ -36,8 +40,10 @@ import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -227,27 +233,53 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
         }
     }
 
-    @Override
-    public List<ProjectId> findProjectsByViews(List<String> views) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public List<ProjectId> findProjectsByViews(List<String> views) {
+		Set<ProjectId> projectIds = new HashSet<ProjectId>();
+		for (String viewName : views) {
+			try {
+				List<String> projectNames = hudson.findProjectNameByView(viewName);
+				projectIds.addAll(findProjectsByNames(projectNames));
+			} catch (HudsonViewNotFoundException e) {
+				if (LOG.isDebugEnabled()) {
+					LOG.debug(e.getMessage(), e);
+				}
+			}
+		}
+		return new ArrayList<ProjectId>(projectIds);
+	}
 
-    @Override
-    public boolean contains(ProjectId projectId) {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	@Override
+	public boolean contains(ProjectId projectId) {
+		try {
+			String name = projectId.getId(JENKINS_ID);
+			hudson.findProject(name);
+		} catch (HudsonProjectNotFoundException e) {
+			return false;
+		}
+		return true;
+	}
 
-    @Override
-    public List<ProjectId> findProjectsByNames(List<String> names) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public List<ProjectId> findProjectsByNames(List<String> names) {
+		List<ProjectId> projectIds = new ArrayList<ProjectId>();
+		for (String name : names) {
+			try {
+				HudsonProject project = hudson.findProject(name);
+				String projectName = project.getName();
+				ProjectId projectId = new ProjectId(projectName);
+				projectId.addId(JENKINS_ID, projectName);
+			} catch (HudsonProjectNotFoundException e) {
+				if (LOG.isDebugEnabled()) {
+					LOG.debug(e.getMessage(), e);
+				}
+			}
+		}
+		return projectIds;
+	}
 
     @Override
     public void close() {
-        // TODO Auto-generated method stub
 
     }
 

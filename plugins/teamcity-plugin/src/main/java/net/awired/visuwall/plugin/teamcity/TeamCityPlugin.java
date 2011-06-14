@@ -99,7 +99,7 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
         List<String> keywords = Arrays.asList("server", "versionMinor", "versionMajor", "version", "startTime",
                 "currentTime", "buildNumber");
         for (String keyword : keywords) {
-            if (xml.contains(keyword)) {
+			if (!xml.contains(keyword)) {
                 return false;
             }
         }

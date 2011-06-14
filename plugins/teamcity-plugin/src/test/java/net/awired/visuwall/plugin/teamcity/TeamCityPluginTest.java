@@ -27,7 +27,6 @@ import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.teamcityclient.ClasspathFiles;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -39,7 +38,6 @@ public class TeamCityPluginTest {
 		new TeamCityPlugin().getSoftwareId(null);
 	}
 
-	@Ignore
 	@Test
 	public void should_be_manageable() throws Exception {
 		String strUrl = ClasspathFiles.getUrlFile("teamcity_version_page.xml");
@@ -57,7 +55,6 @@ public class TeamCityPluginTest {
 		assertNull(softwareId.getWarnings());
 	}
 
-	@Ignore
 	@Test(expected = IncompatibleSoftwareException.class)
 	public void should_not_be_manageable() throws Exception {
 		URL url = ClasspathFiles.getUrl("simple-text-file.txt");

@@ -10,8 +10,8 @@ import java.util.List;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.teamcityclient.TeamCity;
+import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuildItem;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
@@ -44,13 +44,13 @@ public class TeamCityConnectionTest {
 	}
 
 	@Test
-	public void should_call_find_project_names() {
+	public void should_call_find_project_names() throws TeamCityProjectsNotFoundException {
 		connectionPlugin.findProjectNames();
 		verify(teamCity).findProjectNames();
 	}
 
 	@Test
-	public void should_build_one_project_id() {
+	public void should_build_one_project_id() throws TeamCityProjectsNotFoundException {
 		List<TeamCityProject> teamCityProjects = new ArrayList<TeamCityProject>();
 		TeamCityProject teamCityProject = new TeamCityProject();
 		teamCityProject.setName("projectName");
@@ -67,7 +67,7 @@ public class TeamCityConnectionTest {
 	}
 
 	@Test
-	public void should_find_project() throws ProjectNotFoundException {
+	public void should_find_project() throws Exception {
 		TeamCityProject teamCityProject = new TeamCityProject();
 		teamCityProject.setName("projectName");
 		teamCityProject.setDescription("description");
@@ -85,7 +85,7 @@ public class TeamCityConnectionTest {
 
 	@Ignore
 	@Test
-	public void should_find_state_project() throws ProjectNotFoundException {
+	public void should_find_state_project() throws Exception {
 		TeamCityBuildItem buildItem = new TeamCityBuildItem();
 		buildItem.setStatus(TeamCityStatus.SUCCESS);
 

@@ -32,6 +32,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
+import net.awired.visuwall.teamcityclient.exception.TeamCityBuildNotFoundException;
+import net.awired.visuwall.teamcityclient.exception.TeamCityProjectNotFoundException;
+import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
 import net.awired.visuwall.teamcityclient.resource.TeamCityAgent;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuildItem;
@@ -54,7 +57,7 @@ import com.sun.jersey.api.client.WebResource;
 public class TeamCityTest {
 
 	@Test
-	public void should_list_all_project_names() {
+	public void should_list_all_project_names() throws TeamCityProjectsNotFoundException {
 		TeamCityProjects teamcityProjects = createProjects();
 		TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProjects);
 
@@ -69,7 +72,7 @@ public class TeamCityTest {
 	}
 
 	@Test
-	public void should_find_all_project() {
+	public void should_find_all_project() throws TeamCityProjectsNotFoundException {
 		TeamCityProjects teamcityProjects = createProjects();
 		TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProjects);
 
@@ -86,7 +89,7 @@ public class TeamCityTest {
 	}
 
 	@Test
-	public void should_load_project() {
+	public void should_load_project() throws TeamCityProjectNotFoundException {
 		TeamCityProject teamcityProject = createProject();
 		TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProject);
 
@@ -103,7 +106,7 @@ public class TeamCityTest {
 	}
 
 	@Test
-	public void should_load_project_with_build_types() {
+	public void should_load_project_with_build_types() throws TeamCityProjectNotFoundException {
 		TeamCityProject teamcityProject = createProject();
 		TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProject);
 
@@ -126,7 +129,7 @@ public class TeamCityTest {
 	}
 
 	@Test
-	public void should_load_build() {
+	public void should_load_build() throws TeamCityBuildNotFoundException {
 		TeamCityBuild teamcityBuild = createBuild();
 
 		TeamCity teamcity = new TeamCity();

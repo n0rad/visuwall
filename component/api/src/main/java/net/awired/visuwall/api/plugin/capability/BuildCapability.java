@@ -1,6 +1,7 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.Date;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;

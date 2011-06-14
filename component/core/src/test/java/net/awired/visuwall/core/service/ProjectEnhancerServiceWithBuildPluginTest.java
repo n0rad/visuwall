@@ -25,6 +25,7 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
