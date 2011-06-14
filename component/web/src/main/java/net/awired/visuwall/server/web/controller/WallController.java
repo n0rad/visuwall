@@ -108,12 +108,7 @@ public class WallController {
 
     @RequestMapping(value = "{wallName}", method = RequestMethod.DELETE)
     public void DeleteWall(@PathVariable String wallName) {
-        try {
-            Wall wall = wallService.find(wallName);
-            wallService.delete(wall);
-        } catch (NotFoundException e) {
-            LOG.warn("Trying to delete a not found wall : " + wallName, e);
-        }
+        wallService.deleteWall(wallName);
     }
 
     @InitBinder

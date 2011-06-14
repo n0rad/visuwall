@@ -28,6 +28,6 @@ public interface WallDAO {
 
     Wall update(Wall wall);
 
-    void delete(Wall wall);
+    void deleteWall(String wallName);
 
 }

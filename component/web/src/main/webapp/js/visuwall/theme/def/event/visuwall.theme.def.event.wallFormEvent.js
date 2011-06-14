@@ -94,10 +94,10 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 	};
 
 	
-//	this["#wallForm #delete|click"] = function() {		
-//		$this.wallService.deleteWall();
+	this["#wallForm #delete|click"] = function() {		
+		$this.wallService.deleteWall($('#wallForm INPUT#name').val());
 //		$("#modal").dialog('close');
-//	};
+	};
 	
 	this["#wallForm|submit"] = function() {
 		$("#modal .success").empty();
@@ -106,7 +106,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 			$("#modal .failure").html("Wall name is mandatory");
 			return false;
 		}
-		$("#wallForm .loader").empty().html('<img src="res/img/ajax-loader.gif" />');
+		$("w#wallForm .loader").empty().html('<img src="res/img/ajax-loader.gif" />');
 		$this.wallFormController.submitWallData(this, function() { // success
 			$("#wallForm .loader").empty();
 			$("#modal .success").html("Success");

@@ -87,13 +87,13 @@
 				<input id="softwareAccesses0.projectFinderDelaySecond" name="softwareAccesses[0].projectFinderDelaySecond" class="ui-widget-content ui-corner-all" value=""/> 
 				<label for="softwareAccesses0.projectStatusDelaySecond">Project Refresh Time <span>42</span>(s)</label> 
 				<input id="softwareAccesses0.projectStatusDelaySecond" name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value=""/> 
-			</div> 
+			</div>
 		</div>
 			<input class="submit" type="submit" value="Save"/> 
 			<div class="loader"></div>
 			<div class="success"></div>
 			<div class="failure"></div>
-<!-- 			<input id="delete" type="button" value="Delete"/>  -->
+			<input id="delete" type="button" value="Delete"/> 
 		</form>	
 	</div>
 	<div style="display:none" id="helperdiv">
