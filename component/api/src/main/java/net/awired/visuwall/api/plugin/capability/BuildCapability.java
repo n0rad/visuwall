@@ -6,9 +6,8 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.Connection;
 
-public interface BuildCapability extends Connection {
+public interface BuildCapability extends BasicCapability {
 
     /**
      * Project are in a certain state which may vary between software You'll have to try to associate them with common

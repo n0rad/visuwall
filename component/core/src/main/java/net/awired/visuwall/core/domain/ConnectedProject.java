@@ -6,7 +6,7 @@ import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -15,7 +15,7 @@ public class ConnectedProject extends Project {
     private boolean building = false;
 
     @Transient
-    private List<Connection> connectionPlugins = new ArrayList<Connection>();
+    private List<BasicCapability> capabilities = new ArrayList<BasicCapability>();
     @Transient
     private BuildCapability buildPlugin;
     @Transient
@@ -36,13 +36,13 @@ public class ConnectedProject extends Project {
     /////////////////////////////////
 
     @JsonIgnore
-    public List<Connection> getConnectionPlugins() {
-        return connectionPlugins;
+    public void setCapabilities(List<BasicCapability> capabilities) {
+        this.capabilities = capabilities;
     }
 
     @JsonIgnore
-    public void setConnectionPlugins(List<Connection> connectionPlugins) {
-        this.connectionPlugins = connectionPlugins;
+    public List<BasicCapability> getCapabilities() {
+        return capabilities;
     }
 
     @JsonIgnore
@@ -72,5 +72,4 @@ public class ConnectedProject extends Project {
     public boolean isBuilding() {
         return building;
     }
-
 }

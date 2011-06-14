@@ -22,7 +22,7 @@ import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.core.domain.ConnectedProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,7 @@ public class BuildProjectService {
 
     public void updateProject(ConnectedProject project) {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
-        for (Connection service : project.getConnectionPlugins()) {
+        for (BasicCapability service : project.getCapabilities()) {
             projectEnhancerService.enhanceWithBuildInformations(project, service);
             projectEnhancerService.enhanceWithQualityAnalysis(project, service, metrics);
         }

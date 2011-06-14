@@ -26,7 +26,7 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestsCapability;
 import org.apache.commons.lang.StringUtils;
@@ -40,7 +40,7 @@ public class ProjectAggregatorService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProjectAggregatorService.class);
 
-    public void enhanceWithBuildInformations(Project projectToMerge, Connection buildPlugin) {
+    public void enhanceWithBuildInformations(Project projectToMerge, BasicCapability buildPlugin) {
         ProjectId projectId = projectToMerge.getProjectId();
         Preconditions.checkState(projectId != null, "projectToComplete must have a projectId");
         try {
@@ -89,7 +89,7 @@ public class ProjectAggregatorService {
         }
     }
 
-    public void enhanceWithQualityAnalysis(Project analyzedProject, Connection plugin, String... metrics) {
+    public void enhanceWithQualityAnalysis(Project analyzedProject, BasicCapability plugin, String... metrics) {
         ProjectId projectId = analyzedProject.getProjectId();
         Build build = analyzedProject.getCompletedBuild();
 
@@ -120,7 +120,8 @@ public class ProjectAggregatorService {
         }
     }
 
-    private void addUnitTestsAnalysis(TestsCapability testsPlugin, ProjectId projectId, TestResult unitTestResultToMerge) {
+    private void addUnitTestsAnalysis(TestsCapability testsPlugin, ProjectId projectId,
+            TestResult unitTestResultToMerge) {
         TestResult unitTestsAnalysis = testsPlugin.analyzeUnitTests(projectId);
         if (unitTestsAnalysis != null && unitTestResultToMerge != null) {
             mergeTestAnalysis(unitTestResultToMerge, unitTestsAnalysis);

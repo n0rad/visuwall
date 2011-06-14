@@ -2,9 +2,8 @@ package net.awired.visuwall.api.plugin.capability;
 
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.plugin.Connection;
 
-public interface TestsCapability extends Connection {
+public interface TestsCapability extends BasicCapability {
     /**
      * Generate the unit tests reporting
      * 

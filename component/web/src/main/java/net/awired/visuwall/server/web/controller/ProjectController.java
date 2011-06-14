@@ -57,13 +57,13 @@ public class ProjectController {
         return wall.getProjectById(projectId);
     }
 
-    @RequestMapping("{projectName}/build")
+    @RequestMapping("{projectId}/build")
     public @ResponseBody
     Build getBuild(@PathVariable String wallName, @PathVariable String projectId) throws Exception {
         throw new NotImplementedException();
     }
 
-    @RequestMapping("{projectName}/build/{buildId}")
+    @RequestMapping("{projectId}/build/{buildId}")
     public @ResponseBody
     Build getBuild(@PathVariable String wallName, @PathVariable String projectId, @PathVariable int buildId)
             throws Exception {

@@ -59,7 +59,7 @@ public class BuildProjectServiceTest {
     public void should_call_merge_for_plugins() {
         List<Connection> connectionPlugins = getConnectionPlugins();
         ConnectedProject project = new ConnectedProject("test");
-        project.setConnectionPlugins(connectionPlugins);
+        project.setCapabilities((List) connectionPlugins);
         projectService.updateProject(project);
 
         Mockito.verify(projectService.projectEnhancerService).enhanceWithBuildInformations(project,

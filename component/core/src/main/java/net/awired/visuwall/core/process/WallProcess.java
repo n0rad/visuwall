@@ -45,7 +45,6 @@ public class WallProcess {
 
     public void rebuildFullWallInformations(Wall wall) {
         rebuildConnectionPluginsInSoftwareAccess(wall);
-
         for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
             Runnable task = getDiscoverAndAddProjectsTask(wall, softwareAccess);
             @SuppressWarnings("unchecked")
@@ -53,13 +52,6 @@ public class WallProcess {
                     softwareAccess.getProjectFinderDelaySecond() * 1000);
             softwareAccess.setProjectFinderTask(futur);
         }
-
-        updatePluginsAssociatedToProjects(wall);
-
-        //TODO
-        //  retreave current project information from softwares in them
-
-        //contains
     }
 
     private void rebuildConnectionPluginsInSoftwareAccess(Wall wall) {
@@ -67,22 +59,6 @@ public class WallProcess {
             VisuwallPlugin<Connection> plugin = pluginService.getPluginFromUrl(softwareAccess.getUrl());
             Connection connection = plugin.getConnection(softwareAccess.getUrl().toString(), null);
             softwareAccess.setConnection(connection);
-        }
-    }
-
-    private void updatePluginsAssociatedToProjects(Wall wall) {
-        for (ConnectedProject project : wall.getProjects()) {
-            for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
-                Connection connectionPlugin = softwareAccess.getConnection();
-                if (project.getConnectionPlugins().contains(connectionPlugin)) {
-                    // skip already associated plugin which is the build one
-                    continue;
-                }
-
-                if (connectionPlugin.contains(project.getProjectId())) {
-                    project.getConnectionPlugins().add(connectionPlugin);
-                }
-            }
         }
     }
 
@@ -96,43 +72,43 @@ public class WallProcess {
                 LOG.info("Running Project Discover task for " + softwareAccess + " in wall " + theWall);
                 if (softwareAccess.getConnection() instanceof BuildCapability) {
                     BuildCapability buildPlugin = (BuildCapability) softwareAccess.getConnection();
-
-                    Set<ProjectId> projectIds = null;
-                    projectIds = softwareAccessService.discoverBuildProjects(softwareAccess);
-
+                    Set<ProjectId> projectIds = softwareAccessService.discoverBuildProjects(softwareAccess);
                     for (ProjectId projectId : projectIds) {
                         if (containsId(wall.getProjects(), projectId)) {
                             // this project is already registered in list
                             continue;
                         }
 
-                        ConnectedProject connectedProject = new ConnectedProject(projectId);
-                        connectedProject.setBuildPlugin(buildPlugin);
-                        connectedProject.getConnectionPlugins().add(buildPlugin);
-
-                        Runnable statusTask = projectService.getStatusTask(connectedProject);
-                        @SuppressWarnings("unchecked")
-                        ScheduledFuture<Object> scheduleTask = taskScheduler.scheduleAtFixedRate(statusTask,
-                                softwareAccess.getProjectStatusDelaySecond() * 1000);
-                        connectedProject.setProjectStatusTask(scheduleTask);
-                        //TODO MOVE
-                        //                    projectAggregatorService.enhanceWithBuildInformations(connectedProject, buildPlugin);
-                        wall.getProjects().add(connectedProject);
+                        createProject(buildPlugin, projectId);
                     }
                 } else {
                     for (ConnectedProject project : wall.getProjects()) {
                         boolean contains = softwareAccess.getConnection().contains(project.getProjectId());
                         if (contains) {
-                            project.getConnectionPlugins().add(softwareAccess.getConnection());
+                            project.getCapabilities().add(softwareAccess.getConnection());
                         }
                     }
                 }
 
             }
+
+            private void createProject(BuildCapability buildPlugin, ProjectId projectId) {
+                ConnectedProject connectedProject = new ConnectedProject(projectId);
+                connectedProject.setBuildPlugin(buildPlugin);
+                connectedProject.getCapabilities().add(buildPlugin);
+                Runnable statusTask = projectService.getStatusTask(connectedProject);
+                @SuppressWarnings("unchecked")
+                ScheduledFuture<Object> scheduleTask = taskScheduler.scheduleAtFixedRate(statusTask,
+                        softwareAccess.getProjectStatusDelaySecond() * 1000);
+                connectedProject.setProjectStatusTask(scheduleTask);
+                //TODO MOVE
+                //                    projectAggregatorService.enhanceWithBuildInformations(connectedProject, buildPlugin);
+                wall.getProjects().add(connectedProject);
+            }
         };
     }
 
-    // TODO move to project lists in wall !?
+    // TODO move to project List<> in wall !?
     private boolean containsId(List<ConnectedProject> projects, ProjectId projectId) {
         for (Project project : projects) {
             if (project.getProjectId().equals(projectId)) {

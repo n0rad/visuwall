@@ -199,12 +199,10 @@ public class SoftwareAccess {
         this.projectFinderTask = projectFinderTask;
     }
 
-    @JsonIgnore
     public void setProjectStatusDelaySecond(int projectStatusDelaySecond) {
         this.projectStatusDelaySecond = projectStatusDelaySecond;
     }
 
-    @JsonIgnore
     public int getProjectStatusDelaySecond() {
         return projectStatusDelaySecond;
     }
