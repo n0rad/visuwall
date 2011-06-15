@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.hudsonclient.exception;
+package net.awired.visuwall.common.client;
 
 import com.sun.jersey.api.client.UniformInterfaceException;
 

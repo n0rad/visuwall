@@ -18,8 +18,9 @@ package net.awired.visuwall.teamcityclient;
 
 import java.util.List;
 
+import net.awired.visuwall.common.client.GenericSoftwareClient;
+import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
-import net.awired.visuwall.teamcityclient.exception.ResourceNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityBuildListNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityBuildNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectNotFoundException;
@@ -30,17 +31,14 @@ import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProjects;
 
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
 
-public class TeamCityJerseyClient {
+public class TeamCityFinder {
 
-	private Client client;
+	private GenericSoftwareClient client;
 
 	private TeamCityUrlBuilder urlBuilder;
 
-	public TeamCityJerseyClient(Client client, TeamCityUrlBuilder urlBuilder) {
+	public TeamCityFinder(GenericSoftwareClient client, TeamCityUrlBuilder urlBuilder) {
 		this.client = client;
 		this.urlBuilder = urlBuilder;
 	}
@@ -48,8 +46,7 @@ public class TeamCityJerseyClient {
 	public List<TeamCityProject> getProjects() throws TeamCityProjectsNotFoundException {
 		try {
 			String projectsUrl = urlBuilder.getProjects();
-			WebResource resource = resource(projectsUrl);
-			TeamCityProjects teamCityProjects = resource.get(TeamCityProjects.class);
+			TeamCityProjects teamCityProjects = client.resource(projectsUrl, TeamCityProjects.class);
 			return teamCityProjects.getProjects();
 		} catch (ResourceNotFoundException e) {
 			throw new TeamCityProjectsNotFoundException("Projects have not been found", e);
@@ -60,8 +57,7 @@ public class TeamCityJerseyClient {
 		Preconditions.checkNotNull(projectId, "projectId is mandatory");
 		try {
 			String projectUrl = urlBuilder.getProject(projectId);
-			WebResource resource = resource(projectUrl);
-			TeamCityProject teamCityProject = resource.get(TeamCityProject.class);
+			TeamCityProject teamCityProject = client.resource(projectUrl, TeamCityProject.class);
 			return teamCityProject;
 		} catch (ResourceNotFoundException e) {
 			throw new TeamCityProjectNotFoundException("Project #" + projectId + " has not been found", e);
@@ -72,8 +68,7 @@ public class TeamCityJerseyClient {
 		Preconditions.checkArgument(buildNumber >= 0, "buildNumber must be >= 0");
 		try {
 			String buildUrl = urlBuilder.getBuild(buildNumber);
-			WebResource resource = resource(buildUrl);
-			TeamCityBuild teamCityBuild = resource.get(TeamCityBuild.class);
+			TeamCityBuild teamCityBuild = client.resource(buildUrl, TeamCityBuild.class);
 			return teamCityBuild;
 		} catch (ResourceNotFoundException e) {
 			throw new TeamCityBuildNotFoundException("Build #" + buildNumber + " has not been found", e);
@@ -84,20 +79,11 @@ public class TeamCityJerseyClient {
 		Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
 		try {
 			String buildListUrl = urlBuilder.getBuildList(buildTypeId);
-			WebResource resource = resource(buildListUrl);
-			TeamCityBuilds teamCityBuilds = resource.get(TeamCityBuilds.class);
+			TeamCityBuilds teamCityBuilds = client.resource(buildListUrl, TeamCityBuilds.class);
 			return teamCityBuilds;
 		} catch (ResourceNotFoundException e) {
 			throw new TeamCityBuildListNotFoundException("Build list of buildTypeId " + buildTypeId
 			        + " has not been found", e);
-		}
-	}
-
-	private WebResource resource(String url) throws ResourceNotFoundException {
-		try {
-			return client.resource(url);
-		} catch (UniformInterfaceException e) {
-			throw new ResourceNotFoundException(e);
 		}
 	}
 

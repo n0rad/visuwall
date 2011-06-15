@@ -14,10 +14,14 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.bambooclient;
+package net.awired.visuwall.bambooclient.exception;
 
 public class BambooProjectNotFoundException extends Exception {
 
-    private static final long serialVersionUID = 23444963844957734L;
+	private static final long serialVersionUID = 23444963844957734L;
+
+	public BambooProjectNotFoundException(String msg) {
+		super(msg);
+	}
 
 }

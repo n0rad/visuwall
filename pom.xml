@@ -34,6 +34,7 @@
 	</parent>
 
 	<modules>
+		<module>plugins/common-client</module>
 		<module>plugins/bambooclient</module>
 		<module>plugins/hudsonclient</module>
 		<module>plugins/teamcityclient</module>
@@ -127,6 +128,11 @@
                         </dependency>
 
 			<!-- clients -->
+			<dependency>
+                                <groupId>net.awired.visuwall</groupId>
+                                <artifactId>common-client</artifactId>
+                                <version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-hudsonclient</artifactId>

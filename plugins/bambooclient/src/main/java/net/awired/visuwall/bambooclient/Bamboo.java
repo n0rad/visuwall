@@ -19,269 +19,268 @@ package net.awired.visuwall.bambooclient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import net.awired.visuwall.bambooclient.builder.BambooUrlBuilder;
 import net.awired.visuwall.bambooclient.domain.BambooBuild;
 import net.awired.visuwall.bambooclient.domain.BambooProject;
+import net.awired.visuwall.bambooclient.exception.BambooBuildNotFoundException;
+import net.awired.visuwall.bambooclient.exception.BambooBuildNumberNotFoundException;
+import net.awired.visuwall.bambooclient.exception.BambooProjectNotFoundException;
+import net.awired.visuwall.bambooclient.exception.BambooStateNotFoundException;
 import net.awired.visuwall.bambooclient.rest.Build;
 import net.awired.visuwall.bambooclient.rest.Builds;
 import net.awired.visuwall.bambooclient.rest.Plan;
 import net.awired.visuwall.bambooclient.rest.Plans;
 import net.awired.visuwall.bambooclient.rest.Result;
 import net.awired.visuwall.bambooclient.rest.Results;
+import net.awired.visuwall.common.client.GenericSoftwareClient;
+import net.awired.visuwall.common.client.ResourceNotFoundException;
+
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
 
 public class Bamboo {
 
-    private Client client;
+	private BambooUrlBuilder bambooUrlBuilder;
 
-    private BambooUrlBuilder bambooUrlBuilder;
+	private GenericSoftwareClient client;
 
-    private static final Logger LOG = LoggerFactory.getLogger(Bamboo.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Bamboo.class);
 
-    public Bamboo(String bambooUrl) {
-        client = Client.create();
-        bambooUrlBuilder = new BambooUrlBuilder(bambooUrl);
+	public Bamboo(String bambooUrl) {
+		bambooUrlBuilder = new BambooUrlBuilder(bambooUrl);
+		if (LOG.isInfoEnabled()) {
+			LOG.info("Initialize bamboo with url " + bambooUrl);
+		}
+	}
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Initialize bamboo with url " + bambooUrl);
-        }
-    }
+	public List<BambooProject> findAllProjects() {
+		String projectsUrl = bambooUrlBuilder.getAllProjectsUrl();
+		List<BambooProject> projects = new ArrayList<BambooProject>();
+		try {
+			Plans plans = client.resource(projectsUrl, Plans.class);
+			projects.addAll(createProjectsFrom(plans));
+		} catch (ResourceNotFoundException e) {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug(e.getMessage(), e);
+			}
+		}
+		return projects;
+	}
 
-    public List<BambooProject> findAllProjects() {
-        String projectsUrl = bambooUrlBuilder.getAllProjectsUrl();
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("All project url : " + projectsUrl);
-        }
-        WebResource bambooResource = client.resource(projectsUrl);
-        Plans plans = bambooResource.get(Plans.class);
+	public BambooProject findProject(String projectKey) throws BambooProjectNotFoundException {
+		Preconditions.checkNotNull(projectKey, "projectKey is a mandatory parameter");
+		try {
+			String projectUrl = bambooUrlBuilder.getProjectUrl(projectKey);
+			Results results = client.resource(projectUrl, Results.class);
 
-        List<BambooProject> projects = new ArrayList<BambooProject>();
-        projects.addAll(createProjectsFrom(plans));
+			BambooProject project = createProjectFrom(results.results.get(0).result.get(0));
+			project.setName(projectKey);
 
-        return projects;
-    }
+			int[] buildNumbers = getBuildNumbers(results.results.get(0).result);
+			project.setBuildNumbers(buildNumbers);
 
-    private List<BambooProject> createProjectsFrom(Plans plans) {
-        Preconditions.checkNotNull(plans, "plans");
+			String isBuildingUrl = bambooUrlBuilder.getIsBuildingUrl(projectKey);
+			Plan plan = client.resource(isBuildingUrl, Plan.class);
+			project.setBuilding(plan.isBuilding);
+			return project;
+		} catch (ResourceNotFoundException e) {
+			throw new BambooProjectNotFoundException("Can't find bamboo project with projectKey " + projectKey);
+		}
+	}
 
-        List<BambooProject> projects = new ArrayList<BambooProject>();
-        if (plans.plan != null) {
-            for (Plan plan : plans.plan) {
-                projects.add(createProjectFrom(plan));
-            }
-        }
-        if (plans.plans != null) {
-            projects.addAll(createProjectsFrom(plans.plans));
-        }
-        return projects;
-    }
+	private int[] getBuildNumbers(List<Result> results) {
+		int[] buildNumbers = new int[results.size()];
 
-    private BambooProject createProjectFrom(Plan plan) {
-        BambooProject project = new BambooProject();
-        project.setName(plan.name);
-        project.setKey(plan.key);
-        project.setLink(plan.link.href);
-        return project;
-    }
+		for (int i = 0; i < results.size(); i++) {
+			buildNumbers[i] = results.get(i).number;
+		}
 
-    private BambooProject createProjectFrom(Result result) {
-        BambooProject project = new BambooProject();
-        BambooBuild build = createBuildFrom(result);
-        project.setCurrentBuild(build);
-        return project;
-    }
+		return buildNumbers;
+	}
 
-    public BambooProject findProject(String projectKey) {
-        Preconditions.checkNotNull(projectKey, "projectKey is a mandatory parameter");
+	public int getLastBuildNumber(String projectName) throws BambooBuildNumberNotFoundException {
+		checkProjectName(projectName);
+		try {
+			String lastBuildUrl = bambooUrlBuilder.getLatestBuildResult(projectName);
+			Results results = client.resource(lastBuildUrl, Results.class);
+			return results.results.get(0).result.get(0).number;
+		} catch (ResourceNotFoundException e) {
+			throw new BambooBuildNumberNotFoundException(e);
+		}
+	}
 
-        String projectUrl = bambooUrlBuilder.getProjectUrl(projectKey);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Project url : " + projectUrl);
-        }
-        WebResource bambooResource = client.resource(projectUrl);
-        Results results = bambooResource.get(Results.class);
+	public BambooBuild findBuild(String projectName, int buildNumber) throws BambooBuildNotFoundException {
+		checkProjectName(projectName);
+		try {
+			String buildUrl = bambooUrlBuilder.getBuildUrl(projectName, buildNumber);
+			Result result = client.resource(buildUrl, Result.class);
+			BambooBuild build = createBuildFrom(result);
+			return build;
+		} catch (ResourceNotFoundException e) {
+			throw new BambooBuildNotFoundException(e.getMessage(), e);
+		}
+	}
 
-        BambooProject project = createProjectFrom(results.results.get(0).result.get(0));
-        project.setName(projectKey);
+	private void checkProjectName(String projectName) {
+		Preconditions.checkNotNull(projectName, "projectName");
+	}
 
-        int[] buildNumbers = getBuildNumbers(results.results.get(0).result);
-        project.setBuildNumbers(buildNumbers);
+	private BambooBuild createBuildFrom(Result result) {
+		BambooBuild bambooBuild = new BambooBuild();
+		bambooBuild.setBuildNumber(result.number);
+		bambooBuild.setDuration(result.buildDuration.longValue());
+		bambooBuild.setStartTime(result.buildStartedTime);
+		bambooBuild.setState(result.state);
+		bambooBuild.setPassCount(result.successfulTestCount);
+		bambooBuild.setFailCount(result.failedTestCount);
+		return bambooBuild;
+	}
 
-        String isBuildingUrl = bambooUrlBuilder.getIsBuildingUrl(projectKey);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("IsBuilding url : " + isBuildingUrl);
-        }
-        bambooResource = client.resource(isBuildingUrl);
-        Plan plan = bambooResource.get(Plan.class);
-        project.setBuilding(plan.isBuilding);
-        return project;
-    }
+	public String getState(String projectName) throws BambooStateNotFoundException {
+		checkProjectName(projectName);
+		try {
+			String lastBuildUrl = bambooUrlBuilder.getLastBuildUrl();
+			int lastBuildNumber = getLastBuildNumber(projectName);
+			String key = projectName + "-" + lastBuildNumber;
 
-    private int[] getBuildNumbers(List<Result> results) {
-        int[] buildNumbers = new int[results.size()];
+			Builds builds = client.resource(lastBuildUrl, Builds.class);
+			List<Build> allBuilds = builds.builds.get(0).build;
+			for (Build build : allBuilds) {
+				if (key.equals(build.key)) {
+					return build.state;
+				}
+			}
+		} catch (ResourceNotFoundException e) {
+			throw new BambooStateNotFoundException("Not state found for projectName: " + projectName);
+		} catch (BambooBuildNumberNotFoundException e) {
+			throw new BambooStateNotFoundException("Not state found for projectName: " + projectName);
+		}
+		throw new BambooStateNotFoundException("Not state found for projectName: " + projectName);
+	}
 
-        for (int i = 0; i < results.size(); i++) {
-            buildNumbers[i] = results.get(i).number;
-        }
+	public Date getEstimatedFinishTime(String projectName) throws BambooProjectNotFoundException {
+		checkProjectName(projectName);
 
-        return buildNumbers;
-    }
+		BambooProject project = findProject(projectName);
+		BambooBuild build = project.getCurrentBuild();
+		Date startTime = build.getStartTime();
+		long averageBuildDurationTime = getAverageBuildDurationTime(projectName);
+		DateTime estimatedFinishTime = new DateTime(startTime.getTime()).plus(averageBuildDurationTime);
 
-    public int getLastBuildNumber(String projectName) {
-        checkProjectName(projectName);
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Estimated finish time of project " + projectName + " is " + estimatedFinishTime + " ms");
+		}
 
-        String lastBuildUrl = bambooUrlBuilder.getLatestBuildResult(projectName);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Last build url : " + lastBuildUrl);
-        }
-        WebResource bambooResource = client.resource(lastBuildUrl);
-        Results results = bambooResource.get(Results.class);
-        return results.results.get(0).result.get(0).number;
-    }
+		return estimatedFinishTime.toDate();
+	}
 
-    public BambooBuild findBuild(String projectName, int buildNumber) throws BambooBuildNotFoundException {
-        checkProjectName(projectName);
-        String buildUrl = bambooUrlBuilder.getBuildUrl(projectName, buildNumber);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Build url : " + buildUrl);
-        }
-        WebResource bambooResource = client.resource(buildUrl);
-        Result result = bambooResource.get(Result.class);
-        BambooBuild build = createBuildFrom(result);
-        return build;
-    }
+	public long getAverageBuildDurationTime(String projectName) throws BambooProjectNotFoundException {
+		BambooProject bambooProject = findProject(projectName);
 
-    private void checkProjectName(String projectName) {
-        Preconditions.checkNotNull(projectName, "projectName");
-    }
+		long averageTime;
 
-    private BambooBuild createBuildFrom(Result result) {
-        BambooBuild bambooBuild = new BambooBuild();
-        bambooBuild.setBuildNumber(result.number);
-        bambooBuild.setDuration(result.buildDuration.longValue());
-        bambooBuild.setStartTime(result.buildStartedTime);
-        bambooBuild.setState(result.state);
-        bambooBuild.setPassCount(result.successfulTestCount);
-        bambooBuild.setFailCount(result.failedTestCount);
-        return bambooBuild;
-    }
+		if (isNeverSuccessful(bambooProject)) {
+			averageTime = maxDuration(bambooProject);
+		} else {
+			averageTime = computeAverageBuildDuration(bambooProject);
+		}
 
-    public String getState(String projectName) {
-        checkProjectName(projectName);
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Average build time of " + projectName + " is " + averageTime + " ms");
+		}
 
-        String lastBuildUrl = bambooUrlBuilder.getLastBuildUrl();
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Last build url : " + lastBuildUrl);
-        }
+		return averageTime;
+	}
 
-        int lastBuildNumber = getLastBuildNumber(projectName);
-        String key = projectName + "-" + lastBuildNumber;
+	private long computeAverageBuildDuration(BambooProject bambooProject) {
+		String projectName = bambooProject.getName();
+		float sumBuildDurationTime = 0;
+		int[] buildNumbers = bambooProject.getBuildNumbers();
 
-        WebResource bambooResource = client.resource(lastBuildUrl);
-        Builds builds = bambooResource.get(Builds.class);
-        List<Build> allBuilds = builds.builds.get(0).build;
-        for (Build build : allBuilds) {
-            if (key.equals(build.key)) {
-                return build.state;
-            }
-        }
-        throw new RuntimeException("Not state found for projectName: " + projectName);
-    }
+		for (int buildNumber : buildNumbers) {
+			try {
+				BambooBuild build = findBuild(projectName, buildNumber);
+				if (build.isSuccessful()) {
+					sumBuildDurationTime += build.getDuration();
+				}
+			} catch (BambooBuildNotFoundException e) {
+				if (LOG.isDebugEnabled()) {
+					LOG.debug(e.getMessage());
+				}
+			}
+		}
 
-    public Date getEstimatedFinishTime(String projectName) throws BambooProjectNotFoundException {
-        checkProjectName(projectName);
+		return (long) (sumBuildDurationTime / buildNumbers.length);
 
-        BambooProject project = findProject(projectName);
-        BambooBuild build = project.getCurrentBuild();
-        Date startTime = build.getStartTime();
-        long averageBuildDurationTime = getAverageBuildDurationTime(projectName);
-        DateTime estimatedFinishTime = new DateTime(startTime.getTime()).plus(averageBuildDurationTime);
+	}
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Estimated finish time of project " + projectName + " is " + estimatedFinishTime + " ms");
-        }
+	private long maxDuration(BambooProject bambooProject) {
+		long max = 0;
+		int[] buildNumbers = bambooProject.getBuildNumbers();
 
-        return estimatedFinishTime.toDate();
-    }
+		for (int buildNumber : buildNumbers) {
+			try {
+				BambooBuild build = findBuild(bambooProject.getName(), buildNumber);
+				max = Math.max(max, build.getDuration());
+			} catch (BambooBuildNotFoundException e) {
+				if (LOG.isDebugEnabled()) {
+					LOG.debug(e.getMessage());
+				}
+			}
+		}
 
-    public long getAverageBuildDurationTime(String projectName) throws BambooProjectNotFoundException {
-        BambooProject bambooProject = findProject(projectName);
+		return max;
 
-        long averageTime;
+	}
 
-        if (isNeverSuccessful(bambooProject)) {
-            averageTime = maxDuration(bambooProject);
-        } else {
-            averageTime = computeAverageBuildDuration(bambooProject);
-        }
+	private boolean isNeverSuccessful(BambooProject bambooProject) throws BambooProjectNotFoundException {
+		int[] buildNumbers = bambooProject.getBuildNumbers();
+		for (int buildNumber : buildNumbers) {
+			try {
+				BambooBuild build = findBuild(bambooProject.getName(), buildNumber);
+				if (build.isSuccessful()) {
+					return false;
+				}
+			} catch (BambooBuildNotFoundException e) {
+				if (LOG.isDebugEnabled()) {
+					LOG.debug(e.getMessage());
+				}
+			}
+		}
+		return true;
+	}
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Average build time of " + projectName + " is " + averageTime + " ms");
-        }
+	private List<BambooProject> createProjectsFrom(Plans plans) {
+		Preconditions.checkNotNull(plans, "plans");
 
-        return averageTime;
-    }
+		List<BambooProject> projects = new ArrayList<BambooProject>();
+		if (plans.plan != null) {
+			for (Plan plan : plans.plan) {
+				projects.add(createProjectFrom(plan));
+			}
+		}
+		if (plans.plans != null) {
+			projects.addAll(createProjectsFrom(plans.plans));
+		}
+		return projects;
+	}
 
-    private long computeAverageBuildDuration(BambooProject bambooProject) {
-        String projectName = bambooProject.getName();
-        float sumBuildDurationTime = 0;
-        int[] buildNumbers = bambooProject.getBuildNumbers();
+	private BambooProject createProjectFrom(Plan plan) {
+		BambooProject project = new BambooProject();
+		project.setName(plan.name);
+		project.setKey(plan.key);
+		project.setLink(plan.link.href);
+		return project;
+	}
 
-        for (int buildNumber : buildNumbers) {
-            try {
-                BambooBuild build = findBuild(projectName, buildNumber);
-                if (build.isSuccessful()) {
-                    sumBuildDurationTime += build.getDuration();
-                }
-            } catch (BambooBuildNotFoundException e) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(e.getMessage());
-                }
-            }
-        }
-
-        return (long) (sumBuildDurationTime / buildNumbers.length);
-
-    }
-
-    private long maxDuration(BambooProject bambooProject) {
-        long max = 0;
-        int[] buildNumbers = bambooProject.getBuildNumbers();
-
-        for (int buildNumber : buildNumbers) {
-            try {
-                BambooBuild build = findBuild(bambooProject.getName(), buildNumber);
-                max = Math.max(max, build.getDuration());
-            } catch (BambooBuildNotFoundException e) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(e.getMessage());
-                }
-            }
-        }
-
-        return max;
-
-    }
-
-    private boolean isNeverSuccessful(BambooProject bambooProject) throws BambooProjectNotFoundException {
-        int[] buildNumbers = bambooProject.getBuildNumbers();
-        for (int buildNumber : buildNumbers) {
-            try {
-                BambooBuild build = findBuild(bambooProject.getName(), buildNumber);
-                if (build.isSuccessful()) {
-                    return false;
-                }
-            } catch (BambooBuildNotFoundException e) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(e.getMessage());
-                }
-            }
-        }
-        return true;
-    }
+	private BambooProject createProjectFrom(Result result) {
+		BambooProject project = new BambooProject();
+		BambooBuild build = createBuildFrom(result);
+		project.setCurrentBuild(build);
+		return project;
+	}
 }

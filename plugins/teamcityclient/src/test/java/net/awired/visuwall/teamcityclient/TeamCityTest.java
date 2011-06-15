@@ -31,6 +31,8 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import net.awired.visuwall.common.client.GenericSoftwareClient;
+import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
 import net.awired.visuwall.teamcityclient.exception.TeamCityBuildNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectNotFoundException;
@@ -51,7 +53,6 @@ import net.awired.visuwall.teamcityclient.resource.TeamCityVcsRoot;
 
 import org.junit.Test;
 
-import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 
 public class TeamCityTest {
@@ -59,10 +60,10 @@ public class TeamCityTest {
 	@Test
 	public void should_list_all_project_names() throws TeamCityProjectsNotFoundException {
 		TeamCityProjects teamcityProjects = createProjects();
-		TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProjects);
+		TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProjects);
 
 		TeamCity teamcity = new TeamCity();
-		teamcity.teamcityJerseyClient = teamcityJerseyClient;
+		teamcity.teamcityFinder = teamcityJerseyClient;
 
 		List<String> projectNames = teamcity.findProjectNames();
 		assertFalse(projectNames.isEmpty());
@@ -74,10 +75,10 @@ public class TeamCityTest {
 	@Test
 	public void should_find_all_project() throws TeamCityProjectsNotFoundException {
 		TeamCityProjects teamcityProjects = createProjects();
-		TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProjects);
+		TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProjects);
 
 		TeamCity teamcity = new TeamCity();
-		teamcity.teamcityJerseyClient = teamcityJerseyClient;
+		teamcity.teamcityFinder = teamcityJerseyClient;
 
 		List<TeamCityProject> projects = teamcity.findAllProjects();
 		assertFalse(projects.isEmpty());
@@ -91,10 +92,10 @@ public class TeamCityTest {
 	@Test
 	public void should_load_project() throws TeamCityProjectNotFoundException {
 		TeamCityProject teamcityProject = createProject();
-		TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProject);
+		TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProject);
 
 		TeamCity teamcity = new TeamCity();
-		teamcity.teamcityJerseyClient = teamcityJerseyClient;
+		teamcity.teamcityFinder = teamcityJerseyClient;
 
 		TeamCityProject project = teamcity.findProject("project54");
 		assertEquals("http://teamcity.jetbrains.com/project.html?projectId=project54", project.getWebUrl());
@@ -108,10 +109,10 @@ public class TeamCityTest {
 	@Test
 	public void should_load_project_with_build_types() throws TeamCityProjectNotFoundException {
 		TeamCityProject teamcityProject = createProject();
-		TeamCityJerseyClient teamcityJerseyClient = prepareClientFor(teamcityProject);
+		TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProject);
 
 		TeamCity teamcity = new TeamCity();
-		teamcity.teamcityJerseyClient = teamcityJerseyClient;
+		teamcity.teamcityFinder = teamcityJerseyClient;
 
 		TeamCityProject project = teamcity.findProject("project54");
 
@@ -133,7 +134,7 @@ public class TeamCityTest {
 		TeamCityBuild teamcityBuild = createBuild();
 
 		TeamCity teamcity = new TeamCity();
-		teamcity.teamcityJerseyClient = prepareClientFor(teamcityBuild);
+		teamcity.teamcityFinder = prepareClientFor(teamcityBuild);
 
 		TeamCityBuild build = teamcity.findBuild(47068);
 
@@ -207,16 +208,20 @@ public class TeamCityTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	private TeamCityJerseyClient prepareClientFor(Object o) {
+	private TeamCityFinder prepareClientFor(Object o) {
 		WebResource resource = mock(WebResource.class);
 		when(resource.get(any(Class.class))).thenReturn(o);
 
-		Client client = mock(Client.class);
-		when(client.resource(anyString())).thenReturn(resource);
+		GenericSoftwareClient client = mock(GenericSoftwareClient.class);
+		try {
+			when(client.resource(anyString(), any(Class.class))).thenReturn(o);
+		} catch (ResourceNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 
 		TeamCityUrlBuilder teamCityUrlBuilder = mock(TeamCityUrlBuilder.class);
 
-		return new TeamCityJerseyClient(client, teamCityUrlBuilder);
+		return new TeamCityFinder(client, teamCityUrlBuilder);
 	}
 
 	private TeamCityBuild createBuild() {

@@ -21,8 +21,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.awired.visuwall</groupId>
-	<artifactId>visuwall-bambooclient</artifactId>
-	<name>Visuwall - Bamboo Client</name>
+	<artifactId>common-client</artifactId>
+	<name>Visuwall - Common Client</name>
 
 	<parent>
 		<groupId>net.awired.visuwall</groupId>
@@ -44,18 +44,9 @@
 			<version>${guava.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>0.9.26</version>
-		</dependency>
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>1.6.2</version>
-		</dependency>
-		<dependency>
-			<groupId>net.awired.visuwall</groupId>
-			<artifactId>common-client</artifactId>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>${jersey.client.version}</version>
 		</dependency>
 	</dependencies>
 
