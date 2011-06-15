@@ -163,6 +163,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 		
 		var classes = ['failureCheck', 'successCheck', 'loadingCheck', 'warningCheck'];
 		var domObj = $('#' + $(this).attr('id').replace(".", "\\.") + "check", $(this).parent());
+		var tabContent = $(this).parent();
 		
 		if (!$(this).val().trim()) {
 			domObj.switchClasses(classes, '', 1);			
@@ -243,7 +244,7 @@ var ff = '				<table class="softwareInfo">'
 			}
 			
 			
-			var projectNamesFormElem = $('SELECT:regex(id,softwareAccesses.*\.projectNames)');
+			var projectNamesFormElem = $('SELECT:regex(id,softwareAccesses.*\.projectNames)', tabContent);
 			
 			var oldVal = projectNamesFormElem.val();
 			projectNamesFormElem.empty();
