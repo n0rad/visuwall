@@ -61,8 +61,15 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 						var childrens = newContent.children();
 						for (var i = 0; i < childrens.length; i++) {
 							$(ui.panel).append(childrens[i]);
+
+							// projects selector
+							if ($(childrens[i]).is(".projects")) {
+								$(childrens[i]).accordion({
+									autoHeight: false,
+									navigation: true
+								});
+							}
 						}
-						var tt;
 					},
 					remove : function(event, ui) {
 						// removeFunction(event, ui.panel);
