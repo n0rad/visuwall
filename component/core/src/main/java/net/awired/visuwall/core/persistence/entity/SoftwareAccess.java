@@ -42,8 +42,8 @@ public class SoftwareAccess {
     private String login;
     private String password;
     private boolean allProject;
-    private int projectFinderDelaySecond = 30;
-    private int projectStatusDelaySecond = 10;
+    private Integer projectFinderDelaySecond = 30;
+    private Integer projectStatusDelaySecond = 10;
 
     @CollectionOfElements
     private List<String> projectNames = new AutoPopulatingList<String>(String.class);
@@ -181,11 +181,11 @@ public class SoftwareAccess {
         this.connection = connection;
     }
 
-    public int getProjectFinderDelaySecond() {
+    public Integer getProjectFinderDelaySecond() {
         return projectFinderDelaySecond;
     }
 
-    public void setProjectFinderDelaySecond(int projectFinderDelaySecond) {
+    public void setProjectFinderDelaySecond(Integer projectFinderDelaySecond) {
         this.projectFinderDelaySecond = projectFinderDelaySecond;
     }
 
@@ -199,11 +199,11 @@ public class SoftwareAccess {
         this.projectFinderTask = projectFinderTask;
     }
 
-    public void setProjectStatusDelaySecond(int projectStatusDelaySecond) {
+    public void setProjectStatusDelaySecond(Integer projectStatusDelaySecond) {
         this.projectStatusDelaySecond = projectStatusDelaySecond;
     }
 
-    public int getProjectStatusDelaySecond() {
+    public Integer getProjectStatusDelaySecond() {
         return projectStatusDelaySecond;
     }
 
