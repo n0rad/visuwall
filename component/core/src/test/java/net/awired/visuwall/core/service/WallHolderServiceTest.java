@@ -16,7 +16,6 @@
 
 package net.awired.visuwall.core.service;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
@@ -29,7 +28,9 @@ import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
 import net.awired.visuwall.core.persistence.dao.WallDAO;
 import net.awired.visuwall.core.persistence.entity.Wall;
+import net.awired.visuwall.core.process.WallProcess;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -50,11 +51,11 @@ public class WallHolderServiceTest {
         // when(entityManager.createNamedQuery(Matchers.anyString())).thenReturn(query);
 
         WallDAO wallService = Mockito.mock(WallDAO.class);
-        BuildProjectService projectService = Mockito.mock(BuildProjectService.class);
-        PluginService pluginService = Mockito.mock(PluginService.class);
+        WallProcess wallProcess = Mockito.mock(WallProcess.class);
 
         wallHolderService = new WallHolderService();
         wallHolderService.wallDAO = wallService;
+        wallHolderService.wallProcess = wallProcess;
         wallHolderService.init();
     }
 
@@ -69,18 +70,38 @@ public class WallHolderServiceTest {
     }
 
     @Test
-    public void should_add_a_wall() throws NotCreatedException {
+    public void should_add_a_wall() throws NotCreatedException, NotCreatedException, NotFoundException {
+        WallDAO wallService = Mockito.mock(WallDAO.class);
+        WallProcess wallProcess = Mockito.mock(WallProcess.class);
         Wall wall = new Wall("mywall");
+        when(wallService.update(wall)).thenReturn(wall);
+
+        wallHolderService = new WallHolderService();
+        wallHolderService.wallDAO = wallService;
+        wallHolderService.wallProcess = wallProcess;
+        wallHolderService.init();
+
         wallHolderService.update(wall);
+        Wall findWall = wallHolderService.find(wall.getName());
+        Assert.assertEquals(wall, findWall);
     }
 
     @Test
     public void should_find_a_wall() throws NotFoundException, NotCreatedException {
         String wallName = "wallName";
-        wallHolderService.update(new Wall(wallName));
-        Wall wall = wallHolderService.find(wallName);
 
-        assertNotNull(wall);
+        WallDAO wallService = Mockito.mock(WallDAO.class);
+        WallProcess wallProcess = Mockito.mock(WallProcess.class);
+        Wall wall = new Wall(wallName);
+        when(wallService.update(wall)).thenReturn(wall);
+
+        wallHolderService = new WallHolderService();
+        wallHolderService.wallDAO = wallService;
+        wallHolderService.wallProcess = wallProcess;
+        wallHolderService.init();
+        wallHolderService.update(wall);
+        Wall findwall = wallHolderService.find(wallName);
+        assertNotNull(findwall);
     }
 
     @Test(expected = NotFoundException.class)
@@ -90,8 +111,20 @@ public class WallHolderServiceTest {
 
     @Test
     public void should_find_wall_names() throws NotCreatedException {
-        wallHolderService.update(new Wall("wall1"));
-        wallHolderService.update(new Wall("wall2"));
+        WallDAO wallService = Mockito.mock(WallDAO.class);
+        WallProcess wallProcess = Mockito.mock(WallProcess.class);
+        Wall wall1 = new Wall("wall1");
+        Wall wall2 = new Wall("wall2");
+        when(wallService.update(wall1)).thenReturn(wall1);
+        when(wallService.update(wall2)).thenReturn(wall2);
+
+        wallHolderService = new WallHolderService();
+        wallHolderService.wallDAO = wallService;
+        wallHolderService.wallProcess = wallProcess;
+        wallHolderService.init();
+
+        wallHolderService.update(wall1);
+        wallHolderService.update(wall2);
 
         Set<String> wallNames = wallHolderService.getWallNames();
         assertTrue(wallNames.contains("wall1"));
@@ -112,12 +145,4 @@ public class WallHolderServiceTest {
         //        assertFalse(status.isEmpty());
     }
 
-    @Test
-    public void should_return_walls() throws NotCreatedException {
-        assertTrue(wallHolderService.getWalls().isEmpty());
-
-        wallHolderService.update(new Wall("wall"));
-
-        assertFalse(wallHolderService.getWalls().isEmpty());
-    }
 }

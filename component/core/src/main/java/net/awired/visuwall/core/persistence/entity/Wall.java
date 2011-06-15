@@ -91,14 +91,14 @@ public final class Wall extends IdEntityImpl<Long> {
         throw new ProjectNotFoundException("project with this id not found : " + projectId);
     }
 
-    public ConnectedProject getProjectById(String projectId) throws ProjectNotFoundException {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+    public ConnectedProject getProjectById(String id) throws ProjectNotFoundException {
+        Preconditions.checkNotNull(id, "projectId is mandatory");
         for (ConnectedProject project : projects) {
-            if (projectId.equals(project.getId())) {
+            if (id.equals(project.getId())) {
                 return project;
             }
         }
-        throw new ProjectNotFoundException("Project not found for this id : " + projectId);
+        throw new ProjectNotFoundException("Project not found for this id : " + id);
     }
 
     @Override
