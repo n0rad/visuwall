@@ -87,6 +87,11 @@ public class WallHolderService implements WallDAO {
     public Wall update(Wall wall) {
         Wall newWall = wallDAO.update(wall);
         wallProcess.rebuildFullWallInformations(newWall);
+        Wall previousWall = WALLS.get(wall.getName());
+        if (previousWall != null) {
+            previousWall.close();
+            WALLS.remove(previousWall.getName());
+        }
         WALLS.put(newWall.getName(), newWall);
         return newWall;
     }

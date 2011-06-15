@@ -18,6 +18,7 @@ ajsl.view = new function() {
 	var $this = this;
 	
 	this.formFields = "input, checkbox, select, textarea";
+	this.valueFormFields = "input[type=text], checkbox, select, textarea";
 
 	this.rebuildFormRec = function(form, data, formManager, root, rootMethod) {
 		if (root == undefined) {
@@ -38,15 +39,22 @@ ajsl.view = new function() {
 							+ '[' + i + '].', assertMethodName);
 				}
 			} else {
-				// .trigger('change');
-				$('[name="' + root + formElem + '"]', form).val(data[formElem])
-						.blur().change();
+				var elem = $('[name="' + root + formElem + '"]', form);
+				if (elem.is(':checkbox')) {
+					//TODO change to prop with jquery 1.6
+					elem.attr('checked', data[formElem] == true ? 'checked' : '').blur().change();
+//					elem.prop("checked", );
+				} else {
+					// .trigger('change');
+					elem.val(data[formElem]).blur().change();					
+				}
 			}
 		}
 	};
 
 	this.resetFormValues = function(element) {
-		element.find($this.formFields).val('').blur().change();
+		element.find($this.valueFormFields).val('').blur().change();
+		element.find('input:checkbox').removeAttr('checked').blur().change();
 	};
 
 	this.incrementFormIndexes = function(element) {
