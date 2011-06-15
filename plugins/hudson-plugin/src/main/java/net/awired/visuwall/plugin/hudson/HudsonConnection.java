@@ -40,6 +40,8 @@ import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
+import net.awired.visuwall.plugin.hudson.builder.BuildBuilder;
+import net.awired.visuwall.plugin.hudson.builder.ProjectBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +59,7 @@ public final class HudsonConnection implements Connection, BuildCapability, View
 	Hudson hudson;
 
 	private ProjectBuilder projectBuilder = new ProjectBuilder();
+	private BuildBuilder buildBuilder = new BuildBuilder();
 
 	private boolean connected;
 
@@ -198,7 +201,7 @@ public final class HudsonConnection implements Connection, BuildCapability, View
 				throw new BuildNotFoundException("Project " + projectId + " has no name");
 			}
 			HudsonBuild build = hudson.findBuild(projectName, buildNumber);
-			return projectBuilder.buildBuildFrom(build);
+			return buildBuilder.createBuildFrom(build);
 		} catch (HudsonBuildNotFoundException e) {
 			throw new BuildNotFoundException(e);
 		} catch (HudsonProjectNotFoundException e) {

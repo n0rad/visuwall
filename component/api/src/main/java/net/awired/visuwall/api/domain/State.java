@@ -3,7 +3,7 @@ package net.awired.visuwall.api.domain;
 import java.util.Arrays;
 
 public enum State {
-    SUCCESS, NEW, ABORTED, FAILURE, UNSTABLE, NOT_BUILT, UNKNOWN;
+	SUCCESS, NEW, ABORTED, FAILURE, UNSTABLE, NOT_BUILT, UNKNOWN;
 
     private static final String STATE_NAMES = Arrays.toString(State.values());
 

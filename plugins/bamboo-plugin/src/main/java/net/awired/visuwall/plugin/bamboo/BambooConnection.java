@@ -18,15 +18,12 @@ package net.awired.visuwall.plugin.bamboo;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
-import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
@@ -38,6 +35,7 @@ import net.awired.visuwall.bambooclient.exception.BambooBuildNotFoundException;
 import net.awired.visuwall.bambooclient.exception.BambooBuildNumberNotFoundException;
 import net.awired.visuwall.bambooclient.exception.BambooProjectNotFoundException;
 import net.awired.visuwall.bambooclient.exception.BambooStateNotFoundException;
+import net.awired.visuwall.plugin.bamboo.builder.BuildBuilder;
 
 import com.google.common.base.Preconditions;
 
@@ -47,12 +45,7 @@ public class BambooConnection implements Connection, BuildCapability {
 
 	private Bamboo bamboo;
 
-	private static final Map<String, State> STATE_MAPPING = new HashMap<String, State>();
-
-	static {
-		STATE_MAPPING.put("Successful", State.SUCCESS);
-		STATE_MAPPING.put("Failed", State.FAILURE);
-	}
+	private BuildBuilder buildBuilder = new BuildBuilder();
 
 	public BambooConnection(String url, String login, String password) {
 		this(url);
@@ -89,45 +82,18 @@ public class BambooConnection implements Connection, BuildCapability {
 		}
 	}
 
-	private String getProjectKey(ProjectId projectId) {
-		return projectId.getId(BAMBOO_ID);
-	}
-
 	@Override
 	public Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
 	        ProjectNotFoundException {
+		checkProjectId(projectId);
+
 		String projectName = getProjectKey(projectId);
 		try {
-			return createBuild(bamboo.findBuild(projectName, buildNumber));
+			BambooBuild bambooBuild = bamboo.findBuild(projectName, buildNumber);
+			return buildBuilder.createFrom(bambooBuild);
 		} catch (BambooBuildNotFoundException e) {
 			throw new BuildNotFoundException(e);
 		}
-	}
-
-	private Build createBuild(BambooBuild bambooBuild) {
-		Build build = new Build();
-		build.setBuildNumber(bambooBuild.getBuildNumber());
-		build.setDuration(bambooBuild.getDuration());
-		build.setStartTime(bambooBuild.getStartTime());
-		build.setState(getState(bambooBuild.getState()));
-		TestResult unitTestResult = createUnitTestResult(bambooBuild);
-		build.setUnitTestResult(unitTestResult);
-		return build;
-	}
-
-	private TestResult createUnitTestResult(BambooBuild bambooBuild) {
-		TestResult unitTestResult = new TestResult();
-		unitTestResult.setFailCount(bambooBuild.getFailCount());
-		unitTestResult.setPassCount(bambooBuild.getPassCount());
-		return unitTestResult;
-	}
-
-	private State getState(String bambooState) {
-		State state = STATE_MAPPING.get(bambooState);
-		if (state == null) {
-			throw new RuntimeException("No state mapping for bambooState: " + bambooState);
-		}
-		return state;
 	}
 
 	@Override
@@ -158,7 +124,7 @@ public class BambooConnection implements Connection, BuildCapability {
 		try {
 			String projectName = getProjectKey(projectId);
 			String bambooState = bamboo.getState(projectName);
-			return getState(bambooState);
+			return States.asVisuwallState(bambooState);
 		} catch (BambooStateNotFoundException e) {
 			throw new ProjectNotFoundException(e);
 		}
@@ -183,16 +149,20 @@ public class BambooConnection implements Connection, BuildCapability {
 
 	@Override
 	public boolean contains(ProjectId projectId) {
-		return false;
+		throw new RuntimeException("Not yet implemented");
 	}
 
 	@Override
 	public List<ProjectId> findProjectsByNames(List<String> names) {
-		return null;
+		throw new RuntimeException("Not yet implemented");
 	}
 
 	@Override
 	public void close() {
+	}
+
+	private String getProjectKey(ProjectId projectId) {
+		return projectId.getId(BAMBOO_ID);
 	}
 
 	private void checkProjectId(ProjectId projectId) {

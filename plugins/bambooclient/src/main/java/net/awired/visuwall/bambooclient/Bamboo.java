@@ -46,7 +46,7 @@ public class Bamboo {
 
 	private BambooUrlBuilder bambooUrlBuilder;
 
-	private GenericSoftwareClient client;
+	private GenericSoftwareClient client = new GenericSoftwareClient();
 
 	private static final Logger LOG = LoggerFactory.getLogger(Bamboo.class);
 
