@@ -25,7 +25,7 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
-import net.awired.visuwall.api.plugin.capability.TestsCapability;
+import net.awired.visuwall.api.plugin.capability.TestCapability;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -130,7 +130,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
         testResult.setPassCount(2);
         testResult.setSkipCount(3);
 
-        TestsCapability testsPlugin = Mockito.mock(TestsCapability.class);
+        TestCapability testsPlugin = Mockito.mock(TestCapability.class);
         when(testsPlugin.analyzeUnitTests(projectToEnhance.getProjectId())).thenReturn(testResult);
 
         projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, testsPlugin);
@@ -152,7 +152,7 @@ public class ProjectEnhancerServiceWithQualityPluginTest {
         testResult.setPassCount(2);
         testResult.setSkipCount(3);
 
-        TestsCapability testPlugin = Mockito.mock(TestsCapability.class);
+        TestCapability testPlugin = Mockito.mock(TestCapability.class);
         when(testPlugin.analyzeIntegrationTests(projectToEnhance.getProjectId())).thenReturn(testResult);
 
         projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, testPlugin);

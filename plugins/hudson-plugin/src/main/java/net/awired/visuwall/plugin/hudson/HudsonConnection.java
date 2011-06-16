@@ -109,8 +109,6 @@ public final class HudsonConnection implements Connection, BuildCapability, View
 			}
 			HudsonProject hudsonProject = hudson.findProject(projectName);
 			Project project = projectBuilder.buildProjectFrom(hudsonProject);
-			State state = getState(projectId);
-			project.setState(state);
 			project.addId(HUDSON_ID, projectName);
 			return project;
 		} catch (HudsonProjectNotFoundException e) {
@@ -168,8 +166,8 @@ public final class HudsonConnection implements Connection, BuildCapability, View
 			if (projectName == null) {
 				throw new ProjectNotFoundException("Project " + projectId + " has no name");
 			}
-			String state = hudson.getState(projectName);
-			return State.getStateByName(state);
+			String hudsonState = hudson.getState(projectName);
+			return States.asVisuwallState(hudsonState);
 		} catch (HudsonProjectNotFoundException e) {
 			throw new ProjectNotFoundException(e);
 		}

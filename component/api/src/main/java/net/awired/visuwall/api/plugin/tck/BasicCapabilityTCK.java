@@ -16,4 +16,5 @@ public interface BasicCapabilityTCK {
 
 	void should_find_a_project() throws ProjectNotFoundException;
 
+	void should_get_disable_project() throws ProjectNotFoundException;
 }

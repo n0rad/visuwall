@@ -85,4 +85,11 @@ public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
 
 	}
 
+	@Override
+	@Test
+	@Ignore
+	public void should_get_disable_project() throws ProjectNotFoundException {
+
+	}
+
 }

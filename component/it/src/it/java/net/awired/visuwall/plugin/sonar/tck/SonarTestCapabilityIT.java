@@ -22,16 +22,16 @@ import static org.junit.Assert.assertEquals;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.plugin.Connection;
-import net.awired.visuwall.api.plugin.capability.TestsCapability;
-import net.awired.visuwall.api.plugin.tck.TestsCapabilityTCK;
+import net.awired.visuwall.api.plugin.capability.TestCapability;
+import net.awired.visuwall.api.plugin.tck.TestCapabilityTCK;
 import net.awired.visuwall.plugin.sonar.SonarConnection;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class SonarTestCapabilityIT implements TestsCapabilityTCK {
+public class SonarTestCapabilityIT implements TestCapabilityTCK {
 
-	private static TestsCapability sonar = new SonarConnection();
+	private static TestCapability sonar = new SonarConnection();
 
     @BeforeClass
     public static void init() {
@@ -54,7 +54,7 @@ public class SonarTestCapabilityIT implements TestsCapabilityTCK {
 
     @Test
 	public void should_analyze_integration_tests() {
-		TestsCapability sonar = new SonarConnection();
+		TestCapability sonar = new SonarConnection();
 		((Connection) sonar).connect("http://fluxx.fr.cr:9000", null, null);
 
 		ProjectId projectId = new ProjectId();

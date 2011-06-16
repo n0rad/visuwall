@@ -23,7 +23,7 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
-import net.awired.visuwall.plugin.jenkins.builder.ProjectBuilder;
+import net.awired.visuwall.plugin.jenkins.JenkinsState;
 
 import org.junit.Test;
 
@@ -38,9 +38,11 @@ public class ProjectBuilderTest {
 
         HudsonBuild currentBuild = new HudsonBuild();
         currentBuild.addCommiter(commiterInCurrentBuild);
+		currentBuild.setState(JenkinsState.SUCCESS);
 
         HudsonBuild completedBuild = new HudsonBuild();
         completedBuild.addCommiter(commiterInCompletedBuild);
+		completedBuild.setState(JenkinsState.SUCCESS);
 
         HudsonProject hudsonProject = new HudsonProject();
         hudsonProject.setCurrentBuild(currentBuild);

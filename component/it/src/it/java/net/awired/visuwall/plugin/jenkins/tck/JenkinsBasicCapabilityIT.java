@@ -18,6 +18,7 @@ import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -91,6 +92,13 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
 		projectId.addId(JenkinsConnection.JENKINS_ID, "struts");
 		Project project = jenkins.findProject(projectId);
 		assertNotNull(project);
+	}
+
+	@Override
+	@Test
+	@Ignore
+	public void should_get_disable_project() throws ProjectNotFoundException {
+
 	}
 
 }

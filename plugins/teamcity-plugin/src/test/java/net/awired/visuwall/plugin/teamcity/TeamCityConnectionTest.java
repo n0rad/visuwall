@@ -85,7 +85,7 @@ public class TeamCityConnectionTest {
 
 	@Ignore
 	@Test
-	public void should_find_state_project() throws Exception {
+	public void should_find_state_build() throws Exception {
 		TeamCityBuildItem buildItem = new TeamCityBuildItem();
 		buildItem.setStatus(TeamCityStatus.SUCCESS);
 
@@ -101,9 +101,9 @@ public class TeamCityConnectionTest {
 
 		ProjectId projectId = new ProjectId();
 		projectId.addId(TeamCityConnection.TEAMCITY_ID, "projectId");
-		Project project = connectionPlugin.findProject(projectId);
+		State state = connectionPlugin.getLastBuildState(projectId);
 
-		assertEquals(State.SUCCESS, project.getState());
+		assertEquals(State.SUCCESS, state);
 	}
 
 	private TeamCityConnection createConnectionPlugin() {

@@ -22,7 +22,6 @@ import static org.mockito.Mockito.when;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 
@@ -55,7 +54,6 @@ public class ProjectEnhancerServiceWithBuildPluginTest {
         projectFromBuildPlugin.setCompletedBuild(completedBuild);
         projectFromBuildPlugin.setCurrentBuild(currentBuild);
         projectFromBuildPlugin.setDescription("description");
-        projectFromBuildPlugin.setState(State.UNSTABLE);
 
         ProjectId projectId = projectToEnhance.getProjectId();
         when(buildPlugin.findProject(projectId)).thenReturn(projectFromBuildPlugin);
@@ -65,7 +63,6 @@ public class ProjectEnhancerServiceWithBuildPluginTest {
         assertEquals(completedBuild, projectToEnhance.getCompletedBuild());
         assertEquals(currentBuild, projectToEnhance.getCurrentBuild());
         assertEquals("description", projectToEnhance.getDescription());
-        assertEquals(State.UNSTABLE, projectToEnhance.getState());
         assertEquals("name", projectToEnhance.getName());
     }
 

@@ -36,9 +36,11 @@ public class ProjectBuilderTest {
         HudsonCommiter commiterInCompletedBuild = new HudsonCommiter("commiter2");
 
         HudsonBuild currentBuild = new HudsonBuild();
+		currentBuild.setState(HudsonState.SUCCESS);
         currentBuild.addCommiter(commiterInCurrentBuild);
 
         HudsonBuild completedBuild = new HudsonBuild();
+		completedBuild.setState(HudsonState.SUCCESS);
         completedBuild.addCommiter(commiterInCompletedBuild);
 
         HudsonProject hudsonProject = new HudsonProject();

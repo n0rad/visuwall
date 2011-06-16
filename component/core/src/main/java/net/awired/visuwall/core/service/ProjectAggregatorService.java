@@ -18,21 +18,23 @@ package net.awired.visuwall.core.service;
 
 import java.util.Arrays;
 import java.util.Map.Entry;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
-import net.awired.visuwall.api.plugin.capability.TestsCapability;
+import net.awired.visuwall.api.plugin.capability.TestCapability;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import com.google.common.base.Preconditions;
 
 @Service
@@ -51,7 +53,6 @@ public class ProjectAggregatorService {
                 int[] buildNumbers = project.getBuildNumbers();
                 Build completedBuild = project.getCompletedBuild();
                 Build currentBuild = project.getCurrentBuild();
-                State state = project.getState();
 
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("plugin - " + buildPlugin.getClass().getSimpleName());
@@ -60,7 +61,6 @@ public class ProjectAggregatorService {
                     LOG.debug("buildNumbers:" + Arrays.toString(buildNumbers));
                     LOG.debug("completedBuild:" + completedBuild);
                     LOG.debug("currentBuild: " + currentBuild);
-                    LOG.debug("state:" + state);
                 }
 
                 if (buildNumbers != null) {
@@ -77,9 +77,6 @@ public class ProjectAggregatorService {
                 }
                 if (StringUtils.isNotBlank(projectName)) {
                     projectToMerge.setName(projectName);
-                }
-                if (state != null) {
-                    projectToMerge.setState(state);
                 }
             }
         } catch (ProjectNotFoundException e) {
@@ -104,15 +101,15 @@ public class ProjectAggregatorService {
         if (plugin instanceof MetricCapability) {
             addQualityAnalysis((MetricCapability) plugin, projectId, qualityResultToMerge, metrics);
         }
-        if (plugin instanceof TestsCapability) {
-            addUnitTestsAnalysis((TestsCapability) plugin, projectId, unitTestResultToMerge);
-            addIntegrationTestsAnalysis((TestsCapability) plugin, projectId, integrationTestResultToMerge);
+        if (plugin instanceof TestCapability) {
+            addUnitTestsAnalysis((TestCapability) plugin, projectId, unitTestResultToMerge);
+            addIntegrationTestsAnalysis((TestCapability) plugin, projectId, integrationTestResultToMerge);
         }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////
 
-    private void addIntegrationTestsAnalysis(TestsCapability testsPlugin, ProjectId projectId,
+    private void addIntegrationTestsAnalysis(TestCapability testsPlugin, ProjectId projectId,
             TestResult integrationTestResultToMerge) {
         TestResult integrationTestsAnalysis = testsPlugin.analyzeIntegrationTests(projectId);
         if (integrationTestsAnalysis != null && integrationTestResultToMerge != null) {
@@ -120,7 +117,7 @@ public class ProjectAggregatorService {
         }
     }
 
-    private void addUnitTestsAnalysis(TestsCapability testsPlugin, ProjectId projectId,
+    private void addUnitTestsAnalysis(TestCapability testsPlugin, ProjectId projectId,
             TestResult unitTestResultToMerge) {
         TestResult unitTestsAnalysis = testsPlugin.analyzeUnitTests(projectId);
         if (unitTestsAnalysis != null && unitTestResultToMerge != null) {

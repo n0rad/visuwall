@@ -17,17 +17,21 @@
 package net.awired.visuwall.core.service;
 
 import java.util.Date;
+
 import javax.persistence.Transient;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.core.domain.ConnectedProject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.google.common.base.Preconditions;
 
 @Service
@@ -76,7 +80,9 @@ public class BuildProjectService {
             public void run() {
                 LOG.info("Running Project status task for " + project);
                 project.setBuilding(isBuilding(project));
-                project.setState(getState(project));
+				// TODO: Arnaud, j'enleve le state sur Project
+				// tu dois trouver comment faire sans.
+				// project.setState(getState(project));
                 project.setCurrentBuildId(getLastBuildNumber(project));
             }
         };
