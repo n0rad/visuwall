@@ -153,8 +153,14 @@ public final class HudsonConnection implements Connection, BuildCapability, View
 		}
 	}
 
+	@Deprecated
 	@Override
 	public State getState(ProjectId projectId) throws ProjectNotFoundException {
+		return getLastBuildState(projectId);
+	}
+
+	@Override
+	public State getLastBuildState(ProjectId projectId) throws ProjectNotFoundException {
 		checkProjectId(projectId);
 		checkConnected();
 		try {

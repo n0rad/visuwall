@@ -37,27 +37,35 @@ import net.awired.visuwall.bambooclient.exception.BambooProjectNotFoundException
 import net.awired.visuwall.bambooclient.exception.BambooStateNotFoundException;
 import net.awired.visuwall.plugin.bamboo.builder.BuildBuilder;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.common.base.Preconditions;
 
 public class BambooConnection implements Connection, BuildCapability {
 
-	private static final String BAMBOO_ID = "BAMBOO_ID";
+	public static final String BAMBOO_ID = "BAMBOO_ID";
 
 	private Bamboo bamboo;
 
 	private BuildBuilder buildBuilder = new BuildBuilder();
 
-	public BambooConnection(String url, String login, String password) {
-		this(url);
+	private boolean connected;
+
+	public void connect(String url, String login, String password) {
+		connect(url);
 	}
 
-	public BambooConnection(String url) {
-		Preconditions.checkNotNull(url, "Use setUrl() before calling init method");
-		bamboo = new Bamboo(url);
+	public void connect(String url) {
+		Preconditions.checkNotNull(url, "url is mandatory");
+		if (StringUtils.isBlank(url)) {
+			throw new IllegalArgumentException("url can't be null.");
+		}
+		connected = true;
 	}
 
 	@Override
 	public List<ProjectId> findAllProjects() {
+		checkConnected();
 		List<ProjectId> projects = new ArrayList<ProjectId>();
 		for (BambooProject bambooProject : bamboo.findAllProjects()) {
 			ProjectId projectId = new ProjectId();
@@ -118,8 +126,14 @@ public class BambooConnection implements Connection, BuildCapability {
 		}
 	}
 
+	@Deprecated
 	@Override
 	public State getState(ProjectId projectId) throws ProjectNotFoundException {
+		return getLastBuildState(projectId);
+	}
+
+	@Override
+	public State getLastBuildState(ProjectId projectId) throws ProjectNotFoundException {
 		checkProjectId(projectId);
 		try {
 			String projectName = getProjectKey(projectId);
@@ -169,4 +183,7 @@ public class BambooConnection implements Connection, BuildCapability {
 		Preconditions.checkNotNull(projectId, "projectId is mandatory");
 	}
 
+	private void checkConnected() {
+		Preconditions.checkState(connected, "You must connect your plugin");
+	}
 }

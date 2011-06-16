@@ -14,38 +14,42 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar;
+package net.awired.visuwall.plugin.sonar.tck;
 
 import static net.awired.visuwall.IntegrationTestData.SONAR_URL;
-import static net.awired.visuwall.IntegrationTestData.STRUTS_2_ARTIFACT_ID;
 import static net.awired.visuwall.IntegrationTestData.STRUTS_ARTIFACT_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
 import java.util.Map.Entry;
 import java.util.Set;
+
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.api.plugin.capability.MetricCapability;
+import net.awired.visuwall.plugin.sonar.SonarConnection;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class SonarConnectionPluginIT {
+public class SonarMetricCapabilityIT {
 
-    private static SonarConnection sonarPlugin;
+	private static MetricCapability sonar = new SonarConnection();
 
     @BeforeClass
     public static void init() {
-        sonarPlugin = new SonarConnection();
-        sonarPlugin.connect(SONAR_URL);
+		((Connection) sonar).connect(SONAR_URL, null, null);
     }
 
     @Test
     public void should_populate_quality() {
         ProjectId projectId = new ProjectId();
         projectId.setArtifactId(STRUTS_ARTIFACT_ID);
-        QualityResult quality = sonarPlugin.analyzeQuality(projectId, "violations_density");
+		QualityResult quality = sonar.analyzeQuality(projectId, "violations_density");
         QualityMeasure measure = quality.getMeasure("violations_density");
         assertEquals("Rules compliance", measure.getName());
         assertEquals("83.9%", measure.getFormattedValue());
@@ -56,7 +60,7 @@ public class SonarConnectionPluginIT {
     public void should_have_a_lot_of_quality_metrics() {
         ProjectId projectId = new ProjectId();
         projectId.setArtifactId(STRUTS_ARTIFACT_ID);
-        QualityResult quality = sonarPlugin.analyzeQuality(projectId);
+		QualityResult quality = sonar.analyzeQuality(projectId);
         Set<Entry<String, QualityMeasure>> measures = quality.getMeasures();
         for (Entry<String, QualityMeasure> measure : measures) {
             assertNotNull(measure.getValue().getValue());
@@ -67,21 +71,7 @@ public class SonarConnectionPluginIT {
     public void should_not_fail_if_measure_does_not_exist() throws ProjectNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.setArtifactId(STRUTS_ARTIFACT_ID);
-        sonarPlugin.analyzeQuality(projectId, "inexistant_measure");
-    }
-
-    @Test
-    public void should_analyze_unit_tests() {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId(STRUTS_2_ARTIFACT_ID);
-
-        TestResult unitTestsAnalysis = sonarPlugin.analyzeUnitTests(projectId);
-
-        assertEquals(40.9, unitTestsAnalysis.getCoverage(), 0);
-        assertEquals(8, unitTestsAnalysis.getFailCount());
-        assertEquals(0, unitTestsAnalysis.getSkipCount());
-        assertEquals(1824, unitTestsAnalysis.getPassCount());
-        assertEquals(1832, unitTestsAnalysis.getTotalCount());
+		sonar.analyzeQuality(projectId, "inexistant_measure");
     }
 
     @Test

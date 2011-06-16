@@ -53,8 +53,7 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
 
     private static final Logger LOG = LoggerFactory.getLogger(JenkinsConnection.class);
 
-    @VisibleForTesting
-    static final String JENKINS_ID = "JENKINS_ID";
+	public static final String JENKINS_ID = "JENKINS_ID";
 
     @VisibleForTesting
     Hudson hudson;
@@ -140,8 +139,14 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
         }
     }
 
+	@Deprecated
     @Override
     public State getState(ProjectId projectId) throws ProjectNotFoundException {
+		return getLastBuildState(projectId);
+	}
+
+	@Override
+	public State getLastBuildState(ProjectId projectId) throws ProjectNotFoundException {
         checkProjectId(projectId);
         checkConnected();
         try {

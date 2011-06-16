@@ -85,8 +85,14 @@ public class TeamCityConnection implements Connection, BuildCapability {
 		return new ArrayList<ProjectId>();
 	}
 
+	@Deprecated
 	@Override
 	public State getState(ProjectId projectId) throws ProjectNotFoundException {
+		return getLastBuildState(projectId);
+	}
+
+	@Override
+	public State getLastBuildState(ProjectId projectId) throws ProjectNotFoundException {
 		checkConnected();
 		throw new ProjectNotFoundException("No project found");
 	}

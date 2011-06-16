@@ -14,76 +14,77 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.hudson;
+package net.awired.visuwall.plugin.hudson.tck;
 
 import static net.awired.visuwall.IntegrationTestData.HUDSON_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import java.util.List;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.Build;
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import org.junit.BeforeClass;
+import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
+import net.awired.visuwall.plugin.hudson.HudsonConnection;
+
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-public class HudsonConnectionPluginIT {
+public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
 
-    static HudsonConnection hudsonConnectionPlugin = new HudsonConnection();
+	BuildCapability hudson = new HudsonConnection();
 
-    @BeforeClass
-    public static void setUp() {
-        hudsonConnectionPlugin.connect(IntegrationTestData.HUDSON_URL);
+    @Before
+	public void setUp() {
+		((Connection) hudson).connect(IntegrationTestData.HUDSON_URL, null, null);
     }
 
+	@Override
     @Test
-    public void should_find_all_projects() {
-        List<ProjectId> projects = hudsonConnectionPlugin.findAllProjects();
-        assertFalse(projects.isEmpty());
-    }
-
-    @Test
-    public void should_find_project() throws ProjectNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "neverbuild");
-        Project project = hudsonConnectionPlugin.findProject(projectId);
-        assertNotNull(project);
-    }
-
-    @Test
-    public void should_find_build_by_name_and_build_number() throws BuildNotFoundException, ProjectNotFoundException {
+	public void should_find_build_by_build_number() throws BuildNotFoundException, ProjectNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "struts");
-        Build build = hudsonConnectionPlugin.findBuildByBuildNumber(projectId, 3);
+        Build build = hudson.findBuildByBuildNumber(projectId, 3);
         assertNotNull(build);
     }
 
+	@Override
     @Test
-    public void should_find_last_build_number() throws ProjectNotFoundException, BuildNotFoundException {
+	public void should_get_last_build_number() throws ProjectNotFoundException, BuildNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "struts");
-        int buildNumber = hudsonConnectionPlugin.getLastBuildNumber(projectId);
+        int buildNumber = hudson.getLastBuildNumber(projectId);
         assertEquals(4, buildNumber);
     }
 
+	@Override
     @Test
-    public void should_verify_not_building_project() throws ProjectNotFoundException {
+	public void should_get_is_building() throws ProjectNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "struts");
-        boolean building = hudsonConnectionPlugin.isBuilding(projectId);
+        boolean building = hudson.isBuilding(projectId);
         assertFalse(building);
     }
 
+	@Override
     @Test
-    public void should_verify_state() throws ProjectNotFoundException {
+	public void should_get_success_build_state() throws ProjectNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "struts");
-        State state = hudsonConnectionPlugin.getState(projectId);
+		State state = hudson.getLastBuildState(projectId);
         assertEquals(State.SUCCESS, state);
     }
+
+	@Override
+	@Test
+	@Ignore
+	public void should_get_estimated_date() throws ProjectNotFoundException {
+
+	}
 
 }
