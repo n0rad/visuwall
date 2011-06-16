@@ -61,8 +61,15 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 						var childrens = newContent.children();
 						for (var i = 0; i < childrens.length; i++) {
 							$(ui.panel).append(childrens[i]);
+
+							// projects selector
+							if ($(childrens[i]).is(".projects")) {
+								$(childrens[i]).accordion({
+									autoHeight: false,
+									navigation: true
+								});
+							}
 						}
-						var tt;
 					},
 					remove : function(event, ui) {
 						// removeFunction(event, ui.panel);
@@ -156,6 +163,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 		
 		var classes = ['failureCheck', 'successCheck', 'loadingCheck', 'warningCheck'];
 		var domObj = $('#' + $(this).attr('id').replace(".", "\\.") + "check", $(this).parent());
+		var tabContent = $(this).parent();
 		
 		if (!$(this).val().trim()) {
 			domObj.switchClasses(classes, '', 1);			
@@ -235,9 +243,8 @@ var ff = '				<table class="softwareInfo">'
 				domObj.switchClasses(classes, 'successCheck', 1);				
 			}
 			
-			
-			var projectNamesFormElem = $('SELECT:regex(id,softwareAccesses.*\.projectNames)');
-			
+			// project Names
+			var projectNamesFormElem = $('SELECT:regex(id,softwareAccesses.*\.projectNames)', tabContent);
 			var oldVal = projectNamesFormElem.val();
 			projectNamesFormElem.empty();
 			for (var i = 0; i < softwareInfo.projectNames.length; i++) {
@@ -245,6 +252,18 @@ var ff = '				<table class="softwareInfo">'
 				projectNamesFormElem.append($("<option></option>").attr("value",projectName).text(projectName));
 			}
 			projectNamesFormElem.val(oldVal);
+			
+			// views
+			var projectViewsFormElem = $('SELECT:regex(id,softwareAccesses.*\.viewNames)', tabContent);
+			var oldVal = projectViewsFormElem.val();
+			projectViewsFormElem.empty();
+			for (var i = 0; i < softwareInfo.viewNames.length; i++) {
+				var viewName = softwareInfo.viewNames[i];
+				projectViewsFormElem.append($("<option></option>").attr("value",viewName).text(viewName));
+			}
+			projectViewsFormElem.val(oldVal);
+			
+			
 		}, function() {
 			// fail
 			domObj.switchClasses(classes, 'failureCheck', 1);			

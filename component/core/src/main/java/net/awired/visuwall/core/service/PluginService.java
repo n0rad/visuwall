@@ -25,6 +25,7 @@ import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
+import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.core.domain.PluginInfo;
 import net.awired.visuwall.core.domain.SoftwareInfo;
 import org.slf4j.Logger;
@@ -70,6 +71,10 @@ public class PluginService {
             // TODO change that null
             Connection connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
             softwareInfo.setProjectNames(connectionPlugin.findProjectNames());
+
+            if (connectionPlugin instanceof ViewCapability) {
+                softwareInfo.setViewNames(((ViewCapability) connectionPlugin).findViews());
+            }
             return softwareInfo;
         }
         throw new RuntimeException("no plugin to manage url " + url);

@@ -18,9 +18,7 @@ package net.awired.visuwall.server.web.controller;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import net.awired.ajsl.web.service.interfaces.JsService;
 import net.awired.visuwall.core.domain.PluginInfo;
 import net.awired.visuwall.core.domain.SoftwareInfo;
 import net.awired.visuwall.core.service.PluginService;
@@ -48,7 +46,6 @@ public class PluginController {
     public @ResponseBody
     SoftwareInfo getSoftwareInfo(@RequestParam String url) throws MalformedURLException {
         SoftwareInfo softwareInfo = pluginService.getSoftwareInfoFromUrl(new URL(url));
-
         return softwareInfo;
     }
 

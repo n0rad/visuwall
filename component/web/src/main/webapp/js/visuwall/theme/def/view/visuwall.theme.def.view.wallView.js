@@ -131,37 +131,37 @@ visuwall.theme.def.view.wallView = new function() {
 
 	this.displaySuccess = function(projectId) {
 		$this._hideCommiters(projectId);
-		$this._getElement(projectId, '.projectId').switchClasses(
+		$this._getElement(projectId, '.projectName').switchClasses(
 				$this.statusClasses, 'success-state', 3000);
 	};
 
 	this.displayFailure = function(projectId) {
-		$this._getElement(projectId, '.projectId').switchClasses(
+		$this._getElement(projectId, '.projectName').switchClasses(
 				$this.statusClasses, 'failure-state', 3000);
 		$this._hideQuality(projectId);
 	};
 	this.displayUnstable = function(projectId) {
-		$this._getElement(projectId, '.projectId').switchClasses(
+		$this._getElement(projectId, '.projectName').switchClasses(
 				$this.statusClasses, 'unstable-state', 3000);
 	};
 	
 	this.displayNew = function(projectId) {
-		$this._getElement(projectId, '.projectId').switchClasses(
+		$this._getElement(projectId, '.projectName').switchClasses(
 				$this.statusClasses, 'new-state', 3000);
 	};
 	
 	this.displayAborted = function(projectId) {
-		$this._getElement(projectId, '.projectId').switchClasses(
+		$this._getElement(projectId, '.projectName').switchClasses(
 				$this.statusClasses, 'aborted-state', 3000);
 	};
 	
 	this.displayNotBuilt = function(projectId) {
-		$this._getElement(projectId, '.projectId').switchClasses(
+		$this._getElement(projectId, '.projectName').switchClasses(
 				$this.statusClasses, 'notbuilt-state', 3000);
 	};
 	
 	this.displayUnknown = function(projectId) {
-		$this._getElement(projectId, '.projectId').switchClasses(
+		$this._getElement(projectId, '.projectName').switchClasses(
 				$this.statusClasses, 'unknown-state', 3000);
 	};
 	
