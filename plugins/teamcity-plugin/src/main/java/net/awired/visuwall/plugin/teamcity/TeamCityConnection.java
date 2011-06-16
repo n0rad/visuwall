@@ -45,11 +45,14 @@ public class TeamCityConnection implements Connection, BuildCapability {
 	private static final Logger LOG = LoggerFactory.getLogger(TeamCityConnection.class);
 
 	@VisibleForTesting
+	public
 	static final String TEAMCITY_ID = "TEAMCITY_ID";
 
 	private boolean connected;
 
 	TeamCity teamCity;
+
+	private String url;
 
 	public void connect(String url, String login, String password) {
 		connect(url);
@@ -60,6 +63,8 @@ public class TeamCityConnection implements Connection, BuildCapability {
 		if (StringUtils.isBlank(url)) {
 			throw new IllegalArgumentException("url can't be null.");
 		}
+		this.url = url;
+		teamCity = new TeamCity(url);
 		connected = true;
 	}
 
@@ -82,7 +87,22 @@ public class TeamCityConnection implements Connection, BuildCapability {
 	@Override
 	public List<ProjectId> findProjectsByNames(List<String> names) {
 		checkConnected();
-		return new ArrayList<ProjectId>();
+		List<ProjectId> projectIds = new ArrayList<ProjectId>();
+		try {
+			List<TeamCityProject> projects = teamCity.findAllProjects();
+			for (TeamCityProject project : projects) {
+				String name = project.getName();
+				if (names.contains(name)) {
+					String id = project.getId();
+					ProjectId projectId = new ProjectId(name);
+					projectId.addId(TEAMCITY_ID, id);
+					projectIds.add(projectId);
+				}
+			}
+		} catch (TeamCityProjectsNotFoundException e) {
+			LOG.warn("Can't find projects by name with this Team City connection," + this.url, e);
+		}
+		return projectIds;
 	}
 
 	@Deprecated

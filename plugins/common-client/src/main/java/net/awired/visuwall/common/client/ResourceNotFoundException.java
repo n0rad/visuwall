@@ -16,7 +16,6 @@
 
 package net.awired.visuwall.common.client;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class ResourceNotFoundException extends Exception {
 
@@ -26,7 +25,7 @@ public class ResourceNotFoundException extends Exception {
         super(msg);
     }
 
-    public ResourceNotFoundException(UniformInterfaceException e) {
+	public ResourceNotFoundException(Throwable e) {
         super(e);
     }
 
