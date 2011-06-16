@@ -60,6 +60,7 @@ public class BambooConnection implements Connection, BuildCapability {
 		if (StringUtils.isBlank(url)) {
 			throw new IllegalArgumentException("url can't be null.");
 		}
+		bamboo = new Bamboo(url);
 		connected = true;
 	}
 
