@@ -243,9 +243,8 @@ var ff = '				<table class="softwareInfo">'
 				domObj.switchClasses(classes, 'successCheck', 1);				
 			}
 			
-			
+			// project Names
 			var projectNamesFormElem = $('SELECT:regex(id,softwareAccesses.*\.projectNames)', tabContent);
-			
 			var oldVal = projectNamesFormElem.val();
 			projectNamesFormElem.empty();
 			for (var i = 0; i < softwareInfo.projectNames.length; i++) {
@@ -253,6 +252,18 @@ var ff = '				<table class="softwareInfo">'
 				projectNamesFormElem.append($("<option></option>").attr("value",projectName).text(projectName));
 			}
 			projectNamesFormElem.val(oldVal);
+			
+			// views
+			var projectViewsFormElem = $('SELECT:regex(id,softwareAccesses.*\.viewNames)', tabContent);
+			var oldVal = projectViewsFormElem.val();
+			projectViewsFormElem.empty();
+			for (var i = 0; i < softwareInfo.viewNames.length; i++) {
+				var viewName = softwareInfo.viewNames[i];
+				projectViewsFormElem.append($("<option></option>").attr("value",viewName).text(viewName));
+			}
+			projectViewsFormElem.val(oldVal);
+			
+			
 		}, function() {
 			// fail
 			domObj.switchClasses(classes, 'failureCheck', 1);			
