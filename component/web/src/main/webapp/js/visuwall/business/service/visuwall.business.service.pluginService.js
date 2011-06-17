@@ -24,7 +24,7 @@ visuwall.business.service.pluginService = {
 
 	manageable : function(url, success, failure) {
 		$.ajax({
-			  url: 'plugin/managable',
+			  url: 'plugin/getSoftwareInfo',
 			  dataType: 'json',
 			  data: {url : url},
 			  success: function(softwareInfo) {

@@ -19,12 +19,12 @@ package net.awired.visuwall.api.domain;
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
 public final class Build {
 
+    private boolean building;
     private State state = State.UNKNOWN;
     private Set<Commiter> commiters = new TreeSet<Commiter>();
     private long duration;
@@ -113,23 +113,31 @@ public final class Build {
         this.commiters = commiters;
     }
 
-	@Override
-	public boolean equals(Object o) {
-		if (o instanceof Build) {
-			Build b = (Build) o;
-			return Objects.equal(buildNumber, b.buildNumber) && //
-			        Objects.equal(commiters, b.commiters) && //
-			        Objects.equal(duration, b.duration) && //
-			        Objects.equal(integrationTestResult, b.integrationTestResult) && //
-			        Objects.equal(startTime, b.startTime) && //
-			        Objects.equal(state, b.state) && //
-			        Objects.equal(unitTestResult, b.unitTestResult);
-		}
-		return false;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Build) {
+            Build b = (Build) o;
+            return Objects.equal(buildNumber, b.buildNumber) && //
+                    Objects.equal(commiters, b.commiters) && //
+                    Objects.equal(duration, b.duration) && //
+                    Objects.equal(integrationTestResult, b.integrationTestResult) && //
+                    Objects.equal(startTime, b.startTime) && //
+                    Objects.equal(state, b.state) && //
+                    Objects.equal(unitTestResult, b.unitTestResult);
+        }
+        return false;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(duration, buildNumber, startTime);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(duration, buildNumber, startTime);
+    }
+
+    public boolean isBuilding() {
+        return building;
+    }
+
+    public void setBuilding(boolean building) {
+        this.building = building;
+    }
 }

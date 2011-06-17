@@ -29,6 +29,10 @@ visuwall.theme.def.view.wallView = new function() {
 //	    $(this).prependTo('ul#projectsTable');
 //	});
 
+	this.isProjectDisplay = function(projectId, callback) {
+		var isproject = $this._getElement(projectId, '').length > 0;
+		callback(isproject);
+	};
 	
 	this.addProject = function(projectId, name) {
 		LOG.info('add project to display : ' + projectId);

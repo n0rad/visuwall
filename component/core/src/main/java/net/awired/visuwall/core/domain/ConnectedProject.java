@@ -12,8 +12,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class ConnectedProject extends Project {
 
-    private boolean building = false;
-
     @Transient
     private List<BasicCapability> capabilities = new ArrayList<BasicCapability>();
     @Transient
@@ -65,11 +63,4 @@ public class ConnectedProject extends Project {
         return projectStatusTask;
     }
 
-    public void setBuilding(boolean building) {
-        this.building = building;
-    }
-
-    public boolean isBuilding() {
-        return building;
-    }
 }
