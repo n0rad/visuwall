@@ -17,9 +17,9 @@
 package net.awired.visuwall.server.web.controller;
 
 import net.awired.visuwall.api.domain.Project;
+import net.awired.visuwall.core.business.service.BuildProjectService;
+import net.awired.visuwall.core.business.service.WallHolderService;
 import net.awired.visuwall.core.persistence.entity.Wall;
-import net.awired.visuwall.core.service.BuildProjectService;
-import net.awired.visuwall.core.service.WallHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

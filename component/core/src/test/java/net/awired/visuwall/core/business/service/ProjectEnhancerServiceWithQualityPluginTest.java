@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.service;
+package net.awired.visuwall.core.business.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -26,6 +26,7 @@ import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
+import net.awired.visuwall.core.business.service.ProjectAggregatorService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

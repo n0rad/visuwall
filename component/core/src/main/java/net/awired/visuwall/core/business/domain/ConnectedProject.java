@@ -1,4 +1,4 @@
-package net.awired.visuwall.core.domain;
+package net.awired.visuwall.core.business.domain;
 
 import java.util.ArrayList;
 import java.util.List;

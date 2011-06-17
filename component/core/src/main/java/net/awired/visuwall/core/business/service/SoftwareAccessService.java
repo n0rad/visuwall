@@ -1,4 +1,4 @@
-package net.awired.visuwall.core.service;
+package net.awired.visuwall.core.business.service;
 
 import java.util.HashSet;
 import java.util.List;

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.service;
+package net.awired.visuwall.core.business.service;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -24,6 +24,7 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.core.business.service.ProjectAggregatorService;
 
 import org.junit.Before;
 import org.junit.Test;

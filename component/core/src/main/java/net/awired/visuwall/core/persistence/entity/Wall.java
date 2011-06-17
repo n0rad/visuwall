@@ -29,7 +29,7 @@ import javax.persistence.Transient;
 import net.awired.ajsl.persistence.entity.implementation.abstracts.IdEntityImpl;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.core.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.ConnectedProject;
 import net.awired.visuwall.core.utils.ShrinkList;
 import org.hibernate.annotations.Cascade;
 import org.springframework.util.AutoPopulatingList;

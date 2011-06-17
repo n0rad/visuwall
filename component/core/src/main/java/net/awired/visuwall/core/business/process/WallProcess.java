@@ -1,4 +1,4 @@
-package net.awired.visuwall.core.process;
+package net.awired.visuwall.core.business.process;
 
 import java.util.List;
 import java.util.Set;
@@ -8,13 +8,13 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
-import net.awired.visuwall.core.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.ConnectedProject;
+import net.awired.visuwall.core.business.service.BuildProjectService;
+import net.awired.visuwall.core.business.service.PluginService;
+import net.awired.visuwall.core.business.service.ProjectAggregatorService;
+import net.awired.visuwall.core.business.service.SoftwareAccessService;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
-import net.awired.visuwall.core.service.BuildProjectService;
-import net.awired.visuwall.core.service.PluginService;
-import net.awired.visuwall.core.service.ProjectAggregatorService;
-import net.awired.visuwall.core.service.SoftwareAccessService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

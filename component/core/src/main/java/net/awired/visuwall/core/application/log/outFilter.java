@@ -7,7 +7,7 @@ import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.filter.AbstractMatcherFilter;
 import ch.qos.logback.core.spi.FilterReply;
 
-public class outFilter extends AbstractMatcherFilter {
+public class outFilter extends AbstractMatcherFilter<Object> {
 
     @Override
     public FilterReply decide(Object event) {

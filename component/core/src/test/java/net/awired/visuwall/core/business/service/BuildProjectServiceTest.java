@@ -14,14 +14,16 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.service;
+package net.awired.visuwall.core.business.service;
 
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.plugin.Connection;
-import net.awired.visuwall.core.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.ConnectedProject;
+import net.awired.visuwall.core.business.service.BuildProjectService;
+import net.awired.visuwall.core.business.service.ProjectAggregatorService;
 import net.awired.visuwall.core.exception.NotCreatedException;
 import org.junit.Before;
 import org.junit.Test;

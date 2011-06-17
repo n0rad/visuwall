@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.service;
+package net.awired.visuwall.core.business.service;
 
 import java.util.Date;
 import javax.persistence.Transient;
@@ -23,7 +23,7 @@ import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
-import net.awired.visuwall.core.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.ConnectedProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
