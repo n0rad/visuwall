@@ -23,6 +23,7 @@ public final class ProjectStatus {
     private final String id;
     private final String name;
     private boolean building;
+    private int buildingTimeleftSecond;
     private int lastBuildId;
 
     public ProjectStatus(Project project) {
@@ -35,8 +36,9 @@ public final class ProjectStatus {
         return Objects.toStringHelper(this) //
                 .add("projectId", id) //
                 .add("name", name) //
-                .add("last build id", lastBuildId) //
+                .add("lastBuildId", lastBuildId) //
                 .add("building", building) //
+                .add("buildingTimeleft", buildingTimeleftSecond) //
                 .toString();
     }
 
@@ -58,5 +60,13 @@ public final class ProjectStatus {
 
     public String getId() {
         return id;
+    }
+
+    public void setBuildingTimeleftSecond(int buildingTimeleftSecond) {
+        this.buildingTimeleftSecond = buildingTimeleftSecond;
+    }
+
+    public int getBuildingTimeleftSecond() {
+        return buildingTimeleftSecond;
     }
 }

@@ -75,7 +75,6 @@ public class BuildProjectService {
             @Override
             public void run() {
                 LOG.info("Running Project status task for " + project);
-                project.setBuilding(isBuilding(project));
                 project.setState(getState(project));
                 project.setCurrentBuildId(getLastBuildNumber(project));
             }

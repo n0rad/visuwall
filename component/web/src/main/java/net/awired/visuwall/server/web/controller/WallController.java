@@ -69,7 +69,7 @@ public class WallController {
     }
 
     @RequestMapping("{wallName}")
-    public String getProjects(@PathVariable String wallName, ModelMap modelMap) throws NotFoundException {
+    public String getWall(@PathVariable String wallName, ModelMap modelMap) throws NotFoundException {
         Wall wall = wallService.find(wallName);
         modelMap.put("data", wall);
         return WALL_JSP;
@@ -85,7 +85,7 @@ public class WallController {
             ProjectStatus projectStatus = new ProjectStatus(project);
             projectStatus.setLastBuildId(project.getCurrentBuildId());
             //TODO get from current
-            projectStatus.setBuilding(project.isBuilding());
+            projectStatus.setBuilding(false);
             statusList.add(projectStatus);
         }
         return statusList;

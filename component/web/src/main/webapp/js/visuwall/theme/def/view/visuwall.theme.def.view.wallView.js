@@ -29,9 +29,18 @@ visuwall.theme.def.view.wallView = new function() {
 //	    $(this).prependTo('ul#projectsTable');
 //	});
 
-	this.isProjectDisplay = function(projectId, callback) {
+	this.isProject = function(projectId, callback) {
 		var isproject = $this._getElement(projectId, '').length > 0;
 		callback(isproject);
+	};
+	
+	this.getProjectIds = function(callback) {
+		var res = [];
+		var projects = $('LI', $this.table);
+		for (var i = 0; i < projects.length; i++) {
+			res[i] = projects[i].id;
+		}
+		callback(res);
 	};
 	
 	this.addProject = function(projectId, name) {
@@ -159,7 +168,7 @@ visuwall.theme.def.view.wallView = new function() {
 				$this.statusClasses, 'aborted-state', 3000);
 	};
 	
-	this.displayNotBuilt = function(projectId) {
+	this.displayNot_built = function(projectId) {
 		$this._getElement(projectId, '.projectName').switchClasses(
 				$this.statusClasses, 'notbuilt-state', 3000);
 	};
