@@ -20,7 +20,9 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
+
 import net.awired.visuwall.api.domain.quality.QualityResult;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Preconditions;
@@ -31,7 +33,6 @@ public class Project implements Comparable<Project> {
     private ProjectId projectId;
     private String description;
     private QualityResult qualityResult = new QualityResult();
-    private State state;
     private int[] buildNumbers;
 
     private Map<Integer, Build> builds = new HashMap<Integer, Build>();
@@ -94,7 +95,6 @@ public class Project implements Comparable<Project> {
                 .add("id", id) //
                 .add("projectId", projectId) //
                 .add("name", getName()) //
-                .add("state", state) //
                 .add("quality result", qualityResult); //
         return toString.toString();
     }
@@ -125,14 +125,6 @@ public class Project implements Comparable<Project> {
 
     public QualityResult getQualityResult() {
         return qualityResult;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
     }
 
     public int[] getBuildNumbers() {

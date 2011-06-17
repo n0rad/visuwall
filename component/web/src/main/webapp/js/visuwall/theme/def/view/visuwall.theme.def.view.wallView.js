@@ -168,7 +168,7 @@ visuwall.theme.def.view.wallView = new function() {
 				$this.statusClasses, 'aborted-state', 3000);
 	};
 	
-	this.displayNot_built = function(projectId) {
+	this.displayNotbuilt = function(projectId) {
 		$this._getElement(projectId, '.projectName').switchClasses(
 				$this.statusClasses, 'notbuilt-state', 3000);
 	};

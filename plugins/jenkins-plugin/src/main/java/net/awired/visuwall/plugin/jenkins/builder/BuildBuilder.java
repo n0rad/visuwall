@@ -10,26 +10,27 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
+import net.awired.visuwall.plugin.jenkins.States;
 
 import com.google.common.base.Preconditions;
 
 public class BuildBuilder {
 
-	private HudsonBuild hudsonBuild;
+	private HudsonBuild jenkinsBuild;
 	private Build build;
 
-	public Build createBuildFrom(HudsonBuild hudsonBuild) {
-		Preconditions.checkNotNull(hudsonBuild, "hudsonBuild");
-		this.hudsonBuild = hudsonBuild;
+	public Build createBuildFrom(HudsonBuild jenkinsBuild) {
+		Preconditions.checkNotNull(jenkinsBuild, "jenkinsBuild is mandatory");
+		this.jenkinsBuild = jenkinsBuild;
 		build();
 		return this.build;
 	}
 
 	private void build() {
 		build = new Build();
-		build.setDuration(hudsonBuild.getDuration());
-		build.setStartTime(hudsonBuild.getStartTime());
-		build.setBuildNumber(hudsonBuild.getBuildNumber());
+		build.setDuration(jenkinsBuild.getDuration());
+		build.setStartTime(jenkinsBuild.getStartTime());
+		build.setBuildNumber(jenkinsBuild.getBuildNumber());
 		addUnitTestResults();
 		addIntegrationTestResults();
 		addCommiters();
@@ -37,18 +38,22 @@ public class BuildBuilder {
 	}
 
 	private void addState() {
-		String hudsonBuildState = hudsonBuild.getState();
-		build.setState(State.getStateByName(hudsonBuildState));
+		String jenkinsBuildState = jenkinsBuild.getState();
+		if (jenkinsBuildState == null) {
+			build.setState(State.UNKNOWN);
+		} else {
+			build.setState(States.asVisuwallState(jenkinsBuildState));
+		}
 	}
 
 	private void addCommiters() {
-		Set<HudsonCommiter> hudsonCommiters = hudsonBuild.getCommiters();
+		Set<HudsonCommiter> hudsonCommiters = jenkinsBuild.getCommiters();
 		Set<Commiter> commiters = createCommiters(hudsonCommiters);
 		build.setCommiters(commiters);
 	}
 
 	private void addIntegrationTestResults() {
-		HudsonTestResult hudsonIntegrationTestResult = hudsonBuild.getIntegrationTestResult();
+		HudsonTestResult hudsonIntegrationTestResult = jenkinsBuild.getIntegrationTestResult();
 		if (hudsonIntegrationTestResult != null) {
 			TestResult integrationTestResult = createTestResult(hudsonIntegrationTestResult);
 			build.setIntegrationTestResult(integrationTestResult);
@@ -56,7 +61,7 @@ public class BuildBuilder {
 	}
 
 	private HudsonTestResult addUnitTestResults() {
-		HudsonTestResult hudsonUnitTestResult = hudsonBuild.getUnitTestResult();
+		HudsonTestResult hudsonUnitTestResult = jenkinsBuild.getUnitTestResult();
 		if (hudsonUnitTestResult != null) {
 			TestResult unitTestResult = createTestResult(hudsonUnitTestResult);
 			build.setUnitTestResult(unitTestResult);

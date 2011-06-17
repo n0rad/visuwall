@@ -16,7 +16,7 @@ public class States {
 	public static final State asVisuwallState(String bambooState) {
 		State state = STATE_MAPPING.get(bambooState);
 		if (state == null) {
-			throw new RuntimeException("No state mapping for bambooState: " + bambooState);
+			state = State.UNKNOWN;
 		}
 		return state;
 	}

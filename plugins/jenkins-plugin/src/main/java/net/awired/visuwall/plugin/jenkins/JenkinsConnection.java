@@ -53,8 +53,7 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
 
     private static final Logger LOG = LoggerFactory.getLogger(JenkinsConnection.class);
 
-    @VisibleForTesting
-    static final String JENKINS_ID = "JENKINS_ID";
+	public static final String JENKINS_ID = "JENKINS_ID";
 
     @VisibleForTesting
     Hudson hudson;
@@ -104,8 +103,6 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
             }
             HudsonProject hudsonProject = hudson.findProject(projectName);
             Project project = projectCreator.buildProjectFrom(hudsonProject);
-            State state = getState(projectId);
-            project.setState(state);
             project.addId(JENKINS_ID, projectName);
             return project;
         } catch (HudsonProjectNotFoundException e) {
@@ -140,8 +137,14 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
         }
     }
 
+	@Deprecated
     @Override
     public State getState(ProjectId projectId) throws ProjectNotFoundException {
+		return getLastBuildState(projectId);
+	}
+
+	@Override
+	public State getLastBuildState(ProjectId projectId) throws ProjectNotFoundException {
         checkProjectId(projectId);
         checkConnected();
         try {
@@ -149,8 +152,8 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
             if (projectName == null) {
                 throw new ProjectNotFoundException("Project " + projectId + " has no name");
             }
-            String state = hudson.getState(projectName);
-            return State.getStateByName(state);
+			String jenkinsState = hudson.getState(projectName);
+			return States.asVisuwallState(jenkinsState);
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
         }

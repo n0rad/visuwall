@@ -57,6 +57,11 @@ public class TeamCityUrlBuilder {
 	public String getVersion() {
 		return build("/version");
 	}
+
+	public String getServer() {
+		return build("/server");
+	}
+
 	private String build(String url) {
 		return teamCityUrl + API_URI + url;
 	}

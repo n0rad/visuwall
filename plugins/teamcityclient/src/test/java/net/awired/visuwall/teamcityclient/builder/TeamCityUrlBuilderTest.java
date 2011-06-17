@@ -62,4 +62,9 @@ public class TeamCityUrlBuilderTest {
 		assertEquals(TEAM_CITY_URL + "/app/rest/version", versionUrl);
 	}
 
+	@Test
+	public void should_create_valid_server() {
+		String serverUrl = builder.getServer();
+		assertEquals(TEAM_CITY_URL + "/app/rest/server", serverUrl);
+	}
 }

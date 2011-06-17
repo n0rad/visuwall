@@ -22,9 +22,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
@@ -36,6 +38,7 @@ import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
@@ -55,7 +58,7 @@ public class JenkinsConnectionTest {
 
         ProjectId projectId = new ProjectId();
         projectId.addId(JENKINS_ID, "name");
-        State state = jenkinsPlugin.getState(projectId);
+		State state = jenkinsPlugin.getLastBuildState(projectId);
         assertEquals(State.UNKNOWN, state);
     }
 
@@ -166,6 +169,7 @@ public class JenkinsConnectionTest {
         jenkinsPlugin.hudson = hudson;
 
         HudsonBuild hudsonBuild = new HudsonBuild();
+		hudsonBuild.setState(JenkinsState.SUCCESS);
 
         when(hudson.findBuild("project1", 0)).thenReturn(hudsonBuild);
 

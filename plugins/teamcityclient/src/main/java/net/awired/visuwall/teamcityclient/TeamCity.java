@@ -42,7 +42,7 @@ public class TeamCity {
 
 	public TeamCity(String url) {
 		TeamCityUrlBuilder urlBuilder = new TeamCityUrlBuilder(url);
-		GenericSoftwareClient client = new GenericSoftwareClient();
+		GenericSoftwareClient client = new GenericSoftwareClient("guest", "");
 		teamcityFinder = new TeamCityFinder(client, urlBuilder);
 	}
 

@@ -20,6 +20,15 @@ import net.awired.visuwall.api.plugin.capability.BasicCapability;
 
 public interface Connection extends BasicCapability {
 
+	/**
+	 * Initiate connection to the software
+	 * 
+	 * @param url
+	 * @param login
+	 * @param password
+	 */
+	void connect(String url, String login, String password);
+
     /**
      * Close the connection to the software
      */

@@ -3,8 +3,7 @@ visuwall.ctrl.process.Wall = function(wallName) {
 
 	this.wallName = wallName;
 
-	this.__inject__ = [ 'wallView', 'projectService', 'wallService',
-			'processingService' ];
+	this.__inject__ = [ 'wallView', 'projectService', 'wallService'];
 
 	this.updateStatus = function() {
 		LOG.debug("run updater");

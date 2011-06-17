@@ -10,6 +10,7 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
+import net.awired.visuwall.plugin.hudson.States;
 
 import com.google.common.base.Preconditions;
 
@@ -38,7 +39,11 @@ public class BuildBuilder {
 
 	private void addState() {
 		String hudsonBuildState = hudsonBuild.getState();
-		build.setState(State.getStateByName(hudsonBuildState));
+		if (hudsonBuildState == null) {
+			build.setState(State.UNKNOWN);
+		} else {
+			build.setState(States.asVisuwallState(hudsonBuildState));
+		}
 	}
 
 	private void addCommiters() {

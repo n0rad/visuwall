@@ -3,7 +3,7 @@ package net.awired.visuwall.api.plugin.capability;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 
-public interface TestsCapability extends BasicCapability {
+public interface TestCapability extends BasicCapability {
     /**
      * Generate the unit tests reporting
      * 

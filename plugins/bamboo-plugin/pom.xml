@@ -47,6 +47,11 @@
 			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-bambooclient</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
 	</dependencies>
 
 </project>
