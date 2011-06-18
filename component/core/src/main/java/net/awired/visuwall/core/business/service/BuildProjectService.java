@@ -93,7 +93,7 @@ public class BuildProjectService {
         throw new RuntimeException("estimatedFinishTime null");
     }
 
-    private Runnable getUpdateProjectRunner(final ConnectedProject theProject) {
+    Runnable getUpdateProjectRunner(final ConnectedProject theProject) {
         Preconditions.checkNotNull(theProject, "project can not be null");
         return new Runnable() {
             ConnectedProject project = theProject;
