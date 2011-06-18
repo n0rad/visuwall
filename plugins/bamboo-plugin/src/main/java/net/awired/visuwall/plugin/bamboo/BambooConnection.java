@@ -153,20 +153,51 @@ public class BambooConnection implements Connection, BuildCapability {
 
 	@Override
 	public List<String> findProjectNames() {
-		throw new RuntimeException("Not yet implemented");
+        List<String> projectNames = new ArrayList<String>();
+        List<BambooProject> projects = bamboo.findAllProjects();
+        for (BambooProject project : projects) {
+            projectNames.add(project.getName());
+        }
+        return projectNames;
 	}
 
 	@Override
 	public boolean contains(ProjectId projectId) {
-		throw new RuntimeException("Not yet implemented");
+        checkProjectId(projectId);
+        String key = projectId.getId(BAMBOO_ID);
+        List<BambooProject> projects = bamboo.findAllProjects();
+        for (BambooProject project : projects) {
+            String projectKey = project.getKey();
+            if (key.equals(projectKey)) {
+                return true;
+            }
+        }
+        return false;
 	}
 
 	@Override
 	public List<ProjectId> findProjectsByNames(List<String> names) {
-		throw new RuntimeException("Not yet implemented");
+        Preconditions.checkNotNull(names, "names is mandatory");
+        List<ProjectId> projectIds = new ArrayList<ProjectId>();
+        List<BambooProject> projects = bamboo.findAllProjects();
+        for (BambooProject project : projects) {
+            String name = project.getName();
+            if (names.contains(name)) {
+                ProjectId projectId = createProjectId(project);
+                projectIds.add(projectId);
+            }
+        }
+        return projectIds;
 	}
 
-	@Override
+    private ProjectId createProjectId(BambooProject project) {
+        ProjectId projectId = new ProjectId();
+        projectId.setName(project.getName());
+        projectId.addId(BAMBOO_ID, project.getKey());
+        return projectId;
+    }
+
+    @Override
 	public void close() {
 	}
 

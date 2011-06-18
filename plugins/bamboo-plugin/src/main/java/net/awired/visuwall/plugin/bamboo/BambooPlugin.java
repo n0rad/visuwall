@@ -49,6 +49,12 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
     @Override
     public SoftwareId getSoftwareId(URL url) {
         SoftwareId softwareId = new SoftwareId();
+        softwareId.setName("Bamboo");
+        try {
+            softwareId.setVersion(BambooVersionExtractor.extractVersion(url));
+        } catch (BambooVersionNotFoundException e) {
+            softwareId.setVersion("version not found");
+        }
         return softwareId;
     }
 
