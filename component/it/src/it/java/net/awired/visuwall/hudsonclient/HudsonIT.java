@@ -17,10 +17,11 @@
 package net.awired.visuwall.hudsonclient;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
+
 import java.util.List;
 import java.util.Set;
+
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
@@ -28,7 +29,7 @@ import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
-import org.junit.Ignore;
+
 import org.junit.Test;
 
 public class HudsonIT {
@@ -59,7 +60,6 @@ public class HudsonIT {
 
     @Test
     public void should_count_it_and_ut() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
-        Hudson hudson = new Hudson("http://fluxx.fr.cr:8080/hudson");
         HudsonBuild build = hudson.findBuild("itcoverage-project", 17);
         HudsonTestResult unitTestResult = build.getUnitTestResult();
         HudsonTestResult integrationTestResult = build.getIntegrationTestResult();
@@ -78,20 +78,8 @@ public class HudsonIT {
     @Test
     public void should_be_unstable_when_having_passed_tests_and_failed_tests() throws HudsonBuildNotFoundException,
             HudsonProjectNotFoundException {
-        Hudson hudson = new Hudson("http://fluxx.fr.cr:8080/hudson");
         String status = hudson.getState("itcoverage-project");
         assertEquals("UNSTABLE", status);
-    }
-
-    @Ignore("apache site is down")
-    @Test
-    public void should_retrieve_project_names_and_descriptions() {
-        Hudson hudson = new Hudson("https://builds.apache.org");
-        List<String> projects = hudson.findProjectNames();
-        assertFalse(projects.isEmpty());
-        for (String project : projects) {
-            System.err.println(project);
-        }
     }
 
     @Test
@@ -106,7 +94,8 @@ public class HudsonIT {
 
     @Test
     public void should_retrieve_commiter_email() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
-        HudsonBuild build = hudson.findBuild("successproject", 9);
+        Hudson hudsonAwired = new Hudson(IntegrationTestData.JENKINS_URL);
+        HudsonBuild build = hudsonAwired.findBuild("successproject", 9);
         Set<HudsonCommiter> set = build.getCommiters();
         HudsonCommiter commiter = set.iterator().next();
 

@@ -16,10 +16,13 @@
 
 package net.awired.visuwall.plugin.hudson.tck;
 
-import static net.awired.visuwall.IntegrationTestData.HUDSON_ID;
+import static net.awired.visuwall.plugin.hudson.HudsonConnection.HUDSON_ID;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.List;
 
 import net.awired.visuwall.IntegrationTestData;
@@ -55,35 +58,43 @@ public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
 	@Override
 	@Test
 	public void should_find_a_project() throws ProjectNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "neverbuild");
+        ProjectId projectId = fluxxProjectId();
         Project project = hudson.findProject(projectId);
         assertNotNull(project);
     }
 
 	@Override
 	@Test
-	@Ignore
 	public void should_find_project_ids_by_names() {
+        List<String> names = Arrays.asList("fluxx", "visuwall");
+        List<ProjectId> projectIds = hudson.findProjectsByNames(names);
+        assertEquals(2, projectIds.size());
+        assertEquals("fluxx", projectIds.get(0).getName());
+        assertEquals("visuwall", projectIds.get(1).getName());
 	}
 
 	@Override
 	@Test
-	@Ignore
 	public void should_contain_project() {
+        assertTrue(hudson.contains(fluxxProjectId()));
 	}
 
 	@Override
 	@Test
-	@Ignore
 	public void should_not_contain_project() {
+        ProjectId projectId = new ProjectId();
+        projectId.addId(HUDSON_ID, "idValue");
+        assertFalse(hudson.contains(projectId));
 	}
 
 	@Override
 	@Test
-	@Ignore
 	public void should_find_all_project_names() {
-
+        List<String> names = hudson.findProjectNames();
+        List<String> hudsonNames = Arrays.asList("fluxx", "visuwall", "dev-radar");
+        for (String hudsonName : hudsonNames) {
+            assertTrue(names.contains(hudsonName));
+        }
 	}
 
 	@Override
@@ -92,5 +103,11 @@ public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
 	public void should_get_disable_project() throws ProjectNotFoundException {
 
 	}
+
+    private ProjectId fluxxProjectId() {
+        ProjectId projectId = new ProjectId();
+        projectId.addId(HUDSON_ID, "fluxx");
+        return projectId;
+    }
 
 }

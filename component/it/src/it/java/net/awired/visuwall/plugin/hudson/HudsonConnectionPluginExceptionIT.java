@@ -16,11 +16,12 @@
 
 package net.awired.visuwall.plugin.hudson;
 
-import static net.awired.visuwall.IntegrationTestData.HUDSON_ID;
+import static net.awired.visuwall.plugin.hudson.HudsonConnection.HUDSON_ID;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 

@@ -196,14 +196,14 @@ public class HudsonFinder {
 		}
 	}
 
-	public List<String> findViews() {
+    public List<String> findViews() {
 		List<String> views = new ArrayList<String>();
 		try {
-		String projectsUrl = hudsonUrlBuilder.getAllProjectsUrl();
-		HudsonModelHudson hudson = client.resource(projectsUrl, HudsonModelHudson.class);
-		for (HudsonModelView view : hudson.getView()) {
-			addValidViewNAme(views, view);
-		}
+            String projectsUrl = hudsonUrlBuilder.getAllProjectsUrl();
+            HudsonModelHudson hudson = client.resource(projectsUrl, HudsonModelHudson.class);
+            for (HudsonModelView view : hudson.getView()) {
+                addValidViewName(views, view);
+            }
 		} catch (ResourceNotFoundException e) {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug(e.getMessage(), e);
@@ -212,9 +212,9 @@ public class HudsonFinder {
 		return views;
 	}
 
-	private void addValidViewNAme(List<String> views, HudsonModelView view) {
+	private void addValidViewName(List<String> views, HudsonModelView view) {
 		String viewName = view.getName();
-		if (!"All".equals(viewName)) {
+        if (!"All".equals(viewName) && !"Tous".equals(viewName)) {
 			views.add(viewName);
 		}
 	}

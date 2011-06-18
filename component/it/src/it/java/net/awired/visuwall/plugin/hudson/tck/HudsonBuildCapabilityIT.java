@@ -16,10 +16,13 @@
 
 package net.awired.visuwall.plugin.hudson.tck;
 
-import static net.awired.visuwall.IntegrationTestData.HUDSON_ID;
+import static net.awired.visuwall.plugin.hudson.HudsonConnection.HUDSON_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+
+import java.util.Date;
+
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.ProjectId;
@@ -33,7 +36,6 @@ import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
@@ -50,7 +52,7 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
 	public void should_find_build_by_build_number() throws BuildNotFoundException, ProjectNotFoundException {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "struts");
-        Build build = hudson.findBuildByBuildNumber(projectId, 3);
+        Build build = hudson.findBuildByBuildNumber(projectId, 1);
         assertNotNull(build);
     }
 
@@ -60,7 +62,7 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "struts");
         int buildNumber = hudson.getLastBuildNumber(projectId);
-        assertEquals(4, buildNumber);
+        assertEquals(1, buildNumber);
     }
 
 	@Override
@@ -81,11 +83,12 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
         assertEquals(State.SUCCESS, state);
     }
 
-	@Override
-	@Test
-	@Ignore
-	public void should_get_estimated_date() throws ProjectNotFoundException {
-
-	}
-
+    @Override
+    @Test
+    public void should_get_estimated_date() throws ProjectNotFoundException {
+        ProjectId projectId = new ProjectId();
+        projectId.addId(HUDSON_ID, "struts");
+        Date date = hudson.getEstimatedFinishTime(projectId);
+        assertNotNull(date);
+    }
 }
