@@ -25,6 +25,7 @@ import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
@@ -40,7 +41,7 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
 	BuildCapability hudson = new HudsonConnection();
 
     @Before
-	public void setUp() {
+    public void setUp() throws ConnectionException {
 		((Connection) hudson).connect(IntegrationTestData.HUDSON_URL, null, null);
     }
 

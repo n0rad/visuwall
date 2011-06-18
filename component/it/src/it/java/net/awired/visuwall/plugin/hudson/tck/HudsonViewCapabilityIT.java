@@ -17,6 +17,7 @@
 package net.awired.visuwall.plugin.hudson.tck;
 
 import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
@@ -32,7 +33,7 @@ public class HudsonViewCapabilityIT implements ViewCapabilityTCK {
 	ViewCapability hudson = new HudsonConnection();
 
     @Before
-	public void setUp() {
+    public void setUp() throws ConnectionException {
 		((Connection) hudson).connect(IntegrationTestData.HUDSON_URL, null, null);
     }
 

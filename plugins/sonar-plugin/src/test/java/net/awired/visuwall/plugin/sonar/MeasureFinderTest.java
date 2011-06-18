@@ -18,9 +18,9 @@ package net.awired.visuwall.plugin.sonar;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
-import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
+
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
@@ -30,29 +30,6 @@ import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
 public class MeasureFinderTest {
-
-    @Test
-    public void should_find_quality_measure() throws SonarMetricNotFoundException, SonarMeasureNotFoundException {
-        Measure coverageMeasure = new Measure();
-        coverageMeasure.setFormattedValue("5%");
-        coverageMeasure.setValue(5D);
-        coverageMeasure.setMetricName("Coverage");
-        coverageMeasure.setMetricKey("coverage");
-
-        Resource resource = Mockito.mock(Resource.class);
-        when(resource.getMeasure(Matchers.anyString())).thenReturn(coverageMeasure);
-
-        Sonar sonar = Mockito.mock(Sonar.class);
-        when(sonar.find((ResourceQuery) Matchers.anyObject())).thenReturn(resource);
-
-        MeasureFinder measureFinder = new MeasureFinder(sonar);
-
-        QualityMeasure qualityMeasure = measureFinder.findQualityMeasure("artifactId", "coverage");
-
-        assertEquals(coverageMeasure.getFormattedValue(), qualityMeasure.getFormattedValue());
-        assertEquals(coverageMeasure.getValue(), qualityMeasure.getValue());
-        assertEquals(coverageMeasure.getMetricKey(), qualityMeasure.getKey());
-    }
 
     @Test
     public void should_find_measure() throws SonarMetricNotFoundException, SonarMeasureNotFoundException {
@@ -67,7 +44,8 @@ public class MeasureFinderTest {
         Sonar sonar = Mockito.mock(Sonar.class);
         when(sonar.find((ResourceQuery) Matchers.anyObject())).thenReturn(resource);
 
-        MeasureFinder measureFinder = new MeasureFinder(sonar);
+        MeasureFinder measureFinder = new MeasureFinder("http://sonar:9000");
+        measureFinder.sonar = sonar;
         Measure measure = measureFinder.findMeasure("artifactId", "coverage");
 
         assertEquals(coverageMeasure.getFormattedValue(), measure.getFormattedValue());

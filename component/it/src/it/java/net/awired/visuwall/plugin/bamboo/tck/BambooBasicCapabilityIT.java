@@ -24,6 +24,7 @@ import java.util.List;
 
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
@@ -39,7 +40,7 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
 	BasicCapability bamboo = new BambooConnection();
 
     @Before
-	public void init() {
+    public void init() throws ConnectionException {
 		((Connection) bamboo).connect(BAMBOO_URL, null, null);
 	}
 

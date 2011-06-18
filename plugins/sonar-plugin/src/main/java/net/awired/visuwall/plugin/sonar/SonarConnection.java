@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
@@ -30,6 +31,7 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
+import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
@@ -39,17 +41,25 @@ import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.wsclient.services.Measure;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
 
-public final class SonarConnection implements Connection, MetricCapability, TestCapability {
+public class SonarConnection implements Connection, MetricCapability, TestCapability {
 
     private static final Logger LOG = LoggerFactory.getLogger(SonarConnection.class);
 
-    private MeasureFinder measureFinder;
+    private final UUID id = UUID.randomUUID();
+
+    @VisibleForTesting
+    MeasureFinder measureFinder;
+
+    @VisibleForTesting
+    MetricFinder metricFinder;
 
     private Map<String, QualityMetric> metricsMap;
     private String[] metricKeys = new String[] {};
@@ -59,36 +69,29 @@ public final class SonarConnection implements Connection, MetricCapability, Test
     public SonarConnection() {
     }
 
-    public void connect(String url) {
+    public void connect(String url) throws ConnectionException {
         connect(url, null, null);
     }
 
-    public void connect(String url, String login, String password) {
+    @Override
+    public void connect(String url, String login, String password) throws ConnectionException {
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize sonar with url " + url);
         }
         try {
-            measureFinder = new MeasureFinder(url, login, password);
-            MetricFinder metricListBuilder = new MetricFinder(url);
-            metricsMap = metricListBuilder.findMetrics();
+            if (metricFinder == null) {
+                metricFinder = new MetricFinder(url);
+            }
+            if (measureFinder == null) {
+                measureFinder = new MeasureFinder(url, login, password);
+            }
+            metricsMap = metricFinder.findMetrics();
             Set<String> metricKeysSet = metricsMap.keySet();
             int countMetricKeys = metricKeysSet.size();
             metricKeys = metricKeysSet.toArray(new String[countMetricKeys]);
             connected = true;
         } catch (SonarMetricsNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @VisibleForTesting
-    SonarConnection(MeasureFinder measureFinder, MetricFinder metricFinder) {
-        try {
-            this.measureFinder = measureFinder;
-            metricsMap = metricFinder.findMetrics();
-            metricKeys = metricsMap.keySet().toArray(new String[] {});
-            connected = true;
-        } catch (SonarMetricsNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new ConnectionException("can't connect to Sonar at " + url, e);
         }
     }
 
@@ -105,9 +108,12 @@ public final class SonarConnection implements Connection, MetricCapability, Test
             }
             for (String key : metrics) {
                 try {
-                    QualityMeasure qualityMeasure = measureFinder.findQualityMeasure(artifactId, key);
-                    qualityMeasure.setName(metricsMap.get(key).getName());
-                    qualityResult.add(key, qualityMeasure);
+                    Measure measure = measureFinder.findMeasure(artifactId, key);
+                    if (measure.getValue() != null) {
+                        QualityMeasure qualityMeasure = QualityMeasures.asQualityMeasure(measure, key);
+                        qualityMeasure.setName(metricsMap.get(key).getName());
+                        qualityResult.add(key, qualityMeasure);
+                    }
                 } catch (SonarMeasureNotFoundException e) {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug(e.getMessage());
@@ -128,10 +134,10 @@ public final class SonarConnection implements Connection, MetricCapability, Test
         }
         try {
             measureFinder.findMeasure(artifactId, "comment_blank_lines");
+            return true;
         } catch (SonarMeasureNotFoundException e) {
             return false;
         }
-        return true;
     }
 
     @Override
@@ -145,20 +151,20 @@ public final class SonarConnection implements Connection, MetricCapability, Test
                 LOG.debug("can't analyze project " + projectId + " without artifactId. Is it a maven project ?");
             }
         } else {
-			unitTestResult = createUnitTestAnalysis(artifactId);
+            unitTestResult = createUnitTestAnalysis(artifactId);
         }
         return unitTestResult;
     }
 
-	private TestResult createUnitTestAnalysis(String artifactId) {
-		TestResult unitTestResult = new TestResult();
+    private TestResult createUnitTestAnalysis(String artifactId) {
+        TestResult unitTestResult = new TestResult();
         try {
-            Double coverage = measureFinder.findMeasureValue(artifactId, "coverage");
-            Double failures = measureFinder.findMeasureValue(artifactId, "test_failures");
-            Double errors = measureFinder.findMeasureValue(artifactId, "test_errors");
-            Double passTests = measureFinder.findMeasureValue(artifactId, "tests");
+            Double coverage = measureFinder.findMeasure(artifactId, "coverage").getValue();
+            Double failures = measureFinder.findMeasure(artifactId, "test_failures").getValue();
+            Double errors = measureFinder.findMeasure(artifactId, "test_errors").getValue();
+            Double passTests = measureFinder.findMeasure(artifactId, "tests").getValue();
 
-            int skipCount = measureFinder.findMeasureValue(artifactId, "skipped_tests").intValue();
+            int skipCount = measureFinder.findMeasure(artifactId, "skipped_tests").getIntValue();
             int failCount = failures.intValue() + errors.intValue();
             int passCount = passTests.intValue() - failCount;
 
@@ -172,7 +178,7 @@ public final class SonarConnection implements Connection, MetricCapability, Test
                         + ", cause " + e.getMessage());
             }
         }
-		return unitTestResult;
+        return unitTestResult;
     }
 
     @Override
@@ -187,7 +193,7 @@ public final class SonarConnection implements Connection, MetricCapability, Test
                     LOG.debug("can't analyze project " + projectId + " without artifactId. Is it a maven project ?");
                 }
             } else {
-                Double itCoverage = measureFinder.findMeasureValue(artifactId, "it_coverage");
+                Double itCoverage = measureFinder.findMeasure(artifactId, "it_coverage").getValue();
                 integrationTestResult.setCoverage(itCoverage);
             }
         } catch (SonarMeasureNotFoundException e) {
@@ -207,7 +213,6 @@ public final class SonarConnection implements Connection, MetricCapability, Test
             String xml = new String(content);
             return xml.contains("sonar.core.version");
         } catch (IOException e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -237,26 +242,40 @@ public final class SonarConnection implements Connection, MetricCapability, Test
 
     @Override
     public List<ProjectId> findAllProjects() {
-        return null;
+        return new ArrayList<ProjectId>();
     }
 
     @Override
     public List<ProjectId> findProjectsByNames(List<String> names) {
-        return null;
+        return new ArrayList<ProjectId>();
     }
 
     @Override
     public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
-        return null;
+        throw new ProjectNotFoundException("Sonar can't find project by project id");
     }
 
     @Override
     public List<String> findProjectNames() {
-        return null;
+        return new ArrayList<String>();
     }
 
     @Override
     public void close() {
+        connected = false;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof SonarConnection) {
+            SonarConnection s = (SonarConnection) o;
+            return id.equals(s.id);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

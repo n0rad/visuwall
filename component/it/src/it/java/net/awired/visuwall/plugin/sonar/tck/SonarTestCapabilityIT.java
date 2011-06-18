@@ -21,6 +21,7 @@ import static net.awired.visuwall.IntegrationTestData.STRUTS_2_ARTIFACT_ID;
 import static org.junit.Assert.assertEquals;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
+import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.tck.TestCapabilityTCK;
@@ -34,7 +35,7 @@ public class SonarTestCapabilityIT implements TestCapabilityTCK {
 	private static TestCapability sonar = new SonarConnection();
 
     @BeforeClass
-    public static void init() {
+    public static void init() throws ConnectionException {
 		((Connection) sonar).connect(SONAR_URL, null, null);
     }
 
@@ -53,7 +54,7 @@ public class SonarTestCapabilityIT implements TestCapabilityTCK {
     }
 
     @Test
-	public void should_analyze_integration_tests() {
+    public void should_analyze_integration_tests() throws ConnectionException {
 		TestCapability sonar = new SonarConnection();
 		((Connection) sonar).connect("http://fluxx.fr.cr:9000", null, null);
 

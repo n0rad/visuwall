@@ -28,6 +28,7 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
+import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
@@ -41,7 +42,7 @@ public class SonarMetricCapabilityIT {
 	private static MetricCapability sonar = new SonarConnection();
 
     @BeforeClass
-    public static void init() {
+    public static void init() throws ConnectionException {
 		((Connection) sonar).connect(SONAR_URL, null, null);
     }
 
@@ -75,7 +76,7 @@ public class SonarMetricCapabilityIT {
     }
 
     @Test
-    public void should_count_exact_it_and_ut() {
+    public void should_count_exact_it_and_ut() throws ConnectionException {
         ProjectId projectId = new ProjectId();
         projectId.setArtifactId("fr.xebia.librestry:librestry");
 

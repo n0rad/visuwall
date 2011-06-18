@@ -24,4 +24,8 @@ public class SonarMetricsNotFoundException extends Exception {
         super(cause, e);
     }
 
+    public SonarMetricsNotFoundException(String msg) {
+        super(msg);
+    }
+
 }

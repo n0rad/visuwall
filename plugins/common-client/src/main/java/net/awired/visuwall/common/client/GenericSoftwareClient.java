@@ -1,5 +1,7 @@
 package net.awired.visuwall.common.client;
 
+import javax.ws.rs.core.MediaType;
+
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
@@ -32,8 +34,9 @@ public class GenericSoftwareClient {
     }
 
 	public <T> T resource(String url, Class<T> clazz) throws ResourceNotFoundException {
-		Preconditions.checkNotNull(url, "url is mandatory");
-		try {
+        checkUrl(url);
+        checkClass(clazz);
+        try {
 			WebResource resource = client.resource(url);
 			return resource.get(clazz);
 		} catch (UniformInterfaceException e) {
@@ -42,5 +45,27 @@ public class GenericSoftwareClient {
 			throw new ResourceNotFoundException(e);
 		}
 	}
+
+    public <T> T resource(String url, Class<T> clazz, MediaType mediaType) throws ResourceNotFoundException {
+        checkUrl(url);
+        checkClass(clazz);
+        Preconditions.checkNotNull(mediaType, "mediaType is mandatory");
+        try {
+            WebResource resource = client.resource(url);
+            return resource.accept(mediaType).get(clazz);
+        } catch (UniformInterfaceException e) {
+            throw new ResourceNotFoundException(e);
+        } catch (ClientHandlerException e) {
+            throw new ResourceNotFoundException(e);
+        }
+    }
+
+    private <T> void checkClass(Class<T> clazz) {
+        Preconditions.checkNotNull(clazz, "clazz is mandatory");
+    }
+
+    private void checkUrl(String url) {
+        Preconditions.checkNotNull(url, "url is mandatory");
+    }
 
 }
