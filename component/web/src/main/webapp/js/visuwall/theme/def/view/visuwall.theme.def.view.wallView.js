@@ -75,7 +75,7 @@ visuwall.theme.def.view.wallView = new function() {
 		$this._getElement(projectId).fadeOut("slow").remove();		
 	};
 
-	this.updateCountdown = function(projectId, finishDate) {
+	this.setCountdown = function(projectId, finishDate) {
 		$this._hideQuality(projectId);
 		$this._hideCommiters(projectId);
 		var countdownElement = $this._getElement(projectId, 'p.timeleft');

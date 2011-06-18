@@ -26,7 +26,7 @@ visuwall.ctrl.process.Wall = function(wallName) {
 									$this._updateProject(newProject);
 								});
 					} else {
-//						$this._updateBuilding(status.id, status.building);
+						$this._updateBuilding(status.id, status.building, status.buildingTimeleftSecond);
 //						$this._checkVersionChange(status.id, status);
 					}
 					projectDone.push(status.id);
@@ -51,7 +51,8 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	this._updateProject = function(project) {
 		$this._updateLastBuild(project);
 		$this._updateAgo(project);
-		$this._updateBuilding(project);
+		
+		$this._updateBuilding(project.id, project.building/*, project.finishTime*/);
 		$this._updateState(project);
 	};
 	
@@ -125,7 +126,7 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	this._updateBuilding = function(projectId, building, finishTime) {
 		if (building) {
 			$this.wallView.showBuilding(projectId);
-			$this.wallView.setCountdown(projectId, project.finishTime);
+			$this.wallView.setCountdown(projectId, finishTime);
 		} else {
 			this.wallView.stopBuilding(projectId);			
 		}
