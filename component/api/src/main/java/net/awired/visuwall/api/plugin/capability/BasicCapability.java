@@ -34,7 +34,9 @@ public interface BasicCapability {
      * @param projectId
      * @return
      * @throws ProjectNotFoundException
+     * @deprecated
      */
+    @Deprecated
     Project findProject(ProjectId projectId) throws ProjectNotFoundException;
 
     /**

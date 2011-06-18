@@ -16,6 +16,7 @@ public interface BuildCapability extends BasicCapability {
      * @param projectId
      * @return
      * @throws ProjectNotFoundException
+     * @deprecated
      */
     @Deprecated
     State getState(ProjectId projectId) throws ProjectNotFoundException;
@@ -38,7 +39,9 @@ public interface BuildCapability extends BasicCapability {
      * @return
      * @throws BuildNotFoundException
      * @throws ProjectNotFoundException
+     * @deprecated
      */
+    @Deprecated
     Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
             ProjectNotFoundException;
 

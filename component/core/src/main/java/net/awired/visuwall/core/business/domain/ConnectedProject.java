@@ -13,10 +13,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class ConnectedProject extends Project {
 
-    private boolean building;
-
     //TODO move to build
     private State state;
+    private boolean building;
 
     @Transient
     private List<BasicCapability> capabilities = new ArrayList<BasicCapability>();

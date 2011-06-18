@@ -80,6 +80,34 @@ public class BuildProjectService {
         };
     }
 
+    Runnable getUpdateProjectRunner(final ConnectedProject project) {
+        Preconditions.checkNotNull(project, "project is a mandatory parameter");
+        return new Runnable() {
+            @Override
+            public void run() {
+                LOG.info("Running Project Updater task for project " + project);
+                boolean isBuilding = isBuilding(project);
+                int lastBuildNumber = getLastBuildNumber(project);
+                //                if () {
+
+                project.setState(getState(project));
+                //                for (BasicCapability service : project.getCapabilities()) {
+                //                    projectEnhancerService.enhanceWithBuildInformations(project, service);
+                //                    projectEnhancerService.enhanceWithQualityAnalysis(project, service, metrics);
+                //                }
+                //                if (LOG.isDebugEnabled()) {
+                //                    LOG.debug(project.toString());
+                //                }
+
+                //TODO MOVE
+                //                    projectAggregatorService.enhanceWithBuildInformations(connectedProject, buildPlugin);
+
+            }
+        };
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * @return null if no date could be estimated
      * @throws ProjectNotFoundException
@@ -92,34 +120,6 @@ public class BuildProjectService {
         }
         throw new RuntimeException("estimatedFinishTime null");
     }
-
-    Runnable getUpdateProjectRunner(final ConnectedProject project) {
-        Preconditions.checkNotNull(project, "project is a mandatory parameter");
-        return new Runnable() {
-            @Override
-            public void run() {
-                LOG.info("Running Project Updater task for project " + project);
-
-                //                Preconditions.checkNotNull(project, "project is a mandatory parameter");
-                //                for (BasicCapability service : project.getCapabilities()) {
-                //                    projectEnhancerService.enhanceWithBuildInformations(project, service);
-                //                    projectEnhancerService.enhanceWithQualityAnalysis(project, service, metrics);
-                //                }
-                //                if (LOG.isDebugEnabled()) {
-                //                    LOG.debug(project.toString());
-                //                }
-
-                //TODO MOVE
-                //                    projectAggregatorService.enhanceWithBuildInformations(connectedProject, buildPlugin);
-
-                project.setState(getState(project));
-                project.setBuilding(isBuilding(project));
-                project.setCurrentBuildId(getLastBuildNumber(project));
-            }
-        };
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////
 
     private Build findBuildByBuildNumber(ConnectedProject project, int buildNumber) throws BuildNotFoundException,
             ProjectNotFoundException {
@@ -160,7 +160,7 @@ public class BuildProjectService {
     private State getState(ConnectedProject project) {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
         try {
-            return project.getBuildConnection().getState(project.getProjectId());
+            return project.getBuildConnection().getLastBuildState(project.getProjectId());
         } catch (ProjectNotFoundException e) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(e.getMessage());

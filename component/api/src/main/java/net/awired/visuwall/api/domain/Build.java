@@ -22,7 +22,7 @@ import java.util.TreeSet;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
-public final class Build {
+public class Build {
 
     private boolean building;
     private State state = State.UNKNOWN;

@@ -3,7 +3,6 @@ package net.awired.visuwall.core.business.process;
 import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
-
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.Connection;
@@ -15,7 +14,6 @@ import net.awired.visuwall.core.business.service.PluginService;
 import net.awired.visuwall.core.business.service.SoftwareAccessService;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +58,7 @@ public class WallProcess {
                 Connection connection = plugin.getConnection(softwareAccess.getUrl().toString(), null);
                 softwareAccess.setConnection(connection);
             } catch (ConnectionException e) {
-                LOG.warn("Can't rebuid connection. " + softwareAccess, e);
+                LOG.warn("Can't rebuild connection. " + softwareAccess, e);
             }
         }
     }
