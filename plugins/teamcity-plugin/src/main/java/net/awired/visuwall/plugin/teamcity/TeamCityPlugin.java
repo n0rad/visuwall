@@ -42,6 +42,7 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
     public TeamCityConnection getConnection(String url, Properties info) {
         urlBuilder = new TeamCityUrlBuilder(url);
         TeamCityConnection connectionPlugin = new TeamCityConnection();
+        connectionPlugin.connect(url);
         return connectionPlugin;
     }
 

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.domain;
+package net.awired.visuwall.core.business.domain;
 
 import java.util.List;
 import net.awired.visuwall.api.domain.SoftwareId;

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.service;
+package net.awired.visuwall.core.business.service;
 
 import java.util.Arrays;
 import java.util.Map.Entry;

@@ -19,9 +19,9 @@ package net.awired.visuwall.server.web.controller;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import net.awired.visuwall.core.domain.PluginInfo;
-import net.awired.visuwall.core.domain.SoftwareInfo;
-import net.awired.visuwall.core.service.PluginService;
+import net.awired.visuwall.core.business.domain.PluginInfo;
+import net.awired.visuwall.core.business.domain.SoftwareInfo;
+import net.awired.visuwall.core.business.service.PluginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +42,7 @@ public class PluginController {
         return pluginService.getPluginsInfo();
     }
 
-    @RequestMapping(value = "managable", method = RequestMethod.GET)
+    @RequestMapping(value = "getSoftwareInfo", method = RequestMethod.GET)
     public @ResponseBody
     SoftwareInfo getSoftwareInfo(@RequestParam String url) throws MalformedURLException {
         SoftwareInfo softwareInfo = pluginService.getSoftwareInfoFromUrl(new URL(url));

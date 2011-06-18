@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.core.persistence.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,12 +28,12 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import net.awired.ajsl.persistence.entity.implementation.abstracts.IdEntityImpl;
+import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.core.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.ConnectedProject;
 import net.awired.visuwall.core.utils.ShrinkList;
 import org.hibernate.annotations.Cascade;
-import org.springframework.util.AutoPopulatingList;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
@@ -43,14 +44,12 @@ import com.google.common.base.Preconditions;
         @NamedQuery(name = Wall.QUERY_WALLBYNAME, query = "select w FROM Wall AS w where w.name = :"
                 + Wall.QUERY_PARAM_NAME) })
 public final class Wall extends IdEntityImpl<Long> {
-
-    private static final long serialVersionUID = 1L;
-
     public static final String QUERY_NAMES = "wallNames";
     public static final String QUERY_WALLS = "walls";
     public static final String QUERY_WALLBYNAME = "wallByName";
-
     public static final String QUERY_PARAM_NAME = "wallName";
+
+    private static final long serialVersionUID = 1L;
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -62,7 +61,7 @@ public final class Wall extends IdEntityImpl<Long> {
     private List<SoftwareAccess> softwareAccesses = new ShrinkList<SoftwareAccess>(SoftwareAccess.class);
 
     @Transient
-    private List<ConnectedProject> projects = new AutoPopulatingList<ConnectedProject>(ConnectedProject.class);
+    private List<ConnectedProject> projects = new ArrayList<ConnectedProject>();
 
     public Wall() {
     }
@@ -79,6 +78,15 @@ public final class Wall extends IdEntityImpl<Long> {
 
     public Wall(String name) {
         this.name = name;
+    }
+
+    public boolean projectsContainsId(ProjectId projectId) {
+        for (Project project : projects) {
+            if (project.getProjectId().equals(projectId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ConnectedProject getProjectByProjectId(ProjectId projectId) throws ProjectNotFoundException {

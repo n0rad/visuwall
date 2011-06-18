@@ -1,4 +1,4 @@
-package net.awired.visuwall.core.domain;
+package net.awired.visuwall.core.business.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,23 +6,27 @@ import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class ConnectedProject extends Project {
 
-    private boolean building = false;
+    private boolean building;
+
+    //TODO move to build
+    private State state;
 
     @Transient
     private List<BasicCapability> capabilities = new ArrayList<BasicCapability>();
     @Transient
-    private BuildCapability buildPlugin;
+    private BuildCapability buildConnection;
     @Transient
-    private ScheduledFuture<Object> projectStatusTask;
+    private ScheduledFuture<Object> updateProjectTask;
 
     public void close() {
-        projectStatusTask.cancel(true);
+        updateProjectTask.cancel(true);
     }
 
     public ConnectedProject(String name) {
@@ -46,23 +50,13 @@ public class ConnectedProject extends Project {
     }
 
     @JsonIgnore
-    public BuildCapability getBuildPlugin() {
-        return buildPlugin;
+    public BuildCapability getBuildConnection() {
+        return buildConnection;
     }
 
     @JsonIgnore
-    public void setBuildPlugin(BuildCapability buildPlugin) {
-        this.buildPlugin = buildPlugin;
-    }
-
-    @JsonIgnore
-    public void setProjectStatusTask(ScheduledFuture<Object> projectStatusTask) {
-        this.projectStatusTask = projectStatusTask;
-    }
-
-    @JsonIgnore
-    public ScheduledFuture<Object> getProjectStatusTask() {
-        return projectStatusTask;
+    public void setBuildConnection(BuildCapability buildConnection) {
+        this.buildConnection = buildConnection;
     }
 
     public void setBuilding(boolean building) {
@@ -72,4 +66,23 @@ public class ConnectedProject extends Project {
     public boolean isBuilding() {
         return building;
     }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    @JsonIgnore
+    public ScheduledFuture<Object> getUpdateProjectTask() {
+        return updateProjectTask;
+    }
+
+    @JsonIgnore
+    public void setUpdateProjectTask(ScheduledFuture<Object> updateProjectTask) {
+        this.updateProjectTask = updateProjectTask;
+    }
+
 }

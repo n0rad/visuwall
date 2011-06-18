@@ -21,11 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
-import net.awired.visuwall.core.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.ConnectedProject;
+import net.awired.visuwall.core.business.service.PluginService;
+import net.awired.visuwall.core.business.service.WallHolderService;
 import net.awired.visuwall.core.exception.NotFoundException;
 import net.awired.visuwall.core.persistence.entity.Wall;
-import net.awired.visuwall.core.service.PluginService;
-import net.awired.visuwall.core.service.WallHolderService;
 import net.awired.visuwall.server.web.model.ProjectStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +69,7 @@ public class WallController {
     }
 
     @RequestMapping("{wallName}")
-    public String getProjects(@PathVariable String wallName, ModelMap modelMap) throws NotFoundException {
+    public String getWall(@PathVariable String wallName, ModelMap modelMap) throws NotFoundException {
         Wall wall = wallService.find(wallName);
         modelMap.put("data", wall);
         return WALL_JSP;
@@ -84,7 +84,6 @@ public class WallController {
         for (ConnectedProject project : wall.getProjects()) {
             ProjectStatus projectStatus = new ProjectStatus(project);
             projectStatus.setLastBuildId(project.getCurrentBuildId());
-            //TODO get from current
             projectStatus.setBuilding(project.isBuilding());
             statusList.add(projectStatus);
         }

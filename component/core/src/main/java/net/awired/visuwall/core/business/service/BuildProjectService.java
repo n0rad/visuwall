@@ -14,24 +14,25 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.service;
+package net.awired.visuwall.core.business.service;
 
 import java.util.Date;
-
+import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
-
 import net.awired.visuwall.api.domain.Build;
+import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
-import net.awired.visuwall.core.domain.ConnectedProject;
-
+import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.core.business.domain.ConnectedProject;
+import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
+import net.awired.visuwall.core.persistence.entity.Wall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
-
 import com.google.common.base.Preconditions;
 
 @Service
@@ -42,47 +43,79 @@ public class BuildProjectService {
     @Autowired
     ProjectAggregatorService projectEnhancerService;
 
+    @Autowired
+    TaskScheduler taskScheduler;
+
     private static final int PROJECT_NOT_BUILT_ID = -1;
 
     @Transient
     String[] metrics = new String[] { "coverage", "ncloc", "violations_density", "it_coverage" };
 
-    public void updateProject(ConnectedProject project) {
-        Preconditions.checkNotNull(project, "project is a mandatory parameter");
-        for (BasicCapability service : project.getCapabilities()) {
-            projectEnhancerService.enhanceWithBuildInformations(project, service);
-            projectEnhancerService.enhanceWithQualityAnalysis(project, service, metrics);
-        }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(project.toString());
-        }
+    public Runnable getProjectCreationRunner(final Wall wallWhereToAdd, final SoftwareAccess buildSoftwareAccess,
+            final ProjectId projectId) {
+        Preconditions.checkState(buildSoftwareAccess.getConnection() instanceof BuildCapability,
+                "softwareAccess needs to point to BuildCapability plugin connection");
+        return new Runnable() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void run() {
+                LOG.info("Running project creation task for project id " + projectId + " on software "
+                        + buildSoftwareAccess + " in wall " + wallWhereToAdd);
+                BuildCapability buildConnection = (BuildCapability) buildSoftwareAccess.getConnection();
+
+                ConnectedProject connectedProject = new ConnectedProject(projectId);
+                connectedProject.setBuildConnection(buildConnection);
+                connectedProject.getCapabilities().add(buildConnection);
+                Runnable updateProjectRunner = getUpdateProjectRunner(connectedProject);
+
+                LOG.debug("Launching first project fill for project" + connectedProject);
+                updateProjectRunner.run();
+
+                ScheduledFuture<Object> updateProjectTask = taskScheduler.scheduleAtFixedRate(updateProjectRunner,
+                        buildSoftwareAccess.getProjectStatusDelaySecond() * 1000);
+                connectedProject.setUpdateProjectTask(updateProjectTask);
+                LOG.debug("Adding project " + connectedProject + " to wall " + wallWhereToAdd);
+                wallWhereToAdd.getProjects().add(connectedProject);
+            }
+        };
     }
 
     /**
      * @return null if no date could be estimated
      * @throws ProjectNotFoundException
      */
-    public Date getEstimatedFinishTime(ConnectedProject project) throws ProjectNotFoundException {
+    private Date getEstimatedFinishTime(ConnectedProject project) throws ProjectNotFoundException {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
-        Date estimatedFinishTime = project.getBuildPlugin().getEstimatedFinishTime(project.getProjectId());
+        Date estimatedFinishTime = project.getBuildConnection().getEstimatedFinishTime(project.getProjectId());
         if (estimatedFinishTime != null) {
             return estimatedFinishTime;
         }
         throw new RuntimeException("estimatedFinishTime null");
     }
 
-    public Runnable getStatusTask(final ConnectedProject theProject) {
+    Runnable getUpdateProjectRunner(final ConnectedProject theProject) {
         Preconditions.checkNotNull(theProject, "project can not be null");
         return new Runnable() {
             ConnectedProject project = theProject;
 
             @Override
             public void run() {
-                LOG.info("Running Project status task for " + project);
+                LOG.info("Running Project Updater task for project " + project);
+
+                //                Preconditions.checkNotNull(project, "project is a mandatory parameter");
+                //                for (BasicCapability service : project.getCapabilities()) {
+                //                    projectEnhancerService.enhanceWithBuildInformations(project, service);
+                //                    projectEnhancerService.enhanceWithQualityAnalysis(project, service, metrics);
+                //                }
+                //                if (LOG.isDebugEnabled()) {
+                //                    LOG.debug(project.toString());
+                //                }
+
+                //TODO MOVE
+                //                    projectAggregatorService.enhanceWithBuildInformations(connectedProject, buildPlugin);
+
+                project.setState(getState(project));
                 project.setBuilding(isBuilding(project));
-				// TODO: Arnaud, j'enleve le state sur Project
-				// tu dois trouver comment faire sans.
-				// project.setState(getState(project));
                 project.setCurrentBuildId(getLastBuildNumber(project));
             }
         };
@@ -92,7 +125,7 @@ public class BuildProjectService {
             ProjectNotFoundException {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
         try {
-            Build build = project.getBuildPlugin().findBuildByBuildNumber(project.getProjectId(), buildNumber);
+            Build build = project.getBuildConnection().findBuildByBuildNumber(project.getProjectId(), buildNumber);
             if (build != null) {
                 return build;
             }
@@ -113,7 +146,7 @@ public class BuildProjectService {
     private int getLastBuildNumber(ConnectedProject project) {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
         try {
-            return project.getBuildPlugin().getLastBuildNumber(project.getProjectId());
+            return project.getBuildConnection().getLastBuildNumber(project.getProjectId());
         } catch (ProjectNotFoundException e) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(e.getMessage());
@@ -129,7 +162,7 @@ public class BuildProjectService {
     private State getState(ConnectedProject project) {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
         try {
-            return project.getBuildPlugin().getState(project.getProjectId());
+            return project.getBuildConnection().getState(project.getProjectId());
         } catch (ProjectNotFoundException e) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(e.getMessage());
@@ -141,7 +174,7 @@ public class BuildProjectService {
     private boolean isBuilding(ConnectedProject project) {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
         try {
-            return project.getBuildPlugin().isBuilding(project.getProjectId());
+            return project.getBuildConnection().isBuilding(project.getProjectId());
         } catch (ProjectNotFoundException e) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(e.getMessage());

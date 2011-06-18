@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.service;
+package net.awired.visuwall.core.business.service;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,8 +28,8 @@ import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
-import net.awired.visuwall.core.domain.PluginInfo;
-import net.awired.visuwall.core.domain.SoftwareInfo;
+import net.awired.visuwall.core.business.domain.PluginInfo;
+import net.awired.visuwall.core.business.domain.SoftwareInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

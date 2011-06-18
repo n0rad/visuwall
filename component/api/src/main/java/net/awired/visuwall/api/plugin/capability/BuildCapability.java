@@ -1,7 +1,6 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.Date;
-
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -18,28 +17,28 @@ public interface BuildCapability extends BasicCapability {
      * @return
      * @throws ProjectNotFoundException
      */
-	@Deprecated
+    @Deprecated
     State getState(ProjectId projectId) throws ProjectNotFoundException;
 
-	/**
-	 * Builds are in a certain state which may vary between software You'll have to try to associate them with common
-	 * States
-	 * 
-	 * @param projectId
-	 * @return
-	 * @throws ProjectNotFoundException
-	 */
-	State getLastBuildState(ProjectId projectId) throws ProjectNotFoundException;
+    /**
+     * Builds are in a certain state which may vary between software You'll have to try to associate them with common
+     * States
+     * 
+     * @param projectId
+     * @return
+     * @throws ProjectNotFoundException
+     */
+    State getLastBuildState(ProjectId projectId) throws ProjectNotFoundException;
 
-	/**
-	 * Build software can order their builds by number, plugin should be able to retrieve builds by number too
-	 * 
-	 * @param projectId
-	 * @param buildNumber
-	 * @return
-	 * @throws BuildNotFoundException
-	 * @throws ProjectNotFoundException
-	 */
+    /**
+     * Build software can order their builds by number, plugin should be able to retrieve builds by number too
+     * 
+     * @param projectId
+     * @param buildNumber
+     * @return
+     * @throws BuildNotFoundException
+     * @throws ProjectNotFoundException
+     */
     Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
             ProjectNotFoundException;
 

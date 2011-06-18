@@ -36,7 +36,7 @@ public class Hudson {
 
     private static final Logger LOG = LoggerFactory.getLogger(Hudson.class);
 
-    private static final String DEFAULT_STATE = "NEW";
+    private static final String DEFAULT_STATE = "UNKNOWN";
 
     private HudsonFinder hudsonFinder;
 
@@ -167,6 +167,7 @@ public class Hudson {
                 state = "UNSTABLE";
             }
         } catch (HudsonBuildNotFoundException e) {
+            //TODO should return an error not a state
             state = DEFAULT_STATE;
         }
         return state;
