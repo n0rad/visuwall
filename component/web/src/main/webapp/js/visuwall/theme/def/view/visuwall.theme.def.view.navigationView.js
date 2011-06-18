@@ -53,7 +53,7 @@ visuwall.theme.def.view.navigationView = new function() {
 	
 	this._displayForm = function(domObject, title, closeController) {
 		domObject.dialog({
-			height: 380,
+			height: 430,
 			width: 600,
 			title: title,
 			resizable: false,

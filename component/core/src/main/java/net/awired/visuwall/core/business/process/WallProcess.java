@@ -12,7 +12,6 @@ import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
 import net.awired.visuwall.core.business.service.BuildProjectService;
 import net.awired.visuwall.core.business.service.PluginService;
-import net.awired.visuwall.core.business.service.ProjectAggregatorService;
 import net.awired.visuwall.core.business.service.SoftwareAccessService;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
@@ -36,9 +35,6 @@ public class WallProcess {
 
     @Autowired
     PluginService pluginService;
-
-    @Autowired
-    ProjectAggregatorService projectAggregatorService;
 
     @Autowired
     SoftwareAccessService softwareAccessService;
@@ -75,7 +71,6 @@ public class WallProcess {
             public void run() {
                 LOG.info("Running Project Discover task for " + softwareAccess + " in wall " + wall);
                 if (softwareAccess.getConnection() instanceof BuildCapability) {
-                    BuildCapability buildPlugin = (BuildCapability) softwareAccess.getConnection();
                     Set<ProjectId> projectIds = softwareAccessService.discoverBuildProjects(softwareAccess);
                     for (ProjectId projectId : projectIds) {
                         if (wall.projectsContainsId(projectId)) {

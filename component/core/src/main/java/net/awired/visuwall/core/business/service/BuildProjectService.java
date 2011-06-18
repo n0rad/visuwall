@@ -97,11 +97,9 @@ public class BuildProjectService {
         throw new RuntimeException("estimatedFinishTime null");
     }
 
-    Runnable getUpdateProjectRunner(final ConnectedProject theProject) {
-        Preconditions.checkNotNull(theProject, "project can not be null");
+    Runnable getUpdateProjectRunner(final ConnectedProject project) {
+        Preconditions.checkNotNull(project, "project is a mandatory parameter");
         return new Runnable() {
-            ConnectedProject project = theProject;
-
             @Override
             public void run() {
                 LOG.info("Running Project Updater task for project " + project);
@@ -125,7 +123,9 @@ public class BuildProjectService {
         };
     }
 
-    public Build findBuildByBuildNumber(ConnectedProject project, int buildNumber) throws BuildNotFoundException,
+    //////////////////////////////////////////////////////////////////////////////////////
+
+    private Build findBuildByBuildNumber(ConnectedProject project, int buildNumber) throws BuildNotFoundException,
             ProjectNotFoundException {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
         try {
@@ -144,8 +144,6 @@ public class BuildProjectService {
         }
         throw new BuildNotFoundException("No build #" + buildNumber + " for project " + project);
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////
 
     private int getLastBuildNumber(ConnectedProject project) {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
