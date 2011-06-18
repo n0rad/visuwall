@@ -74,7 +74,7 @@ public class JenkinsConnectionTest {
 
         ProjectId projectId = new ProjectId();
         projectId.addId(JENKINS_ID, "name");
-        State state = jenkinsPlugin.getState(projectId);
+        State state = jenkinsPlugin.getLastBuildState(projectId);
         assertEquals(State.FAILURE, state);
     }
 

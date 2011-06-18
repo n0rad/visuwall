@@ -18,7 +18,9 @@ package net.awired.visuwall.core.business.service;
 
 import java.util.Date;
 import java.util.concurrent.ScheduledFuture;
+
 import javax.persistence.Transient;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -28,11 +30,13 @@ import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
+
 import com.google.common.base.Preconditions;
 
 @Service
@@ -162,7 +166,7 @@ public class BuildProjectService {
     private State getState(ConnectedProject project) {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
         try {
-            return project.getBuildConnection().getState(project.getProjectId());
+            return project.getBuildConnection().getLastBuildState(project.getProjectId());
         } catch (ProjectNotFoundException e) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(e.getMessage());

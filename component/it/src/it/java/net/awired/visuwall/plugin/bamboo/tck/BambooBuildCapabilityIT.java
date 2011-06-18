@@ -81,14 +81,14 @@ public class BambooBuildCapabilityIT {
     @Test
     public void should_verify_success_state() throws ProjectNotFoundException {
         ProjectId projectId = strutsProjectId();
-        State state = bamboo.getState(projectId);
+        State state = bamboo.getLastBuildState(projectId);
         assertEquals(State.SUCCESS, state);
     }
 
     @Test
     public void should_verify_failure_state() throws ProjectNotFoundException {
         ProjectId projectId = struts2ProjectId();
-        State state = bamboo.getState(projectId);
+        State state = bamboo.getLastBuildState(projectId);
         assertEquals(State.FAILURE, state);
     }
 

@@ -1,6 +1,7 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.Date;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -8,17 +9,6 @@ import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BuildCapability extends BasicCapability {
-
-    /**
-     * Project are in a certain state which may vary between software You'll have to try to associate them with common
-     * States
-     * 
-     * @param projectId
-     * @return
-     * @throws ProjectNotFoundException
-     */
-    @Deprecated
-    State getState(ProjectId projectId) throws ProjectNotFoundException;
 
     /**
      * Builds are in a certain state which may vary between software You'll have to try to associate them with common
