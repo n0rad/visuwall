@@ -25,6 +25,7 @@ import java.util.List;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
@@ -40,7 +41,7 @@ public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
 	BasicCapability hudson = new HudsonConnection();
 
     @Before
-	public void setUp() {
+    public void setUp() throws ConnectionException {
 		((Connection) hudson).connect(IntegrationTestData.HUDSON_URL, null, null);
     }
 

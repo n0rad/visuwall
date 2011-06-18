@@ -17,26 +17,41 @@
 package net.awired.visuwall.plugin.sonar;
 
 import java.net.URL;
+
 import javax.ws.rs.core.MediaType;
+
 import net.awired.visuwall.api.domain.SoftwareId;
+import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
+import net.awired.visuwall.common.client.GenericSoftwareClient;
+import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.plugin.sonar.resource.Properties;
 import net.awired.visuwall.plugin.sonar.resource.Property;
+
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
 
 public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
 
-    private static final String SONAR_CORE_VERSION_KEY = "sonar.core.version";
+    static final String SONAR_CORE_VERSION_KEY = "sonar.core.version";
+
+    @VisibleForTesting
+    GenericSoftwareClient client;
+
+    @VisibleForTesting
+    SonarConnectionFactory sonarConnectionFactory;
+
+    public SonarPlugin() {
+        client = new GenericSoftwareClient();
+        sonarConnectionFactory = new SonarConnectionFactory();
+    }
 
     @Override
-    public SonarConnection getConnection(String url, java.util.Properties info) {
-        SonarConnection sonarConnectionPlugin = new SonarConnection();
-        sonarConnectionPlugin.connect(url);
-        return sonarConnectionPlugin;
+    public SonarConnection getConnection(String url, java.util.Properties info) throws ConnectionException {
+        Preconditions.checkNotNull(url, "url is mandatory");
+        SonarConnection sonarConnection = sonarConnectionFactory.create(url);
+        return sonarConnection;
     }
 
     @Override
@@ -58,9 +73,8 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
     public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
-            Client client = Client.create();
-            WebResource resource = client.resource(url.toString() + "/api/properties");
-            Properties properties = resource.accept(MediaType.APPLICATION_XML).get(Properties.class);
+            String propertiesUrl = url.toString() + "/api/properties";
+            Properties properties = client.resource(propertiesUrl, Properties.class, MediaType.APPLICATION_XML_TYPE);
             if (isManageable(properties)) {
                 SoftwareId softwareId = new SoftwareId();
                 softwareId.setName("Sonar");
@@ -68,7 +82,7 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
                 return softwareId;
             }
             throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Sonar");
-        } catch (UniformInterfaceException e) {
+        } catch (ResourceNotFoundException e) {
             throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Sonar");
         }
     }

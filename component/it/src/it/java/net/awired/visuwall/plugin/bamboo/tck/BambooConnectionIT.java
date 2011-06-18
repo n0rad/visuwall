@@ -30,6 +30,7 @@ import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
@@ -43,7 +44,7 @@ public class BambooConnectionIT {
 	BambooConnection bamboo = new BambooConnection();
 
     @Before
-	public void init() {
+    public void init() throws ConnectionException {
 		((Connection) bamboo).connect(BAMBOO_URL, null, null);
 	}
 

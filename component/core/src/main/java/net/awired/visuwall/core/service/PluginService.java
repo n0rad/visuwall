@@ -21,16 +21,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
+
 import net.awired.visuwall.api.domain.SoftwareId;
+import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.core.domain.PluginInfo;
 import net.awired.visuwall.core.domain.SoftwareInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import com.google.common.base.Preconditions;
 
 @Service
@@ -69,13 +73,17 @@ public class PluginService {
             softwareInfo.setSoftwareId(softwareId);
             softwareInfo.setPluginInfo(getPluginInfo(visuwallPlugin));
             // TODO change that null
-            Connection connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
-            softwareInfo.setProjectNames(connectionPlugin.findProjectNames());
+            try {
+                Connection connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
+                softwareInfo.setProjectNames(connectionPlugin.findProjectNames());
 
-            if (connectionPlugin instanceof ViewCapability) {
-                softwareInfo.setViewNames(((ViewCapability) connectionPlugin).findViews());
+                if (connectionPlugin instanceof ViewCapability) {
+                    softwareInfo.setViewNames(((ViewCapability) connectionPlugin).findViews());
+                }
+                return softwareInfo;
+            } catch (ConnectionException e) {
+                throw new RuntimeException("no plugin to manage url " + url, e);
             }
-            return softwareInfo;
         }
         throw new RuntimeException("no plugin to manage url " + url);
     }

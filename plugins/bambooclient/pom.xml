@@ -39,11 +39,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>${guava.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>0.9.26</version>
@@ -51,7 +46,7 @@
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>1.6.2</version>
+			<version>${joda.time.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>
