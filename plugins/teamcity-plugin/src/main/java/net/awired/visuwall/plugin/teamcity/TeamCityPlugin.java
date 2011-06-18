@@ -28,19 +28,14 @@ import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
 import net.awired.visuwall.teamcityclient.resource.TeamCityServer;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
-
-    @VisibleForTesting
-    TeamCityUrlBuilder urlBuilder;
 
 	private GenericSoftwareClient genericSoftwareClient = new GenericSoftwareClient("guest", "");
 
     @Override
     public TeamCityConnection getConnection(String url, Properties info) {
-        urlBuilder = new TeamCityUrlBuilder(url);
         TeamCityConnection connectionPlugin = new TeamCityConnection();
         connectionPlugin.connect(url);
         return connectionPlugin;

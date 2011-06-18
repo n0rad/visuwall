@@ -23,7 +23,6 @@ public final class TestResult {
     private int failCount;
     private int passCount;
     private int skipCount;
-    private int totalCount;
     private double coverage;
 
     public int getFailCount() {
@@ -68,7 +67,7 @@ public final class TestResult {
                 .add("passCount", passCount) //
                 .add("skipCount", skipCount) //
                 .add("failCount", failCount) //
-                .add("totalCount", totalCount) //
+                .add("totalCount", getTotalCount()) //
                 .add("coverage", coverage).toString();
     }
 

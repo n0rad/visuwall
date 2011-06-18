@@ -223,8 +223,9 @@ public class HudsonFinder {
 		checkProjectName(projectName);
 		try {
 			String projectUrl = hudsonUrlBuilder.getProjectUrl(projectName);
-			if (MavenHelper.isNotMavenProject(projectUrl))
+            if (MavenHelper.isNotMavenProject(projectUrl)) {
 				throw new HudsonProjectNotFoundException(projectName + " is not a maven project");
+            }
 			client.resource(projectUrl, HudsonMavenMavenModuleSet.class);
 		} catch (ResourceNotFoundException e) {
 			return false;
@@ -299,8 +300,9 @@ public class HudsonFinder {
 	private HudsonMavenMavenModuleSet findJobByProjectName(String projectName) throws HudsonProjectNotFoundException {
 		try {
 			String projectUrl = hudsonUrlBuilder.getProjectUrl(projectName);
-			if (MavenHelper.isNotMavenProject(projectUrl))
+            if (MavenHelper.isNotMavenProject(projectUrl)) {
 				throw new HudsonProjectNotFoundException(projectName + " is not a maven project");
+            }
 			HudsonMavenMavenModuleSet moduleSet = client.resource(projectUrl, HudsonMavenMavenModuleSet.class);
 			return moduleSet;
 		} catch (ResourceNotFoundException e) {

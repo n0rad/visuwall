@@ -76,7 +76,7 @@ public class Project implements Comparable<Project> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Project)) {
+        if (!(obj instanceof Project)) {
             return false;
         }
 

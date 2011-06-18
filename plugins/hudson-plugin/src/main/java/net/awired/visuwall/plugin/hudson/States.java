@@ -18,12 +18,17 @@ package net.awired.visuwall.plugin.hudson;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import net.awired.visuwall.api.domain.State;
+
 import com.google.common.base.Preconditions;
 
 public class States {
 
     private static final Map<String, State> STATE_MAPPING = new HashMap<String, State>();
+
+    private States() {
+    }
 
     static {
         STATE_MAPPING.put("success", State.SUCCESS);

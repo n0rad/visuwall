@@ -19,9 +19,11 @@ package net.awired.visuwall.hudsonclient.finder;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.loader.DocumentLoader;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -52,8 +54,9 @@ public class HudsonRootModuleFinder {
         Document doc = documentLoader.loadFromUrl(pomUrl);
         String groupId = findValueInFirstLevel(doc, "groupId");
         String artifactId = findValueInFirstLevel(doc, "artifactId");
-        if (groupId == null || artifactId == null)
+        if (groupId == null || artifactId == null) {
             return null;
+        }
         return groupId + ":" + artifactId;
     }
 

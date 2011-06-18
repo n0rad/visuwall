@@ -23,7 +23,6 @@ public class HudsonTestResult {
     private int failCount;
     private int passCount;
     private int skipCount;
-    private int totalCount;
 
     public int getFailCount() {
         return failCount;
@@ -59,7 +58,7 @@ public class HudsonTestResult {
                 .add("passCount", passCount) //
                 .add("skipCount", skipCount) //
                 .add("failCount", failCount) //
-                .add("totalCount", totalCount).toString();
+                .add("totalCount", getTotalCount()).toString();
     }
 
 }

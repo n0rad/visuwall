@@ -83,7 +83,7 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
             }
             throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Sonar");
         } catch (ResourceNotFoundException e) {
-            throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Sonar");
+            throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Sonar", e);
         }
     }
 

@@ -42,8 +42,9 @@ public class Property {
     }
 
     public boolean isKey(String key) {
-        if (key == null || this.key == null)
+        if (key == null || this.key == null) {
             return false;
+        }
         return key.equals(this.key);
     }
 
