@@ -17,11 +17,11 @@
 package net.awired.visuwall.hudsonclient.loader;
 
 import static org.junit.Assert.assertNotNull;
-import net.awired.visuwall.hudsonclient.loader.DocumentLoader;
+import net.awired.visuwall.hudsonclient.exception.DocumentNotLoadedException;
 import net.awired.visuwall.hudsonclient.util.ClasspathFiles;
+
 import org.junit.Test;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXParseException;
 
 public class DocumentLoaderTest {
 
@@ -34,7 +34,7 @@ public class DocumentLoaderTest {
         assertNotNull(document);
     }
 
-    @Test(expected = SAXParseException.class)
+    @Test(expected = DocumentNotLoadedException.class)
     public void should_fail_with_other_type_than_xml() throws Exception {
         String fileUrl = ClasspathFiles.getAbsolutePathFile("simple-text-file.txt");
         documentLoader.loadFromUrl(fileUrl);

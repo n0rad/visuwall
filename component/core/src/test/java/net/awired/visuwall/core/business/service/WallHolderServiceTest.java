@@ -19,17 +19,19 @@ package net.awired.visuwall.core.business.service;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.Query;
+
 import net.awired.visuwall.core.business.domain.ConnectedProject;
 import net.awired.visuwall.core.business.process.WallProcess;
-import net.awired.visuwall.core.business.service.WallHolderService;
-import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
 import net.awired.visuwall.core.persistence.dao.WallDAO;
 import net.awired.visuwall.core.persistence.entity.Wall;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,7 +44,7 @@ public class WallHolderServiceTest {
     private WallHolderService wallHolderService;
 
     @Before
-    public void init() throws NotCreatedException {
+    public void init() {
         List<Wall> walls = new ArrayList<Wall>();
 
         Query query = Mockito.mock(Query.class);
@@ -66,12 +68,12 @@ public class WallHolderServiceTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void should_not_accept_null_parameter() throws NotCreatedException {
+    public void should_not_accept_null_parameter() {
         wallHolderService.update(null);
     }
 
     @Test
-    public void should_add_a_wall() throws NotCreatedException, NotCreatedException, NotFoundException {
+    public void should_add_a_wall() throws NotFoundException {
         WallDAO wallService = Mockito.mock(WallDAO.class);
         WallProcess wallProcess = Mockito.mock(WallProcess.class);
         Wall wall = new Wall("mywall");
@@ -88,7 +90,7 @@ public class WallHolderServiceTest {
     }
 
     @Test
-    public void should_find_a_wall() throws NotFoundException, NotCreatedException {
+    public void should_find_a_wall() throws NotFoundException {
         String wallName = "wallName";
 
         WallDAO wallService = Mockito.mock(WallDAO.class);
@@ -111,7 +113,7 @@ public class WallHolderServiceTest {
     }
 
     @Test
-    public void should_find_wall_names() throws NotCreatedException {
+    public void should_find_wall_names() {
         WallDAO wallService = Mockito.mock(WallDAO.class);
         WallProcess wallProcess = Mockito.mock(WallProcess.class);
         Wall wall1 = new Wall("wall1");
@@ -134,7 +136,7 @@ public class WallHolderServiceTest {
 
     @Ignore
     @Test
-    public void should_find_status() throws NotFoundException, NotCreatedException {
+    public void should_find_status() throws NotFoundException {
         Wall wall2 = new Wall("wall1");
         wallHolderService.update(wall2);
 

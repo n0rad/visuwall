@@ -76,8 +76,7 @@ public class HudsonIT {
     }
 
     @Test
-    public void should_be_unstable_when_having_passed_tests_and_failed_tests() throws HudsonBuildNotFoundException,
-            HudsonProjectNotFoundException {
+    public void should_be_unstable_when_having_passed_tests_and_failed_tests() throws HudsonProjectNotFoundException {
         String status = hudson.getState("itcoverage-project");
         assertEquals("UNSTABLE", status);
     }

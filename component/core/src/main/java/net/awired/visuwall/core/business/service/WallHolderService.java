@@ -21,16 +21,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.PostConstruct;
+
 import net.awired.visuwall.core.business.process.WallProcess;
-import net.awired.visuwall.core.exception.NotCreatedException;
 import net.awired.visuwall.core.exception.NotFoundException;
 import net.awired.visuwall.core.persistence.dao.WallDAO;
 import net.awired.visuwall.core.persistence.entity.Wall;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.google.common.base.Preconditions;
 
 @Service
@@ -50,7 +53,7 @@ public class WallHolderService implements WallDAO {
     static Map<String, Wall> WALLS;
 
     @PostConstruct
-    void init() throws NotCreatedException {
+    void init() {
         if (WALLS == null) {
             WALLS = new HashMap<String, Wall>();
             List<Wall> walls = wallDAO.getWalls();

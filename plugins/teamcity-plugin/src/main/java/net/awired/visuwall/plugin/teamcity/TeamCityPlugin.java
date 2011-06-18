@@ -16,7 +16,6 @@
 
 package net.awired.visuwall.plugin.teamcity;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 
@@ -62,9 +61,7 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
 		if (isManageable(url.toString())) {
             try {
                 return createSoftwareId(url);
-            } catch (MalformedURLException e) {
-                throw new IncompatibleSoftwareException("Url " + url + " is not compatible with TeamCity", e);
-			} catch (ResourceNotFoundException e) {
+            } catch (ResourceNotFoundException e) {
 				throw new IncompatibleSoftwareException("Url " + url + " is not compatible with TeamCity", e);
             }
         }
@@ -80,7 +77,7 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
 		return true;
 	}
 
-	private SoftwareId createSoftwareId(URL url) throws MalformedURLException, ResourceNotFoundException {
+    private SoftwareId createSoftwareId(URL url) throws ResourceNotFoundException {
         SoftwareId softwareId = new SoftwareId();
         softwareId.setName("TeamCity");
 		String strVersion = getVersion(url.toString());

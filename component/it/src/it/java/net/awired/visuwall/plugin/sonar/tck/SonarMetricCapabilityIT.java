@@ -29,7 +29,6 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.plugin.sonar.SonarConnection;
@@ -69,7 +68,7 @@ public class SonarMetricCapabilityIT {
     }
 
     @Test
-    public void should_not_fail_if_measure_does_not_exist() throws ProjectNotFoundException {
+    public void should_not_fail_if_measure_does_not_exist() {
         ProjectId projectId = new ProjectId();
         projectId.setArtifactId(STRUTS_ARTIFACT_ID);
 		sonar.analyzeQuality(projectId, "inexistant_measure");

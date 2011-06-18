@@ -157,9 +157,8 @@ public class HudsonFinder {
 			if (projectExists(projectName)) {
 				throw new HudsonBuildNotFoundException("Build #" + buildNumber + " not found for project "
 				        + projectName, e);
-			} else {
-				throw new HudsonProjectNotFoundException("Project " + projectName + " not found", e);
-			}
+            }
+            throw new HudsonProjectNotFoundException("Project " + projectName + " not found", e);
 		}
 	}
 

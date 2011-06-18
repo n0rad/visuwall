@@ -24,4 +24,8 @@ public class DocumentNotLoadedException extends Exception {
         super(msg, e);
     }
 
+    public DocumentNotLoadedException(String msg) {
+        super(msg);
+    }
+
 }

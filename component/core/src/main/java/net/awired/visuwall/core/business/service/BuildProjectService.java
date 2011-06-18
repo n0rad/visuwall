@@ -125,8 +125,7 @@ public class BuildProjectService {
 
     //////////////////////////////////////////////////////////////////////////////////////
 
-    private Build findBuildByBuildNumber(ConnectedProject project, int buildNumber) throws BuildNotFoundException,
-            ProjectNotFoundException {
+    private Build findBuildByBuildNumber(ConnectedProject project, int buildNumber) throws BuildNotFoundException {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
         try {
             Build build = project.getBuildConnection().findBuildByBuildNumber(project.getProjectId(), buildNumber);
