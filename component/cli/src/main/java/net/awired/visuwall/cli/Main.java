@@ -26,7 +26,6 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 import org.slf4j.LoggerFactory;
-import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import com.google.common.io.Files;
 

@@ -75,7 +75,6 @@ public class WallHolderService implements WallDAO {
     @Override
     public Wall find(String wallName) throws NotFoundException {
         Preconditions.checkNotNull(wallName, "wallName");
-
         Wall wall = WALLS.get(wallName);
         if (wall == null) {
             throw new NotFoundException("Wall with name : " + wallName + " not found");

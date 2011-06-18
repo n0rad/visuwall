@@ -1,9 +1,8 @@
 package net.awired.visuwall.core.business.process;
 
-import java.util.List;
+import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
@@ -44,9 +43,10 @@ public class WallProcess {
     ///////////////////////////////////////////////////////////////
 
     public void rebuildFullWallInformations(Wall wall) {
+        //TODO run in thread and prevent wall hiding if software not found
         rebuildConnectionPluginsInSoftwareAccess(wall);
         for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
-            Runnable task = getDiscoverAndAddProjectsTask(wall, softwareAccess);
+            Runnable task = getDiscoverProjectsRunner(wall, softwareAccess);
             @SuppressWarnings("unchecked")
             ScheduledFuture<Object> futur = taskScheduler.scheduleWithFixedDelay(task,
                     softwareAccess.getProjectFinderDelaySecond() * 1000);
@@ -62,24 +62,22 @@ public class WallProcess {
         }
     }
 
-    private Runnable getDiscoverAndAddProjectsTask(final Wall theWall, final SoftwareAccess theSoftwareAccess) {
+    private Runnable getDiscoverProjectsRunner(final Wall wall, final SoftwareAccess softwareAccess) {
         return new Runnable() {
-            Wall wall = theWall;
-            SoftwareAccess softwareAccess = theSoftwareAccess;
-
             @Override
             public void run() {
-                LOG.info("Running Project Discover task for " + softwareAccess + " in wall " + theWall);
+                LOG.info("Running Project Discover task for " + softwareAccess + " in wall " + wall);
                 if (softwareAccess.getConnection() instanceof BuildCapability) {
                     BuildCapability buildPlugin = (BuildCapability) softwareAccess.getConnection();
                     Set<ProjectId> projectIds = softwareAccessService.discoverBuildProjects(softwareAccess);
                     for (ProjectId projectId : projectIds) {
-                        if (containsId(wall.getProjects(), projectId)) {
+                        if (wall.projectsContainsId(projectId)) {
                             // this project is already registered in list
                             continue;
                         }
-
-                        createProject(buildPlugin, projectId);
+                        Runnable projectCreationRunner = WallProcess.this.projectService.getProjectCreationRunner(
+                                wall, softwareAccess, projectId);
+                        taskScheduler.schedule(projectCreationRunner, new Date());
                     }
                 } else {
                     for (ConnectedProject project : wall.getProjects()) {
@@ -89,33 +87,8 @@ public class WallProcess {
                         }
                     }
                 }
-
             }
 
-            private void createProject(BuildCapability buildPlugin, ProjectId projectId) {
-                ConnectedProject connectedProject = new ConnectedProject(projectId);
-                connectedProject.setBuildPlugin(buildPlugin);
-                connectedProject.getCapabilities().add(buildPlugin);
-                Runnable statusTask = projectService.getStatusTask(connectedProject);
-                @SuppressWarnings("unchecked")
-                ScheduledFuture<Object> scheduleTask = taskScheduler.scheduleAtFixedRate(statusTask,
-                        softwareAccess.getProjectStatusDelaySecond() * 1000);
-                connectedProject.setProjectStatusTask(scheduleTask);
-                //TODO MOVE
-                //                    projectAggregatorService.enhanceWithBuildInformations(connectedProject, buildPlugin);
-                wall.getProjects().add(connectedProject);
-            }
         };
     }
-
-    // TODO move to project List<> in wall !?
-    private boolean containsId(List<ConnectedProject> projects, ProjectId projectId) {
-        for (Project project : projects) {
-            if (project.getProjectId().equals(projectId)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 }

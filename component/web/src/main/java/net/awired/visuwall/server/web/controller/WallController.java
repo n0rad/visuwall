@@ -84,8 +84,7 @@ public class WallController {
         for (ConnectedProject project : wall.getProjects()) {
             ProjectStatus projectStatus = new ProjectStatus(project);
             projectStatus.setLastBuildId(project.getCurrentBuildId());
-            //TODO get from current
-            projectStatus.setBuilding(false);
+            projectStatus.setBuilding(project.isBuilding());
             statusList.add(projectStatus);
         }
         return statusList;
