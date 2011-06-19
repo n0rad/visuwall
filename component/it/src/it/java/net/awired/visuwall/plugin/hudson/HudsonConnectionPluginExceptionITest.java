@@ -58,8 +58,7 @@ public class HudsonConnectionPluginExceptionITest {
     }
 
     @Test(expected = ProjectNotFoundException.class)
-    public void should_throw_exception_when_searching_last_build_number_of_inexistant_project()
-            throws BuildNotFoundException, ProjectNotFoundException {
+    public void should_throw_exception_when_searching_last_build_number_of_inexistant_project() throws Exception {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "");
         hudsonConnectionPlugin.getLastBuildNumber(projectId);

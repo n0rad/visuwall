@@ -21,6 +21,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+
 public class ClasspathFiles {
 
 	private ClasspathFiles() {
@@ -47,4 +50,17 @@ public class ClasspathFiles {
 			throw new RuntimeException(e);
 		}
 	}
+
+    public static Object load(String fileName, Class<?> clazz) {
+        try {
+            String file = ClasspathFiles.getUrlFile(fileName);
+            URL url = new URL(file);
+            JAXBContext newInstance = JAXBContext.newInstance(clazz);
+            Unmarshaller unmarshaller = newInstance.createUnmarshaller();
+            return unmarshaller.unmarshal(url);
+        } catch (Exception t) {
+            throw new RuntimeException(t);
+        }
+    }
+
 }

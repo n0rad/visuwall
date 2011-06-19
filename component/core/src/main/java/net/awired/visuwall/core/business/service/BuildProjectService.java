@@ -25,6 +25,7 @@ import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
@@ -152,7 +153,7 @@ public class BuildProjectService {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(e.getMessage());
             }
-        } catch (BuildNotFoundException e) {
+        } catch (BuildNumberNotFoundException e) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(e.getMessage());
             }

@@ -29,6 +29,7 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
@@ -151,7 +152,7 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
     }
 
     @Override
-    public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
+    public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNumberNotFoundException {
         checkProjectId(projectId);
         checkConnected();
         try {
@@ -163,7 +164,7 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
         } catch (HudsonProjectNotFoundException e) {
             throw new ProjectNotFoundException(e);
         } catch (HudsonBuildNotFoundException e) {
-            throw new BuildNotFoundException(e);
+            throw new BuildNumberNotFoundException(e);
         }
     }
 

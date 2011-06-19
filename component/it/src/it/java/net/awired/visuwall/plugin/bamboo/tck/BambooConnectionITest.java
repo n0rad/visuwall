@@ -62,7 +62,7 @@ public class BambooConnectionITest {
     }
 
     @Test
-    public void should_find_last_build_number() throws ProjectNotFoundException, BuildNotFoundException {
+    public void should_find_last_build_number() throws Exception {
         ProjectId projectId = strutsProjectId();
         int buildNumber = bamboo.getLastBuildNumber(projectId);
         assertEquals(3, buildNumber);

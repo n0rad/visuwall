@@ -40,13 +40,16 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 public class Bamboo {
 
-	private BambooUrlBuilder bambooUrlBuilder;
+    @VisibleForTesting
+    BambooUrlBuilder bambooUrlBuilder;
 
-	private GenericSoftwareClient client = new GenericSoftwareClient();
+    @VisibleForTesting
+    GenericSoftwareClient client = new GenericSoftwareClient();
 
 	private static final Logger LOG = LoggerFactory.getLogger(Bamboo.class);
 

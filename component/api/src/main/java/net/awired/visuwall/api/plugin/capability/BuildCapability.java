@@ -22,6 +22,7 @@ import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BuildCapability extends BasicCapability {
@@ -73,8 +74,8 @@ public interface BuildCapability extends BasicCapability {
      * @param projectId
      * @return
      * @throws ProjectNotFoundException
-     * @throws BuildNotFoundException
+     * @throws BuildNumberNotFoundException
      */
-    int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException;
+    int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNumberNotFoundException;
 
 }

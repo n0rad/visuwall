@@ -58,7 +58,7 @@ public class HudsonBuildCapabilityITest implements BuildCapabilityTCK {
 
 	@Override
     @Test
-	public void should_get_last_build_number() throws ProjectNotFoundException, BuildNotFoundException {
+    public void should_get_last_build_number() throws Exception {
         ProjectId projectId = new ProjectId();
         projectId.addId(HUDSON_ID, "struts");
         int buildNumber = hudson.getLastBuildNumber(projectId);
