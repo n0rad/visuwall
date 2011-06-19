@@ -33,4 +33,9 @@ public class BambooVersionExtractorITest {
         assertEquals("2.7.1", version);
     }
 
+    @Test(expected = BambooVersionNotFoundException.class)
+    public void should_not_fail_with_jenkins_url() throws Exception {
+        URL url = new URL(IntegrationTestData.JENKINS_URL);
+        BambooVersionExtractor.extractVersion(url);
+    }
 }
