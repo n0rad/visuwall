@@ -16,7 +16,14 @@
 
 package net.awired.visuwall.plugin.hudson.tck;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+
 import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
@@ -25,44 +32,55 @@ import net.awired.visuwall.api.plugin.tck.ViewCapabilityTCK;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class HudsonViewCapabilityIT implements ViewCapabilityTCK {
 
-	ViewCapability hudson = new HudsonConnection();
+    ViewCapability hudson = new HudsonConnection();
 
     @Before
     public void setUp() throws ConnectionException {
-		((Connection) hudson).connect(IntegrationTestData.HUDSON_URL, null, null);
+        ((Connection) hudson).connect(IntegrationTestData.HUDSON_URL, null, null);
     }
 
-	@Override
-	@Test
-	@Ignore
-	public void should_list_all_views() {
+    @Override
+    @Test
+    public void should_list_all_views() {
+        List<String> views = hudson.findViews();
+        assertEquals(2, views.size());
+        assertTrue(views.contains("View1"));
+        assertTrue(views.contains("View2"));
+    }
 
-	}
+    @Override
+    @Test
+    public void should_list_all_project_in_a_view() throws ViewNotFoundException {
+        List<String> projectNames = hudson.findProjectsByView("View1");
+        assertEquals(2, projectNames.size());
+        assertTrue(projectNames.contains("client-teamcity"));
+        assertTrue(projectNames.contains("dev-radar"));
+    }
 
-	@Override
-	@Test
-	@Ignore
-	public void should_list_all_project_in_a_view() throws ViewNotFoundException {
+    @Override
+    @Test
+    public void should_find_project_ids_by_names() {
+        List<String> names = Arrays.asList("fluxx", "visuwall");
+        List<ProjectId> projectIds = hudson.findProjectsByNames(names);
+        assertEquals(2, projectIds.size());
+        assertEquals("fluxx", projectIds.get(0).getName());
+        assertEquals("visuwall", projectIds.get(1).getName());
+    }
 
-	}
-
-	@Override
-	@Test
-	@Ignore
-	public void should_find_project_ids_by_names() {
-
-	}
-
-	@Override
-	@Test
-	@Ignore
-	public void should_find_all_projects_of_views() {
-
-	}
+    @Override
+    @Test
+    public void should_find_all_projects_of_views() {
+        List<String> views = Arrays.asList("View1", "View2");
+        List<ProjectId> projectIds = hudson.findProjectsByViews(views);
+        assertEquals(4, projectIds.size());
+        List<String> names = Arrays.asList("itcoverage-project", "dev-radar", "fluxx", "dev-radar-sonar");
+        for (int i = 0; i < projectIds.size(); i++) {
+            assertEquals(names.get(i), projectIds.get(i).getName());
+        }
+    }
 
 }

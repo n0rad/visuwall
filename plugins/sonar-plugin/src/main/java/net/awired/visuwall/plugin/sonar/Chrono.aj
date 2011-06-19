@@ -16,14 +16,27 @@
 
 package net.awired.visuwall.plugin.sonar;
 
-import net.awired.visuwall.api.exception.ConnectionException;
+public aspect Chrono {
 
-public class SonarConnectionFactory {
-
-    public SonarConnection create(String url) throws ConnectionException {
-        SonarConnection sonarConnection = new SonarConnection();
-        sonarConnection.connect(url);
-        return sonarConnection;
+    Object around() : execution(public * net.awired.visuwall.plugin.sonar.SonarConnection.* (..)) {
+        long start = System.currentTimeMillis();
+        try {
+            return proceed();
+        } finally {
+        	String prefix = "";
+        	Object method = thisJoinPointStaticPart.getSignature();
+            long end = System.currentTimeMillis();
+            long duration = end - start;
+            if (duration > 200) {
+            	prefix = "[SLOW QUERY] ";
+            }
+            if (duration > 500) {
+                prefix = "[VERY SLOW QUERY] ";
+            }
+            if (duration >= 200) {
+                System.err.println("Chronometer "+prefix+method+" "+duration+" ms");
+            }
+        }
     }
-
+    
 }

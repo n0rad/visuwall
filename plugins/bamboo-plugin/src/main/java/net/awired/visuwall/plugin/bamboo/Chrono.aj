@@ -16,24 +16,27 @@
 
 package net.awired.visuwall.plugin.bamboo;
 
-import java.util.HashMap;
-import java.util.Map;
+public aspect Chrono {
 
-import net.awired.visuwall.api.domain.State;
-
-public class States {
-
-	private static final Map<String, State> STATE_MAPPING = new HashMap<String, State>();
-	static {
-		STATE_MAPPING.put("Successful", State.SUCCESS);
-		STATE_MAPPING.put("Failed", State.FAILURE);
-	}
-
-	public static final State asVisuwallState(String bambooState) {
-		State state = STATE_MAPPING.get(bambooState);
-		if (state == null) {
-			state = State.UNKNOWN;
-		}
-		return state;
-	}
+    Object around() : execution(public * net.awired.visuwall.plugin.bamboo.BambooConnection.* (..)) {
+        long start = System.currentTimeMillis();
+        try {
+            return proceed();
+        } finally {
+        	String prefix = "";
+        	Object method = thisJoinPointStaticPart.getSignature();
+            long end = System.currentTimeMillis();
+            long duration = end - start;
+            if (duration > 200) {
+            	prefix = "[SLOW QUERY] ";
+            }
+            if (duration > 500) {
+                prefix = "[VERY SLOW QUERY] ";
+            }
+            if (duration >= 200) {
+                System.err.println("Chronometer "+prefix+method+" "+duration+" ms");
+            }
+        }
+    }
+    
 }

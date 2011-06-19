@@ -53,7 +53,7 @@ public final class HudsonConnection implements Connection, BuildCapability, View
 
 	private static final Logger LOG = LoggerFactory.getLogger(HudsonConnection.class);
 
-	private static final String HUDSON_ID = "HUDSON_ID";
+    public static final String HUDSON_ID = "HUDSON_ID";
 
 	@VisibleForTesting
 	Hudson hudson;
@@ -89,15 +89,6 @@ public final class HudsonConnection implements Connection, BuildCapability, View
 		return projectIds;
 	}
 
-	private ProjectId createProjectIdFrom(HudsonProject hudsonProject) throws HudsonProjectNotFoundException {
-		Project project = projectBuilder.buildProjectFrom(hudsonProject);
-		ProjectId projectId = new ProjectId();
-		projectId.setName(project.getName());
-		projectId.addId(HUDSON_ID, project.getName());
-		projectId.setArtifactId(hudsonProject.getArtifactId());
-		return projectId;
-	}
-
 	@Override
 	public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
 		checkProjectId(projectId);
@@ -128,14 +119,6 @@ public final class HudsonConnection implements Connection, BuildCapability, View
 		}
 	}
 
-	private void checkProjectId(ProjectId projectId) {
-		Preconditions.checkNotNull(projectId, "projectId is mandatory");
-	}
-
-	private void checkConnected() {
-		Preconditions.checkState(connected, "You must connect your plugin");
-	}
-
 	@Override
 	public boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException {
 		checkProjectId(projectId);
@@ -149,12 +132,6 @@ public final class HudsonConnection implements Connection, BuildCapability, View
 		} catch (HudsonProjectNotFoundException e) {
 			throw new ProjectNotFoundException(e);
 		}
-	}
-
-	@Deprecated
-	@Override
-	public State getState(ProjectId projectId) throws ProjectNotFoundException {
-		return getLastBuildState(projectId);
 	}
 
 	@Override
@@ -171,10 +148,6 @@ public final class HudsonConnection implements Connection, BuildCapability, View
 		} catch (HudsonProjectNotFoundException e) {
 			throw new ProjectNotFoundException(e);
 		}
-	}
-
-	private String extractProjectNameFrom(ProjectId projectId) {
-		return projectId.getId(HUDSON_ID);
 	}
 
 	@Override
@@ -265,10 +238,9 @@ public final class HudsonConnection implements Connection, BuildCapability, View
 		List<ProjectId> projectIds = new ArrayList<ProjectId>();
 		for (String name : names) {
 			try {
-				HudsonProject project = hudson.findProject(name);
-				String projectName = project.getName();
-				ProjectId projectId = new ProjectId(projectName);
-				projectId.addId(HUDSON_ID, projectName);
+                HudsonProject hudsonProject = hudson.findProject(name);
+                ProjectId projectId = createProjectIdFrom(hudsonProject);
+                projectIds.add(projectId);
 			} catch (HudsonProjectNotFoundException e) {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug(e.getMessage(), e);
@@ -280,6 +252,28 @@ public final class HudsonConnection implements Connection, BuildCapability, View
 
 	@Override
 	public void close() {
+        connected = false;
 	}
+
+    private String extractProjectNameFrom(ProjectId projectId) {
+        return projectId.getId(HUDSON_ID);
+    }
+
+    private ProjectId createProjectIdFrom(HudsonProject hudsonProject) throws HudsonProjectNotFoundException {
+        Project project = projectBuilder.buildProjectFrom(hudsonProject);
+        ProjectId projectId = new ProjectId();
+        projectId.setName(project.getName());
+        projectId.addId(HUDSON_ID, project.getName());
+        projectId.setArtifactId(hudsonProject.getArtifactId());
+        return projectId;
+    }
+
+    private void checkProjectId(ProjectId projectId) {
+        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+    }
+
+    private void checkConnected() {
+        Preconditions.checkState(connected, "You must connect your plugin");
+    }
 
 }

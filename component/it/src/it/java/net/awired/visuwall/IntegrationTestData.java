@@ -20,11 +20,8 @@ package net.awired.visuwall;
 public interface IntegrationTestData {
     String BAMBOO_URL = "http://bamboo.visuwall.awired.net";
     String JENKINS_URL = "http://ci.visuwall.awired.net";
-    String HUDSON_URL = "http://ci.visuwall.awired.net";
+    String HUDSON_URL = "http://fluxx.fr.cr:8080/hudson";
     String TEAMCITY_URL = "http://teamcity.jetbrains.com";
-
-    String HUDSON_ID = "HUDSON_ID";
-    String JENKINS_ID = "JENKINS_ID";
 
     String SONAR_URL = "http://sonar.awired.net";
 

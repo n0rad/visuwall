@@ -16,8 +16,27 @@
 
 package net.awired.visuwall.plugin.jenkins;
 
-public interface JenkinsState {
+public aspect Chrono {
 
-	String SUCCESS = "SUCCESS";
-
+    Object around() : execution(public * net.awired.visuwall.plugin.jenkins.JenkinsConnection.* (..)) {
+        long start = System.currentTimeMillis();
+        try {
+            return proceed();
+        } finally {
+        	String prefix = "";
+        	Object method = thisJoinPointStaticPart.getSignature();
+            long end = System.currentTimeMillis();
+            long duration = end - start;
+            if (duration > 200) {
+            	prefix = "[SLOW QUERY] ";
+            }
+            if (duration > 500) {
+                prefix = "[VERY SLOW QUERY] ";
+            }
+            if (duration >= 200) {
+                System.err.println("Chronometer "+prefix+method+" "+duration+" ms");
+            }
+        }
+    }
+    
 }

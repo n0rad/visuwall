@@ -17,9 +17,12 @@
 package net.awired.visuwall.plugin.bamboo.tck;
 
 import static net.awired.visuwall.IntegrationTestData.BAMBOO_URL;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.List;
 
 import net.awired.visuwall.api.domain.Project;
@@ -59,38 +62,39 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
         assertNotNull(project);
     }
 
-	private ProjectId struts2ProjectId() {
-        ProjectId projectId = new ProjectId();
-		projectId.addId(BambooConnection.BAMBOO_ID, "STRUTS2INSTABLE-STRUTS2INSTABLE");
-        return projectId;
+	@Override
+	@Test
+	public void should_find_project_ids_by_names() {
+        String ajslName = "ajsl - Awired Java Standard Library 1.0-ALPHA6";
+        String strutsName = "struts - struts";
+        String struts2Name = "struts 2 instable - struts_2_instable";
+        List<String> names = Arrays.asList(strutsName, struts2Name, ajslName);
+        List<ProjectId> projectIds = bamboo.findProjectsByNames(names);
+        assertEquals(ajslName, projectIds.get(0).getName());
+        assertEquals(strutsName, projectIds.get(1).getName());
+        assertEquals(struts2Name, projectIds.get(2).getName());
     }
 
 	@Override
 	@Test
-	@Ignore
-	public void should_find_project_ids_by_names() {
-
-	}
-
-	@Override
-	@Test
-	@Ignore
 	public void should_contain_project() {
-
+        ProjectId projectId = struts2ProjectId();
+        assertTrue(bamboo.contains(projectId));
 	}
 
 	@Override
 	@Test
-	@Ignore
 	public void should_not_contain_project() {
-
-	}
+        ProjectId projectId = new ProjectId();
+        projectId.addId(BambooConnection.BAMBOO_ID, "idValue");
+        assertFalse(bamboo.contains(projectId));
+    }
 
 	@Override
 	@Test
-	@Ignore
 	public void should_find_all_project_names() {
-
+        List<String> names = bamboo.findProjectNames();
+        assertFalse(names.isEmpty());
 	}
 
 	@Override
@@ -99,5 +103,11 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
 	public void should_get_disable_project() throws ProjectNotFoundException {
 
 	}
+
+    private ProjectId struts2ProjectId() {
+        ProjectId projectId = new ProjectId();
+        projectId.addId(BambooConnection.BAMBOO_ID, "STRUTS2INSTABLE-STRUTS2INSTABLE");
+        return projectId;
+    }
 
 }
