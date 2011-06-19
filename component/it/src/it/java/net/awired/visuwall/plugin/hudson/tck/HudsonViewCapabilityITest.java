@@ -55,7 +55,7 @@ public class HudsonViewCapabilityITest implements ViewCapabilityTCK {
     @Override
     @Test
     public void should_list_all_project_in_a_view() throws ViewNotFoundException {
-        List<String> projectNames = hudson.findProjectsByView("View1");
+        List<String> projectNames = hudson.findProjectNamesByView("View1");
         assertEquals(2, projectNames.size());
         assertTrue(projectNames.contains("client-teamcity"));
         assertTrue(projectNames.contains("dev-radar"));
@@ -65,7 +65,7 @@ public class HudsonViewCapabilityITest implements ViewCapabilityTCK {
     @Test
     public void should_find_project_ids_by_names() {
         List<String> names = Arrays.asList("fluxx", "visuwall");
-        List<ProjectId> projectIds = hudson.findProjectsByNames(names);
+        List<ProjectId> projectIds = hudson.findProjectIdsByNames(names);
         assertEquals(2, projectIds.size());
         assertEquals("fluxx", projectIds.get(0).getName());
         assertEquals("visuwall", projectIds.get(1).getName());
@@ -75,7 +75,7 @@ public class HudsonViewCapabilityITest implements ViewCapabilityTCK {
     @Test
     public void should_find_all_projects_of_views() {
         List<String> views = Arrays.asList("View1", "View2");
-        List<ProjectId> projectIds = hudson.findProjectsByViews(views);
+        List<ProjectId> projectIds = hudson.findProjectIdsByViews(views);
         assertEquals(4, projectIds.size());
         List<String> names = Arrays.asList("itcoverage-project", "dev-radar", "fluxx", "dev-radar-sonar");
         for (int i = 0; i < projectIds.size(); i++) {

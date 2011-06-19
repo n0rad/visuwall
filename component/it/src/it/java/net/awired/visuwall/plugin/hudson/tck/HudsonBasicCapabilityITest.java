@@ -67,7 +67,7 @@ public class HudsonBasicCapabilityITest implements BasicCapabilityTCK {
 	@Test
 	public void should_find_project_ids_by_names() {
         List<String> names = Arrays.asList("fluxx", "visuwall");
-        List<ProjectId> projectIds = hudson.findProjectsByNames(names);
+        List<ProjectId> projectIds = hudson.findProjectIdsByNames(names);
         assertEquals(2, projectIds.size());
         assertEquals("fluxx", projectIds.get(0).getName());
         assertEquals("visuwall", projectIds.get(1).getName());

@@ -37,6 +37,7 @@ import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.hudsonclient.Hudson;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
+import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
@@ -198,7 +199,7 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
     }
 
     @Override
-    public List<String> findProjectsByView(String viewName) throws ViewNotFoundException {
+    public List<String> findProjectNamesByView(String viewName) throws ViewNotFoundException {
         checkConnected();
         Preconditions.checkNotNull(viewName, "viewName is mandatory");
         try {
@@ -209,14 +210,14 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
     }
 
     @Override
-    public List<ProjectId> findProjectsByViews(List<String> views) {
+    public List<ProjectId> findProjectIdsByViews(List<String> views) {
         checkConnected();
         Preconditions.checkNotNull(views, "views is mandatory");
         Set<ProjectId> projectIds = new HashSet<ProjectId>();
         for (String viewName : views) {
             try {
                 List<String> projectNames = hudson.findProjectNameByView(viewName);
-                projectIds.addAll(findProjectsByNames(projectNames));
+                projectIds.addAll(findProjectIdsByNames(projectNames));
             } catch (HudsonViewNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(e.getMessage(), e);
@@ -230,26 +231,20 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
     public boolean contains(ProjectId projectId) {
         checkConnected();
         checkProjectId(projectId);
-        try {
-            String name = projectId.getId(JENKINS_ID);
-            hudson.findProject(name);
-        } catch (HudsonProjectNotFoundException e) {
-            return false;
-        }
-        return true;
+        String name = projectId.getId(JENKINS_ID);
+        return hudson.contains(name);
     }
 
     @Override
-    public List<ProjectId> findProjectsByNames(List<String> names) {
+    public List<ProjectId> findProjectIdsByNames(List<String> names) {
         checkConnected();
         Preconditions.checkNotNull(names, "names is mandatory");
         List<ProjectId> projectIds = new ArrayList<ProjectId>();
         for (String name : names) {
             try {
-                HudsonProject project = hudson.findProject(name);
-                ProjectId projectId = createProjectIdFrom(project);
+                ProjectId projectId = createProjectId(name);
                 projectIds.add(projectId);
-            } catch (HudsonProjectNotFoundException e) {
+            } catch (ArtifactIdNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(e.getMessage(), e);
                 }
@@ -260,7 +255,7 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
 
     @Override
     public void close() {
-
+        connected = false;
     }
 
     private void checkProjectId(ProjectId projectId) {
@@ -281,6 +276,15 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
         projectId.setName(project.getName());
         projectId.addId(JENKINS_ID, project.getName());
         projectId.setArtifactId(hudsonProject.getArtifactId());
+        return projectId;
+    }
+
+    private ProjectId createProjectId(String projectName) throws ArtifactIdNotFoundException {
+        String artifactId = hudson.findArtifactId(projectName);
+        ProjectId projectId = new ProjectId();
+        projectId.setName(projectName);
+        projectId.addId(JENKINS_ID, projectName);
+        projectId.setArtifactId(artifactId);
         return projectId;
     }
 

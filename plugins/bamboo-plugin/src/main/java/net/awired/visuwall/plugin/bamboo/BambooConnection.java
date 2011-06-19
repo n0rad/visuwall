@@ -176,7 +176,7 @@ public class BambooConnection implements Connection, BuildCapability {
 	}
 
 	@Override
-	public List<ProjectId> findProjectsByNames(List<String> names) {
+	public List<ProjectId> findProjectIdsByNames(List<String> names) {
         Preconditions.checkNotNull(names, "names is mandatory");
         List<ProjectId> projectIds = new ArrayList<ProjectId>();
         List<BambooProject> projects = bamboo.findAllProjects();

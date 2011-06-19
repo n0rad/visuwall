@@ -41,7 +41,7 @@ public interface BasicCapability {
      * 
      * @return
      */
-    List<ProjectId> findProjectsByNames(List<String> names);
+    List<ProjectId> findProjectIdsByNames(List<String> names);
 
     /**
      * Plugin should be able to retrieve projects by theirs projectId. ProjectId are filled when you call

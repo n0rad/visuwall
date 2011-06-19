@@ -45,7 +45,7 @@ public class SoftwareAccessService {
             projectIds = buildPlugin.findAllProjects();
             res.addAll(projectIds);
         } else {
-            List<ProjectId> nameProjectIds = buildPlugin.findProjectsByNames(softwareAccess.getProjectNames());
+            List<ProjectId> nameProjectIds = buildPlugin.findProjectIdsByNames(softwareAccess.getProjectNames());
             if (nameProjectIds == null) {
                 LOG.warn("plugin return null on findProjectsByNames", buildPlugin);
             } else {
@@ -53,7 +53,7 @@ public class SoftwareAccessService {
             }
 
             if (buildPlugin instanceof ViewCapability) {
-                List<ProjectId> viewProjectIds = ((ViewCapability) buildPlugin).findProjectsByViews(softwareAccess
+                List<ProjectId> viewProjectIds = ((ViewCapability) buildPlugin).findProjectIdsByViews(softwareAccess
                         .getViewNames());
                 if (nameProjectIds == null) {
                     LOG.warn("plugin return null on findProjectsByViews", buildPlugin);

@@ -58,7 +58,7 @@ public class JenkinsViewCapabilityITest implements ViewCapabilityTCK {
 	@Override
 	@Test
 	public void should_list_all_project_in_a_view() throws ViewNotFoundException {
-		List<String> projects = jenkins.findProjectsByView("struts");
+		List<String> projects = jenkins.findProjectNamesByView("struts");
 		assertEquals(2, projects.size());
 
 		String[] projectNames = { "struts", "struts 2 instable" };
@@ -71,7 +71,7 @@ public class JenkinsViewCapabilityITest implements ViewCapabilityTCK {
 	@Test
 	public void should_find_project_ids_by_names() {
 		List<String> names = Arrays.asList("struts", "struts 2 instable");
-		List<ProjectId> projectIds = jenkins.findProjectsByNames(names);
+		List<ProjectId> projectIds = jenkins.findProjectIdsByNames(names);
 		ProjectId struts = projectIds.get(0);
 		ProjectId struts2instable = projectIds.get(1);
 
@@ -84,7 +84,7 @@ public class JenkinsViewCapabilityITest implements ViewCapabilityTCK {
 	@Test
 	public void should_find_all_projects_of_views() {
 		List<String> views = Arrays.asList("in_error", "struts");
-		List<ProjectId> projects = jenkins.findProjectsByViews(views);
+		List<ProjectId> projects = jenkins.findProjectIdsByViews(views);
 		assertEquals(5, projects.size());
 	}
 

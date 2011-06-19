@@ -246,7 +246,7 @@ public class SonarConnection implements Connection, MetricCapability, TestCapabi
     }
 
     @Override
-    public List<ProjectId> findProjectsByNames(List<String> names) {
+    public List<ProjectId> findProjectIdsByNames(List<String> names) {
         return new ArrayList<ProjectId>();
     }
 

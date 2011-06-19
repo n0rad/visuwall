@@ -69,7 +69,7 @@ public class BambooBasicCapabilityITest implements BasicCapabilityTCK {
         String strutsName = "struts - struts";
         String struts2Name = "struts 2 instable - struts_2_instable";
         List<String> names = Arrays.asList(strutsName, struts2Name, ajslName);
-        List<ProjectId> projectIds = bamboo.findProjectsByNames(names);
+        List<ProjectId> projectIds = bamboo.findProjectIdsByNames(names);
         assertEquals(ajslName, projectIds.get(0).getName());
         assertEquals(strutsName, projectIds.get(1).getName());
         assertEquals(struts2Name, projectIds.get(2).getName());

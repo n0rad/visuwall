@@ -52,7 +52,7 @@ public class JenkinsBasicCapabilityITest implements BasicCapabilityTCK {
 	@Test
 	public void should_find_project_ids_by_names() {
 		List<String> names = Arrays.asList("struts", "struts 2 instable");
-		List<ProjectId> projectIds = jenkins.findProjectsByNames(names);
+		List<ProjectId> projectIds = jenkins.findProjectIdsByNames(names);
 		ProjectId struts = projectIds.get(0);
 		ProjectId struts2instable = projectIds.get(1);
 

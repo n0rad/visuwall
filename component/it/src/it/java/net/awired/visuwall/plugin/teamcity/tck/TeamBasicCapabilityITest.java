@@ -62,7 +62,7 @@ public class TeamBasicCapabilityITest implements BasicCapabilityTCK {
 	@Test
 	public void should_find_project_ids_by_names() {
 		List<String> names = Arrays.asList("Apache Ant", "Gradle");
-		List<ProjectId> projectIds = teamcity.findProjectsByNames(names);
+		List<ProjectId> projectIds = teamcity.findProjectIdsByNames(names);
 
 		assertFalse(projectIds.isEmpty());
 

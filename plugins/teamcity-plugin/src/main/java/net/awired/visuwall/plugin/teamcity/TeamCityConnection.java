@@ -87,7 +87,7 @@ public class TeamCityConnection implements Connection, BuildCapability {
 	}
 
 	@Override
-	public List<ProjectId> findProjectsByNames(List<String> names) {
+	public List<ProjectId> findProjectIdsByNames(List<String> names) {
 		checkConnected();
 		List<ProjectId> projectIds = new ArrayList<ProjectId>();
 		try {
