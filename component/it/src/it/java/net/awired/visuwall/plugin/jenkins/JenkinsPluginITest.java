@@ -27,7 +27,7 @@ import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
 import org.junit.Test;
 
-public class JenkinsPluginIT {
+public class JenkinsPluginITest {
 
     @Test
     public void should_recognize_jenkins_instance_with_valid_url() throws Exception {

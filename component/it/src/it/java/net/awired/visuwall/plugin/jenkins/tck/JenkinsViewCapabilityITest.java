@@ -35,7 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class JenkinsViewCapabilityIT implements ViewCapabilityTCK {
+public class JenkinsViewCapabilityITest implements ViewCapabilityTCK {
 
 	ViewCapability jenkins = new JenkinsConnection();
 

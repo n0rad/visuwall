@@ -25,7 +25,7 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class HudsonConnectionPluginExceptionIT {
+public class HudsonConnectionPluginExceptionITest {
 
     static HudsonConnection hudsonConnectionPlugin = new HudsonConnection();
 

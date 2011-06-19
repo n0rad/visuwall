@@ -45,9 +45,6 @@ import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.Hud
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import net.awired.visuwall.hudsonclient.helper.HudsonXmlHelper;
 import net.awired.visuwall.hudsonclient.helper.MavenHelper;
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,8 +61,6 @@ public class HudsonFinder {
 
 	private GenericSoftwareClient client;
 
-	private Cache cache;
-
 	private HudsonBuildBuilder hudsonBuildBuilder;
 
 	public HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder, GenericSoftwareClient client,
@@ -73,19 +68,12 @@ public class HudsonFinder {
 		this.client = client;
 		this.hudsonUrlBuilder = hudsonUrlBuilder;
 		this.hudsonBuildBuilder = hudsonBuildBuilder;
-		initCache();
 	}
 
 	public HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder) {
 		this.client = new GenericSoftwareClient();
 		this.hudsonUrlBuilder = hudsonUrlBuilder;
 		this.hudsonBuildBuilder = new HudsonBuildBuilder();
-		initCache();
-	}
-
-	private void initCache() {
-		CacheManager cacheManager = CacheManager.create();
-		cache = cacheManager.getCache("hudson_projects_cache");
 	}
 
 	public HudsonBuild find(String projectName, int buildNumber) throws HudsonBuildNotFoundException,
@@ -97,12 +85,6 @@ public class HudsonFinder {
 				LOG.debug("Find build with project name [" + projectName + "] and buildNumber [" + buildNumber + "]");
 			}
 			HudsonMavenMavenModuleSetBuild setBuild = findBuildByProjectNameAndBuildNumber(projectName, buildNumber);
-			String cacheKey = "hudsonbuild_" + projectName + "_" + buildNumber;
-			Element element = cache.get(cacheKey);
-			if (element != null) {
-				return (HudsonBuild) element.getObjectValue();
-			}
-
 			String[] commiterNames = HudsonXmlHelper.getCommiterNames(setBuild);
 			Set<HudsonCommiter> commiters = findCommiters(commiterNames);
 			HudsonMavenReportersSurefireAggregatedReport surefireReport = findSurefireReport(projectName, setBuild);
@@ -112,7 +94,6 @@ public class HudsonFinder {
 			} else {
 				hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport, commiters);
 			}
-			cache.put(new Element(cacheKey, hudsonBuild));
 			return hudsonBuild;
 		} catch (UniformInterfaceException e) {
 			String message = "No build #" + buildNumber + " for project " + projectName;
@@ -144,14 +125,8 @@ public class HudsonFinder {
 		checkProjectName(projectName);
 		checkBuildNumber(buildNumber);
 		try {
-			String cacheKey = "build_" + projectName + "_" + buildNumber;
-			Element element = cache.get(cacheKey);
-			if (element != null) {
-				return (HudsonMavenMavenModuleSetBuild) element.getObjectValue();
-			}
 			String buildUrl = hudsonUrlBuilder.getBuildUrl(projectName, buildNumber);
 			HudsonMavenMavenModuleSetBuild setBuild = client.resource(buildUrl, HudsonMavenMavenModuleSetBuild.class);
-			cache.put(new Element(cacheKey, setBuild));
 			return setBuild;
 		} catch (ResourceNotFoundException e) {
 			if (projectExists(projectName)) {

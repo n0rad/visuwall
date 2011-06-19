@@ -24,7 +24,7 @@ import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import org.junit.Test;
 
-public class SonarPluginIT {
+public class SonarPluginITest {
 
     @Test
     public void should_recognize_sonar_instance_with_valid_url() throws Exception {

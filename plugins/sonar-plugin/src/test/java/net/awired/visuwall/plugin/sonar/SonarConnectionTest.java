@@ -258,7 +258,6 @@ public class SonarConnectionTest {
     @Test
     public void should_generated_hash_code() {
         int hashCode = sonar.hashCode();
-        System.err.println(hashCode);
         assertFalse(hashCode == 0);
     }
 

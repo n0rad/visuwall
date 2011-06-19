@@ -22,8 +22,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
+import java.util.List;
 
 import net.awired.visuwall.api.domain.Build;
+import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
@@ -31,21 +33,33 @@ import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BambooBuildCapabilityIT {
+public class BambooConnectionITest {
 
-	BuildCapability bamboo = new BambooConnection();
+	BambooConnection bamboo = new BambooConnection();
 
     @Before
     public void init() throws ConnectionException {
 		((Connection) bamboo).connect(BAMBOO_URL, null, null);
 	}
+
+    @Test
+    public void should_find_all_projects() {
+        List<ProjectId> projects = bamboo.findAllProjects();
+        assertFalse(projects.isEmpty());
+    }
+
+    @Test
+    public void should_find_project() throws ProjectNotFoundException {
+        ProjectId projectId = struts2ProjectId();
+        Project project = bamboo.findProject(projectId);
+        assertNotNull(project);
+    }
 
     @Test
     public void should_find_last_build_number() throws ProjectNotFoundException, BuildNotFoundException {

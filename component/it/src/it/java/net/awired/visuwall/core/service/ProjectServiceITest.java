@@ -14,22 +14,25 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar;
+package net.awired.visuwall.core.service;
 
-import static org.junit.Assert.assertTrue;
-import net.awired.visuwall.IntegrationTestData;
-import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
-
+import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.plugin.jenkins.JenkinsPlugin;
 import org.junit.Test;
-import org.sonar.wsclient.services.Measure;
 
-public class MeasureFinderIT {
+public class ProjectServiceITest {
 
     @Test
-    public void should_find_measure() throws SonarMeasureNotFoundException {
-        MeasureFinder measureFinder = new MeasureFinder(IntegrationTestData.SONAR_URL);
-        Measure measure = measureFinder.findMeasure(IntegrationTestData.STRUTS_ARTIFACT_ID, "violations_density");
-        assertTrue(measure.getFormattedValue().length() > 0);
-        assertTrue(measure.getValue() > 0);
+    public void github_issue_35() throws Exception {
+        String jenkinsUrl = "http://ci.awired.net/jenkins/";
+        JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
+        BuildCapability connection = jenkinsPlugin.getConnection(jenkinsUrl, null);
+        int buildNumber = 29;
+        ProjectId projectId = new ProjectId("Acml");
+        projectId.setArtifactId("net.awired.aclm:aclm");
+        projectId.addId("JENKINS_ID", "Acml");
+        connection.findBuildByBuildNumber(projectId, buildNumber);
     }
+
 }

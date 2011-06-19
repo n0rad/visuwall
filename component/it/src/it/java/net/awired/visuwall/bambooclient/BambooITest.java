@@ -29,7 +29,7 @@ import net.awired.visuwall.bambooclient.exception.BambooProjectNotFoundException
 
 import org.junit.Test;
 
-public class BambooIT {
+public class BambooITest {
 
     private Bamboo bamboo = new Bamboo(IntegrationTestData.BAMBOO_URL);
 

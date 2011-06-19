@@ -14,9 +14,9 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.hudson.tck;
+package net.awired.visuwall.plugin.bamboo.tck;
 
-import static net.awired.visuwall.plugin.hudson.HudsonConnection.HUDSON_ID;
+import static net.awired.visuwall.IntegrationTestData.BAMBOO_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -25,7 +25,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
-import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -33,68 +32,69 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
-import net.awired.visuwall.plugin.hudson.HudsonConnection;
+import net.awired.visuwall.plugin.bamboo.BambooConnection;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
+public class BambooBasicCapabilityITest implements BasicCapabilityTCK {
 
-	BasicCapability hudson = new HudsonConnection();
+	BasicCapability bamboo = new BambooConnection();
 
     @Before
-    public void setUp() throws ConnectionException {
-		((Connection) hudson).connect(IntegrationTestData.HUDSON_URL, null, null);
-    }
+    public void init() throws ConnectionException {
+		((Connection) bamboo).connect(BAMBOO_URL, null, null);
+	}
 
 	@Override
-	@Test
+    @Test
 	public void should_find_all_projects_ids() {
-        List<ProjectId> projects = hudson.findAllProjects();
+        List<ProjectId> projects = bamboo.findAllProjects();
         assertFalse(projects.isEmpty());
     }
 
 	@Override
-	@Test
+    @Test
 	public void should_find_a_project() throws ProjectNotFoundException {
-        ProjectId projectId = fluxxProjectId();
-        Project project = hudson.findProject(projectId);
+        ProjectId projectId = struts2ProjectId();
+        Project project = bamboo.findProject(projectId);
         assertNotNull(project);
     }
 
 	@Override
 	@Test
 	public void should_find_project_ids_by_names() {
-        List<String> names = Arrays.asList("fluxx", "visuwall");
-        List<ProjectId> projectIds = hudson.findProjectsByNames(names);
-        assertEquals(2, projectIds.size());
-        assertEquals("fluxx", projectIds.get(0).getName());
-        assertEquals("visuwall", projectIds.get(1).getName());
-	}
+        String ajslName = "ajsl - Awired Java Standard Library 1.0-ALPHA6";
+        String strutsName = "struts - struts";
+        String struts2Name = "struts 2 instable - struts_2_instable";
+        List<String> names = Arrays.asList(strutsName, struts2Name, ajslName);
+        List<ProjectId> projectIds = bamboo.findProjectsByNames(names);
+        assertEquals(ajslName, projectIds.get(0).getName());
+        assertEquals(strutsName, projectIds.get(1).getName());
+        assertEquals(struts2Name, projectIds.get(2).getName());
+    }
 
 	@Override
 	@Test
 	public void should_contain_project() {
-        assertTrue(hudson.contains(fluxxProjectId()));
+        ProjectId projectId = struts2ProjectId();
+        assertTrue(bamboo.contains(projectId));
 	}
 
 	@Override
 	@Test
 	public void should_not_contain_project() {
         ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "idValue");
-        assertFalse(hudson.contains(projectId));
-	}
+        projectId.addId(BambooConnection.BAMBOO_ID, "idValue");
+        assertFalse(bamboo.contains(projectId));
+    }
 
 	@Override
 	@Test
 	public void should_find_all_project_names() {
-        List<String> names = hudson.findProjectNames();
-        List<String> hudsonNames = Arrays.asList("fluxx", "visuwall", "dev-radar");
-        for (String hudsonName : hudsonNames) {
-            assertTrue(names.contains(hudsonName));
-        }
+        List<String> names = bamboo.findProjectNames();
+        assertFalse(names.isEmpty());
 	}
 
 	@Override
@@ -104,9 +104,9 @@ public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
 
 	}
 
-    private ProjectId fluxxProjectId() {
+    private ProjectId struts2ProjectId() {
         ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "fluxx");
+        projectId.addId(BambooConnection.BAMBOO_ID, "STRUTS2INSTABLE-STRUTS2INSTABLE");
         return projectId;
     }
 

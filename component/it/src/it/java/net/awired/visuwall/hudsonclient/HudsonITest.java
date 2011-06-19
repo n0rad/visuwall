@@ -32,7 +32,7 @@ import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException
 
 import org.junit.Test;
 
-public class HudsonIT {
+public class HudsonITest {
 
     private Hudson hudson = new Hudson(IntegrationTestData.HUDSON_URL);
 

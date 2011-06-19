@@ -24,7 +24,7 @@ import net.awired.visuwall.IntegrationTestData;
 
 import org.junit.Test;
 
-public class BambooVersionExtractorIT {
+public class BambooVersionExtractorITest {
 
     @Test
     public void should_extract_version() throws Exception {
