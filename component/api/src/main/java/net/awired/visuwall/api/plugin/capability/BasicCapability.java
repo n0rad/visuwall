@@ -17,17 +17,22 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.List;
-
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
-public interface BasicCapability {
+public interface BasicCapability/* <ID_TYPE> */{
+
+    //TODO
+    //    String getDescription(ProjectId projectId);
+    //    SoftwareProjectId<ID_TYPE> contains(ProjectKey projectKey);
+
     /**
      * @param projectId
-     * @throws NotImplementedOperationException
-     * @returntrue if the project is in the Quality Software
+     * @return true if the project is in the Quality Software
+     * @deprecated
      */
+    @Deprecated
     boolean contains(ProjectId projectId);
 
     /**

@@ -1,17 +1,11 @@
 package net.awired.visuwall.core.business.process.capabilities;
 
-import java.util.Arrays;
 import java.util.Date;
 import net.awired.visuwall.api.domain.Build;
-import net.awired.visuwall.api.domain.Project;
-import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +42,7 @@ public class BuildCapabilityProcess {
                 scheduler.schedule(finishTimeRunner, new Date());
             }
             if (previousBuilding == true && building == false) {
+                // build is over
                 lastBuild.setEstimatedFinishTime(null);
             }
 
@@ -58,52 +53,6 @@ public class BuildCapabilityProcess {
             LOG.info("No last build number found to update project" + project);
         }
         return false;
-    }
-
-    /////////////////////////////////////
-
-    void enhanceWithBuildInformations(Project projectToMerge, BasicCapability buildPlugin) {
-        ProjectId projectId = projectToMerge.getProjectId();
-        Preconditions.checkState(projectId != null, "projectToComplete must have a projectId");
-        try {
-            Project project = buildPlugin.findProject(projectId);
-            if (project != null) {
-                String projectName = project.getName();
-                String description = project.getDescription();
-                int[] buildNumbers = project.getBuildNumbers();
-                Build completedBuild = project.getCompletedBuild();
-                Build currentBuild = project.getCurrentBuild();
-
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("plugin - " + buildPlugin.getClass().getSimpleName());
-                    LOG.debug("projectName:" + projectName);
-                    LOG.debug("description:" + description);
-                    LOG.debug("buildNumbers:" + Arrays.toString(buildNumbers));
-                    LOG.debug("completedBuild:" + completedBuild);
-                    LOG.debug("currentBuild: " + currentBuild);
-                }
-
-                if (buildNumbers != null) {
-                    projectToMerge.setBuildNumbers(buildNumbers);
-                }
-                if (completedBuild != null) {
-                    projectToMerge.setCompletedBuild(completedBuild);
-                }
-                if (currentBuild != null) {
-                    projectToMerge.setCurrentBuild(currentBuild);
-                }
-                if (StringUtils.isNotBlank(description)) {
-                    projectToMerge.setDescription(description);
-                }
-                if (StringUtils.isNotBlank(projectName)) {
-                    projectToMerge.setName(projectName);
-                }
-            }
-        } catch (ProjectNotFoundException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(e.getMessage());
-            }
-        }
     }
 
     /**
@@ -131,6 +80,8 @@ public class BuildCapabilityProcess {
         };
     }
 
+    /////////////////////////////////////
+
     Build findBuildByBuildNumber(ConnectedProject project, int buildNumber) throws BuildNotFoundException {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
         try {
@@ -148,18 +99,6 @@ public class BuildCapabilityProcess {
             }
         }
         throw new BuildNotFoundException("No build #" + buildNumber + " for project " + project);
-    }
-
-    public State getState(ConnectedProject project) {
-        Preconditions.checkNotNull(project, "project is a mandatory parameter");
-        try {
-            return project.getBuildConnection().getLastBuildState(project.getProjectId());
-        } catch (ProjectNotFoundException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(e.getMessage());
-            }
-        }
-        throw new RuntimeException("Project " + project + " must have a state. It can't be found in ");
     }
 
 }

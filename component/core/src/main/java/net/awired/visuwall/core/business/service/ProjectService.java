@@ -17,7 +17,9 @@
 package net.awired.visuwall.core.business.service;
 
 import java.util.concurrent.ScheduledFuture;
+import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
@@ -56,7 +58,8 @@ public class ProjectService {
 
                 ConnectedProject connectedProject = new ConnectedProject(projectId);
                 connectedProject.setBuildConnection(buildConnection);
-                connectedProject.getCapabilities().add(buildConnection);
+                //TODO when using SoftwareProjectId
+                //                connectedProject.getCapabilities().add(buildConnection);
                 Runnable updateProjectRunner = getUpdateProjectRunner(wallWhereToAdd, connectedProject);
 
                 LOG.debug("Launching first project updater for project" + connectedProject);
@@ -75,37 +78,52 @@ public class ProjectService {
         Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
         return new Runnable() {
+
+            private boolean neverRun = true;
+
             @Override
             public void run() {
                 LOG.info("Running Project Updater task for project " + project);
                 try {
                     boolean updateNeeded = buildProcess.updateStatusAndReturnFullUpdateNeeded(project);
-                    if (updateNeeded) {
+                    if (neverRun || updateNeeded) {
                         LOG.debug("Project " + project + " build change and needs a update from software");
 
-                        project.setState(buildProcess.getState(project));
+                        // state
+                        State state = project.getBuildConnection().getLastBuildState(project.getProjectId());
+                        project.setState(state);
+
+                        // description
+                        //String description = project.getBuildConnection().getDescription(project.getProjectId());
+                        //project.setDescription(description);
+
+                        int[] buildNumbers = project.getBuildNumbers();
+                        Build completedBuild = project.getCompletedBuild();
+                        Build currentBuild = project.getCurrentBuild();
+
+                        // TODO check for new software to update
+                        // TODO be sure to not remove a project cause of a capability ProjectNotFoundException 
+
+                        //                
+                        //                for (BasicCapability service : project.getCapabilities()) {
+                        //                    projectEnhancerService.enhanceWithBuildInformations(project, service);
+                        //                    projectEnhancerService.enhanceWithQualityAnalysis(project, service, metrics);
+                        //                }
+                        //                if (LOG.isDebugEnabled()) {
+                        //                    LOG.debug(project.toString());
+                        //                }
+
+                        //TODO MOVE
+                        //                    projectAggregatorService.enhanceWithBuildInformations(connectedProject, buildPlugin);                        
                     }
-                    // TODO check for new software to update
-                    // TODO be sure to not remove a project cause of a capability ProjectNotFoundException 
-
-                    //                
-                    //                for (BasicCapability service : project.getCapabilities()) {
-                    //                    projectEnhancerService.enhanceWithBuildInformations(project, service);
-                    //                    projectEnhancerService.enhanceWithQualityAnalysis(project, service, metrics);
-                    //                }
-                    //                if (LOG.isDebugEnabled()) {
-                    //                    LOG.debug(project.toString());
-                    //                }
-
-                    //TODO MOVE
-                    //                    projectAggregatorService.enhanceWithBuildInformations(connectedProject, buildPlugin);
 
                 } catch (ProjectNotFoundException e) {
                     LOG.info("Project not found by build Software, and will be removed");
                     LOG.debug("Project not found cause", e);
                     wall.getProjects().deleteAndCleanProject(project.getId());
+                } finally {
+                    neverRun = false;
                 }
-
             }
         };
     }

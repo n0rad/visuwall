@@ -18,7 +18,6 @@ package net.awired.visuwall.api.domain;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.google.common.base.Objects;
 
 public class ProjectId {
@@ -38,19 +37,19 @@ public class ProjectId {
 
     @Override
     public int hashCode() {
-		return Objects.hashCode(artifactId, ids, name);
+        return Objects.hashCode(artifactId, ids, name);
     }
 
     @Override
     public boolean equals(Object obj) {
-		if (obj instanceof ProjectId) {
-			ProjectId p = (ProjectId) obj;
-			return Objects.equal(getClass(), p.getClass()) && //
-			        Objects.equal(artifactId, p.artifactId) && //
-			        Objects.equal(ids, p.ids) && //
-			        Objects.equal(name, p.name);
-		}
-		return false;
+        if (obj instanceof ProjectId) {
+            ProjectId p = (ProjectId) obj;
+            return Objects.equal(getClass(), p.getClass()) && //
+                    Objects.equal(artifactId, p.artifactId) && //
+                    Objects.equal(ids, p.ids) && //
+                    Objects.equal(name, p.name);
+        }
+        return false;
     }
 
     @Override

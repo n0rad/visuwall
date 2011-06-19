@@ -27,6 +27,7 @@ import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -122,6 +123,7 @@ public class MetricCapabilityProcessTest {
         assertEquals(coverage2, projectToEnhance.getQualityResult().getMeasure("coverage"));
     }
 
+    @Ignore
     @Test
     public void should_enhance_unit_test_results() throws Exception {
         TestResult testResult = new TestResult();
@@ -144,6 +146,7 @@ public class MetricCapabilityProcessTest {
         assertEquals(4.0, enhancedTestResult.getCoverage(), 0);
     }
 
+    @Ignore
     @Test
     public void should_enhance_integration_test_results() throws Exception {
         TestResult testResult = new TestResult();

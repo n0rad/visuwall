@@ -24,7 +24,6 @@ import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
-import net.awired.visuwall.core.business.domain.ConnectedProject;
 import net.awired.visuwall.core.business.service.PluginService;
 import net.awired.visuwall.core.business.service.ProjectService;
 import net.awired.visuwall.core.business.service.SoftwareAccessService;
@@ -56,7 +55,7 @@ public class WallProcess {
     ///////////////////////////////////////////////////////////////
 
     public void rebuildFullWallInformations(Wall wall) {
-        //TODO run in thread and prevent wall hiding if software not found
+        //TODO run in thread and prevent wall hiding (exception causing wall not added to wall list) if software not found
         rebuildConnectionPluginsInSoftwareAccess(wall);
         for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
             Runnable task = getDiscoverProjectsRunner(wall, softwareAccess);
@@ -96,12 +95,13 @@ public class WallProcess {
                         taskScheduler.schedule(projectCreationRunner, new Date());
                     }
                 } else {
-                    for (ConnectedProject project : wall.getProjects()) {
-                        boolean contains = softwareAccess.getConnection().contains(project.getProjectId());
-                        if (contains) {
-                            project.getCapabilities().add(softwareAccess.getConnection());
-                        }
-                    }
+                    //TODO when using SoftwareProjectId
+                    //                    for (ConnectedProject project : wall.getProjects()) {
+                    //                        boolean contains = softwareAccess.getConnection().contains(project.getProjectId());
+                    //                        if (contains) {
+                    //                            project.getCapabilities().add(softwareAccess.getConnection());
+                    //                        }
+                    //                    }
                 }
             }
 

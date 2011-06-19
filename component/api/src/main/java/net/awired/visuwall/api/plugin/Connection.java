@@ -29,7 +29,7 @@ public interface Connection extends BasicCapability {
      * @param password
      * @throws ConnectionException
      */
-	void connect(String url, String login, String password) throws ConnectionException;
+    void connect(String url, String login, String password) throws ConnectionException;
 
     /**
      * Close the connection to the software

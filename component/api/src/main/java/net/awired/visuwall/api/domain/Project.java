@@ -21,6 +21,7 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 import net.awired.visuwall.api.domain.quality.QualityResult;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Preconditions;
@@ -49,19 +50,24 @@ public class Project implements Comparable<Project> {
         this.projectId = projectId;
     }
 
+    @JsonIgnore
     public Build getCompletedBuild() {
         return builds.get(completedBuildId);
     }
 
+    @JsonIgnore
     public void setCompletedBuild(Build completedBuild) {
-        this.builds.put(completedBuild.getBuildNumber(), completedBuild);
-        this.completedBuildId = completedBuild.getBuildNumber();
+        // TODO remove completedBuild;
+        //        this.builds.put(completedBuild.getBuildNumber(), completedBuild);
+        //        this.completedBuildId = completedBuild.getBuildNumber();
     }
 
+    @JsonIgnore
     public Build getCurrentBuild() {
         return builds.get(getCurrentBuildId());
     }
 
+    @JsonIgnore
     public void setCurrentBuild(Build currentBuild) {
         this.builds.put(currentBuild.getBuildNumber(), currentBuild);
         this.setCurrentBuildId(currentBuild.getBuildNumber());

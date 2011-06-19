@@ -57,7 +57,7 @@ public class ProjectServiceTest {
         List<Connection> connectionPlugins = getConnectionPlugins();
         Wall wall = new Wall();
         ConnectedProject project = new ConnectedProject("test");
-        project.setCapabilities((List) connectionPlugins);
+        //project.setCapabilities((List) connectionPlugins);
 
         Runnable updateProjectRunner = projectService.getUpdateProjectRunner(wall, project);
         updateProjectRunner.run();

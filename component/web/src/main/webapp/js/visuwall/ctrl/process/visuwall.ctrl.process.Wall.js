@@ -142,7 +142,7 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	this._updateBuilding = function(projectId, building, finishTime) {
 		if (building) {
 			$this.wallView.showBuilding(projectId);
-			$this.wallView.setCountdown(projectId, finishTime);
+			$this.wallView.setCountdown(projectId, new Date(new Date().getTime() + (finishTime * 1000)));
 		} else {
 			this.wallView.stopBuilding(projectId);			
 		}

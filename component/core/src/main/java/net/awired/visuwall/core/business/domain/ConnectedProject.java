@@ -16,13 +16,14 @@
 
 package net.awired.visuwall.core.business.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
@@ -34,9 +35,11 @@ public class ConnectedProject extends Project {
     private State state;
 
     @Transient
-    private List<BasicCapability> capabilities = new ArrayList<BasicCapability>();
+    private Map<SoftwareProjectId<?>, BasicCapability> capabilities = new HashMap<SoftwareProjectId<?>, BasicCapability>();
     @Transient
     private BuildCapability buildConnection;
+    @Transient
+    private SoftwareProjectId<?> buildProjectId;
     @Transient
     private ScheduledFuture<Object> updateProjectTask;
 
@@ -62,16 +65,6 @@ public class ConnectedProject extends Project {
     }
 
     /////////////////////////////////
-
-    @JsonIgnore
-    public void setCapabilities(List<BasicCapability> capabilities) {
-        this.capabilities = capabilities;
-    }
-
-    @JsonIgnore
-    public List<BasicCapability> getCapabilities() {
-        return capabilities;
-    }
 
     @JsonIgnore
     public BuildCapability getBuildConnection() {
