@@ -17,6 +17,7 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.List;
+
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -41,7 +42,7 @@ public interface BasicCapability {
      * 
      * @return
      */
-    List<ProjectId> findProjectsByNames(List<String> names);
+    List<ProjectId> findProjectIdsByNames(List<String> names);
 
     /**
      * Plugin should be able to retrieve projects by theirs projectId. ProjectId are filled when you call

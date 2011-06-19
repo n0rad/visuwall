@@ -182,8 +182,7 @@ public class JenkinsConnectionTest {
     }
 
     @Test
-    public void should_find_last_build_number() throws HudsonProjectNotFoundException, HudsonBuildNotFoundException,
-            ProjectNotFoundException, BuildNotFoundException {
+    public void should_find_last_build_number() throws Exception {
         Hudson hudson = Mockito.mock(Hudson.class);
 
         JenkinsConnection jenkinsPlugin = new JenkinsConnection();

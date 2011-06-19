@@ -40,13 +40,16 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 public class Bamboo {
 
-	private BambooUrlBuilder bambooUrlBuilder;
+    @VisibleForTesting
+    BambooUrlBuilder bambooUrlBuilder;
 
-	private GenericSoftwareClient client = new GenericSoftwareClient();
+    @VisibleForTesting
+    GenericSoftwareClient client = new GenericSoftwareClient();
 
 	private static final Logger LOG = LoggerFactory.getLogger(Bamboo.class);
 
@@ -88,7 +91,7 @@ public class Bamboo {
 			project.setBuilding(plan.isBuilding);
 			return project;
 		} catch (ResourceNotFoundException e) {
-			throw new BambooProjectNotFoundException("Can't find bamboo project with projectKey " + projectKey);
+            throw new BambooProjectNotFoundException("Can't find bamboo project with projectKey " + projectKey, e);
 		}
 	}
 
@@ -155,9 +158,9 @@ public class Bamboo {
 				}
 			}
 		} catch (ResourceNotFoundException e) {
-			throw new BambooStateNotFoundException("Not state found for projectName: " + projectName);
+            throw new BambooStateNotFoundException("Not state found for projectName: " + projectName, e);
 		} catch (BambooBuildNumberNotFoundException e) {
-			throw new BambooStateNotFoundException("Not state found for projectName: " + projectName);
+            throw new BambooStateNotFoundException("Not state found for projectName: " + projectName, e);
 		}
 		throw new BambooStateNotFoundException("Not state found for projectName: " + projectName);
 	}

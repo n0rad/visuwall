@@ -25,11 +25,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.net.URL;
 import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
 
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
@@ -225,31 +221,19 @@ public class TeamCityTest {
 	}
 
 	private TeamCityBuild createBuild() {
-		return (TeamCityBuild) load("app/rest/builds/id:47068.xml", TeamCityBuild.class);
+        return (TeamCityBuild) ClasspathFiles.load("app/rest/builds/id:47068.xml", TeamCityBuild.class);
 	}
 
 	private TeamCityProjects createProjects() {
-		return (TeamCityProjects) load("app/rest/projects.xml", TeamCityProjects.class);
+        return (TeamCityProjects) ClasspathFiles.load("app/rest/projects.xml", TeamCityProjects.class);
 	}
 
 	private TeamCityProject createProject() {
-		return (TeamCityProject) load("app/rest/projects/id:project54.xml", TeamCityProject.class);
+        return (TeamCityProject) ClasspathFiles.load("app/rest/projects/id:project54.xml", TeamCityProject.class);
 	}
 
 	private TeamCityBuilds createBuilds() {
-		return (TeamCityBuilds) load("app/rest/builds.xml", TeamCityBuilds.class);
-	}
-
-	private Object load(String fileName, Class<?> clazz) {
-		try {
-			String file = ClasspathFiles.getUrlFile(fileName);
-			URL url = new URL(file);
-			JAXBContext newInstance = JAXBContext.newInstance(clazz);
-			Unmarshaller unmarshaller = newInstance.createUnmarshaller();
-			return unmarshaller.unmarshal(url);
-		} catch (Exception t) {
-			throw new RuntimeException(t);
-		}
-	}
+        return (TeamCityBuilds) ClasspathFiles.load("app/rest/builds.xml", TeamCityBuilds.class);
+    }
 
 }

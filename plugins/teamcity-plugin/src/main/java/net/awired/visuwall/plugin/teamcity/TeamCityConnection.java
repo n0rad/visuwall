@@ -25,6 +25,7 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
@@ -87,7 +88,7 @@ public class TeamCityConnection implements Connection, BuildCapability {
 	}
 
 	@Override
-	public List<ProjectId> findProjectsByNames(List<String> names) {
+	public List<ProjectId> findProjectIdsByNames(List<String> names) {
 		checkConnected();
 		List<ProjectId> projectIds = new ArrayList<ProjectId>();
 		try {
@@ -133,7 +134,7 @@ public class TeamCityConnection implements Connection, BuildCapability {
 	}
 
 	@Override
-	public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
+    public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNumberNotFoundException {
 		checkConnected();
         throw projectNotFoundException;
 	}

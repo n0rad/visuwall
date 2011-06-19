@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.bambooclient.exception;
 
+
 public class BambooStateNotFoundException extends Exception {
 
 	private static final long serialVersionUID = -1571179295934231271L;
@@ -23,5 +24,9 @@ public class BambooStateNotFoundException extends Exception {
 	public BambooStateNotFoundException(String msg) {
 		super(msg);
 	}
+
+    public BambooStateNotFoundException(String msg, Exception cause) {
+        super(msg, cause);
+    }
 
 }

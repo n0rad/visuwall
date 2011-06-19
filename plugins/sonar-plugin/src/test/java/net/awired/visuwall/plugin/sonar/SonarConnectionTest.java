@@ -213,7 +213,7 @@ public class SonarConnectionTest {
 
     @Test
     public void should_return_empty_list_when_finding_projects_by_names() {
-        assertTrue(sonar.findProjectsByNames(null).isEmpty());
+        assertTrue(sonar.findProjectIdsByNames(null).isEmpty());
     }
 
     @Test(expected = ProjectNotFoundException.class)
@@ -258,7 +258,6 @@ public class SonarConnectionTest {
     @Test
     public void should_generated_hash_code() {
         int hashCode = sonar.hashCode();
-        System.err.println(hashCode);
         assertFalse(hashCode == 0);
     }
 

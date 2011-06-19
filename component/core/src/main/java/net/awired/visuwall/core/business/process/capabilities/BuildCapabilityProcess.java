@@ -7,6 +7,7 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
@@ -53,12 +54,10 @@ public class BuildCapabilityProcess {
             if (previousLastBuildNumber != lastBuildNumber && !building) {
                 return true;
             }
-            return false;
-        } catch (BuildNotFoundException e) {
-            // TODO should not throw a BuildNotFound I Think
-            e.printStackTrace();
-            throw new RuntimeException(e);
+        } catch (BuildNumberNotFoundException e) {
+            LOG.info("No last build number found to update project" + project);
         }
+        return false;
     }
 
     /////////////////////////////////////

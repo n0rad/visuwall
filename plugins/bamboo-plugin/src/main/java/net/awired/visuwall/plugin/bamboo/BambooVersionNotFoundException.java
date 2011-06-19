@@ -24,4 +24,8 @@ public class BambooVersionNotFoundException extends Exception {
         super(msg, e);
     }
 
+    public BambooVersionNotFoundException(String msg) {
+        super(msg);
+    }
+
 }

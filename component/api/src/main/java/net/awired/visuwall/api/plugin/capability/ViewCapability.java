@@ -27,7 +27,7 @@ public interface ViewCapability extends BasicCapability {
      * 
      * @return
      */
-    List<ProjectId> findProjectsByViews(List<String> views);
+    List<ProjectId> findProjectIdsByViews(List<String> views);
 
     /**
      * Software can sort projects by views, or graphically by tabs. If so, plugin can list these views.
@@ -43,6 +43,6 @@ public interface ViewCapability extends BasicCapability {
      * @return List of project names contained in view
      * @throws ViewNotFoundException
      */
-    List<String> findProjectsByView(String viewName) throws ViewNotFoundException;
+    List<String> findProjectNamesByView(String viewName) throws ViewNotFoundException;
 
 }

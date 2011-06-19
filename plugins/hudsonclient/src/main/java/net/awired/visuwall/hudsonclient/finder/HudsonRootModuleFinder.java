@@ -18,6 +18,7 @@ package net.awired.visuwall.hudsonclient.finder;
 
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.DocumentNotLoadedException;
 import net.awired.visuwall.hudsonclient.loader.DocumentLoader;
 
 import org.w3c.dom.Document;
@@ -44,13 +45,13 @@ public class HudsonRootModuleFinder {
         String pomUrl = hudsonUrlBuilder.getPomUrl(jobName);
         try {
             return createArtifactIdFrom(pomUrl);
-        } catch (Exception e) {
+        } catch (DocumentNotLoadedException e) {
             String logMessage = "Can't find artifactId, job : " + jobName + " at url :'" + pomUrl + "'";
             throw new ArtifactIdNotFoundException(logMessage, e);
         }
     }
 
-    private String createArtifactIdFrom(String pomUrl) throws Exception {
+    private String createArtifactIdFrom(String pomUrl) throws DocumentNotLoadedException {
         Document doc = documentLoader.loadFromUrl(pomUrl);
         String groupId = findValueInFirstLevel(doc, "groupId");
         String artifactId = findValueInFirstLevel(doc, "artifactId");

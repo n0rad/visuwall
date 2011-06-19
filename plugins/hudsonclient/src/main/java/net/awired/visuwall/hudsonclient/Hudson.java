@@ -19,17 +19,22 @@ package net.awired.visuwall.hudsonclient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
+import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
 import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
+import net.awired.visuwall.hudsonclient.finder.HudsonRootModuleFinder;
+
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Preconditions;
 
 public class Hudson {
@@ -40,9 +45,12 @@ public class Hudson {
 
     private HudsonFinder hudsonFinder;
 
+    private HudsonRootModuleFinder hudsonRootModuleFinder;
+
     public Hudson(String hudsonUrl) {
         HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(hudsonUrl);
         hudsonFinder = new HudsonFinder(hudsonUrlBuilder);
+        hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize hudson with url " + hudsonUrl);
         }
@@ -260,6 +268,14 @@ public class Hudson {
             }
         }
         return true;
+    }
+
+    public String findArtifactId(String jobName) throws ArtifactIdNotFoundException {
+        return hudsonRootModuleFinder.findArtifactId(jobName);
+    }
+
+    public boolean contains(String name) {
+        return hudsonFinder.projectExists(name);
     }
 
 }

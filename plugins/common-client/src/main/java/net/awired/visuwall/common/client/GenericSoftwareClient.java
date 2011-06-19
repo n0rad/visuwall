@@ -29,51 +29,67 @@ import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 
 public class GenericSoftwareClient {
 
-	private Client client;
+    private Client client;
 
-	public GenericSoftwareClient(Client client) {
-		Preconditions.checkNotNull(client, "client is mandatory");
-		this.client = client;
-	}
+    private static final ResourceCache CACHE = new ResourceCache();
 
-	public GenericSoftwareClient() {
-		ClientConfig clientConfig = new DefaultClientConfig();
-		client = Client.create(clientConfig);
-	}
-
-	public GenericSoftwareClient(String login, String password) {
-		Preconditions.checkNotNull(login, "login is mandatory");
-		Preconditions.checkNotNull(password, "password is mandatory");
-		ClientConfig clientConfig = new DefaultClientConfig();
-		client = Client.create(clientConfig);
-		client.addFilter(new HTTPBasicAuthFilter(login, password)); 
+    public GenericSoftwareClient(Client client) {
+        Preconditions.checkNotNull(client, "client is mandatory");
+        this.client = client;
     }
 
-	public <T> T resource(String url, Class<T> clazz) throws ResourceNotFoundException {
-        checkUrl(url);
-        checkClass(clazz);
-        try {
-			WebResource resource = client.resource(url);
-			return resource.get(clazz);
-		} catch (UniformInterfaceException e) {
-			throw new ResourceNotFoundException(e);
-		} catch (ClientHandlerException e) {
-			throw new ResourceNotFoundException(e);
-		}
-	}
+    public GenericSoftwareClient() {
+        ClientConfig clientConfig = new DefaultClientConfig();
+        client = Client.create(clientConfig);
+    }
 
-    public <T> T resource(String url, Class<T> clazz, MediaType mediaType) throws ResourceNotFoundException {
+    public GenericSoftwareClient(String login, String password) {
+        Preconditions.checkNotNull(login, "login is mandatory");
+        Preconditions.checkNotNull(password, "password is mandatory");
+        ClientConfig clientConfig = new DefaultClientConfig();
+        client = Client.create(clientConfig);
+        client.addFilter(new HTTPBasicAuthFilter(login, password));
+    }
+
+    public <T> T resource(String url, Class<T> clazz) throws ResourceNotFoundException {
         checkUrl(url);
         checkClass(clazz);
-        Preconditions.checkNotNull(mediaType, "mediaType is mandatory");
         try {
-            WebResource resource = client.resource(url);
-            return resource.accept(mediaType).get(clazz);
+            T object = CACHE.get(url, clazz);
+            if (object == null) {
+                WebResource resource = client.resource(url);
+                object = resource.get(clazz);
+                CACHE.put(object, url, clazz);
+            }
+            return object;
         } catch (UniformInterfaceException e) {
             throw new ResourceNotFoundException(e);
         } catch (ClientHandlerException e) {
             throw new ResourceNotFoundException(e);
         }
+    }
+
+    public <T> T resource(String url, Class<T> clazz, MediaType mediaType) throws ResourceNotFoundException {
+        checkUrl(url);
+        checkClass(clazz);
+        checkMediaType(mediaType);
+        try {
+            T object = CACHE.get(url, clazz, mediaType);
+            if (object == null) {
+                WebResource resource = client.resource(url);
+                object = resource.accept(mediaType).get(clazz);
+                CACHE.put(object, url, clazz, mediaType);
+            }
+            return object;
+        } catch (UniformInterfaceException e) {
+            throw new ResourceNotFoundException(e);
+        } catch (ClientHandlerException e) {
+            throw new ResourceNotFoundException(e);
+        }
+    }
+
+    private void checkMediaType(MediaType mediaType) {
+        Preconditions.checkNotNull(mediaType, "mediaType is mandatory");
     }
 
     private <T> void checkClass(Class<T> clazz) {

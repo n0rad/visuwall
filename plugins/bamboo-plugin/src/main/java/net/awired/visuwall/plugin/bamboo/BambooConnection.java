@@ -25,6 +25,7 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
@@ -140,14 +141,14 @@ public class BambooConnection implements Connection, BuildCapability {
 	}
 
 	@Override
-	public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
+    public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNumberNotFoundException {
 		checkProjectId(projectId);
 		String id = getProjectKey(projectId);
 		Preconditions.checkNotNull(id, BAMBOO_ID);
 		try {
 			return bamboo.getLastBuildNumber(id);
 		} catch (BambooBuildNumberNotFoundException e) {
-			throw new BuildNotFoundException(e);
+            throw new BuildNumberNotFoundException(e);
 		}
 	}
 
@@ -176,7 +177,7 @@ public class BambooConnection implements Connection, BuildCapability {
 	}
 
 	@Override
-	public List<ProjectId> findProjectsByNames(List<String> names) {
+	public List<ProjectId> findProjectIdsByNames(List<String> names) {
         Preconditions.checkNotNull(names, "names is mandatory");
         List<ProjectId> projectIds = new ArrayList<ProjectId>();
         List<BambooProject> projects = bamboo.findAllProjects();
