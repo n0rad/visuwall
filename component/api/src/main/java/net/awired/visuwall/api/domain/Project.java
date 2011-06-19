@@ -20,9 +20,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
-
 import net.awired.visuwall.api.domain.quality.QualityResult;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Preconditions;
@@ -35,7 +33,7 @@ public class Project implements Comparable<Project> {
     private QualityResult qualityResult = new QualityResult();
     private int[] buildNumbers;
 
-    private Map<Integer, Build> builds = new HashMap<Integer, Build>();
+    protected Map<Integer, Build> builds = new HashMap<Integer, Build>();
 
     private int completedBuildId;
     private int currentBuildId;
@@ -76,7 +74,7 @@ public class Project implements Comparable<Project> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Project)) {
+        if (!(obj instanceof Project)) {
             return false;
         }
 

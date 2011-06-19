@@ -25,8 +25,8 @@ import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
-import net.awired.visuwall.core.business.service.BuildProjectService;
 import net.awired.visuwall.core.business.service.PluginService;
+import net.awired.visuwall.core.business.service.ProjectService;
 import net.awired.visuwall.core.business.service.SoftwareAccessService;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
@@ -45,7 +45,7 @@ public class WallProcess {
     TaskScheduler taskScheduler;
 
     @Autowired
-    BuildProjectService projectService;
+    ProjectService projectService;
 
     @Autowired
     PluginService pluginService;
@@ -87,7 +87,7 @@ public class WallProcess {
                 if (softwareAccess.getConnection() instanceof BuildCapability) {
                     Set<ProjectId> projectIds = softwareAccessService.discoverBuildProjects(softwareAccess);
                     for (ProjectId projectId : projectIds) {
-                        if (wall.projectsContainsId(projectId)) {
+                        if (wall.getProjects().containsId(projectId)) {
                             // this project is already registered in list
                             continue;
                         }

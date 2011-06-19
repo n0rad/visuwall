@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
-
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
@@ -30,11 +29,9 @@ import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.core.business.domain.PluginInfo;
 import net.awired.visuwall.core.business.domain.SoftwareInfo;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import com.google.common.base.Preconditions;
 
 @Service
@@ -52,7 +49,9 @@ public class PluginService {
                 visuwallPlugin.getSoftwareId(url);
                 return visuwallPlugin;
             } catch (IncompatibleSoftwareException e) {
-                // TODO what do you want to log?
+                LOG.debug("Plugin " + visuwallPlugin + " can not manage url " + url);
+            } catch (Throwable e) {
+                LOG.warn("Plugin " + visuwallPlugin + " throws exception on url " + url, e);
             }
         }
         throw new RuntimeException("no plugin to manage url " + url);
@@ -66,7 +65,10 @@ public class PluginService {
                 softwareId = visuwallPlugin.getSoftwareId(url);
                 Preconditions.checkNotNull(softwareId, "isManageable() should not return null", visuwallPlugin);
             } catch (IncompatibleSoftwareException e) {
-                LOG.debug("plugin [" + visuwallPlugin + "] is not compatible with software at URL : " + url);
+                LOG.debug("Plugin " + visuwallPlugin + " can not manage url " + url);
+                continue;
+            } catch (Throwable e) {
+                LOG.warn("Plugin " + visuwallPlugin + " throws exception on url " + url, e);
                 continue;
             }
             SoftwareInfo softwareInfo = new SoftwareInfo();
@@ -76,7 +78,6 @@ public class PluginService {
             try {
                 Connection connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
                 softwareInfo.setProjectNames(connectionPlugin.findProjectNames());
-
                 if (connectionPlugin instanceof ViewCapability) {
                     softwareInfo.setViewNames(((ViewCapability) connectionPlugin).findViews());
                 }

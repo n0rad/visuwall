@@ -237,7 +237,7 @@ public class Bamboo {
 
 	}
 
-	private boolean isNeverSuccessful(BambooProject bambooProject) throws BambooProjectNotFoundException {
+    private boolean isNeverSuccessful(BambooProject bambooProject) {
 		int[] buildNumbers = bambooProject.getBuildNumbers();
 		for (int buildNumber : buildNumbers) {
 			try {

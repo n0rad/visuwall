@@ -18,6 +18,7 @@ package net.awired.visuwall.core.application.log;
 
 import java.util.Arrays;
 import java.util.List;
+
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.filter.AbstractMatcherFilter;
@@ -36,9 +37,8 @@ public class outFilter extends AbstractMatcherFilter<Object> {
         List<Level> eventsToKeep = Arrays.asList(Level.TRACE, Level.DEBUG, Level.INFO);
         if (eventsToKeep.contains(loggingEvent.getLevel())) {
             return FilterReply.NEUTRAL;
-        } else {
-            return FilterReply.DENY;
         }
+        return FilterReply.DENY;
     }
 
 }

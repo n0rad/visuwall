@@ -18,12 +18,15 @@ package net.awired.visuwall.hudsonclient.builder;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonTasksTestAggregatedTestResultActionChildReport;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -83,12 +86,15 @@ public class TestResultBuilder {
 
     private void updateTestResult(HudsonTestResult unitTestsResult, Test test) {
         String status = test.status;
-        if ("FAILED".equals(status))
+        if ("FAILED".equals(status)) {
             unitTestsResult.setFailCount(unitTestsResult.getFailCount() + 1);
-        if ("SKIPPED".equals(status))
+        }
+        if ("SKIPPED".equals(status)) {
             unitTestsResult.setSkipCount(unitTestsResult.getSkipCount() + 1);
-        if ("PASSED".equals(status))
+        }
+        if ("PASSED".equals(status)) {
             unitTestsResult.setPassCount(unitTestsResult.getPassCount() + 1);
+        }
     }
 
     private boolean isUnitTest(Test test) {
@@ -116,10 +122,13 @@ public class TestResultBuilder {
             Node attributeNode = testAttributes.item(j);
             String attributeName = attributeNode.getNodeName();
             String attributeValue = attributeNode.getTextContent();
-            if ("className".equals(attributeName))
+            if ("className".equals(attributeName)) {
                 test.className = attributeValue;
-            else if ("status".equals(attributeName))
-                test.status = attributeValue;
+            } else {
+                if ("status".equals(attributeName)) {
+                    test.status = attributeValue;
+                }
+            }
         }
         return test;
     }

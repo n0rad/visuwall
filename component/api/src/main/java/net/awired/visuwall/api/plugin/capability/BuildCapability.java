@@ -25,6 +25,8 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BuildCapability extends BasicCapability {
 
+    //    int[] getBuildNumbers(ProjectId projectId) throws ProjectNotFoundException;
+
     /**
      * Builds are in a certain state which may vary between software You'll have to try to associate them with common
      * States

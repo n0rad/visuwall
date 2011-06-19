@@ -24,6 +24,8 @@ import com.google.common.base.Objects.ToStringHelper;
 
 public class Build {
 
+    private Date estimatedFinishTime;
+
     private boolean building;
     private State state = State.UNKNOWN;
     private Set<Commiter> commiters = new TreeSet<Commiter>();
@@ -139,5 +141,13 @@ public class Build {
 
     public void setBuilding(boolean building) {
         this.building = building;
+    }
+
+    public void setEstimatedFinishTime(Date estimatedFinishTime) {
+        this.estimatedFinishTime = estimatedFinishTime;
+    }
+
+    public Date getEstimatedFinishTime() {
+        return estimatedFinishTime;
     }
 }

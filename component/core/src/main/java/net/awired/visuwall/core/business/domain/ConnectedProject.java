@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
+import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -31,7 +32,6 @@ public class ConnectedProject extends Project {
 
     //TODO move to build
     private State state;
-    private boolean building;
 
     @Transient
     private List<BasicCapability> capabilities = new ArrayList<BasicCapability>();
@@ -50,6 +50,15 @@ public class ConnectedProject extends Project {
 
     public ConnectedProject(ProjectId projectId) {
         super(projectId);
+    }
+
+    public Build findCreatedBuild(Integer buildNumber) {
+        Build build = builds.get(buildNumber);
+        if (build == null) {
+            build = new Build();
+            this.builds.put(buildNumber, build);
+        }
+        return build;
     }
 
     /////////////////////////////////
@@ -72,14 +81,6 @@ public class ConnectedProject extends Project {
     @JsonIgnore
     public void setBuildConnection(BuildCapability buildConnection) {
         this.buildConnection = buildConnection;
-    }
-
-    public void setBuilding(boolean building) {
-        this.building = building;
-    }
-
-    public boolean isBuilding() {
-        return building;
     }
 
     public void setState(State state) {

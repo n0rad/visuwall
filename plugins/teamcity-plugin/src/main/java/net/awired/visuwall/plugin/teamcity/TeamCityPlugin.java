@@ -16,7 +16,6 @@
 
 package net.awired.visuwall.plugin.teamcity;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 
@@ -28,19 +27,14 @@ import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
 import net.awired.visuwall.teamcityclient.resource.TeamCityServer;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
-
-    @VisibleForTesting
-    TeamCityUrlBuilder urlBuilder;
 
 	private GenericSoftwareClient genericSoftwareClient = new GenericSoftwareClient("guest", "");
 
     @Override
     public TeamCityConnection getConnection(String url, Properties info) {
-        urlBuilder = new TeamCityUrlBuilder(url);
         TeamCityConnection connectionPlugin = new TeamCityConnection();
         connectionPlugin.connect(url);
         return connectionPlugin;
@@ -67,9 +61,7 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
 		if (isManageable(url.toString())) {
             try {
                 return createSoftwareId(url);
-            } catch (MalformedURLException e) {
-                throw new IncompatibleSoftwareException("Url " + url + " is not compatible with TeamCity", e);
-			} catch (ResourceNotFoundException e) {
+            } catch (ResourceNotFoundException e) {
 				throw new IncompatibleSoftwareException("Url " + url + " is not compatible with TeamCity", e);
             }
         }
@@ -85,7 +77,7 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
 		return true;
 	}
 
-	private SoftwareId createSoftwareId(URL url) throws MalformedURLException, ResourceNotFoundException {
+    private SoftwareId createSoftwareId(URL url) throws ResourceNotFoundException {
         SoftwareId softwareId = new SoftwareId();
         softwareId.setName("TeamCity");
 		String strVersion = getVersion(url.toString());

@@ -19,6 +19,7 @@ package net.awired.visuwall.api.domain.quality;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+
 import com.google.common.base.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -109,21 +110,25 @@ public final class QualityMetric {
 
     @Override
     public String toString() {
-        return Objects
-                .toStringHelper(this)
-                //
-                .add("description", description).add("direction", direction).add("domain", domain)
-                .add("hidden", hidden).add("key", key).add("name", name).add("qualitative", qualitative)
-                .add("userManaged", userManaged).add("valTyp", valTyp).toString();
+        return Objects.toStringHelper(this) //
+                .add("description", description)//
+                .add("direction", direction)//
+                .add("domain", domain)//
+                .add("hidden", hidden)//
+                .add("key", key)//
+                .add("name", name)//
+                .add("qualitative", qualitative)//
+                .add("userManaged", userManaged)//
+                .add("valTyp", valTyp)//
+                .toString();
     }
 
     @Override
     public boolean equals(Object o) {
         if (o instanceof QualityMetric) {
             return Objects.equal(key, ((QualityMetric) o).key);
-        } else {
-            return false;
         }
+        return false;
     }
 
     @Override

@@ -14,38 +14,18 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.resource;
+package net.awired.visuwall.hudsonclient.exception;
 
-import javax.xml.bind.annotation.XmlRootElement;
+public class DocumentNotLoadedException extends Exception {
 
-@XmlRootElement(name = "property")
-public class Property {
+    private static final long serialVersionUID = -2052810061328639260L;
 
-    private String key;
-
-    private String value;
-
-    public String getKey() {
-        return key;
+    public DocumentNotLoadedException(String msg, Exception e) {
+        super(msg, e);
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public boolean isKey(String key) {
-        if (key == null || this.key == null) {
-            return false;
-        }
-        return key.equals(this.key);
+    public DocumentNotLoadedException(String msg) {
+        super(msg);
     }
 
 }

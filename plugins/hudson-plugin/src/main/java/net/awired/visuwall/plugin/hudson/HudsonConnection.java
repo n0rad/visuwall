@@ -51,215 +51,211 @@ import com.google.common.base.Preconditions;
 
 public final class HudsonConnection implements Connection, BuildCapability, ViewCapability {
 
-	private static final Logger LOG = LoggerFactory.getLogger(HudsonConnection.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HudsonConnection.class);
 
     public static final String HUDSON_ID = "HUDSON_ID";
 
-	@VisibleForTesting
-	Hudson hudson;
+    @VisibleForTesting
+    Hudson hudson;
 
-	private ProjectBuilder projectBuilder = new ProjectBuilder();
-	private BuildBuilder buildBuilder = new BuildBuilder();
+    private ProjectBuilder projectBuilder = new ProjectBuilder();
+    private BuildBuilder buildBuilder = new BuildBuilder();
 
-	private boolean connected;
+    private boolean connected;
 
-	public void connect(String url, String login, String password) {
-		connect(url);
-	}
+    public void connect(String url, String login, String password) {
+        connect(url);
+    }
 
-	public void connect(String url) {
-		if (isBlank(url)) {
-			throw new IllegalStateException("url can't be null.");
-		}
-		hudson = new Hudson(url);
-		connected = true;
-	}
+    public void connect(String url) {
+        if (isBlank(url)) {
+            throw new IllegalStateException("url can't be null.");
+        }
+        hudson = new Hudson(url);
+        connected = true;
+    }
 
-	@Override
-	public List<ProjectId> findAllProjects() {
-		List<ProjectId> projectIds = new ArrayList<ProjectId>();
-		for (HudsonProject hudsonProject : hudson.findAllProjects()) {
-			try {
-				ProjectId projectId = createProjectIdFrom(hudsonProject);
-				projectIds.add(projectId);
-			} catch (HudsonProjectNotFoundException e) {
-				LOG.warn(e.getMessage(), e);
-			}
-		}
-		return projectIds;
-	}
+    @Override
+    public List<ProjectId> findAllProjects() {
+        List<ProjectId> projectIds = new ArrayList<ProjectId>();
+        for (HudsonProject hudsonProject : hudson.findAllProjects()) {
+            ProjectId projectId = createProjectIdFrom(hudsonProject);
+            projectIds.add(projectId);
+        }
+        return projectIds;
+    }
 
-	@Override
-	public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
-		checkProjectId(projectId);
-		checkConnected();
-		try {
-			String projectName = extractProjectNameFrom(projectId);
-			if (projectName == null) {
-				throw new ProjectNotFoundException("Project " + projectId + " has no name");
-			}
-			HudsonProject hudsonProject = hudson.findProject(projectName);
-			Project project = projectBuilder.buildProjectFrom(hudsonProject);
-			project.addId(HUDSON_ID, projectName);
-			return project;
-		} catch (HudsonProjectNotFoundException e) {
-			throw new ProjectNotFoundException(e);
-		}
-	}
+    @Override
+    public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
+        checkProjectId(projectId);
+        checkConnected();
+        try {
+            String projectName = extractProjectNameFrom(projectId);
+            if (projectName == null) {
+                throw new ProjectNotFoundException("Project " + projectId + " has no name");
+            }
+            HudsonProject hudsonProject = hudson.findProject(projectName);
+            Project project = projectBuilder.buildProjectFrom(hudsonProject);
+            project.addId(HUDSON_ID, projectName);
+            return project;
+        } catch (HudsonProjectNotFoundException e) {
+            throw new ProjectNotFoundException(e);
+        }
+    }
 
-	@Override
-	public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
-		checkProjectId(projectId);
-		checkConnected();
-		try {
-			String projectName = extractProjectNameFrom(projectId);
-			return hudson.getEstimatedFinishTime(projectName);
-		} catch (HudsonProjectNotFoundException e) {
-			throw new ProjectNotFoundException(e);
-		}
-	}
+    @Override
+    public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
+        checkProjectId(projectId);
+        checkConnected();
+        try {
+            String projectName = extractProjectNameFrom(projectId);
+            return hudson.getEstimatedFinishTime(projectName);
+        } catch (HudsonProjectNotFoundException e) {
+            throw new ProjectNotFoundException(e);
+        }
+    }
 
-	@Override
-	public boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException {
-		checkProjectId(projectId);
-		checkConnected();
-		try {
-			String projectName = extractProjectNameFrom(projectId);
-			if (projectName == null) {
-				throw new ProjectNotFoundException("Project " + projectId + " has no name");
-			}
-			return hudson.isBuilding(projectName);
-		} catch (HudsonProjectNotFoundException e) {
-			throw new ProjectNotFoundException(e);
-		}
-	}
+    @Override
+    public boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException {
+        checkProjectId(projectId);
+        checkConnected();
+        try {
+            String projectName = extractProjectNameFrom(projectId);
+            if (projectName == null) {
+                throw new ProjectNotFoundException("Project " + projectId + " has no name");
+            }
+            return hudson.isBuilding(projectName);
+        } catch (HudsonProjectNotFoundException e) {
+            throw new ProjectNotFoundException(e);
+        }
+    }
 
-	@Override
-	public State getLastBuildState(ProjectId projectId) throws ProjectNotFoundException {
-		checkProjectId(projectId);
-		checkConnected();
-		try {
-			String projectName = extractProjectNameFrom(projectId);
-			if (projectName == null) {
-				throw new ProjectNotFoundException("Project " + projectId + " has no name");
-			}
-			String hudsonState = hudson.getState(projectName);
-			return States.asVisuwallState(hudsonState);
-		} catch (HudsonProjectNotFoundException e) {
-			throw new ProjectNotFoundException(e);
-		}
-	}
+    @Override
+    public State getLastBuildState(ProjectId projectId) throws ProjectNotFoundException {
+        checkProjectId(projectId);
+        checkConnected();
+        try {
+            String projectName = extractProjectNameFrom(projectId);
+            if (projectName == null) {
+                throw new ProjectNotFoundException("Project " + projectId + " has no name");
+            }
+            String hudsonState = hudson.getState(projectName);
+            return States.asVisuwallState(hudsonState);
+        } catch (HudsonProjectNotFoundException e) {
+            throw new ProjectNotFoundException(e);
+        }
+    }
 
-	@Override
-	public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
-		checkProjectId(projectId);
-		checkConnected();
-		try {
-			String projectName = extractProjectNameFrom(projectId);
-			if (projectName == null) {
-				throw new ProjectNotFoundException("Project " + projectId + " has no name");
-			}
-			return hudson.getLastBuildNumber(projectName);
-		} catch (HudsonProjectNotFoundException e) {
-			throw new ProjectNotFoundException(e);
-		} catch (HudsonBuildNotFoundException e) {
-			throw new BuildNotFoundException(e);
-		}
-	}
+    @Override
+    public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
+        checkProjectId(projectId);
+        checkConnected();
+        try {
+            String projectName = extractProjectNameFrom(projectId);
+            if (projectName == null) {
+                throw new ProjectNotFoundException("Project " + projectId + " has no name");
+            }
+            return hudson.getLastBuildNumber(projectName);
+        } catch (HudsonProjectNotFoundException e) {
+            throw new ProjectNotFoundException(e);
+        } catch (HudsonBuildNotFoundException e) {
+            throw new BuildNotFoundException(e);
+        }
+    }
 
-	@Override
-	public Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
-	        ProjectNotFoundException {
-		checkProjectId(projectId);
-		checkConnected();
-		try {
-			String projectName = extractProjectNameFrom(projectId);
-			if (projectName == null) {
-				throw new BuildNotFoundException("Project " + projectId + " has no name");
-			}
-			HudsonBuild build = hudson.findBuild(projectName, buildNumber);
-			return buildBuilder.createBuildFrom(build);
-		} catch (HudsonBuildNotFoundException e) {
-			throw new BuildNotFoundException(e);
-		} catch (HudsonProjectNotFoundException e) {
-			throw new ProjectNotFoundException(e);
-		}
-	}
+    @Override
+    public Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
+            ProjectNotFoundException {
+        checkProjectId(projectId);
+        checkConnected();
+        try {
+            String projectName = extractProjectNameFrom(projectId);
+            if (projectName == null) {
+                throw new BuildNotFoundException("Project " + projectId + " has no name");
+            }
+            HudsonBuild build = hudson.findBuild(projectName, buildNumber);
+            return buildBuilder.createBuildFrom(build);
+        } catch (HudsonBuildNotFoundException e) {
+            throw new BuildNotFoundException(e);
+        } catch (HudsonProjectNotFoundException e) {
+            throw new ProjectNotFoundException(e);
+        }
+    }
 
-	@Override
-	public List<String> findProjectNames() {
-		return hudson.findProjectNames();
-	}
+    @Override
+    public List<String> findProjectNames() {
+        return hudson.findProjectNames();
+    }
 
-	@Override
-	public List<String> findViews() {
-		return hudson.findViews();
-	}
+    @Override
+    public List<String> findViews() {
+        return hudson.findViews();
+    }
 
-	@Override
-	public List<String> findProjectsByView(String viewName) throws ViewNotFoundException {
-		Preconditions.checkNotNull(viewName, "viewName is mandatory");
-		try {
-			return hudson.findProjectNameByView(viewName);
-		} catch (HudsonViewNotFoundException e) {
-			throw new ViewNotFoundException("can't find view named :" + viewName, e);
-		}
-	}
+    @Override
+    public List<String> findProjectsByView(String viewName) throws ViewNotFoundException {
+        Preconditions.checkNotNull(viewName, "viewName is mandatory");
+        try {
+            return hudson.findProjectNameByView(viewName);
+        } catch (HudsonViewNotFoundException e) {
+            throw new ViewNotFoundException("can't find view named :" + viewName, e);
+        }
+    }
 
-	@Override
-	public List<ProjectId> findProjectsByViews(List<String> views) {
-		Set<ProjectId> projectIds = new HashSet<ProjectId>();
-		for (String viewName : views) {
-			try {
-				List<String> projectNames = hudson.findProjectNameByView(viewName);
-				projectIds.addAll(findProjectsByNames(projectNames));
-			} catch (HudsonViewNotFoundException e) {
-				if (LOG.isDebugEnabled()) {
-					LOG.debug(e.getMessage(), e);
-				}
-			}
-		}
-		return new ArrayList<ProjectId>(projectIds);
-	}
+    @Override
+    public List<ProjectId> findProjectsByViews(List<String> views) {
+        Set<ProjectId> projectIds = new HashSet<ProjectId>();
+        for (String viewName : views) {
+            try {
+                List<String> projectNames = hudson.findProjectNameByView(viewName);
+                projectIds.addAll(findProjectsByNames(projectNames));
+            } catch (HudsonViewNotFoundException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage(), e);
+                }
+            }
+        }
+        return new ArrayList<ProjectId>(projectIds);
+    }
 
-	@Override
-	public boolean contains(ProjectId projectId) {
-		try {
-			String name = projectId.getId(HUDSON_ID);
-			hudson.findProject(name);
-		} catch (HudsonProjectNotFoundException e) {
-			return false;
-		}
-		return true;
-	}
+    @Override
+    public boolean contains(ProjectId projectId) {
+        try {
+            String name = projectId.getId(HUDSON_ID);
+            hudson.findProject(name);
+        } catch (HudsonProjectNotFoundException e) {
+            return false;
+        }
+        return true;
+    }
 
-	@Override
-	public List<ProjectId> findProjectsByNames(List<String> names) {
-		List<ProjectId> projectIds = new ArrayList<ProjectId>();
-		for (String name : names) {
-			try {
+    @Override
+    public List<ProjectId> findProjectsByNames(List<String> names) {
+        List<ProjectId> projectIds = new ArrayList<ProjectId>();
+        for (String name : names) {
+            try {
                 HudsonProject hudsonProject = hudson.findProject(name);
                 ProjectId projectId = createProjectIdFrom(hudsonProject);
                 projectIds.add(projectId);
-			} catch (HudsonProjectNotFoundException e) {
-				if (LOG.isDebugEnabled()) {
-					LOG.debug(e.getMessage(), e);
-				}
-			}
-		}
-		return projectIds;
-	}
+            } catch (HudsonProjectNotFoundException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage(), e);
+                }
+            }
+        }
+        return projectIds;
+    }
 
-	@Override
-	public void close() {
+    @Override
+    public void close() {
         connected = false;
-	}
+    }
 
     private String extractProjectNameFrom(ProjectId projectId) {
         return projectId.getId(HUDSON_ID);
     }
 
-    private ProjectId createProjectIdFrom(HudsonProject hudsonProject) throws HudsonProjectNotFoundException {
+    private ProjectId createProjectIdFrom(HudsonProject hudsonProject) {
         Project project = projectBuilder.buildProjectFrom(hudsonProject);
         ProjectId projectId = new ProjectId();
         projectId.setName(project.getName());

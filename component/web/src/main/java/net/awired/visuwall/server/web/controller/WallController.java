@@ -18,6 +18,7 @@ package net.awired.visuwall.server.web.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
@@ -84,7 +85,12 @@ public class WallController {
         for (ConnectedProject project : wall.getProjects()) {
             ProjectStatus projectStatus = new ProjectStatus(project);
             projectStatus.setLastBuildId(project.getCurrentBuildId());
-            projectStatus.setBuilding(project.isBuilding());
+            projectStatus.setBuilding(project.getCurrentBuild().isBuilding());
+            if (project.getCurrentBuild().getEstimatedFinishTime() != null) {
+                long durationFromNow = project.getCurrentBuild().getEstimatedFinishTime().getTime()
+                        - new Date().getTime();
+                projectStatus.setBuildingTimeleftSecond((int) durationFromNow / 1000);
+            }
             statusList.add(projectStatus);
         }
         return statusList;

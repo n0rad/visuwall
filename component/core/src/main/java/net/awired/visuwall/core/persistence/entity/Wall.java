@@ -16,7 +16,6 @@
 
 package net.awired.visuwall.core.persistence.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,14 +27,11 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import net.awired.ajsl.persistence.entity.implementation.abstracts.IdEntityImpl;
-import net.awired.visuwall.api.domain.Project;
-import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.ProjectHolder;
 import net.awired.visuwall.core.utils.ShrinkList;
 import org.hibernate.annotations.Cascade;
 import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
 
 @Entity
 @NamedQueries({
@@ -61,13 +57,13 @@ public final class Wall extends IdEntityImpl<Long> {
     private List<SoftwareAccess> softwareAccesses = new ShrinkList<SoftwareAccess>(SoftwareAccess.class);
 
     @Transient
-    private List<ConnectedProject> projects = new ArrayList<ConnectedProject>();
+    private final ProjectHolder projects = new ProjectHolder();
 
     public Wall() {
     }
 
     public void close() {
-        for (ConnectedProject project : projects) {
+        for (ConnectedProject project : getProjects()) {
             project.close();
         }
         for (SoftwareAccess softwareAccess : softwareAccesses) {
@@ -78,35 +74,6 @@ public final class Wall extends IdEntityImpl<Long> {
 
     public Wall(String name) {
         this.name = name;
-    }
-
-    public boolean projectsContainsId(ProjectId projectId) {
-        for (Project project : projects) {
-            if (project.getProjectId().equals(projectId)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public ConnectedProject getProjectByProjectId(ProjectId projectId) throws ProjectNotFoundException {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
-        for (ConnectedProject project : projects) {
-            if (projectId.equals(project.getProjectId())) {
-                return project;
-            }
-        }
-        throw new ProjectNotFoundException("project with this id not found : " + projectId);
-    }
-
-    public ConnectedProject getProjectById(String id) throws ProjectNotFoundException {
-        Preconditions.checkNotNull(id, "projectId is mandatory");
-        for (ConnectedProject project : projects) {
-            if (id.equals(project.getId())) {
-                return project;
-            }
-        }
-        throw new ProjectNotFoundException("Project not found for this id : " + id);
     }
 
     @Override
@@ -143,12 +110,8 @@ public final class Wall extends IdEntityImpl<Long> {
         this.softwareAccesses = softwareAccesses;
     }
 
-    public List<ConnectedProject> getProjects() {
+    public ProjectHolder getProjects() {
         return projects;
-    }
-
-    public void setProjects(List<ConnectedProject> projects) {
-        this.projects = projects;
     }
 
 }

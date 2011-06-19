@@ -36,7 +36,8 @@ public class SoftwareAccessService {
     public Set<ProjectId> discoverBuildProjects(SoftwareAccess softwareAccess) throws MissingCapacityException {
         if (!(softwareAccess.getConnection() instanceof BuildCapability)) {
             throw new MissingCapacityException(
-                    "Can not found build projects in a software who does not implement BuildCapability");
+                    "Can not found build projects in a software who does not implement BuildCapability "
+                            + softwareAccess);
         }
         Set<ProjectId> res = new HashSet<ProjectId>();
         BuildCapability buildPlugin = (BuildCapability) softwareAccess.getConnection();

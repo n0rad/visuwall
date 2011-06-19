@@ -54,6 +54,8 @@ public class TeamCityConnection implements Connection, BuildCapability {
 
 	private String url;
 
+    private ProjectNotFoundException projectNotFoundException = new ProjectNotFoundException("No project found");
+
 	public void connect(String url, String login, String password) {
 		connect(url);
 	}
@@ -121,19 +123,19 @@ public class TeamCityConnection implements Connection, BuildCapability {
 	@Override
 	public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
 		checkConnected();
-		throw new ProjectNotFoundException("No project found");
+        throw projectNotFoundException;
 	}
 
 	@Override
 	public boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException {
 		checkConnected();
-		throw new ProjectNotFoundException("No project found");
+        throw projectNotFoundException;
 	}
 
 	@Override
 	public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNotFoundException {
 		checkConnected();
-		throw new ProjectNotFoundException("No project found");
+        throw projectNotFoundException;
 	}
 
 	@Override

@@ -34,6 +34,8 @@
 		</encoder>
 		<filter class="net.awired.visuwall.core.application.log.errFilter" />
 	</appender>
+	
+	<logger name="net.awired" level="DEBUG" />
 
 	<root>
 		<level value="INFO" />

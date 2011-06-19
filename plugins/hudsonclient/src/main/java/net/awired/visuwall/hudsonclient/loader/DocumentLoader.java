@@ -18,15 +18,20 @@ package net.awired.visuwall.hudsonclient.loader;
 
 import java.io.InputStream;
 import java.net.URL;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import net.awired.visuwall.hudsonclient.exception.DocumentNotLoadedException;
+
 import org.w3c.dom.Document;
+
 import com.google.common.base.Preconditions;
 import com.google.common.io.Closeables;
 
 public class DocumentLoader {
 
-    public Document loadFromUrl(String strUrl) throws Exception {
+    public Document loadFromUrl(String strUrl) throws DocumentNotLoadedException {
         Preconditions.checkNotNull(strUrl, "strUrl is mandatory");
         InputStream stream = null;
         try {
@@ -37,7 +42,7 @@ public class DocumentLoader {
             Document doc = documentBuilder.parse(stream);
             return doc;
         } catch (Exception e) {
-            throw e;
+            throw new DocumentNotLoadedException("Can't load document from url: " + strUrl, e);
         } finally {
             Closeables.closeQuietly(stream);
         }

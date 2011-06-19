@@ -18,8 +18,6 @@ package net.awired.visuwall.plugin.sonar;
 
 import static org.junit.Assert.assertEquals;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
-import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
-import net.awired.visuwall.plugin.sonar.exception.SonarMetricNotFoundException;
 
 import org.junit.Test;
 import org.sonar.wsclient.services.Measure;
@@ -27,7 +25,7 @@ import org.sonar.wsclient.services.Measure;
 public class QualityMeasuresTest {
 
     @Test
-    public void should_find_quality_measure() throws SonarMetricNotFoundException, SonarMeasureNotFoundException {
+    public void should_find_quality_measure() {
         Measure coverageMeasure = new Measure();
         coverageMeasure.setFormattedValue("5%");
         coverageMeasure.setValue(5D);

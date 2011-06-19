@@ -201,7 +201,7 @@ public class SonarConnectionTest {
     }
 
     @Test
-    public void should_not_fail_if_project_id_has_no_artifact_id() throws SonarMeasureNotFoundException {
+    public void should_not_fail_if_project_id_has_no_artifact_id() {
         ProjectId projectId = new ProjectId();
         sonar.analyzeIntegrationTests(projectId);
     }
