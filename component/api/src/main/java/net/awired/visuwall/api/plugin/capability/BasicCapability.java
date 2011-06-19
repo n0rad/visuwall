@@ -17,6 +17,7 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.List;
+
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -51,6 +52,7 @@ public interface BasicCapability {
      * @return
      * @throws ProjectNotFoundException
      */
+    @Deprecated
     Project findProject(ProjectId projectId) throws ProjectNotFoundException;
 
     /**

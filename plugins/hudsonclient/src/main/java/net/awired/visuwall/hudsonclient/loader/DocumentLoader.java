@@ -16,15 +16,19 @@
 
 package net.awired.visuwall.hudsonclient.loader;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import net.awired.visuwall.hudsonclient.exception.DocumentNotLoadedException;
 
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import com.google.common.base.Preconditions;
 import com.google.common.io.Closeables;
@@ -39,9 +43,14 @@ public class DocumentLoader {
             stream = url.openStream();
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
-            Document doc = documentBuilder.parse(stream);
-            return doc;
-        } catch (Exception e) {
+            return documentBuilder.parse(stream);
+        } catch (MalformedURLException e) {
+            throw new DocumentNotLoadedException("Can't load document from url: " + strUrl, e);
+        } catch (IOException e) {
+            throw new DocumentNotLoadedException("Can't load document from url: " + strUrl, e);
+        } catch (SAXException e) {
+            throw new DocumentNotLoadedException("Can't load document from url: " + strUrl, e);
+        } catch (ParserConfigurationException e) {
             throw new DocumentNotLoadedException("Can't load document from url: " + strUrl, e);
         } finally {
             Closeables.closeQuietly(stream);

@@ -88,7 +88,7 @@ public class Bamboo {
 			project.setBuilding(plan.isBuilding);
 			return project;
 		} catch (ResourceNotFoundException e) {
-			throw new BambooProjectNotFoundException("Can't find bamboo project with projectKey " + projectKey);
+            throw new BambooProjectNotFoundException("Can't find bamboo project with projectKey " + projectKey, e);
 		}
 	}
 
@@ -155,9 +155,9 @@ public class Bamboo {
 				}
 			}
 		} catch (ResourceNotFoundException e) {
-			throw new BambooStateNotFoundException("Not state found for projectName: " + projectName);
+            throw new BambooStateNotFoundException("Not state found for projectName: " + projectName, e);
 		} catch (BambooBuildNumberNotFoundException e) {
-			throw new BambooStateNotFoundException("Not state found for projectName: " + projectName);
+            throw new BambooStateNotFoundException("Not state found for projectName: " + projectName, e);
 		}
 		throw new BambooStateNotFoundException("Not state found for projectName: " + projectName);
 	}

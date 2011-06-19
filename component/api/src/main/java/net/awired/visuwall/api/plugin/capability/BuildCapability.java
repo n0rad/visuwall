@@ -45,6 +45,7 @@ public interface BuildCapability extends BasicCapability {
      * @throws BuildNotFoundException
      * @throws ProjectNotFoundException
      */
+    @Deprecated
     Build findBuildByBuildNumber(ProjectId projectId, int buildNumber) throws BuildNotFoundException,
             ProjectNotFoundException;
 
