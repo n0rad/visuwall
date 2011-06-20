@@ -58,6 +58,8 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 						ajsl.view.incrementFormIndexes(newContent);
 						ajsl.view.resetFormValues(newContent);
 
+						$("SELECT", newContent).empty();
+						
 						var childrens = newContent.children();
 						for (var i = 0; i < childrens.length; i++) {
 							$(ui.panel).append(childrens[i]);
@@ -70,6 +72,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 								});
 							}
 						}
+						
 					},
 					remove : function(event, ui) {
 						// removeFunction(event, ui.panel);

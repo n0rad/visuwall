@@ -27,7 +27,7 @@ ajsl.view = new function() {
 		if (rootMethod == undefined) {
 			rootMethod = 'addForm';
 		}
-	
+
 		for (var formElem in data) {
 			if (data[formElem] instanceof Array) {
 				var assertMethodName = rootMethod + formElem.ucfirst();
