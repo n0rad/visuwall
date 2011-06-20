@@ -34,7 +34,7 @@ public aspect Chrono {
                 prefix = "[VERY SLOW QUERY] ";
             }
             if (duration >= 200) {
-                System.err.println("Chronometer "+prefix+method+" "+duration+" ms");
+                System.err.print("Chronometer "+prefix+method+" "+duration+" ms\r\n");
             }
         }
     }
