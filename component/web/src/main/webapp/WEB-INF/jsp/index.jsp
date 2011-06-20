@@ -62,7 +62,7 @@
 				<label id="softwareAccesses0.urlcheck" class="check"></label>
 				<input id="softwareAccesses0.url" name="softwareAccesses[0].url" class="ui-widget-content ui-corner-all url" type="text" value=""/>
 
-				<fieldset style="float: left">
+				<fieldset class="idField" style="float: left">
 					<legend>Identification</legend>
 					<label for="softwareAccesses0.login">Login</label> 
 					<input id="softwareAccesses0.login" name="softwareAccesses[0].login" class="ui-widget-content ui-corner-all disabled" type="text" value="" disabled="disabled"/> 
@@ -70,15 +70,17 @@
 					<input id="softwareAccesses0.password" name="softwareAccesses[0].password" class="ui-widget-content ui-corner-all disabled" type="password" value="" disabled="disabled"/> 
 				</fieldset>
 
-				<fieldset style="float: right">
+				<fieldset class="timerField" style="float: right">
 					<legend>Timers</legend>
-					<label for="softwareAccesses0.projectFinderDelaySecond">Software Refresh Time (s)</label>
+					<label for="softwareAccesses0.projectFinderDelaySecond">Software Refresh Time : <span class="bold projectFinderDelaySecond">45s</span></label>
+					<div class="slider projectFinderDelaySecondSlider"></div>
 					<input id="softwareAccesses0.projectFinderDelaySecond" name="softwareAccesses[0].projectFinderDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
-					<label for="softwareAccesses0.projectStatusDelaySecond">Project Refresh Time (s)</label>
+					<label for="softwareAccesses0.projectStatusDelaySecond">Project Refresh Time <span class="bold projectStatusDelaySecond">45s</span></label>
+					<div class="slider projectStatusDelaySecondSlider"></div>
 					<input id="softwareAccesses0.projectStatusDelaySecond" name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
 				</fieldset>			
 		
-				<fieldset>
+				<fieldset class="buildField" style="display: none">
 					<legend>Builds</legend>
 	
 					<label for="softwareAccesses0.allProject">All Projects</label> 
@@ -96,6 +98,8 @@
 						</select>
 					</div>
 				</fieldset>
+				
+				<div style="clear: both;"></div>
 			</div>
 		</div>
 			<input class="submit" type="submit" value="Save"/> 

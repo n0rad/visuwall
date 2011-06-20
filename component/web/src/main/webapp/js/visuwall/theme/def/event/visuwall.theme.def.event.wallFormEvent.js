@@ -45,10 +45,13 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 		$this.tabs = $("#softTabs", this);
 		var context = this;
 		
+
+		
 		$this.tabs.tabs({
 					tabTemplate : "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>Remove Tab</span></li>",
 					add : function(event, ui) {
 						var contents = $('div[id^="tabs-"]', context);
+						
 
 						// -1 is the last but the last is the current added one,
 						// so its -2
@@ -58,6 +61,8 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 						ajsl.view.incrementFormIndexes(newContent);
 						ajsl.view.resetFormValues(newContent);
 
+						
+						$(".timerSlider", newContent).slider();
 						$("SELECT", newContent).empty();
 						
 						var childrens = newContent.children();
@@ -272,25 +277,28 @@ var ff = '				<table class="softwareInfo">'
 			domObj.switchClasses(classes, 'failureCheck', 1);			
 		});
 	};
-	
-
 	this['INPUT:regex(id,softwareAccesses.*\.url)|change|live'] = urlFunc;
-	this['INPUT:regex(id,softwareAccesses.*\.url)|blur|live'] = urlFunc;
 
-//	this['INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)|init'] = function() {
-//		$(this).slider({
-//			value:100,
-//			min: 0,
-//			max: 500,
-//			step: 50
-////			,
-////			slide: function( event, ui ) {
-////				$( "#amount" ).val( "$" + ui.value );
-////			}
-//		});
-////		$( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
-//			
-//	};
+	this['INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)|change'] = function() {
+		$('DIV.projectFinderDelaySecondSlider', $(this).parent()).slider("option", "value", $(this).val());
+	};
+
+	this['DIV.projectFinderDelaySecondSlider|init'] = function() {
+		var func = function( event, ui ) {
+			$("SPAN.projectFinderDelaySecond", $(this).parent()).html( ui.value + "s" );
+			$('INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)', $(this).parent()).val(ui.value);
+		};
+		
+		$(this).slider({
+			value:0,
+			min: 0,
+			max: 500,
+			step: 30,
+			slide: func,
+			change: func
+		});
+	};
+	
 	
 	this['DIV#softAdd|click'] = function(event) {
 		$this.wallFormView.addFormSoftwareAccesses();

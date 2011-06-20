@@ -38,6 +38,13 @@ TABLE.softwareInfo .label {
 	font-weight: bold;
 }
 
+FIELDSET.idField LEGEND {
+	display: none;
+}
+FIELDSET.timerField LEGEND {
+	display: none;
+}
+
 #wallForm .loader {
 	display: inline;
 	float:left;
@@ -66,6 +73,10 @@ TABLE.softwareInfo .label {
 #wallForm .submit {
 	float:left;
 	margin: 10px;
+}
+
+#wallForm .slider {
+	margin: 7px 5px;
 }
 
 #wallForm .disabled {
