@@ -61,32 +61,41 @@
 				<label for="softwareAccesses0.url">Url</label> 
 				<label id="softwareAccesses0.urlcheck" class="check"></label>
 				<input id="softwareAccesses0.url" name="softwareAccesses[0].url" class="ui-widget-content ui-corner-all url" type="text" value=""/>
-				<label for="softwareAccesses0.login">Login</label> 
 
-				<div class="projects">
-					<h3><a href="#">Select Projects</a></h3> 
-					<div> 
+				<fieldset style="float: left">
+					<legend>Identification</legend>
+					<label for="softwareAccesses0.login">Login</label> 
+					<input id="softwareAccesses0.login" name="softwareAccesses[0].login" class="ui-widget-content ui-corner-all disabled" type="text" value="" disabled="disabled"/> 
+					<label for="softwareAccesses0.password">Password</label> 
+					<input id="softwareAccesses0.password" name="softwareAccesses[0].password" class="ui-widget-content ui-corner-all disabled" type="password" value="" disabled="disabled"/> 
+				</fieldset>
+
+				<fieldset style="float: right">
+					<legend>Timers</legend>
+					<label for="softwareAccesses0.projectFinderDelaySecond">Software Refresh Time (s)</label>
+					<input id="softwareAccesses0.projectFinderDelaySecond" name="softwareAccesses[0].projectFinderDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
+					<label for="softwareAccesses0.projectStatusDelaySecond">Project Refresh Time (s)</label>
+					<input id="softwareAccesses0.projectStatusDelaySecond" name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
+				</fieldset>			
+		
+				<fieldset>
+					<legend>Builds</legend>
+	
+					<label for="softwareAccesses0.allProject">All Projects</label> 
+					<input type="checkbox" id="softwareAccesses0.allProject" name="softwareAccesses[0].allProject" value="true" /> 
+					<input type="hidden" id="_softwareAccesses0.allProject" name="_softwareAccesses[0].allProject" value="true" />
+
+					<div style="float:left">	
+						<label for="softwareAccesses0.projectNames">Projects</label>
 						<select id="softwareAccesses0.projectNames" name="softwareAccesses[0].projectNames" multiple="multiple" size="5">
 						</select>
-					</div> 
-					<h3><a href="#">Select views</a></h3> 
-					<div> 
+					</div>
+					<div style="float:right">
+						<label for="softwareAccesses0.viewNames">Views</label>
 						<select id="softwareAccesses0.viewNames" name="softwareAccesses[0].viewNames" multiple="multiple" size="5">
 						</select>
-					</div> 
-				</div> 
-
-				<input id="softwareAccesses0.login" name="softwareAccesses[0].login" class="ui-widget-content ui-corner-all disabled" type="text" value="" disabled="disabled"/> 
-				<label for="softwareAccesses0.password">Password</label> 
-				<input id="softwareAccesses0.password" name="softwareAccesses[0].password" class="ui-widget-content ui-corner-all disabled" type="password" value="" disabled="disabled"/> 
-				<label for="softwareAccesses0.allProject">All Projects</label> 
-				<input type="checkbox" id="softwareAccesses0.allProject" name="softwareAccesses[0].allProject" value="true" /> 
-				<input type="hidden" id="_softwareAccesses0.allProject" name="_softwareAccesses[0].allProject" value="true" />
-				
-				<label for="softwareAccesses0.projectFinderDelaySecond">Software Refresh Time (s)</label> 
-				<input id="softwareAccesses0.projectFinderDelaySecond" name="softwareAccesses[0].projectFinderDelaySecond" class="ui-widget-content ui-corner-all" value=""/> 
-				<label for="softwareAccesses0.projectStatusDelaySecond">Project Refresh Time (s)</label> 
-				<input id="softwareAccesses0.projectStatusDelaySecond" name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value=""/> 
+					</div>
+				</fieldset>
 			</div>
 		</div>
 			<input class="submit" type="submit" value="Save"/> 
