@@ -18,6 +18,8 @@ package net.awired.visuwall.bambooclient.domain;
 
 import java.util.Date;
 
+import com.google.common.base.Objects;
+
 public class BambooBuild {
 
     private int buildNumber;
@@ -68,7 +70,7 @@ public class BambooBuild {
         return failCount;
     }
 
-    public void setFailCount(int failCount) {
+    public void setFailCount(Integer failCount) {
         this.failCount = failCount;
     }
 
@@ -76,7 +78,7 @@ public class BambooBuild {
         return passCount;
     }
 
-    public void setPassCount(int passCount) {
+    public void setPassCount(Integer passCount) {
         this.passCount = passCount;
     }
 
@@ -84,4 +86,15 @@ public class BambooBuild {
         return "Successful".equals(state);
     }
 
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this) //
+                .add("build number", buildNumber) //
+                .add("duration", duration) //
+                .add("start time", startTime) //
+                .add("state", state) //
+                .add("fail count", failCount) //
+                .add("pass count", passCount) //
+                .toString();
+    }
 }

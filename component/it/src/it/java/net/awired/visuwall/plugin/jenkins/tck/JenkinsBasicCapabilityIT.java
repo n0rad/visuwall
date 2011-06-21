@@ -17,16 +17,13 @@
 package net.awired.visuwall.plugin.jenkins.tck;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 
 import net.awired.visuwall.IntegrationTestData;
-import net.awired.visuwall.api.domain.Project;
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
@@ -39,7 +36,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 
-public class JenkinsBasicCapabilityITest implements BasicCapabilityTCK {
+public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
 
 	BasicCapability jenkins = new JenkinsConnection();
 
@@ -52,29 +49,13 @@ public class JenkinsBasicCapabilityITest implements BasicCapabilityTCK {
 	@Test
 	public void should_find_project_ids_by_names() {
 		List<String> names = Arrays.asList("struts", "struts 2 instable");
-		List<ProjectId> projectIds = jenkins.findProjectIdsByNames(names);
-		ProjectId struts = projectIds.get(0);
-		ProjectId struts2instable = projectIds.get(1);
+        List<SoftwareProjectId> projectIds = jenkins.findSoftwareProjectIdsByNames(names);
+        SoftwareProjectId struts = projectIds.get(0);
+        SoftwareProjectId struts2instable = projectIds.get(1);
 
 		assertEquals(2, projectIds.size());
-		assertEquals("org.apache.struts:struts-parent", struts.getArtifactId());
-		assertEquals("org.apache.struts:struts2-parent", struts2instable.getArtifactId());
-	}
-
-	@Override
-	@Test
-	public void should_contain_project() {
-		ProjectId projectId = new ProjectId();
-		projectId.addId(JenkinsConnection.JENKINS_ID, "struts");
-		assertTrue(jenkins.contains(projectId));
-	}
-
-	@Override
-	@Test
-	public void should_not_contain_project() {
-		ProjectId projectId = new ProjectId();
-		projectId.addId(JenkinsConnection.JENKINS_ID, "struts3");
-		assertFalse(jenkins.contains(projectId));
+        assertEquals("struts", struts.getProjectId());
+        assertEquals("struts 2 instable", struts2instable.getProjectId());
 	}
 
 	@Override
@@ -96,19 +77,10 @@ public class JenkinsBasicCapabilityITest implements BasicCapabilityTCK {
 		List<String> names = Arrays.asList("errorproject", "failproject", "freestyle-project", "itcoverage-project",
 		        "neverbuild", "newproject", "struts", "struts 2 instable", "successproject", "test-change-result",
 		        "disabled");
-		List<ProjectId> projectNames = jenkins.findAllProjects();
-		for (ProjectId projectId : projectNames) {
-			assertTrue(names.contains(projectId.getName()));
+        List<SoftwareProjectId> projectNames = jenkins.findAllSoftwareProjectIds();
+        for (SoftwareProjectId projectId : projectNames) {
+            assertTrue(names.contains(projectId.getProjectId()));
 		}
-	}
-
-	@Override
-	@Test
-	public void should_find_a_project() throws ProjectNotFoundException {
-		ProjectId projectId = new ProjectId();
-		projectId.addId(JenkinsConnection.JENKINS_ID, "struts");
-		Project project = jenkins.findProject(projectId);
-		assertNotNull(project);
 	}
 
 	@Override
@@ -117,5 +89,19 @@ public class JenkinsBasicCapabilityITest implements BasicCapabilityTCK {
 	public void should_get_disable_project() throws ProjectNotFoundException {
 
 	}
+
+    @Override
+    @Test
+    @Ignore
+    public void should_find_description_of_a_project() throws ProjectNotFoundException {
+
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void should_identify_a_project() throws ProjectNotFoundException {
+
+    }
 
 }

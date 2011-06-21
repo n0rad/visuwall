@@ -25,7 +25,7 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class HudsonConnectionPluginExceptionITest {
+public class HudsonConnectionPluginExceptionIT {
 
     static HudsonConnection hudsonConnectionPlugin = new HudsonConnection();
 
@@ -34,7 +34,7 @@ public class HudsonConnectionPluginExceptionITest {
         hudsonConnectionPlugin.connect(IntegrationTestData.HUDSON_URL);
     }
 
-    @Test(expected = ProjectNotFoundException.class)
+    @Test(expected = BuildNotFoundException.class)
     public void should_throw_exception_when_searching_inexistant_build() throws BuildNotFoundException,
             ProjectNotFoundException {
         ProjectId projectId = new ProjectId();

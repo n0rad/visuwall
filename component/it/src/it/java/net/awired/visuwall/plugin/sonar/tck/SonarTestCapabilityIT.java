@@ -30,7 +30,7 @@ import net.awired.visuwall.plugin.sonar.SonarConnection;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class SonarTestCapabilityITest implements TestCapabilityTCK {
+public class SonarTestCapabilityIT implements TestCapabilityTCK {
 
 	private static TestCapability sonar = new SonarConnection();
 

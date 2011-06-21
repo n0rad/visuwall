@@ -27,6 +27,8 @@ import java.util.Set;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.ProjectKey;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
@@ -40,7 +42,7 @@ import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
-import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
 import net.awired.visuwall.plugin.jenkins.builder.BuildBuilder;
 import net.awired.visuwall.plugin.jenkins.builder.ProjectBuilder;
@@ -78,6 +80,7 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
     }
 
     @Override
+    @Deprecated
     public List<ProjectId> findAllProjects() {
         checkConnected();
         List<ProjectId> projectIds = new ArrayList<ProjectId>();
@@ -91,11 +94,25 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
     }
 
     @Override
+    public List<SoftwareProjectId> findAllSoftwareProjectIds() {
+        checkConnected();
+        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
+        List<HudsonProject> projects = hudson.findAllProjects();
+        for (int i = 0; i < projects.size(); i++) {
+            HudsonProject hudsonProject = projects.get(i);
+            SoftwareProjectId projectId = new SoftwareProjectId(hudsonProject.getName());
+            projectIds.add(projectId);
+        }
+        return projectIds;
+    }
+
+    @Override
+    @Deprecated
     public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
         checkProjectId(projectId);
         checkConnected();
         try {
-            String projectName = extractProjectNameFrom(projectId);
+            String projectName = jobName(projectId);
             if (projectName == null) {
                 throw new ProjectNotFoundException("Project " + projectId + " has no name");
             }
@@ -103,65 +120,81 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
             Project project = projectCreator.buildProjectFrom(hudsonProject);
             project.addId(JENKINS_ID, projectName);
             return project;
-        } catch (HudsonProjectNotFoundException e) {
+        } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException(e);
         }
     }
 
     @Override
+    @Deprecated
     public Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException {
-        checkProjectId(projectId);
+        return getEstimatedFinishTime(new SoftwareProjectId(projectId.getId(JENKINS_ID)));
+    }
+
+    @Override
+    public Date getEstimatedFinishTime(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkSoftwareProjectId(projectId);
         checkConnected();
         try {
-            String projectName = extractProjectNameFrom(projectId);
+            String projectName = jobName(projectId);
             return hudson.getEstimatedFinishTime(projectName);
-        } catch (HudsonProjectNotFoundException e) {
+        } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException(e);
         }
     }
 
     @Override
+    @Deprecated
     public boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException {
-        checkProjectId(projectId);
+        return isBuilding(new SoftwareProjectId(projectId.getId(JENKINS_ID)));
+    }
+
+    @Override
+    public boolean isBuilding(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkSoftwareProjectId(projectId);
         checkConnected();
         try {
-            String projectName = extractProjectNameFrom(projectId);
-            if (projectName == null) {
-                throw new ProjectNotFoundException("Project " + projectId + " has no name");
-            }
+            String projectName = jobName(projectId);
             return hudson.isBuilding(projectName);
-        } catch (HudsonProjectNotFoundException e) {
+        } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException(e);
         }
     }
 
     @Override
+    @Deprecated
     public State getLastBuildState(ProjectId projectId) throws ProjectNotFoundException {
-        checkProjectId(projectId);
+        return getLastBuildState(new SoftwareProjectId(projectId.getId(JENKINS_ID)));
+    }
+
+    @Override
+    public State getLastBuildState(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkSoftwareProjectId(projectId);
         checkConnected();
         try {
-            String projectName = extractProjectNameFrom(projectId);
-            if (projectName == null) {
-                throw new ProjectNotFoundException("Project " + projectId + " has no name");
-            }
+            String projectName = jobName(projectId);
             String jenkinsState = hudson.getState(projectName);
             return States.asVisuwallState(jenkinsState);
-        } catch (HudsonProjectNotFoundException e) {
+        } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException(e);
         }
     }
 
+    @Deprecated
     @Override
     public int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNumberNotFoundException {
-        checkProjectId(projectId);
+        return getLastBuildNumber(new SoftwareProjectId(projectId.getId(JENKINS_ID)));
+    }
+
+    @Override
+    public int getLastBuildNumber(SoftwareProjectId projectId) throws ProjectNotFoundException,
+            BuildNumberNotFoundException {
+        checkSoftwareProjectId(projectId);
         checkConnected();
         try {
-            String projectName = extractProjectNameFrom(projectId);
-            if (projectName == null) {
-                throw new ProjectNotFoundException("Project " + projectId + " has no name");
-            }
+            String projectName = jobName(projectId);
             return hudson.getLastBuildNumber(projectName);
-        } catch (HudsonProjectNotFoundException e) {
+        } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException(e);
         } catch (HudsonBuildNotFoundException e) {
             throw new BuildNumberNotFoundException(e);
@@ -174,15 +207,12 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
         checkProjectId(projectId);
         checkConnected();
         try {
-            String projectName = extractProjectNameFrom(projectId);
-            if (projectName == null) {
-                throw new ProjectNotFoundException("Project " + projectId + " has no name");
-            }
+            String projectName = jobName(projectId);
             HudsonBuild build = hudson.findBuild(projectName, buildNumber);
             return buildBuilder.createBuildFrom(build);
         } catch (HudsonBuildNotFoundException e) {
             throw new BuildNotFoundException(e);
-        } catch (HudsonProjectNotFoundException e) {
+        } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException(e);
         }
     }
@@ -211,6 +241,7 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
     }
 
     @Override
+    @Deprecated
     public List<ProjectId> findProjectIdsByViews(List<String> views) {
         checkConnected();
         Preconditions.checkNotNull(views, "views is mandatory");
@@ -229,14 +260,38 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
     }
 
     @Override
-    public boolean contains(ProjectId projectId) {
+    public List<SoftwareProjectId> findSoftwareProjectIdsByViews(List<String> views) {
         checkConnected();
-        checkProjectId(projectId);
-        String name = projectId.getId(JENKINS_ID);
-        return hudson.contains(name);
+        Preconditions.checkNotNull(views, "views is mandatory");
+        Set<SoftwareProjectId> projectIds = new HashSet<SoftwareProjectId>();
+        for (String viewName : views) {
+            try {
+                List<String> projectNames = hudson.findProjectNameByView(viewName);
+                projectIds.addAll(findSoftwareProjectIdsByNames(projectNames));
+            } catch (HudsonViewNotFoundException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage(), e);
+                }
+            }
+        }
+        return new ArrayList<SoftwareProjectId>(projectIds);
     }
 
     @Override
+    @Deprecated
+    public boolean contains(ProjectId projectId) {
+        checkConnected();
+        checkProjectId(projectId);
+        try {
+            String name = jobName(projectId);
+            return hudson.contains(name);
+        } catch (HudsonJobNotFoundException e) {
+            return false;
+        }
+    }
+
+    @Override
+    @Deprecated
     public List<ProjectId> findProjectIdsByNames(List<String> names) {
         checkConnected();
         Preconditions.checkNotNull(names, "names is mandatory");
@@ -255,22 +310,77 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
     }
 
     @Override
+    public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
+        checkConnected();
+        Preconditions.checkNotNull(names, "names is mandatory");
+        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
+        for (String name : names) {
+            SoftwareProjectId projectId = new SoftwareProjectId(name);
+            projectIds.add(projectId);
+        }
+        return projectIds;
+    }
+
+    @Override
     public void close() {
         connected = false;
     }
 
+    @Override
+    public String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(projectId);
+        try {
+            String jobName = jobName(projectId);
+            return hudson.getDescription(jobName);
+        } catch (HudsonJobNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find description of project id: " + projectId, e);
+        }
+    }
+
+    @Override
+    public SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException {
+        checkConnected();
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public int[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
     private void checkProjectId(ProjectId projectId) {
+        checkConnected();
         Preconditions.checkNotNull(projectId, "projectId is mandatory");
+    }
+
+    private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
+        checkConnected();
+        Preconditions.checkNotNull(softwareProjectId, "softwareProjectId is mandatory");
     }
 
     private void checkConnected() {
         Preconditions.checkState(connected, "You must connect your plugin");
     }
 
-    private String extractProjectNameFrom(ProjectId projectId) {
-        return projectId.getId(JENKINS_ID);
+    @Deprecated
+    private String jobName(ProjectId projectId) throws HudsonJobNotFoundException {
+        String jobName = projectId.getId(JENKINS_ID);
+        if (jobName == null) {
+            throw new HudsonJobNotFoundException("Project id " + projectId + " does not contain Jenkins id");
+        }
+        return jobName;
     }
 
+    private String jobName(SoftwareProjectId softwareProjectId) throws HudsonJobNotFoundException {
+        String jobName = softwareProjectId.getProjectId();
+        if (jobName == null) {
+            throw new HudsonJobNotFoundException("Project id " + softwareProjectId + " does not contain Jenkins id");
+        }
+        return jobName;
+    }
+
+    @Deprecated
     private ProjectId createProjectIdFrom(HudsonProject hudsonProject) {
         Project project = projectCreator.buildProjectFrom(hudsonProject);
         ProjectId projectId = new ProjectId();
@@ -280,6 +390,7 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
         return projectId;
     }
 
+    @Deprecated
     private ProjectId createProjectId(String projectName) throws ArtifactIdNotFoundException {
         String artifactId = hudson.findArtifactId(projectName);
         ProjectId projectId = new ProjectId();
@@ -288,5 +399,4 @@ public final class JenkinsConnection implements Connection, BuildCapability, Vie
         projectId.setArtifactId(artifactId);
         return projectId;
     }
-
 }

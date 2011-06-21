@@ -28,38 +28,38 @@ import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
-import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 
 import org.junit.Test;
 
-public class HudsonITest {
+public class HudsonIT {
 
     private Hudson hudson = new Hudson(IntegrationTestData.HUDSON_URL);
 
     @Test(expected = IllegalArgumentException.class)
     public void should_throw_an_exception_when_searching_an_inexistant_build() throws HudsonBuildNotFoundException,
-            HudsonProjectNotFoundException {
+            HudsonJobNotFoundException {
         hudson.findBuild("neverbuild", -1);
     }
 
     @Test
-    public void should_find_not_built_project() throws HudsonProjectNotFoundException {
+    public void should_find_not_built_project() throws HudsonJobNotFoundException {
         hudson.findProject("neverbuild");
     }
 
-    @Test(expected = HudsonProjectNotFoundException.class)
-    public void should_throw_exception_when_searching_inexistant_project() throws HudsonProjectNotFoundException {
+    @Test(expected = HudsonJobNotFoundException.class)
+    public void should_throw_exception_when_searching_inexistant_project() throws HudsonJobNotFoundException {
         hudson.findProject("");
     }
 
-    @Test(expected = HudsonProjectNotFoundException.class)
+    @Test(expected = HudsonJobNotFoundException.class)
     public void should_throw_exception_when_searching_inexistant_project_with_build_no()
-            throws HudsonProjectNotFoundException, HudsonBuildNotFoundException {
+            throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
         hudson.findBuild("", 0);
     }
 
     @Test
-    public void should_count_it_and_ut() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+    public void should_count_it_and_ut() throws HudsonBuildNotFoundException, HudsonJobNotFoundException {
         HudsonBuild build = hudson.findBuild("itcoverage-project", 17);
         HudsonTestResult unitTestResult = build.getUnitTestResult();
         HudsonTestResult integrationTestResult = build.getIntegrationTestResult();
@@ -76,7 +76,7 @@ public class HudsonITest {
     }
 
     @Test
-    public void should_be_unstable_when_having_passed_tests_and_failed_tests() throws HudsonProjectNotFoundException {
+    public void should_be_unstable_when_having_passed_tests_and_failed_tests() throws HudsonJobNotFoundException {
         String status = hudson.getState("itcoverage-project");
         assertEquals("UNSTABLE", status);
     }
@@ -92,7 +92,7 @@ public class HudsonITest {
     }
 
     @Test
-    public void should_retrieve_commiter_email() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+    public void should_retrieve_commiter_email() throws HudsonBuildNotFoundException, HudsonJobNotFoundException {
         Hudson hudsonAwired = new Hudson(IntegrationTestData.JENKINS_URL);
         HudsonBuild build = hudsonAwired.findBuild("successproject", 9);
         Set<HudsonCommiter> set = build.getCommiters();

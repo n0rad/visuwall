@@ -17,6 +17,7 @@
 package net.awired.visuwall.hudsonclient.domain;
 
 import java.util.Arrays;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 

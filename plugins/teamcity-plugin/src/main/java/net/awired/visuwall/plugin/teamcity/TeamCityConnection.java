@@ -19,9 +19,12 @@ package net.awired.visuwall.plugin.teamcity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.ProjectKey;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
@@ -32,9 +35,11 @@ import net.awired.visuwall.teamcityclient.TeamCity;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -177,6 +182,57 @@ public class TeamCityConnection implements Connection, BuildCapability {
         }
     }
 
+    @Override
+    public void close() {
+        connected = false;
+    }
+
+    @Override
+    public String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("Not implemented");
+    }
+
+    @Override
+    public SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("Not implemented");
+    }
+
+    @Override
+    public int[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public List<SoftwareProjectId> findAllSoftwareProjectIds() {
+        return new ArrayList<SoftwareProjectId>();
+    }
+
+    @Override
+    public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
+        return new ArrayList<SoftwareProjectId>();
+    }
+
+    @Override
+    public State getLastBuildState(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public Date getEstimatedFinishTime(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public boolean isBuilding(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public int getLastBuildNumber(SoftwareProjectId projectId) throws ProjectNotFoundException,
+            BuildNumberNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
     private Project createProject(TeamCityProject teamCityProject) {
         Project project = new Project(teamCityProject.getName());
         project.setDescription(teamCityProject.getDescription());
@@ -187,7 +243,4 @@ public class TeamCityConnection implements Connection, BuildCapability {
         Preconditions.checkState(connected, "You must connect your plugin");
     }
 
-    @Override
-    public void close() {
-    }
 }

@@ -30,6 +30,7 @@ import java.util.List;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -37,24 +38,30 @@ import net.awired.visuwall.hudsonclient.Hudson;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
-import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 public class JenkinsConnectionTest {
 
-    @Test
-    public void should_return_state_unknow_if_no_state() throws ProjectNotFoundException,
-            HudsonProjectNotFoundException {
-        Hudson hudson = Mockito.mock(Hudson.class);
+    Hudson hudson;
+    JenkinsConnection jenkinsPlugin;
 
-        Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("not_valid_state");
-
-        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
+    @Before
+    public void init() {
+        hudson = Mockito.mock(Hudson.class);
+        jenkinsPlugin = new JenkinsConnection();
         jenkinsPlugin.connect("url");
         jenkinsPlugin.hudson = hudson;
+    }
+
+    @Test
+    public void should_return_state_unknow_if_no_state() throws ProjectNotFoundException,
+            HudsonJobNotFoundException {
+        Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("not_valid_state");
 
         ProjectId projectId = new ProjectId();
         projectId.addId(JENKINS_ID, "name");
@@ -63,14 +70,8 @@ public class JenkinsConnectionTest {
     }
 
     @Test
-    public void should_return_state_valid_state() throws ProjectNotFoundException, HudsonProjectNotFoundException {
-        Hudson hudson = Mockito.mock(Hudson.class);
-
+    public void should_return_state_valid_state() throws ProjectNotFoundException, HudsonJobNotFoundException {
         Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("FAILURE");
-
-        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
-        jenkinsPlugin.connect("url");
-        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId(JENKINS_ID, "name");
@@ -80,7 +81,6 @@ public class JenkinsConnectionTest {
 
     @Test
     public void should_find_all_projects_from_hudson() {
-        Hudson hudson = Mockito.mock(Hudson.class);
         List<HudsonProject> hudsonProjects = new ArrayList<HudsonProject>();
         HudsonProject hudsonProject = new HudsonProject();
         hudsonProject.setArtifactId("artifactId");
@@ -89,10 +89,6 @@ public class JenkinsConnectionTest {
         hudsonProjects.add(hudsonProject);
 
         when(hudson.findAllProjects()).thenReturn(hudsonProjects);
-
-        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
-        jenkinsPlugin.connect("url");
-        jenkinsPlugin.hudson = hudson;
 
         List<ProjectId> projectIds = jenkinsPlugin.findAllProjects();
         ProjectId projectId = projectIds.get(0);
@@ -103,16 +99,10 @@ public class JenkinsConnectionTest {
     }
 
     @Test
-    public void should_find_project_by_projectId() throws HudsonProjectNotFoundException, ProjectNotFoundException {
-        Hudson hudson = Mockito.mock(Hudson.class);
-
+    public void should_find_project_by_projectId() throws HudsonJobNotFoundException, ProjectNotFoundException {
         HudsonProject hudsonProject = new HudsonProject();
         hudsonProject.setName("name");
         when(hudson.findProject(Matchers.anyString())).thenReturn(hudsonProject);
-
-        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
-        jenkinsPlugin.connect("url");
-        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId(JENKINS_ID, "id");
@@ -123,15 +113,10 @@ public class JenkinsConnectionTest {
     }
 
     @Test
-    public void should_get_is_building_information() throws HudsonProjectNotFoundException, ProjectNotFoundException {
-        Hudson hudson = Mockito.mock(Hudson.class);
+    public void should_get_is_building_information() throws HudsonJobNotFoundException, ProjectNotFoundException {
 
         when(hudson.isBuilding("project1")).thenReturn(true);
         when(hudson.isBuilding("project2")).thenReturn(false);
-
-        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
-        jenkinsPlugin.connect("url");
-        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId(JENKINS_ID, "project1");
@@ -143,15 +128,9 @@ public class JenkinsConnectionTest {
     }
 
     @Test
-    public void should_get_estimated_finish_time() throws HudsonProjectNotFoundException, ProjectNotFoundException {
-        Hudson hudson = Mockito.mock(Hudson.class);
-
+    public void should_get_estimated_finish_time() throws HudsonJobNotFoundException, ProjectNotFoundException {
         Date date = new Date();
         when(hudson.getEstimatedFinishTime(Matchers.anyString())).thenReturn(date);
-
-        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
-        jenkinsPlugin.connect("url");
-        jenkinsPlugin.hudson = hudson;
 
         ProjectId projectId = new ProjectId();
         projectId.addId(JENKINS_ID, "project1");
@@ -161,13 +140,7 @@ public class JenkinsConnectionTest {
 
     @Test
     public void should_find_build_by_number() throws BuildNotFoundException, ProjectNotFoundException,
-            HudsonBuildNotFoundException, HudsonProjectNotFoundException {
-        Hudson hudson = Mockito.mock(Hudson.class);
-
-        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
-        jenkinsPlugin.connect("url");
-        jenkinsPlugin.hudson = hudson;
-
+            HudsonBuildNotFoundException, HudsonJobNotFoundException {
         HudsonBuild hudsonBuild = new HudsonBuild();
 		hudsonBuild.setState(JenkinsState.SUCCESS);
 
@@ -183,12 +156,6 @@ public class JenkinsConnectionTest {
 
     @Test
     public void should_find_last_build_number() throws Exception {
-        Hudson hudson = Mockito.mock(Hudson.class);
-
-        JenkinsConnection jenkinsPlugin = new JenkinsConnection();
-        jenkinsPlugin.connect("url");
-        jenkinsPlugin.hudson = hudson;
-
         when(hudson.getLastBuildNumber("project1")).thenReturn(5);
 
         ProjectId projectId = new ProjectId();
@@ -207,6 +174,17 @@ public class JenkinsConnectionTest {
     @Test
     public void should_create_hudson() {
         new JenkinsConnection().connect("url");
+    }
+
+    @Test
+    public void should_get_description() throws Exception {
+        when(hudson.getDescription("projectName")).thenReturn("description");
+
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectName");
+
+        String description = jenkinsPlugin.getDescription(softwareProjectId);
+
+        assertEquals("description", description);
     }
 
 }

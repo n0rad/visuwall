@@ -14,29 +14,33 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.bamboo;
+package net.awired.visuwall.plugin.teamcity;
 
+import static net.awired.visuwall.IntegrationTestData.TEAMCITY_URL;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
-import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.SoftwareId;
+import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
 import org.junit.Test;
 
-public class BambooPluginITest {
+public class TeamCityPluginIT {
 
     @Test
-    public void should_be_manageable() throws MalformedURLException {
-        BambooPlugin bamboo = new BambooPlugin();
-        SoftwareId softwareId = bamboo.getSoftwareId(new URL(IntegrationTestData.BAMBOO_URL));
-        assertNotNull(softwareId);
-        assertEquals("Bamboo", softwareId.getName());
-        assertEquals("2.7.1", softwareId.getVersion());
-        assertNull(softwareId.getWarnings());
+    public void should_recognize_teamcity_instance_with_valid_url() throws Exception {
+        TeamCityPlugin teamcityPlugin = new TeamCityPlugin();
+        SoftwareId softwareId = teamcityPlugin.getSoftwareId(new URL(TEAMCITY_URL));
+        assertEquals("TeamCity", softwareId.getName());
+        assertEquals("6.5", softwareId.getVersion());
     }
+
+    @Test(expected = IncompatibleSoftwareException.class)
+    public void should_not_fail_if_url_is_not_manageable() throws Exception {
+        TeamCityPlugin teamcityPlugin = new TeamCityPlugin();
+        String url = "http://www.google.fr";
+        teamcityPlugin.getSoftwareId(new URL(url));
+    }
+
 }

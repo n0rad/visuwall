@@ -17,15 +17,28 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.List;
+
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.ProjectKey;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
-public interface BasicCapability/* <ID_TYPE> */{
+public interface BasicCapability {
 
-    //TODO
-    //    String getDescription(ProjectId projectId);
-    //    SoftwareProjectId<ID_TYPE> contains(ProjectKey projectKey);
+    /**
+     * Return the description of the project
+     * 
+     * @param projectId
+     * @return
+     */
+    String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException;
+    
+    /**
+     * @param projectKey
+     * @return
+     */
+    SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException;
 
     /**
      * @param projectId
@@ -40,14 +53,30 @@ public interface BasicCapability/* <ID_TYPE> */{
      * 
      * @return
      */
+    @Deprecated
     List<ProjectId> findAllProjects();
+
+    /**
+     * Return the full list of project id contained in the software
+     * 
+     * @return
+     */
+    List<SoftwareProjectId> findAllSoftwareProjectIds();
 
     /**
      * Return a list of project id contained in the software by a list of names
      * 
      * @return
      */
+    @Deprecated
     List<ProjectId> findProjectIdsByNames(List<String> names);
+
+    /**
+     * Return a list of project id contained in the software by a list of names
+     * 
+     * @return
+     */
+    List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names);
 
     /**
      * Plugin should be able to retrieve projects by theirs projectId. ProjectId are filled when you call

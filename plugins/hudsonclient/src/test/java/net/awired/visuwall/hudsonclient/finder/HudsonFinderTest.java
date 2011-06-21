@@ -114,37 +114,37 @@ public class HudsonFinderTest {
     }
 
     @Test
-	public void testFindProjectNames() throws ResourceNotFoundException {
-        Element project1 = mock(Element.class);
-        Node mock1 = mock(Node.class);
-        when(project1.getFirstChild()).thenReturn(mock1);
-        when(mock1.getFirstChild()).thenReturn(mock1);
-        when(mock1.getNodeValue()).thenReturn("project1");
-
-        Element project2 = mock(Element.class);
-        Node mock2 = mock(Node.class);
-        when(project2.getFirstChild()).thenReturn(mock2);
-        when(mock2.getFirstChild()).thenReturn(mock2);
-        when(mock2.getNodeValue()).thenReturn("project2");
-
-        List<Object> elements = new ArrayList<Object>();
-        elements.add(project1);
-        elements.add(project2);
-
-        HudsonModelHudson jobs = mock(HudsonModelHudson.class);
-        when(jobs.getJob()).thenReturn(elements);
-
-		when(client.resource(anyString(), any(Class.class))).thenReturn(jobs);
-
-        List<String> projectNames = hudsonFinder.findProjectNames();
-        Assert.assertEquals("project1", projectNames.get(0));
-        Assert.assertEquals("project2", projectNames.get(1));
-    }
+    	public void testFindJobNames() throws ResourceNotFoundException {
+            Element project1 = mock(Element.class);
+            Node mock1 = mock(Node.class);
+            when(project1.getFirstChild()).thenReturn(mock1);
+            when(mock1.getFirstChild()).thenReturn(mock1);
+            when(mock1.getNodeValue()).thenReturn("project1");
+    
+            Element project2 = mock(Element.class);
+            Node mock2 = mock(Node.class);
+            when(project2.getFirstChild()).thenReturn(mock2);
+            when(mock2.getFirstChild()).thenReturn(mock2);
+            when(mock2.getNodeValue()).thenReturn("project2");
+    
+            List<Object> elements = new ArrayList<Object>();
+            elements.add(project1);
+            elements.add(project2);
+    
+            HudsonModelHudson jobs = mock(HudsonModelHudson.class);
+            when(jobs.getJob()).thenReturn(elements);
+    
+    		when(client.resource(anyString(), any(Class.class))).thenReturn(jobs);
+    
+            List<String> projectNames = hudsonFinder.findJobNames();
+            Assert.assertEquals("project1", projectNames.get(0));
+            Assert.assertEquals("project2", projectNames.get(1));
+        }
 
     @Test
     public void testProjectExists() {
         String absolutePathFile = ClasspathFiles.getAbsolutePathFile("hudson/fluxx.xml");
-        when(hudsonUrlBuilder.getProjectUrl(anyString())).thenReturn(absolutePathFile);
+        when(hudsonUrlBuilder.getJobUrl(anyString())).thenReturn(absolutePathFile);
         boolean found = hudsonFinder.projectExists("projectName");
         assertTrue(found);
     }
@@ -165,7 +165,7 @@ public class HudsonFinderTest {
 	public void should_return_all_projects_of_a_view() throws Exception {
         HudsonView viewResource = (HudsonView) load("hudson/view.xml", HudsonView.class);
 		when(client.resource(anyString(), any(Class.class))).thenReturn(viewResource);
-        List<String> projectNames = hudsonFinder.findProjectNamesByView("android");
+        List<String> projectNames = hudsonFinder.findJobNamesByView("android");
         assertEquals(4, projectNames.size());
         List<String> expectedProjects = Arrays.asList("android-1.11", "android-1.11-daily", "android-trunk",
                 "android-trunk-daily");

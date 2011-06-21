@@ -29,7 +29,7 @@ import net.awired.visuwall.bambooclient.exception.BambooProjectNotFoundException
 
 import org.junit.Test;
 
-public class BambooITest {
+public class BambooIT {
 
     private Bamboo bamboo = new Bamboo(IntegrationTestData.BAMBOO_URL);
 
@@ -57,6 +57,5 @@ public class BambooITest {
         BambooProject project = bamboo.findProject("STRUTS-STRUTS");
         int[] buildNumbers = project.getBuildNumbers();
         assertEquals(buildNumbers[0], 3);
-        assertEquals(buildNumbers[1], 2);
     }
 }

@@ -16,19 +16,19 @@
 
 package net.awired.visuwall.hudsonclient.exception;
 
-public class HudsonProjectNotFoundException extends Exception {
+public class HudsonJobNotFoundException extends Exception {
 
     private static final long serialVersionUID = 4159195103131261896L;
 
-    public HudsonProjectNotFoundException(Throwable cause) {
+    public HudsonJobNotFoundException(Throwable cause) {
         super(cause);
     }
 
-    public HudsonProjectNotFoundException(String cause) {
+    public HudsonJobNotFoundException(String cause) {
         super(cause);
     }
 
-    public HudsonProjectNotFoundException(String message, Throwable cause) {
+    public HudsonJobNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 }

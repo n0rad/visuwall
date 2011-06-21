@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.awired.visuwall.IntegrationTestData;
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -37,7 +36,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class TeamBasicCapabilityITest implements BasicCapabilityTCK {
+public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
 
 	BuildCapability teamcity = new TeamCityConnection();
 
@@ -75,28 +74,6 @@ public class TeamBasicCapabilityITest implements BasicCapabilityTCK {
 
 	@Override
 	@Test
-	public void should_contain_project() {
-		ProjectId projectId = new ProjectId();
-		projectId.addId(TeamCityConnection.TEAMCITY_ID, "project33");
-
-		boolean contains = teamcity.contains(projectId);
-
-		assertTrue(contains);
-	}
-
-	@Override
-	@Test
-	public void should_not_contain_project() {
-		ProjectId projectId = new ProjectId();
-		projectId.addId(TeamCityConnection.TEAMCITY_ID, "does.not.exist");
-
-		boolean contains = teamcity.contains(projectId);
-
-		assertFalse(contains);
-	}
-
-	@Override
-	@Test
 	public void should_find_all_project_names() {
 		List<String> names = Arrays.asList("Apache Ant", "Apache Ivy", "Gradle");
 
@@ -108,20 +85,21 @@ public class TeamBasicCapabilityITest implements BasicCapabilityTCK {
 	}
 
 	@Override
-	@Test
-	public void should_find_a_project() throws ProjectNotFoundException {
-		ProjectId projectId = new ProjectId();
-		projectId.addId(TeamCityConnection.TEAMCITY_ID, "project33");
-
-		Project project = teamcity.findProject(projectId);
-		
-		assertEquals("JGit", project.getName());
-	}
-
-	@Override
 	@Ignore
 	@Test
 	public void should_get_disable_project() throws ProjectNotFoundException {
 	}
+
+    @Override
+    @Ignore
+    @Test
+    public void should_find_description_of_a_project() throws ProjectNotFoundException {
+    }
+
+    @Override
+    @Ignore
+    @Test
+    public void should_identify_a_project() throws ProjectNotFoundException {
+    }
 
 }

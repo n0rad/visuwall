@@ -36,7 +36,7 @@ import net.awired.visuwall.hudsonclient.Hudson;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
-import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 import net.awired.visuwall.plugin.hudson.builder.HudsonState;
 
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class HudsonConnectionTest {
 
     @Test
     public void should_return_state_unknow_if_no_state() throws ProjectNotFoundException,
-            HudsonProjectNotFoundException {
+            HudsonJobNotFoundException {
         Hudson hudson = Mockito.mock(Hudson.class);
 
         Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("not_valid_state");
@@ -62,7 +62,7 @@ public class HudsonConnectionTest {
     }
 
     @Test
-    public void should_return_state_valid_state() throws ProjectNotFoundException, HudsonProjectNotFoundException {
+    public void should_return_state_valid_state() throws ProjectNotFoundException, HudsonJobNotFoundException {
         Hudson hudson = Mockito.mock(Hudson.class);
 
         Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("FAILURE");
@@ -102,7 +102,7 @@ public class HudsonConnectionTest {
     }
 
     @Test
-    public void should_find_project_by_projectId() throws HudsonProjectNotFoundException, ProjectNotFoundException {
+    public void should_find_project_by_projectId() throws HudsonJobNotFoundException, ProjectNotFoundException {
         Hudson hudson = Mockito.mock(Hudson.class);
 
         HudsonProject hudsonProject = new HudsonProject();
@@ -122,7 +122,7 @@ public class HudsonConnectionTest {
     }
 
     @Test
-    public void should_get_is_building_information() throws HudsonProjectNotFoundException, ProjectNotFoundException {
+    public void should_get_is_building_information() throws HudsonJobNotFoundException, ProjectNotFoundException {
         Hudson hudson = Mockito.mock(Hudson.class);
 
         when(hudson.isBuilding("project1")).thenReturn(true);
@@ -142,7 +142,7 @@ public class HudsonConnectionTest {
     }
 
     @Test
-    public void should_get_estimated_finish_time() throws HudsonProjectNotFoundException, ProjectNotFoundException {
+    public void should_get_estimated_finish_time() throws HudsonJobNotFoundException, ProjectNotFoundException {
         Hudson hudson = Mockito.mock(Hudson.class);
 
         Date date = new Date();
@@ -160,7 +160,7 @@ public class HudsonConnectionTest {
 
     @Test
     public void should_find_build_by_number() throws BuildNotFoundException, ProjectNotFoundException,
-            HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+            HudsonBuildNotFoundException, HudsonJobNotFoundException {
         Hudson hudson = Mockito.mock(Hudson.class);
 
         HudsonConnection hudsonPlugin = new HudsonConnection();

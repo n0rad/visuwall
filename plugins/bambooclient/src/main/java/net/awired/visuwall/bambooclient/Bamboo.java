@@ -74,6 +74,7 @@ public class Bamboo {
 		return projects;
 	}
 
+    @Deprecated
 	public BambooProject findProject(String projectKey) throws BambooProjectNotFoundException {
 		Preconditions.checkNotNull(projectKey, "projectKey is a mandatory parameter");
 		try {
@@ -81,10 +82,10 @@ public class Bamboo {
 			Results results = client.resource(projectUrl, Results.class);
 
 			BambooProject project = createProjectFrom(results.results.get(0).result.get(0));
-			project.setName(projectKey);
+            project.setKey(projectKey);
 
-			int[] buildNumbers = getBuildNumbers(results.results.get(0).result);
-			project.setBuildNumbers(buildNumbers);
+            int buildNumber = getBuildNumber(results.results.get(0).result, projectKey);
+            project.setBuildNumbers(new int[] { buildNumber });
 
 			String isBuildingUrl = bambooUrlBuilder.getIsBuildingUrl(projectKey);
 			Plan plan = client.resource(isBuildingUrl, Plan.class);
@@ -95,20 +96,19 @@ public class Bamboo {
 		}
 	}
 
-	private int[] getBuildNumbers(List<Result> results) {
-		int[] buildNumbers = new int[results.size()];
-
-		for (int i = 0; i < results.size(); i++) {
-			buildNumbers[i] = results.get(i).number;
+    private int getBuildNumber(List<Result> results, String projectKey) {
+        for (Result result : results) {
+            if (result.key.startsWith(projectKey)) {
+                return result.number;
+            }
 		}
-
-		return buildNumbers;
+        return -1;
 	}
 
-	public int getLastBuildNumber(String projectName) throws BambooBuildNumberNotFoundException {
-		checkProjectName(projectName);
+    public int getLastBuildNumber(String projectKey) throws BambooBuildNumberNotFoundException {
+        checkProjectKey(projectKey);
 		try {
-			String lastBuildUrl = bambooUrlBuilder.getLatestBuildResult(projectName);
+            String lastBuildUrl = bambooUrlBuilder.getLatestBuildResult(projectKey);
 			Results results = client.resource(lastBuildUrl, Results.class);
 			return results.results.get(0).result.get(0).number;
 		} catch (ResourceNotFoundException e) {
@@ -116,10 +116,10 @@ public class Bamboo {
 		}
 	}
 
-	public BambooBuild findBuild(String projectName, int buildNumber) throws BambooBuildNotFoundException {
-		checkProjectName(projectName);
+    public BambooBuild findBuild(String projectKey, int buildNumber) throws BambooBuildNotFoundException {
+        checkProjectKey(projectKey);
 		try {
-			String buildUrl = bambooUrlBuilder.getBuildUrl(projectName, buildNumber);
+            String buildUrl = bambooUrlBuilder.getBuildUrl(projectKey, buildNumber);
 			Result result = client.resource(buildUrl, Result.class);
 			BambooBuild build = createBuildFrom(result);
 			return build;
@@ -128,14 +128,10 @@ public class Bamboo {
 		}
 	}
 
-	private void checkProjectName(String projectName) {
-		Preconditions.checkNotNull(projectName, "projectName");
-	}
-
 	private BambooBuild createBuildFrom(Result result) {
 		BambooBuild bambooBuild = new BambooBuild();
 		bambooBuild.setBuildNumber(result.number);
-		bambooBuild.setDuration(result.buildDuration.longValue());
+        bambooBuild.setDuration(result.buildDuration);
 		bambooBuild.setStartTime(result.buildStartedTime);
 		bambooBuild.setState(result.state);
 		bambooBuild.setPassCount(result.successfulTestCount);
@@ -143,70 +139,62 @@ public class Bamboo {
 		return bambooBuild;
 	}
 
-	public String getState(String projectName) throws BambooStateNotFoundException {
-		checkProjectName(projectName);
+    public String getState(String projectKey) throws BambooStateNotFoundException {
+        checkProjectKey(projectKey);
 		try {
-			String lastBuildUrl = bambooUrlBuilder.getLastBuildUrl();
-			int lastBuildNumber = getLastBuildNumber(projectName);
-			String key = projectName + "-" + lastBuildNumber;
-
+            int lastBuildNumber = getLastBuildNumber(projectKey);
+            String lastBuildUrl = bambooUrlBuilder.getLastBuildUrl();
 			Builds builds = client.resource(lastBuildUrl, Builds.class);
 			List<Build> allBuilds = builds.builds.get(0).build;
+            String key = projectKey + "-" + lastBuildNumber;
 			for (Build build : allBuilds) {
 				if (key.equals(build.key)) {
 					return build.state;
 				}
 			}
 		} catch (ResourceNotFoundException e) {
-            throw new BambooStateNotFoundException("Not state found for projectName: " + projectName, e);
+            throw new BambooStateNotFoundException("Not state found for projectKey: " + projectKey, e);
 		} catch (BambooBuildNumberNotFoundException e) {
-            throw new BambooStateNotFoundException("Not state found for projectName: " + projectName, e);
+            throw new BambooStateNotFoundException("Not state found for projectKey: " + projectKey, e);
 		}
-		throw new BambooStateNotFoundException("Not state found for projectName: " + projectName);
+        throw new BambooStateNotFoundException("Not state found for projectKey: " + projectKey);
 	}
 
-	public Date getEstimatedFinishTime(String projectName) throws BambooProjectNotFoundException {
-		checkProjectName(projectName);
-
-		BambooProject project = findProject(projectName);
-		BambooBuild build = project.getCurrentBuild();
+    public Date getEstimatedFinishTime(String projectKey) throws BambooProjectNotFoundException {
+        checkProjectKey(projectKey);
+        BambooProject project = findProject(projectKey);
+        BambooBuild build = project.getCurrentBuild();
 		Date startTime = build.getStartTime();
-		long averageBuildDurationTime = getAverageBuildDurationTime(projectName);
+        long averageBuildDurationTime = getAverageBuildDurationTime(projectKey);
 		DateTime estimatedFinishTime = new DateTime(startTime.getTime()).plus(averageBuildDurationTime);
-
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("Estimated finish time of project " + projectName + " is " + estimatedFinishTime + " ms");
+            LOG.debug("Estimated finish time of project " + projectKey + " is " + estimatedFinishTime + " ms");
 		}
-
 		return estimatedFinishTime.toDate();
 	}
 
-	public long getAverageBuildDurationTime(String projectName) throws BambooProjectNotFoundException {
-		BambooProject bambooProject = findProject(projectName);
-
+    public long getAverageBuildDurationTime(String projectKey) throws BambooProjectNotFoundException {
+        checkProjectKey(projectKey);
+        BambooProject bambooProject = findProject(projectKey);
 		long averageTime;
-
 		if (isNeverSuccessful(bambooProject)) {
 			averageTime = maxDuration(bambooProject);
 		} else {
 			averageTime = computeAverageBuildDuration(bambooProject);
 		}
-
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("Average build time of " + projectName + " is " + averageTime + " ms");
+			LOG.debug("Average build time of " + projectKey + " is " + averageTime + " ms");
 		}
-
 		return averageTime;
 	}
 
 	private long computeAverageBuildDuration(BambooProject bambooProject) {
-		String projectName = bambooProject.getName();
+		String projectKey = bambooProject.getKey();
 		float sumBuildDurationTime = 0;
 		int[] buildNumbers = bambooProject.getBuildNumbers();
-
 		for (int buildNumber : buildNumbers) {
 			try {
-				BambooBuild build = findBuild(projectName, buildNumber);
+				BambooBuild build = findBuild(projectKey, buildNumber);
 				if (build.isSuccessful()) {
 					sumBuildDurationTime += build.getDuration();
 				}
@@ -216,18 +204,15 @@ public class Bamboo {
 				}
 			}
 		}
-
 		return (long) (sumBuildDurationTime / buildNumbers.length);
-
 	}
 
 	private long maxDuration(BambooProject bambooProject) {
 		long max = 0;
 		int[] buildNumbers = bambooProject.getBuildNumbers();
-
 		for (int buildNumber : buildNumbers) {
 			try {
-				BambooBuild build = findBuild(bambooProject.getName(), buildNumber);
+				BambooBuild build = findBuild(bambooProject.getKey(), buildNumber);
 				max = Math.max(max, build.getDuration());
 			} catch (BambooBuildNotFoundException e) {
 				if (LOG.isDebugEnabled()) {
@@ -235,16 +220,15 @@ public class Bamboo {
 				}
 			}
 		}
-
 		return max;
-
 	}
 
     private boolean isNeverSuccessful(BambooProject bambooProject) {
+        String projectKey = bambooProject.getKey();
 		int[] buildNumbers = bambooProject.getBuildNumbers();
 		for (int buildNumber : buildNumbers) {
 			try {
-				BambooBuild build = findBuild(bambooProject.getName(), buildNumber);
+                BambooBuild build = findBuild(projectKey, buildNumber);
 				if (build.isSuccessful()) {
 					return false;
 				}
@@ -280,10 +264,25 @@ public class Bamboo {
 		return project;
 	}
 
-	private BambooProject createProjectFrom(Result result) {
+    private BambooProject createProjectFrom(Result result) {
 		BambooProject project = new BambooProject();
-		BambooBuild build = createBuildFrom(result);
-		project.setCurrentBuild(build);
-		return project;
+        String projectKey = result.key;
+        int buildNumber = result.number;
+        String buildUrl = bambooUrlBuilder.getBuildUrl(projectKey, buildNumber);
+        try {
+            Result buildResult = client.resource(buildUrl, Result.class);
+            BambooBuild build = createBuildFrom(buildResult);
+            project.setCurrentBuild(build);
+        } catch (ResourceNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't find build result at " + buildUrl, e);
+            }
+        }
+        return project;
 	}
+
+    private void checkProjectKey(String projectKey) {
+        Preconditions.checkNotNull(projectKey, "projectKey");
+    }
+
 }

@@ -60,7 +60,7 @@ public class HudsonUrlBuilder {
      * @param jobName
      * @return Hudson Url to obtain informations of a job
      */
-    public String getProjectUrl(String jobName) {
+    public String getJobUrl(String jobName) {
         checkJobName(jobName);
         return hudsonUrl + JOB_URI + "/" + encode(jobName) + API_XML;
     }

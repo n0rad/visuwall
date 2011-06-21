@@ -51,7 +51,7 @@ public class HudsonUrlBuilderTest {
 
     @Test
     public void should_create_good_project_url() {
-        String testUrl = hudsonUrlBuilder.getProjectUrl("struts");
+        String testUrl = hudsonUrlBuilder.getJobUrl("struts");
         assertEquals("http://ci.visuwall.awired.net/job/struts/api/xml", testUrl);
     }
 

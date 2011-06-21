@@ -25,7 +25,7 @@ import net.awired.visuwall.core.business.domain.PluginInfo;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class HudsonPluginITest {
+public class HudsonPluginIT {
 
     static PluginInfo pluginInfo = new PluginInfo();
 

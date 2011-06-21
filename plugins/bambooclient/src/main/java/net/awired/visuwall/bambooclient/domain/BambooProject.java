@@ -16,6 +16,10 @@
 
 package net.awired.visuwall.bambooclient.domain;
 
+import java.util.Arrays;
+
+import com.google.common.base.Objects;
+
 public class BambooProject {
 
     private String name;
@@ -76,5 +80,17 @@ public class BambooProject {
 
     public void setCurrentBuild(BambooBuild currentBuild) {
         this.currentBuild = currentBuild;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this) //
+                .add("name", name) //
+                .add("key", key) //
+                .add("link", link) //
+                .add("isBuilding", isBuilding()) //
+                .add("build numbers", Arrays.toString(buildNumbers)) //
+                .add("current build", currentBuild) //
+                .toString();
     }
 }

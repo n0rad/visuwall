@@ -35,7 +35,7 @@ import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
-import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
+import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
 
 import org.joda.time.Minutes;
@@ -58,8 +58,8 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_find_all_projects() throws HudsonProjectNotFoundException {
-        when(hudsonFinder.findProjectNames()).thenReturn(Arrays.asList("project1"));
+    public void should_find_all_projects() throws HudsonJobNotFoundException {
+        when(hudsonFinder.findJobNames()).thenReturn(Arrays.asList("project1"));
         when(hudsonFinder.findProject("project1")).thenReturn(new HudsonProject());
 
         List<HudsonProject> projects = hudson.findAllProjects();
@@ -69,14 +69,14 @@ public class HudsonTest {
 
     @Test
     public void should_not_fail_if_there_is_hudson_project_name_not_found_exception()
-            throws HudsonProjectNotFoundException {
-        when(hudsonFinder.findProjectNames()).thenReturn(Arrays.asList("project1"));
-        when(hudsonFinder.findProject("project1")).thenThrow(new HudsonProjectNotFoundException("cause"));
+            throws HudsonJobNotFoundException {
+        when(hudsonFinder.findJobNames()).thenReturn(Arrays.asList("project1"));
+        when(hudsonFinder.findProject("project1")).thenThrow(new HudsonJobNotFoundException("cause"));
         hudson.findAllProjects();
     }
 
     @Test
-    public void should_find_build() throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+    public void should_find_build() throws HudsonBuildNotFoundException, HudsonJobNotFoundException {
         when(hudsonFinder.find(anyString(), anyInt())).thenReturn(new HudsonBuild());
 
         HudsonBuild build = hudson.findBuild("projectName", 5);
@@ -85,7 +85,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_build_average_build_duration_time() throws HudsonProjectNotFoundException,
+    public void should_build_average_build_duration_time() throws HudsonJobNotFoundException,
             HudsonBuildNotFoundException {
         HudsonProject hudsonProject = new HudsonProject();
         hudsonProject.setName("projectName");
@@ -109,7 +109,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_build_max_build_duration_time() throws HudsonProjectNotFoundException,
+    public void should_build_max_build_duration_time() throws HudsonJobNotFoundException,
             HudsonBuildNotFoundException {
         HudsonProject hudsonProject = new HudsonProject();
         hudsonProject.setName("projectName");
@@ -133,7 +133,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_get_last_build_number() throws HudsonProjectNotFoundException, HudsonBuildNotFoundException {
+    public void should_get_last_build_number() throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
         when(hudsonFinder.getLastBuildNumber("projectName")).thenReturn(42);
 
         int lastBuildNumber = hudson.getLastBuildNumber("projectName");
@@ -142,7 +142,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_get_valid_state() throws HudsonProjectNotFoundException, HudsonBuildNotFoundException {
+    public void should_get_valid_state() throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
         when(hudsonFinder.getLastBuildNumber("projectName")).thenReturn(42);
         when(hudsonFinder.getStateOf("projectName", 42)).thenReturn("SUCCESS");
 
@@ -152,7 +152,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_get_unstable_state_if_tests_pass() throws HudsonProjectNotFoundException,
+    public void should_get_unstable_state_if_tests_pass() throws HudsonJobNotFoundException,
             HudsonBuildNotFoundException {
         HudsonTestResult unitTests = new HudsonTestResult();
         unitTests.setPassCount(1);
@@ -176,7 +176,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_get_failure_state_if_tests_dont_pass() throws HudsonProjectNotFoundException,
+    public void should_get_failure_state_if_tests_dont_pass() throws HudsonJobNotFoundException,
             HudsonBuildNotFoundException {
         HudsonProject hudsonProject = new HudsonProject();
 
@@ -190,7 +190,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_get_new_state_if_build_is_not_found() throws HudsonProjectNotFoundException,
+    public void should_get_new_state_if_build_is_not_found() throws HudsonJobNotFoundException,
             HudsonBuildNotFoundException {
         when(hudsonFinder.getLastBuildNumber("projectName")).thenThrow(new HudsonBuildNotFoundException("cause"));
 
@@ -200,7 +200,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_get_estimated_finish_time() throws HudsonProjectNotFoundException,
+    public void should_get_estimated_finish_time() throws HudsonJobNotFoundException,
             HudsonBuildNotFoundException {
         HudsonBuild build = new HudsonBuild();
         build.setDuration(Minutes.TWO.toStandardDuration().getMillis());
@@ -222,7 +222,7 @@ public class HudsonTest {
 
     @Test
     public void should_get_estimated_finish_time_even_if_there_is_no_current_build()
-            throws HudsonProjectNotFoundException {
+            throws HudsonJobNotFoundException {
         HudsonProject hudsonProject = new HudsonProject();
         hudsonProject.setName("projectName");
         when(hudsonFinder.findProject("projectName")).thenReturn(hudsonProject);
@@ -234,7 +234,7 @@ public class HudsonTest {
 
     @Test
     public void should_get_estimated_finish_time_even_if_there_is_no_start_time()
-            throws HudsonProjectNotFoundException, HudsonBuildNotFoundException {
+            throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
         HudsonBuild build = new HudsonBuild();
         build.setDuration(Minutes.TWO.toStandardDuration().getMillis());
         build.setSuccessful(true);
@@ -254,7 +254,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_get_is_building() throws HudsonProjectNotFoundException {
+    public void should_get_is_building() throws HudsonJobNotFoundException {
         when(hudsonFinder.isBuilding("projectName")).thenReturn(true);
 
         boolean isBuilding = hudson.isBuilding("projectName");
@@ -268,11 +268,20 @@ public class HudsonTest {
         projectNames.add("project1");
         projectNames.add("project2");
 
-        when(hudsonFinder.findProjectNames()).thenReturn(projectNames);
+        when(hudsonFinder.findJobNames()).thenReturn(projectNames);
 
         List<String> names = hudson.findProjectNames();
 
         assertEquals("project1", names.get(0));
         assertEquals("project2", names.get(1));
+    }
+
+    @Test
+    public void should_get_description() throws HudsonJobNotFoundException {
+        when(hudsonFinder.getDescription("projectName")).thenReturn("description");
+
+        String description = hudson.getDescription("projectName");
+
+        assertEquals("description", description);
     }
 }

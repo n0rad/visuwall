@@ -17,7 +17,9 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.List;
+
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
 
 public interface ViewCapability extends BasicCapability {
@@ -27,7 +29,15 @@ public interface ViewCapability extends BasicCapability {
      * 
      * @return
      */
+    @Deprecated
     List<ProjectId> findProjectIdsByViews(List<String> views);
+
+    /**
+     * Return a list of project id contained in the software by view names
+     * 
+     * @return
+     */
+    List<SoftwareProjectId> findSoftwareProjectIdsByViews(List<String> views);
 
     /**
      * Software can sort projects by views, or graphically by tabs. If so, plugin can list these views.

@@ -19,7 +19,9 @@ package net.awired.visuwall.core.business.domain;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
+
 import javax.persistence.Transient;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
@@ -27,6 +29,7 @@ import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class ConnectedProject extends Project {
@@ -35,11 +38,11 @@ public class ConnectedProject extends Project {
     private State state;
 
     @Transient
-    private Map<SoftwareProjectId<?>, BasicCapability> capabilities = new HashMap<SoftwareProjectId<?>, BasicCapability>();
+    private Map<SoftwareProjectId, BasicCapability> capabilities = new HashMap<SoftwareProjectId, BasicCapability>();
     @Transient
     private BuildCapability buildConnection;
     @Transient
-    private SoftwareProjectId<?> buildProjectId;
+    private SoftwareProjectId buildProjectId;
     @Transient
     private ScheduledFuture<Object> updateProjectTask;
 

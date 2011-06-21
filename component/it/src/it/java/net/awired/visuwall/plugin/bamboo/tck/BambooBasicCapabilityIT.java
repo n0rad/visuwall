@@ -19,13 +19,10 @@ package net.awired.visuwall.plugin.bamboo.tck;
 import static net.awired.visuwall.IntegrationTestData.BAMBOO_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -38,7 +35,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class BambooBasicCapabilityITest implements BasicCapabilityTCK {
+public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
 
 	BasicCapability bamboo = new BambooConnection();
 
@@ -55,14 +52,6 @@ public class BambooBasicCapabilityITest implements BasicCapabilityTCK {
     }
 
 	@Override
-    @Test
-	public void should_find_a_project() throws ProjectNotFoundException {
-        ProjectId projectId = struts2ProjectId();
-        Project project = bamboo.findProject(projectId);
-        assertNotNull(project);
-    }
-
-	@Override
 	@Test
 	public void should_find_project_ids_by_names() {
         String ajslName = "ajsl - Awired Java Standard Library 1.0-ALPHA6";
@@ -73,21 +62,6 @@ public class BambooBasicCapabilityITest implements BasicCapabilityTCK {
         assertEquals(ajslName, projectIds.get(0).getName());
         assertEquals(strutsName, projectIds.get(1).getName());
         assertEquals(struts2Name, projectIds.get(2).getName());
-    }
-
-	@Override
-	@Test
-	public void should_contain_project() {
-        ProjectId projectId = struts2ProjectId();
-        assertTrue(bamboo.contains(projectId));
-	}
-
-	@Override
-	@Test
-	public void should_not_contain_project() {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(BambooConnection.BAMBOO_ID, "idValue");
-        assertFalse(bamboo.contains(projectId));
     }
 
 	@Override
@@ -108,6 +82,18 @@ public class BambooBasicCapabilityITest implements BasicCapabilityTCK {
         ProjectId projectId = new ProjectId();
         projectId.addId(BambooConnection.BAMBOO_ID, "STRUTS2INSTABLE-STRUTS2INSTABLE");
         return projectId;
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void should_find_description_of_a_project() throws ProjectNotFoundException {
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void should_identify_a_project() throws ProjectNotFoundException {
     }
 
 }

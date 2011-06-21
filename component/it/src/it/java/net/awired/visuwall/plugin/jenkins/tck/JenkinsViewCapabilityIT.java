@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.awired.visuwall.IntegrationTestData;
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
@@ -35,7 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class JenkinsViewCapabilityITest implements ViewCapabilityTCK {
+public class JenkinsViewCapabilityIT implements ViewCapabilityTCK {
 
 	ViewCapability jenkins = new JenkinsConnection();
 
@@ -71,20 +71,20 @@ public class JenkinsViewCapabilityITest implements ViewCapabilityTCK {
 	@Test
 	public void should_find_project_ids_by_names() {
 		List<String> names = Arrays.asList("struts", "struts 2 instable");
-		List<ProjectId> projectIds = jenkins.findProjectIdsByNames(names);
-		ProjectId struts = projectIds.get(0);
-		ProjectId struts2instable = projectIds.get(1);
+        List<SoftwareProjectId> projectIds = jenkins.findSoftwareProjectIdsByNames(names);
+        SoftwareProjectId struts = projectIds.get(0);
+        SoftwareProjectId struts2instable = projectIds.get(1);
 
 		assertEquals(2, projectIds.size());
-		assertEquals("org.apache.struts:struts-parent", struts.getArtifactId());
-		assertEquals("org.apache.struts:struts2-parent", struts2instable.getArtifactId());
+        assertEquals("struts", struts.getProjectId());
+        assertEquals("struts 2 instable", struts2instable.getProjectId());
 	}
 
 	@Override
 	@Test
 	public void should_find_all_projects_of_views() {
 		List<String> views = Arrays.asList("in_error", "struts");
-		List<ProjectId> projects = jenkins.findProjectIdsByViews(views);
+        List<SoftwareProjectId> projects = jenkins.findSoftwareProjectIdsByViews(views);
 		assertEquals(5, projects.size());
 	}
 

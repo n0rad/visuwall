@@ -17,18 +17,20 @@
 package net.awired.visuwall.hudsonclient.builder;
 
 import java.util.List;
+
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
-import net.awired.visuwall.hudsonclient.exception.HudsonProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
 import net.awired.visuwall.hudsonclient.finder.HudsonRootModuleFinder;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelJob;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelRun;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.annotations.VisibleForTesting;
 
 public class HudsonProjectBuilder {
@@ -47,7 +49,7 @@ public class HudsonProjectBuilder {
     }
 
     public HudsonProject createHudsonProjectFrom(HudsonMavenMavenModuleSet moduleSet)
-            throws HudsonBuildNotFoundException, HudsonProjectNotFoundException {
+            throws HudsonBuildNotFoundException {
         HudsonBuild lastCompletedHudsonBuild = null, currentHudsonBuild = null;
 
         int lastCompleteBuildNumber = UNBUILT_PROJECT, currentBuildNumber = UNBUILT_PROJECT;

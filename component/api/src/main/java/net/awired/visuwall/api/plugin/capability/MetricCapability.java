@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 
@@ -38,6 +39,17 @@ public interface MetricCapability extends BasicCapability {
      *            You can specify the metrics you only want to analyze.
      * @return
      */
+    @Deprecated
     QualityResult analyzeQuality(ProjectId projectId, String... metrics);
+
+    /**
+     * Generate a complete quality reporting for a project defined by <code>projectId</code>
+     * 
+     * @param projectId
+     * @param metrics
+     *            You can specify the metrics you only want to analyze.
+     * @return
+     */
+    QualityResult analyzeQuality(SoftwareProjectId projectId, String... metrics);
 
 }

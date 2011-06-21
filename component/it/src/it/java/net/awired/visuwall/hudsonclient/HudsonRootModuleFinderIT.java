@@ -23,7 +23,7 @@ import net.awired.visuwall.hudsonclient.finder.HudsonRootModuleFinder;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class HudsonRootModuleFinderITest {
+public class HudsonRootModuleFinderIT {
 
     @Test
     public void should_find_synthesis_root_module_from_hudson() throws ArtifactIdNotFoundException {

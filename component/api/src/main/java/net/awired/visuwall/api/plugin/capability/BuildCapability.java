@@ -17,8 +17,10 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.Date;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
@@ -26,7 +28,14 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BuildCapability extends BasicCapability {
 
-    //    int[] getBuildNumbers(ProjectId projectId) throws ProjectNotFoundException;
+    /**
+     * Returns the build numbers order by integer ASC
+     * 
+     * @param projectId
+     * @return
+     * @throws ProjectNotFoundException
+     */
+    int[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException;
 
     /**
      * Builds are in a certain state which may vary between software You'll have to try to associate them with common
@@ -36,7 +45,18 @@ public interface BuildCapability extends BasicCapability {
      * @return
      * @throws ProjectNotFoundException
      */
+    @Deprecated
     State getLastBuildState(ProjectId projectId) throws ProjectNotFoundException;
+
+    /**
+     * Builds are in a certain state which may vary between software You'll have to try to associate them with common
+     * States
+     * 
+     * @param projectId
+     * @return
+     * @throws ProjectNotFoundException
+     */
+    State getLastBuildState(SoftwareProjectId projectId) throws ProjectNotFoundException;
 
     /**
      * Build software can order their builds by number, plugin should be able to retrieve builds by number too
@@ -59,7 +79,17 @@ public interface BuildCapability extends BasicCapability {
      * @return
      * @throws ProjectNotFoundException
      */
+    @Deprecated
     Date getEstimatedFinishTime(ProjectId projectId) throws ProjectNotFoundException;
+
+    /**
+     * If a project is building, plugin can calculate the estimated finish time
+     * 
+     * @param projectId
+     * @return
+     * @throws ProjectNotFoundException
+     */
+    Date getEstimatedFinishTime(SoftwareProjectId projectId) throws ProjectNotFoundException;
 
     /**
      * Return true if project is building
@@ -68,7 +98,17 @@ public interface BuildCapability extends BasicCapability {
      * @return
      * @throws ProjectNotFoundException
      */
+    @Deprecated
     boolean isBuilding(ProjectId projectId) throws ProjectNotFoundException;
+
+    /**
+     * Return true if project is building
+     * 
+     * @param projectId
+     * @return
+     * @throws ProjectNotFoundException
+     */
+    boolean isBuilding(SoftwareProjectId projectId) throws ProjectNotFoundException;
 
     /**
      * Return the last build number of a project
@@ -78,6 +118,17 @@ public interface BuildCapability extends BasicCapability {
      * @throws ProjectNotFoundException
      * @throws BuildNumberNotFoundException
      */
+    @Deprecated
     int getLastBuildNumber(ProjectId projectId) throws ProjectNotFoundException, BuildNumberNotFoundException;
+
+    /**
+     * Return the last build number of a project
+     * 
+     * @param projectId
+     * @return
+     * @throws ProjectNotFoundException
+     * @throws BuildNumberNotFoundException
+     */
+    int getLastBuildNumber(SoftwareProjectId projectId) throws ProjectNotFoundException, BuildNumberNotFoundException;
 
 }

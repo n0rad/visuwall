@@ -27,6 +27,8 @@ import java.util.UUID;
 
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.ProjectKey;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
@@ -278,4 +280,40 @@ public class SonarConnection implements Connection, MetricCapability, TestCapabi
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    @Override
+    public String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public List<SoftwareProjectId> findAllSoftwareProjectIds() {
+        return new ArrayList<SoftwareProjectId>();
+    }
+
+    @Override
+    public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
+        return new ArrayList<SoftwareProjectId>();
+    }
+
+    @Override
+    public TestResult analyzeUnitTests(SoftwareProjectId projectId) {
+        return new TestResult();
+    }
+
+    @Override
+    public TestResult analyzeIntegrationTests(SoftwareProjectId projectId) {
+        return new TestResult();
+    }
+
+    @Override
+    public QualityResult analyzeQuality(SoftwareProjectId projectId, String... metrics) {
+        return new QualityResult();
+    }
+
 }

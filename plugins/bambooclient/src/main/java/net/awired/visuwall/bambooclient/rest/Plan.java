@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Plan {
 
     @XmlAttribute
-    public Boolean enabled;
+    public boolean enabled;
 
     @XmlAttribute
     public String type;
@@ -39,5 +39,5 @@ public class Plan {
 
     public Link link;
 
-    public Boolean isBuilding;
+    public boolean isBuilding;
 }

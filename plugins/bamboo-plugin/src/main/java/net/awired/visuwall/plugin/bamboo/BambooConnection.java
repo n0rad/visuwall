@@ -23,6 +23,8 @@ import java.util.List;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.ProjectKey;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
@@ -71,7 +73,7 @@ public class BambooConnection implements Connection, BuildCapability {
 		List<ProjectId> projects = new ArrayList<ProjectId>();
 		for (BambooProject bambooProject : bamboo.findAllProjects()) {
 			ProjectId projectId = new ProjectId();
-			projectId.setName(bambooProject.getName());
+            projectId.setName(bambooProject.getName());
 			projectId.addId(BAMBOO_ID, bambooProject.getKey());
 			projects.add(projectId);
 		}
@@ -85,7 +87,7 @@ public class BambooConnection implements Connection, BuildCapability {
 			String projectKey = getProjectKey(projectId);
 			BambooProject bambooProject = bamboo.findProject(projectKey);
 			Project project = new Project(projectId);
-			project.setName(bambooProject.getName());
+            project.setName(bambooProject.getName());
 			return project;
 		} catch (BambooProjectNotFoundException e) {
 			throw new ProjectNotFoundException("Can't find project with ProjectId:" + projectId, e);
@@ -191,6 +193,68 @@ public class BambooConnection implements Connection, BuildCapability {
         return projectIds;
 	}
 
+    @Override
+	public void close() {
+	}
+
+    @Override
+    public String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public int[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public List<SoftwareProjectId> findAllSoftwareProjectIds() {
+        return new ArrayList<SoftwareProjectId>();
+    }
+
+    @Override
+    public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
+        return new ArrayList<SoftwareProjectId>();
+    }
+
+    @Override
+    public State getLastBuildState(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public Date getEstimatedFinishTime(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public boolean isBuilding(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public int getLastBuildNumber(SoftwareProjectId projectId) throws ProjectNotFoundException,
+            BuildNumberNotFoundException {
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    private String getProjectKey(ProjectId projectId) {
+        return projectId.getId(BAMBOO_ID);
+    }
+
+    private void checkProjectId(ProjectId projectId) {
+        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+    }
+
+    private void checkConnected() {
+        Preconditions.checkState(connected, "You must connect your plugin");
+    }
+
     private ProjectId createProjectId(BambooProject project) {
         ProjectId projectId = new ProjectId();
         projectId.setName(project.getName());
@@ -198,19 +262,4 @@ public class BambooConnection implements Connection, BuildCapability {
         return projectId;
     }
 
-    @Override
-	public void close() {
-	}
-
-	private String getProjectKey(ProjectId projectId) {
-		return projectId.getId(BAMBOO_ID);
-	}
-
-	private void checkProjectId(ProjectId projectId) {
-		Preconditions.checkNotNull(projectId, "projectId is mandatory");
-	}
-
-	private void checkConnected() {
-		Preconditions.checkState(connected, "You must connect your plugin");
-	}
 }

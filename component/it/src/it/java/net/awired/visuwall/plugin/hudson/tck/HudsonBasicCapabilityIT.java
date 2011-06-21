@@ -16,18 +16,15 @@
 
 package net.awired.visuwall.plugin.hudson.tck;
 
-import static net.awired.visuwall.plugin.hudson.HudsonConnection.HUDSON_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 
 import net.awired.visuwall.IntegrationTestData;
-import net.awired.visuwall.api.domain.Project;
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
@@ -39,7 +36,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class HudsonBasicCapabilityITest implements BasicCapabilityTCK {
+public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
 
 	BasicCapability hudson = new HudsonConnection();
 
@@ -51,40 +48,18 @@ public class HudsonBasicCapabilityITest implements BasicCapabilityTCK {
 	@Override
 	@Test
 	public void should_find_all_projects_ids() {
-        List<ProjectId> projects = hudson.findAllProjects();
+        List<SoftwareProjectId> projects = hudson.findAllSoftwareProjectIds();
         assertFalse(projects.isEmpty());
-    }
-
-	@Override
-	@Test
-	public void should_find_a_project() throws ProjectNotFoundException {
-        ProjectId projectId = fluxxProjectId();
-        Project project = hudson.findProject(projectId);
-        assertNotNull(project);
     }
 
 	@Override
 	@Test
 	public void should_find_project_ids_by_names() {
         List<String> names = Arrays.asList("fluxx", "visuwall");
-        List<ProjectId> projectIds = hudson.findProjectIdsByNames(names);
+        List<SoftwareProjectId> projectIds = hudson.findSoftwareProjectIdsByNames(names);
         assertEquals(2, projectIds.size());
-        assertEquals("fluxx", projectIds.get(0).getName());
-        assertEquals("visuwall", projectIds.get(1).getName());
-	}
-
-	@Override
-	@Test
-	public void should_contain_project() {
-        assertTrue(hudson.contains(fluxxProjectId()));
-	}
-
-	@Override
-	@Test
-	public void should_not_contain_project() {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "idValue");
-        assertFalse(hudson.contains(projectId));
+        assertEquals("fluxx", projectIds.get(0).getProjectId());
+        assertEquals("visuwall", projectIds.get(1).getProjectId());
 	}
 
 	@Override
@@ -104,10 +79,16 @@ public class HudsonBasicCapabilityITest implements BasicCapabilityTCK {
 
 	}
 
-    private ProjectId fluxxProjectId() {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "fluxx");
-        return projectId;
+    @Override
+    @Test
+    @Ignore
+    public void should_find_description_of_a_project() throws ProjectNotFoundException {
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void should_identify_a_project() throws ProjectNotFoundException {
     }
 
 }

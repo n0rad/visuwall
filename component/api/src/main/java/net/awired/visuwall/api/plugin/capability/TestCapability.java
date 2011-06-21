@@ -17,6 +17,7 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 
 public interface TestCapability extends BasicCapability {
@@ -27,6 +28,7 @@ public interface TestCapability extends BasicCapability {
      * @param projectId
      * @return
      */
+    @Deprecated
     TestResult analyzeUnitTests(ProjectId projectId);
 
     /**
@@ -35,6 +37,23 @@ public interface TestCapability extends BasicCapability {
      * @param projectId
      * @return
      */
+    @Deprecated
     TestResult analyzeIntegrationTests(ProjectId projectId);
+
+    /**
+     * Generate the unit tests reporting
+     * 
+     * @param projectId
+     * @return
+     */
+    TestResult analyzeUnitTests(SoftwareProjectId projectId);
+
+    /**
+     * Generate the integration tests reporting
+     * 
+     * @param projectId
+     * @return
+     */
+    TestResult analyzeIntegrationTests(SoftwareProjectId projectId);
 
 }

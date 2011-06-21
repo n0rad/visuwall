@@ -34,7 +34,7 @@ import net.awired.visuwall.plugin.hudson.HudsonConnection;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HudsonViewCapabilityITest implements ViewCapabilityTCK {
+public class HudsonViewCapabilityIT implements ViewCapabilityTCK {
 
     ViewCapability hudson = new HudsonConnection();
 
