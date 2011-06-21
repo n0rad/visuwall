@@ -52,7 +52,7 @@ public class HudsonIT {
         hudson.findProject("");
     }
 
-    @Test(expected = HudsonJobNotFoundException.class)
+    @Test(expected = HudsonBuildNotFoundException.class)
     public void should_throw_exception_when_searching_inexistant_project_with_build_no()
             throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
         hudson.findBuild("", 0);

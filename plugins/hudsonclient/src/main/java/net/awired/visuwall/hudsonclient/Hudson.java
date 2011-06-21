@@ -85,6 +85,7 @@ public class Hudson {
      * @throws HudsonBuildNotFoundException
      * @throws HudsonJobNotFoundException
      */
+    @Deprecated
     public HudsonBuild findBuild(String projectName, int buildNumber) throws HudsonBuildNotFoundException,
             HudsonJobNotFoundException {
         checkJobName(projectName);
