@@ -62,7 +62,9 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 						ajsl.view.resetFormValues(newContent);
 
 						sliderInit($('DIV.projectFinderDelaySecondSlider', newContent));
-						delayChange($('INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)', newContent));
+						$('INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)', newContent).change(function() {
+							delayChange(this);
+						});
 
 						var childrens = newContent.children();
 						for (var i = 0; i < childrens.length; i++) {
