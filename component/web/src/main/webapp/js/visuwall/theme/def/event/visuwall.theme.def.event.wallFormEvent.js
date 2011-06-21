@@ -61,10 +61,9 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 						ajsl.view.incrementFormIndexes(newContent);
 						ajsl.view.resetFormValues(newContent);
 
-						
-						$(".timerSlider", newContent).slider();
-						$("SELECT", newContent).empty();
-						
+						sliderInit($('DIV.projectFinderDelaySecondSlider', newContent));
+						delayChange($('INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)', newContent));
+
 						var childrens = newContent.children();
 						for (var i = 0; i < childrens.length; i++) {
 							$(ui.panel).append(childrens[i]);
@@ -279,17 +278,23 @@ var ff = '				<table class="softwareInfo">'
 	};
 	this['INPUT:regex(id,softwareAccesses.*\.url)|change|live'] = urlFunc;
 
-	this['INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)|change'] = function() {
-		$('DIV.projectFinderDelaySecondSlider', $(this).parent()).slider("option", "value", $(this).val());
-	};
 
-	this['DIV.projectFinderDelaySecondSlider|init'] = function() {
+	var delayChange = function(context) {
+		$('DIV.projectFinderDelaySecondSlider', $(context).parent()).slider("option", "value", $(context).val());
+	};
+	
+	
+	this['INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)|change'] = function() {
+		delayChange(this);
+	};
+	
+	var sliderInit = function(context) {
 		var func = function( event, ui ) {
-			$("SPAN.projectFinderDelaySecond", $(this).parent()).html( ui.value + "s" );
-			$('INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)', $(this).parent()).val(ui.value);
+			$("SPAN.projectFinderDelaySecond", $(context).parent()).html( ui.value + "s" );
+			$('INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)', $(context).parent()).val(ui.value);
 		};
 		
-		$(this).slider({
+		$(context).slider({
 			value:0,
 			min: 0,
 			max: 500,
@@ -298,7 +303,10 @@ var ff = '				<table class="softwareInfo">'
 			change: func
 		});
 	};
-	
+
+	this['DIV.projectFinderDelaySecondSlider|init'] = function() {
+		sliderInit(this);
+	};
 	
 	this['DIV#softAdd|click'] = function(event) {
 		$this.wallFormView.addFormSoftwareAccesses();

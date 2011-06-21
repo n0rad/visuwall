@@ -18,7 +18,7 @@ ajsl.view = new function() {
 	var $this = this;
 	
 	this.formFields = "input, checkbox, select, textarea";
-	this.valueFormFields = "input[type=text], checkbox, select, textarea";
+	this.valueFormFields = "input[type=text], input[type=hidden], checkbox, select, textarea";
 
 	this.rebuildFormRec = function(form, data, formManager, root, rootMethod) {
 		if (root == undefined) {
