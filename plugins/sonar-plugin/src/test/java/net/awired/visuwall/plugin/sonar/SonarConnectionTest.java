@@ -33,7 +33,6 @@ import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
@@ -195,8 +194,8 @@ public class SonarConnectionTest {
         sonar.close();
     }
 
-    @Test(expected = ConnectionException.class)
-    public void should_throw_exception_if_sonar_metrics_are_not_found() throws Exception {
+    @Test
+    public void should_not_throw_exception_if_sonar_metrics_are_not_found() throws Exception {
         when(metricFinder.findMetrics()).thenThrow(new SonarMetricsNotFoundException("not found"));
         sonar.connect("http://sonar:9000");
     }
