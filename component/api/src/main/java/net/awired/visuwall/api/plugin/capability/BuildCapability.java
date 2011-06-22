@@ -33,7 +33,7 @@ public interface BuildCapability extends BasicCapability {
      * @return
      * @throws ProjectNotFoundException
      */
-    int[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException;
+    Integer[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException;
 
     /**
      * Builds are in a certain state which may vary between software You'll have to try to associate them with common

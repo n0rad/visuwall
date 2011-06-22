@@ -52,7 +52,7 @@ public class TeamCityUrlBuilderTest {
 
 	@Test
 	public void should_create_valid_builds_list() {
-		String buildListUrl = builder.getBuildList("297");
+        String buildListUrl = builder.getBuildList("bt297");
 		assertEquals(TEAM_CITY_URL + "/app/rest/buildTypes/id:bt297/builds", buildListUrl);
 	}
 

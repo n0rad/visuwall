@@ -215,7 +215,7 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
     }
 
     @Override
-    public int[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public Integer[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
         checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }

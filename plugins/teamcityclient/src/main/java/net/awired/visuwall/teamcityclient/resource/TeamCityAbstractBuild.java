@@ -27,9 +27,6 @@ public class TeamCityAbstractBuild {
 	private String id;
 
 	@XmlAttribute
-	private String number;
-
-	@XmlAttribute
 	private String status;
 
 	@XmlAttribute
@@ -44,14 +41,6 @@ public class TeamCityAbstractBuild {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getNumber() {
-		return number;
-	}
-
-	public void setNumber(String number) {
-		this.number = number;
 	}
 
 	public String getStatus() {

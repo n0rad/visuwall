@@ -68,7 +68,7 @@ public class TeamCityUrlBuilder {
 
 	public String getBuildList(String buildTypeId) {
 		Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
-		return build("/buildTypes/id:bt" + buildTypeId + "/builds");
+        return build("/buildTypes/id:" + buildTypeId + "/builds");
 	}
 
 	private void checkProjectId(String projectId) {

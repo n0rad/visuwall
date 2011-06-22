@@ -28,6 +28,9 @@ public class TeamCityBuildItem extends TeamCityAbstractBuild {
 	@XmlAttribute
 	private String startDate;
 
+    @XmlAttribute
+    private String number;
+
 	public String getBuildTypeId() {
 		return buildTypeId;
 	}
@@ -43,4 +46,13 @@ public class TeamCityBuildItem extends TeamCityAbstractBuild {
 	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
 }

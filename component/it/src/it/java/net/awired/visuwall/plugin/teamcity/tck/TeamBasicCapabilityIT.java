@@ -29,7 +29,7 @@ import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.teamcity.TeamCityConnection;
 
@@ -38,7 +38,7 @@ import org.junit.Test;
 
 public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
 
-	BuildCapability teamcity = new TeamCityConnection();
+    BasicCapability teamcity = new TeamCityConnection();
 
 	@Before
     public void init() throws ConnectionException {
