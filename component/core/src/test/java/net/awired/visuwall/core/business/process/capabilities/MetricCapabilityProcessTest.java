@@ -21,11 +21,13 @@ import static org.mockito.Mockito.when;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -59,7 +61,7 @@ public class MetricCapabilityProcessTest {
         coverage.setFormattedValue("29%");
         qualityResult.add("coverage", coverage);
 
-        ProjectId projectId = projectToEnhance.getProjectId();
+        SoftwareProjectId projectId = null; // projectToEnhance.getProjectId();
         when(metricPlugin.analyzeQuality(projectId)).thenReturn(qualityResult);
         projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, metricPlugin);
 
@@ -85,7 +87,7 @@ public class MetricCapabilityProcessTest {
         violations.setFormattedValue("1%");
         qualityResult2.add("violations", violations);
 
-        ProjectId projectId = projectToEnhance.getProjectId();
+        SoftwareProjectId projectId = null; // projectToEnhance.getProjectId();
         when(metricPlugin1.analyzeQuality(projectId)).thenReturn(qualityResult1);
         when(metricPlugin2.analyzeQuality(projectId)).thenReturn(qualityResult2);
         projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, metricPlugin1);
@@ -114,7 +116,7 @@ public class MetricCapabilityProcessTest {
         coverage2.setFormattedValue("1%");
         qualityResult2.add("coverage", coverage2);
 
-        ProjectId projectId = projectToEnhance.getProjectId();
+        SoftwareProjectId projectId = null; // projectToEnhance.getProjectId();
         when(metricPlugin1.analyzeQuality(projectId)).thenReturn(qualityResult1);
         when(metricPlugin2.analyzeQuality(projectId)).thenReturn(qualityResult2);
         projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, metricPlugin1);
@@ -133,7 +135,7 @@ public class MetricCapabilityProcessTest {
         testResult.setSkipCount(3);
 
         TestCapability testsPlugin = Mockito.mock(TestCapability.class);
-        when(testsPlugin.analyzeUnitTests(projectToEnhance.getProjectId())).thenReturn(testResult);
+        when(testsPlugin.analyzeUnitTests(null /* projectToEnhance.getProjectId() */)).thenReturn(testResult);
 
         projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, testsPlugin);
 
@@ -156,7 +158,7 @@ public class MetricCapabilityProcessTest {
         testResult.setSkipCount(3);
 
         TestCapability testPlugin = Mockito.mock(TestCapability.class);
-        when(testPlugin.analyzeIntegrationTests(projectToEnhance.getProjectId())).thenReturn(testResult);
+        when(testPlugin.analyzeIntegrationTests(null /* projectToEnhance.getProjectId() */)).thenReturn(testResult);
 
         projectEnhancerService.enhanceWithQualityAnalysis(projectToEnhance, testPlugin);
 

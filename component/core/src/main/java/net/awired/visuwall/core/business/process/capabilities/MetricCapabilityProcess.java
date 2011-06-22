@@ -1,16 +1,19 @@
 package net.awired.visuwall.core.business.process.capabilities;
 
 import java.util.Map.Entry;
+
 import javax.persistence.Transient;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,7 +22,7 @@ public class MetricCapabilityProcess {
     String[] metrics = new String[] { "coverage", "ncloc", "violations_density", "it_coverage" };
 
     void enhanceWithQualityAnalysis(Project analyzedProject, BasicCapability plugin, String... metrics) {
-        ProjectId projectId = analyzedProject.getProjectId();
+        SoftwareProjectId projectId = null;// analyzedProject.getProjectId();
         Build build = analyzedProject.getCompletedBuild();
 
         TestResult unitTestResultToMerge = null;
@@ -39,7 +42,8 @@ public class MetricCapabilityProcess {
         }
     }
 
-    void addQualityAnalysis(MetricCapability metricPlugin, ProjectId projectId, QualityResult qualityResultToMerge,
+    void addQualityAnalysis(MetricCapability metricPlugin, SoftwareProjectId projectId,
+            QualityResult qualityResultToMerge,
             String... metrics) {
         QualityResult qualityAnalysis = metricPlugin.analyzeQuality(projectId, metrics);
         if (qualityAnalysis != null) {
@@ -53,7 +57,7 @@ public class MetricCapabilityProcess {
         }
     }
 
-    void addIntegrationTestsAnalysis(TestCapability testsPlugin, ProjectId projectId,
+    void addIntegrationTestsAnalysis(TestCapability testsPlugin, SoftwareProjectId projectId,
             TestResult integrationTestResultToMerge) {
         TestResult integrationTestsAnalysis = testsPlugin.analyzeIntegrationTests(projectId);
         if (integrationTestsAnalysis != null && integrationTestResultToMerge != null) {
@@ -61,7 +65,7 @@ public class MetricCapabilityProcess {
         }
     }
 
-    void addUnitTestsAnalysis(TestCapability testsPlugin, ProjectId projectId, TestResult unitTestResultToMerge) {
+    void addUnitTestsAnalysis(TestCapability testsPlugin, SoftwareProjectId projectId, TestResult unitTestResultToMerge) {
         TestResult unitTestsAnalysis = testsPlugin.analyzeUnitTests(projectId);
         if (unitTestsAnalysis != null && unitTestResultToMerge != null) {
             mergeTestAnalysis(unitTestResultToMerge, unitTestsAnalysis);
