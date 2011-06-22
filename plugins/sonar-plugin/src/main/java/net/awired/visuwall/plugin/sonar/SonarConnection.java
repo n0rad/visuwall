@@ -32,6 +32,7 @@ import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ConnectionException;
+import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
@@ -235,6 +236,12 @@ public class SonarConnection implements MetricCapability, TestCapability {
             }
         }
         return qualityResult;
+    }
+
+    @Override
+    public String getMavenId(SoftwareProjectId projectId) throws ProjectNotFoundException, MavenIdNotFoundException {
+        checkConnected();
+        throw new ProjectNotFoundException("not implemented");
     }
 
     private TestResult createUnitTestAnalysis(String artifactId) {

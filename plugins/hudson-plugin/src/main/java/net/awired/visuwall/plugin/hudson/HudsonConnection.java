@@ -28,6 +28,7 @@ import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
+import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
@@ -211,6 +212,13 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
 
     @Override
     public int[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public String getMavenId(SoftwareProjectId projectId) throws ProjectNotFoundException, MavenIdNotFoundException {
+        checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }
 

@@ -16,20 +16,25 @@
 
 package net.awired.visuwall.api.plugin.tck;
 
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BasicCapabilityTCK {
 
+    // findAllSoftwareProjectIds
 	void should_find_all_projects_ids();
 
-	void should_find_project_ids_by_names();
-
+    // findProjectNames
     void should_find_all_project_names();
 
-	void should_get_disable_project() throws ProjectNotFoundException;
+    // findSoftwareProjectIdsByNames
+	void should_find_project_ids_by_names();
 
-    void should_find_description_of_a_project() throws ProjectNotFoundException;
+    // getDescription
+    void should_find_description_of_a_project() throws Exception;
 
-    void should_identify_a_project() throws ProjectNotFoundException;
+    // getMavenId
+	void should_get_maven_id() throws Exception;
+
+    // identify
+	void should_identify_a_project() throws Exception;
 
 }

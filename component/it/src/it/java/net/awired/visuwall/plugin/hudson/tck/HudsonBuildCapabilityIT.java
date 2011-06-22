@@ -62,7 +62,7 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
 
 	@Override
     @Test
-	public void should_get_success_build_state() throws ProjectNotFoundException {
+	public void should_get_last_build_state() throws ProjectNotFoundException {
         SoftwareProjectId projectId = struts();
 		State state = hudson.getLastBuildState(projectId);
         assertEquals(State.SUCCESS, state);

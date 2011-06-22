@@ -24,6 +24,7 @@ import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
+import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.bambooclient.Bamboo;
@@ -181,6 +182,11 @@ public class BambooConnection implements BuildCapability {
     public int[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
         checkConnected();
         return new int[0];
+    }
+
+    @Override
+    public String getMavenId(SoftwareProjectId projectId) throws ProjectNotFoundException, MavenIdNotFoundException {
+        return null;
     }
 
 }

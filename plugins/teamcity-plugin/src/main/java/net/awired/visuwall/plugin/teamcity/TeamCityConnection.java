@@ -24,6 +24,7 @@ import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
+import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.teamcityclient.TeamCity;
@@ -157,6 +158,12 @@ public class TeamCityConnection implements BuildCapability {
     @Override
     public int getLastBuildNumber(SoftwareProjectId projectId) throws ProjectNotFoundException,
             BuildNumberNotFoundException {
+        checkConnected();
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public String getMavenId(SoftwareProjectId projectId) throws ProjectNotFoundException, MavenIdNotFoundException {
         checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }

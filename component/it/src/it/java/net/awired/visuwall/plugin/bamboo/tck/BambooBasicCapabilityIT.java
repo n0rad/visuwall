@@ -72,13 +72,6 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
         assertFalse(names.isEmpty());
 	}
 
-	@Override
-	@Test
-	@Ignore
-	public void should_get_disable_project() throws ProjectNotFoundException {
-
-	}
-
     @Override
     @Test
     @Ignore
@@ -90,12 +83,18 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
     @Ignore
     public void should_identify_a_project() throws ProjectNotFoundException {
     }
-    
+
+    @Override
+    @Test
+    @Ignore
+    public void should_get_maven_id() throws Exception {
+
+    }
+
     @Test(expected = IllegalStateException.class)
     public void should_close_connection() {
         bamboo.close();
         bamboo.findSoftwareProjectIdsByNames(new ArrayList<String>());
     }
-
 
 }

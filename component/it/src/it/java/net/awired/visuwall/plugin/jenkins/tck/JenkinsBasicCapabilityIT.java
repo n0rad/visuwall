@@ -82,13 +82,6 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
 		}
 	}
 
-	@Override
-	@Test
-	@Ignore
-	public void should_get_disable_project() throws ProjectNotFoundException {
-
-	}
-
     @Override
     @Test
     @Ignore
@@ -101,6 +94,12 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
     @Ignore
     public void should_identify_a_project() throws ProjectNotFoundException {
 
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void should_get_maven_id() throws Exception {
     }
 
 }

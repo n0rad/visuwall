@@ -82,12 +82,6 @@ public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
 		}
 	}
 
-	@Override
-	@Ignore
-	@Test
-	public void should_get_disable_project() throws ProjectNotFoundException {
-	}
-
     @Override
     @Ignore
     @Test
@@ -98,6 +92,12 @@ public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
     @Ignore
     @Test
     public void should_identify_a_project() throws ProjectNotFoundException {
+    }
+
+    @Override
+    @Ignore
+    @Test
+    public void should_get_maven_id() throws Exception {
     }
 
 }
