@@ -1,9 +1,7 @@
 package net.awired.visuwall.core.business.process.capabilities;
 
 import java.util.Map.Entry;
-
 import javax.persistence.Transient;
-
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
@@ -12,8 +10,7 @@ import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.core.business.domain.Build;
-import net.awired.visuwall.core.business.domain.Project;
-
+import net.awired.visuwall.core.business.domain.ConnectedProject;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,7 +18,7 @@ public class MetricCapabilityProcess {
     @Transient
     String[] metrics = new String[] { "coverage", "ncloc", "violations_density", "it_coverage" };
 
-    void enhanceWithQualityAnalysis(Project analyzedProject, BasicCapability plugin, String... metrics) {
+    void enhanceWithQualityAnalysis(ConnectedProject analyzedProject, BasicCapability plugin, String... metrics) {
         SoftwareProjectId projectId = null;// analyzedProject.getProjectId();
         Build build = analyzedProject.getCompletedBuild();
 
@@ -43,8 +40,7 @@ public class MetricCapabilityProcess {
     }
 
     void addQualityAnalysis(MetricCapability metricPlugin, SoftwareProjectId projectId,
-            QualityResult qualityResultToMerge,
-            String... metrics) {
+            QualityResult qualityResultToMerge, String... metrics) {
         QualityResult qualityAnalysis = metricPlugin.analyzeQuality(projectId, metrics);
         if (qualityAnalysis != null) {
             mergeQualityAnalysis(qualityResultToMerge, qualityAnalysis);
@@ -65,7 +61,8 @@ public class MetricCapabilityProcess {
         }
     }
 
-    void addUnitTestsAnalysis(TestCapability testsPlugin, SoftwareProjectId projectId, TestResult unitTestResultToMerge) {
+    void addUnitTestsAnalysis(TestCapability testsPlugin, SoftwareProjectId projectId,
+            TestResult unitTestResultToMerge) {
         TestResult unitTestsAnalysis = testsPlugin.analyzeUnitTests(projectId);
         if (unitTestsAnalysis != null && unitTestResultToMerge != null) {
             mergeTestAnalysis(unitTestResultToMerge, unitTestsAnalysis);

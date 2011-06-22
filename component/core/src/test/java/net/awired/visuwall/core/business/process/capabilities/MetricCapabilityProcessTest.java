@@ -26,8 +26,7 @@ import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.core.business.domain.Build;
-import net.awired.visuwall.core.business.domain.Project;
-
+import net.awired.visuwall.core.business.domain.ConnectedProject;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -37,13 +36,13 @@ public class MetricCapabilityProcessTest {
 
     MetricCapabilityProcess projectEnhancerService = new MetricCapabilityProcess();
 
-    Project projectToEnhance;
+    ConnectedProject projectToEnhance;
 
     @Before
     public void init() {
         ProjectId projectId = new ProjectId();
         projectId.addId("id", "value");
-        projectToEnhance = new Project(projectId);
+        projectToEnhance = new ConnectedProject(projectId);
 
         Build completedBuild = new Build();
 

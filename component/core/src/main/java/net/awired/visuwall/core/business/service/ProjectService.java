@@ -86,13 +86,13 @@ public class ProjectService {
                     if (neverRun || updateNeeded) {
                         LOG.debug("Project build change and needs a update from software" + project);
 
+                        // description
+                        String description = project.getBuildConnection().getDescription(project.getProjectId());
+                        project.setDescription(description);
+
                         // state
                         State state = project.getBuildConnection().getLastBuildState(project.getBuildProjectId());
                         project.setState(state);
-
-                        // description
-                        //String description = project.getBuildConnection().getDescription(project.getProjectId());
-                        //project.setDescription(description);
 
                         int[] buildNumbers = project.getBuildNumbers();
                         Build completedBuild = project.getCompletedBuild();

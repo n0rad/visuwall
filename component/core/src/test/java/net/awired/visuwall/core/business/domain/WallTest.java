@@ -41,7 +41,7 @@ public class WallTest {
         ConnectedProject project = new ConnectedProject(projectId, null);
         wall.getProjects().add(project);
 
-        Project foundProject = wall.getProjects().getById(project.getId());
+        ConnectedProject foundProject = wall.getProjects().getById(project.getId());
 
         assertEquals(foundProject, project);
     }

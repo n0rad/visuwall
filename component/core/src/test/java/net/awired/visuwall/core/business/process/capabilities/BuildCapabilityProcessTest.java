@@ -2,17 +2,13 @@ package net.awired.visuwall.core.business.process.capabilities;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-
 import java.util.Date;
-
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.Build;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
-import net.awired.visuwall.core.business.domain.Project;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -99,7 +95,7 @@ public class BuildCapabilityProcessTest {
 
     BuildCapabilityProcess projectEnhancerService = new BuildCapabilityProcess();
 
-    Project projectToEnhance;
+    ConnectedProject projectToEnhance;
 
     @Before
     public void init() {
@@ -116,7 +112,7 @@ public class BuildCapabilityProcessTest {
         Build completedBuild = new Build();
         Build currentBuild = new Build();
 
-        Project projectFromBuildPlugin = new Project("name");
+        ConnectedProject projectFromBuildPlugin = new ConnectedProject("name");
         projectFromBuildPlugin.setBuildNumbers(new int[] { 1, 2, 3 });
         projectFromBuildPlugin.setCompletedBuild(completedBuild);
         projectFromBuildPlugin.setCurrentBuild(currentBuild);
@@ -139,10 +135,10 @@ public class BuildCapabilityProcessTest {
         BasicCapability buildPlugin1 = Mockito.mock(BasicCapability.class);
         BasicCapability buildPlugin2 = Mockito.mock(BasicCapability.class);
 
-        Project projectFromBuildPlugin1 = new Project("name1");
+        ConnectedProject projectFromBuildPlugin1 = new ConnectedProject("name1");
         projectFromBuildPlugin1.setDescription("description");
 
-        Project projectFromBuildPlugin2 = new Project("name2");
+        ConnectedProject projectFromBuildPlugin2 = new ConnectedProject("name2");
 
         ProjectId projectId = projectToEnhance.getProjectId();
         // when(buildPlugin1.findProject(projectId)).thenReturn(projectFromBuildPlugin1);
@@ -161,10 +157,10 @@ public class BuildCapabilityProcessTest {
         BasicCapability buildPlugin1 = Mockito.mock(BasicCapability.class);
         BasicCapability buildPlugin2 = Mockito.mock(BasicCapability.class);
 
-        Project projectFromBuildPlugin1 = new Project("name1");
+        ConnectedProject projectFromBuildPlugin1 = new ConnectedProject("name1");
         projectFromBuildPlugin1.setDescription("description1");
 
-        Project projectFromBuildPlugin2 = new Project("name2");
+        ConnectedProject projectFromBuildPlugin2 = new ConnectedProject("name2");
         projectFromBuildPlugin2.setDescription("description2");
 
         ProjectId projectId = projectToEnhance.getProjectId();

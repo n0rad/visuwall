@@ -16,26 +16,23 @@
 
 package net.awired.visuwall.server.web.model;
 
-import net.awired.visuwall.core.business.domain.Project;
+import net.awired.visuwall.core.business.domain.ConnectedProject;
 import com.google.common.base.Objects;
 
 public final class ProjectStatus {
     private final String id;
-    private final String name;
     private boolean building;
     private int buildingTimeleftSecond;
     private int lastBuildId;
 
-    public ProjectStatus(Project project) {
+    public ProjectStatus(ConnectedProject project) {
         this.id = project.getId();
-        this.name = project.getProjectId().getName();
     }
 
     @Override
     public String toString() {
         return Objects.toStringHelper(this) //
-                .add("projectId", id) //
-                .add("name", name) //
+                .add("id", id) //
                 .add("lastBuildId", lastBuildId) //
                 .add("building", building) //
                 .add("buildingTimeleft", buildingTimeleftSecond) //
