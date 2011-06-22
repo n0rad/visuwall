@@ -23,7 +23,6 @@ import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
-
 import org.junit.Test;
 
 public class ProjectBuilderTest {
@@ -31,16 +30,16 @@ public class ProjectBuilderTest {
     private ProjectBuilder projectBuilder = new ProjectBuilder();
 
     @Test
-    public void should_add_current_build_and_completed_build() {
+    public void should_add_current_build_and_completed_build() throws Exception {
         HudsonCommiter commiterInCurrentBuild = new HudsonCommiter("commiter1");
         HudsonCommiter commiterInCompletedBuild = new HudsonCommiter("commiter2");
 
         HudsonBuild currentBuild = new HudsonBuild();
-		currentBuild.setState(HudsonState.SUCCESS);
+        currentBuild.setState(HudsonState.SUCCESS);
         currentBuild.addCommiter(commiterInCurrentBuild);
 
         HudsonBuild completedBuild = new HudsonBuild();
-		completedBuild.setState(HudsonState.SUCCESS);
+        completedBuild.setState(HudsonState.SUCCESS);
         completedBuild.addCommiter(commiterInCompletedBuild);
 
         HudsonProject hudsonProject = new HudsonProject();

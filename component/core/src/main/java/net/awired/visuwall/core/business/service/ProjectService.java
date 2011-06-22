@@ -18,7 +18,7 @@ package net.awired.visuwall.core.business.service;
 
 import java.util.concurrent.ScheduledFuture;
 import net.awired.visuwall.api.domain.Build;
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
@@ -45,7 +45,7 @@ public class ProjectService {
     BuildCapabilityProcess buildProcess;
 
     public Runnable getProjectCreationRunner(final Wall wallWhereToAdd, final SoftwareAccess buildSoftwareAccess,
-            final ProjectId projectId) {
+            final SoftwareProjectId projectId) {
         Preconditions.checkState(buildSoftwareAccess.getConnection() instanceof BuildCapability,
                 "softwareAccess needs to point to BuildCapability plugin connection");
         return new Runnable() {
@@ -56,10 +56,7 @@ public class ProjectService {
                         + buildSoftwareAccess + " in wall " + wallWhereToAdd);
                 BuildCapability buildConnection = (BuildCapability) buildSoftwareAccess.getConnection();
 
-                ConnectedProject connectedProject = new ConnectedProject(projectId);
-                connectedProject.setBuildConnection(buildConnection);
-                //TODO when using SoftwareProjectId
-                //                connectedProject.getCapabilities().add(buildConnection);
+                ConnectedProject connectedProject = new ConnectedProject(projectId, buildConnection);
                 Runnable updateProjectRunner = getUpdateProjectRunner(wallWhereToAdd, connectedProject);
 
                 LOG.debug("Launching first project updater for project" + connectedProject);
@@ -90,7 +87,7 @@ public class ProjectService {
                         LOG.debug("Project " + project + " build change and needs a update from software");
 
                         // state
-                        State state = project.getBuildConnection().getLastBuildState(project.getProjectId());
+                        State state = project.getBuildConnection().getLastBuildState(project.getBuildProjectId());
                         project.setState(state);
 
                         // description
@@ -99,7 +96,7 @@ public class ProjectService {
 
                         int[] buildNumbers = project.getBuildNumbers();
                         Build completedBuild = project.getCompletedBuild();
-                        Build currentBuild = project.getCurrentBuild();
+                        //Build currentBuild = project.getCurrentBuild();
 
                         // TODO check for new software to update
                         // TODO be sure to not remove a project cause of a capability ProjectNotFoundException 

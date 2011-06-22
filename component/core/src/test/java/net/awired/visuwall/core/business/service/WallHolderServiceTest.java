@@ -19,19 +19,14 @@ package net.awired.visuwall.core.business.service;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.Query;
-
-import net.awired.visuwall.core.business.domain.ConnectedProject;
 import net.awired.visuwall.core.business.process.WallProcess;
 import net.awired.visuwall.core.exception.NotFoundException;
 import net.awired.visuwall.core.persistence.dao.WallDAO;
 import net.awired.visuwall.core.persistence.entity.Wall;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -140,9 +135,9 @@ public class WallHolderServiceTest {
         Wall wall2 = new Wall("wall1");
         wallHolderService.update(wall2);
 
-        Wall wall = wallHolderService.find("wall1");
-        ConnectedProject project = new ConnectedProject("test");
-        wall.getProjects().add(project);
+        //        Wall wall = wallHolderService.find("wall1");
+        //        ConnectedProject project = new ConnectedProject("test");
+        //        wall.getProjects().add(project);
 
         //        List<ProjectStatus> status = wallHolderService.getStatus("wall1");
         //        assertFalse(status.isEmpty());

@@ -19,7 +19,7 @@ package net.awired.visuwall.core.business.service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.core.exception.MissingCapacityException;
@@ -33,31 +33,32 @@ public class SoftwareAccessService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SoftwareAccessService.class);
 
-    public Set<ProjectId> discoverBuildProjects(SoftwareAccess softwareAccess) throws MissingCapacityException {
+    public Set<SoftwareProjectId> discoverBuildProjects(SoftwareAccess softwareAccess)
+            throws MissingCapacityException {
         if (!(softwareAccess.getConnection() instanceof BuildCapability)) {
             throw new MissingCapacityException(
                     "Can not found build projects in a software who does not implement BuildCapability "
                             + softwareAccess);
         }
-        Set<ProjectId> res = new HashSet<ProjectId>();
+        Set<SoftwareProjectId> res = new HashSet<SoftwareProjectId>();
         BuildCapability buildPlugin = (BuildCapability) softwareAccess.getConnection();
         if (softwareAccess.isAllProject()) {
-            List<ProjectId> projectIds;
-            projectIds = buildPlugin.findAllProjects();
+            List<SoftwareProjectId> projectIds = buildPlugin.findAllSoftwareProjectIds();
             res.addAll(projectIds);
         } else {
-            List<ProjectId> nameProjectIds = buildPlugin.findProjectIdsByNames(softwareAccess.getProjectNames());
+            List<SoftwareProjectId> nameProjectIds = buildPlugin.findSoftwareProjectIdsByNames(softwareAccess
+                    .getProjectNames());
             if (nameProjectIds == null) {
-                LOG.warn("plugin return null on findProjectsByNames", buildPlugin);
+                LOG.warn("plugin return null on findSoftwareProjectIdsByNames", buildPlugin);
             } else {
                 res.addAll(nameProjectIds);
             }
 
             if (buildPlugin instanceof ViewCapability) {
-                List<ProjectId> viewProjectIds = ((ViewCapability) buildPlugin).findProjectIdsByViews(softwareAccess
-                        .getViewNames());
-                if (nameProjectIds == null) {
-                    LOG.warn("plugin return null on findProjectsByViews", buildPlugin);
+                List<SoftwareProjectId> viewProjectIds = ((ViewCapability) buildPlugin)
+                        .findSoftwareProjectIdsByViews(softwareAccess.getViewNames());
+                if (viewProjectIds == null) {
+                    LOG.warn("plugin return null on findSoftwareProjectIdsByViews", buildPlugin);
                 } else {
                     res.addAll(viewProjectIds);
                 }

@@ -21,6 +21,7 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 import net.awired.visuwall.api.domain.quality.QualityResult;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
@@ -63,8 +64,12 @@ public class Project implements Comparable<Project> {
     }
 
     @JsonIgnore
-    public Build getCurrentBuild() {
-        return builds.get(getCurrentBuildId());
+    public Build getCurrentBuild() throws BuildNotFoundException {
+        Build build = builds.get(getCurrentBuildId());
+        if (build == null) {
+            throw new BuildNotFoundException("Build not found in project");
+        }
+        return build;
     }
 
     @JsonIgnore
@@ -123,6 +128,7 @@ public class Project implements Comparable<Project> {
         projectId.setName(name);
     }
 
+    @Deprecated
     public ProjectId getProjectId() {
         return projectId;
     }

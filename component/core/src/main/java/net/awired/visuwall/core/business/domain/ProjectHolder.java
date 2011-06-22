@@ -1,8 +1,8 @@
 package net.awired.visuwall.core.business.domain;
 
 import java.util.ArrayList;
-import net.awired.visuwall.api.domain.Project;
-import net.awired.visuwall.api.domain.ProjectId;
+import java.util.List;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,23 +14,12 @@ public class ProjectHolder extends ArrayList<ConnectedProject> {
 
     private static final long serialVersionUID = 1L;
 
-    public boolean containsId(ProjectId projectId) {
-        for (Project project : this) {
-            if (project.getProjectId().equals(projectId)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public ConnectedProject getByProjectId(ProjectId projectId) throws ProjectNotFoundException {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+    public List<SoftwareProjectId> getBuildProjectIds() {
+        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>(this.size());
         for (ConnectedProject project : this) {
-            if (projectId.equals(project.getProjectId())) {
-                return project;
-            }
+            projectIds.add(project.getBuildProjectId());
         }
-        throw new ProjectNotFoundException("project with this id not found : " + projectId);
+        return projectIds;
     }
 
     public ConnectedProject getById(String id) throws ProjectNotFoundException {

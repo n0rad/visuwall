@@ -17,9 +17,10 @@
 package net.awired.visuwall.core.business.process;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
@@ -84,9 +85,10 @@ public class WallProcess {
             public void run() {
                 LOG.info("Running Project Discover task for " + softwareAccess + " in wall " + wall);
                 if (softwareAccess.getConnection() instanceof BuildCapability) {
-                    Set<ProjectId> projectIds = softwareAccessService.discoverBuildProjects(softwareAccess);
-                    for (ProjectId projectId : projectIds) {
-                        if (wall.getProjects().containsId(projectId)) {
+                    Set<SoftwareProjectId> projectIds = softwareAccessService.discoverBuildProjects(softwareAccess);
+                    List<SoftwareProjectId> wallBuildProjectIds = wall.getProjects().getBuildProjectIds();
+                    for (SoftwareProjectId projectId : projectIds) {
+                        if (wallBuildProjectIds.contains(projectId)) {
                             // this project is already registered in list
                             continue;
                         }
@@ -95,7 +97,7 @@ public class WallProcess {
                         taskScheduler.schedule(projectCreationRunner, new Date());
                     }
                 } else {
-                    //TODO when using SoftwareProjectId
+                    //                    TODO when using SoftwareProjectId
                     //                    for (ConnectedProject project : wall.getProjects()) {
                     //                        boolean contains = softwareAccess.getConnection().contains(project.getProjectId());
                     //                        if (contains) {

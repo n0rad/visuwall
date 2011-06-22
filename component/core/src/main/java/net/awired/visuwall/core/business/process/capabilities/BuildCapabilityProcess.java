@@ -21,16 +21,16 @@ public class BuildCapabilityProcess {
 
     private static final Logger LOG = LoggerFactory.getLogger(BuildCapabilityProcess.class);
 
-    private static final int PROJECT_NOT_BUILT_ID = -1;
-
     public boolean updateStatusAndReturnFullUpdateNeeded(ConnectedProject project) throws ProjectNotFoundException {
         try {
-            int lastBuildNumber = project.getBuildConnection().getLastBuildNumber(project.getProjectId());
+            int lastBuildNumber = project.getBuildConnection().getLastBuildNumber(project.getBuildProjectId());
             int previousLastBuildNumber = project.getCurrentBuildId();
-            boolean building = project.getBuildConnection().isBuilding(project.getProjectId());
+            boolean building = project.getBuildConnection().isBuilding(project.getBuildProjectId());
             boolean previousBuilding = false;
-            if (project.getCurrentBuild() != null) {
+            try {
                 previousBuilding = project.getCurrentBuild().isBuilding();
+            } catch (BuildNotFoundException e) {
+                LOG.info("No currentBuild found to say the project was building before refresh " + project);
             }
 
             Build lastBuild = project.findCreatedBuild(lastBuildNumber);
@@ -68,7 +68,7 @@ public class BuildCapabilityProcess {
                 LOG.info("Running getEstimatedFinishTime for project " + project);
                 try {
                     Date estimatedFinishTime = project.getBuildConnection().getEstimatedFinishTime(
-                            project.getProjectId());
+                            project.getBuildProjectId());
                     if (estimatedFinishTime != null) {
                         build.setEstimatedFinishTime(estimatedFinishTime);
                     }
@@ -78,27 +78,6 @@ public class BuildCapabilityProcess {
                 }
             }
         };
-    }
-
-    /////////////////////////////////////
-
-    Build findBuildByBuildNumber(ConnectedProject project, int buildNumber) throws BuildNotFoundException {
-        Preconditions.checkNotNull(project, "project is a mandatory parameter");
-        try {
-            Build build = project.getBuildConnection().findBuildByBuildNumber(project.getProjectId(), buildNumber);
-            if (build != null) {
-                return build;
-            }
-        } catch (BuildNotFoundException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(e.getMessage());
-            }
-        } catch (ProjectNotFoundException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(e.getMessage());
-            }
-        }
-        throw new BuildNotFoundException("No build #" + buildNumber + " for project " + project);
     }
 
 }

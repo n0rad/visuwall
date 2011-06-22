@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
 import net.awired.visuwall.core.business.service.PluginService;
 import net.awired.visuwall.core.business.service.WallHolderService;
@@ -81,16 +82,21 @@ public class WallController {
     List<ProjectStatus> getStatus(@PathVariable String wallName, ModelMap modelMap) throws NotFoundException {
         Wall wall = wallService.find(wallName);
         List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
-        //TODO change connectedProject to project
         for (ConnectedProject project : wall.getProjects()) {
             ProjectStatus projectStatus = new ProjectStatus(project);
             projectStatus.setLastBuildId(project.getCurrentBuildId());
-            projectStatus.setBuilding(project.getCurrentBuild().isBuilding());
-            if (project.getCurrentBuild().getEstimatedFinishTime() != null) {
-                long durationFromNow = project.getCurrentBuild().getEstimatedFinishTime().getTime()
-                        - new Date().getTime();
-                projectStatus.setBuildingTimeleftSecond((int) durationFromNow / 1000);
+            try {
+                projectStatus.setBuilding(project.getCurrentBuild().isBuilding());
+                if (project.getCurrentBuild().getEstimatedFinishTime() != null) {
+                    long durationFromNow = project.getCurrentBuild().getEstimatedFinishTime().getTime()
+                            - new Date().getTime();
+                    projectStatus.setBuildingTimeleftSecond((int) durationFromNow / 1000);
+                }
+            } catch (BuildNotFoundException e) {
+                LOG.debug("No current build found to say the project is building + timeleft in projectStatus for "
+                        + project);
             }
+
             statusList.add(projectStatus);
         }
         return statusList;

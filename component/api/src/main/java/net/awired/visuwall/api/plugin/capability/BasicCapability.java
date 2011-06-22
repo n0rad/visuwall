@@ -17,7 +17,6 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.List;
-
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectKey;
@@ -26,6 +25,8 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BasicCapability {
 
+    //    String getMavenId(SoftwareProjectId projectId);
+
     /**
      * Return the description of the project
      * 
@@ -33,7 +34,7 @@ public interface BasicCapability {
      * @return
      */
     String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException;
-    
+
     /**
      * @param projectKey
      * @return
