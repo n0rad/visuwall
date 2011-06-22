@@ -17,8 +17,10 @@
 package net.awired.visuwall.core.business.service;
 
 import java.util.concurrent.ScheduledFuture;
+
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.Build;
@@ -26,11 +28,13 @@ import net.awired.visuwall.core.business.domain.ConnectedProject;
 import net.awired.visuwall.core.business.process.capabilities.BuildCapabilityProcess;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
+
 import com.google.common.base.Preconditions;
 
 @Service
@@ -91,7 +95,8 @@ public class ProjectService {
                         project.setDescription(description);
 
                         // state
-                        State state = project.getBuildConnection().getLastBuildState(project.getBuildProjectId());
+                        State state = project.getBuildConnection().getBuildState(project.getBuildProjectId(),
+                                project.getCompletedBuildId());
                         project.setState(state);
 
                         int[] buildNumbers = project.getBuildNumbers();
@@ -118,6 +123,9 @@ public class ProjectService {
                     LOG.info("Project not found by build Software, and will be removed");
                     LOG.debug("Project not found cause", e);
                     wall.getProjects().deleteAndCleanProject(project.getId());
+                } catch (BuildNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 } finally {
                     neverRun = false;
                 }

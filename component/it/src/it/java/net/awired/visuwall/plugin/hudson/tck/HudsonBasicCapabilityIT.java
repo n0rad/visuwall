@@ -71,13 +71,6 @@ public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
         }
 	}
 
-	@Override
-	@Test
-	@Ignore
-	public void should_get_disable_project() throws ProjectNotFoundException {
-
-	}
-
     @Override
     @Test
     @Ignore
@@ -88,6 +81,19 @@ public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
     @Test
     @Ignore
     public void should_identify_a_project() throws ProjectNotFoundException {
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void should_get_maven_id() throws Exception {
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void should_get_name_of_a_project() throws Exception {
+
     }
 
 }

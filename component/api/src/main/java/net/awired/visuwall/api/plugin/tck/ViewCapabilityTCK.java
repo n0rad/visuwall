@@ -20,11 +20,15 @@ import net.awired.visuwall.api.exception.ViewNotFoundException;
 
 public interface ViewCapabilityTCK {
 
-	void should_list_all_views();
-
+    // findProjectNamesByView
 	void should_list_all_project_in_a_view() throws ViewNotFoundException;
 
+    // findSoftwareProjectIdsByViews
 	void should_find_project_ids_by_names();
 
+    // findProjectNamesByView
 	void should_find_all_projects_of_views();
+
+    // findViews
+    void should_list_all_views();
 }

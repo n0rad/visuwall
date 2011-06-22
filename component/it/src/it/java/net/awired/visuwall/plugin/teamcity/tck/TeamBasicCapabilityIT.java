@@ -64,10 +64,10 @@ public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
 		assertFalse(projectIds.isEmpty());
 
         SoftwareProjectId apacheAntId = projectIds.get(0);
-        assertEquals("Apache Ant", apacheAntId.getProjectId());
+        assertEquals("project28", apacheAntId.getProjectId());
 
 		SoftwareProjectId gradleId = projectIds.get(1);
-        assertEquals("Gradle", gradleId.getProjectId());
+        assertEquals("project22", gradleId.getProjectId());
 	}
 
 	@Override
@@ -82,12 +82,6 @@ public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
 		}
 	}
 
-	@Override
-	@Ignore
-	@Test
-	public void should_get_disable_project() throws ProjectNotFoundException {
-	}
-
     @Override
     @Ignore
     @Test
@@ -98,6 +92,18 @@ public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
     @Ignore
     @Test
     public void should_identify_a_project() throws ProjectNotFoundException {
+    }
+
+    @Override
+    @Ignore
+    @Test
+    public void should_get_maven_id() throws Exception {
+    }
+
+    @Override
+    @Ignore
+    @Test
+    public void should_get_name_of_a_project() throws Exception {
     }
 
 }

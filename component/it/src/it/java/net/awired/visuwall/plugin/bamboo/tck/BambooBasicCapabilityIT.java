@@ -59,10 +59,10 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
         String struts2Name = "struts 2 instable - struts_2_instable";
         List<String> names = Arrays.asList(strutsName, struts2Name, ajslName);
         List<SoftwareProjectId> projectIds = bamboo.findSoftwareProjectIdsByNames(names);
-        // mettre les key
-        assertEquals("ajslKey", projectIds.get(0).getProjectId());
-        assertEquals("strutsKey", projectIds.get(1).getProjectId());
-        assertEquals("struts2Key", projectIds.get(2).getProjectId());
+
+        assertEquals("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6", projectIds.get(0).getProjectId());
+        assertEquals("STRUTS-STRUTS", projectIds.get(1).getProjectId());
+        assertEquals("STRUTS2INSTABLE-STRUTS2INSTABLE", projectIds.get(2).getProjectId());
     }
 
 	@Override
@@ -70,13 +70,6 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
 	public void should_find_all_project_names() {
         List<String> names = bamboo.findProjectNames();
         assertFalse(names.isEmpty());
-	}
-
-	@Override
-	@Test
-	@Ignore
-	public void should_get_disable_project() throws ProjectNotFoundException {
-
 	}
 
     @Override
@@ -90,12 +83,25 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
     @Ignore
     public void should_identify_a_project() throws ProjectNotFoundException {
     }
-    
+
+    @Override
+    @Test
+    @Ignore
+    public void should_get_maven_id() throws Exception {
+
+    }
+
     @Test(expected = IllegalStateException.class)
     public void should_close_connection() {
         bamboo.close();
         bamboo.findSoftwareProjectIdsByNames(new ArrayList<String>());
     }
 
+    @Override
+    @Test
+    @Ignore
+    public void should_get_name_of_a_project() throws Exception {
+
+    }
 
 }

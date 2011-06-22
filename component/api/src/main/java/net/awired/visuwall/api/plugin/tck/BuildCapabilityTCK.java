@@ -18,14 +18,19 @@ package net.awired.visuwall.api.plugin.tck;
 
 public interface BuildCapabilityTCK {
 
-	void should_get_last_build_number() throws Exception;
+    // getBuildNumbers
+    void should_get_build_numbers() throws Exception;
 
-	void should_get_success_build_state() throws Exception;
-
-	void should_get_is_building() throws Exception;
-
+    // getEstimatedFinishTime
     void should_get_estimated_date() throws Exception;
 
-    void should_get_build_numbers() throws Exception;
+    // getLastBuildNumber
+    void should_get_last_build_number() throws Exception;
+
+    // getLastBuildState
+    void should_get_last_build_state() throws Exception;
+
+	// isBuilding
+    void should_get_is_building() throws Exception;
 
 }

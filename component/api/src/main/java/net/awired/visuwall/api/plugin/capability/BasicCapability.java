@@ -21,11 +21,18 @@ import java.util.List;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
+import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BasicCapability {
 
-    //    String getMavenId(SoftwareProjectId projectId);
+    /**
+     * If plugin can find maven id, it should return it or throw MavenIdNotFoundException
+     * 
+     * @param projectId
+     * @return
+     */
+    String getMavenId(SoftwareProjectId projectId) throws ProjectNotFoundException, MavenIdNotFoundException;
 
     /**
      * Initiate connection to the software
@@ -49,6 +56,14 @@ public interface BasicCapability {
      * @return
      */
     String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException;
+
+    /**
+     * Return the name of the project
+     * 
+     * @param projectId
+     * @return
+     */
+    String getName(SoftwareProjectId projectId) throws ProjectNotFoundException;
 
     /**
      * @param projectKey

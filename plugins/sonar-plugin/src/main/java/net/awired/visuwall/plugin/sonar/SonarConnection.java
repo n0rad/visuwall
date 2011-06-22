@@ -31,6 +31,7 @@ import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ConnectionException;
+import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
@@ -74,21 +75,176 @@ public class SonarConnection implements MetricCapability, TestCapability {
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize sonar with url " + url);
         }
-        try {
-            if (metricFinder == null) {
-                metricFinder = new MetricFinder(url);
-            }
-            if (measureFinder == null) {
-                measureFinder = new MeasureFinder(url, login, password);
-            }
-            metricsMap = metricFinder.findMetrics();
-            Set<String> metricKeysSet = metricsMap.keySet();
-            int countMetricKeys = metricKeysSet.size();
-            metricKeys = metricKeysSet.toArray(new String[countMetricKeys]);
-            connected = true;
-        } catch (SonarMetricsNotFoundException e) {
-            throw new ConnectionException("can't connect to Sonar at " + url, e);
+        if (metricFinder == null) {
+            metricFinder = new MetricFinder(url);
         }
+        if (measureFinder == null) {
+            measureFinder = new MeasureFinder(url, login, password);
+        }
+        connected = true;
+    }
+
+    public boolean isSonarInstance(URL url) {
+        Preconditions.checkNotNull(url, "url is mandatory");
+        try {
+            url = new URL(url.toString() + "/api/properties");
+            byte[] content = ByteStreams.toByteArray(url.openStream());
+            String xml = new String(content);
+            return xml.contains("sonar.core.version");
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public Map<String, List<QualityMetric>> getMetricsByCategory() {
+        checkConnected();
+        if (metricsMap == null) {
+            initializeMetrics();
+        }
+        Map<String, List<QualityMetric>> metricsByDomain = new HashMap<String, List<QualityMetric>>();
+        for (QualityMetric metricValue : metricsMap.values()) {
+            String domain = metricValue.getDomain();
+            List<QualityMetric> domainMetrics = metricsByDomain.get(domain);
+            if (domainMetrics == null) {
+                domainMetrics = new ArrayList<QualityMetric>();
+                metricsByDomain.put(domain, domainMetrics);
+            }
+            domainMetrics.add(metricValue);
+        }
+        return metricsByDomain;
+    }
+
+    @Override
+    public List<String> findProjectNames() {
+        checkConnected();
+        return new ArrayList<String>();
+    }
+
+    @Override
+    public void close() {
+        connected = false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof SonarConnection) {
+            SonarConnection s = (SonarConnection) o;
+            return id.equals(s.id);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+    @Override
+    public String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException {
+        checkConnected();
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public List<SoftwareProjectId> findAllSoftwareProjectIds() {
+        checkConnected();
+        return new ArrayList<SoftwareProjectId>();
+    }
+
+    @Override
+    public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
+        checkConnected();
+        return new ArrayList<SoftwareProjectId>();
+    }
+
+    @Override
+    public TestResult analyzeUnitTests(SoftwareProjectId projectId) {
+        checkConnected();
+        checkProjectId(projectId);
+        TestResult unitTestResult = new TestResult();
+        String artifactId = projectId.getProjectId();
+        if (Strings.isNullOrEmpty(artifactId)) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("can't analyze project " + projectId + " without artifactId. Is it a maven project ?");
+            }
+        } else {
+            unitTestResult = createUnitTestAnalysis(artifactId);
+        }
+        return unitTestResult;
+    }
+
+    @Override
+    public TestResult analyzeIntegrationTests(SoftwareProjectId projectId) {
+        checkConnected();
+        checkProjectId(projectId);
+        TestResult integrationTestResult = new TestResult();
+        try {
+            String artifactId = projectId.getProjectId();
+            if (Strings.isNullOrEmpty(artifactId)) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("can't analyze project " + projectId + " without artifactId. Is it a maven project ?");
+                }
+            } else {
+                Double itCoverage = measureFinder.findMeasure(artifactId, "it_coverage").getValue();
+                integrationTestResult.setCoverage(itCoverage);
+            }
+        } catch (SonarMeasureNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Integration tests informations are not available for project " + projectId + ", cause "
+                        + e.getMessage());
+            }
+        }
+        return integrationTestResult;
+    }
+
+    @Override
+    public QualityResult analyzeQuality(SoftwareProjectId projectId, String... metrics) {
+        checkConnected();
+        checkProjectId(projectId);
+        if (metricsMap == null) {
+            initializeMetrics();
+        }
+        QualityResult qualityResult = new QualityResult();
+        String artifactId = projectId.getProjectId();
+        if (!Strings.isNullOrEmpty(artifactId)) {
+            if (metrics.length == 0) {
+                metrics = metricKeys;
+            }
+            for (String key : metrics) {
+                try {
+                    Measure measure = measureFinder.findMeasure(artifactId, key);
+                    if (measure.getValue() != null) {
+                        QualityMeasure qualityMeasure = QualityMeasures.asQualityMeasure(measure, key);
+                        qualityMeasure.setName(metricsMap.get(key).getName());
+                        qualityResult.add(key, qualityMeasure);
+                    }
+                } catch (SonarMeasureNotFoundException e) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(e.getMessage());
+                    }
+                }
+            }
+        }
+        return qualityResult;
+    }
+
+    @Override
+    public String getMavenId(SoftwareProjectId projectId) throws ProjectNotFoundException, MavenIdNotFoundException {
+        checkConnected();
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public String getName(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
+        throw new ProjectNotFoundException("not implemented");
     }
 
     private TestResult createUnitTestAnalysis(String artifactId) {
@@ -116,31 +272,17 @@ public class SonarConnection implements MetricCapability, TestCapability {
         return unitTestResult;
     }
 
-    public boolean isSonarInstance(URL url) {
-        Preconditions.checkNotNull(url, "url is mandatory");
+    private void initializeMetrics() {
         try {
-            url = new URL(url.toString() + "/api/properties");
-            byte[] content = ByteStreams.toByteArray(url.openStream());
-            String xml = new String(content);
-            return xml.contains("sonar.core.version");
-        } catch (IOException e) {
-            return false;
-        }
-    }
-
-    @Override
-    public Map<String, List<QualityMetric>> getMetricsByCategory() {
-        Map<String, List<QualityMetric>> metricsByDomain = new HashMap<String, List<QualityMetric>>();
-        for (QualityMetric metricValue : metricsMap.values()) {
-            String domain = metricValue.getDomain();
-            List<QualityMetric> domainMetrics = metricsByDomain.get(domain);
-            if (domainMetrics == null) {
-                domainMetrics = new ArrayList<QualityMetric>();
-                metricsByDomain.put(domain, domainMetrics);
+        metricsMap = metricFinder.findMetrics();
+        Set<String> metricKeysSet = metricsMap.keySet();
+        int countMetricKeys = metricKeysSet.size();
+        metricKeys = metricKeysSet.toArray(new String[countMetricKeys]);
+        } catch (SonarMetricsNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't initialize metrics", e);
             }
-            domainMetrics.add(metricValue);
         }
-        return metricsByDomain;
     }
 
     private void checkProjectId(SoftwareProjectId projectId) {
@@ -149,119 +291,6 @@ public class SonarConnection implements MetricCapability, TestCapability {
 
     private void checkConnected() {
         Preconditions.checkState(connected, "You must connect your plugin");
-    }
-
-    @Override
-    public List<String> findProjectNames() {
-        return new ArrayList<String>();
-    }
-
-    @Override
-    public void close() {
-        connected = false;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof SonarConnection) {
-            SonarConnection s = (SonarConnection) o;
-            return id.equals(s.id);
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
-
-    @Override
-    public String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException {
-        throw new ProjectNotFoundException("not implemented");
-    }
-
-    @Override
-    public SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException {
-        throw new ProjectNotFoundException("not implemented");
-    }
-
-    @Override
-    public List<SoftwareProjectId> findAllSoftwareProjectIds() {
-        return new ArrayList<SoftwareProjectId>();
-    }
-
-    @Override
-    public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
-        return new ArrayList<SoftwareProjectId>();
-    }
-
-    @Override
-    public TestResult analyzeUnitTests(SoftwareProjectId projectId) {
-        checkProjectId(projectId);
-        checkConnected();
-        TestResult unitTestResult = new TestResult();
-        String artifactId = projectId.getProjectId();
-        if (Strings.isNullOrEmpty(artifactId)) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("can't analyze project " + projectId + " without artifactId. Is it a maven project ?");
-            }
-        } else {
-            unitTestResult = createUnitTestAnalysis(artifactId);
-        }
-        return unitTestResult;
-    }
-
-    @Override
-    public TestResult analyzeIntegrationTests(SoftwareProjectId projectId) {
-        checkProjectId(projectId);
-        checkConnected();
-        TestResult integrationTestResult = new TestResult();
-        try {
-            String artifactId = projectId.getProjectId();
-            if (Strings.isNullOrEmpty(artifactId)) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("can't analyze project " + projectId + " without artifactId. Is it a maven project ?");
-                }
-            } else {
-                Double itCoverage = measureFinder.findMeasure(artifactId, "it_coverage").getValue();
-                integrationTestResult.setCoverage(itCoverage);
-            }
-        } catch (SonarMeasureNotFoundException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Integration tests informations are not available for project " + projectId + ", cause "
-                        + e.getMessage());
-            }
-        }
-        return integrationTestResult;
-    }
-
-    @Override
-    public QualityResult analyzeQuality(SoftwareProjectId projectId, String... metrics) {
-        Preconditions.checkNotNull(projectId, "projectId");
-        checkConnected();
-
-        QualityResult qualityResult = new QualityResult();
-        String artifactId = projectId.getProjectId();
-        if (!Strings.isNullOrEmpty(artifactId)) {
-            if (metrics.length == 0) {
-                metrics = metricKeys;
-            }
-            for (String key : metrics) {
-                try {
-                    Measure measure = measureFinder.findMeasure(artifactId, key);
-                    if (measure.getValue() != null) {
-                        QualityMeasure qualityMeasure = QualityMeasures.asQualityMeasure(measure, key);
-                        qualityMeasure.setName(metricsMap.get(key).getName());
-                        qualityResult.add(key, qualityMeasure);
-                    }
-                } catch (SonarMeasureNotFoundException e) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug(e.getMessage());
-                    }
-                }
-            }
-        }
-        return qualityResult;
     }
 
 }

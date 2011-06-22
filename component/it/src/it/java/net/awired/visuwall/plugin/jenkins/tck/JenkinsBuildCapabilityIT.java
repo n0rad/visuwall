@@ -26,7 +26,6 @@ import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
@@ -55,25 +54,28 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
 
 	@Override
 	@Test
-	public void should_get_success_build_state() throws ProjectNotFoundException {
+    public void should_get_last_build_state() throws Exception {
         SoftwareProjectId projectId = new SoftwareProjectId("struts");
-		State state = jenkins.getLastBuildState(projectId);
+        int buildNumber = jenkins.getLastBuildNumber(projectId);
+        State state = jenkins.getBuildState(projectId, buildNumber);
 		assertEquals(State.SUCCESS, state);
 	}
 
 	@Override
 	@Test
-	public void should_get_is_building() throws ProjectNotFoundException {
+    public void should_get_is_building() throws Exception {
         SoftwareProjectId projectId = new SoftwareProjectId("struts");
-		boolean isBuilding = jenkins.isBuilding(projectId);
+        int buildNumber = jenkins.getLastBuildNumber(projectId);
+        boolean isBuilding = jenkins.isBuilding(projectId, buildNumber);
 		assertFalse(isBuilding);
 	}
 
 	@Override
 	@Test
-	public void should_get_estimated_date() throws ProjectNotFoundException {
+    public void should_get_estimated_date() throws Exception {
         SoftwareProjectId projectId = new SoftwareProjectId("struts");
-		Date date = jenkins.getEstimatedFinishTime(projectId);
+        int buildNumber = jenkins.getLastBuildNumber(projectId);
+        Date date = jenkins.getEstimatedFinishTime(projectId, buildNumber);
 		assertNotNull(date);
 	}
 

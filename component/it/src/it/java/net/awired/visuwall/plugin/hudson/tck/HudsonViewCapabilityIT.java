@@ -75,10 +75,11 @@ public class HudsonViewCapabilityIT implements ViewCapabilityTCK {
     public void should_find_all_projects_of_views() {
         List<String> views = Arrays.asList("View1", "View2");
         List<SoftwareProjectId> projectIds = hudson.findSoftwareProjectIdsByViews(views);
-        assertEquals(4, projectIds.size());
-        List<String> names = Arrays.asList("itcoverage-project", "dev-radar", "fluxx", "dev-radar-sonar");
+        assertEquals(5, projectIds.size());
+        List<String> names = Arrays.asList("itcoverage-project", "dev-radar", "fluxx", "dev-radar-sonar",
+                "client-teamcity");
         for (int i = 0; i < projectIds.size(); i++) {
-            assertEquals(names.get(i), projectIds.get(i).getProjectId());
+            assertTrue(names.contains(projectIds.get(i).getProjectId()));
         }
     }
 

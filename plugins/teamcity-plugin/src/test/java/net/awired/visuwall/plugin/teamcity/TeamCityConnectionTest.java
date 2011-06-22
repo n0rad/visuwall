@@ -81,7 +81,7 @@ public class TeamCityConnectionTest {
 		when(teamCity.findBuildList("bt297"));
 
         SoftwareProjectId projectId = new SoftwareProjectId("projectId");
-		State state = connectionPlugin.getLastBuildState(projectId);
+        State state = connectionPlugin.getBuildState(projectId, 0);
 
 		assertEquals(State.SUCCESS, state);
 	}

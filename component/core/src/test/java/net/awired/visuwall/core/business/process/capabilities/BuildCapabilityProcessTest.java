@@ -26,7 +26,7 @@ public class BuildCapabilityProcessTest {
         SoftwareProjectId projectId = new SoftwareProjectId("name");
         BuildCapability buildCapability = Mockito.mock(BuildCapability.class);
         Mockito.when(buildCapability.getLastBuildNumber(projectId)).thenReturn(newBuildId);
-        Mockito.when(buildCapability.isBuilding(projectId)).thenReturn(building);
+        Mockito.when(buildCapability.isBuilding(projectId, 0)).thenReturn(building);
         ConnectedProject project = new ConnectedProject(projectId, buildCapability);
         project.setCurrentBuildId(previousBuildId);
         return project;

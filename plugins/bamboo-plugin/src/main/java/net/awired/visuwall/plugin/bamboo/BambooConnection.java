@@ -22,7 +22,9 @@ import java.util.List;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
+import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.bambooclient.Bamboo;
@@ -47,6 +49,7 @@ public class BambooConnection implements BuildCapability {
     }
 
     void connect(String url) {
+
         Preconditions.checkNotNull(url, "url is mandatory");
         if (StringUtils.isBlank(url)) {
             throw new IllegalArgumentException("url can't be null.");
@@ -56,7 +59,9 @@ public class BambooConnection implements BuildCapability {
     }
 
     @Override
-    public boolean isBuilding(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public boolean isBuilding(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException {
+        checkConnected();
         checkProjectId(projectId);
         try {
             String projectName = getProjectKey(projectId);
@@ -72,7 +77,9 @@ public class BambooConnection implements BuildCapability {
     }
 
     @Override
-    public State getLastBuildState(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public State getBuildState(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException {
+        checkConnected();
         checkProjectId(projectId);
         try {
             String projectName = getProjectKey(projectId);
@@ -86,6 +93,7 @@ public class BambooConnection implements BuildCapability {
     @Override
     public int getLastBuildNumber(SoftwareProjectId projectId) throws ProjectNotFoundException,
             BuildNumberNotFoundException {
+        checkConnected();
         checkProjectId(projectId);
         String id = getProjectKey(projectId);
         Preconditions.checkNotNull(id, BAMBOO_ID);
@@ -98,6 +106,7 @@ public class BambooConnection implements BuildCapability {
 
     @Override
     public List<String> findProjectNames() {
+        checkConnected();
         List<String> projectNames = new ArrayList<String>();
         List<BambooProject> projects = bamboo.findAllProjects();
         for (BambooProject project : projects) {
@@ -108,21 +117,18 @@ public class BambooConnection implements BuildCapability {
 
     @Override
     public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
+        checkConnected();
         Preconditions.checkNotNull(names, "names is mandatory");
         List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
         List<BambooProject> projects = bamboo.findAllProjects();
         for (BambooProject project : projects) {
             String name = project.getName();
             if (names.contains(name)) {
-                SoftwareProjectId projectId = createProjectId(project);
+                SoftwareProjectId projectId = new SoftwareProjectId(project.getKey());
                 projectIds.add(projectId);
             }
         }
         return projectIds;
-    }
-
-    private SoftwareProjectId createProjectId(BambooProject project) {
-        return new SoftwareProjectId(project.getKey());
     }
 
     @Override
@@ -132,16 +138,19 @@ public class BambooConnection implements BuildCapability {
 
     @Override
     public String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }
 
     @Override
     public SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException {
+        checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }
 
     @Override
-    public Date getEstimatedFinishTime(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public Date getEstimatedFinishTime(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException {
         checkConnected();
         String projectName = getProjectKey(projectId);
         try {
@@ -161,13 +170,32 @@ public class BambooConnection implements BuildCapability {
 
     @Override
     public List<SoftwareProjectId> findAllSoftwareProjectIds() {
-        // TODO Auto-generated method stub
-        return null;
+        checkConnected();
+        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
+        List<BambooProject> projects = bamboo.findAllProjects();
+        for (BambooProject project : projects) {
+            String key = project.getKey();
+            SoftwareProjectId softwareProjectId = new SoftwareProjectId(key);
+            projectIds.add(softwareProjectId);
+        }
+        return projectIds;
     }
 
     @Override
     public int[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
-        // TODO Auto-generated method stub
+        checkConnected();
+        return new int[0];
+    }
+
+    @Override
+    public String getMavenId(SoftwareProjectId projectId) throws ProjectNotFoundException, MavenIdNotFoundException {
+        checkConnected();
+        return null;
+    }
+
+    @Override
+    public String getName(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
         return null;
     }
 

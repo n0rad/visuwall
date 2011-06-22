@@ -27,7 +27,6 @@ import java.util.List;
 
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.Hudson;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
@@ -51,21 +50,21 @@ public class JenkinsConnectionTest {
     }
 
     @Test
-    public void should_return_state_unknow_if_no_state() throws ProjectNotFoundException,
+    public void should_return_state_unknow_if_no_state() throws Exception,
             HudsonJobNotFoundException {
         Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("not_valid_state");
 
         SoftwareProjectId projectId = new SoftwareProjectId("name");
-		State state = jenkinsPlugin.getLastBuildState(projectId);
+        State state = jenkinsPlugin.getBuildState(projectId, 0);
         assertEquals(State.UNKNOWN, state);
     }
 
     @Test
-    public void should_return_state_valid_state() throws ProjectNotFoundException, HudsonJobNotFoundException {
+    public void should_return_state_valid_state() throws Exception {
         Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("FAILURE");
 
         SoftwareProjectId projectId = new SoftwareProjectId("name");
-        State state = jenkinsPlugin.getLastBuildState(projectId);
+        State state = jenkinsPlugin.getBuildState(projectId, 0);
         assertEquals(State.FAILURE, state);
     }
 
@@ -86,27 +85,27 @@ public class JenkinsConnectionTest {
     }
 
     @Test
-    public void should_get_is_building_information() throws HudsonJobNotFoundException, ProjectNotFoundException {
+    public void should_get_is_building_information() throws Exception {
 
         when(hudson.isBuilding("project1")).thenReturn(true);
         when(hudson.isBuilding("project2")).thenReturn(false);
 
         SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
-        assertTrue(jenkinsPlugin.isBuilding(projectId));
+        assertTrue(jenkinsPlugin.isBuilding(projectId, 0));
 
         projectId = new SoftwareProjectId("project2");
-        assertFalse(jenkinsPlugin.isBuilding(projectId));
+        assertFalse(jenkinsPlugin.isBuilding(projectId, 0));
     }
 
     @Test
-    public void should_get_estimated_finish_time() throws HudsonJobNotFoundException, ProjectNotFoundException {
+    public void should_get_estimated_finish_time() throws Exception {
         Date date = new Date();
         when(hudson.getEstimatedFinishTime(Matchers.anyString())).thenReturn(date);
 
         SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
-        assertEquals(date, jenkinsPlugin.getEstimatedFinishTime(projectId));
+        assertEquals(date, jenkinsPlugin.getEstimatedFinishTime(projectId, 0));
     }
 
     @Test

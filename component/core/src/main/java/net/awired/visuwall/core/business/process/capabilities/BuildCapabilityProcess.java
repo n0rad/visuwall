@@ -1,16 +1,19 @@
 package net.awired.visuwall.core.business.process.capabilities;
 
 import java.util.Date;
+
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.core.business.domain.Build;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
+
 import com.google.common.base.Preconditions;
 
 @Component
@@ -21,11 +24,12 @@ public class BuildCapabilityProcess {
 
     private static final Logger LOG = LoggerFactory.getLogger(BuildCapabilityProcess.class);
 
-    public boolean updateStatusAndReturnFullUpdateNeeded(ConnectedProject project) throws ProjectNotFoundException {
+    public boolean updateStatusAndReturnFullUpdateNeeded(ConnectedProject project) throws ProjectNotFoundException,
+            BuildNotFoundException {
         try {
             int lastBuildNumber = project.getBuildConnection().getLastBuildNumber(project.getBuildProjectId());
             int previousLastBuildNumber = project.getCurrentBuildId();
-            boolean building = project.getBuildConnection().isBuilding(project.getBuildProjectId());
+            boolean building = project.getBuildConnection().isBuilding(project.getBuildProjectId(), lastBuildNumber);
             boolean previousBuilding = false;
             try {
                 previousBuilding = project.getCurrentBuild().isBuilding();
@@ -68,11 +72,14 @@ public class BuildCapabilityProcess {
                 LOG.info("Running getEstimatedFinishTime for project " + project);
                 try {
                     Date estimatedFinishTime = project.getBuildConnection().getEstimatedFinishTime(
-                            project.getBuildProjectId());
+                            project.getBuildProjectId(), build.getBuildNumber());
                     if (estimatedFinishTime != null) {
                         build.setEstimatedFinishTime(estimatedFinishTime);
                     }
                 } catch (ProjectNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (BuildNotFoundException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
