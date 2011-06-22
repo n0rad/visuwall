@@ -65,7 +65,6 @@ public class ParameterCheckTest {
 
     @Test(expected = IllegalStateException.class)
     public void cant_call_find_all_software_project_ids_when_disconnected() {
-        System.err.println(connection);
         connection.findAllSoftwareProjectIds();
     }
 }

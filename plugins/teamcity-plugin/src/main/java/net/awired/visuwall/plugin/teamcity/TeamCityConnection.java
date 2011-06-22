@@ -94,11 +94,13 @@ public class TeamCityConnection implements BuildCapability {
 
     @Override
     public int[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }
 
     @Override
     public List<SoftwareProjectId> findAllSoftwareProjectIds() {
+        checkConnected();
         List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
         try {
             List<TeamCityProject> projects = teamCity.findAllProjects();
@@ -137,11 +139,13 @@ public class TeamCityConnection implements BuildCapability {
 
     @Override
     public State getLastBuildState(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }
 
     @Override
     public Date getEstimatedFinishTime(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }
 
@@ -153,6 +157,7 @@ public class TeamCityConnection implements BuildCapability {
     @Override
     public int getLastBuildNumber(SoftwareProjectId projectId) throws ProjectNotFoundException,
             BuildNumberNotFoundException {
+        checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }
 
