@@ -18,8 +18,10 @@ package net.awired.visuwall.api.domain;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import com.google.common.base.Objects;
 
+@Deprecated
 public class ProjectId {
 
     private final Map<String, String> ids = new HashMap<String, String>();

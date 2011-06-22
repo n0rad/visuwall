@@ -19,7 +19,7 @@ package net.awired.visuwall.plugin.sonar.tck;
 import static net.awired.visuwall.IntegrationTestData.SONAR_URL;
 import static net.awired.visuwall.IntegrationTestData.STRUTS_2_ARTIFACT_ID;
 import static org.junit.Assert.assertEquals;
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.Connection;
@@ -41,8 +41,7 @@ public class SonarTestCapabilityIT implements TestCapabilityTCK {
 
     @Test
     public void should_analyze_unit_tests() {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId(STRUTS_2_ARTIFACT_ID);
+        SoftwareProjectId projectId = struts2();
 
         TestResult unitTestsAnalysis = sonar.analyzeUnitTests(projectId);
 
@@ -58,8 +57,7 @@ public class SonarTestCapabilityIT implements TestCapabilityTCK {
 		TestCapability sonar = new SonarConnection();
 		((Connection) sonar).connect("http://fluxx.fr.cr:9000", null, null);
 
-		ProjectId projectId = new ProjectId();
-        projectId.setArtifactId("fr.xebia.librestry:librestry");
+        SoftwareProjectId projectId = librestry();
 
 		TestResult integrationTestsAnalysis = sonar.analyzeIntegrationTests(projectId);
         assertEquals(47.4, integrationTestsAnalysis.getCoverage(), 0);
@@ -68,6 +66,14 @@ public class SonarTestCapabilityIT implements TestCapabilityTCK {
         assertEquals(0, integrationTestsAnalysis.getSkipCount());
         assertEquals(0, integrationTestsAnalysis.getPassCount());
         assertEquals(0, integrationTestsAnalysis.getTotalCount());
+    }
+
+    private SoftwareProjectId librestry() {
+        return new SoftwareProjectId("fr.xebia.librestry:librestry");
+    }
+
+    private SoftwareProjectId struts2() {
+        return new SoftwareProjectId(STRUTS_2_ARTIFACT_ID);
     }
 
 }

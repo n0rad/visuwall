@@ -16,7 +16,6 @@
 
 package net.awired.visuwall.plugin.hudson.tck;
 
-import static net.awired.visuwall.plugin.hudson.HudsonConnection.HUDSON_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -24,7 +23,6 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Date;
 
 import net.awired.visuwall.IntegrationTestData;
-import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -66,17 +64,19 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
 	@Override
     @Test
 	public void should_get_success_build_state() throws ProjectNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "struts");
+        SoftwareProjectId projectId = struts();
 		State state = hudson.getLastBuildState(projectId);
         assertEquals(State.SUCCESS, state);
+    }
+
+    private SoftwareProjectId struts() {
+        return new SoftwareProjectId("struts");
     }
 
     @Override
     @Test
     public void should_get_estimated_date() throws ProjectNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(HUDSON_ID, "struts");
+        SoftwareProjectId projectId = struts();
         Date date = hudson.getEstimatedFinishTime(projectId);
         assertNotNull(date);
     }

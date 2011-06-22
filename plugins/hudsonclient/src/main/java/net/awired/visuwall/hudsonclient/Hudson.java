@@ -35,6 +35,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 public class Hudson {
@@ -43,7 +44,8 @@ public class Hudson {
 
     private static final String DEFAULT_STATE = "UNKNOWN";
 
-    private HudsonFinder hudsonFinder;
+    @VisibleForTesting
+    HudsonFinder hudsonFinder;
 
     private HudsonRootModuleFinder hudsonRootModuleFinder;
 
@@ -54,10 +56,6 @@ public class Hudson {
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize hudson with url " + hudsonUrl);
         }
-    }
-
-    public Hudson(HudsonFinder hudsonFinder) {
-        this.hudsonFinder = hudsonFinder;
     }
 
     /**
@@ -116,20 +114,6 @@ public class Hudson {
     public String getDescription(String jobName) throws HudsonJobNotFoundException {
         checkJobName(jobName);
         return hudsonFinder.getDescription(jobName);
-    }
-
-    /**
-     * If there is no success job in history, the average build duration time is the max duration time Else we compute
-     * the average success build duration
-     * 
-     * @param jobName
-     * @return Average build duration time computed with old successful jobs
-     * @throws HudsonJobNotFoundException
-     */
-    public long getAverageBuildDurationTime(String jobName) throws HudsonJobNotFoundException {
-        checkJobName(jobName);
-        HudsonProject hudsonProject = findProject(jobName);
-        return computeBuildDurationTime(hudsonProject);
     }
 
     private long computeBuildDurationTime(HudsonProject hudsonProject) throws HudsonJobNotFoundException {

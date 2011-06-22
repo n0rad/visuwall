@@ -24,8 +24,4 @@ public class ArtifactIdNotFoundException extends Exception {
         super(message, t);
     }
 
-    public ArtifactIdNotFoundException(String message) {
-        super(message);
-    }
-
 }

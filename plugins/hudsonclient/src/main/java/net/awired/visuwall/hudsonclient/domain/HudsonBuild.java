@@ -19,6 +19,7 @@ package net.awired.visuwall.hudsonclient.domain;
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
@@ -32,10 +33,6 @@ public final class HudsonBuild {
     private HudsonTestResult integrationTestResult;
     private String state;
     private int buildNumber;
-
-    public void addCommiter(HudsonCommiter commiter) {
-        commiters.add(commiter);
-    }
 
     public boolean isSuccessful() {
         return successful;

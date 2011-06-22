@@ -54,7 +54,8 @@ public class HudsonTest {
         client = mock(GenericSoftwareClient.class);
         hudsonFinder = mock(HudsonFinder.class);
         hudsonUrlBuilder = mock(HudsonUrlBuilder.class);
-        hudson = new Hudson(hudsonFinder);
+        hudson = new Hudson("http://hudson.com");
+        hudson.hudsonFinder = hudsonFinder;
     }
 
     @Test
@@ -82,54 +83,6 @@ public class HudsonTest {
         HudsonBuild build = hudson.findBuild("projectName", 5);
 
         assertNotNull(build);
-    }
-
-    @Test
-    public void should_build_average_build_duration_time() throws HudsonJobNotFoundException,
-            HudsonBuildNotFoundException {
-        HudsonProject hudsonProject = new HudsonProject();
-        hudsonProject.setName("projectName");
-        hudsonProject.setBuildNumbers(new int[] { 1, 2 });
-
-        when(hudsonFinder.findProject("projectName")).thenReturn(hudsonProject);
-        HudsonBuild build1 = new HudsonBuild();
-        build1.setDuration(4);
-        build1.setSuccessful(true);
-
-        HudsonBuild build2 = new HudsonBuild();
-        build2.setDuration(2);
-        build2.setSuccessful(true);
-
-        when(hudsonFinder.find("projectName", 1)).thenReturn(build1);
-        when(hudsonFinder.find("projectName", 2)).thenReturn(build2);
-
-        long averageBuildDurationTime = hudson.getAverageBuildDurationTime("projectName");
-
-        assertEquals(3, averageBuildDurationTime);
-    }
-
-    @Test
-    public void should_build_max_build_duration_time() throws HudsonJobNotFoundException,
-            HudsonBuildNotFoundException {
-        HudsonProject hudsonProject = new HudsonProject();
-        hudsonProject.setName("projectName");
-        hudsonProject.setBuildNumbers(new int[] { 1, 2 });
-
-        when(hudsonFinder.findProject("projectName")).thenReturn(hudsonProject);
-        HudsonBuild build1 = new HudsonBuild();
-        build1.setDuration(4);
-        build1.setSuccessful(false);
-
-        HudsonBuild build2 = new HudsonBuild();
-        build2.setDuration(2);
-        build2.setSuccessful(false);
-
-        when(hudsonFinder.find("projectName", 1)).thenReturn(build1);
-        when(hudsonFinder.find("projectName", 2)).thenReturn(build2);
-
-        long averageBuildDurationTime = hudson.getAverageBuildDurationTime("projectName");
-
-        assertEquals(4, averageBuildDurationTime);
     }
 
     @Test

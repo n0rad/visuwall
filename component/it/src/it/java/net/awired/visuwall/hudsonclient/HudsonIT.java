@@ -36,26 +36,9 @@ public class HudsonIT {
 
     private Hudson hudson = new Hudson(IntegrationTestData.HUDSON_URL);
 
-    @Test(expected = IllegalArgumentException.class)
-    public void should_throw_an_exception_when_searching_an_inexistant_build() throws HudsonBuildNotFoundException,
-            HudsonJobNotFoundException {
-        hudson.findBuild("neverbuild", -1);
-    }
-
     @Test
     public void should_find_not_built_project() throws HudsonJobNotFoundException {
         hudson.findProject("neverbuild");
-    }
-
-    @Test(expected = HudsonJobNotFoundException.class)
-    public void should_throw_exception_when_searching_inexistant_project() throws HudsonJobNotFoundException {
-        hudson.findProject("");
-    }
-
-    @Test(expected = HudsonBuildNotFoundException.class)
-    public void should_throw_exception_when_searching_inexistant_project_with_build_no()
-            throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
-        hudson.findBuild("", 0);
     }
 
     @Test

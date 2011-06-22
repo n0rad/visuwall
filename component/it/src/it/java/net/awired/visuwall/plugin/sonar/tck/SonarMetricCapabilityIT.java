@@ -24,7 +24,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
@@ -47,8 +47,7 @@ public class SonarMetricCapabilityIT {
 
     @Test
     public void should_populate_quality() {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId(STRUTS_ARTIFACT_ID);
+        SoftwareProjectId projectId = struts();
 		QualityResult quality = sonar.analyzeQuality(projectId, "violations_density");
         QualityMeasure measure = quality.getMeasure("violations_density");
         assertEquals("Rules compliance", measure.getName());
@@ -58,8 +57,7 @@ public class SonarMetricCapabilityIT {
 
     @Test
     public void should_have_a_lot_of_quality_metrics() {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId(STRUTS_ARTIFACT_ID);
+        SoftwareProjectId projectId = struts();
 		QualityResult quality = sonar.analyzeQuality(projectId);
         Set<Entry<String, QualityMeasure>> measures = quality.getMeasures();
         for (Entry<String, QualityMeasure> measure : measures) {
@@ -69,15 +67,13 @@ public class SonarMetricCapabilityIT {
 
     @Test
     public void should_not_fail_if_measure_does_not_exist() {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId(STRUTS_ARTIFACT_ID);
+        SoftwareProjectId projectId = struts();
 		sonar.analyzeQuality(projectId, "inexistant_measure");
     }
 
     @Test
     public void should_count_exact_it_and_ut() throws ConnectionException {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId("fr.xebia.librestry:librestry");
+        SoftwareProjectId projectId = librestry();
 
         SonarConnection sonarPlugin = new SonarConnection();
         sonarPlugin.connect("http://fluxx.fr.cr:9000");
@@ -95,6 +91,14 @@ public class SonarMetricCapabilityIT {
         assertEquals(0, integrationTestsAnalysis.getSkipCount());
         assertEquals(0, integrationTestsAnalysis.getPassCount());
         assertEquals(0, integrationTestsAnalysis.getTotalCount());
+    }
+
+    private SoftwareProjectId librestry() {
+        return new SoftwareProjectId("fr.xebia.librestry:librestry");
+    }
+
+    private SoftwareProjectId struts() {
+        return new SoftwareProjectId(STRUTS_ARTIFACT_ID);
     }
 
 }

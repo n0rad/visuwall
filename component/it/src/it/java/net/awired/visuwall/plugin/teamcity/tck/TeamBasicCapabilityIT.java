@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.awired.visuwall.IntegrationTestData;
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
@@ -48,12 +48,11 @@ public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
 	@Override
 	@Test
 	public void should_find_all_projects_ids() {
-		List<ProjectId> projectIds = teamcity.findAllProjects();
+        List<SoftwareProjectId> projectIds = teamcity.findAllSoftwareProjectIds();
 
 		assertFalse(projectIds.isEmpty());
-		for (ProjectId projectId : projectIds) {
-			String name = projectId.getName();
-			assertFalse(name.isEmpty());
+        for (SoftwareProjectId projectId : projectIds) {
+            assertFalse(projectId.getProjectId().isEmpty());
 		}
 	}
 
@@ -61,15 +60,15 @@ public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
 	@Test
 	public void should_find_project_ids_by_names() {
 		List<String> names = Arrays.asList("Apache Ant", "Gradle");
-		List<ProjectId> projectIds = teamcity.findProjectIdsByNames(names);
+        List<SoftwareProjectId> projectIds = teamcity.findSoftwareProjectIdsByNames(names);
 
 		assertFalse(projectIds.isEmpty());
 
-		ProjectId apacheAntId = projectIds.get(0);
-		assertEquals("Apache Ant", apacheAntId.getName());
+        SoftwareProjectId apacheAntId = projectIds.get(0);
+        assertEquals("Apache Ant", apacheAntId.getProjectId());
 
-		ProjectId gradleId = projectIds.get(1);
-		assertEquals("Gradle", gradleId.getName());
+		SoftwareProjectId gradleId = projectIds.get(1);
+        assertEquals("Gradle", gradleId.getProjectId());
 	}
 
 	@Override

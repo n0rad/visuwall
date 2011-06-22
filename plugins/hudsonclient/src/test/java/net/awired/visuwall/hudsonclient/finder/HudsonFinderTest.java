@@ -74,7 +74,9 @@ public class HudsonFinderTest {
         testResultBuilder = mock(TestResultBuilder.class);
 		client = mock(GenericSoftwareClient.class);
         hudsonBuildBuilder = mock(HudsonBuildBuilder.class);
-        hudsonFinder = new HudsonFinder(hudsonUrlBuilder, client, hudsonBuildBuilder);
+        hudsonFinder = new HudsonFinder(hudsonUrlBuilder);
+        hudsonFinder.client = client;
+        hudsonFinder.hudsonBuildBuilder = hudsonBuildBuilder;
     }
 
     @Test
@@ -140,14 +142,6 @@ public class HudsonFinderTest {
             Assert.assertEquals("project1", projectNames.get(0));
             Assert.assertEquals("project2", projectNames.get(1));
         }
-
-    @Test
-    public void testProjectExists() {
-        String absolutePathFile = ClasspathFiles.getAbsolutePathFile("hudson/fluxx.xml");
-        when(hudsonUrlBuilder.getJobUrl(anyString())).thenReturn(absolutePathFile);
-        boolean found = hudsonFinder.projectExists("projectName");
-        assertTrue(found);
-    }
 
     @Test
 	public void should_return_all_views() throws ResourceNotFoundException {

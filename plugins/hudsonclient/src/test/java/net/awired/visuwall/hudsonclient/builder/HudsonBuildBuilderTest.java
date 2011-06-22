@@ -20,17 +20,20 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
+
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
+import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
+
 import org.junit.Test;
 
 public class HudsonBuildBuilderTest {
@@ -68,7 +71,8 @@ public class HudsonBuildBuilderTest {
 
         HudsonMavenReportersSurefireAggregatedReport surefireReport = mock(HudsonMavenReportersSurefireAggregatedReport.class);
 
-        HudsonBuildBuilder hudsonBuildBuilder = new HudsonBuildBuilder(testResultBuilder);
+        HudsonBuildBuilder hudsonBuildBuilder = new HudsonBuildBuilder();
+        hudsonBuildBuilder.testResultBuilder = testResultBuilder;
         HudsonBuild hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport, commiters);
 
         assertEquals(duration, hudsonBuild.getDuration());

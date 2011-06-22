@@ -23,7 +23,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.teamcityclient.TeamCity;
@@ -80,23 +79,6 @@ public class TeamCityConnectionTest {
 		
 		assertEquals("projectName", projectId.getName());
 		assertEquals("projectId", projectId.getId(TeamCityConnection.TEAMCITY_ID));
-	}
-
-	@Test
-	public void should_find_project() throws Exception {
-		TeamCityProject teamCityProject = new TeamCityProject();
-		teamCityProject.setName("projectName");
-		teamCityProject.setDescription("description");
-
-		when(teamCity.findProject("projectId")).thenReturn(teamCityProject);
-
-		ProjectId projectId = new ProjectId();
-		projectId.addId(TeamCityConnection.TEAMCITY_ID, "projectId");
-		Project project = connectionPlugin.findProject(projectId);
-
-		assertEquals("projectName", project.getName());
-		assertEquals("description", project.getDescription());
-		// assertEquals(State.SUCCESS, project.getState());
 	}
 
 	@Ignore

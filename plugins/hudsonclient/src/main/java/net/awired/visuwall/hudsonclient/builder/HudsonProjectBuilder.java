@@ -39,7 +39,8 @@ public class HudsonProjectBuilder {
 
     private static final int UNBUILT_PROJECT = -1;
 
-    private HudsonRootModuleFinder hudsonRootModuleFinder;
+    @VisibleForTesting
+    HudsonRootModuleFinder hudsonRootModuleFinder;
 
     private HudsonFinder hudsonFinder;
 
@@ -119,8 +120,4 @@ public class HudsonProjectBuilder {
         return color.endsWith("_anime");
     }
 
-    @VisibleForTesting
-    void setHudsonRootModuleFinder(HudsonRootModuleFinder hudsonRootModuleFinder) {
-        this.hudsonRootModuleFinder = hudsonRootModuleFinder;
-    }
 }

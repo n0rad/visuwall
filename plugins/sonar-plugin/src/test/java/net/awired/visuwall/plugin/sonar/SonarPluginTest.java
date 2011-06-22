@@ -109,7 +109,7 @@ public class SonarPluginTest {
 
         GenericSoftwareClient client = mock(GenericSoftwareClient.class);
         Object resourceCall = client.resource(anyString(), any(Class.class), eq(APPLICATION_XML_TYPE));
-        when(resourceCall).thenThrow(new ResourceNotFoundException("no page"));
+        when(resourceCall).thenThrow(new ResourceNotFoundException(null));
 
         sonar.client = client;
 

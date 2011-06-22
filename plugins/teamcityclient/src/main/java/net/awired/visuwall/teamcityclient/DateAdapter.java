@@ -34,7 +34,4 @@ public class DateAdapter {
 		}
 	}
 
-	public static String printDate(Date dt) {
-		return TEAMCITY_DATE_FORMAT.format(dt);
-	}
 }

@@ -21,10 +21,6 @@ public class BambooProjectNotFoundException extends Exception {
 
 	private static final long serialVersionUID = 23444963844957734L;
 
-	public BambooProjectNotFoundException(String msg) {
-		super(msg);
-	}
-
     public BambooProjectNotFoundException(String msg, Exception cause) {
         super(msg, cause);
     }

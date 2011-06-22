@@ -23,7 +23,7 @@ import static org.junit.Assert.assertFalse;
 import java.util.Arrays;
 import java.util.List;
 
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
@@ -47,7 +47,7 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
 	@Override
     @Test
 	public void should_find_all_projects_ids() {
-        List<ProjectId> projects = bamboo.findAllProjects();
+        List<SoftwareProjectId> projects = bamboo.findAllSoftwareProjectIds();
         assertFalse(projects.isEmpty());
     }
 
@@ -58,10 +58,11 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
         String strutsName = "struts - struts";
         String struts2Name = "struts 2 instable - struts_2_instable";
         List<String> names = Arrays.asList(strutsName, struts2Name, ajslName);
-        List<ProjectId> projectIds = bamboo.findProjectIdsByNames(names);
-        assertEquals(ajslName, projectIds.get(0).getName());
-        assertEquals(strutsName, projectIds.get(1).getName());
-        assertEquals(struts2Name, projectIds.get(2).getName());
+        List<SoftwareProjectId> projectIds = bamboo.findSoftwareProjectIdsByNames(names);
+        // mettre les key
+        assertEquals("ajslKey", projectIds.get(0).getProjectId());
+        assertEquals("strutsKey", projectIds.get(1).getProjectId());
+        assertEquals("struts2Key", projectIds.get(2).getProjectId());
     }
 
 	@Override
@@ -77,12 +78,6 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
 	public void should_get_disable_project() throws ProjectNotFoundException {
 
 	}
-
-    private ProjectId struts2ProjectId() {
-        ProjectId projectId = new ProjectId();
-        projectId.addId(BambooConnection.BAMBOO_ID, "STRUTS2INSTABLE-STRUTS2INSTABLE");
-        return projectId;
-    }
 
     @Override
     @Test

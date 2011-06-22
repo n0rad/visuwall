@@ -49,7 +49,7 @@ public class HudsonRootModuleFinderTest {
     @Test(expected = ArtifactIdNotFoundException.class)
     public void should_not_find_artifact_id() throws Exception {
         DocumentLoader documentLoader = mock(DocumentLoader.class);
-        when(documentLoader.loadFromUrl(anyString())).thenThrow(new DocumentNotLoadedException("file not found"));
+        when(documentLoader.loadFromUrl(anyString())).thenThrow(new DocumentNotLoadedException("file not found", null));
 
         HudsonUrlBuilder hudsonUrlBuilder = mock(HudsonUrlBuilder.class);
         HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);

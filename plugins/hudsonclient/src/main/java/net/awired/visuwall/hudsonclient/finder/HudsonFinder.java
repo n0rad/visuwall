@@ -48,6 +48,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 public class HudsonFinder {
@@ -56,16 +57,11 @@ public class HudsonFinder {
 
     private HudsonUrlBuilder hudsonUrlBuilder;
 
-    private GenericSoftwareClient client;
+    @VisibleForTesting
+    GenericSoftwareClient client;
 
-    private HudsonBuildBuilder hudsonBuildBuilder;
-
-    public HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder, GenericSoftwareClient client,
-            HudsonBuildBuilder hudsonBuildBuilder) {
-        this.client = client;
-        this.hudsonUrlBuilder = hudsonUrlBuilder;
-        this.hudsonBuildBuilder = hudsonBuildBuilder;
-    }
+    @VisibleForTesting
+    HudsonBuildBuilder hudsonBuildBuilder;
 
     public HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder) {
         this.client = new GenericSoftwareClient();

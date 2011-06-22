@@ -33,11 +33,6 @@ public class GenericSoftwareClient {
 
     private static final ResourceCache CACHE = new ResourceCache();
 
-    public GenericSoftwareClient(Client client) {
-        Preconditions.checkNotNull(client, "client is mandatory");
-        this.client = client;
-    }
-
     public GenericSoftwareClient() {
         ClientConfig clientConfig = new DefaultClientConfig();
         client = Client.create(clientConfig);

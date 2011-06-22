@@ -18,7 +18,6 @@ package net.awired.visuwall.plugin.hudson;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -26,18 +25,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.awired.visuwall.api.domain.Build;
-import net.awired.visuwall.api.domain.Project;
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.hudsonclient.Hudson;
-import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
-import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
-import net.awired.visuwall.plugin.hudson.builder.HudsonState;
 
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -55,8 +48,7 @@ public class HudsonConnectionTest {
         hudsonPlugin.connect("url");
         hudsonPlugin.hudson = hudson;
 
-        ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "idValue");
+        SoftwareProjectId projectId = new SoftwareProjectId("idValue");
         State state = hudsonPlugin.getLastBuildState(projectId);
         assertEquals(State.UNKNOWN, state);
     }
@@ -71,8 +63,7 @@ public class HudsonConnectionTest {
         hudsonPlugin.connect("url");
         hudsonPlugin.hudson = hudson;
 
-        ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "idValue");
+        SoftwareProjectId projectId = new SoftwareProjectId("idValue");
         State state = hudsonPlugin.getLastBuildState(projectId);
         assertEquals(State.FAILURE, state);
     }
@@ -82,7 +73,6 @@ public class HudsonConnectionTest {
         Hudson hudson = Mockito.mock(Hudson.class);
         List<HudsonProject> hudsonProjects = new ArrayList<HudsonProject>();
         HudsonProject hudsonProject = new HudsonProject();
-        hudsonProject.setArtifactId("artifactId");
         hudsonProject.setName("name");
 
         hudsonProjects.add(hudsonProject);
@@ -93,32 +83,10 @@ public class HudsonConnectionTest {
         hudsonPlugin.connect("url");
         hudsonPlugin.hudson = hudson;
 
-        List<ProjectId> projectIds = hudsonPlugin.findAllProjects();
-        ProjectId projectId = projectIds.get(0);
+        List<SoftwareProjectId> projectIds = hudsonPlugin.findAllSoftwareProjectIds();
+        SoftwareProjectId projectId = projectIds.get(0);
 
-        assertEquals("artifactId", projectId.getArtifactId());
-        assertEquals("name", projectId.getId("HUDSON_ID"));
-        assertEquals("name", projectId.getName());
-    }
-
-    @Test
-    public void should_find_project_by_projectId() throws HudsonJobNotFoundException, ProjectNotFoundException {
-        Hudson hudson = Mockito.mock(Hudson.class);
-
-        HudsonProject hudsonProject = new HudsonProject();
-        hudsonProject.setName("name");
-        when(hudson.findProject(Matchers.anyString())).thenReturn(hudsonProject);
-
-        HudsonConnection hudsonPlugin = new HudsonConnection();
-        hudsonPlugin.connect("url");
-        hudsonPlugin.hudson = hudson;
-
-        ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "id");
-
-        Project project = hudsonPlugin.findProject(projectId);
-
-        assertEquals(hudsonProject.getName(), project.getName());
+        assertEquals("name", projectId.getProjectId());
     }
 
     @Test
@@ -132,12 +100,11 @@ public class HudsonConnectionTest {
         hudsonPlugin.connect("url");
         hudsonPlugin.hudson = hudson;
 
-        ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "project1");
+        SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
         assertTrue(hudsonPlugin.isBuilding(projectId));
 
-        projectId.addId("HUDSON_ID", "project2");
+        projectId = new SoftwareProjectId("project2");
         assertFalse(hudsonPlugin.isBuilding(projectId));
     }
 
@@ -152,32 +119,9 @@ public class HudsonConnectionTest {
         hudsonPlugin.connect("url");
         hudsonPlugin.hudson = hudson;
 
-        ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "project1");
+        SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
         assertEquals(date, hudsonPlugin.getEstimatedFinishTime(projectId));
-    }
-
-    @Test
-    public void should_find_build_by_number() throws BuildNotFoundException, ProjectNotFoundException,
-            HudsonBuildNotFoundException, HudsonJobNotFoundException {
-        Hudson hudson = Mockito.mock(Hudson.class);
-
-        HudsonConnection hudsonPlugin = new HudsonConnection();
-        hudsonPlugin.connect("url");
-        hudsonPlugin.hudson = hudson;
-
-        HudsonBuild hudsonBuild = new HudsonBuild();
-		hudsonBuild.setState(HudsonState.SUCCESS);
-
-        when(hudson.findBuild("project1", 0)).thenReturn(hudsonBuild);
-
-        ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "project1");
-
-        Build build = hudsonPlugin.findBuildByBuildNumber(projectId, 0);
-
-        assertNotNull(build);
     }
 
     @Test
@@ -190,8 +134,7 @@ public class HudsonConnectionTest {
 
         when(hudson.getLastBuildNumber("project1")).thenReturn(5);
 
-        ProjectId projectId = new ProjectId();
-        projectId.addId("HUDSON_ID", "project1");
+        SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
         int lastBuildNumber = hudsonPlugin.getLastBuildNumber(projectId);
 

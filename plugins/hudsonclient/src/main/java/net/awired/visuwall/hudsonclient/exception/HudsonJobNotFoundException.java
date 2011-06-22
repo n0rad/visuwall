@@ -27,8 +27,4 @@ public class HudsonJobNotFoundException extends Exception {
     public HudsonJobNotFoundException(String cause) {
         super(cause);
     }
-
-    public HudsonJobNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

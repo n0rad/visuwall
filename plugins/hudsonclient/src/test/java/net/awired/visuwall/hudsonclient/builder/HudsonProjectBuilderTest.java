@@ -22,16 +22,20 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import java.net.URL;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
+
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
 import net.awired.visuwall.hudsonclient.finder.HudsonRootModuleFinder;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
 import net.awired.visuwall.hudsonclient.util.ClasspathFiles;
+
 import org.junit.Test;
 
 public class HudsonProjectBuilderTest {
@@ -47,7 +51,7 @@ public class HudsonProjectBuilderTest {
 
         HudsonUrlBuilder hudsonUrlBuilder = mock(HudsonUrlBuilder.class);
         HudsonProjectBuilder hudsonProjectBuilder = new HudsonProjectBuilder(hudsonUrlBuilder, hudsonFinder);
-        hudsonProjectBuilder.setHudsonRootModuleFinder(hudsonRootModuleFinder);
+        hudsonProjectBuilder.hudsonRootModuleFinder = hudsonRootModuleFinder;
 
         HudsonMavenMavenModuleSet moduleSet = createModuleSetFrom("fluxx.xml");
         HudsonProject hudsonProject = hudsonProjectBuilder.createHudsonProjectFrom(moduleSet);

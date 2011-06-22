@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -250,11 +249,6 @@ public class SonarConnection implements Connection, MetricCapability, TestCapabi
     @Override
     public List<ProjectId> findProjectIdsByNames(List<String> names) {
         return new ArrayList<ProjectId>();
-    }
-
-    @Override
-    public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
-        throw new ProjectNotFoundException("Sonar can't find project by project id");
     }
 
     @Override

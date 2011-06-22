@@ -173,7 +173,7 @@ public class Bamboo {
 		return estimatedFinishTime.toDate();
 	}
 
-    public long getAverageBuildDurationTime(String projectKey) throws BambooProjectNotFoundException {
+    long getAverageBuildDurationTime(String projectKey) throws BambooProjectNotFoundException {
         checkProjectKey(projectKey);
         BambooProject bambooProject = findProject(projectKey);
 		long averageTime;

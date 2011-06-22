@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.List;
 
 import net.awired.visuwall.api.domain.Build;
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -58,7 +57,7 @@ public class BambooConnection implements Connection, BuildCapability {
 		connect(url);
 	}
 
-	public void connect(String url) {
+    void connect(String url) {
 		Preconditions.checkNotNull(url, "url is mandatory");
 		if (StringUtils.isBlank(url)) {
 			throw new IllegalArgumentException("url can't be null.");
@@ -78,20 +77,6 @@ public class BambooConnection implements Connection, BuildCapability {
 			projects.add(projectId);
 		}
 		return projects;
-	}
-
-	@Override
-	public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
-		checkProjectId(projectId);
-		try {
-			String projectKey = getProjectKey(projectId);
-			BambooProject bambooProject = bamboo.findProject(projectKey);
-			Project project = new Project(projectId);
-            project.setName(bambooProject.getName());
-			return project;
-		} catch (BambooProjectNotFoundException e) {
-			throw new ProjectNotFoundException("Can't find project with ProjectId:" + projectId, e);
-		}
 	}
 
 	@Override
@@ -195,6 +180,7 @@ public class BambooConnection implements Connection, BuildCapability {
 
     @Override
 	public void close() {
+        connected = false;
 	}
 
     @Override
@@ -219,6 +205,7 @@ public class BambooConnection implements Connection, BuildCapability {
 
     @Override
     public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
+        checkConnected();
         return new ArrayList<SoftwareProjectId>();
     }
 

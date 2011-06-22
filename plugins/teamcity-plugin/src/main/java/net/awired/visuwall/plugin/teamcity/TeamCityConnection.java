@@ -48,7 +48,7 @@ public class TeamCityConnection implements Connection, BuildCapability {
     private static final Logger LOG = LoggerFactory.getLogger(TeamCityConnection.class);
 
     @VisibleForTesting
-    public static final String TEAMCITY_ID = "TEAMCITY_ID";
+    static final String TEAMCITY_ID = "TEAMCITY_ID";
 
     private boolean connected;
 
@@ -63,7 +63,7 @@ public class TeamCityConnection implements Connection, BuildCapability {
         connect(url);
     }
 
-    public void connect(String url) {
+    void connect(String url) {
         Preconditions.checkNotNull(url, "url is mandatory");
         if (StringUtils.isBlank(url)) {
             throw new IllegalArgumentException("url can't be null.");
@@ -171,29 +171,19 @@ public class TeamCityConnection implements Connection, BuildCapability {
     }
 
     @Override
-    public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
-        checkConnected();
-        String id = projectId.getId(TEAMCITY_ID);
-        try {
-            TeamCityProject project = teamCity.findProject(id);
-            return createProject(project);
-        } catch (TeamCityProjectNotFoundException e) {
-            throw new ProjectNotFoundException("No project found with projectId:" + projectId, e);
-        }
-    }
-
-    @Override
     public void close() {
         connected = false;
     }
 
     @Override
     public String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
         throw new ProjectNotFoundException("Not implemented");
     }
 
     @Override
     public SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException {
+        checkConnected();
         throw new ProjectNotFoundException("Not implemented");
     }
 

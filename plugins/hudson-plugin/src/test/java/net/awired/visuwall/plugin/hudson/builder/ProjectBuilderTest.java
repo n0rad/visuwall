@@ -37,11 +37,11 @@ public class ProjectBuilderTest {
 
         HudsonBuild currentBuild = new HudsonBuild();
 		currentBuild.setState(HudsonState.SUCCESS);
-        currentBuild.addCommiter(commiterInCurrentBuild);
+        currentBuild.getCommiters().add(commiterInCurrentBuild);
 
         HudsonBuild completedBuild = new HudsonBuild();
 		completedBuild.setState(HudsonState.SUCCESS);
-        completedBuild.addCommiter(commiterInCompletedBuild);
+        completedBuild.getCommiters().add(commiterInCompletedBuild);
 
         HudsonProject hudsonProject = new HudsonProject();
         hudsonProject.setCurrentBuild(currentBuild);

@@ -17,7 +17,6 @@ import net.awired.visuwall.bambooclient.domain.BambooBuild;
 import net.awired.visuwall.bambooclient.domain.BambooProject;
 import net.awired.visuwall.bambooclient.exception.BambooBuildNotFoundException;
 import net.awired.visuwall.bambooclient.exception.BambooBuildNumberNotFoundException;
-import net.awired.visuwall.bambooclient.exception.BambooProjectNotFoundException;
 import net.awired.visuwall.bambooclient.rest.Builds;
 import net.awired.visuwall.bambooclient.rest.Plan;
 import net.awired.visuwall.bambooclient.rest.Plans;
@@ -61,39 +60,11 @@ public class BambooTest {
 
     @Test
     public void should_return_empty_list_if_plans_are_not_found() throws ResourceNotFoundException {
-        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
+        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException(null));
 
         List<BambooProject> projects = bamboo.findAllProjects();
 
         assertTrue(projects.isEmpty());
-    }
-
-    @Test
-    public void should_find_project() throws Exception {
-        when(bambooUrlBuilder.getProjectUrl(anyString())).thenReturn("project-url");
-        Results results = createResults();
-        when(client.resource(eq("project-url"), any(Class.class))).thenReturn(results);
-
-        when(bambooUrlBuilder.getIsBuildingUrl(anyString())).thenReturn("is-building-url");
-        Plan plan = createPlan();
-        when(client.resource(eq("is-building-url"), any(Class.class))).thenReturn(plan);
-
-        when(bambooUrlBuilder.getBuildUrl(anyString(), anyInt())).thenReturn("build-url");
-        Result result = createResult();
-        when(client.resource(eq("build-url"), any(Class.class))).thenReturn(result);
-
-        String projectKey = "AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6";
-        BambooProject project = bamboo.findProject(projectKey);
-        assertEquals(1, project.getBuildNumbers()[0]);
-        assertEquals("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6", project.getKey());
-    }
-
-    @Test(expected = BambooProjectNotFoundException.class)
-    public void should_throw_exception_if_resource_not_found() throws Exception {
-        Results results = createResults();
-        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
-
-        bamboo.findProject("projectKey");
     }
 
     @Test
@@ -108,14 +79,14 @@ public class BambooTest {
 
     @Test(expected = BambooBuildNumberNotFoundException.class)
     public void should_throw_exception_when_build_not_found_for_finding_last_build_number() throws Exception {
-        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
+        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException(null));
 
         bamboo.getLastBuildNumber("projectKey");
     }
 
     @Test(expected = BambooBuildNotFoundException.class)
     public void should_throw_exception_when_build_not_found() throws Exception {
-        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
+        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException(null));
 
         bamboo.findBuild("projectKey", 0);
     }

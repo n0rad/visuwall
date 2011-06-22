@@ -2,15 +2,16 @@ package net.awired.visuwall.core.business.process.capabilities;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+
 import java.util.Date;
+
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -122,7 +123,7 @@ public class BuildCapabilityProcessTest {
         projectFromBuildPlugin.setDescription("description");
 
         ProjectId projectId = projectToEnhance.getProjectId();
-        when(buildPlugin.findProject(projectId)).thenReturn(projectFromBuildPlugin);
+        // when(buildPlugin.findProject(projectId)).thenReturn(projectFromBuildPlugin);
         //        projectEnhancerService.enhanceWithBuildInformations(projectToEnhance, buildPlugin);
 
         assertArrayEquals(new int[] { 1, 2, 3 }, projectToEnhance.getBuildNumbers());
@@ -144,8 +145,8 @@ public class BuildCapabilityProcessTest {
         Project projectFromBuildPlugin2 = new Project("name2");
 
         ProjectId projectId = projectToEnhance.getProjectId();
-        when(buildPlugin1.findProject(projectId)).thenReturn(projectFromBuildPlugin1);
-        when(buildPlugin2.findProject(projectId)).thenReturn(projectFromBuildPlugin2);
+        // when(buildPlugin1.findProject(projectId)).thenReturn(projectFromBuildPlugin1);
+        // when(buildPlugin2.findProject(projectId)).thenReturn(projectFromBuildPlugin2);
 
         //        projectEnhancerService.enhanceWithBuildInformations(projectToEnhance, buildPlugin1);
         //        projectEnhancerService.enhanceWithBuildInformations(projectToEnhance, buildPlugin2);
@@ -167,8 +168,8 @@ public class BuildCapabilityProcessTest {
         projectFromBuildPlugin2.setDescription("description2");
 
         ProjectId projectId = projectToEnhance.getProjectId();
-        when(buildPlugin1.findProject(projectId)).thenReturn(projectFromBuildPlugin1);
-        when(buildPlugin2.findProject(projectId)).thenReturn(projectFromBuildPlugin2);
+        // when(buildPlugin1.findProject(projectId)).thenReturn(projectFromBuildPlugin1);
+        // when(buildPlugin2.findProject(projectId)).thenReturn(projectFromBuildPlugin2);
 
         //        projectEnhancerService.enhanceWithBuildInformations(projectToEnhance, buildPlugin1);
         //        projectEnhancerService.enhanceWithBuildInformations(projectToEnhance, buildPlugin2);
@@ -181,7 +182,7 @@ public class BuildCapabilityProcessTest {
     public void should_not_fail_if_project_is_not_found() throws Exception {
         Connection buildPlugin = Mockito.mock(Connection.class);
         ProjectId projectId = projectToEnhance.getProjectId();
-        when(buildPlugin.findProject(projectId)).thenThrow(new ProjectNotFoundException("project not found"));
+        // when(buildPlugin.findProject(projectId)).thenThrow(new ProjectNotFoundException("project not found"));
         //        projectEnhancerService.enhanceWithBuildInformations(projectToEnhance, buildPlugin);
     }
 }

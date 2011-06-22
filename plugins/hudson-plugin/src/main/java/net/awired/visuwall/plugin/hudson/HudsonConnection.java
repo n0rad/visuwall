@@ -68,10 +68,11 @@ public final class HudsonConnection implements Connection, BuildCapability, View
     private boolean connected;
 
     public void connect(String url, String login, String password) {
+        Preconditions.checkNotNull(url, "url is mandatory");
         connect(url);
     }
 
-    public void connect(String url) {
+    void connect(String url) {
         if (isBlank(url)) {
             throw new IllegalStateException("url can't be null.");
         }
@@ -104,25 +105,6 @@ public final class HudsonConnection implements Connection, BuildCapability, View
             projectIds.add(projectId);
         }
         return projectIds;
-    }
-
-    @Override
-    @Deprecated
-    public Project findProject(ProjectId projectId) throws ProjectNotFoundException {
-        checkProjectId(projectId);
-        checkConnected();
-        try {
-            String projectName = jobName(projectId);
-            if (projectName == null) {
-                throw new ProjectNotFoundException("Project " + projectId + " has no name");
-            }
-            HudsonProject hudsonProject = hudson.findProject(projectName);
-            Project project = projectCreator.buildProjectFrom(hudsonProject);
-            project.addId(HUDSON_ID, projectName);
-            return project;
-        } catch (HudsonJobNotFoundException e) {
-            throw new ProjectNotFoundException(e);
-        }
     }
 
     @Override

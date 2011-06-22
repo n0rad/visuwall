@@ -34,7 +34,6 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
@@ -214,16 +213,6 @@ public class SonarConnectionTest {
     @Test
     public void should_return_empty_list_when_finding_projects_by_names() {
         assertTrue(sonar.findProjectIdsByNames(null).isEmpty());
-    }
-
-    @Test(expected = ProjectNotFoundException.class)
-    public void should_throw_exception_when_searching_project() throws ProjectNotFoundException {
-        sonar.findProject(null);
-    }
-
-    @Test(expected = ProjectNotFoundException.class)
-    public void should_throw_exception_when_find_project_by_project_id() throws ProjectNotFoundException {
-        sonar.findProject(null);
     }
 
     @Test

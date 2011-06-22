@@ -58,7 +58,7 @@ public class MetricFinderTest {
     public void should_throw_exception_if_sonar_metrics_are_not_found() throws Exception {
         GenericSoftwareClient genericSoftwareClient = Mockito.mock(GenericSoftwareClient.class);
         Object call = genericSoftwareClient.resource(anyString(), any(Class.class));
-        when(call).thenThrow(new ResourceNotFoundException("not found"));
+        when(call).thenThrow(new ResourceNotFoundException(null));
         
         MetricFinder metricFinder = new MetricFinder("http://sonar:9000");
         metricFinder.genericSoftwareClient = genericSoftwareClient;
