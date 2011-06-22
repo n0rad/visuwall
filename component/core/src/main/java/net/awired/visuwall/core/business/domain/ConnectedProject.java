@@ -19,17 +19,13 @@ package net.awired.visuwall.core.business.domain;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
-
 import javax.persistence.Transient;
-
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
-import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class ConnectedProject extends Project {
@@ -40,22 +36,24 @@ public class ConnectedProject extends Project {
     @Transient
     private Map<SoftwareProjectId, BasicCapability> capabilities = new HashMap<SoftwareProjectId, BasicCapability>();
     @Transient
-    private BuildCapability buildConnection;
+    private final BuildCapability buildConnection;
     @Transient
-    private SoftwareProjectId buildProjectId;
+    private final SoftwareProjectId buildProjectId;
+
+    //    private ProjectKey projectKey;
+
     @Transient
     private ScheduledFuture<Object> updateProjectTask;
 
+    public ConnectedProject(SoftwareProjectId projectId, BuildCapability buildCapability) {
+        super(projectId.getProjectId());
+        this.buildConnection = buildCapability;
+        this.buildProjectId = projectId;
+        this.capabilities.put(getBuildProjectId(), buildCapability);
+    }
+
     public void close() {
         updateProjectTask.cancel(true);
-    }
-
-    public ConnectedProject(String name) {
-        super(name);
-    }
-
-    public ConnectedProject(ProjectId projectId) {
-        super(projectId);
     }
 
     public Build findCreatedBuild(Integer buildNumber) {
@@ -74,11 +72,6 @@ public class ConnectedProject extends Project {
         return buildConnection;
     }
 
-    @JsonIgnore
-    public void setBuildConnection(BuildCapability buildConnection) {
-        this.buildConnection = buildConnection;
-    }
-
     public void setState(State state) {
         this.state = state;
     }
@@ -95,6 +88,10 @@ public class ConnectedProject extends Project {
     @JsonIgnore
     public void setUpdateProjectTask(ScheduledFuture<Object> updateProjectTask) {
         this.updateProjectTask = updateProjectTask;
+    }
+
+    public SoftwareProjectId getBuildProjectId() {
+        return buildProjectId;
     }
 
 }

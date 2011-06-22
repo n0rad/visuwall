@@ -26,7 +26,6 @@ import java.util.Set;
 
 import javax.persistence.Query;
 
-import net.awired.visuwall.core.business.domain.ConnectedProject;
 import net.awired.visuwall.core.business.process.WallProcess;
 import net.awired.visuwall.core.exception.NotFoundException;
 import net.awired.visuwall.core.persistence.dao.WallDAO;
@@ -136,13 +135,13 @@ public class WallHolderServiceTest {
 
     @Ignore
     @Test
-    public void should_find_status() throws NotFoundException {
+    public void should_find_status() {
         Wall wall2 = new Wall("wall1");
         wallHolderService.update(wall2);
 
-        Wall wall = wallHolderService.find("wall1");
-        ConnectedProject project = new ConnectedProject("test");
-        wall.getProjects().add(project);
+        //        Wall wall = wallHolderService.find("wall1");
+        //        ConnectedProject project = new ConnectedProject("test");
+        //        wall.getProjects().add(project);
 
         //        List<ProjectStatus> status = wallHolderService.getStatus("wall1");
         //        assertFalse(status.isEmpty());

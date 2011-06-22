@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
@@ -39,7 +39,6 @@ import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.sonar.wsclient.services.Measure;
 
@@ -61,33 +60,6 @@ public class SonarConnectionTest {
     }
 
     @Test
-    public void should_find_project() throws SonarMeasureNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId("artifactId");
-
-        when(measureFinder.findMeasure("artifactId", "comment_blank_line")).thenReturn(new Measure());
-
-        assertTrue(sonar.contains(projectId));
-    }
-
-    @Test
-    public void should_not_find_project() throws SonarMeasureNotFoundException {
-        when(measureFinder.findMeasure(Matchers.anyString(), Matchers.anyString())).thenThrow(
-                new SonarMeasureNotFoundException(""));
-
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId("artifactId");
-
-        assertFalse(sonar.contains(projectId));
-    }
-
-    @Test
-    public void should_return_false_when_no_artifact_id_found() {
-
-        assertFalse(sonar.contains(new ProjectId()));
-    }
-
-    @Test
     public void should_build_valid_unit_test_result() throws SonarMeasureNotFoundException {
         Measure[] measures = new Measure[5];
         for (Integer i = 0; i < measures.length; i++) {
@@ -101,8 +73,7 @@ public class SonarConnectionTest {
         when(measureFinder.findMeasure("artifactId", "tests")).thenReturn(measures[3]);
         when(measureFinder.findMeasure("artifactId", "skipped_tests")).thenReturn(measures[4]);
 
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId("artifactId");
+        SoftwareProjectId projectId = new SoftwareProjectId("artifactId");
 
         TestResult unitTestResult = sonar.analyzeUnitTests(projectId);
 
@@ -118,8 +89,7 @@ public class SonarConnectionTest {
         measure.setValue(8D);
         when(measureFinder.findMeasure("artifactId", "it_coverage")).thenReturn(measure);
 
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId("artifactId");
+        SoftwareProjectId projectId = new SoftwareProjectId("artifactId");
 
         TestResult integrationTestResult = sonar.analyzeIntegrationTests(projectId);
 
@@ -165,8 +135,7 @@ public class SonarConnectionTest {
 
     @Test
     public void should_analyze_quality() throws SonarMeasureNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId("artifactId");
+        SoftwareProjectId projectId = new SoftwareProjectId("artifactId");
 
         Measure generatedLines = new Measure();
         generatedLines.setValue(0D);
@@ -179,8 +148,7 @@ public class SonarConnectionTest {
 
     @Test
     public void should_not_fail_if_quality_measures_are_not_found() throws SonarMeasureNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId("artifactId");
+        SoftwareProjectId projectId = new SoftwareProjectId("artifactId");
         
         when(measureFinder.findMeasure(anyString(), anyString())).thenThrow(
                 new SonarMeasureNotFoundException("not found"));
@@ -190,8 +158,7 @@ public class SonarConnectionTest {
 
     @Test
     public void should_not_fail_if_quality_measures_are_not_found_for_analysis() throws SonarMeasureNotFoundException {
-        ProjectId projectId = new ProjectId();
-        projectId.setArtifactId("artifactId");
+        SoftwareProjectId projectId = new SoftwareProjectId("artifactId");
 
         when(measureFinder.findMeasure(anyString(), anyString())).thenThrow(
                 new SonarMeasureNotFoundException("not found"));
@@ -201,18 +168,8 @@ public class SonarConnectionTest {
 
     @Test
     public void should_not_fail_if_project_id_has_no_artifact_id() {
-        ProjectId projectId = new ProjectId();
+        SoftwareProjectId projectId = new SoftwareProjectId("");
         sonar.analyzeIntegrationTests(projectId);
-    }
-
-    @Test
-    public void should_return_empty_list_when_finding_all_projects() {
-        assertTrue(sonar.findAllProjects().isEmpty());
-    }
-
-    @Test
-    public void should_return_empty_list_when_finding_projects_by_names() {
-        assertTrue(sonar.findProjectIdsByNames(null).isEmpty());
     }
 
     @Test

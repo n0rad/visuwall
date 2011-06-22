@@ -74,7 +74,6 @@ public class Bamboo {
 		return projects;
 	}
 
-    @Deprecated
 	public BambooProject findProject(String projectKey) throws BambooProjectNotFoundException {
 		Preconditions.checkNotNull(projectKey, "projectKey is a mandatory parameter");
 		try {

@@ -8,6 +8,7 @@ import java.util.Date;
 import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
@@ -26,13 +27,12 @@ public class BuildCapabilityProcessTest {
 
     private static ConnectedProject initProject(int previousBuildId, int newBuildId, boolean building)
             throws Exception {
-        ProjectId projectId = new ProjectId();
-        ConnectedProject project = new ConnectedProject(projectId);
-        project.setCurrentBuildId(previousBuildId);
+        SoftwareProjectId projectId = new SoftwareProjectId("name");
         BuildCapability buildCapability = Mockito.mock(BuildCapability.class);
         Mockito.when(buildCapability.getLastBuildNumber(projectId)).thenReturn(newBuildId);
         Mockito.when(buildCapability.isBuilding(projectId)).thenReturn(building);
-        project.setBuildConnection(buildCapability);
+        ConnectedProject project = new ConnectedProject(projectId, buildCapability);
+        project.setCurrentBuildId(previousBuildId);
         return project;
     }
 

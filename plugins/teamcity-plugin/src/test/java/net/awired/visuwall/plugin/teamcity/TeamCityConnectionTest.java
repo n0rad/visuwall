@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.awired.visuwall.api.domain.ProjectId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.teamcityclient.TeamCity;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
@@ -64,23 +64,6 @@ public class TeamCityConnectionTest {
 		verify(teamCity).findProjectNames();
 	}
 
-	@Test
-	public void should_build_one_project_id() throws TeamCityProjectsNotFoundException {
-		List<TeamCityProject> teamCityProjects = new ArrayList<TeamCityProject>();
-		TeamCityProject teamCityProject = new TeamCityProject();
-		teamCityProject.setName("projectName");
-		teamCityProject.setId("projectId");
-		teamCityProjects.add(teamCityProject);
-		
-		when(teamCity.findAllProjects()).thenReturn(teamCityProjects );
-		
-		List<ProjectId> projects = connectionPlugin.findAllProjects();
-		ProjectId projectId = projects.get(0);
-		
-		assertEquals("projectName", projectId.getName());
-		assertEquals("projectId", projectId.getId(TeamCityConnection.TEAMCITY_ID));
-	}
-
 	@Ignore
 	@Test
 	public void should_find_state_build() throws Exception {
@@ -97,8 +80,7 @@ public class TeamCityConnectionTest {
 		when(teamCity.findProject("projectId")).thenReturn(teamCityProject);
 		when(teamCity.findBuildList("bt297"));
 
-		ProjectId projectId = new ProjectId();
-		projectId.addId(TeamCityConnection.TEAMCITY_ID, "projectId");
+        SoftwareProjectId projectId = new SoftwareProjectId("projectId");
 		State state = connectionPlugin.getLastBuildState(projectId);
 
 		assertEquals(State.SUCCESS, state);

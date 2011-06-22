@@ -18,12 +18,13 @@ package net.awired.visuwall.api.plugin.capability;
 
 import java.util.List;
 
-import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BasicCapability {
+
+    //    String getMavenId(SoftwareProjectId projectId);
 
     /**
      * Return the description of the project
@@ -32,7 +33,7 @@ public interface BasicCapability {
      * @return
      */
     String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException;
-    
+
     /**
      * @param projectKey
      * @return
@@ -40,35 +41,11 @@ public interface BasicCapability {
     SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException;
 
     /**
-     * @param projectId
-     * @return true if the project is in the Quality Software
-     * @deprecated
-     */
-    @Deprecated
-    boolean contains(ProjectId projectId);
-
-    /**
-     * Return the full list of project id contained in the software
-     * 
-     * @return
-     */
-    @Deprecated
-    List<ProjectId> findAllProjects();
-
-    /**
      * Return the full list of project id contained in the software
      * 
      * @return
      */
     List<SoftwareProjectId> findAllSoftwareProjectIds();
-
-    /**
-     * Return a list of project id contained in the software by a list of names
-     * 
-     * @return
-     */
-    @Deprecated
-    List<ProjectId> findProjectIdsByNames(List<String> names);
 
     /**
      * Return a list of project id contained in the software by a list of names
