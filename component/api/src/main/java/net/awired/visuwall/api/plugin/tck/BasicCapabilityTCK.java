@@ -32,7 +32,10 @@ public interface BasicCapabilityTCK {
     void should_find_description_of_a_project() throws Exception;
 
     // getMavenId
-	void should_get_maven_id() throws Exception;
+    void should_get_maven_id() throws Exception;
+
+    // getMavenId
+    void should_get_name_of_a_project() throws Exception;
 
     // identify
 	void should_identify_a_project() throws Exception;

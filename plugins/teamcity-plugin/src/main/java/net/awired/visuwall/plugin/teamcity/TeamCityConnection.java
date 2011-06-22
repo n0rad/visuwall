@@ -168,6 +168,12 @@ public class TeamCityConnection implements BuildCapability {
         throw new ProjectNotFoundException("not implemented");
     }
 
+    @Override
+    public String getName(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
+        throw new ProjectNotFoundException("not implemented");
+    }
+
     private void checkConnected() {
         Preconditions.checkState(connected, "You must connect your plugin");
     }

@@ -102,4 +102,10 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
     public void should_get_maven_id() throws Exception {
     }
 
+    @Override
+    @Ignore
+    @Test
+    public void should_get_name_of_a_project() throws Exception {
+    }
+
 }

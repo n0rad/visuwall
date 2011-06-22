@@ -222,6 +222,12 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
         throw new ProjectNotFoundException("not implemented");
     }
 
+    @Override
+    public String getName(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
+        throw new ProjectNotFoundException("not implemented");
+    }
+
     private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
         checkConnected();
         Preconditions.checkNotNull(softwareProjectId, "softwareProjectId is mandatory");

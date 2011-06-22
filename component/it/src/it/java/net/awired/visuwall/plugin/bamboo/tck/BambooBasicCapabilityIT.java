@@ -97,4 +97,11 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
         bamboo.findSoftwareProjectIdsByNames(new ArrayList<String>());
     }
 
+    @Override
+    @Test
+    @Ignore
+    public void should_get_name_of_a_project() throws Exception {
+
+    }
+
 }

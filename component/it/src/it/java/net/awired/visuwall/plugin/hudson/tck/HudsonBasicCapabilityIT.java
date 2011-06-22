@@ -89,4 +89,11 @@ public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
     public void should_get_maven_id() throws Exception {
     }
 
+    @Override
+    @Test
+    @Ignore
+    public void should_get_name_of_a_project() throws Exception {
+
+    }
+
 }

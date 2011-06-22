@@ -58,6 +58,14 @@ public interface BasicCapability {
     String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException;
 
     /**
+     * Return the name of the project
+     * 
+     * @param projectId
+     * @return
+     */
+    String getName(SoftwareProjectId projectId) throws ProjectNotFoundException;
+
+    /**
      * @param projectKey
      * @return
      */

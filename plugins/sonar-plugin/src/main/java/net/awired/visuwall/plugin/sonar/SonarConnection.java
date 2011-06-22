@@ -244,6 +244,12 @@ public class SonarConnection implements MetricCapability, TestCapability {
         throw new ProjectNotFoundException("not implemented");
     }
 
+    @Override
+    public String getName(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
+        throw new ProjectNotFoundException("not implemented");
+    }
+
     private TestResult createUnitTestAnalysis(String artifactId) {
         TestResult unitTestResult = new TestResult();
         try {

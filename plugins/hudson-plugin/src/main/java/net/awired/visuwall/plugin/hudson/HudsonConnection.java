@@ -239,4 +239,10 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
         return jobName;
     }
 
+    @Override
+    public String getName(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
+        throw new ProjectNotFoundException("not implemented");
+    }
+
 }

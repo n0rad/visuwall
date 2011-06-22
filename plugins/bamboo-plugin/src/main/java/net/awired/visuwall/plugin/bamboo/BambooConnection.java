@@ -186,6 +186,13 @@ public class BambooConnection implements BuildCapability {
 
     @Override
     public String getMavenId(SoftwareProjectId projectId) throws ProjectNotFoundException, MavenIdNotFoundException {
+        checkConnected();
+        return null;
+    }
+
+    @Override
+    public String getName(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
         return null;
     }
 
