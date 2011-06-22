@@ -4,4 +4,8 @@ public class MavenIdNotFoundException extends Exception {
 
     private static final long serialVersionUID = 1869112629963801100L;
 
+    public MavenIdNotFoundException(String msg) {
+        super(msg);
+    }
+
 }
