@@ -20,11 +20,27 @@ import java.util.List;
 
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
+import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BasicCapability {
 
     //    String getMavenId(SoftwareProjectId projectId);
+
+    /**
+     * Initiate connection to the software
+     * 
+     * @param url
+     * @param login
+     * @param password
+     * @throws ConnectionException
+     */
+    void connect(String url, String login, String password) throws ConnectionException;
+
+    /**
+     * Close the connection to the software
+     */
+    void close();
 
     /**
      * Return the description of the project

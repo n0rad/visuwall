@@ -26,7 +26,6 @@ import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
@@ -42,7 +41,7 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
 
 	@Before
     public void init() throws ConnectionException {
-		((Connection) jenkins).connect(IntegrationTestData.JENKINS_URL, null, null);
+        jenkins.connect(IntegrationTestData.JENKINS_URL, null, null);
 	}
 
 	@Override

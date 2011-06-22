@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
@@ -21,23 +21,23 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class ParameterCheckTest {
 
-    private Connection connection;
+    private BasicCapability connection;
 
-    public ParameterCheckTest(Class<Connection> clazz) throws InstantiationException, IllegalAccessException {
+    public ParameterCheckTest(Class<BasicCapability> clazz) throws InstantiationException, IllegalAccessException {
         this.connection = clazz.newInstance();
     }
 
     @Parameters
     public static Collection<Object[]> createData() {
         @SuppressWarnings("unchecked")
-        List<Class<? extends Connection>> connections = Arrays.asList(//
+        List<Class<? extends BasicCapability>> connections = Arrays.asList(//
                 JenkinsConnection.class, //
                 HudsonConnection.class, //
                 TeamCityConnection.class, //
                 BambooConnection.class, //
                 SonarConnection.class);
         List<Object[]> objects = new ArrayList<Object[]>();
-        for (Class<? extends Connection> clazz : connections) {
+        for (Class<? extends BasicCapability> clazz : connections) {
             objects.add(new Object[] { clazz });
         }
         return objects;

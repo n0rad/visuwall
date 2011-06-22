@@ -9,7 +9,7 @@ import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
 
@@ -111,7 +111,7 @@ public class BuildCapabilityProcessTest {
     @Ignore
     @Test
     public void should_merge_with_one_build_plugin() throws Exception {
-        Connection buildPlugin = Mockito.mock(Connection.class);
+        BasicCapability buildPlugin = Mockito.mock(BasicCapability.class);
 
         Build completedBuild = new Build();
         Build currentBuild = new Build();
@@ -136,8 +136,8 @@ public class BuildCapabilityProcessTest {
     @Ignore
     @Test
     public void should_merge_with_two_build_plugins() throws Exception {
-        Connection buildPlugin1 = Mockito.mock(Connection.class);
-        Connection buildPlugin2 = Mockito.mock(Connection.class);
+        BasicCapability buildPlugin1 = Mockito.mock(BasicCapability.class);
+        BasicCapability buildPlugin2 = Mockito.mock(BasicCapability.class);
 
         Project projectFromBuildPlugin1 = new Project("name1");
         projectFromBuildPlugin1.setDescription("description");
@@ -158,8 +158,8 @@ public class BuildCapabilityProcessTest {
     @Ignore
     @Test
     public void last_plugin_is_always_right() throws Exception {
-        Connection buildPlugin1 = Mockito.mock(Connection.class);
-        Connection buildPlugin2 = Mockito.mock(Connection.class);
+        BasicCapability buildPlugin1 = Mockito.mock(BasicCapability.class);
+        BasicCapability buildPlugin2 = Mockito.mock(BasicCapability.class);
 
         Project projectFromBuildPlugin1 = new Project("name1");
         projectFromBuildPlugin1.setDescription("description1");
@@ -180,7 +180,7 @@ public class BuildCapabilityProcessTest {
     @Ignore
     @Test
     public void should_not_fail_if_project_is_not_found() throws Exception {
-        Connection buildPlugin = Mockito.mock(Connection.class);
+        BasicCapability buildPlugin = Mockito.mock(BasicCapability.class);
         ProjectId projectId = projectToEnhance.getProjectId();
         // when(buildPlugin.findProject(projectId)).thenThrow(new ProjectNotFoundException("project not found"));
         //        projectEnhancerService.enhanceWithBuildInformations(projectToEnhance, buildPlugin);

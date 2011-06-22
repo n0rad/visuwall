@@ -22,8 +22,9 @@ import java.util.Properties;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
 
-public interface VisuwallPlugin<T extends Connection> {
+public interface VisuwallPlugin<T extends BasicCapability> {
 
     // TODO change url to URL type
     T getConnection(String url, Properties info) throws ConnectionException;

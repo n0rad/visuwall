@@ -21,17 +21,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
+
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
-import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.core.business.domain.PluginInfo;
 import net.awired.visuwall.core.business.domain.SoftwareInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import com.google.common.base.Preconditions;
 
 @Service
@@ -42,9 +45,9 @@ public class PluginService {
     @SuppressWarnings("rawtypes")
     private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader.load(VisuwallPlugin.class);
 
-    public VisuwallPlugin<Connection> getPluginFromUrl(URL url) {
-        List<VisuwallPlugin<Connection>> visuwallPlugins = getPlugins();
-        for (VisuwallPlugin<Connection> visuwallPlugin : visuwallPlugins) {
+    public VisuwallPlugin<BasicCapability> getPluginFromUrl(URL url) {
+        List<VisuwallPlugin<BasicCapability>> visuwallPlugins = getPlugins();
+        for (VisuwallPlugin<BasicCapability> visuwallPlugin : visuwallPlugins) {
             try {
                 visuwallPlugin.getSoftwareId(url);
                 return visuwallPlugin;
@@ -58,8 +61,8 @@ public class PluginService {
     }
 
     public SoftwareInfo getSoftwareInfoFromUrl(URL url) {
-        List<VisuwallPlugin<Connection>> visuwallPlugins = getPlugins();
-        for (VisuwallPlugin<Connection> visuwallPlugin : visuwallPlugins) {
+        List<VisuwallPlugin<BasicCapability>> visuwallPlugins = getPlugins();
+        for (VisuwallPlugin<BasicCapability> visuwallPlugin : visuwallPlugins) {
             SoftwareId softwareId = null;
             try {
                 softwareId = visuwallPlugin.getSoftwareId(url);
@@ -76,7 +79,7 @@ public class PluginService {
             softwareInfo.setPluginInfo(getPluginInfo(visuwallPlugin));
             // TODO change that null
             try {
-                Connection connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
+                BasicCapability connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
                 softwareInfo.setProjectNames(connectionPlugin.findProjectNames());
                 if (connectionPlugin instanceof ViewCapability) {
                     softwareInfo.setViewNames(((ViewCapability) connectionPlugin).findViews());
@@ -89,7 +92,7 @@ public class PluginService {
         throw new RuntimeException("no plugin to manage url " + url);
     }
 
-    public PluginInfo getPluginInfo(VisuwallPlugin<Connection> visuwallPlugin) {
+    public PluginInfo getPluginInfo(VisuwallPlugin<BasicCapability> visuwallPlugin) {
         PluginInfo pluginInfo = new PluginInfo();
         pluginInfo.setName(visuwallPlugin.getName());
         pluginInfo.setVersion(visuwallPlugin.getVersion());
@@ -99,22 +102,22 @@ public class PluginService {
     }
 
     public List<PluginInfo> getPluginsInfo() {
-        List<VisuwallPlugin<Connection>> visuwallPlugins = getPlugins();
+        List<VisuwallPlugin<BasicCapability>> visuwallPlugins = getPlugins();
         List<PluginInfo> pluginInfos = new ArrayList<PluginInfo>(visuwallPlugins.size());
-        for (VisuwallPlugin<Connection> visuwallPlugin : visuwallPlugins) {
+        for (VisuwallPlugin<BasicCapability> visuwallPlugin : visuwallPlugins) {
             PluginInfo pluginInfo = getPluginInfo(visuwallPlugin);
             pluginInfos.add(pluginInfo);
         }
         return pluginInfos;
     }
 
-    public List<VisuwallPlugin<Connection>> getPlugins() {
+    public List<VisuwallPlugin<BasicCapability>> getPlugins() {
         @SuppressWarnings("rawtypes")
         Iterator<VisuwallPlugin> pluginIt = pluginLoader.iterator();
-        List<VisuwallPlugin<Connection>> result = new ArrayList<VisuwallPlugin<Connection>>();
+        List<VisuwallPlugin<BasicCapability>> result = new ArrayList<VisuwallPlugin<BasicCapability>>();
         while (pluginIt.hasNext()) {
             @SuppressWarnings("unchecked")
-            VisuwallPlugin<Connection> plugin = pluginIt.next();
+            VisuwallPlugin<BasicCapability> plugin = pluginIt.next();
             result.add(plugin);
         }
         return result;

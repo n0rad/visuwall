@@ -25,7 +25,6 @@ import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.bambooclient.Bamboo;
 import net.awired.visuwall.bambooclient.domain.BambooProject;
@@ -37,7 +36,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.common.base.Preconditions;
 
-public class BambooConnection implements Connection, BuildCapability {
+public class BambooConnection implements BuildCapability {
 
 	public static final String BAMBOO_ID = "BAMBOO_ID";
 

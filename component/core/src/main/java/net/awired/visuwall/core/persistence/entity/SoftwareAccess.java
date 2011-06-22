@@ -20,14 +20,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
-import net.awired.visuwall.api.plugin.Connection;
+
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.CollectionOfElements;
 import org.springframework.util.AutoPopulatingList;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
@@ -53,7 +57,7 @@ public class SoftwareAccess {
     @Transient
     private ScheduledFuture<Object> projectFinderTask;
     @Transient
-    private Connection connection;
+    private BasicCapability connection;
 
     public SoftwareAccess() {
 
@@ -172,12 +176,12 @@ public class SoftwareAccess {
     }
 
     @JsonIgnore
-    public Connection getConnection() {
+    public BasicCapability getConnection() {
         return connection;
     }
 
     @JsonIgnore
-    public void setConnection(Connection connection) {
+    public void setConnection(BasicCapability connection) {
         this.connection = connection;
     }
 

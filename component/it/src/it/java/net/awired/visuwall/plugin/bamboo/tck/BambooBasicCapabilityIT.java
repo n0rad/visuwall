@@ -20,13 +20,13 @@ import static net.awired.visuwall.IntegrationTestData.BAMBOO_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
@@ -41,7 +41,7 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
 
     @Before
     public void init() throws ConnectionException {
-		((Connection) bamboo).connect(BAMBOO_URL, null, null);
+        bamboo.connect(BAMBOO_URL, null, null);
 	}
 
 	@Override
@@ -90,5 +90,12 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
     @Ignore
     public void should_identify_a_project() throws ProjectNotFoundException {
     }
+    
+    @Test(expected = IllegalStateException.class)
+    public void should_close_connection() {
+        bamboo.close();
+        bamboo.findSoftwareProjectIdsByNames(new ArrayList<String>());
+    }
+
 
 }
