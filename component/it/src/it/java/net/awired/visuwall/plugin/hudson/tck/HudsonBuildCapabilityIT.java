@@ -26,7 +26,6 @@ import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
@@ -54,17 +53,19 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
 
 	@Override
     @Test
-	public void should_get_is_building() throws ProjectNotFoundException {
+    public void should_get_is_building() throws Exception {
         SoftwareProjectId projectId = new SoftwareProjectId("struts");
-        boolean building = hudson.isBuilding(projectId);
+        int buildNumber = hudson.getLastBuildNumber(projectId);
+        boolean building = hudson.isBuilding(projectId, buildNumber);
         assertFalse(building);
     }
 
 	@Override
     @Test
-	public void should_get_last_build_state() throws ProjectNotFoundException {
+    public void should_get_last_build_state() throws Exception {
         SoftwareProjectId projectId = struts();
-		State state = hudson.getLastBuildState(projectId);
+        int buildNumber = hudson.getLastBuildNumber(projectId);
+        State state = hudson.getBuildState(projectId, buildNumber);
         assertEquals(State.SUCCESS, state);
     }
 
@@ -74,9 +75,10 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
 
     @Override
     @Test
-    public void should_get_estimated_date() throws ProjectNotFoundException {
+    public void should_get_estimated_date() throws Exception {
         SoftwareProjectId projectId = struts();
-        Date date = hudson.getEstimatedFinishTime(projectId);
+        int buildNumber = hudson.getLastBuildNumber(projectId);
+        Date date = hudson.getEstimatedFinishTime(projectId, buildNumber);
         assertNotNull(date);
     }
 

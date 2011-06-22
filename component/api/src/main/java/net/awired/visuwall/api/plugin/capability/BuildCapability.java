@@ -20,6 +20,7 @@ import java.util.Date;
 
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
@@ -39,28 +40,37 @@ public interface BuildCapability extends BasicCapability {
      * States
      * 
      * @param projectId
+     * @param buildNumber
      * @return
      * @throws ProjectNotFoundException
+     * @throws BuildNotFoundException
      */
-    State getLastBuildState(SoftwareProjectId projectId) throws ProjectNotFoundException;
+    State getBuildState(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException;
 
     /**
      * If a project is building, plugin can calculate the estimated finish time
      * 
      * @param projectId
+     * @param buildNumber
      * @return
      * @throws ProjectNotFoundException
+     * @throws BuildNotFoundException
      */
-    Date getEstimatedFinishTime(SoftwareProjectId projectId) throws ProjectNotFoundException;
+    Date getEstimatedFinishTime(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException;
 
     /**
      * Return true if project is building
      * 
      * @param projectId
+     * @param buildNumber
      * @return
      * @throws ProjectNotFoundException
+     * @throws BuildNotFoundException
      */
-    boolean isBuilding(SoftwareProjectId projectId) throws ProjectNotFoundException;
+    boolean isBuilding(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException;
 
     /**
      * Return the last build number of a project

@@ -23,6 +23,7 @@ import java.util.List;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -139,19 +140,22 @@ public class TeamCityConnection implements BuildCapability {
     }
 
     @Override
-    public State getLastBuildState(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public State getBuildState(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException {
         checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }
 
     @Override
-    public Date getEstimatedFinishTime(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public Date getEstimatedFinishTime(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException {
         checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }
 
     @Override
-    public boolean isBuilding(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public boolean isBuilding(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException {
         throw new ProjectNotFoundException("not implemented");
     }
 

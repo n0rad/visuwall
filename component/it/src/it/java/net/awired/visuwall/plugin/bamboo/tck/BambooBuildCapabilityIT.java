@@ -26,7 +26,6 @@ import java.util.Date;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
 
@@ -50,30 +49,34 @@ public class BambooBuildCapabilityIT {
     }
 
     @Test
-    public void should_verify_not_building_project() throws ProjectNotFoundException {
+    public void should_verify_not_building_project() throws Exception {
         SoftwareProjectId projectId = strutsProjectId();
-        boolean building = bamboo.isBuilding(projectId);
+        int buildNumber = bamboo.getLastBuildNumber(projectId);
+        boolean building = bamboo.isBuilding(projectId, buildNumber);
         assertFalse(building);
     }
 
     @Test
-    public void should_verify_success_state() throws ProjectNotFoundException {
+    public void should_verify_success_state() throws Exception {
         SoftwareProjectId projectId = strutsProjectId();
-        State state = bamboo.getLastBuildState(projectId);
+        int buildNumber = bamboo.getLastBuildNumber(projectId);
+        State state = bamboo.getBuildState(projectId, buildNumber);
         assertEquals(State.SUCCESS, state);
     }
 
     @Test
-    public void should_verify_failure_state() throws ProjectNotFoundException {
+    public void should_verify_failure_state() throws Exception {
         SoftwareProjectId projectId = struts2ProjectId();
-        State state = bamboo.getLastBuildState(projectId);
+        int buildNumber = bamboo.getLastBuildNumber(projectId);
+        State state = bamboo.getBuildState(projectId, buildNumber);
         assertEquals(State.FAILURE, state);
     }
 
     @Test
-    public void should_get_estimated_finish_time() throws ProjectNotFoundException {
+    public void should_get_estimated_finish_time() throws Exception {
         SoftwareProjectId projectId = strutsProjectId();
-        Date estimatedFinishTime = bamboo.getEstimatedFinishTime(projectId);
+        int buildNumber = bamboo.getLastBuildNumber(projectId);
+        Date estimatedFinishTime = bamboo.getEstimatedFinishTime(projectId, buildNumber);
         assertNotNull(estimatedFinishTime);
     }
     

@@ -27,6 +27,7 @@ import java.util.Set;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -83,7 +84,8 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
     }
 
     @Override
-    public Date getEstimatedFinishTime(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public Date getEstimatedFinishTime(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException {
         checkSoftwareProjectId(projectId);
         checkConnected();
         try {
@@ -95,7 +97,8 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
     }
 
     @Override
-    public boolean isBuilding(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public boolean isBuilding(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException {
         checkSoftwareProjectId(projectId);
         checkConnected();
         try {
@@ -107,7 +110,8 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
     }
 
     @Override
-    public State getLastBuildState(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public State getBuildState(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException {
         checkSoftwareProjectId(projectId);
         checkConnected();
         try {
