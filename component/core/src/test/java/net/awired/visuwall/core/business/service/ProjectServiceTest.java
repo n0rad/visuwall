@@ -17,11 +17,14 @@
 package net.awired.visuwall.core.business.service;
 
 import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.plugin.Connection;
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.core.persistence.entity.Wall;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,9 +41,9 @@ public class ProjectServiceTest {
         //        projectService.projectEnhancerService = projectEnhancerService;
     }
 
-    public List<Connection> getConnectionPlugins() {
-        List<Connection> connectionPlugins = new ArrayList<Connection>();
-        Connection connectionPlugin = Mockito.mock(Connection.class);
+    public List<BasicCapability> getConnectionPlugins() {
+        List<BasicCapability> connectionPlugins = new ArrayList<BasicCapability>();
+        BasicCapability connectionPlugin = Mockito.mock(BasicCapability.class);
         connectionPlugins.add(connectionPlugin);
 
         List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
@@ -53,7 +56,7 @@ public class ProjectServiceTest {
     @Ignore
     @Test
     public void should_call_merge_for_plugins() {
-        List<Connection> connectionPlugins = getConnectionPlugins();
+        List<BasicCapability> connectionPlugins = getConnectionPlugins();
         Wall wall = new Wall();
         // ConnectedProject project = new ConnectedProject("test");
         //project.setCapabilities((List) connectionPlugins);

@@ -30,7 +30,6 @@ import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
-import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.hudsonclient.Hudson;
@@ -45,7 +44,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
-public final class JenkinsConnection implements Connection, BuildCapability, ViewCapability {
+public final class JenkinsConnection implements BuildCapability, ViewCapability {
 
     private static final Logger LOG = LoggerFactory.getLogger(JenkinsConnection.class);
 

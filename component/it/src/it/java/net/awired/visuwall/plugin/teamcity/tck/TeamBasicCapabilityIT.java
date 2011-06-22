@@ -27,7 +27,6 @@ import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.teamcity.TeamCityConnection;
@@ -42,7 +41,7 @@ public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
 
 	@Before
     public void init() throws ConnectionException {
-		((Connection) teamcity).connect(IntegrationTestData.TEAMCITY_URL, "guest", "");
+        teamcity.connect(IntegrationTestData.TEAMCITY_URL, "guest", "");
 	}
 
 	@Override

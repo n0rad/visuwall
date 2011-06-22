@@ -29,7 +29,6 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.plugin.sonar.SonarConnection;
 
@@ -42,7 +41,7 @@ public class SonarMetricCapabilityIT {
 
     @BeforeClass
     public static void init() throws ConnectionException {
-		((Connection) sonar).connect(SONAR_URL, null, null);
+        sonar.connect(SONAR_URL, null, null);
     }
 
     @Test
