@@ -59,10 +59,10 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
         String struts2Name = "struts 2 instable - struts_2_instable";
         List<String> names = Arrays.asList(strutsName, struts2Name, ajslName);
         List<SoftwareProjectId> projectIds = bamboo.findSoftwareProjectIdsByNames(names);
-        // mettre les key
-        assertEquals("ajslKey", projectIds.get(0).getProjectId());
-        assertEquals("strutsKey", projectIds.get(1).getProjectId());
-        assertEquals("struts2Key", projectIds.get(2).getProjectId());
+
+        assertEquals("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6", projectIds.get(0).getProjectId());
+        assertEquals("STRUTS-STRUTS", projectIds.get(1).getProjectId());
+        assertEquals("STRUTS2INSTABLE-STRUTS2INSTABLE", projectIds.get(2).getProjectId());
     }
 
 	@Override

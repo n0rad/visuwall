@@ -19,6 +19,7 @@ package net.awired.visuwall.plugin.teamcity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -28,9 +29,11 @@ import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.teamcityclient.TeamCity;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -96,7 +99,20 @@ public class TeamCityConnection implements BuildCapability {
 
     @Override
     public List<SoftwareProjectId> findAllSoftwareProjectIds() {
-        return new ArrayList<SoftwareProjectId>();
+        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
+        try {
+            List<TeamCityProject> projects = teamCity.findAllProjects();
+            for (TeamCityProject project : projects) {
+                String id = project.getId();
+                SoftwareProjectId softwareProjectId = new SoftwareProjectId(id);
+                projectIds.add(softwareProjectId);
+            }
+        } catch (TeamCityProjectsNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't build list of software project ids.", e);
+            }
+        }
+        return projectIds;
     }
 
     @Override

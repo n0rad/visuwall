@@ -64,10 +64,10 @@ public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
 		assertFalse(projectIds.isEmpty());
 
         SoftwareProjectId apacheAntId = projectIds.get(0);
-        assertEquals("Apache Ant", apacheAntId.getProjectId());
+        assertEquals("project28", apacheAntId.getProjectId());
 
 		SoftwareProjectId gradleId = projectIds.get(1);
-        assertEquals("Gradle", gradleId.getProjectId());
+        assertEquals("project22", gradleId.getProjectId());
 	}
 
 	@Override

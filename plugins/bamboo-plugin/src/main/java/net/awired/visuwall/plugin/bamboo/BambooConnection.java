@@ -59,6 +59,7 @@ public class BambooConnection implements BuildCapability {
 
 	@Override
     public boolean isBuilding(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
 		checkProjectId(projectId);
 		try {
 			String projectName = getProjectKey(projectId);
@@ -75,6 +76,7 @@ public class BambooConnection implements BuildCapability {
 
     @Override
     public State getLastBuildState(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
 		checkProjectId(projectId);
 		try {
 			String projectName = getProjectKey(projectId);
@@ -88,6 +90,7 @@ public class BambooConnection implements BuildCapability {
 	@Override
     public int getLastBuildNumber(SoftwareProjectId projectId) throws ProjectNotFoundException,
             BuildNumberNotFoundException {
+        checkConnected();
 		checkProjectId(projectId);
 		String id = getProjectKey(projectId);
 		Preconditions.checkNotNull(id, BAMBOO_ID);
@@ -100,6 +103,7 @@ public class BambooConnection implements BuildCapability {
 
 	@Override
 	public List<String> findProjectNames() {
+        checkConnected();
         List<String> projectNames = new ArrayList<String>();
         List<BambooProject> projects = bamboo.findAllProjects();
         for (BambooProject project : projects) {
@@ -110,22 +114,19 @@ public class BambooConnection implements BuildCapability {
 
 	@Override
     public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
+        checkConnected();
         Preconditions.checkNotNull(names, "names is mandatory");
         List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
         List<BambooProject> projects = bamboo.findAllProjects();
         for (BambooProject project : projects) {
             String name = project.getName();
             if (names.contains(name)) {
-                SoftwareProjectId projectId = createProjectId(project);
+                SoftwareProjectId projectId = new SoftwareProjectId(project.getKey());
                 projectIds.add(projectId);
             }
         }
         return projectIds;
 	}
-
-    private SoftwareProjectId createProjectId(BambooProject project) {
-        return new SoftwareProjectId(project.getKey());
-    }
 
     @Override
 	public void close() {
@@ -134,11 +135,13 @@ public class BambooConnection implements BuildCapability {
 
     @Override
     public String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException {
+        checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }
 
     @Override
     public SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException {
+        checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }
 
@@ -157,21 +160,27 @@ public class BambooConnection implements BuildCapability {
         return projectId.getProjectId();
     }
 
-
     private void checkConnected() {
         Preconditions.checkState(connected, "You must connect your plugin");
     }
 
     @Override
     public List<SoftwareProjectId> findAllSoftwareProjectIds() {
-        // TODO Auto-generated method stub
-        return null;
+        checkConnected();
+        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
+        List<BambooProject> projects = bamboo.findAllProjects();
+        for (BambooProject project : projects) {
+            String key = project.getKey();
+            SoftwareProjectId softwareProjectId = new SoftwareProjectId(key);
+            projectIds.add(softwareProjectId);
+        }
+        return projectIds;
     }
 
     @Override
     public int[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
-        // TODO Auto-generated method stub
-        return null;
+        checkConnected();
+        return new int[0];
     }
 
 }
