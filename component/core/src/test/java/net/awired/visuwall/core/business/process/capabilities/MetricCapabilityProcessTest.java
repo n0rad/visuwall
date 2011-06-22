@@ -18,8 +18,6 @@ package net.awired.visuwall.core.business.process.capabilities;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
-import net.awired.visuwall.api.domain.Build;
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
@@ -27,6 +25,8 @@ import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
+import net.awired.visuwall.core.business.domain.Build;
+import net.awired.visuwall.core.business.domain.Project;
 
 import org.junit.Before;
 import org.junit.Ignore;

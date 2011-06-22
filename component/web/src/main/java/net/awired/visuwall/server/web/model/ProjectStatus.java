@@ -16,7 +16,7 @@
 
 package net.awired.visuwall.server.web.model;
 
-import net.awired.visuwall.api.domain.Project;
+import net.awired.visuwall.core.business.domain.Project;
 import com.google.common.base.Objects;
 
 public final class ProjectStatus {

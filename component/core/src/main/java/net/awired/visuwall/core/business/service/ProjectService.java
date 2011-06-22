@@ -17,11 +17,11 @@
 package net.awired.visuwall.core.business.service;
 
 import java.util.concurrent.ScheduledFuture;
-import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.core.business.domain.Build;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
 import net.awired.visuwall.core.business.process.capabilities.BuildCapabilityProcess;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
@@ -59,7 +59,7 @@ public class ProjectService {
                 ConnectedProject connectedProject = new ConnectedProject(projectId, buildConnection);
                 Runnable updateProjectRunner = getUpdateProjectRunner(wallWhereToAdd, connectedProject);
 
-                LOG.debug("Launching first project updater for project" + connectedProject);
+                LOG.debug("Launching first project updater for " + connectedProject);
                 updateProjectRunner.run();
 
                 ScheduledFuture<Object> updateProjectTask = taskScheduler.scheduleAtFixedRate(updateProjectRunner,
@@ -84,7 +84,7 @@ public class ProjectService {
                 try {
                     boolean updateNeeded = buildProcess.updateStatusAndReturnFullUpdateNeeded(project);
                     if (neverRun || updateNeeded) {
-                        LOG.debug("Project " + project + " build change and needs a update from software");
+                        LOG.debug("Project build change and needs a update from software" + project);
 
                         // state
                         State state = project.getBuildConnection().getLastBuildState(project.getBuildProjectId());

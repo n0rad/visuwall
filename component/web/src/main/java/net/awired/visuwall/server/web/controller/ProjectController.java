@@ -16,7 +16,7 @@
 
 package net.awired.visuwall.server.web.controller;
 
-import net.awired.visuwall.api.domain.Project;
+import net.awired.visuwall.core.business.domain.Project;
 import net.awired.visuwall.core.business.service.ProjectService;
 import net.awired.visuwall.core.business.service.WallHolderService;
 import net.awired.visuwall.core.persistence.entity.Wall;

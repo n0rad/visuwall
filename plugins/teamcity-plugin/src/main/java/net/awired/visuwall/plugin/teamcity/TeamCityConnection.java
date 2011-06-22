@@ -19,8 +19,6 @@ package net.awired.visuwall.plugin.teamcity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -31,11 +29,9 @@ import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.teamcityclient.TeamCity;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -143,12 +139,6 @@ public class TeamCityConnection implements Connection, BuildCapability {
     public int getLastBuildNumber(SoftwareProjectId projectId) throws ProjectNotFoundException,
             BuildNumberNotFoundException {
         throw new ProjectNotFoundException("not implemented");
-    }
-
-    private Project createProject(TeamCityProject teamCityProject) {
-        Project project = new Project(teamCityProject.getName());
-        project.setDescription(teamCityProject.getDescription());
-        return project;
     }
 
     private void checkConnected() {

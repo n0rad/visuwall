@@ -4,8 +4,6 @@ import java.util.Map.Entry;
 
 import javax.persistence.Transient;
 
-import net.awired.visuwall.api.domain.Build;
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
@@ -13,6 +11,8 @@ import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
+import net.awired.visuwall.core.business.domain.Build;
+import net.awired.visuwall.core.business.domain.Project;
 
 import org.springframework.stereotype.Component;
 

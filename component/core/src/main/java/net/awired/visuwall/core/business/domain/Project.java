@@ -14,12 +14,13 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.domain;
+package net.awired.visuwall.core.business.domain;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
+import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import org.codehaus.jackson.annotate.JsonIgnore;

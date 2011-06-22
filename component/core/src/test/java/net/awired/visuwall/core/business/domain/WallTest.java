@@ -17,7 +17,6 @@
 package net.awired.visuwall.core.business.domain;
 
 import static org.junit.Assert.assertEquals;
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.core.persistence.entity.Wall;

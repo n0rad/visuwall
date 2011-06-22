@@ -14,11 +14,14 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.domain;
+package net.awired.visuwall.core.business.domain;
 
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
+import net.awired.visuwall.api.domain.Commiter;
+import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.TestResult;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;

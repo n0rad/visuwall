@@ -1,10 +1,10 @@
 package net.awired.visuwall.core.business.process.capabilities;
 
-import net.awired.visuwall.api.domain.Build;
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
+import net.awired.visuwall.core.business.domain.Build;
+import net.awired.visuwall.core.business.domain.Project;
 import org.springframework.stereotype.Component;
 
 @Component

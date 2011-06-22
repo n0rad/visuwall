@@ -20,13 +20,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
-import net.awired.visuwall.api.domain.Build;
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import com.google.common.base.Preconditions;
 
 public class ConnectedProject extends Project {
 
@@ -47,6 +46,8 @@ public class ConnectedProject extends Project {
 
     public ConnectedProject(SoftwareProjectId projectId, BuildCapability buildCapability) {
         super(projectId.getProjectId());
+        Preconditions.checkNotNull(projectId, "projectId is a mandatory parameter");
+        Preconditions.checkNotNull(buildCapability, "buildCapability is a mandatory parameter");
         this.buildConnection = buildCapability;
         this.buildProjectId = projectId;
         this.capabilities.put(getBuildProjectId(), buildCapability);

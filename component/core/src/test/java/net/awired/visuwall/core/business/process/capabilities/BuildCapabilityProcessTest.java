@@ -5,13 +5,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 
-import net.awired.visuwall.api.domain.Build;
-import net.awired.visuwall.api.domain.Project;
 import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.plugin.Connection;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.core.business.domain.Build;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.Project;
 
 import org.junit.Assert;
 import org.junit.Before;

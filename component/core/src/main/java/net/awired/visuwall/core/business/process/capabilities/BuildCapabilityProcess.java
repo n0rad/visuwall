@@ -1,10 +1,10 @@
 package net.awired.visuwall.core.business.process.capabilities;
 
 import java.util.Date;
-import net.awired.visuwall.api.domain.Build;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.core.business.domain.Build;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +50,7 @@ public class BuildCapabilityProcess {
                 return true;
             }
         } catch (BuildNumberNotFoundException e) {
-            LOG.info("No last build number found to update project" + project);
+            LOG.info("No last build number found to update project " + project);
         }
         return false;
     }
