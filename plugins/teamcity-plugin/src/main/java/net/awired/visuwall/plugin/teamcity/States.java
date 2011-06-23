@@ -35,7 +35,6 @@ public class States {
 
 	public static final State asVisuwallState(String teamcityState) {
 		Preconditions.checkNotNull(teamcityState, "teamcityState is mandatory");
-		teamcityState = teamcityState.toLowerCase();
 		State state = STATE_MAPPING.get(teamcityState);
 		if (state == null) {
 			state = State.UNKNOWN;

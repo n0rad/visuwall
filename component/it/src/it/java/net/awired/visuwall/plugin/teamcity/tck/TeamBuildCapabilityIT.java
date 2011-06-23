@@ -16,6 +16,7 @@ import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.teamcity.TeamCityConnection;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TeamBuildCapabilityIT implements BuildCapabilityTCK {
@@ -38,6 +39,7 @@ public class TeamBuildCapabilityIT implements BuildCapabilityTCK {
 
     @Override
     @Test
+    @Ignore
     public void should_get_estimated_date() throws Exception {
         SoftwareProjectId projectId = amazonProjectSoftwareId();
         Date estimatedFinishTime = teamcity.getEstimatedFinishTime(projectId, 1);
