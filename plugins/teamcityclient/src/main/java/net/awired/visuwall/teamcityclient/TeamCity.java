@@ -64,9 +64,9 @@ public class TeamCity {
 		return teamcityFinder.getProject(projectId);
 	}
 
-	public TeamCityBuild findBuild(int buildNumber) throws TeamCityBuildNotFoundException {
-		Preconditions.checkArgument(buildNumber >= 0, "buildNumber must be >= 0");
-		return teamcityFinder.getBuild(buildNumber);
+    public TeamCityBuild findBuild(int buildId) throws TeamCityBuildNotFoundException {
+        Preconditions.checkArgument(buildId >= 0, "buildId must be >= 0");
+        return teamcityFinder.getBuild(buildId);
 	}
 
 	public TeamCityBuilds findBuildList(String buildTypeId) throws TeamCityBuildListNotFoundException {

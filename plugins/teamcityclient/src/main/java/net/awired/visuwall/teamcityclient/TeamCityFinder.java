@@ -69,14 +69,14 @@ public class TeamCityFinder {
 		}
 	}
 
-	public TeamCityBuild getBuild(int buildNumber) throws TeamCityBuildNotFoundException {
-		Preconditions.checkArgument(buildNumber >= 0, "buildNumber must be >= 0");
+    public TeamCityBuild getBuild(int buildId) throws TeamCityBuildNotFoundException {
+        Preconditions.checkArgument(buildId >= 0, "buildId must be >= 0");
 		try {
-			String buildUrl = urlBuilder.getBuild(buildNumber);
+            String buildUrl = urlBuilder.getBuild(buildId);
 			TeamCityBuild teamCityBuild = client.resource(buildUrl, TeamCityBuild.class);
 			return teamCityBuild;
 		} catch (ResourceNotFoundException e) {
-			throw new TeamCityBuildNotFoundException("Build #" + buildNumber + " has not been found", e);
+            throw new TeamCityBuildNotFoundException("Build #" + buildId + " has not been found", e);
 		}
 	}
 
