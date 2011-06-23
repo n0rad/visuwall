@@ -22,22 +22,26 @@ import java.util.TreeSet;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
 public class Build {
 
-    private Date estimatedFinishTime;
-
+    private final int buildNumber;
     private boolean building;
     private State state = State.UNKNOWN;
     private Set<Commiter> commiters = new TreeSet<Commiter>();
     private long duration;
     private Date startTime;
+    private Date estimatedFinishTime;
+
+    //TODO use composition for capabilities ? 
     private TestResult unitTestResult = new TestResult();
     private TestResult integrationTestResult = new TestResult();
-    private int buildNumber;
+
+    public Build(int buildNumber) {
+        this.buildNumber = buildNumber;
+    }
 
     public long getDuration() {
         return duration;
@@ -75,14 +79,10 @@ public class Build {
         return buildNumber;
     }
 
-    public void setBuildNumber(int buildNumber) {
-        this.buildNumber = buildNumber;
-    }
-
     @Override
     public String toString() {
         ToStringHelper toString = Objects.toStringHelper(this) //
-                .add("builder number", buildNumber) //
+                .add("builderNumber", buildNumber) //
                 .add("state", state) //
                 .add("commiters", commiters) //
                 .add("duration", duration) //

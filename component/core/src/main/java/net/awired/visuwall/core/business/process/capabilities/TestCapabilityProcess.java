@@ -1,18 +1,17 @@
 package net.awired.visuwall.core.business.process.capabilities;
 
-import net.awired.visuwall.api.domain.ProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.core.business.domain.Build;
-import net.awired.visuwall.core.business.domain.Project;
+import net.awired.visuwall.core.business.domain.ConnectedProject;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TestCapabilityProcess {
 
-    private void enhanceWithTests(Project analyzedProject, BasicCapability plugin) {
-        ProjectId projectId = analyzedProject.getProjectId();
-        Build build = analyzedProject.getCompletedBuild();
+    private void enhanceWithTests(ConnectedProject analyzedProject, BasicCapability plugin) {
+        //        ProjectId projectId = analyzedProject.getProjectId();
+        Build build = analyzedProject.getLastBuild();
 
         TestResult unitTestResultToMerge = null;
         TestResult integrationTestResultToMerge = null;

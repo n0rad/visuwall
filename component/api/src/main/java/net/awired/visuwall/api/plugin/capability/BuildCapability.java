@@ -17,7 +17,6 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.Date;
-
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -25,6 +24,8 @@ import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BuildCapability extends BasicCapability {
+
+    //    BuildTime getBuildTime(SoftwareProjectId projectId, int buildNumber);
 
     /**
      * Returns the build numbers order by integer ASC

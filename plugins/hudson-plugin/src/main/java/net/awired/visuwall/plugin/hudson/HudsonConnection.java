@@ -17,13 +17,11 @@
 package net.awired.visuwall.plugin.hudson;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -39,10 +37,8 @@ import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -57,6 +53,7 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
 
     private boolean connected;
 
+    @Override
     public void connect(String url, String login, String password) {
         Preconditions.checkNotNull(url, "url is mandatory");
         connect(url);
