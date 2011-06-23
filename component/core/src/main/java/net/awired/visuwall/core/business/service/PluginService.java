@@ -21,20 +21,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
-
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
+import net.awired.visuwall.core.business.domain.CapabilitiesEnum;
 import net.awired.visuwall.core.business.domain.PluginInfo;
 import net.awired.visuwall.core.business.domain.SoftwareInfo;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import com.google.common.base.Preconditions;
 
 @Service
@@ -96,8 +94,8 @@ public class PluginService {
         PluginInfo pluginInfo = new PluginInfo();
         pluginInfo.setName(visuwallPlugin.getName());
         pluginInfo.setVersion(visuwallPlugin.getVersion());
-        //TODO set capabilities
-        //pluginInfo.setCapabilities(capabilities);
+        Class<BasicCapability> connectionClass = visuwallPlugin.getConnectionClass();
+        pluginInfo.setCapabilities(CapabilitiesEnum.getCapabilitiesForClass(connectionClass));
         return pluginInfo;
     }
 
