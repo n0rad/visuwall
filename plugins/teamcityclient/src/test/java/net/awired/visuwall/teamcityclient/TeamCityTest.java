@@ -199,7 +199,7 @@ public class TeamCityTest {
 		assertEquals("ERROR", build.getStatus());
 		assertEquals("bt213", build.getBuildTypeId());
 		assertNotNull(build.getStartDate());
-		assertEquals("/app/rest/builds/id:51753", build.getHref());
+        assertEquals("/app/rest/builds/id:51753", build.getHref());
 		assertEquals("http://teamcity.jetbrains.com/viewLog.html?buildId=51753&buildTypeId=bt213", build.getWebUrl());
 	}
 

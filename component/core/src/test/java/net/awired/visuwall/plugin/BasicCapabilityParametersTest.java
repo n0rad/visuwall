@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.awired.visuwall.api.exception.ConnectionException;
+import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
@@ -19,11 +20,11 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class ParameterCheckTest {
+public class BasicCapabilityParametersTest {
 
     private BasicCapability connection;
 
-    public ParameterCheckTest(Class<BasicCapability> clazz) throws InstantiationException, IllegalAccessException {
+    public BasicCapabilityParametersTest(Class<BasicCapability> clazz) throws InstantiationException, IllegalAccessException {
         this.connection = clazz.newInstance();
     }
 
@@ -64,7 +65,18 @@ public class ParameterCheckTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void cant_call_find_all_software_project_ids_when_disconnected() {
+    public void cant_call_findAllSoftwareProjectIds_when_disconnected() {
         connection.findAllSoftwareProjectIds();
     }
+
+    @Test(expected = NullPointerException.class)
+    public void cant_call_find_getDescription_with_null_param() throws ProjectNotFoundException {
+        connection.getDescription(null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void cant_call_findSoftwareProjectIdsByNames_with_null_param() {
+        connection.findSoftwareProjectIdsByNames(null);
+    }
+
 }

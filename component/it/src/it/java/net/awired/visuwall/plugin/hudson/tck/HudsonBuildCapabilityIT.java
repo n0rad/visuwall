@@ -62,7 +62,7 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
 
 	@Override
     @Test
-    public void should_get_last_build_state() throws Exception {
+    public void should_get_build_state() throws Exception {
         SoftwareProjectId projectId = struts();
         int buildNumber = hudson.getLastBuildNumber(projectId);
         State state = hudson.getBuildState(projectId, buildNumber);

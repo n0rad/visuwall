@@ -17,6 +17,8 @@
 package net.awired.visuwall.plugin.teamcity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -32,8 +34,10 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.teamcityclient.TeamCity;
 import net.awired.visuwall.teamcityclient.exception.TeamCityBuildListNotFoundException;
+import net.awired.visuwall.teamcityclient.exception.TeamCityBuildNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
+import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuildItem;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuildType;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
@@ -43,15 +47,11 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 public class TeamCityConnection implements BuildCapability {
 
     private static final Logger LOG = LoggerFactory.getLogger(TeamCityConnection.class);
-
-    @VisibleForTesting
-    static final String TEAMCITY_ID = "TEAMCITY_ID";
 
     private boolean connected;
 
@@ -143,6 +143,129 @@ public class TeamCityConnection implements BuildCapability {
         }
     }
 
+    @Override
+    public List<SoftwareProjectId> findAllSoftwareProjectIds() {
+        checkConnected();
+        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
+        try {
+            List<TeamCityProject> projects = teamCity.findAllProjects();
+            for (TeamCityProject project : projects) {
+                String id = project.getId();
+                SoftwareProjectId softwareProjectId = new SoftwareProjectId(id);
+                projectIds.add(softwareProjectId);
+            }
+        } catch (TeamCityProjectsNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't build list of software project ids.", e);
+            }
+        }
+        return projectIds;
+    }
+
+    @Override
+    public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
+        checkConnected();
+        Preconditions.checkNotNull(names, "names is mandatory");
+        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
+        try {
+            List<TeamCityProject> projects = teamCity.findAllProjects();
+            for (TeamCityProject project : projects) {
+                String name = project.getName();
+                if (names.contains(name)) {
+                    String id = project.getId();
+                    SoftwareProjectId projectId = new SoftwareProjectId(id);
+                    projectIds.add(projectId);
+                }
+            }
+        } catch (TeamCityProjectsNotFoundException e) {
+            LOG.warn("Can't find projects by name with this Team City connection," + this.url, e);
+        }
+        return projectIds;
+    }
+
+    @Override
+    public State getBuildState(SoftwareProjectId softwareProjectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        checkBuildNumber(buildNumber);
+        try {
+            TeamCityBuild build = findBuild(softwareProjectId, buildNumber);
+            String status = build.getStatus();
+            State state = States.asVisuwallState(status);
+            return state;
+        } catch (TeamCityProjectNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find project for software project id:" + softwareProjectId, e);
+        } catch (TeamCityBuildNotFoundException e) {
+            throw new BuildNotFoundException("Can't find build #" + buildNumber + " for software project id:"
+                    + softwareProjectId, e);
+        }
+    }
+
+    @Override
+    public Date getEstimatedFinishTime(SoftwareProjectId softwareProjectId, int buildNumber)
+            throws ProjectNotFoundException,
+            BuildNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        checkBuildNumber(buildNumber);
+        throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public boolean isBuilding(SoftwareProjectId softwareProjectId, int buildNumber) throws ProjectNotFoundException,
+            BuildNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        checkBuildNumber(buildNumber);
+        try {
+            TeamCityBuild build = findBuild(softwareProjectId, buildNumber);
+            if (build == null) {
+                throw new BuildNotFoundException("Can't find build #" + buildNumber + " for software project id:"
+                        + softwareProjectId);
+            }
+            return build.getFinishDate().after(new Date());
+        } catch (TeamCityProjectNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find project for software project id:" + softwareProjectId, e);
+        } catch (TeamCityBuildNotFoundException e) {
+            throw new BuildNotFoundException("Can't find build #" + buildNumber + " for software project id:"
+                    + softwareProjectId, e);
+        }
+    }
+
+    @Override
+    public int getLastBuildNumber(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
+            BuildNumberNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        Integer[] buildNumbers = getBuildNumbers(softwareProjectId);
+        List<Integer> buildNumbersAsList = Arrays.asList(buildNumbers);
+        Integer lastBuildNumber = Collections.max(buildNumbersAsList);
+        return lastBuildNumber;
+    }
+
+    @Override
+    public String getMavenId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
+            MavenIdNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        throw new MavenIdNotFoundException("TeamCity does not implemented this capability");
+    }
+
+    @Override
+    public String getName(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        try {
+            String projectId = softwareProjectId.getProjectId();
+            TeamCityProject project = teamCity.findProject(projectId);
+            return project.getName();
+        } catch (TeamCityProjectNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find name of project with software project id:"
+                    + softwareProjectId, e);
+        }
+    }
+
     private void addBuildNumbers(Set<Integer> numbers, TeamCityBuildType buildType) {
         try {
             String buildTypeId = buildType.getId();
@@ -169,92 +292,35 @@ public class TeamCityConnection implements BuildCapability {
         }
     }
 
-    @Override
-    public List<SoftwareProjectId> findAllSoftwareProjectIds() {
-        checkConnected();
-        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
-        try {
-            List<TeamCityProject> projects = teamCity.findAllProjects();
-            for (TeamCityProject project : projects) {
-                String id = project.getId();
-                SoftwareProjectId softwareProjectId = new SoftwareProjectId(id);
-                projectIds.add(softwareProjectId);
-            }
-        } catch (TeamCityProjectsNotFoundException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Can't build list of software project ids.", e);
-            }
-        }
-        return projectIds;
-    }
-
-    @Override
-    public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
-        checkConnected();
-        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
-        try {
-            List<TeamCityProject> projects = teamCity.findAllProjects();
-            for (TeamCityProject project : projects) {
-                String name = project.getName();
-                if (names.contains(name)) {
-                    String id = project.getId();
-                    SoftwareProjectId projectId = new SoftwareProjectId(id);
-                    projectIds.add(projectId);
+    private TeamCityBuild findBuild(SoftwareProjectId softwareProjectId, int buildNumber)
+            throws TeamCityProjectNotFoundException, TeamCityBuildNotFoundException {
+        String buildNumberAsString = Integer.toString(buildNumber);
+        String projectId = softwareProjectId.getProjectId();
+        TeamCityProject project = teamCity.findProject(projectId);
+        List<TeamCityBuildType> buildTypes = project.getBuildTypes();
+        for (TeamCityBuildType buildType : buildTypes) {
+            try {
+                String buildTypeId = buildType.getId();
+                TeamCityBuilds buildList = teamCity.findBuildList(buildTypeId);
+                List<TeamCityBuildItem> builds = buildList.getBuilds();
+                for (TeamCityBuildItem buildItem : builds) {
+                    if (buildItem.getNumber().equals(buildNumberAsString)) {
+                        String buildId = buildItem.getId();
+                        int buildIdAsString = Integer.parseInt(buildId);
+                        return teamCity.findBuild(buildIdAsString);
+                    }
+                }
+            } catch (TeamCityBuildListNotFoundException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage());
                 }
             }
-        } catch (TeamCityProjectsNotFoundException e) {
-            LOG.warn("Can't find projects by name with this Team City connection," + this.url, e);
         }
-        return projectIds;
+        return null;
     }
 
-    @Override
-    public State getBuildState(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
-            BuildNotFoundException {
-        checkConnected();
-        throw new ProjectNotFoundException("not implemented");
-    }
-
-    @Override
-    public Date getEstimatedFinishTime(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
-            BuildNotFoundException {
-        checkConnected();
-        throw new ProjectNotFoundException("not implemented");
-    }
-
-    @Override
-    public boolean isBuilding(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
-            BuildNotFoundException {
-        throw new ProjectNotFoundException("not implemented");
-    }
-
-    @Override
-    public int getLastBuildNumber(SoftwareProjectId projectId) throws ProjectNotFoundException,
-            BuildNumberNotFoundException {
-        checkConnected();
-        throw new ProjectNotFoundException("not implemented");
-    }
-
-    @Override
-    public String getMavenId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
-            MavenIdNotFoundException {
-        checkConnected();
-        checkSoftwareProjectId(softwareProjectId);
-        throw new MavenIdNotFoundException("TeamCity does not implemented this capability");
-    }
-
-    @Override
-    public String getName(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
-        checkConnected();
-        checkSoftwareProjectId(softwareProjectId);
-        try {
-            String projectId = softwareProjectId.getProjectId();
-            TeamCityProject project = teamCity.findProject(projectId);
-            return project.getName();
-        } catch (TeamCityProjectNotFoundException e) {
-            throw new ProjectNotFoundException("Can't find name of project with software project id:"
-                    + softwareProjectId, e);
-        }
+    private void checkBuildNumber(int buildNumber) {
+        Preconditions.checkArgument(buildNumber >= 0, "buildNumber must be >= 0");
     }
 
     private void checkConnected() {

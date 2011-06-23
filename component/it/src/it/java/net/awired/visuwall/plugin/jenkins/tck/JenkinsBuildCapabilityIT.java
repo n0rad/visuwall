@@ -54,7 +54,7 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
 
 	@Override
 	@Test
-    public void should_get_last_build_state() throws Exception {
+    public void should_get_build_state() throws Exception {
         SoftwareProjectId projectId = new SoftwareProjectId("struts");
         int buildNumber = jenkins.getLastBuildNumber(projectId);
         State state = jenkins.getBuildState(projectId, buildNumber);

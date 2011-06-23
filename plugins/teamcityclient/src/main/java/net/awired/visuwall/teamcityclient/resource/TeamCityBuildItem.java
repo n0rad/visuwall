@@ -26,8 +26,9 @@ public class TeamCityBuildItem extends TeamCityAbstractBuild {
 	private String buildTypeId;
 
 	@XmlAttribute
-	private String startDate;
+    private String startDate;
 
+    // warning, it's not always an integer
     @XmlAttribute
     private String number;
 

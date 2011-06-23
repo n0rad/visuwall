@@ -28,4 +28,8 @@ public final class BuildNotFoundException extends Exception {
         super(t);
     }
 
+    public BuildNotFoundException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
+
 }
