@@ -28,7 +28,7 @@ public interface BuildCapabilityTCK {
     void should_get_last_build_number() throws Exception;
 
     // getLastBuildState
-    void should_get_last_build_state() throws Exception;
+    void should_get_build_state() throws Exception;
 
 	// isBuilding
     void should_get_is_building() throws Exception;
