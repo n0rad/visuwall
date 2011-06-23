@@ -75,6 +75,9 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	
 
 	this._updateLastBuild = function(project) {
+		
+		var lastBuild = project.builds[project.lastBuildNumber]; 
+		
 		//TODO use completedBuildId
 		if (project.completedBuild == null) {
 			return;
@@ -118,7 +121,8 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	};
 	
 	this._updateState = function(project) {
-		var stateFunction = 'display' + project.state.toLowerCase().ucfirst();
+		var lastBuild = project.builds[project.lastBuildNumber]; 
+		var stateFunction = 'display' + lastBuild.state.toLowerCase().ucfirst();
 		$this.wallView[stateFunction](project.id);
 	};
 
@@ -131,6 +135,7 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	};
 
 	this._updateAgo = function(project) {
+		var lastBuild = project.builds[project.lastBuildNumber]; 
 		if (project.completedBuild != null) {
 			var finishDate = new Date(project.completedBuild.startTime + project.completedBuild.duration);
 			$this.wallView.updateAgo(project.id, finishDate);

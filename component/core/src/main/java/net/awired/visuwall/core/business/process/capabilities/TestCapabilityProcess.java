@@ -11,7 +11,7 @@ public class TestCapabilityProcess {
 
     private void enhanceWithTests(ConnectedProject analyzedProject, BasicCapability plugin) {
         //        ProjectId projectId = analyzedProject.getProjectId();
-        Build build = analyzedProject.getCompletedBuild();
+        Build build = analyzedProject.getLastBuild();
 
         TestResult unitTestResultToMerge = null;
         TestResult integrationTestResultToMerge = null;

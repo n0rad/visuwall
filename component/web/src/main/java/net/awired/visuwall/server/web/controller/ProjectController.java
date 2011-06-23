@@ -40,7 +40,8 @@ public class ProjectController {
     public @ResponseBody
     ConnectedProject getProject(@PathVariable String wallName, @PathVariable String projectId) throws Exception {
         Wall wall = wallService.find(wallName);
-        return wall.getProjects().getById(projectId);
+        ConnectedProject project = wall.getProjects().getById(projectId);
+        return project;
     }
 
 }

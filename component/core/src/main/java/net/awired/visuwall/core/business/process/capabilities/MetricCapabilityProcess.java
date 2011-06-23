@@ -20,7 +20,7 @@ public class MetricCapabilityProcess {
 
     void enhanceWithQualityAnalysis(ConnectedProject analyzedProject, BasicCapability plugin, String... metrics) {
         SoftwareProjectId projectId = null;// analyzedProject.getProjectId();
-        Build build = analyzedProject.getCompletedBuild();
+        Build build = analyzedProject.getLastBuild();
 
         TestResult unitTestResultToMerge = null;
         TestResult integrationTestResultToMerge = null;

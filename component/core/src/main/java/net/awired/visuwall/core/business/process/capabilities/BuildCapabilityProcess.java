@@ -1,19 +1,16 @@
 package net.awired.visuwall.core.business.process.capabilities;
 
 import java.util.Date;
-
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.core.business.domain.Build;
 import net.awired.visuwall.core.business.domain.ConnectedProject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
-
 import com.google.common.base.Preconditions;
 
 @Component
@@ -28,18 +25,18 @@ public class BuildCapabilityProcess {
             BuildNotFoundException {
         try {
             int lastBuildNumber = project.getBuildConnection().getLastBuildNumber(project.getBuildProjectId());
-            int previousLastBuildNumber = project.getCurrentBuildId();
+            int previousLastBuildNumber = project.getLastBuildNumber();
             boolean building = project.getBuildConnection().isBuilding(project.getBuildProjectId(), lastBuildNumber);
             boolean previousBuilding = false;
-            try {
-                previousBuilding = project.getCurrentBuild().isBuilding();
-            } catch (BuildNotFoundException e) {
-                LOG.info("No currentBuild found to say the project was building before refresh " + project);
-            }
+            //            try {
+            previousBuilding = project.getLastBuild().isBuilding();
+            //            } catch (BuildNotFoundException e) {
+            //                LOG.info("No currentBuild found to say the project was building before refresh " + project);
+            //            }
 
             Build lastBuild = project.findCreatedBuild(lastBuildNumber);
             lastBuild.setBuilding(building);
-            project.setCurrentBuildId(lastBuildNumber);
+            project.setLastBuildNumber(lastBuildNumber);
             if (previousBuilding == false && building == true) {
                 // currently building
                 Runnable finishTimeRunner = getEstimatedFinishTimeRunner(project, lastBuild);

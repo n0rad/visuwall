@@ -24,24 +24,29 @@ import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Preconditions;
 
 public class ConnectedProject implements Comparable<ConnectedProject> {
 
-    private final String id = new BigInteger(42, new SecureRandom()).toString(36);
+    private static final Logger LOG = LoggerFactory.getLogger(ConnectedProject.class);
 
+    private final String id = new BigInteger(42, new SecureRandom()).toString(36);
+    private String name;
     private String description;
+
     private int[] buildNumbers;
     protected Map<Integer, Build> builds = new HashMap<Integer, Build>();
 
-    private int completedBuildId;
-    private int currentBuildId;
+    private int lastBuildNumber;
+    private int lastCompletedBuildNumber;
+
     //    private ProjectKey projectKey;
 
     private QualityResult qualityResult = new QualityResult();
@@ -72,16 +77,17 @@ public class ConnectedProject implements Comparable<ConnectedProject> {
     public Build findCreatedBuild(Integer buildNumber) {
         Build build = builds.get(buildNumber);
         if (build == null) {
-            build = new Build();
+            LOG.debug("Build with id " + lastBuildNumber + " not found and will be created for project " + this);
+            build = new Build(buildNumber);
             this.builds.put(buildNumber, build);
         }
         return build;
     }
 
-    @JsonIgnore
-    public Build getCompletedBuild() {
-        return builds.get(completedBuildId);
-    }
+    //    @JsonIgnore
+    //    public Build getCompletedBuild() {
+    //        return builds.get(completedBuildId);
+    //    }
 
     @JsonIgnore
     public void setCompletedBuild(Build completedBuild) {
@@ -91,19 +97,16 @@ public class ConnectedProject implements Comparable<ConnectedProject> {
     }
 
     @JsonIgnore
-    public Build getCurrentBuild() throws BuildNotFoundException {
-        Build build = builds.get(getCurrentBuildId());
-        if (build == null) {
-            throw new BuildNotFoundException("Build not found in project");
-        }
-        return build;
+    public Build getLastBuild() {
+        return findCreatedBuild(lastBuildNumber);
     }
 
-    @JsonIgnore
-    public void setCurrentBuild(Build currentBuild) {
-        this.builds.put(currentBuild.getBuildNumber(), currentBuild);
-        this.setCurrentBuildId(currentBuild.getBuildNumber());
-    }
+    //
+    //    @JsonIgnore
+    //    public void setCurrentBuild(Build currentBuild) {
+    //        this.builds.put(currentBuild.getBuildNumber(), currentBuild);
+    //        this.setCurrentBuildId(currentBuild.getBuildNumber());
+    //    }
 
     @Override
     public String toString() {
@@ -176,20 +179,14 @@ public class ConnectedProject implements Comparable<ConnectedProject> {
         return qualityResult;
     }
 
+    @JsonIgnore
     public int[] getBuildNumbers() {
         return buildNumbers;
     }
 
+    @JsonIgnore
     public void setBuildNumbers(int[] buildNumbers) {
         this.buildNumbers = buildNumbers;
-    }
-
-    public int getCompletedBuildId() {
-        return completedBuildId;
-    }
-
-    public int getCurrentBuildId() {
-        return currentBuildId;
     }
 
     public String getId() {
@@ -204,8 +201,28 @@ public class ConnectedProject implements Comparable<ConnectedProject> {
         return description;
     }
 
-    public void setCurrentBuildId(int currentBuildId) {
-        this.currentBuildId = currentBuildId;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setLastBuildNumber(int lastBuildNumber) {
+        this.lastBuildNumber = lastBuildNumber;
+    }
+
+    public int getLastBuildNumber() {
+        return lastBuildNumber;
+    }
+
+    public Map<Integer, Build> getBuilds() {
+        return builds;
+    }
+
+    public void setBuilds(Map<Integer, Build> builds) {
+        this.builds = builds;
     }
 
 }

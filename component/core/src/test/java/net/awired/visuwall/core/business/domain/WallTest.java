@@ -19,9 +19,11 @@ package net.awired.visuwall.core.business.domain;
 import static org.junit.Assert.assertEquals;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.persistence.entity.Wall;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class WallTest {
 
@@ -36,9 +38,11 @@ public class WallTest {
     @Test
     public void should_find_project_by_id() throws ProjectNotFoundException {
         SoftwareProjectId projectId = new SoftwareProjectId("name");
+        BuildCapability buildCapability = Mockito.mock(BuildCapability.class);
 
         Wall wall = new Wall();
-        ConnectedProject project = new ConnectedProject(projectId, null);
+
+        ConnectedProject project = new ConnectedProject(projectId, buildCapability);
         wall.getProjects().add(project);
 
         ConnectedProject foundProject = wall.getProjects().getById(project.getId());
