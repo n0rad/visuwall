@@ -33,7 +33,6 @@ public class HudsonPluginIT {
     public static void init() {
         pluginInfo.setName("Hudson plugin");
         pluginInfo.setVersion(1.0f);
-        pluginInfo.setClassName(HudsonPlugin.class.getName());
     }
 
     @Test
