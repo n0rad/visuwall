@@ -30,6 +30,9 @@ import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProjects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Preconditions;
 
 public class TeamCityFinder {
@@ -37,6 +40,8 @@ public class TeamCityFinder {
 	private GenericSoftwareClient client;
 
 	private TeamCityUrlBuilder urlBuilder;
+
+    private static final Logger LOG = LoggerFactory.getLogger(TeamCityFinder.class);
 
 	public TeamCityFinder(GenericSoftwareClient client, TeamCityUrlBuilder urlBuilder) {
 		this.client = client;
@@ -79,6 +84,9 @@ public class TeamCityFinder {
 		Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
 		try {
 			String buildListUrl = urlBuilder.getBuildList(buildTypeId);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(buildListUrl);
+            }
 			TeamCityBuilds teamCityBuilds = client.resource(buildListUrl, TeamCityBuilds.class);
 			return teamCityBuilds;
 		} catch (ResourceNotFoundException e) {

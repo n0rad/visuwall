@@ -36,6 +36,9 @@ public class TeamCityBuild extends TeamCityAbstractBuild {
 	@XmlAttribute
 	private boolean pinned;
 
+    @XmlAttribute
+    private String number;
+
 	private String statusText;
 
 	private TeamCityBuildType buildType;
@@ -162,4 +165,11 @@ public class TeamCityBuild extends TeamCityAbstractBuild {
 		this.relatedIssues = relatedIssues;
 	}
 
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 }
