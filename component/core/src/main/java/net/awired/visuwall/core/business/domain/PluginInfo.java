@@ -23,15 +23,9 @@ public class PluginInfo {
 
     private String name;
     private float version;
-    private String className;
-    private Class connectionClass;
-    private List<String> capabilities;
+    private List<CapabilitiesEnum> capabilities;
 
     // //////////////////////
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
 
     public String getName() {
         return name;
@@ -49,39 +43,27 @@ public class PluginInfo {
         this.version = version;
     }
 
-    public String getClassName() {
-        return className;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof PluginInfo) {
             PluginInfo pi = (PluginInfo) obj;
             return Objects.equal(name, pi.name) && //
-                    Objects.equal(version, pi.version) && //
-                    Objects.equal(className, pi.className);
+                    Objects.equal(version, pi.version) //
+            ;
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(name, version, className);
+        return Objects.hashCode(name, version);
     }
 
-    public void setConnectionClass(Class connectionClass) {
-        this.connectionClass = connectionClass;
-    }
-
-    public Class getConnectionClass() {
-        return connectionClass;
-    }
-
-    public List<String> getCapabilities() {
-        return capabilities;
-    }
-
-    public void setCapabilities(List<String> capabilities) {
+    public void setCapabilities(List<CapabilitiesEnum> capabilities) {
         this.capabilities = capabilities;
+    }
+
+    public List<CapabilitiesEnum> getCapabilities() {
+        return capabilities;
     }
 }

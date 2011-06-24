@@ -181,8 +181,8 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 		
 		domObj.switchClasses(classes, 'loadingCheck', 1);
 		$this.pluginService.manageable($(this).val(), function(softwareInfo) {
+			//success
 			if (softwareInfo.warnings) {
-				//success
 				domObj.switchClasses(classes, 'warningCheck', 1);				
 				
 
@@ -250,6 +250,14 @@ var ff = '				<table class="softwareInfo">'
 			} else {
 				//success
 				domObj.switchClasses(classes, 'successCheck', 1);				
+			}
+
+			
+			// display build part
+			if ($.inArray('build', softwareInfo.pluginInfo.capabilities) != -1) {
+				$('FIELDSET.buildField', tabContent).show();
+			} else {
+				$('FIELDSET.buildField', tabContent).hide();				
 			}
 			
 			// project Names

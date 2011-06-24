@@ -79,7 +79,7 @@
 					<div class="slider projectStatusDelaySecondSlider"></div>
 					<input id="softwareAccesses0.projectStatusDelaySecond" name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
 				</fieldset>			
-		
+				<div style="clear: both;"></div>
 				<fieldset class="buildField" style="display: none">
 					<legend>Builds</legend>
 	
