@@ -19,12 +19,10 @@ package net.awired.visuwall.core.business.service;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
-import net.awired.visuwall.core.business.domain.Build;
 import net.awired.visuwall.core.business.domain.Project;
 import net.awired.visuwall.core.business.process.capabilities.BuildCapabilityProcess;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
@@ -98,34 +96,35 @@ public class ProjectService {
                             String name = project.getBuildConnection().getName(projectId);
                             project.setName(name);
                         } catch (Exception e) {
-                            LOG.error(e.getMessage(), e);
+                            LOG.warn("Can not found project name for project " + project, e);
                         }
 
                         // description
-                        String description = project.getBuildConnection().getDescription(projectId);
-                        project.setDescription(description);
-
-                        // buildNumber
-                        List<Integer> buildNumbers = project.getBuildConnection().getBuildNumbers(projectId);
-                        project.setBuildNumbers(buildNumbers);
-
                         try {
-                            // lastbuild
+                            String description = project.getBuildConnection().getDescription(projectId);
+                            project.setDescription(description);
+                        } catch (Exception e) {
+                            LOG.warn("Can not found description for project " + project, e);
+                        }
+
+                        // lastBuild
+                        try {
                             int lastBuildNumber = project.getBuildConnection().getLastBuildNumber(projectId);
                             project.setLastBuildNumber(lastBuildNumber);
-
-                            // state
-                            State state = project.getBuildConnection().getBuildState(projectId, lastBuildNumber);
-                            Build lastBuild = project.getLastBuild();
-                            lastBuild.setState(state);
-
-                            // buildTime
-                            //TODO it
-
-                            buildProcess.updatePreviousCompletedBuild(project);
-
+                            buildProcess.updateBuild(project, lastBuildNumber);
                         } catch (BuildNumberNotFoundException e) {
-                            LOG.debug("No lastBuild found from software");
+                            LOG.info("No last build found for project " + project);
+                            LOG.debug("No last build found cause ", e);
+                        } catch (Exception e) {
+                            LOG.warn("Can not update last build for project " + project, e);
+                        }
+
+                        try {
+                            List<Integer> buildNumbers = project.getBuildConnection().getBuildNumbers(projectId);
+                            project.setBuildNumbers(buildNumbers);
+                            buildProcess.updatePreviousCompletedBuild(project);
+                        } catch (Exception e) {
+                            LOG.warn("Can not update previous completed build for project " + project, e);
                         }
 
                         // TODO check for new software to update

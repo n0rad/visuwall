@@ -24,8 +24,6 @@ public class BuildCapabilityProcess {
     @Autowired
     TaskScheduler scheduler;
 
-    private static final int SKIP_FIRST_BUILD_POS = 1;
-
     public void updatePreviousCompletedBuild(Project project) throws ProjectNotFoundException {
         List<Integer> buildNumbers = project.getBuildNumbers();
         if (buildNumbers.size() < 2) {
@@ -55,8 +53,6 @@ public class BuildCapabilityProcess {
     }
 
     public void updateBuild(Project project, Integer buildNumber) throws ProjectNotFoundException {
-        Preconditions.checkState(!project.getBuildNumbers().contains(buildNumber),
-                "buildNumber '%s' not found in builds Number to update build in project %s ", buildNumber, project);
         try {
             SoftwareProjectId projectId = project.getBuildProjectId();
 
@@ -124,8 +120,7 @@ public class BuildCapabilityProcess {
      * @return null if no date could be estimated
      * @throws ProjectNotFoundException
      */
-    Runnable getEstimatedFinishTimeRunner(final Project project, final Build build)
-            throws ProjectNotFoundException {
+    Runnable getEstimatedFinishTimeRunner(final Project project, final Build build) throws ProjectNotFoundException {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
         return new Runnable() {
             @Override
