@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
@@ -37,9 +38,11 @@ import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.wsclient.services.Measure;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -85,6 +88,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
     }
 
     public boolean isSonarInstance(URL url) {
+        checkConnected();
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
             url = new URL(url.toString() + "/api/properties");
@@ -141,8 +145,9 @@ public class SonarConnection implements MetricCapability, TestCapability {
     }
 
     @Override
-    public String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public String getDescription(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
         throw new ProjectNotFoundException("not implemented");
     }
 
@@ -161,13 +166,14 @@ public class SonarConnection implements MetricCapability, TestCapability {
     @Override
     public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
         checkConnected();
+        Preconditions.checkNotNull(names, "names is mandatory");
         return new ArrayList<SoftwareProjectId>();
     }
 
     @Override
     public TestResult analyzeUnitTests(SoftwareProjectId projectId) {
         checkConnected();
-        checkProjectId(projectId);
+        checkSoftwareProjectId(projectId);
         TestResult unitTestResult = new TestResult();
         String artifactId = projectId.getProjectId();
         if (Strings.isNullOrEmpty(artifactId)) {
@@ -183,7 +189,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
     @Override
     public TestResult analyzeIntegrationTests(SoftwareProjectId projectId) {
         checkConnected();
-        checkProjectId(projectId);
+        checkSoftwareProjectId(projectId);
         TestResult integrationTestResult = new TestResult();
         try {
             String artifactId = projectId.getProjectId();
@@ -207,7 +213,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
     @Override
     public QualityResult analyzeQuality(SoftwareProjectId projectId, String... metrics) {
         checkConnected();
-        checkProjectId(projectId);
+        checkSoftwareProjectId(projectId);
         if (metricsMap == null) {
             initializeMetrics();
         }
@@ -285,12 +291,17 @@ public class SonarConnection implements MetricCapability, TestCapability {
         }
     }
 
-    private void checkProjectId(SoftwareProjectId projectId) {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+    private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
+        Preconditions.checkNotNull(softwareProjectId, "softwareProjectId is mandatory");
     }
 
     private void checkConnected() {
         Preconditions.checkState(connected, "You must connect your plugin");
+    }
+
+    @Override
+    public boolean isClosed() {
+        return !connected;
     }
 
 }

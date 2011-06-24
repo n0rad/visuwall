@@ -1,0 +1,90 @@
+package net.awired.visuwall.plugin;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
+import net.awired.visuwall.plugin.bamboo.BambooConnection;
+import net.awired.visuwall.plugin.hudson.HudsonConnection;
+import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
+import net.awired.visuwall.plugin.sonar.SonarConnection;
+import net.awired.visuwall.plugin.teamcity.TeamCityConnection;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+@RunWith(Parameterized.class)
+public class MandatoryConnectionTest {
+
+    private static final List<String> METHODS_NOT_TO_TEST = Arrays.asList("equals", "close", "connect", "hashCode",
+            "isClosed");
+
+    private String className;
+    private Method method;
+    private BasicCapability basicCapability;
+
+    public MandatoryConnectionTest(BasicCapability basicCapability, String className, Method method) {
+        this.basicCapability = basicCapability;
+        this.className = className;
+        this.method = method;
+    }
+
+    @Parameters
+    public static Collection<Object[]> createData() throws InstantiationException, IllegalAccessException {
+        @SuppressWarnings("unchecked")
+        List<Class<? extends BasicCapability>> connections = Arrays.asList(//
+                JenkinsConnection.class, //
+                HudsonConnection.class, //
+                TeamCityConnection.class, //
+                BambooConnection.class, //
+                SonarConnection.class);
+        List<Object[]> objects = new ArrayList<Object[]>();
+        for (Class<? extends BasicCapability> clazz : connections) {
+            addMethodsToTest(objects, clazz);
+        }
+        return objects;
+    }
+
+    private static void addMethodsToTest(List<Object[]> objects, Class<? extends BasicCapability> clazz)
+            throws InstantiationException, IllegalAccessException {
+        BasicCapability basicCapability = clazz.newInstance();
+        String className = clazz.getName();
+        Method[] methods = clazz.getDeclaredMethods();
+        for (Method method : methods) {
+            if (isTestable(method)) {
+                objects.add(new Object[] { basicCapability, className, method });
+            }
+        }
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testMethod() throws Throwable {
+        assertTrue(basicCapability.isClosed());
+        String fullMethodName = className + "." + method.getName();
+        try {
+            Class<?>[] parameterTypes = method.getParameterTypes();
+            int numParameters = parameterTypes.length;
+            method.invoke(basicCapability, new Object[numParameters]);
+        } catch (Exception e) {
+            if (e.getCause() instanceof IllegalStateException) {
+                throw e.getCause();
+            }
+            e.printStackTrace();
+            fail(fullMethodName + " can't be invoke without a connection");
+        }
+        fail("You can't invoke " + fullMethodName + " without being connected");
+    }
+
+    private static boolean isTestable(Method method) {
+        return method.getModifiers() == 1 && !METHODS_NOT_TO_TEST.contains(method.getName());
+    }
+
+}

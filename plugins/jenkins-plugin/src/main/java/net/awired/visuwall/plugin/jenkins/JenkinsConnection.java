@@ -17,11 +17,13 @@
 package net.awired.visuwall.plugin.jenkins;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -37,8 +39,10 @@ import net.awired.visuwall.hudsonclient.domain.HudsonProject;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -81,8 +85,8 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
     }
 
     @Override
-    public Date getEstimatedFinishTime(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
-            BuildNotFoundException {
+    public Date getEstimatedFinishTime(SoftwareProjectId projectId, Integer buildNumber)
+            throws ProjectNotFoundException, BuildNotFoundException {
         checkSoftwareProjectId(projectId);
         checkConnected();
         try {
@@ -94,7 +98,7 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
     }
 
     @Override
-    public boolean isBuilding(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+    public boolean isBuilding(SoftwareProjectId projectId, Integer buildNumber) throws ProjectNotFoundException,
             BuildNotFoundException {
         checkSoftwareProjectId(projectId);
         checkConnected();
@@ -107,7 +111,7 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
     }
 
     @Override
-    public State getBuildState(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+    public State getBuildState(SoftwareProjectId projectId, Integer buildNumber) throws ProjectNotFoundException,
             BuildNotFoundException {
         checkSoftwareProjectId(projectId);
         checkConnected();
@@ -224,9 +228,16 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
     }
 
     @Override
-    public String getName(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public String getName(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
-        throw new ProjectNotFoundException("not implemented");
+        checkSoftwareProjectId(softwareProjectId);
+        String projectName = softwareProjectId.getProjectId();
+        try {
+            HudsonProject project = hudson.findProject(projectName);
+            return project.getName();
+        } catch (HudsonJobNotFoundException e) {
+            throw new ProjectNotFoundException("Can't get name of project " + softwareProjectId, e);
+        }
     }
 
     private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
@@ -244,6 +255,11 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
             throw new HudsonJobNotFoundException("Project id " + softwareProjectId + " does not contain Jenkins id");
         }
         return jobName;
+    }
+
+    @Override
+    public boolean isClosed() {
+        return !connected;
     }
 
 }
