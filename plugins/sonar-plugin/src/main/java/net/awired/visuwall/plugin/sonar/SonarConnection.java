@@ -217,28 +217,32 @@ public class SonarConnection implements MetricCapability, TestCapability {
         if (metricsMap == null) {
             initializeMetrics();
         }
+        if (metrics.length == 0) {
+            metrics = metricKeys;
+        }
         QualityResult qualityResult = new QualityResult();
         String artifactId = projectId.getProjectId();
         if (!Strings.isNullOrEmpty(artifactId)) {
-            if (metrics.length == 0) {
-                metrics = metricKeys;
-            }
             for (String key : metrics) {
-                try {
-                    Measure measure = measureFinder.findMeasure(artifactId, key);
-                    if (measure.getValue() != null) {
-                        QualityMeasure qualityMeasure = QualityMeasures.asQualityMeasure(measure, key);
-                        qualityMeasure.setName(metricsMap.get(key).getName());
-                        qualityResult.add(key, qualityMeasure);
-                    }
-                } catch (SonarMeasureNotFoundException e) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug(e.getMessage());
-                    }
-                }
+                addQualityMeasure(qualityResult, artifactId, key);
             }
         }
         return qualityResult;
+    }
+
+    private void addQualityMeasure(QualityResult qualityResult, String artifactId, String key) {
+        try {
+            Measure measure = measureFinder.findMeasure(artifactId, key);
+            if (measure.getValue() != null) {
+                QualityMeasure qualityMeasure = QualityMeasures.asQualityMeasure(measure, key);
+                qualityMeasure.setName(metricsMap.get(key).getName());
+                qualityResult.add(key, qualityMeasure);
+            }
+        } catch (SonarMeasureNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -251,6 +255,11 @@ public class SonarConnection implements MetricCapability, TestCapability {
     public String getName(SoftwareProjectId projectId) throws ProjectNotFoundException {
         checkConnected();
         throw new ProjectNotFoundException("not implemented");
+    }
+
+    @Override
+    public boolean isClosed() {
+        return !connected;
     }
 
     private TestResult createUnitTestAnalysis(String artifactId) {
@@ -280,10 +289,10 @@ public class SonarConnection implements MetricCapability, TestCapability {
 
     private void initializeMetrics() {
         try {
-        metricsMap = metricFinder.findMetrics();
-        Set<String> metricKeysSet = metricsMap.keySet();
-        int countMetricKeys = metricKeysSet.size();
-        metricKeys = metricKeysSet.toArray(new String[countMetricKeys]);
+            metricsMap = metricFinder.findMetrics();
+            Set<String> metricKeysSet = metricsMap.keySet();
+            int countMetricKeys = metricKeysSet.size();
+            metricKeys = metricKeysSet.toArray(new String[countMetricKeys]);
         } catch (SonarMetricsNotFoundException e) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Can't initialize metrics", e);
@@ -297,11 +306,6 @@ public class SonarConnection implements MetricCapability, TestCapability {
 
     private void checkConnected() {
         Preconditions.checkState(connected, "You must connect your plugin");
-    }
-
-    @Override
-    public boolean isClosed() {
-        return !connected;
     }
 
 }

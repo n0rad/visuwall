@@ -57,27 +57,23 @@ public class MeasureFinder {
     public Measure findMeasure(String artifactId, String measureKey) throws SonarMeasureNotFoundException {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(artifactId), "artifactId is a mandatory parameter");
         Preconditions.checkNotNull(measureKey, "measureKey is a mandatory parameter");
-        try {
-            Measure measure = findMeasureFromSonar(artifactId, measureKey);
-            if (measure == null) {
-                throw new SonarMeasureNotFoundException("Measure [" + measureKey + "] not found for project "
-                        + artifactId + " in Sonar " + sonarUrl);
-            }
-            return measure;
-        } catch (ConnectionException e) {
-            throw new SonarMeasureNotFoundException("Metric " + measureKey + " not found for project " + artifactId
-                    + " in Sonar " + sonarUrl, e);
-        }
+        Measure measure = findMeasureFromSonar(artifactId, measureKey);
+        return measure;
     }
 
     private Measure findMeasureFromSonar(String artifactId, String measureKey) throws SonarMeasureNotFoundException {
         ResourceQuery query = ResourceQuery.createForMetrics(artifactId, measureKey);
-        Resource resource = sonar.find(query);
-        if (resource == null) {
-            throw new SonarMeasureNotFoundException("Metric " + measureKey + " not found for project "
-                    + artifactId + " in Sonar " + sonarUrl);
+        try {
+            Resource resource = sonar.find(query);
+            if (resource == null) {
+                throw new SonarMeasureNotFoundException("Metric " + measureKey + " not found for project " + artifactId
+                        + " in Sonar " + sonarUrl);
+            }
+            return resource.getMeasure(measureKey);
+        } catch (ConnectionException e) {
+            throw new SonarMeasureNotFoundException("Metric " + measureKey + " not found for project " + artifactId
+                    + " in Sonar " + sonarUrl, e);
         }
-        return resource.getMeasure(measureKey);
     }
 
 }

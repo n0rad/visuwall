@@ -49,6 +49,7 @@ public class SonarConnectionTest {
     MeasureFinder measureFinder = Mockito.mock(MeasureFinder.class);
 
     SonarConnection sonar;
+
     @Before
     public void init() throws Exception {
         when(metricFinder.findMetrics()).thenReturn(metricList);
@@ -192,6 +193,7 @@ public class SonarConnectionTest {
     @Test
     public void should_close_connection() {
         sonar.close();
+        assertTrue(sonar.isClosed());
     }
 
     @Test
