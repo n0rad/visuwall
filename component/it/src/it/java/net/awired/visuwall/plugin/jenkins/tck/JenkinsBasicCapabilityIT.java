@@ -103,9 +103,11 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
     }
 
     @Override
-    @Ignore
     @Test
     public void should_get_name_of_a_project() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("struts");
+        String name = jenkins.getName(softwareProjectId);
+        assertEquals("struts", name);
     }
 
 }
