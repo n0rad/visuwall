@@ -17,6 +17,7 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.Date;
+import java.util.List;
 
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -35,7 +36,7 @@ public interface BuildCapability extends BasicCapability {
      * @return
      * @throws ProjectNotFoundException
      */
-    Integer[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException;
+    List<Integer> getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException;
 
     /**
      * Builds are in a certain state which may vary between software You'll have to try to associate them with common

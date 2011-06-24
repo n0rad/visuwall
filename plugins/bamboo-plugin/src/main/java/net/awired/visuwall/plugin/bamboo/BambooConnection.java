@@ -187,9 +187,9 @@ public class BambooConnection implements BuildCapability {
     }
 
     @Override
-    public Integer[] getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public List<Integer> getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
         checkConnected();
-        return new Integer[0];
+        return new ArrayList<Integer>();
     }
 
     @Override

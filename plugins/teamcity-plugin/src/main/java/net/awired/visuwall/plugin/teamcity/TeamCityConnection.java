@@ -17,7 +17,6 @@
 package net.awired.visuwall.plugin.teamcity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -125,7 +124,7 @@ public class TeamCityConnection implements BuildCapability {
     }
 
     @Override
-    public Integer[] getBuildNumbers(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
+    public List<Integer> getBuildNumbers(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         try {
@@ -136,7 +135,7 @@ public class TeamCityConnection implements BuildCapability {
             for (TeamCityBuildType buildType : buildTypes) {
                 addBuildNumbers(numbers, buildType);
             }
-            return numbers.toArray(new Integer[numbers.size()]);
+            return new ArrayList<Integer>(numbers);
         } catch (TeamCityProjectNotFoundException e) {
             throw new ProjectNotFoundException("Can't find build numbers of software project id:" + softwareProjectId,
                     e);
@@ -240,9 +239,8 @@ public class TeamCityConnection implements BuildCapability {
             BuildNumberNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
-        Integer[] buildNumbers = getBuildNumbers(softwareProjectId);
-        List<Integer> buildNumbersAsList = Arrays.asList(buildNumbers);
-        Integer lastBuildNumber = Collections.max(buildNumbersAsList);
+        List<Integer> buildNumbers = getBuildNumbers(softwareProjectId);
+        Integer lastBuildNumber = Collections.max(buildNumbers);
         return lastBuildNumber;
     }
 
