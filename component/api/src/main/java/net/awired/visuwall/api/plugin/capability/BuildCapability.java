@@ -17,6 +17,7 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.Date;
+
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -25,7 +26,7 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BuildCapability extends BasicCapability {
 
-    //    BuildTime getBuildTime(SoftwareProjectId projectId, int buildNumber);
+    // BuildTime getBuildTime(SoftwareProjectId projectId, Integer buildNumber);
 
     /**
      * Returns the build numbers order by integer ASC
@@ -46,7 +47,7 @@ public interface BuildCapability extends BasicCapability {
      * @throws ProjectNotFoundException
      * @throws BuildNotFoundException
      */
-    State getBuildState(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+    State getBuildState(SoftwareProjectId projectId, Integer buildNumber) throws ProjectNotFoundException,
             BuildNotFoundException;
 
     /**
@@ -58,7 +59,7 @@ public interface BuildCapability extends BasicCapability {
      * @throws ProjectNotFoundException
      * @throws BuildNotFoundException
      */
-    Date getEstimatedFinishTime(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+    Date getEstimatedFinishTime(SoftwareProjectId projectId, Integer buildNumber) throws ProjectNotFoundException,
             BuildNotFoundException;
 
     /**
@@ -70,7 +71,7 @@ public interface BuildCapability extends BasicCapability {
      * @throws ProjectNotFoundException
      * @throws BuildNotFoundException
      */
-    boolean isBuilding(SoftwareProjectId projectId, int buildNumber) throws ProjectNotFoundException,
+    boolean isBuilding(SoftwareProjectId projectId, Integer buildNumber) throws ProjectNotFoundException,
             BuildNotFoundException;
 
     /**

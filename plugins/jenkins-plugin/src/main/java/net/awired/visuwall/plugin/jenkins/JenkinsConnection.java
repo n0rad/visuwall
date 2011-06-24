@@ -257,4 +257,9 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
         return jobName;
     }
 
+    @Override
+    public boolean isClosed() {
+        return !connected;
+    }
+
 }

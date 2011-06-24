@@ -184,7 +184,8 @@ public class TeamCityConnection implements BuildCapability {
     }
 
     @Override
-    public State getBuildState(SoftwareProjectId softwareProjectId, int buildNumber) throws ProjectNotFoundException,
+    public State getBuildState(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws ProjectNotFoundException,
             BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
@@ -203,7 +204,7 @@ public class TeamCityConnection implements BuildCapability {
     }
 
     @Override
-    public Date getEstimatedFinishTime(SoftwareProjectId softwareProjectId, int buildNumber)
+    public Date getEstimatedFinishTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
             throws ProjectNotFoundException,
             BuildNotFoundException {
         checkConnected();
@@ -213,7 +214,8 @@ public class TeamCityConnection implements BuildCapability {
     }
 
     @Override
-    public boolean isBuilding(SoftwareProjectId softwareProjectId, int buildNumber) throws ProjectNotFoundException,
+    public boolean isBuilding(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws ProjectNotFoundException,
             BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
@@ -329,6 +331,11 @@ public class TeamCityConnection implements BuildCapability {
 
     private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
         Preconditions.checkNotNull(softwareProjectId, "softwareProjectId is mandatory");
+    }
+
+    @Override
+    public boolean isClosed() {
+        return !connected;
     }
 
 }

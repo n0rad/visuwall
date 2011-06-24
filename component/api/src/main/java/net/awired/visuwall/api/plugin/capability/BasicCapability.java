@@ -50,6 +50,11 @@ public interface BasicCapability {
     void close();
 
     /**
+     * Return the state of the connection
+     */
+    boolean isClosed();
+
+    /**
      * Return the description of the project
      * 
      * @param projectId

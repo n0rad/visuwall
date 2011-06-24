@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.List;
 
 import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
@@ -24,7 +23,8 @@ public class BasicCapabilityParametersTest {
 
     private BasicCapability connection;
 
-    public BasicCapabilityParametersTest(Class<BasicCapability> clazz) throws InstantiationException, IllegalAccessException {
+    public BasicCapabilityParametersTest(Class<BasicCapability> clazz) throws InstantiationException,
+            IllegalAccessException {
         this.connection = clazz.newInstance();
     }
 
@@ -70,12 +70,14 @@ public class BasicCapabilityParametersTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void cant_call_find_getDescription_with_null_param() throws ProjectNotFoundException {
+    public void cant_call_find_getDescription_with_null_param() throws Exception {
+        connection.connect("url", null, null);
         connection.getDescription(null);
     }
 
     @Test(expected = NullPointerException.class)
-    public void cant_call_findSoftwareProjectIdsByNames_with_null_param() {
+    public void cant_call_findSoftwareProjectIdsByNames_with_null_param() throws Exception {
+        connection.connect("url", null, null);
         connection.findSoftwareProjectIdsByNames(null);
     }
 
