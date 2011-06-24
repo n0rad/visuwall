@@ -41,7 +41,7 @@ public class ConnectedProject implements Comparable<ConnectedProject> {
     private String name;
     private String description;
 
-    private int[] buildNumbers;
+    private Integer[] buildNumbers;
     protected Map<Integer, Build> builds = new HashMap<Integer, Build>();
 
     private int lastBuildNumber;
@@ -84,35 +84,17 @@ public class ConnectedProject implements Comparable<ConnectedProject> {
         return build;
     }
 
-    //    @JsonIgnore
-    //    public Build getCompletedBuild() {
-    //        return builds.get(completedBuildId);
-    //    }
-
-    @JsonIgnore
-    public void setCompletedBuild(Build completedBuild) {
-        // TODO remove completedBuild;
-        //        this.builds.put(completedBuild.getBuildNumber(), completedBuild);
-        //        this.completedBuildId = completedBuild.getBuildNumber();
-    }
-
     @JsonIgnore
     public Build getLastBuild() {
         return findCreatedBuild(lastBuildNumber);
     }
-
-    //
-    //    @JsonIgnore
-    //    public void setCurrentBuild(Build currentBuild) {
-    //        this.builds.put(currentBuild.getBuildNumber(), currentBuild);
-    //        this.setCurrentBuildId(currentBuild.getBuildNumber());
-    //    }
 
     @Override
     public String toString() {
         //TODO check new info
         ToStringHelper toString = Objects.toStringHelper(this) //
                 .add("id", id) //
+                .add("name", name) //
                 .add("buildProjectId", buildProjectId) //
                 .add("qualityResult", qualityResult); //
         return toString.toString();
@@ -180,12 +162,12 @@ public class ConnectedProject implements Comparable<ConnectedProject> {
     }
 
     @JsonIgnore
-    public int[] getBuildNumbers() {
+    public Integer[] getBuildNumbers() {
         return buildNumbers;
     }
 
     @JsonIgnore
-    public void setBuildNumbers(int[] buildNumbers) {
+    public void setBuildNumbers(Integer[] buildNumbers) {
         this.buildNumbers = buildNumbers;
     }
 
@@ -223,6 +205,14 @@ public class ConnectedProject implements Comparable<ConnectedProject> {
 
     public void setBuilds(Map<Integer, Build> builds) {
         this.builds = builds;
+    }
+
+    public void setLastCompletedBuildNumber(int lastCompletedBuildNumber) {
+        this.lastCompletedBuildNumber = lastCompletedBuildNumber;
+    }
+
+    public int getLastCompletedBuildNumber() {
+        return lastCompletedBuildNumber;
     }
 
 }

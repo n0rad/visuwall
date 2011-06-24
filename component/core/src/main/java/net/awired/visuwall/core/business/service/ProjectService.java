@@ -86,7 +86,9 @@ public class ProjectService {
                 try {
                     boolean updateNeeded = buildProcess.updateStatusAndReturnFullUpdateNeeded(project);
                     if (neverRun || updateNeeded) {
-                        LOG.debug("Project build change and needs a update from software " + project);
+                        if (!neverRun) {
+                            LOG.debug("Project build change and needs a update from software " + project);
+                        }
 
                         SoftwareProjectId projectId = project.getBuildProjectId();
 
@@ -102,19 +104,24 @@ public class ProjectService {
                         String description = project.getBuildConnection().getDescription(projectId);
                         project.setDescription(description);
 
+                        // buildNumber
+                        Integer[] buildNumbers = project.getBuildConnection().getBuildNumbers(projectId);
+                        project.setBuildNumbers(buildNumbers);
+
                         try {
                             // lastbuild
                             int lastBuildNumber = project.getBuildConnection().getLastBuildNumber(projectId);
                             project.setLastBuildNumber(lastBuildNumber);
 
                             // state
-                            State state = project.getBuildConnection().getBuildState(project.getBuildProjectId(),
-                                    lastBuildNumber);
+                            State state = project.getBuildConnection().getBuildState(projectId, lastBuildNumber);
                             Build lastBuild = project.getLastBuild();
                             lastBuild.setState(state);
 
-                            // buildNumber
-                            // int[] buildNumbers = project.getBuildNumbers();
+                            // buildTime
+                            //TODO it
+
+                            buildProcess.updatePreviousCompletedBuild(project);
 
                         } catch (BuildNumberNotFoundException e) {
                             LOG.debug("No lastBuild found from software");
