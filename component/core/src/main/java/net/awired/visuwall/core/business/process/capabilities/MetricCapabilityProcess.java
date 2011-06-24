@@ -10,7 +10,7 @@ import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.core.business.domain.Build;
-import net.awired.visuwall.core.business.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.Project;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +18,7 @@ public class MetricCapabilityProcess {
     @Transient
     String[] metrics = new String[] { "coverage", "ncloc", "violations_density", "it_coverage" };
 
-    void enhanceWithQualityAnalysis(ConnectedProject analyzedProject, BasicCapability plugin, String... metrics) {
+    void enhanceWithQualityAnalysis(Project analyzedProject, BasicCapability plugin, String... metrics) {
         SoftwareProjectId projectId = null;// analyzedProject.getProjectId();
         Build build = analyzedProject.getLastBuild();
 

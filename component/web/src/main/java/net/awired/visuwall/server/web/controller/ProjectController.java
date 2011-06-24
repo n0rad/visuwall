@@ -16,7 +16,7 @@
 
 package net.awired.visuwall.server.web.controller;
 
-import net.awired.visuwall.core.business.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.Project;
 import net.awired.visuwall.core.business.service.ProjectService;
 import net.awired.visuwall.core.business.service.WallHolderService;
 import net.awired.visuwall.core.persistence.entity.Wall;
@@ -38,9 +38,9 @@ public class ProjectController {
 
     @RequestMapping("{projectId}")
     public @ResponseBody
-    ConnectedProject getProject(@PathVariable String wallName, @PathVariable String projectId) throws Exception {
+    Project getProject(@PathVariable String wallName, @PathVariable String projectId) throws Exception {
         Wall wall = wallService.find(wallName);
-        ConnectedProject project = wall.getProjects().getById(projectId);
+        Project project = wall.getProjects().getById(projectId);
         return project;
     }
 

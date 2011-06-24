@@ -1,14 +1,14 @@
 package net.awired.visuwall.core.business.process.capabilities;
 
-import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.core.business.domain.Build;
-import net.awired.visuwall.core.business.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +26,14 @@ public class BuildCapabilityProcess {
 
     private static final int SKIP_FIRST_BUILD_POS = 1;
 
-    public void updatePreviousCompletedBuild(ConnectedProject project) throws ProjectNotFoundException {
-        Integer[] projectNumbers = project.getBuildNumbers();
-        for (int i = SKIP_FIRST_BUILD_POS; i < projectNumbers.length; i++) {
-            int buildNumber = projectNumbers[i];
+    public void updatePreviousCompletedBuild(Project project) throws ProjectNotFoundException {
+        List<Integer> buildNumbers = project.getBuildNumbers();
+        if (buildNumbers.size() < 2) {
+            return;
+        }
+
+        List<Integer> previousBuilds = buildNumbers.subList(1, buildNumbers.size() - 1);
+        for (Integer buildNumber : previousBuilds) {
             Build build = project.getBuilds().get(buildNumber);
             if (build == null) {
                 updateBuild(project, buildNumber);
@@ -50,8 +54,8 @@ public class BuildCapabilityProcess {
         }
     }
 
-    public void updateBuild(ConnectedProject project, int buildNumber) throws ProjectNotFoundException {
-        Preconditions.checkState(Arrays.binarySearch(project.getBuildNumbers(), buildNumber) < 0,
+    public void updateBuild(Project project, Integer buildNumber) throws ProjectNotFoundException {
+        Preconditions.checkState(!project.getBuildNumbers().contains(buildNumber),
                 "buildNumber '%s' not found in builds Number to update build in project %s ", buildNumber, project);
         try {
             SoftwareProjectId projectId = project.getBuildProjectId();
@@ -78,7 +82,7 @@ public class BuildCapabilityProcess {
         }
     }
 
-    public boolean updateStatusAndReturnFullUpdateNeeded(ConnectedProject project) throws ProjectNotFoundException,
+    public boolean updateStatusAndReturnFullUpdateNeeded(Project project) throws ProjectNotFoundException,
             BuildNotFoundException {
         try {
             int lastBuildNumber = project.getBuildConnection().getLastBuildNumber(project.getBuildProjectId());
@@ -120,7 +124,7 @@ public class BuildCapabilityProcess {
      * @return null if no date could be estimated
      * @throws ProjectNotFoundException
      */
-    Runnable getEstimatedFinishTimeRunner(final ConnectedProject project, final Build build)
+    Runnable getEstimatedFinishTimeRunner(final Project project, final Build build)
             throws ProjectNotFoundException {
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
         return new Runnable() {

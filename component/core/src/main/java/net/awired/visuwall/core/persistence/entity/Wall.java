@@ -27,7 +27,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import net.awired.ajsl.persistence.entity.implementation.abstracts.IdEntityImpl;
-import net.awired.visuwall.core.business.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.Project;
 import net.awired.visuwall.core.business.domain.ProjectHolder;
 import net.awired.visuwall.core.utils.ShrinkList;
 import org.hibernate.annotations.Cascade;
@@ -63,7 +63,7 @@ public final class Wall extends IdEntityImpl<Long> {
     }
 
     public void close() {
-        for (ConnectedProject project : getProjects()) {
+        for (Project project : getProjects()) {
             project.close();
         }
         for (SoftwareAccess softwareAccess : softwareAccesses) {

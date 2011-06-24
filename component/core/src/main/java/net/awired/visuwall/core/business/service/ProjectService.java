@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.core.business.service;
 
+import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -24,7 +25,7 @@ import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.Build;
-import net.awired.visuwall.core.business.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.Project;
 import net.awired.visuwall.core.business.process.capabilities.BuildCapabilityProcess;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
@@ -58,7 +59,7 @@ public class ProjectService {
                         + buildSoftwareAccess + " in wall " + wallWhereToAdd);
                 BuildCapability buildConnection = (BuildCapability) buildSoftwareAccess.getConnection();
 
-                ConnectedProject connectedProject = new ConnectedProject(projectId, buildConnection);
+                Project connectedProject = new Project(projectId, buildConnection);
                 Runnable updateProjectRunner = getUpdateProjectRunner(wallWhereToAdd, connectedProject);
 
                 LOG.debug("Launching first project updater for " + connectedProject);
@@ -73,7 +74,7 @@ public class ProjectService {
         };
     }
 
-    Runnable getUpdateProjectRunner(final Wall wall, final ConnectedProject project) {
+    Runnable getUpdateProjectRunner(final Wall wall, final Project project) {
         Preconditions.checkNotNull(wall, "wall is a mandatory parameter");
         Preconditions.checkNotNull(project, "project is a mandatory parameter");
         return new Runnable() {
@@ -105,7 +106,7 @@ public class ProjectService {
                         project.setDescription(description);
 
                         // buildNumber
-                        Integer[] buildNumbers = project.getBuildConnection().getBuildNumbers(projectId);
+                        List<Integer> buildNumbers = project.getBuildConnection().getBuildNumbers(projectId);
                         project.setBuildNumbers(buildNumbers);
 
                         try {

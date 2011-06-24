@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
-import net.awired.visuwall.core.business.domain.ConnectedProject;
+import net.awired.visuwall.core.business.domain.Project;
 import net.awired.visuwall.core.business.service.PluginService;
 import net.awired.visuwall.core.business.service.WallHolderService;
 import net.awired.visuwall.core.exception.NotFoundException;
@@ -81,7 +81,7 @@ public class WallController {
     List<ProjectStatus> getStatus(@PathVariable String wallName, ModelMap modelMap) throws NotFoundException {
         Wall wall = wallService.find(wallName);
         List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
-        for (ConnectedProject project : wall.getProjects()) {
+        for (Project project : wall.getProjects()) {
             ProjectStatus projectStatus = new ProjectStatus(project);
             projectStatus.setLastBuildId(project.getLastBuildNumber());
             //            try {

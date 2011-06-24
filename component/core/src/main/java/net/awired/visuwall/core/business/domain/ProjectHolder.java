@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 
-public class ProjectHolder extends ArrayList<ConnectedProject> {
+public class ProjectHolder extends ArrayList<Project> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProjectHolder.class);
 
@@ -16,15 +16,15 @@ public class ProjectHolder extends ArrayList<ConnectedProject> {
 
     public List<SoftwareProjectId> getBuildProjectIds() {
         List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>(this.size());
-        for (ConnectedProject project : this) {
+        for (Project project : this) {
             projectIds.add(project.getBuildProjectId());
         }
         return projectIds;
     }
 
-    public ConnectedProject getById(String id) throws ProjectNotFoundException {
+    public Project getById(String id) throws ProjectNotFoundException {
         Preconditions.checkNotNull(id, "projectId is mandatory");
-        for (ConnectedProject project : this) {
+        for (Project project : this) {
             if (id.equals(project.getId())) {
                 return project;
             }
@@ -34,7 +34,7 @@ public class ProjectHolder extends ArrayList<ConnectedProject> {
 
     public void deleteAndCleanProject(String id) {
         try {
-            ConnectedProject project = this.getById(id);
+            Project project = this.getById(id);
             project.close();
             this.remove(project);
         } catch (ProjectNotFoundException e) {
