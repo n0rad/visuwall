@@ -18,12 +18,9 @@ package net.awired.visuwall.plugin.hudson;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import net.awired.visuwall.api.domain.State;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Preconditions;
 
 public class States {

@@ -18,152 +18,150 @@ package net.awired.visuwall.teamcityclient.resource;
 
 import java.util.Date;
 import java.util.List;
-
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-
 import net.awired.visuwall.teamcityclient.DateAdapter;
 
 @XmlRootElement(name = "build")
 public class TeamCityBuild extends TeamCityAbstractBuild {
 
-	@XmlAttribute
-	private boolean personal;
+    @XmlAttribute
+    private boolean personal;
 
-	@XmlAttribute
-	private boolean history;
+    @XmlAttribute
+    private boolean history;
 
-	@XmlAttribute
-	private boolean pinned;
+    @XmlAttribute
+    private boolean pinned;
 
     @XmlAttribute
     private String number;
 
-	private String statusText;
+    private String statusText;
 
-	private TeamCityBuildType buildType;
+    private TeamCityBuildType buildType;
 
-	private String startDate;
+    private String startDate;
 
-	private String finishDate;
+    private String finishDate;
 
-	private TeamCityAgent agent;
+    private TeamCityAgent agent;
 
-	private TeamCityTags tags;
+    private TeamCityTags tags;
 
-	private TeamCityProperties properties;
+    private TeamCityProperties properties;
 
-	private TeamCityRevisions revisions;
+    private TeamCityRevisions revisions;
 
-	private TeamCityVcsRoot vcsRoot;
+    private TeamCityVcsRoot vcsRoot;
 
-	private TeamCityChanges changes;
+    private TeamCityChanges changes;
 
-	private TeamCityRelatedIssues relatedIssues;
+    private TeamCityRelatedIssues relatedIssues;
 
-	public boolean isPersonal() {
-		return personal;
-	}
+    public boolean isPersonal() {
+        return personal;
+    }
 
-	public void setPersonal(boolean personal) {
-		this.personal = personal;
-	}
+    public void setPersonal(boolean personal) {
+        this.personal = personal;
+    }
 
-	public boolean isHistory() {
-		return history;
-	}
+    public boolean isHistory() {
+        return history;
+    }
 
-	public void setHistory(boolean history) {
-		this.history = history;
-	}
+    public void setHistory(boolean history) {
+        this.history = history;
+    }
 
-	public boolean isPinned() {
-		return pinned;
-	}
+    public boolean isPinned() {
+        return pinned;
+    }
 
-	public void setPinned(boolean pinned) {
-		this.pinned = pinned;
-	}
+    public void setPinned(boolean pinned) {
+        this.pinned = pinned;
+    }
 
-	public String getStatusText() {
-		return statusText;
-	}
+    public String getStatusText() {
+        return statusText;
+    }
 
-	public void setStatusText(String statusText) {
-		this.statusText = statusText;
-	}
+    public void setStatusText(String statusText) {
+        this.statusText = statusText;
+    }
 
-	public TeamCityBuildType getBuildType() {
-		return buildType;
-	}
+    public TeamCityBuildType getBuildType() {
+        return buildType;
+    }
 
-	public void setBuildType(TeamCityBuildType buildType) {
-		this.buildType = buildType;
-	}
+    public void setBuildType(TeamCityBuildType buildType) {
+        this.buildType = buildType;
+    }
 
-	public Date getStartDate() {
-		return DateAdapter.parseDate(startDate);
-	}
+    public Date getStartDate() {
+        return DateAdapter.parseDate(startDate);
+    }
 
-	public Date getFinishDate() {
-		return DateAdapter.parseDate(finishDate);
-	}
+    public Date getFinishDate() {
+        return DateAdapter.parseDate(finishDate);
+    }
 
-	public TeamCityAgent getAgent() {
-		return agent;
-	}
+    public TeamCityAgent getAgent() {
+        return agent;
+    }
 
-	public void setAgent(TeamCityAgent agent) {
-		this.agent = agent;
-	}
+    public void setAgent(TeamCityAgent agent) {
+        this.agent = agent;
+    }
 
-	public List<TeamCityTag> getTags() {
-		return tags.getTags();
-	}
+    public List<TeamCityTag> getTags() {
+        return tags.getTags();
+    }
 
-	public void setTags(TeamCityTags tags) {
-		this.tags = tags;
-	}
+    public void setTags(TeamCityTags tags) {
+        this.tags = tags;
+    }
 
-	public List<TeamCityProperty> getProperties() {
-		return properties.getProperties();
-	}
+    public List<TeamCityProperty> getProperties() {
+        return properties.getProperties();
+    }
 
-	public void setProperties(TeamCityProperties properties) {
-		this.properties = properties;
-	}
+    public void setProperties(TeamCityProperties properties) {
+        this.properties = properties;
+    }
 
-	public List<TeamCityRevision> getRevisions() {
-		return revisions.getRevisions();
-	}
+    public List<TeamCityRevision> getRevisions() {
+        return revisions.getRevisions();
+    }
 
-	public void setRevision(TeamCityRevisions revisions) {
-		this.revisions = revisions;
-	}
+    public void setRevision(TeamCityRevisions revisions) {
+        this.revisions = revisions;
+    }
 
-	public TeamCityVcsRoot getVcsRoot() {
-		return vcsRoot;
-	}
+    public TeamCityVcsRoot getVcsRoot() {
+        return vcsRoot;
+    }
 
-	public void setVcsRoot(TeamCityVcsRoot vcsRoot) {
-		this.vcsRoot = vcsRoot;
-	}
+    public void setVcsRoot(TeamCityVcsRoot vcsRoot) {
+        this.vcsRoot = vcsRoot;
+    }
 
-	public TeamCityChanges getChanges() {
-		return changes;
-	}
+    public TeamCityChanges getChanges() {
+        return changes;
+    }
 
-	public void setChanges(TeamCityChanges changes) {
-		this.changes = changes;
-	}
+    public void setChanges(TeamCityChanges changes) {
+        this.changes = changes;
+    }
 
-	public List<TeamCityRelatedIssue> getRelatedIssues() {
-		return relatedIssues.getRelatedIssues();
-	}
+    public List<TeamCityRelatedIssue> getRelatedIssues() {
+        return relatedIssues.getRelatedIssues();
+    }
 
-	public void setRelatedIssues(TeamCityRelatedIssues relatedIssues) {
-		this.relatedIssues = relatedIssues;
-	}
+    public void setRelatedIssues(TeamCityRelatedIssues relatedIssues) {
+        this.relatedIssues = relatedIssues;
+    }
 
     public String getNumber() {
         return number;

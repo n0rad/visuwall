@@ -18,7 +18,6 @@ package net.awired.visuwall.plugin.sonar;
 
 import static org.junit.Assert.assertFalse;
 import net.awired.visuwall.api.exception.ConnectionException;
-
 import org.junit.Test;
 
 public class SonarConnectionFactoryTest {

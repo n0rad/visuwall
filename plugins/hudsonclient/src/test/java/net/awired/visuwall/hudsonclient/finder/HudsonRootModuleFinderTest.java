@@ -25,7 +25,6 @@ import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.DocumentNotLoadedException;
 import net.awired.visuwall.hudsonclient.loader.DocumentLoader;
 import net.awired.visuwall.hudsonclient.util.ClasspathFiles;
-
 import org.junit.Test;
 import org.w3c.dom.Document;
 
@@ -49,7 +48,8 @@ public class HudsonRootModuleFinderTest {
     @Test(expected = ArtifactIdNotFoundException.class)
     public void should_not_find_artifact_id() throws Exception {
         DocumentLoader documentLoader = mock(DocumentLoader.class);
-        when(documentLoader.loadFromUrl(anyString())).thenThrow(new DocumentNotLoadedException("file not found", null));
+        when(documentLoader.loadFromUrl(anyString())).thenThrow(
+                new DocumentNotLoadedException("file not found", null));
 
         HudsonUrlBuilder hudsonUrlBuilder = mock(HudsonUrlBuilder.class);
         HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);

@@ -19,9 +19,7 @@ package net.awired.visuwall.plugin.jenkins.tck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-
 import java.util.Date;
-
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -33,32 +31,30 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-
 public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
 
-	BuildCapability jenkins = new JenkinsConnection();
+    BuildCapability jenkins = new JenkinsConnection();
 
-	@Before
+    @Before
     public void init() throws ConnectionException {
         jenkins.connect(IntegrationTestData.JENKINS_URL, null, null);
-	}
+    }
 
-	@Override
-	@Test
+    @Override
+    @Test
     public void should_get_last_build_number() throws Exception {
         SoftwareProjectId projectId = struts();
-		int number = jenkins.getLastBuildNumber(projectId);
-		assertEquals(4, number);
-	}
+        int number = jenkins.getLastBuildNumber(projectId);
+        assertEquals(4, number);
+    }
 
     @Ignore("refaire le calcul du UNSTABLE, peut etre le sortir et mettre dans core")
-	@Override
-	@Test
+    @Override
+    @Test
     public void should_get_build_state() throws Exception {
         assertEquals(State.SUCCESS, getLastBuildState("struts"));
         assertEquals(State.FAILURE, getLastBuildState("errorproject"));
@@ -73,23 +69,23 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
         return state;
     }
 
-	@Override
-	@Test
+    @Override
+    @Test
     public void should_get_is_building() throws Exception {
         SoftwareProjectId projectId = struts();
         int buildNumber = jenkins.getLastBuildNumber(projectId);
         boolean isBuilding = jenkins.isBuilding(projectId, buildNumber);
-		assertFalse(isBuilding);
-	}
+        assertFalse(isBuilding);
+    }
 
-	@Override
-	@Test
+    @Override
+    @Test
     public void should_get_estimated_date() throws Exception {
         SoftwareProjectId projectId = struts();
         int buildNumber = jenkins.getLastBuildNumber(projectId);
         Date date = jenkins.getEstimatedFinishTime(projectId, buildNumber);
-		assertNotNull(date);
-	}
+        assertNotNull(date);
+    }
 
     private SoftwareProjectId struts() {
         return new SoftwareProjectId("struts");

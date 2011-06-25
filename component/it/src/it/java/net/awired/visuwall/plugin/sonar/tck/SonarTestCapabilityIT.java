@@ -25,13 +25,12 @@ import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.tck.TestCapabilityTCK;
 import net.awired.visuwall.plugin.sonar.SonarConnection;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class SonarTestCapabilityIT implements TestCapabilityTCK {
 
-	private static TestCapability sonar = new SonarConnection();
+    private static TestCapability sonar = new SonarConnection();
 
     @BeforeClass
     public static void init() throws ConnectionException {
@@ -53,12 +52,12 @@ public class SonarTestCapabilityIT implements TestCapabilityTCK {
 
     @Test
     public void should_analyze_integration_tests() throws ConnectionException {
-		TestCapability sonar = new SonarConnection();
+        TestCapability sonar = new SonarConnection();
         sonar.connect("http://fluxx.fr.cr:9000", null, null);
 
         SoftwareProjectId projectId = librestry();
 
-		TestResult integrationTestsAnalysis = sonar.analyzeIntegrationTests(projectId);
+        TestResult integrationTestsAnalysis = sonar.analyzeIntegrationTests(projectId);
         assertEquals(47.4, integrationTestsAnalysis.getCoverage(), 0);
         // Sonar/Jacoco don't count IT tests
         assertEquals(0, integrationTestsAnalysis.getFailCount());

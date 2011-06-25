@@ -18,10 +18,8 @@ package net.awired.visuwall.plugin.hudson.tck;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
 import java.util.Arrays;
 import java.util.List;
-
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -29,7 +27,6 @@ import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.api.plugin.tck.ViewCapabilityTCK;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
-
 import org.junit.Before;
 import org.junit.Test;
 

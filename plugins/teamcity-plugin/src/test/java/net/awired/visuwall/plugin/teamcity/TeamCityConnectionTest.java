@@ -19,10 +19,8 @@ package net.awired.visuwall.plugin.teamcity;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.teamcityclient.TeamCity;
@@ -31,7 +29,6 @@ import net.awired.visuwall.teamcityclient.resource.TeamCityBuildItem;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
 import net.awired.visuwall.teamcityclient.resource.TeamCityStatus;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -39,57 +36,57 @@ import org.mockito.Mockito;
 
 public class TeamCityConnectionTest {
 
-	private TeamCity teamCity;
-	private TeamCityConnection connectionPlugin;
+    private TeamCity teamCity;
+    private TeamCityConnection connectionPlugin;
 
-	@Before
-	public void init() {
-		teamCity = Mockito.mock(TeamCity.class);
-		connectionPlugin = createConnectionPlugin();
-	}
+    @Before
+    public void init() {
+        teamCity = Mockito.mock(TeamCity.class);
+        connectionPlugin = createConnectionPlugin();
+    }
 
-	@Test(expected = NullPointerException.class)
-	public void should_fail_when_passing_null() {
-		connectionPlugin.connect(null);
-	}
+    @Test(expected = NullPointerException.class)
+    public void should_fail_when_passing_null() {
+        connectionPlugin.connect(null);
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void should_fail_when_passing_empty_string() {
-		connectionPlugin.connect("");
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void should_fail_when_passing_empty_string() {
+        connectionPlugin.connect("");
+    }
 
-	@Test
-	public void should_call_find_project_names() throws TeamCityProjectsNotFoundException {
-		connectionPlugin.findProjectNames();
-		verify(teamCity).findProjectNames();
-	}
+    @Test
+    public void should_call_find_project_names() throws TeamCityProjectsNotFoundException {
+        connectionPlugin.findProjectNames();
+        verify(teamCity).findProjectNames();
+    }
 
-	@Ignore
-	@Test
-	public void should_find_state_build() throws Exception {
-		TeamCityBuildItem buildItem = new TeamCityBuildItem();
-		buildItem.setStatus(TeamCityStatus.SUCCESS);
+    @Ignore
+    @Test
+    public void should_find_state_build() throws Exception {
+        TeamCityBuildItem buildItem = new TeamCityBuildItem();
+        buildItem.setStatus(TeamCityStatus.SUCCESS);
 
-		List<TeamCityBuildItem> buildItems = new ArrayList<TeamCityBuildItem>();
-		buildItems.add(buildItem);
+        List<TeamCityBuildItem> buildItems = new ArrayList<TeamCityBuildItem>();
+        buildItems.add(buildItem);
 
-		TeamCityBuilds builds = new TeamCityBuilds();
-		builds.setBuilds(buildItems);
+        TeamCityBuilds builds = new TeamCityBuilds();
+        builds.setBuilds(buildItems);
 
-		TeamCityProject teamCityProject = new TeamCityProject();
-		when(teamCity.findProject("projectId")).thenReturn(teamCityProject);
-		when(teamCity.findBuildList("bt297"));
+        TeamCityProject teamCityProject = new TeamCityProject();
+        when(teamCity.findProject("projectId")).thenReturn(teamCityProject);
+        when(teamCity.findBuildList("bt297"));
 
         SoftwareProjectId projectId = new SoftwareProjectId("projectId");
         State state = connectionPlugin.getBuildState(projectId, 0);
 
-		assertEquals(State.SUCCESS, state);
-	}
+        assertEquals(State.SUCCESS, state);
+    }
 
-	private TeamCityConnection createConnectionPlugin() {
-	    TeamCityConnection connectionPlugin = new TeamCityConnection();
-		connectionPlugin.connect("http://");
-		connectionPlugin.teamCity = teamCity;
-	    return connectionPlugin;
+    private TeamCityConnection createConnectionPlugin() {
+        TeamCityConnection connectionPlugin = new TeamCityConnection();
+        connectionPlugin.connect("http://");
+        connectionPlugin.teamCity = teamCity;
+        return connectionPlugin;
     }
 }

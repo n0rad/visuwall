@@ -17,54 +17,53 @@
 package net.awired.visuwall.teamcityclient.builder;
 
 import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
 public class TeamCityUrlBuilderTest {
 
-	private static final String TEAM_CITY_URL = "http://teamcity.jetbrains.com";
+    private static final String TEAM_CITY_URL = "http://teamcity.jetbrains.com";
 
-	TeamCityUrlBuilder builder = new TeamCityUrlBuilder(TEAM_CITY_URL);
+    TeamCityUrlBuilder builder = new TeamCityUrlBuilder(TEAM_CITY_URL);
 
-	@Test
-	public void should_create_valid_projects_url() {
-		String projectsUrl = builder.getProjects();
-		assertEquals(TEAM_CITY_URL + "/app/rest/projects", projectsUrl);
-	}
+    @Test
+    public void should_create_valid_projects_url() {
+        String projectsUrl = builder.getProjects();
+        assertEquals(TEAM_CITY_URL + "/app/rest/projects", projectsUrl);
+    }
 
-	@Test
-	public void should_create_valid_project_url() {
-		String projectUrl = builder.getProject("project54");
-		assertEquals(TEAM_CITY_URL + "/app/rest/projects/id:project54", projectUrl);
-	}
+    @Test
+    public void should_create_valid_project_url() {
+        String projectUrl = builder.getProject("project54");
+        assertEquals(TEAM_CITY_URL + "/app/rest/projects/id:project54", projectUrl);
+    }
 
-	@Test
-	public void should_create_valid_build_type_url() {
-		String buildTypeUrl = builder.getBuildType("bt296");
-		assertEquals(TEAM_CITY_URL + "/app/rest/buildTypes/id:bt296", buildTypeUrl);
-	}
+    @Test
+    public void should_create_valid_build_type_url() {
+        String buildTypeUrl = builder.getBuildType("bt296");
+        assertEquals(TEAM_CITY_URL + "/app/rest/buildTypes/id:bt296", buildTypeUrl);
+    }
 
-	@Test
-	public void should_create_valid_build_url() {
-		String buildTypeUrl = builder.getBuild(47068);
-		assertEquals(TEAM_CITY_URL + "/app/rest/builds/id:47068", buildTypeUrl);
-	}
+    @Test
+    public void should_create_valid_build_url() {
+        String buildTypeUrl = builder.getBuild(47068);
+        assertEquals(TEAM_CITY_URL + "/app/rest/builds/id:47068", buildTypeUrl);
+    }
 
-	@Test
-	public void should_create_valid_builds_list() {
+    @Test
+    public void should_create_valid_builds_list() {
         String buildListUrl = builder.getBuildList("bt297");
-		assertEquals(TEAM_CITY_URL + "/app/rest/buildTypes/id:bt297/builds", buildListUrl);
-	}
+        assertEquals(TEAM_CITY_URL + "/app/rest/buildTypes/id:bt297/builds", buildListUrl);
+    }
 
-	@Test
-	public void should_create_valid_version() {
-		String versionUrl = builder.getVersion();
-		assertEquals(TEAM_CITY_URL + "/app/rest/version", versionUrl);
-	}
+    @Test
+    public void should_create_valid_version() {
+        String versionUrl = builder.getVersion();
+        assertEquals(TEAM_CITY_URL + "/app/rest/version", versionUrl);
+    }
 
-	@Test
-	public void should_create_valid_server() {
-		String serverUrl = builder.getServer();
-		assertEquals(TEAM_CITY_URL + "/app/rest/server", serverUrl);
-	}
+    @Test
+    public void should_create_valid_server() {
+        String serverUrl = builder.getServer();
+        assertEquals(TEAM_CITY_URL + "/app/rest/server", serverUrl);
+    }
 }

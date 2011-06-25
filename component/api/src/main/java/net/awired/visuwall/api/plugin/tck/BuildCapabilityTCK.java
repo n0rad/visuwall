@@ -30,7 +30,7 @@ public interface BuildCapabilityTCK {
     // getLastBuildState
     void should_get_build_state() throws Exception;
 
-	// isBuilding
+    // isBuilding
     void should_get_is_building() throws Exception;
 
     // getBuildTime

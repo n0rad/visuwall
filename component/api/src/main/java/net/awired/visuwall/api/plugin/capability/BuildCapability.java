@@ -18,7 +18,6 @@ package net.awired.visuwall.api.plugin.capability;
 
 import java.util.Date;
 import java.util.List;
-
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -93,6 +92,7 @@ public interface BuildCapability extends BasicCapability {
      * @throws ProjectNotFoundException
      * @throws BuildNumberNotFoundException
      */
-    int getLastBuildNumber(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException, BuildNumberNotFoundException;
+    int getLastBuildNumber(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
+            BuildNumberNotFoundException;
 
 }

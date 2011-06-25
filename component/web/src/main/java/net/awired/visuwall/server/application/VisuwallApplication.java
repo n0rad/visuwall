@@ -18,15 +18,9 @@ package net.awired.visuwall.server.application;
 
 import java.util.Properties;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
 import net.awired.visuwall.core.application.common.ApplicationHelper;
-import net.awired.visuwall.core.application.enumeration.LogLevelEnum;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.ServletContextAware;
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 
 @Component
 public class VisuwallApplication implements ServletContextAware {

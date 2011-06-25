@@ -24,10 +24,8 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
-
 import java.util.Date;
 import java.util.List;
-
 import net.awired.visuwall.bambooclient.builder.BambooUrlBuilder;
 import net.awired.visuwall.bambooclient.domain.BambooBuild;
 import net.awired.visuwall.bambooclient.domain.BambooProject;
@@ -40,7 +38,6 @@ import net.awired.visuwall.bambooclient.rest.Result;
 import net.awired.visuwall.bambooclient.rest.Results;
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

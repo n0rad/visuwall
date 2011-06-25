@@ -18,7 +18,6 @@ package net.awired.visuwall.plugin.teamcity;
 
 import java.net.URL;
 import java.util.Properties;
-
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
@@ -26,13 +25,12 @@ import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
 import net.awired.visuwall.teamcityclient.resource.TeamCityServer;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
 
-	private GenericSoftwareClient genericSoftwareClient = new GenericSoftwareClient("guest", "");
+    private GenericSoftwareClient genericSoftwareClient = new GenericSoftwareClient("guest", "");
 
     @Override
     public TeamCityConnection getConnection(String url, Properties info) {
@@ -59,11 +57,11 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
     @Override
     public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
         Preconditions.checkNotNull(url, "url is mandatory");
-		if (isManageable(url.toString())) {
+        if (isManageable(url.toString())) {
             try {
                 return createSoftwareId(url);
             } catch (ResourceNotFoundException e) {
-				throw new IncompatibleSoftwareException("Url " + url + " is not compatible with TeamCity", e);
+                throw new IncompatibleSoftwareException("Url " + url + " is not compatible with TeamCity", e);
             }
         }
         throw new IncompatibleSoftwareException("Url " + url + " is not compatible with TeamCity");
@@ -76,28 +74,28 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
                 .add("version", getVersion()).toString();
     }
 
-	private boolean isManageable(String url) {
-		try {
-			getVersion(url);
-		} catch (ResourceNotFoundException e) {
-			return false;
-		}
-		return true;
-	}
+    private boolean isManageable(String url) {
+        try {
+            getVersion(url);
+        } catch (ResourceNotFoundException e) {
+            return false;
+        }
+        return true;
+    }
 
     private SoftwareId createSoftwareId(URL url) throws ResourceNotFoundException {
         SoftwareId softwareId = new SoftwareId();
         softwareId.setName("TeamCity");
-		String strVersion = getVersion(url.toString());
-		softwareId.setVersion(strVersion);
+        String strVersion = getVersion(url.toString());
+        softwareId.setVersion(strVersion);
         return softwareId;
     }
 
-	private String getVersion(String url) throws ResourceNotFoundException {
-		TeamCityUrlBuilder builder = new TeamCityUrlBuilder(url);
-		String serverUrl = builder.getServer();
-		TeamCityServer server = genericSoftwareClient.resource(serverUrl, TeamCityServer.class);
-		return server.getVersionMajor() + "." + server.getVersionMinor();
+    private String getVersion(String url) throws ResourceNotFoundException {
+        TeamCityUrlBuilder builder = new TeamCityUrlBuilder(url);
+        String serverUrl = builder.getServer();
+        TeamCityServer server = genericSoftwareClient.resource(serverUrl, TeamCityServer.class);
+        return server.getVersionMajor() + "." + server.getVersionMinor();
     }
 
 }

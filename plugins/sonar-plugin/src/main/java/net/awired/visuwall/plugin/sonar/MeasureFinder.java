@@ -18,13 +18,11 @@ package net.awired.visuwall.plugin.sonar;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
-
 import org.sonar.wsclient.Sonar;
 import org.sonar.wsclient.connectors.ConnectionException;
 import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -70,8 +68,8 @@ public class MeasureFinder {
         try {
             Resource resource = sonar.find(query);
             if (resource == null) {
-                throw new SonarMeasureNotFoundException("Metric " + measureKey + " not found for project " + artifactId
-                        + " in Sonar " + sonarUrl);
+                throw new SonarMeasureNotFoundException("Metric " + measureKey + " not found for project "
+                        + artifactId + " in Sonar " + sonarUrl);
             }
             return resource.getMeasure(measureKey);
         } catch (ConnectionException e) {

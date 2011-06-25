@@ -17,15 +17,14 @@
 package net.awired.visuwall.plugin.teamcity;
 
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
-
 import org.junit.Test;
 
 public class TeamCityPluginTest {
 
-	@Test(expected = NullPointerException.class)
-	public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance()
-	        throws IncompatibleSoftwareException {
-		new TeamCityPlugin().getSoftwareId(null);
-	}
+    @Test(expected = NullPointerException.class)
+    public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance()
+            throws IncompatibleSoftwareException {
+        new TeamCityPlugin().getSoftwareId(null);
+    }
 
 }

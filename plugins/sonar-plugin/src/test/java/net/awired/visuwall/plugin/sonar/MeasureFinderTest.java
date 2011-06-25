@@ -19,7 +19,6 @@ package net.awired.visuwall.plugin.sonar;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;

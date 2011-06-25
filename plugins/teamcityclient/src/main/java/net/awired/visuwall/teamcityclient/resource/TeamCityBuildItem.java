@@ -22,31 +22,31 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "build")
 public class TeamCityBuildItem extends TeamCityAbstractBuild {
 
-	@XmlAttribute
-	private String buildTypeId;
+    @XmlAttribute
+    private String buildTypeId;
 
-	@XmlAttribute
+    @XmlAttribute
     private String startDate;
 
     // warning, it's not always an integer
     @XmlAttribute
     private String number;
 
-	public String getBuildTypeId() {
-		return buildTypeId;
-	}
+    public String getBuildTypeId() {
+        return buildTypeId;
+    }
 
-	public void setBuildTypeId(String buildTypeId) {
-		this.buildTypeId = buildTypeId;
-	}
+    public void setBuildTypeId(String buildTypeId) {
+        this.buildTypeId = buildTypeId;
+    }
 
-	public String getStartDate() {
-		return startDate;
-	}
+    public String getStartDate() {
+        return startDate;
+    }
 
-	public void setStartDate(String startDate) {
-		this.startDate = startDate;
-	}
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
 
     public String getNumber() {
         return number;

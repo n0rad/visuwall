@@ -19,7 +19,6 @@ package net.awired.visuwall.hudsonclient.loader;
 import static org.junit.Assert.assertNotNull;
 import net.awired.visuwall.hudsonclient.exception.DocumentNotLoadedException;
 import net.awired.visuwall.hudsonclient.util.ClasspathFiles;
-
 import org.junit.Test;
 import org.w3c.dom.Document;
 

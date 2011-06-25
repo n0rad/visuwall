@@ -19,10 +19,8 @@ package net.awired.visuwall.plugin.teamcity.tck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 import java.util.Arrays;
 import java.util.List;
-
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -32,7 +30,6 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.teamcity.TeamCityConnection;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,48 +37,48 @@ public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
 
     BasicCapability teamcity = new TeamCityConnection();
 
-	@Before
+    @Before
     public void init() throws ConnectionException {
         teamcity.connect(IntegrationTestData.TEAMCITY_URL, "guest", "");
-	}
+    }
 
-	@Override
-	@Test
-	public void should_find_all_projects_ids() {
+    @Override
+    @Test
+    public void should_find_all_projects_ids() {
         List<SoftwareProjectId> projectIds = teamcity.findAllSoftwareProjectIds();
 
-		assertFalse(projectIds.isEmpty());
+        assertFalse(projectIds.isEmpty());
         for (SoftwareProjectId projectId : projectIds) {
             assertFalse(projectId.getProjectId().isEmpty());
-		}
-	}
+        }
+    }
 
-	@Override
-	@Test
-	public void should_find_project_ids_by_names() {
-		List<String> names = Arrays.asList("Apache Ant", "Gradle");
+    @Override
+    @Test
+    public void should_find_project_ids_by_names() {
+        List<String> names = Arrays.asList("Apache Ant", "Gradle");
         List<SoftwareProjectId> projectIds = teamcity.findSoftwareProjectIdsByNames(names);
 
-		assertFalse(projectIds.isEmpty());
+        assertFalse(projectIds.isEmpty());
 
         SoftwareProjectId apacheAntId = projectIds.get(0);
         assertEquals("project28", apacheAntId.getProjectId());
 
-		SoftwareProjectId gradleId = projectIds.get(1);
+        SoftwareProjectId gradleId = projectIds.get(1);
         assertEquals("project22", gradleId.getProjectId());
-	}
+    }
 
-	@Override
-	@Test
-	public void should_find_all_project_names() {
-		List<String> names = Arrays.asList("Apache Ant", "Apache Ivy", "Gradle");
+    @Override
+    @Test
+    public void should_find_all_project_names() {
+        List<String> names = Arrays.asList("Apache Ant", "Apache Ivy", "Gradle");
 
-		List<String> projectNames = teamcity.findProjectNames();
+        List<String> projectNames = teamcity.findProjectNames();
 
-		for (String name : names) {
-			assertTrue(projectNames.contains(name));
-		}
-	}
+        for (String name : names) {
+            assertTrue(projectNames.contains(name));
+        }
+    }
 
     @Override
     @Test

@@ -19,11 +19,9 @@ package net.awired.visuwall.plugin.teamcity.tck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -32,7 +30,6 @@ import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.teamcity.TeamCityConnection;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

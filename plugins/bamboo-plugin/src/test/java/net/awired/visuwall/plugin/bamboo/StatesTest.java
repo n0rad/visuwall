@@ -18,7 +18,6 @@ package net.awired.visuwall.plugin.bamboo;
 
 import static org.junit.Assert.assertEquals;
 import net.awired.visuwall.api.domain.State;
-
 import org.junit.Test;
 
 public class StatesTest {

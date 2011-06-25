@@ -20,18 +20,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
-
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.CollectionOfElements;
 import org.springframework.util.AutoPopulatingList;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 

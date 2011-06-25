@@ -18,11 +18,9 @@ package net.awired.visuwall.plugin.bamboo;
 
 import java.net.URL;
 import java.util.Properties;
-
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 

@@ -17,9 +17,7 @@
 package net.awired.visuwall.plugin.sonar;
 
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
-
 import org.sonar.wsclient.services.Measure;
-
 import com.google.common.base.Preconditions;
 
 public class QualityMeasures {

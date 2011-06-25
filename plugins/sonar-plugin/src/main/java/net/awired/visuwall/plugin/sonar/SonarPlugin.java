@@ -17,9 +17,7 @@
 package net.awired.visuwall.plugin.sonar;
 
 import java.net.URL;
-
 import javax.ws.rs.core.MediaType;
-
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
@@ -28,7 +26,6 @@ import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.plugin.sonar.resource.Properties;
 import net.awired.visuwall.plugin.sonar.resource.Property;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;

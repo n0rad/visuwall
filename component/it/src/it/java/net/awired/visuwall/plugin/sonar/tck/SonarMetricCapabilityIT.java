@@ -20,10 +20,8 @@ import static net.awired.visuwall.IntegrationTestData.SONAR_URL;
 import static net.awired.visuwall.IntegrationTestData.STRUTS_ARTIFACT_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-
 import java.util.Map.Entry;
 import java.util.Set;
-
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
@@ -32,14 +30,13 @@ import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.tck.MetricCapabilityTCK;
 import net.awired.visuwall.plugin.sonar.SonarConnection;
-
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class SonarMetricCapabilityIT implements MetricCapabilityTCK {
 
-	private static MetricCapability sonar = new SonarConnection();
+    private static MetricCapability sonar = new SonarConnection();
 
     @BeforeClass
     public static void init() throws ConnectionException {
@@ -49,7 +46,7 @@ public class SonarMetricCapabilityIT implements MetricCapabilityTCK {
     @Test
     public void should_populate_quality() {
         SoftwareProjectId projectId = struts();
-		QualityResult quality = sonar.analyzeQuality(projectId, "violations_density");
+        QualityResult quality = sonar.analyzeQuality(projectId, "violations_density");
         QualityMeasure measure = quality.getMeasure("violations_density");
         assertEquals("Rules compliance", measure.getName());
         assertEquals("83.9%", measure.getFormattedValue());
@@ -59,7 +56,7 @@ public class SonarMetricCapabilityIT implements MetricCapabilityTCK {
     @Test
     public void should_have_a_lot_of_quality_metrics() {
         SoftwareProjectId projectId = struts();
-		QualityResult quality = sonar.analyzeQuality(projectId);
+        QualityResult quality = sonar.analyzeQuality(projectId);
         Set<Entry<String, QualityMeasure>> measures = quality.getMeasures();
         for (Entry<String, QualityMeasure> measure : measures) {
             assertNotNull(measure.getValue().getValue());
@@ -69,7 +66,7 @@ public class SonarMetricCapabilityIT implements MetricCapabilityTCK {
     @Test
     public void should_not_fail_if_measure_does_not_exist() {
         SoftwareProjectId projectId = struts();
-		sonar.analyzeQuality(projectId, "inexistant_measure");
+        sonar.analyzeQuality(projectId, "inexistant_measure");
     }
 
     @Test

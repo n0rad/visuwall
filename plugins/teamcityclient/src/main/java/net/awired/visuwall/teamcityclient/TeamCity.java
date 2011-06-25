@@ -18,7 +18,6 @@ package net.awired.visuwall.teamcityclient;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
 import net.awired.visuwall.teamcityclient.exception.TeamCityBuildListNotFoundException;
@@ -28,54 +27,53 @@ import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundExce
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 public class TeamCity {
 
-	@VisibleForTesting
-	TeamCityFinder teamcityFinder;
+    @VisibleForTesting
+    TeamCityFinder teamcityFinder;
 
-	public TeamCity() {
-	}
+    public TeamCity() {
+    }
 
-	public TeamCity(String url) {
-		TeamCityUrlBuilder urlBuilder = new TeamCityUrlBuilder(url);
-		GenericSoftwareClient client = new GenericSoftwareClient("guest", "");
-		teamcityFinder = new TeamCityFinder(client, urlBuilder);
-	}
+    public TeamCity(String url) {
+        TeamCityUrlBuilder urlBuilder = new TeamCityUrlBuilder(url);
+        GenericSoftwareClient client = new GenericSoftwareClient("guest", "");
+        teamcityFinder = new TeamCityFinder(client, urlBuilder);
+    }
 
-	public List<String> findProjectNames() throws TeamCityProjectsNotFoundException {
-		List<String> projectNames = new ArrayList<String>();
-		List<TeamCityProject> projects = teamcityFinder.getProjects();
-		for (TeamCityProject project : projects) {
-			projectNames.add(project.getName());
-		}
-		return projectNames;
-	}
+    public List<String> findProjectNames() throws TeamCityProjectsNotFoundException {
+        List<String> projectNames = new ArrayList<String>();
+        List<TeamCityProject> projects = teamcityFinder.getProjects();
+        for (TeamCityProject project : projects) {
+            projectNames.add(project.getName());
+        }
+        return projectNames;
+    }
 
-	public List<TeamCityProject> findAllProjects() throws TeamCityProjectsNotFoundException {
-		return teamcityFinder.getProjects();
-	}
+    public List<TeamCityProject> findAllProjects() throws TeamCityProjectsNotFoundException {
+        return teamcityFinder.getProjects();
+    }
 
-	public TeamCityProject findProject(String projectId) throws TeamCityProjectNotFoundException {
-		checkProjectId(projectId);
-		return teamcityFinder.getProject(projectId);
-	}
+    public TeamCityProject findProject(String projectId) throws TeamCityProjectNotFoundException {
+        checkProjectId(projectId);
+        return teamcityFinder.getProject(projectId);
+    }
 
     public TeamCityBuild findBuild(int buildId) throws TeamCityBuildNotFoundException {
         Preconditions.checkArgument(buildId >= 0, "buildId must be >= 0");
         return teamcityFinder.getBuild(buildId);
-	}
+    }
 
-	public TeamCityBuilds findBuildList(String buildTypeId) throws TeamCityBuildListNotFoundException {
-		Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
-		return teamcityFinder.getBuildList(buildTypeId);
-	}
+    public TeamCityBuilds findBuildList(String buildTypeId) throws TeamCityBuildListNotFoundException {
+        Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
+        return teamcityFinder.getBuildList(buildTypeId);
+    }
 
-	private void checkProjectId(String projectId) {
-		Preconditions.checkNotNull(projectId, "projectId is mandatory");
-	}
+    private void checkProjectId(String projectId) {
+        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+    }
 
 }

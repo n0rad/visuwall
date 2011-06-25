@@ -19,12 +19,9 @@ package net.awired.visuwall.plugin.jenkins;
 import static net.awired.visuwall.IntegrationTestData.JENKINS_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-
 import java.net.URL;
-
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
-
 import org.junit.Test;
 
 public class JenkinsPluginIT {

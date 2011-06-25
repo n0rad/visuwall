@@ -17,7 +17,6 @@
 package net.awired.visuwall.api.domain;
 
 import java.util.Date;
-
 import com.google.common.base.Objects;
 
 public class BuildTime {

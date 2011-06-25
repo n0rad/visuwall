@@ -20,9 +20,7 @@ import static net.awired.visuwall.IntegrationTestData.BAMBOO_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-
 import java.util.Date;
-
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -30,19 +28,18 @@ import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class BambooBuildCapabilityIT implements BuildCapabilityTCK {
 
-	BuildCapability bamboo = new BambooConnection();
+    BuildCapability bamboo = new BambooConnection();
 
     @Before
     public void init() throws ConnectionException {
         bamboo.connect(BAMBOO_URL, null, null);
-	}
+    }
 
     private SoftwareProjectId strutsProjectId() {
         return new SoftwareProjectId("STRUTS-STRUTS");

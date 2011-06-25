@@ -17,7 +17,6 @@
 package net.awired.visuwall.plugin.sonar;
 
 import net.awired.visuwall.api.exception.ConnectionException;
-
 import com.google.common.base.Preconditions;
 
 public class SonarConnectionFactory {

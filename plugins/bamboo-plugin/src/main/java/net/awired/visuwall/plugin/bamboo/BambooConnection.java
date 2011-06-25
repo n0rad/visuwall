@@ -19,7 +19,6 @@ package net.awired.visuwall.plugin.bamboo;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -36,9 +35,7 @@ import net.awired.visuwall.bambooclient.exception.BambooBuildNotFoundException;
 import net.awired.visuwall.bambooclient.exception.BambooBuildNumberNotFoundException;
 import net.awired.visuwall.bambooclient.exception.BambooProjectNotFoundException;
 import net.awired.visuwall.bambooclient.exception.BambooStateNotFoundException;
-
 import org.apache.commons.lang.StringUtils;
-
 import com.google.common.base.Preconditions;
 
 public class BambooConnection implements BuildCapability {
@@ -239,7 +236,8 @@ public class BambooConnection implements BuildCapability {
             buildTime.setStartTime(bambooBuild.getStartTime());
             return buildTime;
         } catch (BambooBuildNotFoundException e) {
-            throw new BuildNotFoundException("Can't find build #" + buildNumber + " of project " + softwareProjectId, e);
+            throw new BuildNotFoundException("Can't find build #" + buildNumber + " of project " + softwareProjectId,
+                    e);
         }
     }
 

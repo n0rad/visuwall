@@ -17,7 +17,6 @@
 package net.awired.visuwall.core.tools;
 
 import java.util.List;
-
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;

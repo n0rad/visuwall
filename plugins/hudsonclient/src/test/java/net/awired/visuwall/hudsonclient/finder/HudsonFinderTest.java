@@ -25,16 +25,13 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
-
 import junit.framework.Assert;
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
@@ -49,7 +46,6 @@ import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModel
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import net.awired.visuwall.hudsonclient.util.ClasspathFiles;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -60,7 +56,7 @@ public class HudsonFinderTest {
 
     HudsonUrlBuilder hudsonUrlBuilder;
     TestResultBuilder testResultBuilder;
-	GenericSoftwareClient client;
+    GenericSoftwareClient client;
     HudsonBuildBuilder hudsonBuildBuilder;
 
     static HudsonMavenMavenModuleSetBuild moduleSetBuild = mock(HudsonMavenMavenModuleSetBuild.class);
@@ -72,7 +68,7 @@ public class HudsonFinderTest {
     public void init() {
         hudsonUrlBuilder = mock(HudsonUrlBuilder.class);
         testResultBuilder = mock(TestResultBuilder.class);
-		client = mock(GenericSoftwareClient.class);
+        client = mock(GenericSoftwareClient.class);
         hudsonBuildBuilder = mock(HudsonBuildBuilder.class);
         hudsonFinder = new HudsonFinder(hudsonUrlBuilder);
         hudsonFinder.client = client;
@@ -80,13 +76,13 @@ public class HudsonFinderTest {
     }
 
     @Test
-	public void testFindCommiters() throws ResourceNotFoundException {
+    public void testFindCommiters() throws ResourceNotFoundException {
         HudsonUser user = new HudsonUser();
         user.setId("jsmadja");
         user.setName("Julien Smadja");
         user.setEmail("jsmadja@xebia.fr");
 
-		when(client.resource(anyString(), any(Class.class))).thenReturn(user);
+        when(client.resource(anyString(), any(Class.class))).thenReturn(user);
 
         Set<HudsonCommiter> commiters = hudsonFinder.findCommiters(new String[] { "Julien Smadja" });
 
@@ -96,13 +92,13 @@ public class HudsonFinderTest {
         assertEquals("jsmadja@xebia.fr", commiter.getEmail());
     }
 
-	@Ignore
+    @Ignore
     @Test
     public void testFind() throws Exception {
-		Class<Class> clazz1 = Class.class;
-		Class<Class> clazz2 = Class.class;
-		when(client.resource(anyString(), any(clazz1))).thenReturn(moduleSetBuild);
-		when(client.resource(anyString(), any(clazz2))).thenReturn(surefireReport);
+        Class<Class> clazz1 = Class.class;
+        Class<Class> clazz2 = Class.class;
+        when(client.resource(anyString(), any(clazz1))).thenReturn(moduleSetBuild);
+        when(client.resource(anyString(), any(clazz2))).thenReturn(surefireReport);
         when(
                 hudsonBuildBuilder.createHudsonBuild(any(HudsonMavenMavenModuleSetBuild.class),
                         any(HudsonMavenReportersSurefireAggregatedReport.class), any(Set.class))).thenReturn(
@@ -112,41 +108,41 @@ public class HudsonFinderTest {
 
         assertNotNull(hudsonBuild);
         verify(hudsonUrlBuilder).getBuildUrl(anyString(), anyInt());
-		verify(client).resource(anyString(), HudsonMavenMavenModuleSetBuild.class);
+        verify(client).resource(anyString(), HudsonMavenMavenModuleSetBuild.class);
     }
 
     @Test
-    	public void testFindJobNames() throws ResourceNotFoundException {
-            Element project1 = mock(Element.class);
-            Node mock1 = mock(Node.class);
-            when(project1.getFirstChild()).thenReturn(mock1);
-            when(mock1.getFirstChild()).thenReturn(mock1);
-            when(mock1.getNodeValue()).thenReturn("project1");
-    
-            Element project2 = mock(Element.class);
-            Node mock2 = mock(Node.class);
-            when(project2.getFirstChild()).thenReturn(mock2);
-            when(mock2.getFirstChild()).thenReturn(mock2);
-            when(mock2.getNodeValue()).thenReturn("project2");
-    
-            List<Object> elements = new ArrayList<Object>();
-            elements.add(project1);
-            elements.add(project2);
-    
-            HudsonModelHudson jobs = mock(HudsonModelHudson.class);
-            when(jobs.getJob()).thenReturn(elements);
-    
-    		when(client.resource(anyString(), any(Class.class))).thenReturn(jobs);
-    
-            List<String> projectNames = hudsonFinder.findJobNames();
-            Assert.assertEquals("project1", projectNames.get(0));
-            Assert.assertEquals("project2", projectNames.get(1));
-        }
+    public void testFindJobNames() throws ResourceNotFoundException {
+        Element project1 = mock(Element.class);
+        Node mock1 = mock(Node.class);
+        when(project1.getFirstChild()).thenReturn(mock1);
+        when(mock1.getFirstChild()).thenReturn(mock1);
+        when(mock1.getNodeValue()).thenReturn("project1");
+
+        Element project2 = mock(Element.class);
+        Node mock2 = mock(Node.class);
+        when(project2.getFirstChild()).thenReturn(mock2);
+        when(mock2.getFirstChild()).thenReturn(mock2);
+        when(mock2.getNodeValue()).thenReturn("project2");
+
+        List<Object> elements = new ArrayList<Object>();
+        elements.add(project1);
+        elements.add(project2);
+
+        HudsonModelHudson jobs = mock(HudsonModelHudson.class);
+        when(jobs.getJob()).thenReturn(elements);
+
+        when(client.resource(anyString(), any(Class.class))).thenReturn(jobs);
+
+        List<String> projectNames = hudsonFinder.findJobNames();
+        Assert.assertEquals("project1", projectNames.get(0));
+        Assert.assertEquals("project2", projectNames.get(1));
+    }
 
     @Test
-	public void should_return_all_views() throws ResourceNotFoundException {
+    public void should_return_all_views() throws ResourceNotFoundException {
         HudsonModelHudson viewsResource = (HudsonModelHudson) load("hudson/views.xml", HudsonModelHudson.class);
-		when(client.resource(anyString(), any(Class.class))).thenReturn(viewsResource);
+        when(client.resource(anyString(), any(Class.class))).thenReturn(viewsResource);
         List<String> views = hudsonFinder.findViews();
         assertEquals(4, views.size());
         List<String> expectedViews = Arrays.asList("android", "on", "on-tools", "synthesis");
@@ -156,9 +152,9 @@ public class HudsonFinderTest {
     }
 
     @Test
-	public void should_return_all_projects_of_a_view() throws Exception {
+    public void should_return_all_projects_of_a_view() throws Exception {
         HudsonView viewResource = (HudsonView) load("hudson/view.xml", HudsonView.class);
-		when(client.resource(anyString(), any(Class.class))).thenReturn(viewResource);
+        when(client.resource(anyString(), any(Class.class))).thenReturn(viewResource);
         List<String> projectNames = hudsonFinder.findJobNamesByView("android");
         assertEquals(4, projectNames.size());
         List<String> expectedProjects = Arrays.asList("android-1.11", "android-1.11-daily", "android-trunk",

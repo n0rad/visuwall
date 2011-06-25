@@ -23,12 +23,10 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
@@ -36,7 +34,6 @@ import net.awired.visuwall.hudsonclient.domain.HudsonJob;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
-
 import org.joda.time.Minutes;
 import org.junit.Before;
 import org.junit.Test;
@@ -94,8 +91,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_get_estimated_finish_time() throws HudsonJobNotFoundException,
-            HudsonBuildNotFoundException {
+    public void should_get_estimated_finish_time() throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
         HudsonBuild build = new HudsonBuild();
         build.setDuration(Minutes.TWO.toStandardDuration().getMillis());
         build.setSuccessful(true);
@@ -127,8 +123,8 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_get_estimated_finish_time_even_if_there_is_no_start_time()
-            throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
+    public void should_get_estimated_finish_time_even_if_there_is_no_start_time() throws HudsonJobNotFoundException,
+            HudsonBuildNotFoundException {
         HudsonBuild build = new HudsonBuild();
         build.setDuration(Minutes.TWO.toStandardDuration().getMillis());
         build.setSuccessful(true);

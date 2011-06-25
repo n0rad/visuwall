@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
@@ -42,11 +41,9 @@ import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.Hud
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import net.awired.visuwall.hudsonclient.helper.HudsonXmlHelper;
 import net.awired.visuwall.hudsonclient.helper.MavenHelper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -290,7 +287,8 @@ public class HudsonFinder {
         return lastCompletedHudsonBuild;
     }
 
-    public HudsonBuild getCurrentBuild(String jobName) throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
+    public HudsonBuild getCurrentBuild(String jobName) throws HudsonJobNotFoundException,
+            HudsonBuildNotFoundException {
         checkJobName(jobName);
         HudsonModelJob modelJob = findJobByName(jobName);
         HudsonModelRun currentHudsonRun = modelJob.getLastBuild();

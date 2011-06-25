@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
@@ -28,7 +27,6 @@ import net.awired.visuwall.plugin.hudson.HudsonConnection;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
 import net.awired.visuwall.plugin.sonar.SonarConnection;
 import net.awired.visuwall.plugin.teamcity.TeamCityConnection;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

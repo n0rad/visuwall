@@ -20,16 +20,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import net.awired.visuwall.hudsonclient.exception.DocumentNotLoadedException;
-
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-
 import com.google.common.base.Preconditions;
 import com.google.common.io.Closeables;
 

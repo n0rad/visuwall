@@ -19,7 +19,6 @@ package net.awired.visuwall.plugin.sonar;
 import static org.junit.Assert.assertTrue;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
-
 import org.junit.Test;
 import org.sonar.wsclient.services.Measure;
 

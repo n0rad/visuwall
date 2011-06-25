@@ -23,47 +23,47 @@ import javax.xml.bind.annotation.XmlAttribute;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TeamCityAbstractBuild {
 
-	@XmlAttribute
-	private String id;
+    @XmlAttribute
+    private String id;
 
-	@XmlAttribute
-	private String status;
+    @XmlAttribute
+    private String status;
 
-	@XmlAttribute
-	private String href;
+    @XmlAttribute
+    private String href;
 
-	@XmlAttribute
-	private String webUrl;
+    @XmlAttribute
+    private String webUrl;
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public String getHref() {
-		return href;
-	}
+    public String getHref() {
+        return href;
+    }
 
-	public void setHref(String href) {
-		this.href = href;
-	}
+    public void setHref(String href) {
+        this.href = href;
+    }
 
-	public String getWebUrl() {
-		return webUrl;
-	}
+    public String getWebUrl() {
+        return webUrl;
+    }
 
-	public void setWebUrl(String webUrl) {
-		this.webUrl = webUrl;
-	}
+    public void setWebUrl(String webUrl) {
+        this.webUrl = webUrl;
+    }
 }

@@ -18,10 +18,8 @@ package net.awired.visuwall.hudsonclient;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
 import java.util.List;
 import java.util.Set;
-
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
@@ -29,7 +27,6 @@ import net.awired.visuwall.hudsonclient.domain.HudsonJob;
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
-
 import org.junit.Test;
 
 public class HudsonIT {

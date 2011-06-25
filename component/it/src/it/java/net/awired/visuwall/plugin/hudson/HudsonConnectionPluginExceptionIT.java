@@ -19,7 +19,6 @@ package net.awired.visuwall.plugin.hudson;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
