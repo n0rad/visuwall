@@ -25,7 +25,10 @@ import java.util.Date;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ConnectionException;
+import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
@@ -55,11 +58,18 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
 	@Override
 	@Test
     public void should_get_build_state() throws Exception {
-        SoftwareProjectId projectId = new SoftwareProjectId("struts");
+        assertEquals(State.SUCCESS, getLastBuildState("struts"));
+        assertEquals(State.FAILURE, getLastBuildState("errorproject"));
+        assertEquals(State.UNSTABLE, getLastBuildState("itcoverage-project"));
+    }
+
+    private State getLastBuildState(String jobName) throws ProjectNotFoundException, BuildNumberNotFoundException,
+            BuildNotFoundException {
+        SoftwareProjectId projectId = new SoftwareProjectId(jobName);
         int buildNumber = jenkins.getLastBuildNumber(projectId);
         State state = jenkins.getBuildState(projectId, buildNumber);
-		assertEquals(State.SUCCESS, state);
-	}
+        return state;
+    }
 
 	@Override
 	@Test

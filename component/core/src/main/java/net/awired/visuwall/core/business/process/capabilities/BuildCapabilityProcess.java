@@ -18,6 +18,7 @@ package net.awired.visuwall.core.business.process.capabilities;
 
 import java.util.Date;
 import java.util.List;
+
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -25,11 +26,13 @@ import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.core.business.domain.Build;
 import net.awired.visuwall.core.business.domain.Project;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
+
 import com.google.common.base.Preconditions;
 
 @Component
@@ -59,7 +62,7 @@ public class BuildCapabilityProcess {
             }
 
             State state = build.getState();
-            if (state == State.UNKNOWN || state == State.ABORTED || state == State.NOTBUILT) {
+            if (state == State.UNKNOWN || state == State.ABORTED) {
                 continue;
             }
 

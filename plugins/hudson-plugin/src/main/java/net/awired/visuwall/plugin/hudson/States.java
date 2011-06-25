@@ -35,7 +35,6 @@ public class States {
         STATE_MAPPING.put("aborted", State.ABORTED);
         STATE_MAPPING.put("failure", State.FAILURE);
         STATE_MAPPING.put("unstable", State.UNSTABLE);
-        STATE_MAPPING.put("not_build", State.NOTBUILT);
     }
 
     public static final State asVisuwallState(String hudsonState) {

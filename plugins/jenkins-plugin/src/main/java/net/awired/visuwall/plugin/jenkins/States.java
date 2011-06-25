@@ -18,7 +18,9 @@ package net.awired.visuwall.plugin.jenkins;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import net.awired.visuwall.api.domain.State;
+
 import com.google.common.base.Preconditions;
 
 public class States {
@@ -30,7 +32,6 @@ public class States {
         STATE_MAPPING.put("aborted", State.ABORTED);
         STATE_MAPPING.put("failure", State.FAILURE);
         STATE_MAPPING.put("unstable", State.UNSTABLE);
-        STATE_MAPPING.put("not_build", State.NOTBUILT);
     }
 
     public static final State asVisuwallState(String jenkinsState) {
