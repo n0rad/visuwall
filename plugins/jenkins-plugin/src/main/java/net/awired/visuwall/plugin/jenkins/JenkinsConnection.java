@@ -35,7 +35,9 @@ import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.hudsonclient.Hudson;
-import net.awired.visuwall.hudsonclient.domain.HudsonProject;
+import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
+import net.awired.visuwall.hudsonclient.domain.HudsonJob;
+import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
@@ -49,8 +51,6 @@ import com.google.common.base.Preconditions;
 public final class JenkinsConnection implements BuildCapability, ViewCapability {
 
     private static final Logger LOG = LoggerFactory.getLogger(JenkinsConnection.class);
-
-    public static final String JENKINS_ID = "JENKINS_ID";
 
     @VisibleForTesting
     Hudson hudson;
@@ -75,9 +75,9 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
     public List<SoftwareProjectId> findAllSoftwareProjectIds() {
         checkConnected();
         List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
-        List<HudsonProject> projects = hudson.findAllProjects();
+        List<HudsonJob> projects = hudson.findAllProjects();
         for (int i = 0; i < projects.size(); i++) {
-            HudsonProject hudsonProject = projects.get(i);
+            HudsonJob hudsonProject = projects.get(i);
             SoftwareProjectId projectId = new SoftwareProjectId(hudsonProject.getName());
             projectIds.add(projectId);
         }
@@ -117,10 +117,13 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
         checkConnected();
         try {
             String projectName = jobName(projectId);
-            String jenkinsState = hudson.getState(projectName);
-            return States.asVisuwallState(jenkinsState);
+            HudsonBuild hudsonBuild = hudson.findBuild(projectName, buildNumber);
+            String hudsonState = hudsonBuild.getState();
+            return States.asVisuwallState(hudsonState);
         } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException(e);
+        } catch (HudsonBuildNotFoundException e) {
+            throw new BuildNotFoundException(e);
         }
     }
 
@@ -216,15 +219,22 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
     }
 
     @Override
-    public List<Integer> getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public List<Integer> getBuildNumbers(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
         throw new ProjectNotFoundException("not implemented");
     }
 
     @Override
-    public String getMavenId(SoftwareProjectId projectId) throws ProjectNotFoundException, MavenIdNotFoundException {
+    public String getMavenId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
+            MavenIdNotFoundException {
         checkConnected();
-        throw new ProjectNotFoundException("not implemented");
+        checkSoftwareProjectId(softwareProjectId);
+        String jobName = softwareProjectId.getProjectId();
+        try {
+            return hudson.findArtifactId(jobName);
+        } catch (ArtifactIdNotFoundException e) {
+            throw new MavenIdNotFoundException("Can't get maven id of project " + softwareProjectId, e);
+        }
     }
 
     @Override
@@ -233,7 +243,7 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
         checkSoftwareProjectId(softwareProjectId);
         String projectName = softwareProjectId.getProjectId();
         try {
-            HudsonProject project = hudson.findProject(projectName);
+            HudsonJob project = hudson.findJob(projectName);
             return project.getName();
         } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException("Can't get name of project " + softwareProjectId, e);
@@ -252,7 +262,7 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
     private String jobName(SoftwareProjectId softwareProjectId) throws HudsonJobNotFoundException {
         String jobName = softwareProjectId.getProjectId();
         if (jobName == null) {
-            throw new HudsonJobNotFoundException("Project id " + softwareProjectId + " does not contain Jenkins id");
+            throw new HudsonJobNotFoundException("Project id " + softwareProjectId + " does not contain id");
         }
         return jobName;
     }

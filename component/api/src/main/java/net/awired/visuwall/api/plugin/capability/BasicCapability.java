@@ -29,10 +29,10 @@ public interface BasicCapability {
     /**
      * If plugin can find maven id, it should return it or throw MavenIdNotFoundException
      * 
-     * @param projectId
+     * @param softwareProjectId
      * @return
      */
-    String getMavenId(SoftwareProjectId projectId) throws ProjectNotFoundException, MavenIdNotFoundException;
+    String getMavenId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException, MavenIdNotFoundException;
 
     /**
      * Initiate connection to the software
@@ -57,10 +57,10 @@ public interface BasicCapability {
     /**
      * Return the description of the project
      * 
-     * @param projectId
+     * @param softwareProjectId
      * @return
      */
-    String getDescription(SoftwareProjectId projectId) throws ProjectNotFoundException;
+    String getDescription(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException;
 
     /**
      * Return the name of the project

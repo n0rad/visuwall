@@ -84,22 +84,24 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
 
     @Override
     @Test
-    @Ignore
     public void should_find_description_of_a_project() throws ProjectNotFoundException {
-
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("struts");
+        String description = jenkins.getDescription(softwareProjectId);
+        assertEquals("this is the struts project", description);
     }
 
     @Override
     @Test
     @Ignore
     public void should_identify_a_project() throws ProjectNotFoundException {
-
     }
 
     @Override
     @Test
-    @Ignore
     public void should_get_maven_id() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("struts");
+        String mavenId = jenkins.getMavenId(softwareProjectId);
+        assertEquals("org.apache.struts:struts-parent", mavenId);
     }
 
     @Override

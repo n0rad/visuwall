@@ -67,8 +67,8 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
     @Test
     public void should_get_build_state() throws Exception {
         assertEquals(State.SUCCESS, getLastBuildState("struts"));
-        assertEquals(State.FAILURE, getLastBuildState(""));
-        assertEquals(State.UNSTABLE, getLastBuildState("client-teamcity"));
+        assertEquals(State.UNSTABLE, getLastBuildState("fluxx"));
+        assertEquals(State.FAILURE, getLastBuildState("dev-radar"));
     }
 
     private State getLastBuildState(String name) throws ProjectNotFoundException, BuildNumberNotFoundException,

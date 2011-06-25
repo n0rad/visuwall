@@ -27,6 +27,11 @@ public class SoftwareProjectId {
     }
 
     @Override
+    public String toString() {
+        return projectId;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hashCode(projectId);
     }

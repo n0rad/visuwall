@@ -75,7 +75,7 @@ public class Bamboo {
 	}
 
 	public BambooProject findProject(String projectKey) throws BambooProjectNotFoundException {
-		Preconditions.checkNotNull(projectKey, "projectKey is a mandatory parameter");
+        Preconditions.checkNotNull(projectKey, "projectKey is mandatory");
 		try {
 			String projectUrl = bambooUrlBuilder.getProjectUrl(projectKey);
 			Results results = client.resource(projectUrl, Results.class);

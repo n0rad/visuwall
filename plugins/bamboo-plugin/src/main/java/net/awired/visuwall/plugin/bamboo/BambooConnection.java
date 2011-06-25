@@ -51,7 +51,7 @@ public class BambooConnection implements BuildCapability {
         connect(url);
     }
 
-    void connect(String url) {
+    public void connect(String url) {
 
         Preconditions.checkNotNull(url, "url is mandatory");
         if (StringUtils.isBlank(url)) {
@@ -73,10 +73,6 @@ public class BambooConnection implements BuildCapability {
         } catch (BambooProjectNotFoundException e) {
             throw new ProjectNotFoundException("Can't find project with ProjectId:" + projectId, e);
         }
-    }
-
-    private void checkSoftwareProjectId(SoftwareProjectId projectId) {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
     }
 
     @Override
@@ -154,8 +150,7 @@ public class BambooConnection implements BuildCapability {
 
     @Override
     public Date getEstimatedFinishTime(SoftwareProjectId projectId, Integer buildNumber)
-            throws ProjectNotFoundException,
-            BuildNotFoundException {
+            throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
         String projectName = getProjectKey(projectId);
         try {
@@ -193,20 +188,39 @@ public class BambooConnection implements BuildCapability {
     }
 
     @Override
-    public String getMavenId(SoftwareProjectId projectId) throws ProjectNotFoundException, MavenIdNotFoundException {
+    public String getMavenId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
+            MavenIdNotFoundException {
         checkConnected();
-        return null;
+        checkSoftwareProjectId(softwareProjectId);
+        try {
+            String projectId = softwareProjectId.getProjectId();
+            BambooProject project = bamboo.findProject(projectId);
+            return project.getName();
+        } catch (BambooProjectNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find project with software project id: " + softwareProjectId);
+        }
     }
 
     @Override
-    public String getName(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public String getName(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
-        return null;
+        try {
+            String projectKey = softwareProjectId.getProjectId();
+            BambooProject project = bamboo.findProject(projectKey);
+            String name = project.getName();
+            return name;
+        } catch (BambooProjectNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find name of software project id: " + softwareProjectId);
+        }
     }
 
     @Override
     public boolean isClosed() {
         return !connected;
+    }
+
+    private void checkSoftwareProjectId(SoftwareProjectId projectId) {
+        Preconditions.checkNotNull(projectId, "projectId is mandatory");
     }
 
 }

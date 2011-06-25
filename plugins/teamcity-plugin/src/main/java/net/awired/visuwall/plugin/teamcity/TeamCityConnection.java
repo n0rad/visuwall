@@ -63,7 +63,7 @@ public class TeamCityConnection implements BuildCapability {
         connect(url);
     }
 
-    void connect(String url) {
+    public void connect(String url) {
         Preconditions.checkNotNull(url, "url is mandatory");
         if (StringUtils.isBlank(url)) {
             throw new IllegalArgumentException("url can't be null.");

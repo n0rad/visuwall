@@ -24,4 +24,8 @@ public class MavenIdNotFoundException extends Exception {
         super(msg);
     }
 
+    public MavenIdNotFoundException(String msg, Throwable t) {
+        super(msg, t);
+    }
+
 }
