@@ -25,7 +25,10 @@ import java.util.Date;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ConnectionException;
+import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
@@ -63,10 +66,17 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
 	@Override
     @Test
     public void should_get_build_state() throws Exception {
-        SoftwareProjectId projectId = struts();
+        assertEquals(State.SUCCESS, getLastBuildState("struts"));
+        assertEquals(State.FAILURE, getLastBuildState(""));
+        assertEquals(State.UNSTABLE, getLastBuildState("client-teamcity"));
+    }
+
+    private State getLastBuildState(String name) throws ProjectNotFoundException, BuildNumberNotFoundException,
+            BuildNotFoundException {
+        SoftwareProjectId projectId = new SoftwareProjectId(name);
         int buildNumber = hudson.getLastBuildNumber(projectId);
         State state = hudson.getBuildState(projectId, buildNumber);
-        assertEquals(State.SUCCESS, state);
+        return state;
     }
 
     private SoftwareProjectId struts() {
