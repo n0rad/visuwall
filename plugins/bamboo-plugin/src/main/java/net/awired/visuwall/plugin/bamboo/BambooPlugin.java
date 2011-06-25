@@ -22,6 +22,8 @@ import java.util.Properties;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
+import com.google.common.base.Preconditions;
+
 public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
 
     @Override
@@ -48,6 +50,7 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
 
     @Override
     public SoftwareId getSoftwareId(URL url) {
+        Preconditions.checkNotNull(url, "url is mandatory");
         SoftwareId softwareId = new SoftwareId();
         softwareId.setName("Bamboo");
         try {

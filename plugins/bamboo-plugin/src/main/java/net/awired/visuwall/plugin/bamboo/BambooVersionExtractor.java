@@ -20,22 +20,36 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import com.google.common.base.Preconditions;
 import com.google.common.io.ByteStreams;
+import com.google.common.io.Closeables;
 
-public class BambooVersionExtractor {
+class BambooVersionExtractor {
 
-    public static String extractVersion(URL url) throws BambooVersionNotFoundException {
-        try {
-            InputStream stream = url.openStream();
-            byte[] bytes = ByteStreams.toByteArray(stream);
-            String page = new String(bytes);
-            if (page.contains("version ") && page.contains(" build")) {
-                return page.split("version ")[1].split(" build")[0];
-            }
-        } catch (IOException e) {
-            throw new BambooVersionNotFoundException("Can't extract version from url:" + url, e);
-        }
-        throw new BambooVersionNotFoundException("Can't extract version from url:" + url);
+    private BambooVersionExtractor() {
     }
 
+    static String extractVersion(URL url) throws BambooVersionNotFoundException {
+        InputStream stream = null;
+        try {
+            stream = url.openStream();
+            byte[] bytes = ByteStreams.toByteArray(stream);
+            String page = new String(bytes);
+            return extractVersion(page);
+        } catch (IOException e) {
+            throw new BambooVersionNotFoundException("Can't extract version from url:" + url, e);
+        } finally {
+            Closeables.closeQuietly(stream);
+        }
+    }
+
+    static String extractVersion(String content) throws BambooVersionNotFoundException {
+        Preconditions.checkNotNull(content, "content is mandatory");
+        if (content.contains("version ") && content.contains(" build")) {
+            String rightOfVersionToken = content.split("version ")[1];
+            String leftOfBuildToken = rightOfVersionToken.split(" build")[0];
+            return leftOfBuildToken;
+        }
+        throw new BambooVersionNotFoundException("Can't extract version from content: " + content);
+    }
 }
