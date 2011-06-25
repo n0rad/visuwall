@@ -19,10 +19,10 @@ package net.awired.visuwall.plugin.bamboo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import net.awired.visuwall.api.domain.SoftwareId;
+import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -51,8 +51,8 @@ public class BambooPluginTest {
         assertEquals(BambooConnection.class, bamboo.getConnectionClass());
     }
 
-    @Test
-    public void should_get_software_id_without_version() throws MalformedURLException {
+    @Test(expected = IncompatibleSoftwareException.class)
+    public void should_not_get_software_id_without_version() throws Exception {
         URL url = new URL("http://bamboo:8080");
         SoftwareId softwareId = bamboo.getSoftwareId(url);
         assertEquals("Bamboo", softwareId.getName());
@@ -60,7 +60,7 @@ public class BambooPluginTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void cant_pass_null_as_url_parameter() {
+    public void cant_pass_null_as_url_parameter() throws IncompatibleSoftwareException {
         bamboo.getSoftwareId(null);
     }
 

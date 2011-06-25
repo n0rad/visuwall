@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -221,7 +222,14 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
     @Override
     public List<Integer> getBuildNumbers(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
-        throw new ProjectNotFoundException("not implemented");
+        checkSoftwareProjectId(softwareProjectId);
+        try {
+            String jobName = softwareProjectId.getProjectId();
+            return hudson.getBuildNumbers(jobName);
+        } catch (HudsonJobNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find build numbers of software project id " + softwareProjectId,
+                    e);
+        }
     }
 
     @Override
@@ -248,6 +256,30 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
         } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException("Can't get name of project " + softwareProjectId, e);
         }
+    }
+
+    @Override
+    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws BuildNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        checkBuildNumber(buildNumber);
+        try {
+            String jobName = softwareProjectId.getProjectId();
+            HudsonBuild hudsonBuild = hudson.findBuild(jobName, buildNumber);
+            BuildTime buildTime = new BuildTime();
+            buildTime.setDuration(hudsonBuild.getDuration());
+            buildTime.setStartTime(hudsonBuild.getStartTime());
+            return buildTime;
+        } catch (HudsonBuildNotFoundException e) {
+            throw new BuildNotFoundException("Can't find build #" + buildNumber + " of project " + softwareProjectId, e);
+        } catch (HudsonJobNotFoundException e) {
+            throw new BuildNotFoundException("Can't find project " + softwareProjectId, e);
+        }
+    }
+
+    private void checkBuildNumber(Integer buildNumber) {
+        Preconditions.checkNotNull(buildNumber, "buildNumber is mandatory");
     }
 
     private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {

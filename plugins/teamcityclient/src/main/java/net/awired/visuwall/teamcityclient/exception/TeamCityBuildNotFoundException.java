@@ -24,4 +24,8 @@ public class TeamCityBuildNotFoundException extends Exception {
 		super(msg, t);
 	}
 
+    public TeamCityBuildNotFoundException(String msg) {
+        super(msg);
+    }
+
 }

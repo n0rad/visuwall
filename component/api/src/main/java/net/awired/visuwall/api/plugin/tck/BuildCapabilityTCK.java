@@ -33,4 +33,6 @@ public interface BuildCapabilityTCK {
 	// isBuilding
     void should_get_is_building() throws Exception;
 
+    // getBuildTime
+    void should_get_build_time() throws Exception;
 }

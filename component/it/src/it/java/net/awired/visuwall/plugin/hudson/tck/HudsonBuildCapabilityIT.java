@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Date;
 
 import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -79,16 +80,12 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
         return state;
     }
 
-    private SoftwareProjectId struts() {
-        return new SoftwareProjectId("struts");
-    }
-
     @Override
     @Test
     public void should_get_estimated_date() throws Exception {
-        SoftwareProjectId projectId = struts();
-        int buildNumber = hudson.getLastBuildNumber(projectId);
-        Date date = hudson.getEstimatedFinishTime(projectId, buildNumber);
+        SoftwareProjectId softwareProjectId = struts();
+        int buildNumber = hudson.getLastBuildNumber(softwareProjectId);
+        Date date = hudson.getEstimatedFinishTime(softwareProjectId, buildNumber);
         assertNotNull(date);
     }
 
@@ -97,5 +94,18 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
     @Ignore
     public void should_get_build_numbers() throws Exception {
 
+    }
+
+    @Override
+    @Test
+    public void should_get_build_time() throws Exception {
+        SoftwareProjectId softwareProjectId = struts();
+        int buildNumber = hudson.getLastBuildNumber(softwareProjectId);
+        BuildTime buildTime = hudson.getBuildTime(softwareProjectId, buildNumber);
+        assertNotNull(buildTime);
+    }
+
+    private SoftwareProjectId struts() {
+        return new SoftwareProjectId("struts");
     }
 }

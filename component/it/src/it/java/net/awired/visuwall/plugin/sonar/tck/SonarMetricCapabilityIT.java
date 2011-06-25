@@ -30,12 +30,14 @@ import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
+import net.awired.visuwall.api.plugin.tck.MetricCapabilityTCK;
 import net.awired.visuwall.plugin.sonar.SonarConnection;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
-public class SonarMetricCapabilityIT {
+public class SonarMetricCapabilityIT implements MetricCapabilityTCK {
 
 	private static MetricCapability sonar = new SonarConnection();
 
@@ -90,6 +92,30 @@ public class SonarMetricCapabilityIT {
         assertEquals(0, integrationTestsAnalysis.getSkipCount());
         assertEquals(0, integrationTestsAnalysis.getPassCount());
         assertEquals(0, integrationTestsAnalysis.getTotalCount());
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void should_analyze_quality_with_all_metrics() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void should_analyze_quality_with_only_3_metrics() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void should_get_metrics_by_category() {
+        // TODO Auto-generated method stub
+
     }
 
     private SoftwareProjectId librestry() {

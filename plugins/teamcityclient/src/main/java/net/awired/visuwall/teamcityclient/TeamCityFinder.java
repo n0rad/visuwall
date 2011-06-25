@@ -84,9 +84,6 @@ public class TeamCityFinder {
 		Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
 		try {
 			String buildListUrl = urlBuilder.getBuildList(buildTypeId);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(buildListUrl);
-            }
 			TeamCityBuilds teamCityBuilds = client.resource(buildListUrl, TeamCityBuilds.class);
 			return teamCityBuilds;
 		} catch (ResourceNotFoundException e) {

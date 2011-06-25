@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -89,6 +90,15 @@ public class TeamBuildCapabilityIT implements BuildCapabilityTCK {
         boolean isBuilding = teamcity.isBuilding(projectId, 1);
 
         assertFalse(isBuilding);
+    }
+
+    @Test
+    @Override
+    public void should_get_build_time() throws Exception {
+        SoftwareProjectId softwareProjectId = amazonProjectSoftwareId();
+        int buildNumber = teamcity.getLastBuildNumber(softwareProjectId);
+        BuildTime buildTime = teamcity.getBuildTime(softwareProjectId, buildNumber);
+        assertNotNull(buildTime);
     }
 
     private SoftwareProjectId amazonProjectSoftwareId() {

@@ -107,7 +107,7 @@ public class HudsonTest {
         hudsonJob.setName("projectName");
         when(hudsonFinder.findJob("projectName")).thenReturn(hudsonJob);
 
-        when(hudsonFinder.getBuildNumbers("projectName")).thenReturn(new int[] { 1 });
+        when(hudsonFinder.getBuildNumbers("projectName")).thenReturn(Arrays.asList(1));
 
         Date date = hudson.getEstimatedFinishTime("projectName");
 

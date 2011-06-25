@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -29,7 +30,9 @@ import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.bambooclient.Bamboo;
+import net.awired.visuwall.bambooclient.domain.BambooBuild;
 import net.awired.visuwall.bambooclient.domain.BambooProject;
+import net.awired.visuwall.bambooclient.exception.BambooBuildNotFoundException;
 import net.awired.visuwall.bambooclient.exception.BambooBuildNumberNotFoundException;
 import net.awired.visuwall.bambooclient.exception.BambooProjectNotFoundException;
 import net.awired.visuwall.bambooclient.exception.BambooStateNotFoundException;
@@ -52,7 +55,6 @@ public class BambooConnection implements BuildCapability {
     }
 
     public void connect(String url) {
-
         Preconditions.checkNotNull(url, "url is mandatory");
         if (StringUtils.isBlank(url)) {
             throw new IllegalArgumentException("url can't be null.");
@@ -66,6 +68,7 @@ public class BambooConnection implements BuildCapability {
             BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(projectId);
+        checkBuildNumber(buildNumber);
         try {
             String projectName = getProjectKey(projectId);
             BambooProject bambooProject = bamboo.findProject(projectName);
@@ -80,6 +83,7 @@ public class BambooConnection implements BuildCapability {
             BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(projectId);
+        checkBuildNumber(buildNumber);
         try {
             String projectName = getProjectKey(projectId);
             String bambooState = bamboo.getState(projectName);
@@ -152,6 +156,7 @@ public class BambooConnection implements BuildCapability {
     public Date getEstimatedFinishTime(SoftwareProjectId projectId, Integer buildNumber)
             throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
+        checkBuildNumber(buildNumber);
         String projectName = getProjectKey(projectId);
         try {
             return bamboo.getEstimatedFinishTime(projectName);
@@ -204,6 +209,7 @@ public class BambooConnection implements BuildCapability {
     @Override
     public String getName(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
         try {
             String projectKey = softwareProjectId.getProjectId();
             BambooProject project = bamboo.findProject(projectKey);
@@ -219,8 +225,30 @@ public class BambooConnection implements BuildCapability {
         return !connected;
     }
 
-    private void checkSoftwareProjectId(SoftwareProjectId projectId) {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+    @Override
+    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws BuildNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        checkBuildNumber(buildNumber);
+        try {
+            String projectKey = softwareProjectId.getProjectId();
+            BambooBuild bambooBuild = bamboo.findBuild(projectKey, buildNumber);
+            BuildTime buildTime = new BuildTime();
+            buildTime.setDuration(bambooBuild.getDuration());
+            buildTime.setStartTime(bambooBuild.getStartTime());
+            return buildTime;
+        } catch (BambooBuildNotFoundException e) {
+            throw new BuildNotFoundException("Can't find build #" + buildNumber + " of project " + softwareProjectId, e);
+        }
+    }
+
+    private void checkBuildNumber(Integer buildNumber) {
+        Preconditions.checkNotNull(buildNumber, "buildNumber is mandatory");
+    }
+
+    private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
+        Preconditions.checkNotNull(softwareProjectId, "softwareProjectId is mandatory");
     }
 
 }

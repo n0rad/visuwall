@@ -19,6 +19,7 @@ package net.awired.visuwall.api.plugin.capability;
 import java.util.Date;
 import java.util.List;
 
+import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -27,16 +28,25 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BuildCapability extends BasicCapability {
 
-    // BuildTime getBuildTime(SoftwareProjectId projectId, Integer buildNumber);
+    /**
+     * Return build time information
+     * 
+     * @param softwareProjectId
+     * @param buildNumber
+     * @return
+     * @throws ProjectNotFoundException
+     */
+    BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildNumber) throws BuildNotFoundException,
+            ProjectNotFoundException;
 
     /**
      * Returns the build numbers order by integer ASC
      * 
-     * @param projectId
+     * @param softwareProjectId
      * @return
      * @throws ProjectNotFoundException
      */
-    List<Integer> getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException;
+    List<Integer> getBuildNumbers(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException;
 
     /**
      * Builds are in a certain state which may vary between software You'll have to try to associate them with common
@@ -78,11 +88,11 @@ public interface BuildCapability extends BasicCapability {
     /**
      * Return the last build number of a project
      * 
-     * @param projectId
+     * @param softwareProjectId
      * @return
      * @throws ProjectNotFoundException
      * @throws BuildNumberNotFoundException
      */
-    int getLastBuildNumber(SoftwareProjectId projectId) throws ProjectNotFoundException, BuildNumberNotFoundException;
+    int getLastBuildNumber(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException, BuildNumberNotFoundException;
 
 }

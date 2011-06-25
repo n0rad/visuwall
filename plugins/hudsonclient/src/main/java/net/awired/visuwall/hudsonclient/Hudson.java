@@ -75,16 +75,16 @@ public class Hudson {
     }
 
     /**
-     * @param projectName
+     * @param jobName
      * @param buildNumber
      * @return HudsonBuild found in Hudson with its project name and build number
      * @throws HudsonBuildNotFoundException
      * @throws HudsonJobNotFoundException
      */
-    public HudsonBuild findBuild(String projectName, int buildNumber) throws HudsonBuildNotFoundException,
+    public HudsonBuild findBuild(String jobName, int buildNumber) throws HudsonBuildNotFoundException,
             HudsonJobNotFoundException {
-        checkJobName(projectName);
-        return hudsonFinder.find(projectName, buildNumber);
+        checkJobName(jobName);
+        return hudsonFinder.find(jobName, buildNumber);
     }
 
     private void checkJobName(String jobName) {
@@ -201,7 +201,7 @@ public class Hudson {
     private long computeAverageBuildDuration(HudsonJob hudsonJob) throws HudsonJobNotFoundException {
         String projectName = hudsonJob.getName();
         float sumBuildDurationTime = 0;
-        int[] buildNumbers = hudsonFinder.getBuildNumbers(projectName);
+        List<Integer> buildNumbers = hudsonFinder.getBuildNumbers(projectName);
 
         for (int buildNumber : buildNumbers) {
             try {
@@ -216,12 +216,12 @@ public class Hudson {
             }
         }
 
-        return (long) (sumBuildDurationTime / buildNumbers.length);
+        return (long) (sumBuildDurationTime / buildNumbers.size());
     }
 
     private long maxDuration(HudsonJob hudsonProject) throws HudsonJobNotFoundException {
         long max = 0;
-        int[] buildNumbers = hudsonFinder.getBuildNumbers(hudsonProject.getName());
+        List<Integer> buildNumbers = hudsonFinder.getBuildNumbers(hudsonProject.getName());
 
         for (int buildNumber : buildNumbers) {
             try {
@@ -238,7 +238,7 @@ public class Hudson {
     }
 
     private boolean isNeverSuccessful(String jobName) throws HudsonJobNotFoundException {
-        int[] buildNumbers = hudsonFinder.getBuildNumbers(jobName);
+        List<Integer> buildNumbers = hudsonFinder.getBuildNumbers(jobName);
         for (int buildNumber : buildNumbers) {
             try {
                 HudsonBuild build = findBuild(jobName, buildNumber);
@@ -258,9 +258,13 @@ public class Hudson {
         return hudsonRootModuleFinder.findArtifactId(jobName);
     }
 
-    @Deprecated
-    public boolean contains(String name) {
-        return hudsonFinder.projectExists(name);
+    public List<Integer> getBuildNumbers(String jobName) throws HudsonJobNotFoundException {
+        checkJobName(jobName);
+        try {
+            return hudsonFinder.getBuildNumbers(jobName);
+        } catch (HudsonJobNotFoundException e) {
+            throw new HudsonJobNotFoundException("Can't find build numbers of jobName '" + jobName + "'", e);
+        }
     }
 
 }

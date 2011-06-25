@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Date;
 
 import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -50,7 +51,7 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
 	@Override
 	@Test
     public void should_get_last_build_number() throws Exception {
-        SoftwareProjectId projectId = new SoftwareProjectId("struts");
+        SoftwareProjectId projectId = struts();
 		int number = jenkins.getLastBuildNumber(projectId);
 		assertEquals(4, number);
 	}
@@ -75,7 +76,7 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
 	@Override
 	@Test
     public void should_get_is_building() throws Exception {
-        SoftwareProjectId projectId = new SoftwareProjectId("struts");
+        SoftwareProjectId projectId = struts();
         int buildNumber = jenkins.getLastBuildNumber(projectId);
         boolean isBuilding = jenkins.isBuilding(projectId, buildNumber);
 		assertFalse(isBuilding);
@@ -84,16 +85,29 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
 	@Override
 	@Test
     public void should_get_estimated_date() throws Exception {
-        SoftwareProjectId projectId = new SoftwareProjectId("struts");
+        SoftwareProjectId projectId = struts();
         int buildNumber = jenkins.getLastBuildNumber(projectId);
         Date date = jenkins.getEstimatedFinishTime(projectId, buildNumber);
 		assertNotNull(date);
 	}
+
+    private SoftwareProjectId struts() {
+        return new SoftwareProjectId("struts");
+    }
 
     @Override
     @Test
     @Ignore
     public void should_get_build_numbers() throws Exception {
 
+    }
+
+    @Override
+    @Test
+    public void should_get_build_time() throws Exception {
+        SoftwareProjectId projectId = struts();
+        int buildNumber = jenkins.getLastBuildNumber(projectId);
+        BuildTime buildTime = jenkins.getBuildTime(projectId, buildNumber);
+        assertNotNull(buildTime);
     }
 }

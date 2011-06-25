@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -87,8 +88,9 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
     @Override
     public Date getEstimatedFinishTime(SoftwareProjectId projectId, Integer buildNumber)
             throws ProjectNotFoundException, BuildNotFoundException {
-        checkSoftwareProjectId(projectId);
         checkConnected();
+        checkSoftwareProjectId(projectId);
+        checkBuildNumber(buildNumber);
         try {
             String projectName = jobName(projectId);
             return hudson.getEstimatedFinishTime(projectName);
@@ -100,8 +102,9 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
     @Override
     public boolean isBuilding(SoftwareProjectId projectId, Integer buildNumber) throws ProjectNotFoundException,
             BuildNotFoundException {
-        checkSoftwareProjectId(projectId);
         checkConnected();
+        checkSoftwareProjectId(projectId);
+        checkBuildNumber(buildNumber);
         try {
             String projectName = jobName(projectId);
             return hudson.isBuilding(projectName);
@@ -113,8 +116,9 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
     @Override
     public State getBuildState(SoftwareProjectId projectId, Integer buildNumber) throws ProjectNotFoundException,
             BuildNotFoundException {
-        checkSoftwareProjectId(projectId);
         checkConnected();
+        checkSoftwareProjectId(projectId);
+        checkBuildNumber(buildNumber);
         try {
             String projectName = jobName(projectId);
             HudsonBuild hudsonBuild = hudson.findBuild(projectName, buildNumber);
@@ -130,8 +134,8 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
     @Override
     public int getLastBuildNumber(SoftwareProjectId projectId) throws ProjectNotFoundException,
             BuildNumberNotFoundException {
-        checkSoftwareProjectId(projectId);
         checkConnected();
+        checkSoftwareProjectId(projectId);
         try {
             String projectName = jobName(projectId);
             return hudson.getLastBuildNumber(projectName);
@@ -221,7 +225,13 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
     @Override
     public List<Integer> getBuildNumbers(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
-        throw new ProjectNotFoundException("not implemented");
+        try {
+            String jobName = softwareProjectId.getProjectId();
+            return hudson.getBuildNumbers(jobName);
+        } catch (HudsonJobNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find build numbers of software project id " + softwareProjectId,
+                    e);
+        }
     }
 
     @Override
@@ -229,8 +239,8 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
             MavenIdNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
-        String jobName = softwareProjectId.getProjectId();
         try {
+            String jobName = softwareProjectId.getProjectId();
             return hudson.findArtifactId(jobName);
         } catch (ArtifactIdNotFoundException e) {
             throw new MavenIdNotFoundException("Can't get maven id of project " + softwareProjectId, e);
@@ -241,8 +251,8 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
     public String getName(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
-        String projectName = softwareProjectId.getProjectId();
         try {
+            String projectName = softwareProjectId.getProjectId();
             HudsonJob project = hudson.findJob(projectName);
             return project.getName();
         } catch (HudsonJobNotFoundException e) {
@@ -250,8 +260,36 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
         }
     }
 
-    private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
+    @Override
+    public boolean isClosed() {
+        return !connected;
+    }
+
+    @Override
+    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws BuildNotFoundException {
         checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        checkBuildNumber(buildNumber);
+        try {
+            String jobName = softwareProjectId.getProjectId();
+            HudsonBuild hudsonBuild = hudson.findBuild(jobName, buildNumber);
+            BuildTime buildTime = new BuildTime();
+            buildTime.setDuration(hudsonBuild.getDuration());
+            buildTime.setStartTime(hudsonBuild.getStartTime());
+            return buildTime;
+        } catch (HudsonBuildNotFoundException e) {
+            throw new BuildNotFoundException("Can't find build #" + buildNumber + " of project " + softwareProjectId, e);
+        } catch (HudsonJobNotFoundException e) {
+            throw new BuildNotFoundException("Can't find project " + softwareProjectId, e);
+        }
+    }
+
+    private void checkBuildNumber(Integer buildNumber) {
+        Preconditions.checkNotNull(buildNumber, "buildNumber is mandatory");
+    }
+
+    private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
         Preconditions.checkNotNull(softwareProjectId, "softwareProjectId is mandatory");
     }
 
@@ -265,11 +303,6 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
             throw new HudsonJobNotFoundException("Project id " + softwareProjectId + " does not contain id");
         }
         return jobName;
-    }
-
-    @Override
-    public boolean isClosed() {
-        return !connected;
     }
 
 }

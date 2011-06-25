@@ -20,17 +20,19 @@ import java.net.URL;
 import java.util.Properties;
 
 import net.awired.visuwall.api.domain.SoftwareId;
+import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
 
     @Override
     public BambooConnection getConnection(String url, Properties info) {
-		BambooConnection connection = new BambooConnection();
-		connection.connect(url);
-		return connection;
+        BambooConnection connection = new BambooConnection();
+        connection.connect(url);
+        return connection;
     }
 
     @Override
@@ -49,16 +51,22 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) {
+    public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
         Preconditions.checkNotNull(url, "url is mandatory");
-        SoftwareId softwareId = new SoftwareId();
-        softwareId.setName("Bamboo");
         try {
+            SoftwareId softwareId = new SoftwareId();
+            softwareId.setName("Bamboo");
             softwareId.setVersion(BambooVersionExtractor.extractVersion(url));
+            return softwareId;
         } catch (BambooVersionNotFoundException e) {
-            softwareId.setVersion("version not found");
+            throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Jenkins");
         }
-        return softwareId;
     }
 
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this) //
+                .add("name", getName()) //
+                .add("version", getVersion()).toString();
+    }
 }

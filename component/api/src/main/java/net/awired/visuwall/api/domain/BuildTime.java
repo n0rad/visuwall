@@ -18,6 +18,8 @@ package net.awired.visuwall.api.domain;
 
 import java.util.Date;
 
+import com.google.common.base.Objects;
+
 public class BuildTime {
 
     private Date startTime;
@@ -38,5 +40,13 @@ public class BuildTime {
 
     public long getDuration() {
         return duration;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this) //
+                .add("start time", startTime) //
+                .add("duration", duration) //
+                .toString();
     }
 }

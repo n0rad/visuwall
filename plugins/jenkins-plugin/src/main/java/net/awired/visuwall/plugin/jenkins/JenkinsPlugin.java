@@ -20,11 +20,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
+
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
@@ -63,6 +67,13 @@ public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
             return createSoftwareId(xml);
         }
         throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Jenkins");
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this) //
+                .add("name", getName()) //
+                .add("version", getVersion()).toString();
     }
 
     private SoftwareId createSoftwareId(String xml) {

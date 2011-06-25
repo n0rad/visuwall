@@ -27,6 +27,7 @@ import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
 import net.awired.visuwall.teamcityclient.resource.TeamCityServer;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
@@ -66,6 +67,13 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
             }
         }
         throw new IncompatibleSoftwareException("Url " + url + " is not compatible with TeamCity");
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this) //
+                .add("name", getName()) //
+                .add("version", getVersion()).toString();
     }
 
 	private boolean isManageable(String url) {

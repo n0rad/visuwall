@@ -163,23 +163,6 @@ public class HudsonFinder {
         }
     }
 
-    @Deprecated
-    public boolean projectExists(String jobName) {
-        checkJobName(jobName);
-        try {
-            String projectUrl = hudsonUrlBuilder.getJobUrl(jobName);
-            if (MavenHelper.isNotMavenProject(projectUrl)) {
-                throw new HudsonJobNotFoundException(jobName + " is not a maven project");
-            }
-            client.resource(projectUrl, HudsonMavenMavenModuleSet.class);
-        } catch (ResourceNotFoundException e) {
-            return false;
-        } catch (HudsonJobNotFoundException e) {
-            return false;
-        }
-        return true;
-    }
-
     public String getDescription(String jobName) throws HudsonJobNotFoundException {
         checkJobName(jobName);
         HudsonMavenMavenModuleSet moduleSet = findJobByName(jobName);
@@ -272,13 +255,14 @@ public class HudsonFinder {
         return hudsonProject;
     }
 
-    public int[] getBuildNumbers(String jobName) throws HudsonJobNotFoundException {
+    public List<Integer> getBuildNumbers(String jobName) throws HudsonJobNotFoundException {
         checkJobName(jobName);
         HudsonModelJob modelJob = findJobByName(jobName);
         List<HudsonModelRun> builds = modelJob.getBuild();
-        int[] buildNumbers = new int[builds.size()];
-        for (int i = 0; i < builds.size(); i++) {
-            buildNumbers[i] = builds.get(i).getNumber();
+        List<Integer> buildNumbers = new ArrayList<Integer>();
+        for (HudsonModelRun build : builds) {
+            int buildNumber = build.getNumber();
+            buildNumbers.add(buildNumber);
         }
         return buildNumbers;
     }

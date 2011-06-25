@@ -23,16 +23,19 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
 
+import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-public class BambooBuildCapabilityIT {
+public class BambooBuildCapabilityIT implements BuildCapabilityTCK {
 
 	BuildCapability bamboo = new BambooConnection();
 
@@ -41,50 +44,68 @@ public class BambooBuildCapabilityIT {
         bamboo.connect(BAMBOO_URL, null, null);
 	}
 
-    @Test
-    public void should_find_last_build_number() throws Exception {
-        SoftwareProjectId projectId = strutsProjectId();
-        int buildNumber = bamboo.getLastBuildNumber(projectId);
-        assertEquals(3, buildNumber);
-    }
-
-    @Test
-    public void should_verify_not_building_project() throws Exception {
-        SoftwareProjectId projectId = strutsProjectId();
-        int buildNumber = bamboo.getLastBuildNumber(projectId);
-        boolean building = bamboo.isBuilding(projectId, buildNumber);
-        assertFalse(building);
-    }
-
-    @Test
-    public void should_verify_success_state() throws Exception {
-        SoftwareProjectId projectId = strutsProjectId();
-        int buildNumber = bamboo.getLastBuildNumber(projectId);
-        State state = bamboo.getBuildState(projectId, buildNumber);
-        assertEquals(State.SUCCESS, state);
-    }
-
-    @Test
-    public void should_verify_failure_state() throws Exception {
-        SoftwareProjectId projectId = struts2ProjectId();
-        int buildNumber = bamboo.getLastBuildNumber(projectId);
-        State state = bamboo.getBuildState(projectId, buildNumber);
-        assertEquals(State.FAILURE, state);
-    }
-
-    @Test
-    public void should_get_estimated_finish_time() throws Exception {
-        SoftwareProjectId projectId = strutsProjectId();
-        int buildNumber = bamboo.getLastBuildNumber(projectId);
-        Date estimatedFinishTime = bamboo.getEstimatedFinishTime(projectId, buildNumber);
-        assertNotNull(estimatedFinishTime);
-    }
-    
     private SoftwareProjectId strutsProjectId() {
         return new SoftwareProjectId("STRUTS-STRUTS");
     }
 
     private SoftwareProjectId struts2ProjectId() {
         return new SoftwareProjectId("STRUTS2INSTABLE-STRUTS2INSTABLE");
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void should_get_build_numbers() throws Exception {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    @Test
+    public void should_get_estimated_date() throws Exception {
+        SoftwareProjectId projectId = strutsProjectId();
+        int buildNumber = bamboo.getLastBuildNumber(projectId);
+        Date estimatedFinishTime = bamboo.getEstimatedFinishTime(projectId, buildNumber);
+        assertNotNull(estimatedFinishTime);
+    }
+
+    @Override
+    @Test
+    public void should_get_last_build_number() throws Exception {
+        SoftwareProjectId projectId = strutsProjectId();
+        int buildNumber = bamboo.getLastBuildNumber(projectId);
+        assertEquals(3, buildNumber);
+    }
+
+    @Override
+    @Test
+    public void should_get_build_state() throws Exception {
+        SoftwareProjectId projectId = struts2ProjectId();
+        int buildNumber = bamboo.getLastBuildNumber(projectId);
+        State state = bamboo.getBuildState(projectId, buildNumber);
+        assertEquals(State.FAILURE, state);
+
+        projectId = strutsProjectId();
+        buildNumber = bamboo.getLastBuildNumber(projectId);
+        state = bamboo.getBuildState(projectId, buildNumber);
+        assertEquals(State.SUCCESS, state);
+    }
+
+    @Override
+    @Test
+    public void should_get_is_building() throws Exception {
+        SoftwareProjectId projectId = strutsProjectId();
+        int buildNumber = bamboo.getLastBuildNumber(projectId);
+        boolean building = bamboo.isBuilding(projectId, buildNumber);
+        assertFalse(building);
+    }
+
+    @Override
+    @Test
+    public void should_get_build_time() throws Exception {
+        SoftwareProjectId softwareProjectId = strutsProjectId();
+        int buildNumber = bamboo.getLastBuildNumber(softwareProjectId);
+        BuildTime buildTime = bamboo.getBuildTime(softwareProjectId, buildNumber);
+        assertNotNull(buildTime);
     }
 }
