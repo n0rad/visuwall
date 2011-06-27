@@ -25,6 +25,7 @@ import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.quality.QualityResult;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -86,8 +87,12 @@ public class Project implements Comparable<Project> {
     }
 
     @JsonIgnore
-    public Build getLastBuild() {
-        return findCreatedBuild(lastBuildNumber);
+    public Build getLastBuild() throws BuildNotFoundException {
+        Build lastBuild = builds.get(lastBuildNumber);
+        if (lastBuild == null) {
+            throw new BuildNotFoundException("No last build found for project " + this);
+        }
+        return lastBuild;
     }
 
     @Override

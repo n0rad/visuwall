@@ -6,6 +6,7 @@ import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityResult;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
@@ -20,7 +21,13 @@ public class MetricCapabilityProcess {
 
     void enhanceWithQualityAnalysis(Project analyzedProject, BasicCapability plugin, String... metrics) {
         SoftwareProjectId projectId = null;// analyzedProject.getProjectId();
-        Build build = analyzedProject.getLastBuild();
+        Build build = null;
+        try {
+            build = analyzedProject.getLastBuild();
+        } catch (BuildNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         TestResult unitTestResultToMerge = null;
         TestResult integrationTestResultToMerge = null;

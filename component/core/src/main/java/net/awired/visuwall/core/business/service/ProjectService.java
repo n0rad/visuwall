@@ -16,11 +16,9 @@
 
 package net.awired.visuwall.core.business.service;
 
-import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.Project;
@@ -83,8 +81,8 @@ public class ProjectService {
             public void run() {
                 LOG.info("Running Project Updater task for project " + project);
                 try {
-                    boolean updateNeeded = buildProcess.updateStatusAndReturnFullUpdateNeeded(project);
-                    if (neverRun || updateNeeded) {
+                    int[] buildsToUpdate = buildProcess.updateStatusAndReturnBuildsToUpdate(project);
+                    if (neverRun || buildsToUpdate.length != 0) {
                         if (!neverRun) {
                             LOG.debug("Project build change and needs a update from software " + project);
                         }
@@ -107,25 +105,17 @@ public class ProjectService {
                             LOG.warn("Can not found description for project " + project, e);
                         }
 
-                        // lastBuild
-                        try {
-                            int lastBuildNumber = project.getBuildConnection().getLastBuildNumber(projectId);
-                            project.setLastBuildNumber(lastBuildNumber);
-                            buildProcess.updateBuild(project, lastBuildNumber);
-                        } catch (BuildNumberNotFoundException e) {
-                            LOG.info("No last build found for project " + project);
-                            LOG.debug("No last build found cause ", e);
-                        } catch (Exception e) {
-                            LOG.warn("Can not update last build for project " + project, e);
+                        for (int buildId : buildsToUpdate) {
+                            buildProcess.updateBuild(project, buildId);
                         }
 
-                        try {
-                            List<Integer> buildNumbers = project.getBuildConnection().getBuildNumbers(projectId);
-                            project.setBuildNumbers(buildNumbers);
-                            buildProcess.updatePreviousCompletedBuild(project);
-                        } catch (Exception e) {
-                            LOG.warn("Can not update previous completed build for project " + project, e);
-                        }
+                        //                        try {
+                        //                            List<Integer> buildNumbers = project.getBuildConnection().getBuildNumbers(projectId);
+                        //                            project.setBuildNumbers(buildNumbers);
+                        //                            buildProcess.updatePreviousCompletedBuild(project);
+                        //                        } catch (Exception e) {
+                        //                            LOG.warn("Can not update previous completed build for project " + project, e);
+                        //                        }
 
                         // TODO check for new software to update
                         // TODO be sure to not remove a project cause of a capability ProjectNotFoundException 

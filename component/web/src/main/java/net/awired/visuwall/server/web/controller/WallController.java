@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.core.business.domain.Project;
 import net.awired.visuwall.core.business.service.PluginService;
 import net.awired.visuwall.core.business.service.WallHolderService;
@@ -84,17 +85,17 @@ public class WallController {
         for (Project project : wall.getProjects()) {
             ProjectStatus projectStatus = new ProjectStatus(project);
             projectStatus.setLastBuildId(project.getLastBuildNumber());
-            //            try {
-            projectStatus.setBuilding(project.getLastBuild().isBuilding());
-            if (project.getLastBuild().getEstimatedFinishTime() != null) {
-                long durationFromNow = project.getLastBuild().getEstimatedFinishTime().getTime()
-                        - new Date().getTime();
-                projectStatus.setBuildingTimeleftSecond((int) durationFromNow / 1000);
+            try {
+                projectStatus.setBuilding(project.getLastBuild().isBuilding());
+                if (project.getLastBuild().getEstimatedFinishTime() != null) {
+                    long durationFromNow = project.getLastBuild().getEstimatedFinishTime().getTime()
+                            - new Date().getTime();
+                    projectStatus.setBuildingTimeleftSecond((int) durationFromNow / 1000);
+                }
+            } catch (BuildNotFoundException e) {
+                LOG.debug("No current build found to say the project is building + timeleft in projectStatus for "
+                        + project);
             }
-            //            } catch (BuildNotFoundException e) {
-            //                LOG.debug("No current build found to say the project is building + timeleft in projectStatus for "
-            //                        + project);
-            //            }
 
             statusList.add(projectStatus);
         }
