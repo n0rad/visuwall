@@ -28,7 +28,7 @@ public class ProjectNotFoundException extends Exception {
         super(cause);
     }
 
-	public ProjectNotFoundException(String msg, Throwable t) {
-		super(msg, t);
-	}
+    public ProjectNotFoundException(String msg, Throwable t) {
+        super(msg, t);
+    }
 }

@@ -16,23 +16,14 @@
 
 package net.awired.visuwall.hudsonclient.domain;
 
-import java.util.Arrays;
-
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
 
-public final class HudsonProject {
+public final class HudsonJob {
 
     private String name;
     private String description;
-    private int[] buildNumbers;
     private int lastBuildNumber = -1;
-    private String artifactId;
     private boolean building;
-
-    private HudsonBuild completedBuild;
-
-    private HudsonBuild currentBuild;
 
     public String getName() {
         return name;
@@ -58,14 +49,6 @@ public final class HudsonProject {
         this.building = building;
     }
 
-    public int[] getBuildNumbers() {
-        return buildNumbers;
-    }
-
-    public void setBuildNumbers(int[] buildNumbers) {
-        this.buildNumbers = buildNumbers.clone();
-    }
-
     public int getLastBuildNumber() {
         return lastBuildNumber;
     }
@@ -74,39 +57,11 @@ public final class HudsonProject {
         this.lastBuildNumber = lastBuildNumber;
     }
 
-    public String getArtifactId() {
-        return artifactId;
-    }
-
-    public void setArtifactId(String artifactId) {
-        this.artifactId = artifactId;
-    }
-
-    public HudsonBuild getCompletedBuild() {
-        return completedBuild;
-    }
-
-    public void setCompletedBuild(HudsonBuild completedBuild) {
-        this.completedBuild = completedBuild;
-    }
-
-    public HudsonBuild getCurrentBuild() {
-        return currentBuild;
-    }
-
-    public void setCurrentBuild(HudsonBuild currentBuild) {
-        this.currentBuild = currentBuild;
-    }
-
     @Override
     public String toString() {
-        ToStringHelper toString = Objects.toStringHelper(this) //
+        return Objects.toStringHelper(this) //
                 .add("name", name) //
                 .add("description", description) //
-                .add("isBuilding", isBuilding()) //
-                .add("buildNumbers", Arrays.toString(buildNumbers)) //
-                .add("lastBuildNumber", lastBuildNumber) //
-                .add("artifactId", artifactId);
-        return toString.toString();
+                .add("lastBuildNumber", lastBuildNumber).toString();
     }
 }

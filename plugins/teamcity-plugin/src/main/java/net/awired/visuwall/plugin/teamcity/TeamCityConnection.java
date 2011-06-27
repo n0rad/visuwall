@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
+import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -41,11 +41,9 @@ import net.awired.visuwall.teamcityclient.resource.TeamCityBuildItem;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuildType;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Preconditions;
 
 public class TeamCityConnection implements BuildCapability {
@@ -63,7 +61,7 @@ public class TeamCityConnection implements BuildCapability {
         connect(url);
     }
 
-    void connect(String url) {
+    public void connect(String url) {
         Preconditions.checkNotNull(url, "url is mandatory");
         if (StringUtils.isBlank(url)) {
             throw new IllegalArgumentException("url can't be null.");
@@ -118,7 +116,8 @@ public class TeamCityConnection implements BuildCapability {
                 }
             }
         } catch (TeamCityProjectsNotFoundException e) {
-            throw new ProjectNotFoundException("Can't identify software project id with project key: " + projectKey, e);
+            throw new ProjectNotFoundException("Can't identify software project id with project key: " + projectKey,
+                    e);
         }
         throw new ProjectNotFoundException("Can't identify software project id with project key: " + projectKey);
     }
@@ -137,8 +136,8 @@ public class TeamCityConnection implements BuildCapability {
             }
             return new ArrayList<Integer>(numbers);
         } catch (TeamCityProjectNotFoundException e) {
-            throw new ProjectNotFoundException("Can't find build numbers of software project id:" + softwareProjectId,
-                    e);
+            throw new ProjectNotFoundException(
+                    "Can't find build numbers of software project id:" + softwareProjectId, e);
         }
     }
 
@@ -184,8 +183,7 @@ public class TeamCityConnection implements BuildCapability {
 
     @Override
     public State getBuildState(SoftwareProjectId softwareProjectId, Integer buildNumber)
-            throws ProjectNotFoundException,
-            BuildNotFoundException {
+            throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         checkBuildNumber(buildNumber);
@@ -204,8 +202,7 @@ public class TeamCityConnection implements BuildCapability {
 
     @Override
     public Date getEstimatedFinishTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
-            throws ProjectNotFoundException,
-            BuildNotFoundException {
+            throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         checkBuildNumber(buildNumber);
@@ -214,8 +211,7 @@ public class TeamCityConnection implements BuildCapability {
 
     @Override
     public boolean isBuilding(SoftwareProjectId softwareProjectId, Integer buildNumber)
-            throws ProjectNotFoundException,
-            BuildNotFoundException {
+            throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         checkBuildNumber(buildNumber);
@@ -262,6 +258,35 @@ public class TeamCityConnection implements BuildCapability {
             return project.getName();
         } catch (TeamCityProjectNotFoundException e) {
             throw new ProjectNotFoundException("Can't find name of project with software project id:"
+                    + softwareProjectId, e);
+        }
+    }
+
+    @Override
+    public boolean isClosed() {
+        return !connected;
+    }
+
+    @Override
+    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws BuildNotFoundException, ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        checkBuildNumber(buildNumber);
+        try {
+            TeamCityBuild teamcityBuild = findBuild(softwareProjectId, buildNumber);
+            BuildTime buildTime = new BuildTime();
+            Date finishDate = teamcityBuild.getFinishDate();
+            Date startDate = teamcityBuild.getStartDate();
+            long duration = finishDate.getTime() - startDate.getTime();
+            buildTime.setDuration(duration);
+            buildTime.setStartTime(startDate);
+            return buildTime;
+        } catch (TeamCityProjectNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find name of project with software project id:"
+                    + softwareProjectId, e);
+        } catch (TeamCityBuildNotFoundException e) {
+            throw new BuildNotFoundException("Can't find build #" + buildNumber + " for software project id:"
                     + softwareProjectId, e);
         }
     }
@@ -316,7 +341,8 @@ public class TeamCityConnection implements BuildCapability {
                 }
             }
         }
-        return null;
+        throw new TeamCityBuildNotFoundException("Can't find build #" + buildNumber + "of software project id "
+                + softwareProjectId);
     }
 
     private void checkBuildNumber(int buildNumber) {
@@ -329,11 +355,6 @@ public class TeamCityConnection implements BuildCapability {
 
     private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
         Preconditions.checkNotNull(softwareProjectId, "softwareProjectId is mandatory");
-    }
-
-    @Override
-    public boolean isClosed() {
-        return !connected;
     }
 
 }

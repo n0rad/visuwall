@@ -19,10 +19,8 @@ package net.awired.visuwall.plugin.hudson.tck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 import java.util.Arrays;
 import java.util.List;
-
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -30,46 +28,45 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
 
-	BasicCapability hudson = new HudsonConnection();
+    BasicCapability hudson = new HudsonConnection();
 
     @Before
     public void setUp() throws ConnectionException {
         hudson.connect(IntegrationTestData.HUDSON_URL, null, null);
     }
 
-	@Override
-	@Test
-	public void should_find_all_projects_ids() {
+    @Override
+    @Test
+    public void should_find_all_projects_ids() {
         List<SoftwareProjectId> projects = hudson.findAllSoftwareProjectIds();
         assertFalse(projects.isEmpty());
     }
 
-	@Override
-	@Test
-	public void should_find_project_ids_by_names() {
+    @Override
+    @Test
+    public void should_find_project_ids_by_names() {
         List<String> names = Arrays.asList("fluxx", "visuwall");
         List<SoftwareProjectId> projectIds = hudson.findSoftwareProjectIdsByNames(names);
         assertEquals(2, projectIds.size());
         assertEquals("fluxx", projectIds.get(0).getProjectId());
         assertEquals("visuwall", projectIds.get(1).getProjectId());
-	}
+    }
 
-	@Override
-	@Test
-	public void should_find_all_project_names() {
+    @Override
+    @Test
+    public void should_find_all_project_names() {
         List<String> names = hudson.findProjectNames();
         List<String> hudsonNames = Arrays.asList("fluxx", "visuwall", "dev-radar");
         for (String hudsonName : hudsonNames) {
             assertTrue(names.contains(hudsonName));
         }
-	}
+    }
 
     @Override
     @Test

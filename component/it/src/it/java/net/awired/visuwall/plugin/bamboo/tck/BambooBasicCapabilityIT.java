@@ -19,41 +19,38 @@ package net.awired.visuwall.plugin.bamboo.tck;
 import static net.awired.visuwall.IntegrationTestData.BAMBOO_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
 
-	BasicCapability bamboo = new BambooConnection();
+    BasicCapability bamboo = new BambooConnection();
 
     @Before
     public void init() throws ConnectionException {
         bamboo.connect(BAMBOO_URL, null, null);
-	}
+    }
 
-	@Override
+    @Override
     @Test
-	public void should_find_all_projects_ids() {
+    public void should_find_all_projects_ids() {
         List<SoftwareProjectId> projects = bamboo.findAllSoftwareProjectIds();
         assertFalse(projects.isEmpty());
     }
 
-	@Override
-	@Test
-	public void should_find_project_ids_by_names() {
+    @Override
+    @Test
+    public void should_find_project_ids_by_names() {
         String ajslName = "ajsl - Awired Java Standard Library 1.0-ALPHA6";
         String strutsName = "struts - struts";
         String struts2Name = "struts 2 instable - struts_2_instable";
@@ -65,12 +62,12 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
         assertEquals("STRUTS2INSTABLE-STRUTS2INSTABLE", projectIds.get(2).getProjectId());
     }
 
-	@Override
-	@Test
-	public void should_find_all_project_names() {
+    @Override
+    @Test
+    public void should_find_all_project_names() {
         List<String> names = bamboo.findProjectNames();
         assertFalse(names.isEmpty());
-	}
+    }
 
     @Override
     @Test

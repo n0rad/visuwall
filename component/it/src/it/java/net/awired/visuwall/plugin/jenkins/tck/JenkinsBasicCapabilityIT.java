@@ -18,10 +18,8 @@ package net.awired.visuwall.plugin.jenkins.tck;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
 import java.util.Arrays;
 import java.util.List;
-
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -29,77 +27,77 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-
 public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
 
-	BasicCapability jenkins = new JenkinsConnection();
+    BasicCapability jenkins = new JenkinsConnection();
 
-	@Before
+    @Before
     public void init() throws ConnectionException {
         jenkins.connect(IntegrationTestData.JENKINS_URL, null, null);
-	}
+    }
 
-	@Override
-	@Test
-	public void should_find_project_ids_by_names() {
-		List<String> names = Arrays.asList("struts", "struts 2 instable");
+    @Override
+    @Test
+    public void should_find_project_ids_by_names() {
+        List<String> names = Arrays.asList("struts", "struts 2 instable");
         List<SoftwareProjectId> projectIds = jenkins.findSoftwareProjectIdsByNames(names);
         SoftwareProjectId struts = projectIds.get(0);
         SoftwareProjectId struts2instable = projectIds.get(1);
 
-		assertEquals(2, projectIds.size());
+        assertEquals(2, projectIds.size());
         assertEquals("struts", struts.getProjectId());
         assertEquals("struts 2 instable", struts2instable.getProjectId());
-	}
-
-	@Override
-	@Test
-	public void should_find_all_project_names() {
-		List<String> names = Arrays.asList("errorproject", "failproject", "freestyle-project", "itcoverage-project",
-		        "neverbuild", "newproject", "struts", "struts 2 instable", "successproject", "test-change-result",
-		        "disabled");
-		List<String> projectNames = jenkins.findProjectNames();
-		assertEquals(names.size(), projectNames.size());
-		for (String name : names) {
-			assertTrue(projectNames.contains(name));
-		}
-	}
-
-	@Override
-	@Test
-	public void should_find_all_projects_ids() {
-		List<String> names = Arrays.asList("errorproject", "failproject", "freestyle-project", "itcoverage-project",
-		        "neverbuild", "newproject", "struts", "struts 2 instable", "successproject", "test-change-result",
-		        "disabled");
-        List<SoftwareProjectId> projectNames = jenkins.findAllSoftwareProjectIds();
-        for (SoftwareProjectId projectId : projectNames) {
-            assertTrue(names.contains(projectId.getProjectId()));
-		}
-	}
+    }
 
     @Override
     @Test
-    @Ignore
-    public void should_find_description_of_a_project() throws ProjectNotFoundException {
+    public void should_find_all_project_names() {
+        List<String> names = Arrays.asList("errorproject", "failproject", "freestyle-project", "itcoverage-project",
+                "neverbuild", "newproject", "struts", "struts 2 instable", "successproject", "test-change-result",
+                "disabled");
+        List<String> projectNames = jenkins.findProjectNames();
+        assertEquals(names.size(), projectNames.size());
+        for (String name : names) {
+            assertTrue(projectNames.contains(name));
+        }
+    }
 
+    @Override
+    @Test
+    public void should_find_all_projects_ids() {
+        List<String> names = Arrays.asList("errorproject", "failproject", "freestyle-project", "itcoverage-project",
+                "neverbuild", "newproject", "struts", "struts 2 instable", "successproject", "test-change-result",
+                "disabled");
+        List<SoftwareProjectId> projectNames = jenkins.findAllSoftwareProjectIds();
+        for (SoftwareProjectId projectId : projectNames) {
+            assertTrue(names.contains(projectId.getProjectId()));
+        }
+    }
+
+    @Override
+    @Test
+    public void should_find_description_of_a_project() throws ProjectNotFoundException {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("struts");
+        String description = jenkins.getDescription(softwareProjectId);
+        assertEquals("this is the struts project", description);
     }
 
     @Override
     @Test
     @Ignore
     public void should_identify_a_project() throws ProjectNotFoundException {
-
     }
 
     @Override
     @Test
-    @Ignore
     public void should_get_maven_id() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("struts");
+        String mavenId = jenkins.getMavenId(softwareProjectId);
+        assertEquals("org.apache.struts:struts-parent", mavenId);
     }
 
     @Override

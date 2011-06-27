@@ -17,7 +17,6 @@
 package net.awired.visuwall.bambooclient.domain;
 
 import java.util.Arrays;
-
 import com.google.common.base.Objects;
 
 public class BambooProject {

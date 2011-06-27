@@ -18,18 +18,15 @@ package net.awired.visuwall.hudsonclient;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
 import java.util.List;
 import java.util.Set;
-
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
-import net.awired.visuwall.hudsonclient.domain.HudsonProject;
+import net.awired.visuwall.hudsonclient.domain.HudsonJob;
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
-
 import org.junit.Test;
 
 public class HudsonIT {
@@ -38,7 +35,7 @@ public class HudsonIT {
 
     @Test
     public void should_find_not_built_project() throws HudsonJobNotFoundException {
-        hudson.findProject("neverbuild");
+        hudson.findJob("neverbuild");
     }
 
     @Test
@@ -59,15 +56,9 @@ public class HudsonIT {
     }
 
     @Test
-    public void should_be_unstable_when_having_passed_tests_and_failed_tests() throws HudsonJobNotFoundException {
-        String status = hudson.getState("itcoverage-project");
-        assertEquals("UNSTABLE", status);
-    }
-
-    @Test
     public void should_not_find_non_maven_projects() throws Exception {
-        List<HudsonProject> projects = hudson.findAllProjects();
-        for (HudsonProject project : projects) {
+        List<HudsonJob> projects = hudson.findAllProjects();
+        for (HudsonJob project : projects) {
             if ("freestyle-project".equals(project.getName())) {
                 fail(project.getName() + " is not a maven project");
             }

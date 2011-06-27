@@ -25,26 +25,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TeamCityChanges {
 
-	@XmlAttribute
-	private String href;
+    @XmlAttribute
+    private String href;
 
-	@XmlAttribute
-	private int count;
+    @XmlAttribute
+    private int count;
 
-	public String getHref() {
-		return href;
-	}
+    public String getHref() {
+        return href;
+    }
 
-	public void setHref(String href) {
-		this.href = href;
-	}
+    public void setHref(String href) {
+        this.href = href;
+    }
 
-	public int getCount() {
-		return count;
-	}
+    public int getCount() {
+        return count;
+    }
 
-	public void setCount(int count) {
-		this.count = count;
-	}
+    public void setCount(int count) {
+        this.count = count;
+    }
 
 }

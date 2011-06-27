@@ -23,21 +23,17 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
-import net.awired.visuwall.hudsonclient.domain.HudsonProject;
-import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
+import net.awired.visuwall.hudsonclient.domain.HudsonJob;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
-
 import org.joda.time.Minutes;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,9 +57,9 @@ public class HudsonTest {
     @Test
     public void should_find_all_projects() throws HudsonJobNotFoundException {
         when(hudsonFinder.findJobNames()).thenReturn(Arrays.asList("project1"));
-        when(hudsonFinder.findProject("project1")).thenReturn(new HudsonProject());
+        when(hudsonFinder.findJob("project1")).thenReturn(new HudsonJob());
 
-        List<HudsonProject> projects = hudson.findAllProjects();
+        List<HudsonJob> projects = hudson.findAllProjects();
 
         assertEquals(1, projects.size());
     }
@@ -72,7 +68,7 @@ public class HudsonTest {
     public void should_not_fail_if_there_is_hudson_project_name_not_found_exception()
             throws HudsonJobNotFoundException {
         when(hudsonFinder.findJobNames()).thenReturn(Arrays.asList("project1"));
-        when(hudsonFinder.findProject("project1")).thenThrow(new HudsonJobNotFoundException("cause"));
+        when(hudsonFinder.findJob("project1")).thenThrow(new HudsonJobNotFoundException("cause"));
         hudson.findAllProjects();
     }
 
@@ -95,78 +91,19 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_get_valid_state() throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
-        when(hudsonFinder.getLastBuildNumber("projectName")).thenReturn(42);
-        when(hudsonFinder.getStateOf("projectName", 42)).thenReturn("SUCCESS");
-
-        String state = hudson.getState("projectName");
-
-        assertEquals("SUCCESS", state);
-    }
-
-    @Test
-    public void should_get_unstable_state_if_tests_pass() throws HudsonJobNotFoundException,
-            HudsonBuildNotFoundException {
-        HudsonTestResult unitTests = new HudsonTestResult();
-        unitTests.setPassCount(1);
-        HudsonTestResult integrationTests = new HudsonTestResult();
-        integrationTests.setPassCount(1);
-
-        HudsonBuild completedBuild = new HudsonBuild();
-        completedBuild.setUnitTestResult(unitTests);
-        completedBuild.setIntegrationTestResult(integrationTests);
-
-        HudsonProject hudsonProject = new HudsonProject();
-        hudsonProject.setCompletedBuild(completedBuild);
-
-        when(hudsonFinder.getLastBuildNumber("projectName")).thenReturn(42);
-        when(hudsonFinder.getStateOf("projectName", 42)).thenReturn("FAILURE");
-        when(hudsonFinder.findProject("projectName")).thenReturn(hudsonProject);
-
-        String state = hudson.getState("projectName");
-
-        assertEquals("UNSTABLE", state);
-    }
-
-    @Test
-    public void should_get_failure_state_if_tests_dont_pass() throws HudsonJobNotFoundException,
-            HudsonBuildNotFoundException {
-        HudsonProject hudsonProject = new HudsonProject();
-
-        when(hudsonFinder.getLastBuildNumber("projectName")).thenReturn(42);
-        when(hudsonFinder.getStateOf("projectName", 42)).thenReturn("FAILURE");
-        when(hudsonFinder.findProject("projectName")).thenReturn(hudsonProject);
-
-        String state = hudson.getState("projectName");
-
-        assertEquals("FAILURE", state);
-    }
-
-    @Test
-    public void should_get_new_state_if_build_is_not_found() throws HudsonJobNotFoundException,
-            HudsonBuildNotFoundException {
-        when(hudsonFinder.getLastBuildNumber("projectName")).thenThrow(new HudsonBuildNotFoundException("cause"));
-
-        String state = hudson.getState("projectName");
-
-        assertEquals("UNKNOWN", state);
-    }
-
-    @Test
-    public void should_get_estimated_finish_time() throws HudsonJobNotFoundException,
-            HudsonBuildNotFoundException {
+    public void should_get_estimated_finish_time() throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
         HudsonBuild build = new HudsonBuild();
         build.setDuration(Minutes.TWO.toStandardDuration().getMillis());
         build.setSuccessful(true);
         build.setStartTime(new Date());
-
-        HudsonProject hudsonProject = new HudsonProject();
-        hudsonProject.setName("projectName");
-        hudsonProject.setCurrentBuild(build);
-        hudsonProject.setBuildNumbers(new int[] { 1 });
-
-        when(hudsonFinder.findProject("projectName")).thenReturn(hudsonProject);
+        when(hudsonFinder.getCurrentBuild("projectName")).thenReturn(build);
         when(hudsonFinder.find("projectName", 1)).thenReturn(build);
+
+        HudsonJob hudsonJob = new HudsonJob();
+        hudsonJob.setName("projectName");
+        when(hudsonFinder.findJob("projectName")).thenReturn(hudsonJob);
+
+        when(hudsonFinder.getBuildNumbers("projectName")).thenReturn(Arrays.asList(1));
 
         Date date = hudson.getEstimatedFinishTime("projectName");
 
@@ -176,9 +113,9 @@ public class HudsonTest {
     @Test
     public void should_get_estimated_finish_time_even_if_there_is_no_current_build()
             throws HudsonJobNotFoundException {
-        HudsonProject hudsonProject = new HudsonProject();
+        HudsonJob hudsonProject = new HudsonJob();
         hudsonProject.setName("projectName");
-        when(hudsonFinder.findProject("projectName")).thenReturn(hudsonProject);
+        when(hudsonFinder.findJob("projectName")).thenReturn(hudsonProject);
 
         Date date = hudson.getEstimatedFinishTime("projectName");
 
@@ -186,19 +123,17 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_get_estimated_finish_time_even_if_there_is_no_start_time()
-            throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
+    public void should_get_estimated_finish_time_even_if_there_is_no_start_time() throws HudsonJobNotFoundException,
+            HudsonBuildNotFoundException {
         HudsonBuild build = new HudsonBuild();
         build.setDuration(Minutes.TWO.toStandardDuration().getMillis());
         build.setSuccessful(true);
         build.setStartTime(null);
 
-        HudsonProject hudsonProject = new HudsonProject();
+        HudsonJob hudsonProject = new HudsonJob();
         hudsonProject.setName("projectName");
-        hudsonProject.setCurrentBuild(build);
-        hudsonProject.setBuildNumbers(new int[] { 1 });
 
-        when(hudsonFinder.findProject("projectName")).thenReturn(hudsonProject);
+        when(hudsonFinder.findJob("projectName")).thenReturn(hudsonProject);
         when(hudsonFinder.find("projectName", 1)).thenReturn(build);
 
         Date date = hudson.getEstimatedFinishTime("projectName");

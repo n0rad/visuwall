@@ -18,7 +18,6 @@ package net.awired.visuwall.api.plugin;
 
 import java.net.URL;
 import java.util.Properties;
-
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;

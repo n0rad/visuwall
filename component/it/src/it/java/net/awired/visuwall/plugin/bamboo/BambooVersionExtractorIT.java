@@ -17,11 +17,8 @@
 package net.awired.visuwall.plugin.bamboo;
 
 import static org.junit.Assert.assertEquals;
-
 import java.net.URL;
-
 import net.awired.visuwall.IntegrationTestData;
-
 import org.junit.Test;
 
 public class BambooVersionExtractorIT {

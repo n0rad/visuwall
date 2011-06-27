@@ -17,62 +17,61 @@
 package net.awired.visuwall.teamcityclient.builder;
 
 import java.net.URL;
-
 import com.google.common.base.Preconditions;
 
 public class TeamCityUrlBuilder {
 
-	private String teamCityUrl;
-	private static final String API_URI = "/app/rest";
+    private String teamCityUrl;
+    private static final String API_URI = "/app/rest";
 
-	public TeamCityUrlBuilder(String teamCityUrl) {
-		Preconditions.checkNotNull(teamCityUrl, "teamCityUrl is mandatory");
-		this.teamCityUrl = teamCityUrl;
-	}
+    public TeamCityUrlBuilder(String teamCityUrl) {
+        Preconditions.checkNotNull(teamCityUrl, "teamCityUrl is mandatory");
+        this.teamCityUrl = teamCityUrl;
+    }
 
-	public TeamCityUrlBuilder(URL teamCityUrl) {
-		Preconditions.checkNotNull(teamCityUrl, "teamCityUrl is mandatory");
-		this.teamCityUrl = teamCityUrl.toString();
-	}
+    public TeamCityUrlBuilder(URL teamCityUrl) {
+        Preconditions.checkNotNull(teamCityUrl, "teamCityUrl is mandatory");
+        this.teamCityUrl = teamCityUrl.toString();
+    }
 
-	public String getProjects() {
-		return build("/projects");
-	}
+    public String getProjects() {
+        return build("/projects");
+    }
 
-	public String getProject(String projectId) {
-		checkProjectId(projectId);
-		return build("/projects/id:" + projectId);
-	}
+    public String getProject(String projectId) {
+        checkProjectId(projectId);
+        return build("/projects/id:" + projectId);
+    }
 
-	public String getBuildType(String buildTypeId) {
-		Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
-		return build("/buildTypes/id:" + buildTypeId);
-	}
+    public String getBuildType(String buildTypeId) {
+        Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
+        return build("/buildTypes/id:" + buildTypeId);
+    }
 
-	public String getBuild(int buildId) {
-		Preconditions.checkArgument(buildId >= 0, "buildId must be >= 0");
-		return build("/builds/id:" + buildId);
-	}
+    public String getBuild(int buildId) {
+        Preconditions.checkArgument(buildId >= 0, "buildId must be >= 0");
+        return build("/builds/id:" + buildId);
+    }
 
-	public String getVersion() {
-		return build("/version");
-	}
+    public String getVersion() {
+        return build("/version");
+    }
 
-	public String getServer() {
-		return build("/server");
-	}
+    public String getServer() {
+        return build("/server");
+    }
 
-	private String build(String url) {
-		return teamCityUrl + API_URI + url;
-	}
+    private String build(String url) {
+        return teamCityUrl + API_URI + url;
+    }
 
-	public String getBuildList(String buildTypeId) {
-		Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
+    public String getBuildList(String buildTypeId) {
+        Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
         return build("/buildTypes/id:" + buildTypeId + "/builds");
-	}
+    }
 
-	private void checkProjectId(String projectId) {
-		Preconditions.checkNotNull(projectId, "projectId is mandatory");
-	}
+    private void checkProjectId(String projectId) {
+        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+    }
 
 }

@@ -22,20 +22,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -49,6 +46,7 @@ public class SonarConnectionTest {
     MeasureFinder measureFinder = Mockito.mock(MeasureFinder.class);
 
     SonarConnection sonar;
+
     @Before
     public void init() throws Exception {
         when(metricFinder.findMetrics()).thenReturn(metricList);
@@ -97,16 +95,16 @@ public class SonarConnectionTest {
 
     /***
      * <metric>
-    	<key>generated_lines</key>
-    	<name>Generated Lines</name>
-    	<description>Number of generated lines</description>
-    	<domain>Size</domain>
-    	<qualitative>false</qualitative>
-    	<direction>-1</direction>
-    	<user_managed>false</user_managed>
-    	<val_type>INT</val_type>
-    	<hidden>false</hidden>
-    </metric>
+     * <key>generated_lines</key>
+     * <name>Generated Lines</name>
+     * <description>Number of generated lines</description>
+     * <domain>Size</domain>
+     * <qualitative>false</qualitative>
+     * <direction>-1</direction>
+     * <user_managed>false</user_managed>
+     * <val_type>INT</val_type>
+     * <hidden>false</hidden>
+     * </metric>
      */
     @Test
     public void should_build_valid_metric_map() throws Exception {
@@ -141,14 +139,14 @@ public class SonarConnectionTest {
         when(measureFinder.findMeasure("artifactId", "coverage")).thenReturn(generatedLines);
 
         QualityResult result = sonar.analyzeQuality(projectId, "coverage");
-        
+
         assertNotNull(result.getMeasure("coverage"));
     }
 
     @Test
     public void should_not_fail_if_quality_measures_are_not_found() throws SonarMeasureNotFoundException {
         SoftwareProjectId projectId = new SoftwareProjectId("artifactId");
-        
+
         when(measureFinder.findMeasure(anyString(), anyString())).thenThrow(
                 new SonarMeasureNotFoundException("not found"));
 
@@ -192,6 +190,7 @@ public class SonarConnectionTest {
     @Test
     public void should_close_connection() {
         sonar.close();
+        assertTrue(sonar.isClosed());
     }
 
     @Test

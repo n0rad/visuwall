@@ -18,12 +18,9 @@ package net.awired.visuwall.plugin.teamcity;
 
 import static net.awired.visuwall.IntegrationTestData.TEAMCITY_URL;
 import static org.junit.Assert.assertEquals;
-
 import java.net.URL;
-
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
-
 import org.junit.Test;
 
 public class TeamCityPluginIT {

@@ -24,9 +24,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.net.URL;
-
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
@@ -34,7 +32,6 @@ import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.plugin.sonar.resource.Properties;
 import net.awired.visuwall.plugin.sonar.resource.Property;
-
 import org.junit.Before;
 import org.junit.Test;
 

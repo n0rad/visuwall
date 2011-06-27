@@ -19,7 +19,6 @@ package net.awired.visuwall.api.domain.quality;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-
 import com.google.common.base.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)

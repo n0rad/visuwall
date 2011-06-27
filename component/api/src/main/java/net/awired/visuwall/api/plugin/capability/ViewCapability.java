@@ -17,7 +17,6 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.List;
-
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
 

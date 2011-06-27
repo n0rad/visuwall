@@ -17,7 +17,6 @@
 package net.awired.visuwall.teamcityclient;
 
 import java.util.List;
-
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
@@ -29,70 +28,61 @@ import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProjects;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Preconditions;
 
 public class TeamCityFinder {
 
-	private GenericSoftwareClient client;
+    private GenericSoftwareClient client;
 
-	private TeamCityUrlBuilder urlBuilder;
+    private TeamCityUrlBuilder urlBuilder;
 
-    private static final Logger LOG = LoggerFactory.getLogger(TeamCityFinder.class);
+    public TeamCityFinder(GenericSoftwareClient client, TeamCityUrlBuilder urlBuilder) {
+        this.client = client;
+        this.urlBuilder = urlBuilder;
+    }
 
-	public TeamCityFinder(GenericSoftwareClient client, TeamCityUrlBuilder urlBuilder) {
-		this.client = client;
-		this.urlBuilder = urlBuilder;
-	}
+    public List<TeamCityProject> getProjects() throws TeamCityProjectsNotFoundException {
+        try {
+            String projectsUrl = urlBuilder.getProjects();
+            TeamCityProjects teamCityProjects = client.resource(projectsUrl, TeamCityProjects.class);
+            return teamCityProjects.getProjects();
+        } catch (ResourceNotFoundException e) {
+            throw new TeamCityProjectsNotFoundException("Projects have not been found", e);
+        }
+    }
 
-	public List<TeamCityProject> getProjects() throws TeamCityProjectsNotFoundException {
-		try {
-			String projectsUrl = urlBuilder.getProjects();
-			TeamCityProjects teamCityProjects = client.resource(projectsUrl, TeamCityProjects.class);
-			return teamCityProjects.getProjects();
-		} catch (ResourceNotFoundException e) {
-			throw new TeamCityProjectsNotFoundException("Projects have not been found", e);
-		}
-	}
-
-	public TeamCityProject getProject(String projectId) throws TeamCityProjectNotFoundException {
-		Preconditions.checkNotNull(projectId, "projectId is mandatory");
-		try {
-			String projectUrl = urlBuilder.getProject(projectId);
-			TeamCityProject teamCityProject = client.resource(projectUrl, TeamCityProject.class);
-			return teamCityProject;
-		} catch (ResourceNotFoundException e) {
-			throw new TeamCityProjectNotFoundException("Project #" + projectId + " has not been found", e);
-		}
-	}
+    public TeamCityProject getProject(String projectId) throws TeamCityProjectNotFoundException {
+        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+        try {
+            String projectUrl = urlBuilder.getProject(projectId);
+            TeamCityProject teamCityProject = client.resource(projectUrl, TeamCityProject.class);
+            return teamCityProject;
+        } catch (ResourceNotFoundException e) {
+            throw new TeamCityProjectNotFoundException("Project #" + projectId + " has not been found", e);
+        }
+    }
 
     public TeamCityBuild getBuild(int buildId) throws TeamCityBuildNotFoundException {
         Preconditions.checkArgument(buildId >= 0, "buildId must be >= 0");
-		try {
+        try {
             String buildUrl = urlBuilder.getBuild(buildId);
-			TeamCityBuild teamCityBuild = client.resource(buildUrl, TeamCityBuild.class);
-			return teamCityBuild;
-		} catch (ResourceNotFoundException e) {
+            TeamCityBuild teamCityBuild = client.resource(buildUrl, TeamCityBuild.class);
+            return teamCityBuild;
+        } catch (ResourceNotFoundException e) {
             throw new TeamCityBuildNotFoundException("Build #" + buildId + " has not been found", e);
-		}
-	}
+        }
+    }
 
-	public TeamCityBuilds getBuildList(String buildTypeId) throws TeamCityBuildListNotFoundException {
-		Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
-		try {
-			String buildListUrl = urlBuilder.getBuildList(buildTypeId);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(buildListUrl);
-            }
-			TeamCityBuilds teamCityBuilds = client.resource(buildListUrl, TeamCityBuilds.class);
-			return teamCityBuilds;
-		} catch (ResourceNotFoundException e) {
-			throw new TeamCityBuildListNotFoundException("Build list of buildTypeId " + buildTypeId
-			        + " has not been found", e);
-		}
-	}
+    public TeamCityBuilds getBuildList(String buildTypeId) throws TeamCityBuildListNotFoundException {
+        Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
+        try {
+            String buildListUrl = urlBuilder.getBuildList(buildTypeId);
+            TeamCityBuilds teamCityBuilds = client.resource(buildListUrl, TeamCityBuilds.class);
+            return teamCityBuilds;
+        } catch (ResourceNotFoundException e) {
+            throw new TeamCityBuildListNotFoundException("Build list of buildTypeId " + buildTypeId
+                    + " has not been found", e);
+        }
+    }
 
 }

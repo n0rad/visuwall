@@ -18,10 +18,8 @@ package net.awired.visuwall.plugin.jenkins.tck;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
 import java.util.Arrays;
 import java.util.List;
-
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -29,62 +27,60 @@ import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.api.plugin.tck.ViewCapabilityTCK;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
-
 import org.junit.Before;
 import org.junit.Test;
 
-
 public class JenkinsViewCapabilityIT implements ViewCapabilityTCK {
 
-	ViewCapability jenkins = new JenkinsConnection();
+    ViewCapability jenkins = new JenkinsConnection();
 
-	@Before
+    @Before
     public void init() throws ConnectionException {
         jenkins.connect(IntegrationTestData.JENKINS_URL, null, null);
-	}
+    }
 
-	@Override
-	@Test
-	public void should_list_all_views() {
-		List<String> viewNames = jenkins.findViews();
+    @Override
+    @Test
+    public void should_list_all_views() {
+        List<String> viewNames = jenkins.findViews();
 
-		String[] views = { "in_error", "struts" };
-		for (String viewName : views) {
-			assertTrue(viewNames.contains(viewName));
-		}
-	}
+        String[] views = { "in_error", "struts" };
+        for (String viewName : views) {
+            assertTrue(viewNames.contains(viewName));
+        }
+    }
 
-	@Override
-	@Test
-	public void should_list_all_project_in_a_view() throws ViewNotFoundException {
-		List<String> projects = jenkins.findProjectNamesByView("struts");
-		assertEquals(2, projects.size());
+    @Override
+    @Test
+    public void should_list_all_project_in_a_view() throws ViewNotFoundException {
+        List<String> projects = jenkins.findProjectNamesByView("struts");
+        assertEquals(2, projects.size());
 
-		String[] projectNames = { "struts", "struts 2 instable" };
-		for (String projectName : projectNames) {
-			assertTrue(projects.contains(projectName));
-		}
-	}
+        String[] projectNames = { "struts", "struts 2 instable" };
+        for (String projectName : projectNames) {
+            assertTrue(projects.contains(projectName));
+        }
+    }
 
-	@Override
-	@Test
-	public void should_find_project_ids_by_names() {
-		List<String> names = Arrays.asList("struts", "struts 2 instable");
+    @Override
+    @Test
+    public void should_find_project_ids_by_names() {
+        List<String> names = Arrays.asList("struts", "struts 2 instable");
         List<SoftwareProjectId> projectIds = jenkins.findSoftwareProjectIdsByNames(names);
         SoftwareProjectId struts = projectIds.get(0);
         SoftwareProjectId struts2instable = projectIds.get(1);
 
-		assertEquals(2, projectIds.size());
+        assertEquals(2, projectIds.size());
         assertEquals("struts", struts.getProjectId());
         assertEquals("struts 2 instable", struts2instable.getProjectId());
-	}
+    }
 
-	@Override
-	@Test
-	public void should_find_all_projects_of_views() {
-		List<String> views = Arrays.asList("in_error", "struts");
+    @Override
+    @Test
+    public void should_find_all_projects_of_views() {
+        List<String> views = Arrays.asList("in_error", "struts");
         List<SoftwareProjectId> projects = jenkins.findSoftwareProjectIdsByViews(views);
-		assertEquals(5, projects.size());
-	}
+        assertEquals(5, projects.size());
+    }
 
 }

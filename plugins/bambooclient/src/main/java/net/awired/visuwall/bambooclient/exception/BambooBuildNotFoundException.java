@@ -18,10 +18,10 @@ package net.awired.visuwall.bambooclient.exception;
 
 public class BambooBuildNotFoundException extends Exception {
 
-	private static final long serialVersionUID = -2694816327799844474L;
+    private static final long serialVersionUID = -2694816327799844474L;
 
-	public BambooBuildNotFoundException(String msg, Throwable t) {
-		super(msg, t);
-	}
+    public BambooBuildNotFoundException(String msg, Throwable t) {
+        super(msg, t);
+    }
 
 }

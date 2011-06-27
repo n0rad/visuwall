@@ -17,7 +17,6 @@
 package net.awired.visuwall.common.client;
 
 import javax.ws.rs.core.MediaType;
-
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;

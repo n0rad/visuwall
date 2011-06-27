@@ -17,9 +17,7 @@
 package net.awired.visuwall.common.client;
 
 import java.io.Serializable;
-
 import javax.ws.rs.core.MediaType;
-
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;

@@ -19,31 +19,32 @@ package net.awired.visuwall.plugin.hudson.tck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-
 import java.util.Date;
-
 import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ConnectionException;
+import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
 
-	BuildCapability hudson = new HudsonConnection();
+    BuildCapability hudson = new HudsonConnection();
 
     @Before
     public void setUp() throws ConnectionException {
         hudson.connect(IntegrationTestData.HUDSON_URL, null, null);
     }
 
-	@Override
+    @Override
     @Test
     public void should_get_last_build_number() throws Exception {
         SoftwareProjectId projectId = new SoftwareProjectId("struts");
@@ -51,7 +52,7 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
         assertEquals(1, buildNumber);
     }
 
-	@Override
+    @Override
     @Test
     public void should_get_is_building() throws Exception {
         SoftwareProjectId projectId = new SoftwareProjectId("struts");
@@ -60,25 +61,28 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
         assertFalse(building);
     }
 
-	@Override
+    @Override
     @Test
     public void should_get_build_state() throws Exception {
-        SoftwareProjectId projectId = struts();
-        int buildNumber = hudson.getLastBuildNumber(projectId);
-        State state = hudson.getBuildState(projectId, buildNumber);
-        assertEquals(State.SUCCESS, state);
+        assertEquals(State.SUCCESS, getLastBuildState("struts"));
+        assertEquals(State.UNSTABLE, getLastBuildState("fluxx"));
+        assertEquals(State.FAILURE, getLastBuildState("dev-radar"));
     }
 
-    private SoftwareProjectId struts() {
-        return new SoftwareProjectId("struts");
+    private State getLastBuildState(String name) throws ProjectNotFoundException, BuildNumberNotFoundException,
+            BuildNotFoundException {
+        SoftwareProjectId projectId = new SoftwareProjectId(name);
+        int buildNumber = hudson.getLastBuildNumber(projectId);
+        State state = hudson.getBuildState(projectId, buildNumber);
+        return state;
     }
 
     @Override
     @Test
     public void should_get_estimated_date() throws Exception {
-        SoftwareProjectId projectId = struts();
-        int buildNumber = hudson.getLastBuildNumber(projectId);
-        Date date = hudson.getEstimatedFinishTime(projectId, buildNumber);
+        SoftwareProjectId softwareProjectId = struts();
+        int buildNumber = hudson.getLastBuildNumber(softwareProjectId);
+        Date date = hudson.getEstimatedFinishTime(softwareProjectId, buildNumber);
         assertNotNull(date);
     }
 
@@ -87,5 +91,18 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
     @Ignore
     public void should_get_build_numbers() throws Exception {
 
+    }
+
+    @Override
+    @Test
+    public void should_get_build_time() throws Exception {
+        SoftwareProjectId softwareProjectId = struts();
+        int buildNumber = hudson.getLastBuildNumber(softwareProjectId);
+        BuildTime buildTime = hudson.getBuildTime(softwareProjectId, buildNumber);
+        assertNotNull(buildTime);
+    }
+
+    private SoftwareProjectId struts() {
+        return new SoftwareProjectId("struts");
     }
 }

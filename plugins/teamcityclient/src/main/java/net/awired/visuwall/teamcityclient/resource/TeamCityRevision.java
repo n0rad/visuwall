@@ -26,26 +26,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TeamCityRevision {
 
-	@XmlAttribute(name = "display-version")
-	private int displayVersion;
+    @XmlAttribute(name = "display-version")
+    private int displayVersion;
 
-	@XmlElement(name = "vcs-root")
-	private TeamCityVcsRoot vcsRoot;
+    @XmlElement(name = "vcs-root")
+    private TeamCityVcsRoot vcsRoot;
 
-	public int getDisplayVersion() {
-		return displayVersion;
-	}
+    public int getDisplayVersion() {
+        return displayVersion;
+    }
 
-	public void setDisplayVersion(int displayVersion) {
-		this.displayVersion = displayVersion;
-	}
+    public void setDisplayVersion(int displayVersion) {
+        this.displayVersion = displayVersion;
+    }
 
-	public TeamCityVcsRoot getVcsRoot() {
-		return vcsRoot;
-	}
+    public TeamCityVcsRoot getVcsRoot() {
+        return vcsRoot;
+    }
 
-	public void setVcsRoot(TeamCityVcsRoot vcsRoot) {
-		this.vcsRoot = vcsRoot;
-	}
+    public void setVcsRoot(TeamCityVcsRoot vcsRoot) {
+        this.vcsRoot = vcsRoot;
+    }
 
 }

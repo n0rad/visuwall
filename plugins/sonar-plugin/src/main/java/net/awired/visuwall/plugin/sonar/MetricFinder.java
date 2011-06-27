@@ -18,13 +18,11 @@ package net.awired.visuwall.plugin.sonar;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.plugin.sonar.domain.SonarMetrics;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
-
 import com.google.common.annotations.VisibleForTesting;
 
 public class MetricFinder {

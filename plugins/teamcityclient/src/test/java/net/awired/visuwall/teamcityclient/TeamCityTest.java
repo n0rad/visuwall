@@ -24,9 +24,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import java.util.List;
-
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
@@ -46,193 +44,191 @@ import net.awired.visuwall.teamcityclient.resource.TeamCityRelatedIssue;
 import net.awired.visuwall.teamcityclient.resource.TeamCityRevision;
 import net.awired.visuwall.teamcityclient.resource.TeamCityTag;
 import net.awired.visuwall.teamcityclient.resource.TeamCityVcsRoot;
-
 import org.junit.Test;
-
 import com.sun.jersey.api.client.WebResource;
 
 public class TeamCityTest {
 
-	@Test
-	public void should_list_all_project_names() throws TeamCityProjectsNotFoundException {
-		TeamCityProjects teamcityProjects = createProjects();
-		TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProjects);
+    @Test
+    public void should_list_all_project_names() throws TeamCityProjectsNotFoundException {
+        TeamCityProjects teamcityProjects = createProjects();
+        TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProjects);
 
-		TeamCity teamcity = new TeamCity();
-		teamcity.teamcityFinder = teamcityJerseyClient;
+        TeamCity teamcity = new TeamCity();
+        teamcity.teamcityFinder = teamcityJerseyClient;
 
-		List<String> projectNames = teamcity.findProjectNames();
-		assertFalse(projectNames.isEmpty());
-		for (String s : projectNames) {
-			assertNotNull(s);
-		}
-	}
+        List<String> projectNames = teamcity.findProjectNames();
+        assertFalse(projectNames.isEmpty());
+        for (String s : projectNames) {
+            assertNotNull(s);
+        }
+    }
 
-	@Test
-	public void should_find_all_project() throws TeamCityProjectsNotFoundException {
-		TeamCityProjects teamcityProjects = createProjects();
-		TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProjects);
+    @Test
+    public void should_find_all_project() throws TeamCityProjectsNotFoundException {
+        TeamCityProjects teamcityProjects = createProjects();
+        TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProjects);
 
-		TeamCity teamcity = new TeamCity();
-		teamcity.teamcityFinder = teamcityJerseyClient;
+        TeamCity teamcity = new TeamCity();
+        teamcity.teamcityFinder = teamcityJerseyClient;
 
-		List<TeamCityProject> projects = teamcity.findAllProjects();
-		assertFalse(projects.isEmpty());
-		for (TeamCityProject project : projects) {
-			assertNotNull(project.getName());
-			assertNotNull(project.getId());
-			assertNotNull(project.getHref());
-		}
-	}
+        List<TeamCityProject> projects = teamcity.findAllProjects();
+        assertFalse(projects.isEmpty());
+        for (TeamCityProject project : projects) {
+            assertNotNull(project.getName());
+            assertNotNull(project.getId());
+            assertNotNull(project.getHref());
+        }
+    }
 
-	@Test
-	public void should_load_project() throws TeamCityProjectNotFoundException {
-		TeamCityProject teamcityProject = createProject();
-		TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProject);
+    @Test
+    public void should_load_project() throws TeamCityProjectNotFoundException {
+        TeamCityProject teamcityProject = createProject();
+        TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProject);
 
-		TeamCity teamcity = new TeamCity();
-		teamcity.teamcityFinder = teamcityJerseyClient;
+        TeamCity teamcity = new TeamCity();
+        teamcity.teamcityFinder = teamcityJerseyClient;
 
-		TeamCityProject project = teamcity.findProject("project54");
-		assertEquals("http://teamcity.jetbrains.com/project.html?projectId=project54", project.getWebUrl());
-		assertEquals("typica & maragogype", project.getDescription());
-		assertFalse(project.isArchived());
-		assertEquals("Amazon API client", project.getName());
-		assertEquals("project54", project.getId());
-		assertEquals("/app/rest/projects/id:project54", project.getHref());
-	}
+        TeamCityProject project = teamcity.findProject("project54");
+        assertEquals("http://teamcity.jetbrains.com/project.html?projectId=project54", project.getWebUrl());
+        assertEquals("typica & maragogype", project.getDescription());
+        assertFalse(project.isArchived());
+        assertEquals("Amazon API client", project.getName());
+        assertEquals("project54", project.getId());
+        assertEquals("/app/rest/projects/id:project54", project.getHref());
+    }
 
-	@Test
-	public void should_load_project_with_build_types() throws TeamCityProjectNotFoundException {
-		TeamCityProject teamcityProject = createProject();
-		TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProject);
+    @Test
+    public void should_load_project_with_build_types() throws TeamCityProjectNotFoundException {
+        TeamCityProject teamcityProject = createProject();
+        TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProject);
 
-		TeamCity teamcity = new TeamCity();
-		teamcity.teamcityFinder = teamcityJerseyClient;
+        TeamCity teamcity = new TeamCity();
+        teamcity.teamcityFinder = teamcityJerseyClient;
 
-		TeamCityProject project = teamcity.findProject("project54");
+        TeamCityProject project = teamcity.findProject("project54");
 
-		List<TeamCityBuildType> teamCitybuildTypes = project.getBuildTypes();
+        List<TeamCityBuildType> teamCitybuildTypes = project.getBuildTypes();
 
-		TeamCityBuildType bt297 = teamCitybuildTypes.get(0);
+        TeamCityBuildType bt297 = teamCitybuildTypes.get(0);
 
-		assertEquals(3, teamCitybuildTypes.size());
-		assertEquals("bt297", bt297.getId());
-		assertEquals("Build", bt297.getName());
-		assertEquals("/app/rest/buildTypes/id:bt297", bt297.getHref());
-		assertEquals("Amazon API client", bt297.getProjectName());
-		assertEquals("project54", bt297.getProjectId());
-		assertEquals("http://teamcity.jetbrains.com/viewType.html?buildTypeId=bt297", bt297.getWebUrl());
-	}
+        assertEquals(3, teamCitybuildTypes.size());
+        assertEquals("bt297", bt297.getId());
+        assertEquals("Build", bt297.getName());
+        assertEquals("/app/rest/buildTypes/id:bt297", bt297.getHref());
+        assertEquals("Amazon API client", bt297.getProjectName());
+        assertEquals("project54", bt297.getProjectId());
+        assertEquals("http://teamcity.jetbrains.com/viewType.html?buildTypeId=bt297", bt297.getWebUrl());
+    }
 
-	@Test
-	public void should_load_build() throws TeamCityBuildNotFoundException {
-		TeamCityBuild teamcityBuild = createBuild();
+    @Test
+    public void should_load_build() throws TeamCityBuildNotFoundException {
+        TeamCityBuild teamcityBuild = createBuild();
 
-		TeamCity teamcity = new TeamCity();
-		teamcity.teamcityFinder = prepareClientFor(teamcityBuild);
+        TeamCity teamcity = new TeamCity();
+        teamcity.teamcityFinder = prepareClientFor(teamcityBuild);
 
-		TeamCityBuild build = teamcity.findBuild(47068);
+        TeamCityBuild build = teamcity.findBuild(47068);
 
-		assertEquals("47068", build.getId());
-		assertEquals("6", build.getNumber());
-		assertEquals("SUCCESS", build.getStatus());
-		assertEquals("/app/rest/builds/id:47068", build.getHref());
-		assertEquals("http://teamcity.jetbrains.com/viewLog.html?buildId=47068&buildTypeId=bt297", build.getWebUrl());
-		assertFalse(build.isPersonal());
-		assertFalse(build.isHistory());
-		assertFalse(build.isPinned());
+        assertEquals("47068", build.getId());
+        assertEquals("6", build.getNumber());
+        assertEquals("SUCCESS", build.getStatus());
+        assertEquals("/app/rest/builds/id:47068", build.getHref());
+        assertEquals("http://teamcity.jetbrains.com/viewLog.html?buildId=47068&buildTypeId=bt297", build.getWebUrl());
+        assertFalse(build.isPersonal());
+        assertFalse(build.isHistory());
+        assertFalse(build.isPinned());
 
-		assertEquals("Success", build.getStatusText());
+        assertEquals("Success", build.getStatusText());
 
-		TeamCityBuildType buildType = build.getBuildType();
-		assertEquals("bt297", buildType.getId());
-		assertEquals("Build", buildType.getName());
-		assertEquals("/app/rest/buildTypes/id:bt297", buildType.getHref());
-		assertEquals("Amazon API client", buildType.getProjectName());
-		assertEquals("project54", buildType.getProjectId());
-		assertEquals("http://teamcity.jetbrains.com/viewType.html?buildTypeId=bt297", buildType.getWebUrl());
+        TeamCityBuildType buildType = build.getBuildType();
+        assertEquals("bt297", buildType.getId());
+        assertEquals("Build", buildType.getName());
+        assertEquals("/app/rest/buildTypes/id:bt297", buildType.getHref());
+        assertEquals("Amazon API client", buildType.getProjectName());
+        assertEquals("project54", buildType.getProjectId());
+        assertEquals("http://teamcity.jetbrains.com/viewType.html?buildTypeId=bt297", buildType.getWebUrl());
 
-		assertNotNull(build.getStartDate());
-		assertNotNull(build.getFinishDate());
+        assertNotNull(build.getStartDate());
+        assertNotNull(build.getFinishDate());
 
-		TeamCityAgent agent = build.getAgent();
-		assertEquals("win-6-m-i-b97d43d5", agent.getName());
+        TeamCityAgent agent = build.getAgent();
+        assertEquals("win-6-m-i-b97d43d5", agent.getName());
 
-		List<TeamCityTag> tags = build.getTags();
-		assertTrue(tags.isEmpty());
+        List<TeamCityTag> tags = build.getTags();
+        assertTrue(tags.isEmpty());
 
-		List<TeamCityProperty> properties = build.getProperties();
-		TeamCityProperty property = properties.get(0);
-		assertEquals("system.rel.version", property.getName());
-		assertEquals("1.7.x", property.getValue());
+        List<TeamCityProperty> properties = build.getProperties();
+        TeamCityProperty property = properties.get(0);
+        assertEquals("system.rel.version", property.getName());
+        assertEquals("1.7.x", property.getValue());
 
-		List<TeamCityRevision> revisions = build.getRevisions();
-		TeamCityRevision revision = revisions.get(0);
-		assertEquals(346, revision.getDisplayVersion());
+        List<TeamCityRevision> revisions = build.getRevisions();
+        TeamCityRevision revision = revisions.get(0);
+        assertEquals(346, revision.getDisplayVersion());
 
-		TeamCityVcsRoot vcsRoot = revision.getVcsRoot();
-		assertEquals("/app/rest/vcs-roots/id:1084", vcsRoot.getHref());
-		assertEquals("http://typica.googlecode.com/svn/trunk", vcsRoot.getName());
+        TeamCityVcsRoot vcsRoot = revision.getVcsRoot();
+        assertEquals("/app/rest/vcs-roots/id:1084", vcsRoot.getHref());
+        assertEquals("http://typica.googlecode.com/svn/trunk", vcsRoot.getName());
 
-		TeamCityChanges changes = build.getChanges();
-		assertEquals("/app/rest/changes?build=id:47068", changes.getHref());
-		assertEquals(0, changes.getCount());
+        TeamCityChanges changes = build.getChanges();
+        assertEquals("/app/rest/changes?build=id:47068", changes.getHref());
+        assertEquals(0, changes.getCount());
 
-		List<TeamCityRelatedIssue> relatedIssues = build.getRelatedIssues();
-		assertTrue(relatedIssues.isEmpty());
-	}
+        List<TeamCityRelatedIssue> relatedIssues = build.getRelatedIssues();
+        assertTrue(relatedIssues.isEmpty());
+    }
 
-	@Test
-	public void should_load_build_type_with_builds() {
-		TeamCityBuilds builds = createBuilds();
+    @Test
+    public void should_load_build_type_with_builds() {
+        TeamCityBuilds builds = createBuilds();
 
-		assertEquals("/app/rest/builds?count=100&start=100", builds.getNextHref());
-		assertEquals(100, builds.getCount());
+        assertEquals("/app/rest/builds?count=100&start=100", builds.getNextHref());
+        assertEquals(100, builds.getCount());
 
-		List<TeamCityBuildItem> buildList = builds.getBuilds();
-		assertEquals(100, buildList.size());
+        List<TeamCityBuildItem> buildList = builds.getBuilds();
+        assertEquals(100, buildList.size());
 
-		TeamCityBuildItem build = buildList.get(0);
-		assertEquals("51753", build.getId());
+        TeamCityBuildItem build = buildList.get(0);
+        assertEquals("51753", build.getId());
         assertEquals("421", build.getNumber());
-		assertEquals("ERROR", build.getStatus());
-		assertEquals("bt213", build.getBuildTypeId());
-		assertNotNull(build.getStartDate());
+        assertEquals("ERROR", build.getStatus());
+        assertEquals("bt213", build.getBuildTypeId());
+        assertNotNull(build.getStartDate());
         assertEquals("/app/rest/builds/id:51753", build.getHref());
-		assertEquals("http://teamcity.jetbrains.com/viewLog.html?buildId=51753&buildTypeId=bt213", build.getWebUrl());
-	}
+        assertEquals("http://teamcity.jetbrains.com/viewLog.html?buildId=51753&buildTypeId=bt213", build.getWebUrl());
+    }
 
-	@SuppressWarnings("unchecked")
-	private TeamCityFinder prepareClientFor(Object o) {
-		WebResource resource = mock(WebResource.class);
-		when(resource.get(any(Class.class))).thenReturn(o);
+    @SuppressWarnings("unchecked")
+    private TeamCityFinder prepareClientFor(Object o) {
+        WebResource resource = mock(WebResource.class);
+        when(resource.get(any(Class.class))).thenReturn(o);
 
-		GenericSoftwareClient client = mock(GenericSoftwareClient.class);
-		try {
-			when(client.resource(anyString(), any(Class.class))).thenReturn(o);
-		} catch (ResourceNotFoundException e) {
-			throw new RuntimeException(e);
-		}
+        GenericSoftwareClient client = mock(GenericSoftwareClient.class);
+        try {
+            when(client.resource(anyString(), any(Class.class))).thenReturn(o);
+        } catch (ResourceNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
-		TeamCityUrlBuilder teamCityUrlBuilder = mock(TeamCityUrlBuilder.class);
+        TeamCityUrlBuilder teamCityUrlBuilder = mock(TeamCityUrlBuilder.class);
 
-		return new TeamCityFinder(client, teamCityUrlBuilder);
-	}
+        return new TeamCityFinder(client, teamCityUrlBuilder);
+    }
 
-	private TeamCityBuild createBuild() {
+    private TeamCityBuild createBuild() {
         return (TeamCityBuild) ClasspathFiles.load("app/rest/builds/id:47068.xml", TeamCityBuild.class);
-	}
+    }
 
-	private TeamCityProjects createProjects() {
+    private TeamCityProjects createProjects() {
         return (TeamCityProjects) ClasspathFiles.load("app/rest/projects.xml", TeamCityProjects.class);
-	}
+    }
 
-	private TeamCityProject createProject() {
+    private TeamCityProject createProject() {
         return (TeamCityProject) ClasspathFiles.load("app/rest/projects/id:project54.xml", TeamCityProject.class);
-	}
+    }
 
-	private TeamCityBuilds createBuilds() {
+    private TeamCityBuilds createBuilds() {
         return (TeamCityBuilds) ClasspathFiles.load("app/rest/builds.xml", TeamCityBuilds.class);
     }
 

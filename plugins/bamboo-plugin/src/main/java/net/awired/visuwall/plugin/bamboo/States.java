@@ -18,22 +18,27 @@ package net.awired.visuwall.plugin.bamboo;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import net.awired.visuwall.api.domain.State;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class States {
 
-	private static final Map<String, State> STATE_MAPPING = new HashMap<String, State>();
-	static {
-		STATE_MAPPING.put("Successful", State.SUCCESS);
-		STATE_MAPPING.put("Failed", State.FAILURE);
-	}
+    private static final Logger LOG = LoggerFactory.getLogger(States.class);
 
-	public static final State asVisuwallState(String bambooState) {
-		State state = STATE_MAPPING.get(bambooState);
-		if (state == null) {
-			state = State.UNKNOWN;
-		}
-		return state;
-	}
+    private static final Map<String, State> STATE_MAPPING = new HashMap<String, State>();
+
+    static {
+        STATE_MAPPING.put("Successful", State.SUCCESS);
+        STATE_MAPPING.put("Failed", State.FAILURE);
+    }
+
+    public static final State asVisuwallState(String bambooState) {
+        State state = STATE_MAPPING.get(bambooState);
+        if (state == null) {
+            state = State.UNKNOWN;
+            LOG.warn(bambooState + " is not available in Bamboo plugin. Please report it to Visuwall dev team.");
+        }
+        return state;
+    }
 }

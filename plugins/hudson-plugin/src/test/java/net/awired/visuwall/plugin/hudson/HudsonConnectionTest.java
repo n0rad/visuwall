@@ -20,56 +20,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.hudsonclient.Hudson;
-import net.awired.visuwall.hudsonclient.domain.HudsonProject;
-
+import net.awired.visuwall.hudsonclient.domain.HudsonJob;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 public class HudsonConnectionTest {
-
-    @Test
-    public void should_return_state_unknow_if_no_state() throws Exception {
-        Hudson hudson = Mockito.mock(Hudson.class);
-
-        Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("not_valid_state");
-        HudsonConnection hudsonPlugin = new HudsonConnection();
-        hudsonPlugin.connect("url");
-        hudsonPlugin.hudson = hudson;
-
-        SoftwareProjectId projectId = new SoftwareProjectId("idValue");
-        State state = hudsonPlugin.getBuildState(projectId, 0);
-        assertEquals(State.UNKNOWN, state);
-    }
-
-    @Test
-    public void should_return_state_valid_state() throws Exception {
-        Hudson hudson = Mockito.mock(Hudson.class);
-
-        Mockito.when(hudson.getState(Matchers.anyString())).thenReturn("FAILURE");
-
-        HudsonConnection hudsonPlugin = new HudsonConnection();
-        hudsonPlugin.connect("url");
-        hudsonPlugin.hudson = hudson;
-
-        SoftwareProjectId projectId = new SoftwareProjectId("idValue");
-        State state = hudsonPlugin.getBuildState(projectId, 0);
-        assertEquals(State.FAILURE, state);
-    }
-
     @Test
     public void should_find_all_projects_from_hudson() {
         Hudson hudson = Mockito.mock(Hudson.class);
-        List<HudsonProject> hudsonProjects = new ArrayList<HudsonProject>();
-        HudsonProject hudsonProject = new HudsonProject();
+        List<HudsonJob> hudsonProjects = new ArrayList<HudsonJob>();
+        HudsonJob hudsonProject = new HudsonJob();
         hudsonProject.setName("name");
 
         hudsonProjects.add(hudsonProject);

@@ -71,20 +71,20 @@ public final class TestResult {
                 .add("coverage", coverage).toString();
     }
 
-	@Override
-	public boolean equals(Object o) {
-		if (o instanceof TestResult) {
-			TestResult t = (TestResult) o;
-			return passCount == t.passCount && //
-			        skipCount == t.skipCount && //
-			        failCount == t.failCount && //
-			        coverage == t.coverage;
-		}
-		return false;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof TestResult) {
+            TestResult t = (TestResult) o;
+            return passCount == t.passCount && //
+                    skipCount == t.skipCount && //
+                    failCount == t.failCount && //
+                    coverage == t.coverage;
+        }
+        return false;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(passCount, skipCount, failCount, coverage);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(passCount, skipCount, failCount, coverage);
+    }
 }

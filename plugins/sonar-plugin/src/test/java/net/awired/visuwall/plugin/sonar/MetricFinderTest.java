@@ -20,16 +20,13 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Map;
-
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.plugin.sonar.domain.SonarMetrics;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
-
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -59,7 +56,7 @@ public class MetricFinderTest {
         GenericSoftwareClient genericSoftwareClient = Mockito.mock(GenericSoftwareClient.class);
         Object call = genericSoftwareClient.resource(anyString(), any(Class.class));
         when(call).thenThrow(new ResourceNotFoundException(null));
-        
+
         MetricFinder metricFinder = new MetricFinder("http://sonar:9000");
         metricFinder.genericSoftwareClient = genericSoftwareClient;
 

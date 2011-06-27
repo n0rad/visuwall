@@ -18,17 +18,14 @@ package net.awired.visuwall.hudsonclient.builder;
 
 import java.util.Date;
 import java.util.Set;
-
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import net.awired.visuwall.hudsonclient.helper.HudsonXmlHelper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.sun.jersey.api.client.ClientHandlerException;

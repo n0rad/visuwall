@@ -16,17 +16,16 @@
 
 package net.awired.visuwall.api.plugin.tck;
 
-
 public interface BasicCapabilityTCK {
 
     // findAllSoftwareProjectIds
-	void should_find_all_projects_ids();
+    void should_find_all_projects_ids();
 
     // findProjectNames
     void should_find_all_project_names();
 
     // findSoftwareProjectIdsByNames
-	void should_find_project_ids_by_names();
+    void should_find_project_ids_by_names();
 
     // getDescription
     void should_find_description_of_a_project() throws Exception;
@@ -38,6 +37,6 @@ public interface BasicCapabilityTCK {
     void should_get_name_of_a_project() throws Exception;
 
     // identify
-	void should_identify_a_project() throws Exception;
+    void should_identify_a_project() throws Exception;
 
 }

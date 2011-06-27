@@ -19,10 +19,9 @@ package net.awired.visuwall.hudsonclient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
-import net.awired.visuwall.hudsonclient.domain.HudsonProject;
+import net.awired.visuwall.hudsonclient.domain.HudsonJob;
 import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
@@ -30,19 +29,15 @@ import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
 import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
 import net.awired.visuwall.hudsonclient.finder.HudsonRootModuleFinder;
-
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 public class Hudson {
 
     private static final Logger LOG = LoggerFactory.getLogger(Hudson.class);
-
-    private static final String DEFAULT_STATE = "UNKNOWN";
 
     @VisibleForTesting
     HudsonFinder hudsonFinder;
@@ -61,11 +56,11 @@ public class Hudson {
     /**
      * @return List of all available projects on Hudson
      */
-    public List<HudsonProject> findAllProjects() {
-        List<HudsonProject> projects = new ArrayList<HudsonProject>();
+    public List<HudsonJob> findAllProjects() {
+        List<HudsonJob> projects = new ArrayList<HudsonJob>();
         for (String projectName : hudsonFinder.findJobNames()) {
             try {
-                HudsonProject hudsonProject = findProject(projectName);
+                HudsonJob hudsonProject = findJob(projectName);
                 projects.add(hudsonProject);
             } catch (HudsonJobNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
@@ -77,16 +72,16 @@ public class Hudson {
     }
 
     /**
-     * @param projectName
+     * @param jobName
      * @param buildNumber
      * @return HudsonBuild found in Hudson with its project name and build number
      * @throws HudsonBuildNotFoundException
      * @throws HudsonJobNotFoundException
      */
-    public HudsonBuild findBuild(String projectName, int buildNumber) throws HudsonBuildNotFoundException,
+    public HudsonBuild findBuild(String jobName, int buildNumber) throws HudsonBuildNotFoundException,
             HudsonJobNotFoundException {
-        checkJobName(projectName);
-        return hudsonFinder.find(projectName, buildNumber);
+        checkJobName(jobName);
+        return hudsonFinder.find(jobName, buildNumber);
     }
 
     private void checkJobName(String jobName) {
@@ -98,9 +93,9 @@ public class Hudson {
      * @return HudsonProject found with its name
      * @throws HudsonJobNotFoundException
      */
-    public HudsonProject findProject(String projectName) throws HudsonJobNotFoundException {
+    public HudsonJob findJob(String projectName) throws HudsonJobNotFoundException {
         checkJobName(projectName);
-        return hudsonFinder.findProject(projectName);
+        return hudsonFinder.findJob(projectName);
     }
 
     /**
@@ -115,15 +110,15 @@ public class Hudson {
         return hudsonFinder.getDescription(jobName);
     }
 
-    private long computeBuildDurationTime(HudsonProject hudsonProject) throws HudsonJobNotFoundException {
+    private long computeBuildDurationTime(HudsonJob hudsonJob) throws HudsonJobNotFoundException {
         long averageTime;
-        if (isNeverSuccessful(hudsonProject)) {
-            averageTime = maxDuration(hudsonProject);
+        if (isNeverSuccessful(hudsonJob.getName())) {
+            averageTime = maxDuration(hudsonJob);
         } else {
-            averageTime = computeAverageBuildDuration(hudsonProject);
+            averageTime = computeAverageBuildDuration(hudsonJob);
         }
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Average build time of " + hudsonProject.getName() + " is " + averageTime + " ms");
+            LOG.debug("Average build time of " + hudsonJob.getName() + " is " + averageTime + " ms");
         }
         return averageTime;
     }
@@ -134,26 +129,34 @@ public class Hudson {
      * @throws HudsonJobNotFoundException
      */
     public Date getEstimatedFinishTime(String jobName) throws HudsonJobNotFoundException {
-        HudsonProject project = findProject(jobName);
-        HudsonBuild currentBuild = project.getCurrentBuild();
-        if (currentBuild == null) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(jobName + " has no current build");
+        checkJobName(jobName);
+        try {
+            HudsonJob hudsonJob = hudsonFinder.findJob(jobName);
+            HudsonBuild currentBuild = hudsonFinder.getCurrentBuild(jobName);
+            if (currentBuild == null) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(jobName + " has no current build");
+                }
+                return new Date();
             }
-            return new Date();
-        }
-        long averageBuildDurationTime = computeBuildDurationTime(project);
-        Date startTime = currentBuild.getStartTime();
-        if (startTime == null) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(currentBuild + " has no start time");
+            long averageBuildDurationTime = computeBuildDurationTime(hudsonJob);
+            Date startTime = currentBuild.getStartTime();
+            if (startTime == null) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(currentBuild + " has no start time");
+                }
+                return new Date();
             }
-            return new Date();
+            long time = startTime.getTime();
+            DateTime dateTime = new DateTime(time);
+            DateTime estimatedFinishTime = dateTime.plus(averageBuildDurationTime);
+            return estimatedFinishTime.toDate();
+        } catch (HudsonBuildNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't find estimated finish time of job: " + jobName, e);
+            }
         }
-        long time = startTime.getTime();
-        DateTime dateTime = new DateTime(time);
-        DateTime estimatedFinishTime = dateTime.plus(averageBuildDurationTime);
-        return estimatedFinishTime.toDate();
+        return new Date();
     }
 
     public boolean isBuilding(String projectName) throws HudsonJobNotFoundException {
@@ -161,24 +164,7 @@ public class Hudson {
         return hudsonFinder.isBuilding(projectName);
     }
 
-    public String getState(String projectName) throws HudsonJobNotFoundException {
-        checkJobName(projectName);
-        String state = DEFAULT_STATE;
-        try {
-            int lastBuildNumber = getLastBuildNumber(projectName);
-            state = hudsonFinder.getStateOf(projectName, lastBuildNumber);
-            if ("FAILURE".equals(state) && hasPassedTests(projectName)) {
-                state = "UNSTABLE";
-            }
-        } catch (HudsonBuildNotFoundException e) {
-            //TODO should return an error not a state
-            state = DEFAULT_STATE;
-        }
-        return state;
-    }
-
-    public int getLastBuildNumber(String projectName) throws HudsonJobNotFoundException,
-            HudsonBuildNotFoundException {
+    public int getLastBuildNumber(String projectName) throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
         checkJobName(projectName);
         return hudsonFinder.getLastBuildNumber(projectName);
     }
@@ -197,12 +183,11 @@ public class Hudson {
         return hudsonFinder.findJobNamesByView(viewName);
     }
 
-    private boolean hasPassedTests(String projectName) throws HudsonJobNotFoundException {
-        HudsonProject project = findProject(projectName);
-        HudsonBuild build = project.getCompletedBuild();
-        if (build != null) {
-            HudsonTestResult unitTestResult = build.getUnitTestResult();
-            HudsonTestResult integrationTestResult = build.getIntegrationTestResult();
+    private boolean hasPassedTests(String jobName) throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
+        HudsonBuild hudsonBuild = hudsonFinder.getCompletedBuild(jobName);
+        if (hudsonBuild != null) {
+            HudsonTestResult unitTestResult = hudsonBuild.getUnitTestResult();
+            HudsonTestResult integrationTestResult = hudsonBuild.getIntegrationTestResult();
             int passedUnitTests = unitTestResult == null ? 0 : unitTestResult.getPassCount();
             int passedIntegrationTests = integrationTestResult == null ? 0 : integrationTestResult.getPassCount();
             return (passedUnitTests + passedIntegrationTests) > 0;
@@ -210,10 +195,10 @@ public class Hudson {
         return false;
     }
 
-    private long computeAverageBuildDuration(HudsonProject hudsonProject) throws HudsonJobNotFoundException {
-        String projectName = hudsonProject.getName();
+    private long computeAverageBuildDuration(HudsonJob hudsonJob) throws HudsonJobNotFoundException {
+        String projectName = hudsonJob.getName();
         float sumBuildDurationTime = 0;
-        int[] buildNumbers = hudsonProject.getBuildNumbers();
+        List<Integer> buildNumbers = hudsonFinder.getBuildNumbers(projectName);
 
         for (int buildNumber : buildNumbers) {
             try {
@@ -228,12 +213,12 @@ public class Hudson {
             }
         }
 
-        return (long) (sumBuildDurationTime / buildNumbers.length);
+        return (long) (sumBuildDurationTime / buildNumbers.size());
     }
 
-    private long maxDuration(HudsonProject hudsonProject) throws HudsonJobNotFoundException {
+    private long maxDuration(HudsonJob hudsonProject) throws HudsonJobNotFoundException {
         long max = 0;
-        int[] buildNumbers = hudsonProject.getBuildNumbers();
+        List<Integer> buildNumbers = hudsonFinder.getBuildNumbers(hudsonProject.getName());
 
         for (int buildNumber : buildNumbers) {
             try {
@@ -249,11 +234,11 @@ public class Hudson {
         return max;
     }
 
-    private boolean isNeverSuccessful(HudsonProject hudsonProject) throws HudsonJobNotFoundException {
-        int[] buildNumbers = hudsonProject.getBuildNumbers();
+    private boolean isNeverSuccessful(String jobName) throws HudsonJobNotFoundException {
+        List<Integer> buildNumbers = hudsonFinder.getBuildNumbers(jobName);
         for (int buildNumber : buildNumbers) {
             try {
-                HudsonBuild build = findBuild(hudsonProject.getName(), buildNumber);
+                HudsonBuild build = findBuild(jobName, buildNumber);
                 if (build.isSuccessful()) {
                     return false;
                 }
@@ -270,9 +255,13 @@ public class Hudson {
         return hudsonRootModuleFinder.findArtifactId(jobName);
     }
 
-    @Deprecated
-    public boolean contains(String name) {
-        return hudsonFinder.projectExists(name);
+    public List<Integer> getBuildNumbers(String jobName) throws HudsonJobNotFoundException {
+        checkJobName(jobName);
+        try {
+            return hudsonFinder.getBuildNumbers(jobName);
+        } catch (HudsonJobNotFoundException e) {
+            throw new HudsonJobNotFoundException("Can't find build numbers of jobName '" + jobName + "'", e);
+        }
     }
 
 }

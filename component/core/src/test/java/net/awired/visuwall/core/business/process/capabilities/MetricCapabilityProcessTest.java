@@ -16,7 +16,9 @@
 
 package net.awired.visuwall.core.business.process.capabilities;
 
+import org.junit.Ignore;
 
+@Ignore
 public class MetricCapabilityProcessTest {
     //
     //    MetricCapabilityProcess projectEnhancerService = new MetricCapabilityProcess();

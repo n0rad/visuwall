@@ -17,7 +17,6 @@
 package net.awired.visuwall.teamcityclient.resource;
 
 import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -28,80 +27,80 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TeamCityProject {
 
-	@XmlAttribute
-	private String name;
+    @XmlAttribute
+    private String name;
 
-	@XmlAttribute
-	private String id;
+    @XmlAttribute
+    private String id;
 
-	@XmlAttribute
-	private String href;
+    @XmlAttribute
+    private String href;
 
-	@XmlAttribute
-	private String webUrl;
+    @XmlAttribute
+    private String webUrl;
 
-	@XmlAttribute
-	private String description;
+    @XmlAttribute
+    private String description;
 
-	@XmlAttribute
-	private boolean archived;
+    @XmlAttribute
+    private boolean archived;
 
-	@XmlElement
-	private TeamCityBuildTypes buildTypes;
+    @XmlElement
+    private TeamCityBuildTypes buildTypes;
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getHref() {
-		return href;
-	}
+    public String getHref() {
+        return href;
+    }
 
-	public void setHref(String href) {
-		this.href = href;
-	}
+    public void setHref(String href) {
+        this.href = href;
+    }
 
-	public String getWebUrl() {
-		return webUrl;
-	}
+    public String getWebUrl() {
+        return webUrl;
+    }
 
-	public void setWebUrl(String webUrl) {
-		this.webUrl = webUrl;
-	}
+    public void setWebUrl(String webUrl) {
+        this.webUrl = webUrl;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public boolean isArchived() {
-		return archived;
-	}
+    public boolean isArchived() {
+        return archived;
+    }
 
-	public void setArchived(boolean archived) {
-		this.archived = archived;
-	}
+    public void setArchived(boolean archived) {
+        this.archived = archived;
+    }
 
-	public List<TeamCityBuildType> getBuildTypes() {
-		return buildTypes.getBuildTypes();
-	}
+    public List<TeamCityBuildType> getBuildTypes() {
+        return buildTypes.getBuildTypes();
+    }
 
-	public void setBuildTypes(TeamCityBuildTypes buildTypes) {
-		this.buildTypes = buildTypes;
-	}
+    public void setBuildTypes(TeamCityBuildTypes buildTypes) {
+        this.buildTypes = buildTypes;
+    }
 }

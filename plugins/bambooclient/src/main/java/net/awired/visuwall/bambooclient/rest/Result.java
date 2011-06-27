@@ -17,12 +17,10 @@
 package net.awired.visuwall.bambooclient.rest;
 
 import java.util.Date;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-
 import com.google.common.base.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -67,27 +65,27 @@ public class Result {
     public int failedTestCount;
 
     public String buildReason;
-    
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this) //
-        .add("id", id) //
-        .add("number", number) //
-        .add("lifeCycleState", lifeCycleState) //
-        .add("state", state) //
-        .add("key", key) //
-        .add("link", link) //
-        .add("build started time", buildStartedTime) //
-        .add("buid completed time", buildCompletedTime) //
-        .add("build duration in seconds", buildDurationInSeconds) //
-        .add("build duration", buildDuration) //
-        .add("build duration description", buildDurationDescription) //
-        .add("build relative time", buildRelativeTime) //
-        .add("vcsRevisionKey", vcsRevisionKey) //
-        .add("build test summary", buildTestSummary) //
-        .add("sucessful test count", successfulTestCount) //
-        .add("failed test count", failedTestCount) //
+                .add("id", id) //
+                .add("number", number) //
+                .add("lifeCycleState", lifeCycleState) //
+                .add("state", state) //
+                .add("key", key) //
+                .add("link", link) //
+                .add("build started time", buildStartedTime) //
+                .add("buid completed time", buildCompletedTime) //
+                .add("build duration in seconds", buildDurationInSeconds) //
+                .add("build duration", buildDuration) //
+                .add("build duration description", buildDurationDescription) //
+                .add("build relative time", buildRelativeTime) //
+                .add("vcsRevisionKey", vcsRevisionKey) //
+                .add("build test summary", buildTestSummary) //
+                .add("sucessful test count", successfulTestCount) //
+                .add("failed test count", failedTestCount) //
                 .add("build reason", buildReason) //
-        .toString();
+                .toString();
     }
 }

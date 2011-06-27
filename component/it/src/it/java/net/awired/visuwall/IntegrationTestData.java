@@ -16,7 +16,6 @@
 
 package net.awired.visuwall;
 
-
 public interface IntegrationTestData {
     String BAMBOO_URL = "http://bamboo.visuwall.awired.net";
     String JENKINS_URL = "http://ci.visuwall.awired.net";
