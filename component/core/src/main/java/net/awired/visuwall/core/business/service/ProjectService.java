@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.core.business.service;
 
+import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -109,13 +110,14 @@ public class ProjectService {
                             buildProcess.updateBuild(project, buildId);
                         }
 
-                        //                        try {
-                        //                            List<Integer> buildNumbers = project.getBuildConnection().getBuildNumbers(projectId);
-                        //                            project.setBuildNumbers(buildNumbers);
-                        //                            buildProcess.updatePreviousCompletedBuild(project);
-                        //                        } catch (Exception e) {
-                        //                            LOG.warn("Can not update previous completed build for project " + project, e);
-                        //                        }
+                        try {
+                            List<Integer> buildNumbers = project.getBuildConnection().getBuildNumbers(projectId);
+                            project.setBuildNumbers(buildNumbers);
+                            buildProcess.updatePreviousCompletedBuild(project);
+                            buildProcess.updateLastNotBuildingNumber(project);
+                        } catch (Exception e) {
+                            LOG.warn("Can not update previous completed build for project " + project, e);
+                        }
 
                         // TODO check for new software to update
                         // TODO be sure to not remove a project cause of a capability ProjectNotFoundException 

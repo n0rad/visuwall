@@ -18,6 +18,7 @@ package net.awired.visuwall.core.business.process.capabilities;
 
 import java.util.Date;
 import java.util.List;
+import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -43,27 +44,56 @@ public class BuildCapabilityProcess {
     public void updatePreviousCompletedBuild(Project project) throws ProjectNotFoundException {
         List<Integer> buildNumbers = project.getBuildNumbers();
         if (buildNumbers.size() < 2) {
+            // with only a build there is no previous completed build
             return;
         }
-
-        List<Integer> previousBuilds = buildNumbers.subList(1, buildNumbers.size() - 1);
-        for (Integer buildNumber : previousBuilds) {
-            Build build = project.getBuilds().get(buildNumber);
-            if (build == null) {
-                updateBuild(project, buildNumber);
-                build = project.getBuilds().get(buildNumber);
+        try {
+            int skip = 1;
+            if (project.getLastBuild().isBuilding()) {
+                if (buildNumbers.size() < 3) {
+                    // first build is building so we do not have enough builds to have a previous completed 
+                    return;
+                }
+                skip = 2;
+            }
+            List<Integer> previousBuilds = buildNumbers.subList(1, buildNumbers.size() - skip);
+            for (Integer buildNumber : previousBuilds) {
+                Build build = getCreatedWithContentBuild(project, buildNumber);
                 if (build == null) {
-                    LOG.warn("Build " + buildNumber + " not found after update for project " + project);
                     continue;
                 }
-            }
+                State state = build.getState();
+                if (state == State.UNKNOWN || state == State.ABORTED) {
+                    continue;
+                }
 
-            State state = build.getState();
-            if (state == State.UNKNOWN || state == State.ABORTED) {
+                project.setPreviousCompletedBuildNumber(build.getBuildNumber());
+                break;
+            }
+        } catch (BuildNotFoundException e) {
+            LOG.warn("last build not found to update previous completed build", e);
+        }
+    }
+
+    private Build getCreatedWithContentBuild(Project project, int buildNumber) throws ProjectNotFoundException {
+        Build build = project.getBuilds().get(buildNumber);
+        if (build == null) {
+            updateBuild(project, buildNumber);
+            build = project.getBuilds().get(buildNumber);
+            if (build == null) {
+                LOG.warn("Build " + buildNumber + " not found after update for project " + project);
+            }
+        }
+        return build;
+    }
+
+    public void updateLastNotBuildingNumber(Project project) throws ProjectNotFoundException {
+        for (Integer buildNumber : project.getBuildNumbers()) {
+            Build build = getCreatedWithContentBuild(project, buildNumber);
+            if (build.isBuilding()) {
                 continue;
             }
-
-            project.setLastCompletedBuildNumber(build.getBuildNumber());
+            project.setLastNotBuildingNumber(buildNumber);
             break;
         }
     }
@@ -81,13 +111,11 @@ public class BuildCapabilityProcess {
             //TODO why is it old state ?
             //            boolean building = project.getBuildConnection().isBuilding(projectId, buildNumber);
             //            build.setBuilding(building);
-            //            if (building == true) {
-            //                Date estimatedFinishTime = project.getBuildConnection()
-            //                        .getEstimatedFinishTime(projectId, buildNumber);
-            //                build.setEstimatedFinishTime(estimatedFinishTime);
-            //            }
 
             // buildTime
+            BuildTime buildTime = project.getBuildConnection().getBuildTime(projectId, buildNumber);
+            build.setStartTime(buildTime.getStartTime());
+            build.setDuration(buildTime.getDuration());
 
             project.findCreatedBuild(buildNumber);
         } catch (BuildNotFoundException e) {

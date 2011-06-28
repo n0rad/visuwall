@@ -47,7 +47,8 @@ public class Project implements Comparable<Project> {
     protected Map<Integer, Build> builds = new HashMap<Integer, Build>();
 
     private int lastBuildNumber;
-    private int lastCompletedBuildNumber;
+    private int lastNotBuildingNumber;
+    private int previousCompletedBuildNumber;
 
     //    private ProjectKey projectKey;
 
@@ -203,20 +204,28 @@ public class Project implements Comparable<Project> {
         this.builds = builds;
     }
 
-    public void setLastCompletedBuildNumber(int lastCompletedBuildNumber) {
-        this.lastCompletedBuildNumber = lastCompletedBuildNumber;
-    }
-
-    public int getLastCompletedBuildNumber() {
-        return lastCompletedBuildNumber;
-    }
-
     public void setBuildNumbers(List<Integer> buildNumbers) {
         this.buildNumbers = buildNumbers;
     }
 
     public List<Integer> getBuildNumbers() {
         return buildNumbers;
+    }
+
+    public void setLastNotBuildingNumber(int lastNotBuildingNumber) {
+        this.lastNotBuildingNumber = lastNotBuildingNumber;
+    }
+
+    public int getLastNotBuildingNumber() {
+        return lastNotBuildingNumber;
+    }
+
+    public void setPreviousCompletedBuildNumber(int previousCompletedBuildNumber) {
+        this.previousCompletedBuildNumber = previousCompletedBuildNumber;
+    }
+
+    public int getPreviousCompletedBuildNumber() {
+        return previousCompletedBuildNumber;
     }
 
 }
