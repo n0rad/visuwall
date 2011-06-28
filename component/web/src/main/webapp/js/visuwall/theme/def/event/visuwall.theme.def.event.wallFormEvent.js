@@ -61,11 +61,11 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 						ajsl.view.incrementFormIndexes(newContent);
 						ajsl.view.resetFormValues(newContent);
 
-						sliderInitFinder($('DIV.projectFinderDelaySecondSlider', newContent));
+						sliderInit($('DIV.projectFinderDelaySecondSlider', newContent), 'projectFinderDelaySecond');
 						$('INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)', newContent).change(function() {
 							delayChange(this, 'projectFinderDelaySecond');
 						});
-						sliderInitStatus($('DIV.projectStatusDelaySecondSlider', newContent));
+						sliderInit($('DIV.projectStatusDelaySecondSlider', newContent), 'projectStatusDelaySecond');
 						$('INPUT:regex(id,softwareAccesses.*\.projectStatusDelaySecond)', newContent).change(function() {
 							delayChange(this, 'projectStatusDelaySecond');
 						});
@@ -307,46 +307,42 @@ var ff = '				<table class="softwareInfo">'
 	this['INPUT:regex(id,softwareAccesses.*\.projectStatusDelaySecond)|change'] = function() {
 		delayChange(this, 'projectStatusDelaySecond');
 	};
-
-	var sliderInitFinder = function(context) {
-		var func = function( event, ui ) {
-			$("SPAN.projectFinderDelaySecond", $(context).parent()).html( ui.value + "s" );
-			$('INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)', $(context).parent()).val(ui.value);
-		};
-		
-		$(context).slider({
-			value:0,
-			min: 0,
-			max: 500,
-			step: 30,
-			slide: func,
-			change: func
-		});
-	};
-
 	
-	var sliderInitStatus = function(context) {
+	var sliderInit = function(context, id) {
 		var func = function( event, ui ) {
-			$("SPAN.projectStatusDelaySecond", $(context).parent()).html( ui.value + "s" );
-			$('INPUT:regex(id,softwareAccesses.*\.projectStatusDelaySecond)', $(context).parent()).val(ui.value);
+			$("SPAN." + id, $(context).parent()).html( ui.value + "s" );
+			$('INPUT:regex(id,softwareAccesses.*\.' + id +')', $(context).parent()).val(ui.value);
 		};
 		
-		$(context).slider({
-			value:0,
-			min: 0,
-			max: 500,
-			step: 30,
-			slide: func,
-			change: func
-		});
+		if (id == 'projectStatusDelaySecond') {
+			$(context).slider({
+				value:0,
+				min: 10,
+				max: 200,
+				step: 10,
+				slide: func,
+				change: func
+			});
+			$(context).slider("option", "value", '30');
+		} else {
+			$(context).slider({
+				value:0,
+				min: 60,
+				max: 500,
+				step: 30,
+				slide: func,
+				change: func
+			});
+			$(context).slider("option", "value", '200');			
+		}
 	};
 
 	this['DIV.projectFinderDelaySecondSlider|init'] = function() {
-		sliderInitFinder(this);
+		sliderInit(this, 'projectFinderDelaySecond');
 	};
 
 	this['DIV.projectStatusDelaySecondSlider|init'] = function() {
-		sliderInitStatus(this);
+		sliderInit(this, 'projectStatusDelaySecond');
 	};
 	
 	

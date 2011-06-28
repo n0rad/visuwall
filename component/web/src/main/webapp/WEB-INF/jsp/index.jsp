@@ -74,11 +74,11 @@
 					<legend>Timers</legend>
 					<label for="softwareAccesses0.projectFinderDelaySecond">Software Refresh Time : <span class="bold projectFinderDelaySecond">45s</span></label>
 					<div class="slider projectFinderDelaySecondSlider"></div>
-					<input id="softwareAccesses0.projectFinderDelaySecond" name="softwareAccesses[0].projectFinderDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
+					<input type="hidden" id="softwareAccesses0.projectFinderDelaySecond" name="softwareAccesses[0].projectFinderDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
 					
 					<label for="softwareAccesses0.projectStatusDelaySecond">Project Refresh Time <span class="bold projectStatusDelaySecond">45s</span></label>
 					<div class="slider projectStatusDelaySecondSlider"></div>
-					<input id="softwareAccesses0.projectStatusDelaySecond" name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
+					<input type="hidden" id="softwareAccesses0.projectStatusDelaySecond" name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
 				</fieldset>			
 				<div style="clear: both;"></div>
 				<fieldset class="buildField" style="display: none">
