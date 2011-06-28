@@ -66,7 +66,6 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	
 	this._updateProject = function(project) {
 		$this._updateLastBuild(project);
-		$this._updateBuilding(project.id, project.building/*, project.finishTime*/);
 	};
 	
 	
@@ -83,6 +82,7 @@ visuwall.ctrl.process.Wall = function(wallName) {
 		$this.wallView[stateFunction](project.id);
 
 		
+		$this._updateBuilding(project.id, project.building, project.finishTime);
 		$this._updateTimers(project, lastBuild);
 		$this.wallView.updateCommiters(project.id, $this._getCommiterNames(lastBuild.commiters));
 	//	$this.wallView.updateQuality(project.id, lastBuild.qualityResult.measures);
@@ -93,28 +93,18 @@ visuwall.ctrl.process.Wall = function(wallName) {
 				lastBuild.unitTestResult.passCount,
 				lastBuild.unitTestResult.skipCount);
 
-		$this.wallView.updateITCoverage(project.id, project.completedBuild.integrationTestResult.coverage);
+		$this.wallView.updateITCoverage(project.id, lastBuild.integrationTestResult.coverage);
 		$this.wallView.updateIT(project.id,
 				lastBuild.integrationTestResult.failCount,
 				lastBuild.integrationTestResult.passCount,
 				lastBuild.integrationTestResult.skipCount);
-
-//		$this.projectDAO.callbackPreviousCompletedBuild($this.wallName , project.id, function(
-//				previousBuild) {
-//			if (completedBuild == null || previousBuild == null) {
-//				return;
-//			}
-//
-//			var failDiff = completedBuild.unitTestResult.failCount
-//					- previousBuild.unitTestResult.failCount;
-//			var successDiff = completedBuild.unitTestResult.totalCount
-//					- previousBuild.unitTestResult.totalCount;
-//			var skipDiff = completedBuild.unitTestResult.skipCount
-//					- previousBuild.unitTestResult.skipCount;
-//
-//			$this.wallView.updateUTDiff(project.id, failDiff,
-//					successDiff, skipDiff);
-//		});
+		
+		if (project.previousCompletedBuildNumber != 0) {
+//			var failDiff = lastBuild.unitTestResult.failCount - previousBuild.unitTestResult.failCount;
+//			var successDiff = lastBuild.unitTestResult.totalCount - previousBuild.unitTestResult.totalCount;
+//			var skipDiff = lastBuild.unitTestResult.skipCount - previousBuild.unitTestResult.skipCount;
+//			$this.wallView.updateUTDiff(project.id, failDiff, successDiff, skipDiff);
+		}
 	};
 	
 	this._getCommiterNames = function(commiters) {
@@ -139,7 +129,9 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	this._updateBuilding = function(projectId, building, finishTime) {
 		if (building) {
 			$this.wallView.showBuilding(projectId);
-			$this.wallView.setCountdown(projectId, new Date(new Date().getTime() + (finishTime * 1000)));
+			if (finishTime) {
+				$this.wallView.setCountdown(projectId, new Date(new Date().getTime() + (finishTime * 1000)));
+			}
 		} else {
 			this.wallView.stopBuilding(projectId);			
 		}
