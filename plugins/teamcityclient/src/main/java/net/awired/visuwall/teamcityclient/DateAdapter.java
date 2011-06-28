@@ -19,16 +19,19 @@ package net.awired.visuwall.teamcityclient;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import com.google.common.base.Preconditions;
 
 public class DateAdapter {
+
     private static final SimpleDateFormat TEAMCITY_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmssZ");
 
     private DateAdapter() {
     }
 
-    public static Date parseDate(String s) {
+    public static Date parseDate(String dateToParse) {
+        Preconditions.checkNotNull(dateToParse, "dateToParse is mandatory");
         try {
-            return TEAMCITY_DATE_FORMAT.parse(s);
+            return TEAMCITY_DATE_FORMAT.parse(dateToParse);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

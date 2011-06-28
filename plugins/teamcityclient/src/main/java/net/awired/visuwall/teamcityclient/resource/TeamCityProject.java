@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import com.google.common.base.Objects;
 
 @XmlRootElement(name = "project")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -103,4 +104,19 @@ public class TeamCityProject {
     public void setBuildTypes(TeamCityBuildTypes buildTypes) {
         this.buildTypes = buildTypes;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof TeamCityProject && id != null) {
+            TeamCityProject tcp = (TeamCityProject) obj;
+            return id.equals(tcp.id);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, name, href);
+    }
+
 }

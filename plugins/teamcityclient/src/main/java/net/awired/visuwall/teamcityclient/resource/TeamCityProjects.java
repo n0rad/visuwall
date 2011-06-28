@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.teamcityclient.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -28,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class TeamCityProjects {
 
     @XmlElements(value = { @XmlElement(name = "project") })
-    private List<TeamCityProject> projects;
+    private List<TeamCityProject> projects = new ArrayList<TeamCityProject>();
 
     public List<TeamCityProject> getProjects() {
         return projects;

@@ -19,6 +19,7 @@ package net.awired.visuwall.teamcityclient.resource;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import com.google.common.base.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TeamCityAbstractBuild {
@@ -65,5 +66,19 @@ public class TeamCityAbstractBuild {
 
     public void setWebUrl(String webUrl) {
         this.webUrl = webUrl;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof TeamCityAbstractBuild) {
+            TeamCityAbstractBuild teamCityBuild = (TeamCityAbstractBuild) obj;
+            return id.equals(teamCityBuild.id);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, status, href, webUrl);
     }
 }

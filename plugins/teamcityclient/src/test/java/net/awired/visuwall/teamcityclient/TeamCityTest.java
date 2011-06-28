@@ -28,6 +28,7 @@ import java.util.List;
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
+import net.awired.visuwall.teamcityclient.exception.TeamCityBuildListNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityBuildNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
@@ -48,6 +49,11 @@ import org.junit.Test;
 import com.sun.jersey.api.client.WebResource;
 
 public class TeamCityTest {
+
+    @Test(expected = NullPointerException.class)
+    public void cant_pass_null_as_parameter_in_constructor() {
+        new TeamCity(null);
+    }
 
     @Test
     public void should_list_all_project_names() throws TeamCityProjectsNotFoundException {
@@ -180,13 +186,18 @@ public class TeamCityTest {
     }
 
     @Test
-    public void should_load_build_type_with_builds() {
+    public void should_load_build_type_with_builds() throws TeamCityBuildListNotFoundException {
         TeamCityBuilds builds = createBuilds();
 
-        assertEquals("/app/rest/builds?count=100&start=100", builds.getNextHref());
-        assertEquals(100, builds.getCount());
+        TeamCity teamcity = new TeamCity();
+        teamcity.teamcityFinder = prepareClientFor(builds);
 
-        List<TeamCityBuildItem> buildList = builds.getBuilds();
+        TeamCityBuilds teamCityBuilds = teamcity.findBuildList("47068");
+
+        assertEquals("/app/rest/builds?count=100&start=100", teamCityBuilds.getNextHref());
+        assertEquals(100, teamCityBuilds.getCount());
+
+        List<TeamCityBuildItem> buildList = teamCityBuilds.getBuilds();
         assertEquals(100, buildList.size());
 
         TeamCityBuildItem build = buildList.get(0);
@@ -197,6 +208,12 @@ public class TeamCityTest {
         assertNotNull(build.getStartDate());
         assertEquals("/app/rest/builds/id:51753", build.getHref());
         assertEquals("http://teamcity.jetbrains.com/viewLog.html?buildId=51753&buildTypeId=bt213", build.getWebUrl());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void cant_pass_negative_number_to_find_build_method() throws TeamCityBuildNotFoundException {
+        TeamCity teamcity = new TeamCity();
+        teamcity.findBuild(-1);
     }
 
     @SuppressWarnings("unchecked")

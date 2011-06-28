@@ -49,6 +49,11 @@ public class TeamCityUrlBuilderTest {
         assertEquals(TEAM_CITY_URL + "/app/rest/builds/id:47068", buildTypeUrl);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void cant_pass_negative_number_as_build_id_in_get_build_method() {
+        builder.getBuild(-1);
+    }
+
     @Test
     public void should_create_valid_builds_list() {
         String buildListUrl = builder.getBuildList("bt297");

@@ -24,4 +24,8 @@ public class ResourceNotFoundException extends Exception {
         super(e);
     }
 
+    public ResourceNotFoundException(String msg) {
+        super(msg);
+    }
+
 }

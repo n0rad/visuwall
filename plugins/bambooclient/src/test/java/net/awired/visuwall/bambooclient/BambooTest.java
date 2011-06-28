@@ -73,7 +73,7 @@ public class BambooTest {
 
     @Test
     public void should_return_empty_list_if_plans_are_not_found() throws ResourceNotFoundException {
-        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException(null));
+        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
 
         List<BambooProject> projects = bamboo.findAllProjects();
 
@@ -92,14 +92,14 @@ public class BambooTest {
 
     @Test(expected = BambooBuildNumberNotFoundException.class)
     public void should_throw_exception_when_build_not_found_for_finding_last_build_number() throws Exception {
-        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException(null));
+        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
 
         bamboo.getLastBuildNumber("projectKey");
     }
 
     @Test(expected = BambooBuildNotFoundException.class)
     public void should_throw_exception_when_build_not_found() throws Exception {
-        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException(null));
+        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
 
         bamboo.findBuild("projectKey", 0);
     }

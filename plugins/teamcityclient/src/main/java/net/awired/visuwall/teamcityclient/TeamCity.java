@@ -39,6 +39,7 @@ public class TeamCity {
     }
 
     public TeamCity(String url) {
+        Preconditions.checkNotNull(url, "url is mandatory");
         TeamCityUrlBuilder urlBuilder = new TeamCityUrlBuilder(url);
         GenericSoftwareClient client = new GenericSoftwareClient("guest", "");
         teamcityFinder = new TeamCityFinder(client, urlBuilder);

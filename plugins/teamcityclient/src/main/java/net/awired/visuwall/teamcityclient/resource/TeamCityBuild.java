@@ -170,4 +170,5 @@ public class TeamCityBuild extends TeamCityAbstractBuild {
     public void setNumber(String number) {
         this.number = number;
     }
+
 }
