@@ -344,7 +344,18 @@ var ff = '				<table class="softwareInfo">'
 	this['DIV.projectStatusDelaySecondSlider|init'] = function() {
 		sliderInit(this, 'projectStatusDelaySecond');
 	};
+
 	
+	this['INPUT:regex(id,softwareAccesses.*\.allProject)|change|live'] = function() {
+		if ($(this).is(':checked')) {
+			$('SELECT:regex(id,softwareAccesses.*\.projectNames)', $(this).parent()).attr("disabled","disabled");
+			$('SELECT:regex(id,softwareAccesses.*\.viewNames)', $(this).parent()).attr("disabled","disabled");
+		} else {
+			$('SELECT:regex(id,softwareAccesses.*\.projectNames)', $(this).parent()).removeAttr('disabled');
+			$('SELECT:regex(id,softwareAccesses.*\.viewNames)', $(this).parent()).removeAttr('disabled');
+			
+		}
+	};
 	
 	this['DIV#softAdd|click'] = function(event) {
 		$this.wallFormView.addFormSoftwareAccesses();

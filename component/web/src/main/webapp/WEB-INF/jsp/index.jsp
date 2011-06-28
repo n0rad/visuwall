@@ -88,12 +88,12 @@
 					<input type="checkbox" id="softwareAccesses0.allProject" name="softwareAccesses[0].allProject" value="true" /> 
 					<input type="hidden" id="_softwareAccesses0.allProject" name="_softwareAccesses[0].allProject" value="true" />
 
-					<div style="float:left">	
+					<div class="projectNamesSection" style="float:left">	
 						<label for="softwareAccesses0.projectNames">Projects</label>
 						<select id="softwareAccesses0.projectNames" name="softwareAccesses[0].projectNames" multiple="multiple" size="5">
 						</select>
 					</div>
-					<div style="float:right">
+					<div class="projectNamesSection" style="float:right">
 						<label for="softwareAccesses0.viewNames">Views</label>
 						<select id="softwareAccesses0.viewNames" name="softwareAccesses[0].viewNames" multiple="multiple" size="5">
 						</select>
