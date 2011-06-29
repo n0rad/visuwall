@@ -42,19 +42,19 @@ ajsl.view = new function() {
 				var elem = $('[name="' + root + formElem + '"]', form);
 				if (elem.is(':checkbox')) {
 					//TODO change to prop with jquery 1.6
-					elem.attr('checked', data[formElem] == true ? 'checked' : '').blur().change();
+					elem.attr('checked', data[formElem] == true ? 'checked' : '').change();
 //					elem.prop("checked", );
 				} else {
 					// .trigger('change');
-					elem.val(data[formElem]).blur().change();					
+					elem.val(data[formElem]).change();					
 				}
 			}
 		}
 	};
 
 	this.resetFormValues = function(element) {
-		element.find($this.valueFormFields).val('').blur().change();
-		element.find('input:checkbox').removeAttr('checked').blur().change();
+		element.find($this.valueFormFields).val('').change();
+		element.find('input:checkbox').removeAttr('checked').change();
 	};
 
 	this.incrementFormIndexes = function(element) {
