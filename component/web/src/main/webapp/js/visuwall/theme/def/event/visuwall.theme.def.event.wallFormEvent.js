@@ -70,6 +70,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 							delayChange(this, 'projectStatusDelaySecond');
 						});
 
+						$("FIELDSET.buildField", newContent).hide();
 						
 						var childrens = newContent.children();
 						for (var i = 0; i < childrens.length; i++) {
