@@ -228,4 +228,12 @@ public class Project implements Comparable<Project> {
         return previousCompletedBuildNumber;
     }
 
+    public Map<SoftwareProjectId, BasicCapability> getCapabilities() {
+        return capabilities;
+    }
+
+    public void setCapabilities(Map<SoftwareProjectId, BasicCapability> capabilities) {
+        this.capabilities = capabilities;
+    }
+
 }
