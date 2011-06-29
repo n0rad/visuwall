@@ -23,7 +23,7 @@
 			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
 			</pattern>
 		</encoder>
-		<filter class="net.awired.visuwall.core.application.log.outFilter" />
+		<filter class="net.awired.visuwall.core.application.log.OutFilter" />
 	</appender>
 
 	<appender name="stderr" class="ch.qos.logback.core.ConsoleAppender">
@@ -32,7 +32,7 @@
 			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
 			</pattern>
 		</encoder>
-		<filter class="net.awired.visuwall.core.application.log.errFilter" />
+		<filter class="net.awired.visuwall.core.application.log.ErrFilter" />
 	</appender>
 	
 	<logger name="net.awired" level="DEBUG" />

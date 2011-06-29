@@ -55,16 +55,21 @@ public class WallProcess {
 
     ///////////////////////////////////////////////////////////////
 
-    public void rebuildFullWallInformations(Wall wall) {
-        //TODO run in thread and prevent wall hiding (exception causing wall not added to wall list) if software not found
-        rebuildConnectionPluginsInSoftwareAccess(wall);
-        for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
-            Runnable task = getDiscoverProjectsRunner(wall, softwareAccess);
-            @SuppressWarnings("unchecked")
-            ScheduledFuture<Object> futur = taskScheduler.scheduleWithFixedDelay(task,
-                    softwareAccess.getProjectFinderDelaySecond() * 1000);
-            softwareAccess.setProjectFinderTask(futur);
-        }
+    public void rebuildFullWallInformations(final Wall wall) {
+        taskScheduler.schedule(new Runnable() {
+            @Override
+            public void run() {
+                //TODO prevent wall hiding (exception causing wall not added to wall list) if software not found
+                rebuildConnectionPluginsInSoftwareAccess(wall);
+                for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
+                    Runnable task = getDiscoverProjectsRunner(wall, softwareAccess);
+                    @SuppressWarnings("unchecked")
+                    ScheduledFuture<Object> futur = taskScheduler.scheduleWithFixedDelay(task,
+                            softwareAccess.getProjectFinderDelaySecond() * 1000);
+                    softwareAccess.setProjectFinderTask(futur);
+                }
+            }
+        }, new Date());
     }
 
     private void rebuildConnectionPluginsInSoftwareAccess(Wall wall) {

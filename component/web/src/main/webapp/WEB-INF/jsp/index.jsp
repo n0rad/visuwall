@@ -79,7 +79,7 @@
 					<label for="softwareAccesses0.projectStatusDelaySecond">Project Refresh Time <span class="bold projectStatusDelaySecond">45s</span></label>
 					<div class="slider projectStatusDelaySecondSlider"></div>
 					<input type="hidden" id="softwareAccesses0.projectStatusDelaySecond" name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
-				</fieldset>			
+				</fieldset>
 				<div style="clear: both;"></div>
 				<fieldset class="buildField" style="display: none">
 					<legend>Builds</legend>

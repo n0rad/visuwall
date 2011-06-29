@@ -52,7 +52,7 @@ public class ProjectService {
             @SuppressWarnings("unchecked")
             @Override
             public void run() {
-                LOG.info("Running project creation task for project id " + projectId + " on software "
+                LOG.debug("Running project creation task for project id " + projectId + " on software "
                         + buildSoftwareAccess + " in wall " + wallWhereToAdd);
                 BuildCapability buildConnection = (BuildCapability) buildSoftwareAccess.getConnection();
 
@@ -80,7 +80,7 @@ public class ProjectService {
 
             @Override
             public void run() {
-                LOG.info("Running Project Updater task for project " + project);
+                LOG.debug("Running Project Updater task for project " + project);
                 try {
                     int[] buildsToUpdate = buildProcess.updateStatusAndReturnBuildsToUpdate(project);
                     if (neverRun || buildsToUpdate.length != 0) {

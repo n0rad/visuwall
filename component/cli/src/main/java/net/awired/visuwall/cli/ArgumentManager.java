@@ -100,16 +100,9 @@ class ArgumentManager extends CliArgumentManager {
 
         // -l
         logLevel = new CliOneParamArgument<LogLevelEnum>('l', new CliParamEnum<LogLevelEnum>("level",
-                LogLevelEnum.class) {
-            @Override
-            public LogLevelEnum parse(String param) throws CliArgumentParseException {
-                LogLevelEnum res = super.parse(param);
-                System.setProperty(ApplicationHelper.LOG_LVL_KEY, param);
-                return res;
-            }
-        });
+                LogLevelEnum.class));
         logLevel.setDescription("Change log level");
-        logLevel.setParamOneDefValue(LogLevelEnum.warn);
+        logLevel.setParamOneDefValue(LogLevelEnum.info);
         logLevel.setName("level");
         addArg(logLevel);
     }

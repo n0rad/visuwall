@@ -183,7 +183,7 @@ public class BuildCapabilityProcess {
                 project.setLastBuildNumber(lastBuildNumber);
             }
         } catch (BuildNumberNotFoundException e) {
-            LOG.info("No last build number found to update project " + project);
+            LOG.debug("No last build number found to update project " + project);
         }
         return new int[] {};
     }
@@ -199,7 +199,7 @@ public class BuildCapabilityProcess {
         return new Runnable() {
             @Override
             public void run() {
-                LOG.info("Running getEstimatedFinishTime for project " + project);
+                LOG.debug("Running getEstimatedFinishTime for project " + project);
                 try {
                     Date estimatedFinishTime = project.getBuildConnection().getEstimatedFinishTime(
                             project.getBuildProjectId(), build.getBuildNumber());

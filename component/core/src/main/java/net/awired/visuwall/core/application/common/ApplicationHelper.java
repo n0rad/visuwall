@@ -16,8 +16,10 @@
 
 package net.awired.visuwall.core.application.common;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.jar.Manifest;
@@ -25,9 +27,17 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import net.awired.visuwall.core.application.enumeration.LogLevelEnum;
+import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
+import ch.qos.logback.core.util.StatusPrinter;
+import com.google.common.io.CharStreams;
 
 public class ApplicationHelper {
+
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(ApplicationHelper.class);
 
     public static final String LOG_LVL_KEY = "VISUWALL_LOG";
     public static final String HOME_KEY = "VISUWALL_HOME";
@@ -120,4 +130,32 @@ public class ApplicationHelper {
         return System.getProperty("user.home") + "/.visuwall";
     }
 
+    public static void changeLogLvl() {
+        Level loglvl = ApplicationHelper.findLogLvl();
+        try {
+            InputStream logConfStream = ApplicationHelper.class.getResourceAsStream("/visuwall-logback.xml");
+            String logConfString = CharStreams.toString(new InputStreamReader(logConfStream));
+            if (loglvl != null) {
+                // TODO replace with a better regexp to replace all tags like that <logger name="net.awired" level="DEBUG" />
+                // TODO or replace by a xml parser or replace by a deep logback communication to set log lvl
+                logConfString = logConfString.replace("DEBUG", loglvl.toString());
+            }
+            LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+            try {
+                JoranConfigurator configurator = new JoranConfigurator();
+                configurator.setContext(lc);
+                lc.reset();
+                configurator.doConfigure(new ByteArrayInputStream(logConfString.getBytes()));
+            } catch (JoranException je) {
+                je.printStackTrace();
+            }
+            StatusPrinter.printInCaseOfErrorsOrWarnings(lc);
+        } catch (IOException e) {
+            LOG.error("Can not change application log level", e);
+        }
+
+        // don't change root lvl as is may put hibernate or jetty in debug
+        //        Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+        //        root.setLevel(loglvl);
+    }
 }

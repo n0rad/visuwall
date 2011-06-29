@@ -23,7 +23,7 @@ import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.filter.AbstractMatcherFilter;
 import ch.qos.logback.core.spi.FilterReply;
 
-public class outFilter extends AbstractMatcherFilter<Object> {
+public class ErrFilter extends AbstractMatcherFilter<Object> {
 
     @Override
     public FilterReply decide(Object event) {
@@ -33,7 +33,7 @@ public class outFilter extends AbstractMatcherFilter<Object> {
 
         LoggingEvent loggingEvent = (LoggingEvent) event;
 
-        List<Level> eventsToKeep = Arrays.asList(Level.TRACE, Level.DEBUG, Level.INFO);
+        List<Level> eventsToKeep = Arrays.asList(Level.WARN, Level.ERROR);
         if (eventsToKeep.contains(loggingEvent.getLevel())) {
             return FilterReply.NEUTRAL;
         }
