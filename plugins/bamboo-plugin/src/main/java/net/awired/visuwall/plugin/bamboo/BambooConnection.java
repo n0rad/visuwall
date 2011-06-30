@@ -29,18 +29,17 @@ import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.bambooclient.Bamboo;
-import net.awired.visuwall.bambooclient.domain.BambooBuild;
-import net.awired.visuwall.bambooclient.domain.BambooProject;
 import net.awired.visuwall.bambooclient.exception.BambooBuildNotFoundException;
 import net.awired.visuwall.bambooclient.exception.BambooBuildNumberNotFoundException;
-import net.awired.visuwall.bambooclient.exception.BambooProjectNotFoundException;
+import net.awired.visuwall.bambooclient.exception.BambooEstimatedFinishTimeNotFoundException;
+import net.awired.visuwall.bambooclient.exception.BambooPlanNotFoundException;
 import net.awired.visuwall.bambooclient.exception.BambooStateNotFoundException;
+import net.awired.visuwall.bambooclient.rest.Plan;
+import net.awired.visuwall.bambooclient.rest.Result;
 import org.apache.commons.lang.StringUtils;
 import com.google.common.base.Preconditions;
 
 public class BambooConnection implements BuildCapability {
-
-    public static final String BAMBOO_ID = "BAMBOO_ID";
 
     private Bamboo bamboo;
 
@@ -68,9 +67,8 @@ public class BambooConnection implements BuildCapability {
         checkBuildNumber(buildNumber);
         try {
             String projectName = getProjectKey(projectId);
-            BambooProject bambooProject = bamboo.findProject(projectName);
-            return bambooProject.isBuilding();
-        } catch (BambooProjectNotFoundException e) {
+            return bamboo.isBuilding(projectName, buildNumber);
+        } catch (BambooPlanNotFoundException e) {
             throw new ProjectNotFoundException("Can't find project with ProjectId:" + projectId, e);
         }
     }
@@ -95,10 +93,9 @@ public class BambooConnection implements BuildCapability {
             BuildNumberNotFoundException {
         checkConnected();
         checkSoftwareProjectId(projectId);
-        String id = getProjectKey(projectId);
-        Preconditions.checkNotNull(id, BAMBOO_ID);
         try {
-            return bamboo.getLastBuildNumber(id);
+            String id = getProjectKey(projectId);
+            return bamboo.getLastResultNumber(id);
         } catch (BambooBuildNumberNotFoundException e) {
             throw new BuildNumberNotFoundException(e);
         }
@@ -108,9 +105,9 @@ public class BambooConnection implements BuildCapability {
     public List<String> findProjectNames() {
         checkConnected();
         List<String> projectNames = new ArrayList<String>();
-        List<BambooProject> projects = bamboo.findAllProjects();
-        for (BambooProject project : projects) {
-            projectNames.add(project.getName());
+        List<Plan> plans = bamboo.findAllPlans();
+        for (Plan plan : plans) {
+            projectNames.add(plan.getName());
         }
         return projectNames;
     }
@@ -120,11 +117,11 @@ public class BambooConnection implements BuildCapability {
         checkConnected();
         Preconditions.checkNotNull(names, "names is mandatory");
         List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
-        List<BambooProject> projects = bamboo.findAllProjects();
-        for (BambooProject project : projects) {
-            String name = project.getName();
+        List<Plan> plans = bamboo.findAllPlans();
+        for (Plan plan : plans) {
+            String name = plan.getName();
             if (names.contains(name)) {
-                SoftwareProjectId projectId = new SoftwareProjectId(project.getKey());
+                SoftwareProjectId projectId = new SoftwareProjectId(plan.getKey());
                 projectIds.add(projectId);
             }
         }
@@ -157,8 +154,10 @@ public class BambooConnection implements BuildCapability {
         String projectName = getProjectKey(projectId);
         try {
             return bamboo.getEstimatedFinishTime(projectName);
-        } catch (BambooProjectNotFoundException e) {
+        } catch (BambooPlanNotFoundException e) {
             throw new ProjectNotFoundException(e);
+        } catch (BambooEstimatedFinishTimeNotFoundException e) {
+            return new Date();
         }
     }
 
@@ -174,9 +173,9 @@ public class BambooConnection implements BuildCapability {
     public List<SoftwareProjectId> findAllSoftwareProjectIds() {
         checkConnected();
         List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
-        List<BambooProject> projects = bamboo.findAllProjects();
-        for (BambooProject project : projects) {
-            String key = project.getKey();
+        List<Plan> plans = bamboo.findAllPlans();
+        for (Plan plan : plans) {
+            String key = plan.getKey();
             SoftwareProjectId softwareProjectId = new SoftwareProjectId(key);
             projectIds.add(softwareProjectId);
         }
@@ -196,9 +195,9 @@ public class BambooConnection implements BuildCapability {
         checkSoftwareProjectId(softwareProjectId);
         try {
             String projectId = softwareProjectId.getProjectId();
-            BambooProject project = bamboo.findProject(projectId);
+            Plan project = bamboo.findPlan(projectId);
             return project.getName();
-        } catch (BambooProjectNotFoundException e) {
+        } catch (BambooPlanNotFoundException e) {
             throw new ProjectNotFoundException("Can't find project with software project id: " + softwareProjectId);
         }
     }
@@ -209,10 +208,10 @@ public class BambooConnection implements BuildCapability {
         checkSoftwareProjectId(softwareProjectId);
         try {
             String projectKey = softwareProjectId.getProjectId();
-            BambooProject project = bamboo.findProject(projectKey);
+            Plan project = bamboo.findPlan(projectKey);
             String name = project.getName();
             return name;
-        } catch (BambooProjectNotFoundException e) {
+        } catch (BambooPlanNotFoundException e) {
             throw new ProjectNotFoundException("Can't find name of software project id: " + softwareProjectId);
         }
     }
@@ -230,10 +229,10 @@ public class BambooConnection implements BuildCapability {
         checkBuildNumber(buildNumber);
         try {
             String projectKey = softwareProjectId.getProjectId();
-            BambooBuild bambooBuild = bamboo.findBuild(projectKey, buildNumber);
+            Result bambooResult = bamboo.findResult(projectKey, buildNumber);
             BuildTime buildTime = new BuildTime();
-            buildTime.setDuration(bambooBuild.getDuration());
-            buildTime.setStartTime(bambooBuild.getStartTime());
+            buildTime.setDuration(bambooResult.getBuildDuration());
+            buildTime.setStartTime(bambooResult.getBuildStartedTime());
             return buildTime;
         } catch (BambooBuildNotFoundException e) {
             throw new BuildNotFoundException("Can't find build #" + buildNumber + " of project " + softwareProjectId,

@@ -20,24 +20,134 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import com.google.common.base.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "plan")
 public class Plan {
 
     @XmlAttribute
-    public boolean enabled;
+    private boolean enabled;
 
     @XmlAttribute
-    public String type;
+    private String type;
 
     @XmlAttribute
-    public String name;
+    private String name;
 
     @XmlAttribute
-    public String key;
+    private String key;
 
-    public Link link;
+    private String projectKey;
 
-    public boolean isBuilding;
+    private String projectName;
+
+    private boolean isFavourite;
+
+    private boolean isActive;
+
+    private boolean isBuilding;
+
+    private double averageBuildTimeInSeconds;
+
+    private Link link;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getProjectKey() {
+        return projectKey;
+    }
+
+    public void setProjectKey(String projectKey) {
+        this.projectKey = projectKey;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        this.isFavourite = favourite;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        this.isActive = active;
+    }
+
+    public boolean isBuilding() {
+        return isBuilding;
+    }
+
+    public void setBuilding(boolean building) {
+        this.isBuilding = building;
+    }
+
+    public double getAverageBuildTimeInSeconds() {
+        return averageBuildTimeInSeconds;
+    }
+
+    public void setAverageBuildTimeInSeconds(double averageBuildTimeInSeconds) {
+        this.averageBuildTimeInSeconds = averageBuildTimeInSeconds;
+    }
+
+    public Link getLink() {
+        return link;
+    }
+
+    public void setLink(Link link) {
+        this.link = link;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this) //
+                .add("name", name) //
+                .add("key", key) //
+                .add("project name", projectName) //
+                .add("project key", projectKey) //
+                .add("link", link) //
+                .toString();
+    }
 }

@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import com.google.common.base.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "link")
@@ -30,4 +31,27 @@ public class Link {
 
     @XmlAttribute
     public String href;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Link) {
+            Link link = (Link) obj;
+            return Objects.equal(link.href, href) && Objects.equal(link.rel, rel);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(rel, href);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this) //
+                .add("href", href) //
+                .add("rel", rel) //
+                .toString();
+    }
+
 }

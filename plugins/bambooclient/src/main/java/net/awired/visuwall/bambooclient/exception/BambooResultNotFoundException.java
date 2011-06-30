@@ -14,20 +14,18 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.bambooclient.rest;
+package net.awired.visuwall.bambooclient.exception;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+public class BambooResultNotFoundException extends Exception {
 
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "builds")
-public class Builds {
+    private static final long serialVersionUID = -7353782954764291350L;
 
-    public List<Builds> builds = new ArrayList<Builds>();
+    public BambooResultNotFoundException(String msg) {
+        super(msg);
+    }
 
-    public List<Build> build = new ArrayList<Build>();
+    public BambooResultNotFoundException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 
 }

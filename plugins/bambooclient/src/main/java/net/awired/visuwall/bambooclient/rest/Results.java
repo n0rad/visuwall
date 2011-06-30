@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.bambooclient.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "results")
 public class Results {
 
-    public List<Results> results;
+    public List<Results> results = new ArrayList<Results>();
 
-    public List<Result> result;
+    public List<Result> result = new ArrayList<Result>();
 }

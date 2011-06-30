@@ -6,9 +6,9 @@
 	<projectName>ajsl</projectName>
 	<link rel="self"
 		href="http://bamboo.visuwall.awired.net/rest/api/latest/plan/AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6" />
-	<isFavourite>false</isFavourite>
-	<isActive>false</isActive>
-	<isBuilding>false</isBuilding>
+	<isFavourite>true</isFavourite>
+	<isActive>true</isActive>
+	<isBuilding>true</isBuilding>
 	<averageBuildTimeInSeconds>114.0</averageBuildTimeInSeconds>
 	<actions size="1" max-result="1" start-index="0" />
 	<stages size="1" max-result="1" start-index="0" />

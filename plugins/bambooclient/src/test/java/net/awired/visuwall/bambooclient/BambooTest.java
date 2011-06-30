@@ -20,18 +20,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import java.util.Date;
 import java.util.List;
 import net.awired.visuwall.bambooclient.builder.BambooUrlBuilder;
-import net.awired.visuwall.bambooclient.domain.BambooBuild;
-import net.awired.visuwall.bambooclient.domain.BambooProject;
 import net.awired.visuwall.bambooclient.exception.BambooBuildNotFoundException;
 import net.awired.visuwall.bambooclient.exception.BambooBuildNumberNotFoundException;
+import net.awired.visuwall.bambooclient.exception.BambooEstimatedFinishTimeNotFoundException;
+import net.awired.visuwall.bambooclient.exception.BambooPlanNotFoundException;
+import net.awired.visuwall.bambooclient.exception.BambooStateNotFoundException;
 import net.awired.visuwall.bambooclient.rest.Builds;
+import net.awired.visuwall.bambooclient.rest.Link;
 import net.awired.visuwall.bambooclient.rest.Plan;
 import net.awired.visuwall.bambooclient.rest.Plans;
 import net.awired.visuwall.bambooclient.rest.Result;
@@ -58,24 +59,27 @@ public class BambooTest {
     }
 
     @Test
-    public void should_find_all_projects() throws ResourceNotFoundException {
+    public void should_find_all_plans() throws ResourceNotFoundException {
         Plans plans = createPlans();
         when(client.resource(anyString(), any(Class.class))).thenReturn(plans);
 
-        List<BambooProject> projects = bamboo.findAllProjects();
+        List<Plan> projects = bamboo.findAllPlans();
 
-        BambooProject ajsl = projects.get(0);
+        Link link = new Link();
+        link.href = "http://bamboo.visuwall.awired.net/rest/api/latest/plan/AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6";
+        link.rel = "self";
+
+        Plan ajsl = projects.get(0);
         assertEquals("ajsl - Awired Java Standard Library 1.0-ALPHA6", ajsl.getName());
         assertEquals("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6", ajsl.getKey());
-        assertEquals("http://bamboo.visuwall.awired.net/rest/api/latest/plan/AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6",
-                ajsl.getLink());
+        assertEquals(link, ajsl.getLink());
     }
 
     @Test
     public void should_return_empty_list_if_plans_are_not_found() throws ResourceNotFoundException {
         when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
 
-        List<BambooProject> projects = bamboo.findAllProjects();
+        List<Plan> projects = bamboo.findAllPlans();
 
         assertTrue(projects.isEmpty());
     }
@@ -85,49 +89,55 @@ public class BambooTest {
         Results results = createResults();
         when(client.resource(anyString(), any(Class.class))).thenReturn(results);
 
-        int lastBuildNumber = bamboo.getLastBuildNumber("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
+        int lastBuildNumber = bamboo.getLastResultNumber("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
 
         assertEquals(1, lastBuildNumber);
+    }
+
+    @Test(expected = BambooPlanNotFoundException.class)
+    public void should_throw_exception_when_plan_not_found() throws Exception {
+        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
+        bamboo.findPlan("planKey");
     }
 
     @Test(expected = BambooBuildNumberNotFoundException.class)
     public void should_throw_exception_when_build_not_found_for_finding_last_build_number() throws Exception {
         when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
 
-        bamboo.getLastBuildNumber("projectKey");
+        bamboo.getLastResultNumber("projectKey");
     }
 
     @Test(expected = BambooBuildNotFoundException.class)
     public void should_throw_exception_when_build_not_found() throws Exception {
         when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
 
-        bamboo.findBuild("projectKey", 0);
+        bamboo.findResult("projectKey", 0);
     }
 
     @Test
-    public void should_find_build() throws Exception {
-        Result result = createResult();
-        when(client.resource(anyString(), any(Class.class))).thenReturn(result);
+    public void should_find_result() throws Exception {
+        Result expectedResult = createResult();
+        when(client.resource(anyString(), any(Class.class))).thenReturn(expectedResult);
 
-        BambooBuild build = bamboo.findBuild("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6", 1);
+        Result result = bamboo.findResult("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6", 1);
 
-        assertNotNull(build);
-        assertEquals(1, build.getBuildNumber());
-        assertEquals(114817, build.getDuration());
-        assertEquals(0, build.getFailCount());
-        assertEquals(18, build.getPassCount());
-        assertNotNull(build.getStartTime());
-        assertEquals("Successful", build.getState());
+        assertNotNull(result);
+        assertEquals(1, result.getNumber());
+        assertEquals(114817, result.getBuildDuration());
+        assertEquals(0, result.getFailedTestCount());
+        assertEquals(18, result.getSuccessfulTestCount());
+        assertNotNull(result.getBuildStartedTime());
+        assertEquals("Successful", result.getState());
     }
 
     @Test
     public void should_find_state() throws Exception {
         Builds builds = createBuilds();
-        when(bambooUrlBuilder.getLastBuildUrl()).thenReturn("last-build-url");
+        when(bambooUrlBuilder.getAllBuildsUrl()).thenReturn("last-build-url");
         when(client.resource(eq("last-build-url"), any(Class.class))).thenReturn(builds);
 
         Results results = createResults();
-        when(bambooUrlBuilder.getLatestBuildResult(anyString())).thenReturn("latest-build-result-url");
+        when(bambooUrlBuilder.getResultsUrl(anyString())).thenReturn("latest-build-result-url");
         when(client.resource(eq("latest-build-result-url"), any(Class.class))).thenReturn(results);
 
         String state = bamboo.getState("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
@@ -135,42 +145,129 @@ public class BambooTest {
         assertEquals("Successful", state);
     }
 
+    @Test(expected = BambooStateNotFoundException.class)
+    public void should_throw_exception_when_builds_are_not_found() throws Exception {
+        Throwable notFound = new ResourceNotFoundException("not found");
+        when(bambooUrlBuilder.getAllBuildsUrl()).thenReturn("last-build-url");
+        when(client.resource(eq("last-build-url"), any(Class.class))).thenThrow(notFound);
+
+        Results results = createResults();
+        when(bambooUrlBuilder.getResultsUrl(anyString())).thenReturn("latest-build-result-url");
+        when(client.resource(eq("latest-build-result-url"), any(Class.class))).thenReturn(results);
+
+        bamboo.getState("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
+    }
+
+    @Test(expected = BambooStateNotFoundException.class)
+    public void should_throw_exception_when_there_is_no_builds() throws Exception {
+        Builds builds = new Builds();
+        when(bambooUrlBuilder.getAllBuildsUrl()).thenReturn("last-build-url");
+        when(client.resource(eq("last-build-url"), any(Class.class))).thenReturn(builds);
+
+        Results results = createResults();
+        when(bambooUrlBuilder.getResultsUrl(anyString())).thenReturn("latest-build-result-url");
+        when(client.resource(eq("latest-build-result-url"), any(Class.class))).thenReturn(results);
+
+        bamboo.getState("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
+    }
+
+    @Test(expected = BambooStateNotFoundException.class)
+    public void should_throw_exception_when_build_number_is_not_found() throws Exception {
+        Throwable notFound = new ResourceNotFoundException("not found");
+        when(client.resource(anyString(), any(Class.class))).thenThrow(notFound);
+        bamboo.getState("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
+    }
+
     @Test
     public void should_get_average_build_duration_time() throws Exception {
-        when(bambooUrlBuilder.getProjectUrl(anyString())).thenReturn("project-url");
-        Results results = createResults();
-        when(client.resource(eq("project-url"), any(Class.class))).thenReturn(results);
-
-        when(bambooUrlBuilder.getIsBuildingUrl(anyString())).thenReturn("is-building-url");
-        Plan plan = createPlan();
-        when(client.resource(eq("is-building-url"), any(Class.class))).thenReturn(plan);
-
-        when(bambooUrlBuilder.getBuildUrl(anyString(), anyInt())).thenReturn("build-url");
-        Result result = createResult();
-        when(client.resource(eq("build-url"), any(Class.class))).thenReturn(result);
+        when(bambooUrlBuilder.getPlanUrl(anyString())).thenReturn("plan-url");
+        when(client.resource(eq("plan-url"), any(Class.class))).thenReturn(createPlan());
 
         long duration = bamboo.getAverageBuildDurationTime("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
 
-        assertEquals(114817, duration);
+        assertEquals(114, duration);
     }
 
     @Test
     public void should_get_estimated_finish_time() throws Exception {
-        when(bambooUrlBuilder.getProjectUrl(anyString())).thenReturn("project-url");
+        when(bambooUrlBuilder.getAllResultsUrl()).thenReturn("results-url");
+
         Results results = createResults();
-        when(client.resource(eq("project-url"), any(Class.class))).thenReturn(results);
+        when(client.resource(eq("results-url"), any(Class.class))).thenReturn(results);
 
-        when(bambooUrlBuilder.getIsBuildingUrl(anyString())).thenReturn("is-building-url");
-        Plan plan = createPlan();
-        when(client.resource(eq("is-building-url"), any(Class.class))).thenReturn(plan);
-
-        when(bambooUrlBuilder.getBuildUrl(anyString(), anyInt())).thenReturn("build-url");
         Result result = createResult();
-        when(client.resource(eq("build-url"), any(Class.class))).thenReturn(result);
+        String resultUrl = "http://bamboo.visuwall.awired.net/rest/api/latest/result/AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6-1";
+        when(client.resource(eq(resultUrl), any(Class.class))).thenReturn(result);
+
+        when(bambooUrlBuilder.getPlanUrl(anyString())).thenReturn("plan-url");
+        when(client.resource(eq("plan-url"), any(Class.class))).thenReturn(createPlan());
 
         Date finishTime = bamboo.getEstimatedFinishTime("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
 
         assertNotNull(finishTime);
+    }
+
+    @Test
+    public void should_get_is_building() throws Exception {
+        when(client.resource(anyString(), any(Class.class))).thenReturn(createPlan());
+
+        boolean isBuilding = bamboo.isBuilding("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6", 0);
+
+        assertTrue(isBuilding);
+    }
+
+    @Test
+    public void should_find_project() throws Exception {
+        when(client.resource(anyString(), any(Class.class))).thenReturn(createPlan());
+
+        Plan plan = bamboo.findPlan("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
+
+        Link link = new Link();
+        link.rel = "self";
+        link.href = "http://bamboo.visuwall.awired.net/rest/api/latest/plan/AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6";
+
+        assertTrue(plan.isEnabled());
+        assertEquals("chain", plan.getType());
+        assertEquals("ajsl - Awired Java Standard Library 1.0-ALPHA6", plan.getName());
+        assertEquals("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6", plan.getKey());
+        assertEquals("AJSL", plan.getProjectKey());
+        assertEquals("ajsl", plan.getProjectName());
+        assertEquals(link, plan.getLink());
+        assertTrue(plan.isFavourite());
+        assertTrue(plan.isActive());
+        assertTrue(plan.isBuilding());
+        assertEquals(114.0d, plan.getAverageBuildTimeInSeconds(), 0);
+    }
+
+    @Test(expected = BambooBuildNumberNotFoundException.class)
+    public void should_throw_exception_if_there_is_no_results_to_get_last_result_number() throws Exception {
+        when(client.resource(anyString(), any(Class.class))).thenReturn(new Results());
+
+        bamboo.getLastResultNumber("projectKey");
+    }
+
+    @Test(expected = BambooEstimatedFinishTimeNotFoundException.class)
+    public void should_throw_exception_when_there_is_no_result_to_get_estimated_finish_time() throws Exception {
+        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
+        bamboo.getEstimatedFinishTime("planKey");
+    }
+
+    @Test(expected = BambooPlanNotFoundException.class)
+    public void should_throw_exception_when_there_is_no_plan_to_get_average_build_duration_time() throws Exception {
+        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
+        bamboo.getAverageBuildDurationTime("planKey");
+    }
+
+    @Test(expected = BambooPlanNotFoundException.class)
+    public void should_throw_exception_when_there_is_no_plan_to_get_is_building() throws Exception {
+        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
+        bamboo.isBuilding("planKey", 0);
+    }
+
+    @Test(expected = BambooBuildNumberNotFoundException.class)
+    public void should_throw_exception_when_there_is_no_plan_to_get_last_result() throws Exception {
+        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
+        bamboo.getLastResultNumber("planKey");
     }
 
     private Builds createBuilds() {

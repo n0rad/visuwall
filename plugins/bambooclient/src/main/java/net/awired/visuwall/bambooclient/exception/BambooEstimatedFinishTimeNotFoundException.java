@@ -16,11 +16,11 @@
 
 package net.awired.visuwall.bambooclient.exception;
 
-public class BambooProjectNotFoundException extends Exception {
+public class BambooEstimatedFinishTimeNotFoundException extends Exception {
 
-    private static final long serialVersionUID = 23444963844957734L;
+    private static final long serialVersionUID = -3404370125762664057L;
 
-    public BambooProjectNotFoundException(String msg, Exception cause) {
+    public BambooEstimatedFinishTimeNotFoundException(String msg, Throwable cause) {
         super(msg, cause);
     }
 

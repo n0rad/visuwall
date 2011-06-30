@@ -28,43 +28,179 @@ import com.google.common.base.Objects;
 public class Result {
 
     @XmlAttribute
-    public int id;
+    private int id;
 
     @XmlAttribute
-    public int number;
+    private int number;
 
     @XmlAttribute
-    public String lifeCycleState;
+    private String lifeCycleState;
 
     @XmlAttribute
-    public String state;
+    private String state;
 
     @XmlAttribute
-    public String key;
+    private String key;
 
-    public Link link;
+    private Link link;
 
-    public Date buildStartedTime;
+    private Date buildStartedTime;
 
-    public Date buildCompletedTime;
+    private Date buildCompletedTime;
 
-    public int buildDurationInSeconds;
+    private int buildDurationInSeconds;
 
-    public int buildDuration;
+    private int buildDuration;
 
-    public String buildDurationDescription;
+    private String buildDurationDescription;
 
-    public String buildRelativeTime;
+    private String buildRelativeTime;
 
-    public int vcsRevisionKey;
+    private int vcsRevisionKey;
 
-    public String buildTestSummary;
+    private String buildTestSummary;
 
-    public int successfulTestCount;
+    private int successfulTestCount;
 
-    public int failedTestCount;
+    private int failedTestCount;
 
-    public String buildReason;
+    private String buildReason;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public String getLifeCycleState() {
+        return lifeCycleState;
+    }
+
+    public void setLifeCycleState(String lifeCycleState) {
+        this.lifeCycleState = lifeCycleState;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public Link getLink() {
+        return link;
+    }
+
+    public void setLink(Link link) {
+        this.link = link;
+    }
+
+    public Date getBuildStartedTime() {
+        return buildStartedTime;
+    }
+
+    public void setBuildStartedTime(Date buildStartedTime) {
+        this.buildStartedTime = buildStartedTime;
+    }
+
+    public Date getBuildCompletedTime() {
+        return buildCompletedTime;
+    }
+
+    public void setBuildCompletedTime(Date buildCompletedTime) {
+        this.buildCompletedTime = buildCompletedTime;
+    }
+
+    public int getBuildDurationInSeconds() {
+        return buildDurationInSeconds;
+    }
+
+    public void setBuildDurationInSeconds(int buildDurationInSeconds) {
+        this.buildDurationInSeconds = buildDurationInSeconds;
+    }
+
+    public int getBuildDuration() {
+        return buildDuration;
+    }
+
+    public void setBuildDuration(int buildDuration) {
+        this.buildDuration = buildDuration;
+    }
+
+    public String getBuildDurationDescription() {
+        return buildDurationDescription;
+    }
+
+    public void setBuildDurationDescription(String buildDurationDescription) {
+        this.buildDurationDescription = buildDurationDescription;
+    }
+
+    public String getBuildRelativeTime() {
+        return buildRelativeTime;
+    }
+
+    public void setBuildRelativeTime(String buildRelativeTime) {
+        this.buildRelativeTime = buildRelativeTime;
+    }
+
+    public int getVcsRevisionKey() {
+        return vcsRevisionKey;
+    }
+
+    public void setVcsRevisionKey(int vcsRevisionKey) {
+        this.vcsRevisionKey = vcsRevisionKey;
+    }
+
+    public String getBuildTestSummary() {
+        return buildTestSummary;
+    }
+
+    public void setBuildTestSummary(String buildTestSummary) {
+        this.buildTestSummary = buildTestSummary;
+    }
+
+    public int getSuccessfulTestCount() {
+        return successfulTestCount;
+    }
+
+    public void setSuccessfulTestCount(int successfulTestCount) {
+        this.successfulTestCount = successfulTestCount;
+    }
+
+    public int getFailedTestCount() {
+        return failedTestCount;
+    }
+
+    public void setFailedTestCount(int failedTestCount) {
+        this.failedTestCount = failedTestCount;
+    }
+
+    public String getBuildReason() {
+        return buildReason;
+    }
+
+    public void setBuildReason(String buildReason) {
+        this.buildReason = buildReason;
+    }
 
     @Override
     public String toString() {

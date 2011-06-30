@@ -27,30 +27,35 @@ public class BambooUrlBuilderTest {
     @Test
     public void should_build_all_projects_url() {
         String expectedUrl = "http://bamboo.visuwall.awired.net/rest/api/latest/plan";
-        assertEquals(expectedUrl, builder.getAllProjectsUrl());
+        assertEquals(expectedUrl, builder.getAllPlansUrl());
     }
 
     @Test
     public void should_build_latest_result_url() {
         String expectedUrl = "http://bamboo.visuwall.awired.net/rest/api/latest/result/STRUTS-STRUTS";
-        assertEquals(expectedUrl, builder.getLatestBuildResult("STRUTS-STRUTS"));
+        assertEquals(expectedUrl, builder.getResultsUrl("STRUTS-STRUTS"));
     }
 
     @Test
     public void should_build_build_url() {
         String expectedUrl = "http://bamboo.visuwall.awired.net/rest/api/latest/result/STRUTS-STRUTS-3?expand=changes,metadata,stages,labels,jiraIssues,comments";
-        assertEquals(expectedUrl, builder.getBuildUrl("STRUTS-STRUTS", 3));
-    }
-
-    @Test
-    public void should_build_is_building_url() {
-        String expectedUrl = "http://bamboo.visuwall.awired.net/rest/api/latest/plan/STRUTS2INSTABLE-STRUTS2INSTABLE";
-        assertEquals(expectedUrl, builder.getIsBuildingUrl("STRUTS2INSTABLE-STRUTS2INSTABLE"));
+        assertEquals(expectedUrl, builder.getResultUrl("STRUTS-STRUTS", 3));
     }
 
     @Test
     public void should_build_latest_build_url() {
-        assertEquals("http://bamboo.visuwall.awired.net/rest/api/latest/build", builder.getLastBuildUrl());
+        assertEquals("http://bamboo.visuwall.awired.net/rest/api/latest/build", builder.getAllBuildsUrl());
+    }
+
+    @Test
+    public void should_build_all_results_url() {
+        assertEquals("http://bamboo.visuwall.awired.net/rest/api/latest/result", builder.getAllResultsUrl());
+    }
+
+    @Test
+    public void should_build_plan_url() {
+        assertEquals("http://bamboo.visuwall.awired.net/rest/api/latest/plan/STRUTS-STRUTS",
+                builder.getPlanUrl("STRUTS-STRUTS"));
     }
 
 }

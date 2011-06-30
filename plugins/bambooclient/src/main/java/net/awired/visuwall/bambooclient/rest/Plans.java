@@ -28,4 +28,6 @@ public class Plans {
     public Plans plans;
 
     public List<Plan> plan;
+
+    public Link link;
 }

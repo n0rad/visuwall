@@ -14,20 +14,10 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.bambooclient.rest;
+package net.awired.visuwall.bambooclient;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+public interface State {
 
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "builds")
-public class Builds {
-
-    public List<Builds> builds = new ArrayList<Builds>();
-
-    public List<Build> build = new ArrayList<Build>();
-
+    String SUCCESSFUL = "Successful";
+    String Failed = "Failed";
 }

@@ -24,28 +24,29 @@ public class BambooUrlBuilder {
         this.bambooUrl = bambooUrl + "/rest/api/";
     }
 
-    public String getAllProjectsUrl() {
+    public String getAllPlansUrl() {
         return bambooUrl + "latest/plan";
     }
 
-    public String getProjectUrl(String projectKey) {
-        return bambooUrl + "latest/result/" + projectKey + "?expand=results.result";
+    public String getAllBuildsUrl() {
+        return bambooUrl + "latest/build";
     }
 
-    public String getBuildUrl(String projectKey, int buildNumber) {
-        return bambooUrl + "latest/result/" + projectKey + "-" + buildNumber
+    public String getAllResultsUrl() {
+        return bambooUrl + "latest/result";
+    }
+
+    public String getPlanUrl(String planKey) {
+        return bambooUrl + "latest/plan/" + planKey;
+    }
+
+    public String getResultUrl(String planKey, int buildNumber) {
+        return bambooUrl + "latest/result/" + planKey + "-" + buildNumber
                 + "?expand=changes,metadata,stages,labels,jiraIssues,comments";
     }
 
-    public String getLatestBuildResult(String projectKey) {
-        return bambooUrl + "latest/result/" + projectKey;
+    public String getResultsUrl(String planKey) {
+        return bambooUrl + "latest/result/" + planKey;
     }
 
-    public String getIsBuildingUrl(String projectKey) {
-        return bambooUrl + "latest/plan/" + projectKey;
-    }
-
-    public String getLastBuildUrl() {
-        return bambooUrl + "latest/build";
-    }
 }
