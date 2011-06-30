@@ -48,7 +48,6 @@ public class GenericSoftwareClient {
     public <T> T resource(String url, Class<T> clazz) throws ResourceNotFoundException {
         checkUrl(url);
         checkClass(clazz);
-        String errorMessage = "Can't get resource of type " + clazz.getName() + " at " + url;
         try {
             T object = CACHE.get(url, clazz);
             if (object == null) {
@@ -57,12 +56,9 @@ public class GenericSoftwareClient {
                 CACHE.put(object, url, clazz);
             }
             return object;
-        } catch (NumberFormatException e) {
-            throw new ResourceNotFoundException(errorMessage, e);
-        } catch (UniformInterfaceException e) {
-            throw new ResourceNotFoundException(errorMessage, e);
-        } catch (ClientHandlerException e) {
-            throw new ResourceNotFoundException(errorMessage, e);
+        } catch (Throwable t) {
+            String errorMessage = "Can't get resource of type " + clazz.getName() + " at " + url;
+            throw new ResourceNotFoundException(errorMessage, t);
         }
     }
 

@@ -219,6 +219,7 @@ public class HudsonFinder {
         try {
             String jobUrl = hudsonUrlBuilder.getJobUrl(jobName);
             if (MavenHelper.isNotMavenProject(jobUrl)) {
+                LOG.warn(jobName + " is not a maven project");
                 throw new HudsonJobNotFoundException(jobName + " is not a maven project");
             }
             HudsonMavenMavenModuleSet moduleSet = client.resource(jobUrl, HudsonMavenMavenModuleSet.class);
