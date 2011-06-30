@@ -21,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import java.util.Date;
+import java.util.List;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -29,7 +30,6 @@ import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class BambooBuildCapabilityIT implements BuildCapabilityTCK {
@@ -51,10 +51,10 @@ public class BambooBuildCapabilityIT implements BuildCapabilityTCK {
 
     @Override
     @Test
-    @Ignore
     public void should_get_build_numbers() throws Exception {
-        // TODO Auto-generated method stub
-
+        List<Integer> buildNumbers = bamboo.getBuildNumbers(strutsProjectId());
+        assertEquals(2, buildNumbers.get(0).intValue());
+        assertEquals(3, buildNumbers.get(1).intValue());
     }
 
     @Override

@@ -103,8 +103,6 @@ public class SonarMetricCapabilityIT implements MetricCapabilityTCK {
     @Test
     @Ignore
     public void should_analyze_quality_with_only_3_metrics() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
