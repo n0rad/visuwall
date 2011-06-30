@@ -74,11 +74,12 @@
 					<legend>Timers</legend>
 					<label for="softwareAccesses0.projectFinderDelaySecond">Software Refresh Time : <span class="bold projectFinderDelaySecond">45s</span></label>
 					<div class="slider projectFinderDelaySecondSlider"></div>
-					<input id="softwareAccesses0.projectFinderDelaySecond" name="softwareAccesses[0].projectFinderDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
+					<input type="hidden" id="softwareAccesses0.projectFinderDelaySecond" name="softwareAccesses[0].projectFinderDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
+					
 					<label for="softwareAccesses0.projectStatusDelaySecond">Project Refresh Time <span class="bold projectStatusDelaySecond">45s</span></label>
 					<div class="slider projectStatusDelaySecondSlider"></div>
-					<input id="softwareAccesses0.projectStatusDelaySecond" name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
-				</fieldset>			
+					<input type="hidden" id="softwareAccesses0.projectStatusDelaySecond" name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
+				</fieldset>
 				<div style="clear: both;"></div>
 				<fieldset class="buildField" style="display: none">
 					<legend>Builds</legend>
@@ -87,12 +88,12 @@
 					<input type="checkbox" id="softwareAccesses0.allProject" name="softwareAccesses[0].allProject" value="true" /> 
 					<input type="hidden" id="_softwareAccesses0.allProject" name="_softwareAccesses[0].allProject" value="true" />
 
-					<div style="float:left">	
+					<div class="projectNamesSection" style="float:left">	
 						<label for="softwareAccesses0.projectNames">Projects</label>
 						<select id="softwareAccesses0.projectNames" name="softwareAccesses[0].projectNames" multiple="multiple" size="5">
 						</select>
 					</div>
-					<div style="float:right">
+					<div class="projectNamesSection" style="float:right">
 						<label for="softwareAccesses0.viewNames">Views</label>
 						<select id="softwareAccesses0.viewNames" name="softwareAccesses[0].viewNames" multiple="multiple" size="5">
 						</select>

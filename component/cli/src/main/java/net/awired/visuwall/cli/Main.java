@@ -25,8 +25,6 @@ import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
-import org.slf4j.LoggerFactory;
-import ch.qos.logback.classic.Logger;
 import com.google.common.io.Files;
 
 public class Main {
@@ -40,8 +38,8 @@ public class Main {
     public void run(String[] args) {
         argManager.parse(args);
 
-        Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        root.setLevel(argManager.logLevel.getParamOneValue().getLevel());
+        System.setProperty(ApplicationHelper.LOG_LVL_KEY, argManager.logLevel.getParamOneValue().toString());
+        ApplicationHelper.changeLogLvl();
 
         if (argManager.displayFile.isSet()) {
             argManager.displayFile.getParamOneValue().display();

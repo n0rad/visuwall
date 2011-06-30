@@ -25,6 +25,7 @@ import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.quality.QualityResult;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -46,7 +47,8 @@ public class Project implements Comparable<Project> {
     protected Map<Integer, Build> builds = new HashMap<Integer, Build>();
 
     private int lastBuildNumber;
-    private int lastCompletedBuildNumber;
+    private int lastNotBuildingNumber;
+    private int previousCompletedBuildNumber;
 
     //    private ProjectKey projectKey;
 
@@ -86,8 +88,12 @@ public class Project implements Comparable<Project> {
     }
 
     @JsonIgnore
-    public Build getLastBuild() {
-        return findCreatedBuild(lastBuildNumber);
+    public Build getLastBuild() throws BuildNotFoundException {
+        Build lastBuild = builds.get(lastBuildNumber);
+        if (lastBuild == null) {
+            throw new BuildNotFoundException("No last build found for project " + this);
+        }
+        return lastBuild;
     }
 
     @Override
@@ -198,20 +204,36 @@ public class Project implements Comparable<Project> {
         this.builds = builds;
     }
 
-    public void setLastCompletedBuildNumber(int lastCompletedBuildNumber) {
-        this.lastCompletedBuildNumber = lastCompletedBuildNumber;
-    }
-
-    public int getLastCompletedBuildNumber() {
-        return lastCompletedBuildNumber;
-    }
-
     public void setBuildNumbers(List<Integer> buildNumbers) {
         this.buildNumbers = buildNumbers;
     }
 
     public List<Integer> getBuildNumbers() {
         return buildNumbers;
+    }
+
+    public void setLastNotBuildingNumber(int lastNotBuildingNumber) {
+        this.lastNotBuildingNumber = lastNotBuildingNumber;
+    }
+
+    public int getLastNotBuildingNumber() {
+        return lastNotBuildingNumber;
+    }
+
+    public void setPreviousCompletedBuildNumber(int previousCompletedBuildNumber) {
+        this.previousCompletedBuildNumber = previousCompletedBuildNumber;
+    }
+
+    public int getPreviousCompletedBuildNumber() {
+        return previousCompletedBuildNumber;
+    }
+
+    public Map<SoftwareProjectId, BasicCapability> getCapabilities() {
+        return capabilities;
+    }
+
+    public void setCapabilities(Map<SoftwareProjectId, BasicCapability> capabilities) {
+        this.capabilities = capabilities;
     }
 
 }

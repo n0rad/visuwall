@@ -25,6 +25,8 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BasicCapability {
 
+    //    boolean isProjectDisabled(SoftwareProjectId projectId) throws ProjectNotFoundException;
+
     /**
      * If plugin can find maven id, it should return it or throw MavenIdNotFoundException
      * 

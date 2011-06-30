@@ -44,6 +44,9 @@ FIELDSET.idField LEGEND {
 FIELDSET.timerField LEGEND {
 	display: none;
 }
+FIELDSET.buildField LEGEND {
+	display: none;
+}
 
 #wallForm .loader {
 	display: inline;

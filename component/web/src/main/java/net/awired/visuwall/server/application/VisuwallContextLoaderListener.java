@@ -18,36 +18,14 @@ package net.awired.visuwall.server.application;
 
 import javax.servlet.ServletContextEvent;
 import net.awired.visuwall.core.application.common.ApplicationHelper;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ContextLoaderListener;
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 
 public class VisuwallContextLoaderListener extends ContextLoaderListener {
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        //        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(confFile.getBytes("UTF-8"));
-        //
-        //        // assume SLF4J is bound to logback in the current environment
-        //        LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-        //
-        //        try {
-        //            JoranConfigurator configurator = new JoranConfigurator();
-        //            configurator.setContext(lc);
-        //            // the context was probably already configured by default configuration rules
-        //            lc.reset();
-        //            configurator.doConfigure(byteArrayInputStream);
-        //        } catch (JoranException je) {
-        //            je.printStackTrace();
-        //        }
-        //        StatusPrinter.printInCaseOfErrorsOrWarnings(lc);
-
-        Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        Level loglvl = ApplicationHelper.findLogLvl();
-        if (loglvl != null) {
-            root.setLevel(loglvl);
-        }
+        ApplicationHelper.changeLogLvl();
         super.contextInitialized(event);
     }
+
 }

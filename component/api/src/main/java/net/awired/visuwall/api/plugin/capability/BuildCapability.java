@@ -40,6 +40,7 @@ public interface BuildCapability extends BasicCapability {
 
     /**
      * Returns the build numbers order by integer ASC
+     * Pending builds not included.
      * 
      * @param softwareProjectId
      * @return
@@ -86,6 +87,7 @@ public interface BuildCapability extends BasicCapability {
 
     /**
      * Return the last build number of a project
+     * Pending builds not included.
      * 
      * @param softwareProjectId
      * @return

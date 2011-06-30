@@ -20,7 +20,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 	this.__inject__ = ['wallFormView', 'wallFormController', 'wallController', 'pluginService', 'navigationView', 'wallService'];
 	
 	
-//	this.context = 'DIV#modal';
+// this.context = 'DIV#modal';
 	this.softTabsCount = 1;
 	this.tabs;
 	
@@ -28,20 +28,20 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 	this.init = function() {
 		
 		$(".projects", this).accordion({
-//			fillSpace: true,
+// fillSpace: true,
 			autoHeight: false,
-//			collapsible: true
+// collapsible: true
 			navigation: true
 		});
-//		$("select", this).multiselect();
+// $("select", this).multiselect();
 		
 		
-//		$(".projects", this).accordion({
-//			fillSpace: true,
-//			autoHeight: false,
-//			collapsible: true
-////			navigation: true
-//		});
+// $(".projects", this).accordion({
+// fillSpace: true,
+// autoHeight: false,
+// collapsible: true
+// // navigation: true
+// });
 		$this.tabs = $("#softTabs", this);
 		var context = this;
 		
@@ -61,11 +61,17 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 						ajsl.view.incrementFormIndexes(newContent);
 						ajsl.view.resetFormValues(newContent);
 
-						sliderInit($('DIV.projectFinderDelaySecondSlider', newContent));
+						sliderInit($('DIV.projectFinderDelaySecondSlider', newContent), 'projectFinderDelaySecond');
 						$('INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)', newContent).change(function() {
-							delayChange(this);
+							delayChange(this, 'projectFinderDelaySecond');
+						});
+						sliderInit($('DIV.projectStatusDelaySecondSlider', newContent), 'projectStatusDelaySecond');
+						$('INPUT:regex(id,softwareAccesses.*\.projectStatusDelaySecond)', newContent).change(function() {
+							delayChange(this, 'projectStatusDelaySecond');
 						});
 
+						$("FIELDSET.buildField", newContent).hide();
+						
 						var childrens = newContent.children();
 						for (var i = 0; i < childrens.length; i++) {
 							$(ui.panel).append(childrens[i]);
@@ -112,7 +118,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 	
 	this["#wallForm #delete|click"] = function() {		
 		$this.wallService.deleteWall($('#wallForm INPUT#name').val());
-//		$("#modal").dialog('close');
+// $("#modal").dialog('close');
 	};
 	
 	this["#wallForm|submit"] = function() {
@@ -136,7 +142,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 				
 				$("#modal").dialog('close');
 			}, 1000);
-		}, function (msg) { //failure
+		}, function (msg) { // failure
 			$("#wallForm .loader").empty();
 			$("#modal .failure").html(msg);
 		});
@@ -168,7 +174,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 		}
 		$('UL LI A[href="#' + tabIdFull + '"]', softTabs).html(hostname);
 
-		////////////
+		// //////////
 		
 		var classes = ['failureCheck', 'successCheck', 'loadingCheck', 'warningCheck'];
 		var domObj = $('#' + $(this).attr('id').replace(".", "\\.") + "check", $(this).parent());
@@ -181,7 +187,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 		
 		domObj.switchClasses(classes, 'loadingCheck', 1);
 		$this.pluginService.manageable($(this).val(), function(softwareInfo) {
-			//success
+			// success
 			if (softwareInfo.warnings) {
 				domObj.switchClasses(classes, 'warningCheck', 1);				
 				
@@ -220,35 +226,37 @@ var ff = '				<table class="softwareInfo">'
 							target : 'bottomRight'
 						}
 					},
-//					show : {
-//						when : 'click',
-//						solo : true
-//					},
-//		            hide: false, // Don't specify a hide event
+// show : {
+// when : 'click',
+// solo : true
+// },
+// hide: false, // Don't specify a hide event
 		            style: {
-//		               width: {
-//		            	   min: 300
-//		               },
-//		               height: {
-//		            	   min: 300
-//		               },
+// width: {
+// min: 300
+// },
+// height: {
+// min: 300
+// },
 		               border: {
 		                  width: 5,
 		                  radius: 2
 		               },
 		               padding: 10, 
 		               textAlign: 'center',
-		               tip: true, // Give it a speech bubble tip with automatic corner detection
-		               name: 'cream' // Style it according to the preset 'cream' style
+		               tip: true, // Give it a speech bubble tip with
+									// automatic corner detection
+		               name: 'cream' // Style it according to the preset
+										// 'cream' style
 		            }
 				});
 				
-//				domObj.qtip("show");
+// domObj.qtip("show");
 				domObj.mouseover();
 				
 				
 			} else {
-				//success
+				// success
 				domObj.switchClasses(classes, 'successCheck', 1);				
 			}
 
@@ -289,33 +297,65 @@ var ff = '				<table class="softwareInfo">'
 	this['INPUT:regex(id,softwareAccesses.*\.url)|change|live'] = urlFunc;
 
 
-	var delayChange = function(context) {
-		$('DIV.projectFinderDelaySecondSlider', $(context).parent()).slider("option", "value", $(context).val());
+	var delayChange = function(context, id) {
+		$('DIV.' + id + 'Slider', $(context).parent()).slider("option", "value", $(context).val());
 	};
-	
 	
 	this['INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)|change'] = function() {
-		delayChange(this);
+		delayChange(this, 'projectFinderDelaySecond');
 	};
 	
-	var sliderInit = function(context) {
+	this['INPUT:regex(id,softwareAccesses.*\.projectStatusDelaySecond)|change'] = function() {
+		delayChange(this, 'projectStatusDelaySecond');
+	};
+	
+	var sliderInit = function(context, id) {
 		var func = function( event, ui ) {
-			$("SPAN.projectFinderDelaySecond", $(context).parent()).html( ui.value + "s" );
-			$('INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)', $(context).parent()).val(ui.value);
+			$("SPAN." + id, $(context).parent()).html( ui.value + "s" );
+			$('INPUT:regex(id,softwareAccesses.*\.' + id +')', $(context).parent()).val(ui.value);
 		};
 		
-		$(context).slider({
-			value:0,
-			min: 0,
-			max: 500,
-			step: 30,
-			slide: func,
-			change: func
-		});
+		if (id == 'projectStatusDelaySecond') {
+			$(context).slider({
+				value:0,
+				min: 10,
+				max: 200,
+				step: 10,
+				slide: func,
+				change: func
+			});
+			$(context).slider("option", "value", '30');
+		} else {
+			$(context).slider({
+				value:0,
+				min: 60,
+				max: 500,
+				step: 30,
+				slide: func,
+				change: func
+			});
+			$(context).slider("option", "value", '200');			
+		}
 	};
 
 	this['DIV.projectFinderDelaySecondSlider|init'] = function() {
-		sliderInit(this);
+		sliderInit(this, 'projectFinderDelaySecond');
+	};
+
+	this['DIV.projectStatusDelaySecondSlider|init'] = function() {
+		sliderInit(this, 'projectStatusDelaySecond');
+	};
+
+	
+	this['INPUT:regex(id,softwareAccesses.*\.allProject)|change|live'] = function() {
+		if ($(this).is(':checked')) {
+			$('SELECT:regex(id,softwareAccesses.*\.projectNames)', $(this).parent()).attr("disabled","disabled");
+			$('SELECT:regex(id,softwareAccesses.*\.viewNames)', $(this).parent()).attr("disabled","disabled");
+		} else {
+			$('SELECT:regex(id,softwareAccesses.*\.projectNames)', $(this).parent()).removeAttr('disabled');
+			$('SELECT:regex(id,softwareAccesses.*\.viewNames)', $(this).parent()).removeAttr('disabled');
+			
+		}
 	};
 	
 	this['DIV#softAdd|click'] = function(event) {
