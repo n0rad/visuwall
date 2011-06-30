@@ -215,7 +215,17 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
     @Override
     public SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException {
         checkConnected();
-        throw new ProjectNotFoundException("not implemented");
+        Preconditions.checkNotNull(projectKey, "projectKey is mandatory");
+        String jobName = projectKey.getName();
+        if (jobName != null) {
+            try {
+                hudson.findJob(jobName);
+                return new SoftwareProjectId(jobName);
+            } catch (HudsonJobNotFoundException e) {
+                throw new ProjectNotFoundException("Can't identify job with project key: " + projectKey, e);
+            }
+        }
+        throw new ProjectNotFoundException("Can't identify job with project key: " + projectKey);
     }
 
     @Override

@@ -91,7 +91,7 @@ public class HudsonFinder {
         }
     }
 
-    public HudsonMavenMavenModuleSetBuild findBuildByJobNameAndBuildNumber(String jobName, int buildNumber)
+    private HudsonMavenMavenModuleSetBuild findBuildByJobNameAndBuildNumber(String jobName, int buildNumber)
             throws HudsonBuildNotFoundException {
         checkJobName(jobName);
         checkBuildNumber(buildNumber);

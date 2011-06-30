@@ -26,10 +26,8 @@ import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.tck.TestCapabilityTCK;
 import net.awired.visuwall.plugin.sonar.SonarConnection;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
 public class SonarTestCapabilityIT implements TestCapabilityTCK {
 
     private static TestCapability sonar = new SonarConnection();

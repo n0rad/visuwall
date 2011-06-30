@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -29,7 +30,6 @@ import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
@@ -70,27 +70,36 @@ public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
 
     @Override
     @Test
-    @Ignore
     public void should_find_description_of_a_project() throws ProjectNotFoundException {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("visuwall");
+        String description = hudson.getDescription(softwareProjectId);
+        assertEquals("keep an eye on your projects!", description);
     }
 
     @Override
     @Test
-    @Ignore
     public void should_identify_a_project() throws ProjectNotFoundException {
+        ProjectKey projectKey = new ProjectKey();
+        projectKey.setName("visuwall");
+        projectKey.setMavenId("net.awired.visuwall:visuwall");
+        SoftwareProjectId identity = hudson.identify(projectKey);
+        assertEquals(new SoftwareProjectId("visuwall"), identity);
     }
 
     @Override
     @Test
-    @Ignore
     public void should_get_maven_id() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("visuwall");
+        String mavenId = hudson.getMavenId(softwareProjectId);
+        assertEquals("net.awired.visuwall:visuwall", mavenId);
     }
 
     @Override
     @Test
-    @Ignore
     public void should_get_name_of_a_project() throws Exception {
-
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("visuwall");
+        String name = hudson.getName(softwareProjectId);
+        assertEquals("visuwall", name);
     }
 
 }
