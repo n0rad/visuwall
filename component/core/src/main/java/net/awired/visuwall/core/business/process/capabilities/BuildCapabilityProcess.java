@@ -175,9 +175,8 @@ public class BuildCapabilityProcess {
                         Runnable finishTimeRunner = getEstimatedFinishTimeRunner(project, lastBuild);
                         scheduler.schedule(finishTimeRunner, new Date());
                         return new int[] { previousLastBuildNumber };
-                    } else {
-                        // building is still running
                     }
+                    // building is still running
                 }
 
                 if (previousBuilding == true && lastBuilding == false) {
@@ -188,10 +187,9 @@ public class BuildCapabilityProcess {
                         LOG.info("previous build {} is over and a new build {} is also over {}", new Object[] {
                                 previousLastBuildNumber, lastBuildNumber, project });
                         return new int[] { previousLastBuildNumber, lastBuildNumber };
-                    } else {
-                        LOG.info("Previous build {} is over and no new build ", previousLastBuildNumber, project);
-                        return new int[] { previousLastBuildNumber };
                     }
+                    LOG.info("Previous build {} is over and no new build ", previousLastBuildNumber, project);
+                    return new int[] { previousLastBuildNumber };
                 }
             } finally {
                 lastBuild.setBuilding(lastBuilding);
