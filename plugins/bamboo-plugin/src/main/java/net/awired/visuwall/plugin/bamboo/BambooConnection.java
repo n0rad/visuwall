@@ -17,6 +17,7 @@
 package net.awired.visuwall.plugin.bamboo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import net.awired.visuwall.api.domain.BuildTime;
@@ -37,6 +38,8 @@ import net.awired.visuwall.bambooclient.exception.BambooStateNotFoundException;
 import net.awired.visuwall.bambooclient.rest.Plan;
 import net.awired.visuwall.bambooclient.rest.Result;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 
 public class BambooConnection implements BuildCapability {
@@ -44,6 +47,8 @@ public class BambooConnection implements BuildCapability {
     private Bamboo bamboo;
 
     private boolean connected;
+
+    private static final Logger LOG = LoggerFactory.getLogger(BambooConnection.class);
 
     @Override
     public void connect(String url, String login, String password) {
@@ -183,9 +188,20 @@ public class BambooConnection implements BuildCapability {
     }
 
     @Override
-    public List<Integer> getBuildNumbers(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public List<Integer> getBuildNumbers(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
-        return new ArrayList<Integer>();
+        checkSoftwareProjectId(softwareProjectId);
+        String planKey = softwareProjectId.getProjectId();
+        int lastResultNumber;
+        try {
+            lastResultNumber = bamboo.getLastResultNumber(planKey);
+        } catch (BambooBuildNumberNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't find builds numbers of software project id : " + softwareProjectId, e);
+            }
+            return new ArrayList<Integer>();
+        }
+        return Arrays.asList(lastResultNumber);
     }
 
     @Override

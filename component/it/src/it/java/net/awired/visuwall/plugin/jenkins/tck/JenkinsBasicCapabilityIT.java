@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -28,7 +29,6 @@ import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
@@ -88,8 +88,11 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
 
     @Override
     @Test
-    @Ignore
     public void should_identify_a_project() throws ProjectNotFoundException {
+        ProjectKey projectKey = new ProjectKey();
+        projectKey.setName("struts");
+        SoftwareProjectId softwareProjectId = jenkins.identify(projectKey);
+        assertEquals("struts", softwareProjectId.getProjectId());
     }
 
     @Override

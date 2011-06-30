@@ -236,6 +236,10 @@ public class TeamCityConnection implements BuildCapability {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         List<Integer> buildNumbers = getBuildNumbers(softwareProjectId);
+        if (buildNumbers.isEmpty()) {
+            throw new BuildNumberNotFoundException("Can't find build numbers for software project id : "
+                    + softwareProjectId);
+        }
         Integer lastBuildNumber = Collections.max(buildNumbers);
         return lastBuildNumber;
     }

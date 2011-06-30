@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import java.util.Date;
+import java.util.List;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -32,7 +33,6 @@ import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
@@ -88,9 +88,12 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
 
     @Override
     @Test
-    @Ignore
     public void should_get_build_numbers() throws Exception {
-
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("dev-radar-sonar");
+        List<Integer> buildNumbers = hudson.getBuildNumbers(softwareProjectId);
+        assertEquals(25, buildNumbers.get(0).intValue());
+        assertEquals(68, buildNumbers.get(1).intValue());
+        assertEquals(69, buildNumbers.get(2).intValue());
     }
 
     @Override

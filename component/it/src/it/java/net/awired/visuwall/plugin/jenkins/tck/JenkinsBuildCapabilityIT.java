@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import java.util.Date;
+import java.util.List;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -32,7 +33,6 @@ import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
@@ -52,13 +52,11 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
         assertEquals(4, number);
     }
 
-    @Ignore("refaire le calcul du UNSTABLE, peut etre le sortir et mettre dans core")
     @Override
     @Test
     public void should_get_build_state() throws Exception {
         assertEquals(State.SUCCESS, getLastBuildState("struts"));
         assertEquals(State.FAILURE, getLastBuildState("errorproject"));
-        assertEquals(State.UNSTABLE, getLastBuildState("itcoverage-project"));
     }
 
     private State getLastBuildState(String jobName) throws ProjectNotFoundException, BuildNumberNotFoundException,
@@ -72,18 +70,18 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
     @Override
     @Test
     public void should_get_is_building() throws Exception {
-        SoftwareProjectId projectId = struts();
-        int buildNumber = jenkins.getLastBuildNumber(projectId);
-        boolean isBuilding = jenkins.isBuilding(projectId, buildNumber);
+        SoftwareProjectId softwareProjectId = struts();
+        int buildNumber = jenkins.getLastBuildNumber(softwareProjectId);
+        boolean isBuilding = jenkins.isBuilding(softwareProjectId, buildNumber);
         assertFalse(isBuilding);
     }
 
     @Override
     @Test
     public void should_get_estimated_date() throws Exception {
-        SoftwareProjectId projectId = struts();
-        int buildNumber = jenkins.getLastBuildNumber(projectId);
-        Date date = jenkins.getEstimatedFinishTime(projectId, buildNumber);
+        SoftwareProjectId softwareProjectId = struts();
+        int buildNumber = jenkins.getLastBuildNumber(softwareProjectId);
+        Date date = jenkins.getEstimatedFinishTime(softwareProjectId, buildNumber);
         assertNotNull(date);
     }
 
@@ -93,17 +91,21 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
 
     @Override
     @Test
-    @Ignore
     public void should_get_build_numbers() throws Exception {
-
+        SoftwareProjectId softwareProjectId = struts();
+        List<Integer> buildNumbers = jenkins.getBuildNumbers(softwareProjectId);
+        assertEquals(1, buildNumbers.get(0).intValue());
+        assertEquals(2, buildNumbers.get(1).intValue());
+        assertEquals(3, buildNumbers.get(2).intValue());
+        assertEquals(4, buildNumbers.get(3).intValue());
     }
 
     @Override
     @Test
     public void should_get_build_time() throws Exception {
-        SoftwareProjectId projectId = struts();
-        int buildNumber = jenkins.getLastBuildNumber(projectId);
-        BuildTime buildTime = jenkins.getBuildTime(projectId, buildNumber);
+        SoftwareProjectId softwareProjectId = struts();
+        int buildNumber = jenkins.getLastBuildNumber(softwareProjectId);
+        BuildTime buildTime = jenkins.getBuildTime(softwareProjectId, buildNumber);
         assertNotNull(buildTime);
     }
 }

@@ -53,8 +53,7 @@ public class BambooBuildCapabilityIT implements BuildCapabilityTCK {
     @Test
     public void should_get_build_numbers() throws Exception {
         List<Integer> buildNumbers = bamboo.getBuildNumbers(strutsProjectId());
-        assertEquals(2, buildNumbers.get(0).intValue());
-        assertEquals(3, buildNumbers.get(1).intValue());
+        assertEquals(3, buildNumbers.get(0).intValue());
     }
 
     @Override

@@ -24,4 +24,8 @@ public class BuildNumberNotFoundException extends Exception {
         super(e);
     }
 
+    public BuildNumberNotFoundException(String msg) {
+        super(msg);
+    }
+
 }

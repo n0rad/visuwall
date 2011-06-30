@@ -27,16 +27,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class TeamCityRevision {
 
     @XmlAttribute(name = "display-version")
-    private int displayVersion;
+    private String displayVersion;
 
     @XmlElement(name = "vcs-root")
     private TeamCityVcsRoot vcsRoot;
 
-    public int getDisplayVersion() {
+    public String getDisplayVersion() {
         return displayVersion;
     }
 
-    public void setDisplayVersion(int displayVersion) {
+    public void setDisplayVersion(String displayVersion) {
         this.displayVersion = displayVersion;
     }
 

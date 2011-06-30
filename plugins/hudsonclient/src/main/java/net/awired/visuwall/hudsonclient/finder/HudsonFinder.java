@@ -17,6 +17,7 @@
 package net.awired.visuwall.hudsonclient.finder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -261,6 +262,7 @@ public class HudsonFinder {
             int buildNumber = build.getNumber();
             buildNumbers.add(buildNumber);
         }
+        Collections.sort(buildNumbers);
         return buildNumbers;
     }
 
