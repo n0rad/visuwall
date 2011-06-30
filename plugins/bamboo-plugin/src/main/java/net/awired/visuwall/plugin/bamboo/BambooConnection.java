@@ -142,7 +142,7 @@ public class BambooConnection implements BuildCapability {
     public String getDescription(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
-        throw new ProjectNotFoundException("not implemented");
+        return "";
     }
 
     @Override

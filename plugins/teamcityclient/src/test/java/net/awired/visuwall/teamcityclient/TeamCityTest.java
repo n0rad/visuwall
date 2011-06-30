@@ -171,7 +171,7 @@ public class TeamCityTest {
 
         List<TeamCityRevision> revisions = build.getRevisions();
         TeamCityRevision revision = revisions.get(0);
-        assertEquals(346, revision.getDisplayVersion());
+        assertEquals("346", revision.getDisplayVersion());
 
         TeamCityVcsRoot vcsRoot = revision.getVcsRoot();
         assertEquals("/app/rest/vcs-roots/id:1084", vcsRoot.getHref());
