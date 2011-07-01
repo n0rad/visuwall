@@ -24,4 +24,8 @@ public class TeamCityProjectNotFoundException extends Exception {
         super(msg, cause);
     }
 
+    public TeamCityProjectNotFoundException(String msg) {
+        super(msg);
+    }
+
 }

@@ -101,4 +101,11 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
 
     }
 
+    @Override
+    @Test
+    @Ignore
+    public void should_get_a_disabled_project() throws Exception {
+
+    }
+
 }

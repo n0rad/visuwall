@@ -72,6 +72,8 @@ public interface BasicCapability {
     String getName(SoftwareProjectId projectId) throws ProjectNotFoundException;
 
     /**
+     * Find the software project id with informations contained in project key
+     * 
      * @param projectKey
      * @return
      */
@@ -98,4 +100,12 @@ public interface BasicCapability {
      */
     List<String> findProjectNames();
 
+    /**
+     * Returns true is project is disabled in the software
+     * 
+     * @param projectId
+     * @return
+     * @throws ProjectNotFoundException
+     */
+    boolean isProjectDisabled(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException;
 }

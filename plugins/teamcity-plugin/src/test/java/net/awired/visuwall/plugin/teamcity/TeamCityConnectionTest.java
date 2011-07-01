@@ -17,13 +17,18 @@
 package net.awired.visuwall.plugin.teamcity;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.teamcityclient.TeamCity;
+import net.awired.visuwall.teamcityclient.exception.TeamCityProjectNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuildItem;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
@@ -37,27 +42,27 @@ import org.mockito.Mockito;
 public class TeamCityConnectionTest {
 
     private TeamCity teamCity;
-    private TeamCityConnection connectionPlugin;
+    private TeamCityConnection teamCityConnection;
 
     @Before
     public void init() {
         teamCity = Mockito.mock(TeamCity.class);
-        connectionPlugin = createConnectionPlugin();
+        teamCityConnection = createConnectionPlugin();
     }
 
     @Test(expected = NullPointerException.class)
     public void should_fail_when_passing_null() {
-        connectionPlugin.connect(null);
+        teamCityConnection.connect(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void should_fail_when_passing_empty_string() {
-        connectionPlugin.connect("");
+        teamCityConnection.connect("");
     }
 
     @Test
     public void should_call_find_project_names() throws TeamCityProjectsNotFoundException {
-        connectionPlugin.findProjectNames();
+        teamCityConnection.findProjectNames();
         verify(teamCity).findProjectNames();
     }
 
@@ -78,9 +83,44 @@ public class TeamCityConnectionTest {
         when(teamCity.findBuildList("bt297"));
 
         SoftwareProjectId projectId = new SoftwareProjectId("projectId");
-        State state = connectionPlugin.getBuildState(projectId, 0);
+        State state = teamCityConnection.getBuildState(projectId, 0);
 
         assertEquals(State.SUCCESS, state);
+    }
+
+    @Test
+    public void should_get_a_disabled_project() throws Exception {
+        TeamCityProject project = new TeamCityProject();
+        project.setArchived(true);
+
+        when(teamCity.findProject(anyString())).thenReturn(project);
+
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        boolean isDisabled = teamCityConnection.isProjectDisabled(softwareProjectId);
+
+        assertTrue(isDisabled);
+    }
+
+    @Test
+    public void should_get_an_enabled_project() throws Exception {
+        TeamCityProject project = new TeamCityProject();
+        project.setArchived(false);
+
+        when(teamCity.findProject(anyString())).thenReturn(project);
+
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        boolean isDisabled = teamCityConnection.isProjectDisabled(softwareProjectId);
+
+        assertFalse(isDisabled);
+    }
+
+    @Test(expected = ProjectNotFoundException.class)
+    public void should_throw_exception_when_project_is_not_found() throws Exception {
+        Throwable notFound = new TeamCityProjectNotFoundException("not found");
+        when(teamCity.findProject(anyString())).thenThrow(notFound);
+
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        teamCityConnection.isProjectDisabled(softwareProjectId);
     }
 
     private TeamCityConnection createConnectionPlugin() {

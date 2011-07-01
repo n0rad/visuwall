@@ -295,6 +295,19 @@ public class TeamCityConnection implements BuildCapability {
         }
     }
 
+    @Override
+    public boolean isProjectDisabled(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        try {
+            String projectId = softwareProjectId.getProjectId();
+            TeamCityProject project = teamCity.findProject(projectId);
+            return project.isArchived();
+        } catch (TeamCityProjectNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find project with software project id:" + softwareProjectId, e);
+        }
+    }
+
     private void addBuildNumbers(Set<Integer> numbers, TeamCityBuildType buildType) {
         try {
             String buildTypeId = buildType.getId();

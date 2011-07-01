@@ -259,6 +259,13 @@ public class SonarConnection implements MetricCapability, TestCapability {
         return !connected;
     }
 
+    @Override
+    public boolean isProjectDisabled(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        return false;
+    }
+
     private TestResult createUnitTestAnalysis(String artifactId) {
         TestResult unitTestResult = new TestResult();
         try {
