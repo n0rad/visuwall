@@ -43,7 +43,7 @@ public class SonarConnectionTest {
     Map<String, QualityMetric> metricList = createMetricList();
 
     MetricFinder metricFinder = Mockito.mock(MetricFinder.class);
-    MeasureFinder measureFinder = Mockito.mock(MeasureFinder.class);
+    SonarFinder measureFinder = Mockito.mock(SonarFinder.class);
 
     SonarConnection sonar;
 
@@ -51,7 +51,7 @@ public class SonarConnectionTest {
     public void init() throws Exception {
         when(metricFinder.findMetrics()).thenReturn(metricList);
         sonar = new SonarConnection();
-        sonar.measureFinder = measureFinder;
+        sonar.sonarFinder = measureFinder;
         sonar.metricFinder = metricFinder;
         sonar.connect("http://sonar:9000");
     }

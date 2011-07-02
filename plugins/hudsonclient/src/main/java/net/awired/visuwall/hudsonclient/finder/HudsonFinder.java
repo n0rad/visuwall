@@ -36,6 +36,7 @@ import net.awired.visuwall.hudsonclient.generated.hudson.HudsonView;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelHudson;
 import net.awired.visuwall.hudsonclient.generated.hudson.hudsonmodel.HudsonModelView;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonMavenMavenModuleSet;
+import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelBallColor;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelJob;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelRun;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
@@ -219,6 +220,7 @@ public class HudsonFinder {
         try {
             String jobUrl = hudsonUrlBuilder.getJobUrl(jobName);
             if (MavenHelper.isNotMavenProject(jobUrl)) {
+                LOG.warn(jobName + " is not a maven project");
                 throw new HudsonJobNotFoundException(jobName + " is not a maven project");
             }
             HudsonMavenMavenModuleSet moduleSet = client.resource(jobUrl, HudsonMavenMavenModuleSet.class);
@@ -246,11 +248,13 @@ public class HudsonFinder {
     private HudsonJob createHudsonProjectFrom(HudsonMavenMavenModuleSet moduleSet) {
         String name = moduleSet.getName();
         String description = moduleSet.getDescription();
+        boolean disabled = moduleSet.getColor() == HudsonModelBallColor.DISABLED;
 
-        HudsonJob hudsonProject = new HudsonJob();
-        hudsonProject.setName(name);
-        hudsonProject.setDescription(description);
-        return hudsonProject;
+        HudsonJob hudsonJob = new HudsonJob();
+        hudsonJob.setName(name);
+        hudsonJob.setDescription(description);
+        hudsonJob.setDisabled(disabled);
+        return hudsonJob;
     }
 
     public List<Integer> getBuildNumbers(String jobName) throws HudsonJobNotFoundException {

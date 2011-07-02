@@ -39,4 +39,6 @@ public interface BasicCapabilityTCK {
     // identify
     void should_identify_a_project() throws Exception;
 
+    // isProjectDisabled
+    void should_get_a_disabled_project() throws Exception;
 }

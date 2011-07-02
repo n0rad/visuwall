@@ -26,7 +26,7 @@ public class MeasureFinderIT {
 
     @Test
     public void should_find_measure() throws SonarMeasureNotFoundException {
-        MeasureFinder measureFinder = new MeasureFinder(IntegrationTestData.SONAR_URL);
+        SonarFinder measureFinder = new SonarFinder(IntegrationTestData.SONAR_URL);
         Measure measure = measureFinder.findMeasure(IntegrationTestData.STRUTS_ARTIFACT_ID, "violations_density");
         assertTrue(measure.getFormattedValue().length() > 0);
         assertTrue(measure.getValue() > 0);

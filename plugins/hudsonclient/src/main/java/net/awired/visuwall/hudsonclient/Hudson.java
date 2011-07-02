@@ -89,13 +89,13 @@ public class Hudson {
     }
 
     /**
-     * @param projectName
-     * @return HudsonProject found with its name
+     * @param jobName
+     * @return HudsonJob found with its name
      * @throws HudsonJobNotFoundException
      */
-    public HudsonJob findJob(String projectName) throws HudsonJobNotFoundException {
-        checkJobName(projectName);
-        return hudsonFinder.findJob(projectName);
+    public HudsonJob findJob(String jobName) throws HudsonJobNotFoundException {
+        checkJobName(jobName);
+        return hudsonFinder.findJob(jobName);
     }
 
     /**

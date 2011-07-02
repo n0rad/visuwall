@@ -31,17 +31,17 @@ import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
-public class MeasureFinderTest {
+public class SonarFinderTest {
 
     @Mock
     Sonar sonar;
 
-    MeasureFinder measureFinder;
+    SonarFinder measureFinder;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        measureFinder = new MeasureFinder("http://sonar:9000");
+        measureFinder = new SonarFinder("http://sonar:9000");
         measureFinder.sonar = sonar;
     }
 
@@ -85,11 +85,11 @@ public class MeasureFinderTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void should_throw_exception_when_sonar_url_is_empty() {
-        new MeasureFinder("");
+        new SonarFinder("");
     }
 
     @Test
     public void should_create_sonar_with_login_and_password() {
-        new MeasureFinder("sonarUrl", "login", "password");
+        new SonarFinder("sonarUrl", "login", "password");
     }
 }

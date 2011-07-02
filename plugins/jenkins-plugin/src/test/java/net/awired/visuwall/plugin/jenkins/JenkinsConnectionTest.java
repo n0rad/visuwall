@@ -29,19 +29,22 @@ import net.awired.visuwall.hudsonclient.domain.HudsonJob;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
-import org.mockito.Mockito;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class JenkinsConnectionTest {
 
+    @Mock
     Hudson hudson;
-    JenkinsConnection jenkinsPlugin;
+
+    JenkinsConnection jenkinsConnection;
 
     @Before
     public void init() {
-        hudson = Mockito.mock(Hudson.class);
-        jenkinsPlugin = new JenkinsConnection();
-        jenkinsPlugin.connect("url");
-        jenkinsPlugin.hudson = hudson;
+        MockitoAnnotations.initMocks(this);
+        jenkinsConnection = new JenkinsConnection();
+        jenkinsConnection.connect("http://jenkins:8080");
+        jenkinsConnection.hudson = hudson;
     }
 
     @Test
@@ -54,7 +57,7 @@ public class JenkinsConnectionTest {
 
         when(hudson.findAllProjects()).thenReturn(hudsonProjects);
 
-        List<SoftwareProjectId> projectIds = jenkinsPlugin.findAllSoftwareProjectIds();
+        List<SoftwareProjectId> projectIds = jenkinsConnection.findAllSoftwareProjectIds();
         SoftwareProjectId projectId = projectIds.get(0);
 
         assertEquals("name", projectId.getProjectId());
@@ -68,10 +71,10 @@ public class JenkinsConnectionTest {
 
         SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
-        assertTrue(jenkinsPlugin.isBuilding(projectId, 0));
+        assertTrue(jenkinsConnection.isBuilding(projectId, 0));
 
         projectId = new SoftwareProjectId("project2");
-        assertFalse(jenkinsPlugin.isBuilding(projectId, 0));
+        assertFalse(jenkinsConnection.isBuilding(projectId, 0));
     }
 
     @Test
@@ -81,7 +84,7 @@ public class JenkinsConnectionTest {
 
         SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
-        assertEquals(date, jenkinsPlugin.getEstimatedFinishTime(projectId, 0));
+        assertEquals(date, jenkinsConnection.getEstimatedFinishTime(projectId, 0));
     }
 
     @Test
@@ -90,7 +93,7 @@ public class JenkinsConnectionTest {
 
         SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
-        int lastBuildNumber = jenkinsPlugin.getLastBuildNumber(projectId);
+        int lastBuildNumber = jenkinsConnection.getLastBuildNumber(projectId);
 
         assertEquals(5, lastBuildNumber);
     }
@@ -111,7 +114,7 @@ public class JenkinsConnectionTest {
 
         SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectName");
 
-        String description = jenkinsPlugin.getDescription(softwareProjectId);
+        String description = jenkinsConnection.getDescription(softwareProjectId);
 
         assertEquals("description", description);
     }

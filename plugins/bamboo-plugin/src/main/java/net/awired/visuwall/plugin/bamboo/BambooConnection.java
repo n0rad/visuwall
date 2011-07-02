@@ -40,11 +40,13 @@ import net.awired.visuwall.bambooclient.rest.Result;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 public class BambooConnection implements BuildCapability {
 
-    private Bamboo bamboo;
+    @VisibleForTesting
+    Bamboo bamboo;
 
     private boolean connected;
 
@@ -65,16 +67,16 @@ public class BambooConnection implements BuildCapability {
     }
 
     @Override
-    public boolean isBuilding(SoftwareProjectId projectId, Integer buildNumber) throws ProjectNotFoundException,
+    public boolean isBuilding(SoftwareProjectId softwareProjectId, Integer buildNumber) throws ProjectNotFoundException,
             BuildNotFoundException {
         checkConnected();
-        checkSoftwareProjectId(projectId);
+        checkSoftwareProjectId(softwareProjectId);
         checkBuildNumber(buildNumber);
         try {
-            String projectName = getProjectKey(projectId);
+            String projectName = getProjectKey(softwareProjectId);
             return bamboo.isBuilding(projectName, buildNumber);
         } catch (BambooPlanNotFoundException e) {
-            throw new ProjectNotFoundException("Can't find project with ProjectId:" + projectId, e);
+            throw new ProjectNotFoundException("Can't find project with software project id:" + softwareProjectId, e);
         }
     }
 
@@ -253,6 +255,19 @@ public class BambooConnection implements BuildCapability {
         } catch (BambooBuildNotFoundException e) {
             throw new BuildNotFoundException("Can't find build #" + buildNumber + " of project " + softwareProjectId,
                     e);
+        }
+    }
+
+    @Override
+    public boolean isProjectDisabled(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        String planKey = softwareProjectId.getProjectId();
+        try {
+            Plan plan = bamboo.findPlan(planKey);
+            return !plan.isEnabled();
+        } catch (BambooPlanNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find plan with software project id: " + softwareProjectId, e);
         }
     }
 

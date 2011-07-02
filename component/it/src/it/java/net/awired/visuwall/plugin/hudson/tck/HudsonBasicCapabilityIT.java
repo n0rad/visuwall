@@ -30,6 +30,7 @@ import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
@@ -102,4 +103,10 @@ public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
         assertEquals("visuwall", name);
     }
 
+    @Override
+    @Test
+    @Ignore
+    public void should_get_a_disabled_project() throws Exception {
+
+    }
 }

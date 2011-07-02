@@ -292,6 +292,19 @@ public final class HudsonConnection implements BuildCapability, ViewCapability {
         }
     }
 
+    @Override
+    public boolean isProjectDisabled(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        try {
+            String jobName = softwareProjectId.getProjectId();
+            HudsonJob job = hudson.findJob(jobName);
+            return job.isDisabled();
+        } catch (HudsonJobNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find job with software project id: " + softwareProjectId, e);
+        }
+    }
+
     private void checkBuildNumber(Integer buildNumber) {
         Preconditions.checkNotNull(buildNumber, "buildNumber is mandatory");
     }

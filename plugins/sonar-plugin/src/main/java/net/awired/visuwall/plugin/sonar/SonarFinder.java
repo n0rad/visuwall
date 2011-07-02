@@ -18,6 +18,7 @@ package net.awired.visuwall.plugin.sonar;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
+import net.awired.visuwall.plugin.sonar.exception.SonarResourceNotFoundException;
 import org.sonar.wsclient.Sonar;
 import org.sonar.wsclient.connectors.ConnectionException;
 import org.sonar.wsclient.services.Measure;
@@ -27,7 +28,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
-public class MeasureFinder {
+public class SonarFinder {
 
     private String sonarUrl;
 
@@ -37,11 +38,11 @@ public class MeasureFinder {
     @VisibleForTesting
     Sonar sonar;
 
-    public MeasureFinder(String sonarUrl) {
+    public SonarFinder(String sonarUrl) {
         this(sonarUrl, null, null);
     }
 
-    public MeasureFinder(String sonarUrl, String login, String password) {
+    public SonarFinder(String sonarUrl, String login, String password) {
         Preconditions.checkNotNull(sonarUrl, "sonarUrl is mandatory");
         Preconditions.checkArgument(!sonarUrl.isEmpty(), "sonarUrl can't be empty");
         this.sonarUrl = sonarUrl;
@@ -75,6 +76,21 @@ public class MeasureFinder {
         } catch (ConnectionException e) {
             throw new SonarMeasureNotFoundException("Metric " + measureKey + " not found for project " + artifactId
                     + " in Sonar " + sonarUrl, e);
+        }
+    }
+
+    public Resource findResource(String resourceId) throws SonarResourceNotFoundException {
+        Preconditions.checkNotNull(resourceId, "resourceId is mandatory");
+        ResourceQuery query = new ResourceQuery(resourceId);
+        try {
+            Resource resource = sonar.find(query);
+            if (resource == null) {
+                throw new SonarResourceNotFoundException("Resource " + resourceId + " not found in Sonar " + sonarUrl);
+            }
+            return resource;
+        } catch (ConnectionException e) {
+            throw new SonarResourceNotFoundException("Resource " + resourceId + " not found in Sonar " + sonarUrl, e);
+
         }
     }
 

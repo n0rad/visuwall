@@ -17,7 +17,6 @@
 package net.awired.visuwall.plugin.jenkins;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 import net.awired.visuwall.api.domain.SoftwareId;
@@ -27,8 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import com.google.common.io.ByteStreams;
-import com.google.common.io.Closeables;
 
 public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
 
@@ -59,9 +56,17 @@ public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
     @Override
     public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
         Preconditions.checkNotNull(url, "url is mandatory");
-        String xml = getContent(url);
-        if (isManageable(xml)) {
-            return createSoftwareId(xml);
+        try {
+            url = new URL(url.toString() + "/api/");
+            String content = Downloadables.getContent(url);
+            JenkinsVersionPage jenkinsApiPage = new JenkinsVersionPage(content);
+            if (jenkinsApiPage.isJenkinsApiPage()) {
+                return jenkinsApiPage.createSoftwareId();
+            }
+        } catch (IOException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't get content of " + url, e);
+            }
         }
         throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Jenkins");
     }
@@ -73,49 +78,4 @@ public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
                 .add("version", getVersion()).toString();
     }
 
-    private SoftwareId createSoftwareId(String xml) {
-        SoftwareId softwareId = new SoftwareId();
-        softwareId.setName("Jenkins");
-        String strVersion = getVersion(xml);
-        softwareId.setVersion(strVersion);
-        addWarnings(softwareId, strVersion);
-        return softwareId;
-    }
-
-    private void addWarnings(SoftwareId softwareInfo, String strVersion) {
-        double version = Double.parseDouble(strVersion);
-        if (version < 1.405) {
-            addWarningForVersionBefore1405(softwareInfo);
-        }
-    }
-
-    private void addWarningForVersionBefore1405(SoftwareId softwareInfo) {
-        softwareInfo.setWarnings("This jenkins version has a bug with git project. Git project wont be display.");
-    }
-
-    private String getVersion(String xml) {
-        return new JenkinsVersionExtractor(xml).version();
-    }
-
-    private boolean isManageable(String xml) {
-        return xml.contains("Remote API [Jenkins]");
-    }
-
-    private String getContent(URL url) {
-        InputStream stream = null;
-        try {
-            url = new URL(url.toString() + "/api/");
-            stream = url.openStream();
-            byte[] content = ByteStreams.toByteArray(stream);
-            String xml = new String(content);
-            return xml;
-        } catch (IOException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Can't get content of " + url, e);
-            }
-            return "";
-        } finally {
-            Closeables.closeQuietly(stream);
-        }
-    }
 }

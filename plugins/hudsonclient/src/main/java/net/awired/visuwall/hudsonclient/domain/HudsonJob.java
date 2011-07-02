@@ -24,6 +24,7 @@ public final class HudsonJob {
     private String description;
     private int lastBuildNumber = -1;
     private boolean building;
+    private boolean disabled;
 
     public String getName() {
         return name;
@@ -57,6 +58,14 @@ public final class HudsonJob {
         this.lastBuildNumber = lastBuildNumber;
     }
 
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this) //
@@ -64,4 +73,5 @@ public final class HudsonJob {
                 .add("description", description) //
                 .add("lastBuildNumber", lastBuildNumber).toString();
     }
+
 }
