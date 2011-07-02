@@ -284,9 +284,11 @@ var ff = '				<table class="softwareInfo">'
 			var projectViewsFormElem = $('SELECT:regex(id,softwareAccesses.*\.viewNames)', tabContent);
 			var oldVal = projectViewsFormElem.val();
 			projectViewsFormElem.empty();
-			for (var i = 0; i < softwareInfo.viewNames.length; i++) {
-				var viewName = softwareInfo.viewNames[i];
-				projectViewsFormElem.append($("<option></option>").attr("value",viewName).text(viewName));
+			if (softwareInfo.viewNames) {
+				for (var i = 0; i < softwareInfo.viewNames.length; i++) {
+					var viewName = softwareInfo.viewNames[i];
+					projectViewsFormElem.append($("<option></option>").attr("value",viewName).text(viewName));
+				}
 			}
 			projectViewsFormElem.val(oldVal);
 			

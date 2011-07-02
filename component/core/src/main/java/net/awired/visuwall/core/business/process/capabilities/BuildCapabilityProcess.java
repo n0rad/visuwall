@@ -57,8 +57,15 @@ public class BuildCapabilityProcess {
                 }
                 skip = 2;
             }
-            List<Integer> previousBuilds = buildNumbers.subList(1, buildNumbers.size() - skip);
-            for (Integer buildNumber : previousBuilds) {
+
+            ListIterator<Integer> reverseBuildIt = project.getBuildNumbers().listIterator(
+                    project.getBuildNumbers().size());
+
+            for (int i = 0; reverseBuildIt.hasPrevious(); i++) {
+                Integer buildNumber = reverseBuildIt.previous();
+                if (i < skip) {
+                    continue;
+                }
                 Build build = getCreatedWithContentBuild(project, buildNumber);
                 if (build == null) {
                     continue;

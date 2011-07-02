@@ -121,6 +121,10 @@ public class ProjectService {
 
                         for (int buildId : buildsToUpdate) {
                             buildProcess.updateBuild(project, buildId);
+
+                            if (buildId == project.getLastNotBuildingNumber()) {
+                                metricCapabilityProcess.updateLastBuildMetrics(project);
+                            }
                         }
 
                         // TODO check for new software to update

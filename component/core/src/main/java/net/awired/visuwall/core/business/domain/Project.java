@@ -154,6 +154,7 @@ public class Project implements Comparable<Project> {
         this.updateProjectTask = updateProjectTask;
     }
 
+    @JsonIgnore
     public SoftwareProjectId getBuildProjectId() {
         return buildProjectId;
     }
@@ -218,10 +219,12 @@ public class Project implements Comparable<Project> {
         return previousCompletedBuildNumber;
     }
 
+    @JsonIgnore
     public Map<SoftwareProjectId, BasicCapability> getCapabilities() {
         return capabilities;
     }
 
+    @JsonIgnore
     public void setCapabilities(Map<SoftwareProjectId, BasicCapability> capabilities) {
         this.capabilities = capabilities;
     }

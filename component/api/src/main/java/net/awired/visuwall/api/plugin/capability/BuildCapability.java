@@ -27,6 +27,9 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BuildCapability extends BasicCapability {
 
+    //    List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, Integer buildNumber)
+    //            throws BuildNotFoundException, ProjectNotFoundException;
+
     /**
      * Return build time information
      * 
