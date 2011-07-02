@@ -1,0 +1,94 @@
+package net.awired.visuwall.plugin.sonar.tck;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import java.util.Arrays;
+import java.util.List;
+import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.api.domain.ProjectKey;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
+import net.awired.visuwall.api.exception.ConnectionException;
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
+import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
+import net.awired.visuwall.plugin.sonar.SonarConnection;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+public class SonarBasicCapabilityIT implements BasicCapabilityTCK {
+
+    private static BasicCapability sonar = new SonarConnection();
+
+    @BeforeClass
+    public static void init() throws ConnectionException {
+        sonar.connect(IntegrationTestData.SONAR_URL, null, null);
+    }
+
+    @Override
+    @Test
+    public void should_find_all_projects_ids() {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("net.awired.visuwall:visuwall");
+
+        List<SoftwareProjectId> projectNames = sonar.findAllSoftwareProjectIds();
+        assertTrue(projectNames.contains(softwareProjectId));
+    }
+
+    @Override
+    @Test
+    public void should_find_all_project_names() {
+        List<String> projectNames = sonar.findProjectNames();
+        assertTrue(projectNames.contains("Visuwall"));
+    }
+
+    @Override
+    @Test
+    public void should_find_project_ids_by_names() {
+        List<String> names = Arrays.asList("Visuwall");
+        List<SoftwareProjectId> softwareProjectIds = sonar.findSoftwareProjectIdsByNames(names);
+
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("net.awired.visuwall:visuwall");
+        assertEquals(softwareProjectId, softwareProjectIds.get(0));
+    }
+
+    @Override
+    @Test
+    public void should_find_description_of_a_project() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("net.awired.visuwall:visuwall");
+        String description = sonar.getDescription(softwareProjectId);
+        assertEquals("Visuwall", description);
+    }
+
+    @Override
+    @Test
+    public void should_get_maven_id() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("net.awired.visuwall:visuwall");
+        String mavenId = sonar.getMavenId(softwareProjectId);
+        assertEquals("net.awired.visuwall:visuwall", mavenId);
+    }
+
+    @Override
+    @Test
+    public void should_get_name_of_a_project() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("net.awired.visuwall:visuwall");
+        String name = sonar.getName(softwareProjectId);
+        assertEquals("Visuwall", name);
+    }
+
+    @Override
+    @Test
+    public void should_identify_a_project() throws Exception {
+        ProjectKey projectKey = new ProjectKey();
+        projectKey.setMavenId("net.awired.visuwall:visuwall");
+        SoftwareProjectId softwareProjectId = sonar.identify(projectKey);
+        assertEquals("net.awired.visuwall:visuwall", softwareProjectId.getProjectId());
+    }
+
+    @Override
+    @Test
+    public void should_get_a_disabled_project() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("net.awired.visuwall:visuwall");
+        boolean isDisabled = sonar.isProjectDisabled(softwareProjectId);
+        assertFalse(isDisabled);
+    }
+
+}

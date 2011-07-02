@@ -25,6 +25,7 @@ import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
+import net.awired.visuwall.plugin.sonar.SonarConnection;
 import net.awired.visuwall.plugin.teamcity.TeamCityConnection;
 
 public class Conswall {
@@ -56,11 +57,15 @@ public class Conswall {
         BambooConnection bambooConnection = new BambooConnection();
         bambooConnection.connect("http://bamboo.visuwall.awired.net");
 
+        SonarConnection sonarConnection = new SonarConnection();
+        sonarConnection.connect("http://nemo.sonarsource.org");
+
         BasicCapability[] plugins = { //
-        jenkinsConnection, //
-                hudsonConnection, //
-                teamCityConnection, //
-                bambooConnection //
+        //jenkinsConnection, //
+        //hudsonConnection, //
+        //teamCityConnection, //
+        //bambooConnection, //
+                sonarConnection
         };
 
         for (BasicCapability capability : plugins) {
@@ -72,11 +77,11 @@ public class Conswall {
     private void print() {
         System.out.println("\n------------------------ " + capability.getClass().getName()
                 + " ------------------------");
-        // printProjectNames();
-        // printProjectIds();
-        // printNames();
-        // printDescriptions();
-        // printMavenIds();
+        printProjectNames();
+        printProjectIds();
+        printNames();
+        printDescriptions();
+        printMavenIds();
         if (buildCapability != null) {
             printLastBuildDates();
         }

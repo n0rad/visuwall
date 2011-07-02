@@ -71,7 +71,7 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
     public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
-            String propertiesUrl = url.toString() + "/api/properties";
+            String propertiesUrl = url.toString() + "/api/properties/sonar.core.version";
             Properties properties = client.resource(propertiesUrl, Properties.class, MediaType.APPLICATION_XML_TYPE);
             if (isManageable(properties)) {
                 SoftwareId softwareId = new SoftwareId();

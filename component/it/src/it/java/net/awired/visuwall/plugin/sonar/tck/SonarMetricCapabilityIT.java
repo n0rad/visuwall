@@ -70,7 +70,7 @@ public class SonarMetricCapabilityIT implements MetricCapabilityTCK {
     }
 
     @Test
-    public void should_count_exact_it_and_ut() throws ConnectionException {
+    public void should_count_exact_it_and_ut() {
         SoftwareProjectId projectId = librestry();
 
         SonarConnection sonarPlugin = new SonarConnection();

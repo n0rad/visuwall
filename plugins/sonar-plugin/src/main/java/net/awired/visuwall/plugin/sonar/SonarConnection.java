@@ -30,16 +30,19 @@ import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
+import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
+import net.awired.visuwall.plugin.sonar.exception.SonarResourceNotFoundException;
+import net.awired.visuwall.plugin.sonar.resource.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.wsclient.services.Measure;
+import org.sonar.wsclient.services.Resource;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -53,10 +56,13 @@ public class SonarConnection implements MetricCapability, TestCapability {
     private final UUID id = UUID.randomUUID();
 
     @VisibleForTesting
-    MeasureFinder measureFinder;
+    SonarFinder sonarFinder;
 
     @VisibleForTesting
     MetricFinder metricFinder;
+
+    @VisibleForTesting
+    SonarClient sonarClient;
 
     private Map<String, QualityMetric> metricsMap;
     private String[] metricKeys = new String[] {};
@@ -66,20 +72,23 @@ public class SonarConnection implements MetricCapability, TestCapability {
     public SonarConnection() {
     }
 
-    public void connect(String url) throws ConnectionException {
+    public void connect(String url) {
         connect(url, null, null);
     }
 
     @Override
-    public void connect(String url, String login, String password) throws ConnectionException {
+    public void connect(String url, String login, String password) {
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize sonar with url " + url);
         }
         if (metricFinder == null) {
             metricFinder = new MetricFinder(url);
         }
-        if (measureFinder == null) {
-            measureFinder = new MeasureFinder(url, login, password);
+        if (sonarFinder == null) {
+            sonarFinder = new SonarFinder(url, login, password);
+        }
+        if (sonarClient == null) {
+            sonarClient = new SonarClient(url);
         }
         connected = true;
     }
@@ -119,7 +128,16 @@ public class SonarConnection implements MetricCapability, TestCapability {
     @Override
     public List<String> findProjectNames() {
         checkConnected();
-        return new ArrayList<String>();
+        List<String> projectNames = new ArrayList<String>();
+        try {
+            List<Project> names = sonarClient.findProjects().getProjects();
+            for (Project project : names) {
+                projectNames.add(project.getName());
+            }
+        } catch (ResourceNotFoundException e) {
+            LOG.warn(e.getMessage(), e);
+        }
+        return projectNames;
     }
 
     @Override
@@ -145,26 +163,67 @@ public class SonarConnection implements MetricCapability, TestCapability {
     public String getDescription(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
-        throw new ProjectNotFoundException("not implemented");
+        try {
+            String artifactId = softwareProjectId.getProjectId();
+            Resource resource = sonarFinder.findResource(artifactId);
+            return resource.getName(true);
+        } catch (SonarResourceNotFoundException e) {
+            throw new ProjectNotFoundException("Can't get description of software project id: " + softwareProjectId,
+                    e);
+        }
     }
 
     @Override
     public SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException {
         checkConnected();
-        throw new ProjectNotFoundException("not implemented");
+        Preconditions.checkNotNull(projectKey, "projectKey is mandatory");
+        try {
+            String mavenId = projectKey.getMavenId();
+            Resource resource;
+            resource = sonarFinder.findResource(mavenId);
+            SoftwareProjectId softwareProjectId = new SoftwareProjectId(resource.getKey());
+            return softwareProjectId;
+        } catch (SonarResourceNotFoundException e) {
+            throw new ProjectNotFoundException("Can't identify project key: " + projectKey, e);
+        }
     }
 
     @Override
     public List<SoftwareProjectId> findAllSoftwareProjectIds() {
         checkConnected();
-        return new ArrayList<SoftwareProjectId>();
+        List<SoftwareProjectId> softwareProjectIds = new ArrayList<SoftwareProjectId>();
+        try {
+            List<Project> names = sonarClient.findProjects().getProjects();
+            for (Project project : names) {
+                String key = project.getKey();
+                SoftwareProjectId softwareProjectId = new SoftwareProjectId(key);
+                softwareProjectIds.add(softwareProjectId);
+            }
+        } catch (ResourceNotFoundException e) {
+            LOG.warn(e.getMessage(), e);
+        }
+        return softwareProjectIds;
     }
 
     @Override
     public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
         checkConnected();
         Preconditions.checkNotNull(names, "names is mandatory");
-        return new ArrayList<SoftwareProjectId>();
+        List<SoftwareProjectId> softwareProjectIds = new ArrayList<SoftwareProjectId>();
+        try {
+            List<Project> projects = sonarClient.findProjects().getProjects();
+            for (Project project : projects) {
+                String name = project.getName();
+                if (names.contains(name)) {
+                    String key = project.getKey();
+                    SoftwareProjectId softwareProjectId = new SoftwareProjectId(key);
+                    softwareProjectIds.add(softwareProjectId);
+                }
+            }
+        } catch (ResourceNotFoundException e) {
+            LOG.warn(e.getMessage(), e);
+        }
+        return softwareProjectIds;
     }
 
     @Override
@@ -195,7 +254,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
                     LOG.debug("can't analyze project " + projectId + " without artifactId. Is it a maven project ?");
                 }
             } else {
-                Double itCoverage = measureFinder.findMeasure(artifactId, "it_coverage").getValue();
+                Double itCoverage = sonarFinder.findMeasure(artifactId, "it_coverage").getValue();
                 integrationTestResult.setCoverage(itCoverage);
             }
         } catch (SonarMeasureNotFoundException e) {
@@ -229,7 +288,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
 
     private void addQualityMeasure(QualityResult qualityResult, String artifactId, String key) {
         try {
-            Measure measure = measureFinder.findMeasure(artifactId, key);
+            Measure measure = sonarFinder.findMeasure(artifactId, key);
             if (measure.getValue() != null) {
                 QualityMeasure qualityMeasure = QualityMeasures.asQualityMeasure(measure, key);
                 qualityMeasure.setName(metricsMap.get(key).getName());
@@ -243,15 +302,30 @@ public class SonarConnection implements MetricCapability, TestCapability {
     }
 
     @Override
-    public String getMavenId(SoftwareProjectId projectId) throws ProjectNotFoundException, MavenIdNotFoundException {
+    public String getMavenId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
+            MavenIdNotFoundException {
         checkConnected();
-        throw new ProjectNotFoundException("not implemented");
+        checkSoftwareProjectId(softwareProjectId);
+        String artifactId = softwareProjectId.getProjectId();
+        try {
+            Resource resource = sonarFinder.findResource(artifactId);
+            return resource.getKey();
+        } catch (SonarResourceNotFoundException e) {
+            throw new ProjectNotFoundException("Can't get name of software project id: " + softwareProjectId, e);
+        }
     }
 
     @Override
-    public String getName(SoftwareProjectId projectId) throws ProjectNotFoundException {
+    public String getName(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
-        throw new ProjectNotFoundException("not implemented");
+        checkSoftwareProjectId(softwareProjectId);
+        try {
+            String artifactId = softwareProjectId.getProjectId();
+            Resource resource = sonarFinder.findResource(artifactId);
+            return resource.getName();
+        } catch (SonarResourceNotFoundException e) {
+            throw new ProjectNotFoundException("Can't get name of software project id: " + softwareProjectId, e);
+        }
     }
 
     @Override
@@ -269,12 +343,12 @@ public class SonarConnection implements MetricCapability, TestCapability {
     private TestResult createUnitTestAnalysis(String artifactId) {
         TestResult unitTestResult = new TestResult();
         try {
-            Double coverage = measureFinder.findMeasure(artifactId, "coverage").getValue();
-            Double failures = measureFinder.findMeasure(artifactId, "test_failures").getValue();
-            Double errors = measureFinder.findMeasure(artifactId, "test_errors").getValue();
-            Double passTests = measureFinder.findMeasure(artifactId, "tests").getValue();
+            Double coverage = sonarFinder.findMeasure(artifactId, "coverage").getValue();
+            Double failures = sonarFinder.findMeasure(artifactId, "test_failures").getValue();
+            Double errors = sonarFinder.findMeasure(artifactId, "test_errors").getValue();
+            Double passTests = sonarFinder.findMeasure(artifactId, "tests").getValue();
 
-            int skipCount = measureFinder.findMeasure(artifactId, "skipped_tests").getIntValue();
+            int skipCount = sonarFinder.findMeasure(artifactId, "skipped_tests").getIntValue();
             int failCount = failures.intValue() + errors.intValue();
             int passCount = passTests.intValue() - failCount;
 
