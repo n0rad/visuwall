@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
@@ -49,10 +48,6 @@ public class Project implements Comparable<Project> {
     private int lastBuildNumber;
     private int lastNotBuildingNumber;
     private int previousCompletedBuildNumber;
-
-    //    private ProjectKey projectKey;
-
-    private QualityResult qualityResult = new QualityResult();
 
     @Transient
     private Map<SoftwareProjectId, BasicCapability> capabilities = new HashMap<SoftwareProjectId, BasicCapability>();
@@ -102,8 +97,7 @@ public class Project implements Comparable<Project> {
         ToStringHelper toString = Objects.toStringHelper(this) //
                 .add("id", id) //
                 .add("name", name) //
-                .add("buildProjectId", buildProjectId) //
-                .add("qualityResult", qualityResult); //
+                .add("buildProjectId", buildProjectId);
         return toString.toString();
     }
 
@@ -162,10 +156,6 @@ public class Project implements Comparable<Project> {
 
     public SoftwareProjectId getBuildProjectId() {
         return buildProjectId;
-    }
-
-    public QualityResult getQualityResult() {
-        return qualityResult;
     }
 
     public String getId() {

@@ -18,15 +18,13 @@ package net.awired.visuwall.core.business.process.capabilities;
 
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 import net.awired.visuwall.api.domain.BuildTime;
-import net.awired.visuwall.api.domain.ProjectResourceId;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
-import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.core.business.domain.Build;
 import net.awired.visuwall.core.business.domain.Project;
 import org.slf4j.Logger;
@@ -91,7 +89,10 @@ public class BuildCapabilityProcess {
     }
 
     public void updateLastNotBuildingNumber(Project project) throws ProjectNotFoundException {
-        for (Integer buildNumber : project.getBuildNumbers()) {
+        ListIterator<Integer> reverseBuildIt = project.getBuildNumbers().listIterator(
+                project.getBuildNumbers().size());
+        while (reverseBuildIt.hasPrevious()) {
+            Integer buildNumber = reverseBuildIt.previous();
             Build build = getCreatedWithContentBuild(project, buildNumber);
             if (build.isBuilding()) {
                 continue;
@@ -111,28 +112,16 @@ public class BuildCapabilityProcess {
 
             build.setState(state);
 
-            //TODO why is it old state ?
-            //            boolean building = project.getBuildConnection().isBuilding(projectId, buildNumber);
-            //            build.setBuilding(building);
-
             // buildTime
             BuildTime buildTime = project.getBuildConnection().getBuildTime(projectId, buildNumber);
             build.setStartTime(buildTime.getStartTime());
             build.setDuration(buildTime.getDuration());
 
-            // projectSoftwareId
-            ProjectResourceId projectResourceId = new ProjectResourceId();
-            projectResourceId.setDate(new Date(build.getStartTime().getTime() + build.getDuration()));
-            projectResourceId.setBuildNumber(build.getBuildNumber());
+            //            // projectSoftwareId
+            //            ProjectResourceId projectResourceId = new ProjectResourceId();
+            //            projectResourceId.setDate(new Date(build.getStartTime().getTime() + build.getDuration()));
+            //            projectResourceId.setBuildNumber(build.getBuildNumber());
 
-            for (SoftwareProjectId softwareProjectId : project.getCapabilities().keySet()) {
-                BasicCapability capability = project.getCapabilities().get(softwareProjectId);
-                if (capability instanceof TestCapability) {
-                    ((TestCapability) capability).analyzeUnitTests(softwareProjectId);
-                }
-            }
-
-            project.findCreatedBuild(buildNumber);
         } catch (BuildNotFoundException e) {
             LOG.warn("BuildNumber " + buildNumber + " not found in software to update project " + project, e);
             //TODO remove buildNumber from buildNumbers as its removed from software

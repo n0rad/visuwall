@@ -17,6 +17,7 @@
 package net.awired.visuwall.core.persistence.entity;
 
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -67,7 +68,10 @@ public final class Wall extends IdEntityImpl<Long> {
             project.close();
         }
         for (SoftwareAccess softwareAccess : softwareAccesses) {
-            softwareAccess.getProjectFinderTask().cancel(true);
+            ScheduledFuture<Object> projectFinderTask = softwareAccess.getProjectFinderTask();
+            if (projectFinderTask != null) {
+                projectFinderTask.cancel(true);
+            }
             softwareAccess.getConnection().close();
         }
     }

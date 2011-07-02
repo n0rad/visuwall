@@ -35,6 +35,20 @@ public class MetricCapabilityProcess {
     @Transient
     String[] metrics = new String[] { "coverage", "ncloc", "violations_density", "it_coverage" };
 
+    public void updateLastBuildMetrics(Project project) {
+        for (SoftwareProjectId softwareProjectId : project.getCapabilities().keySet()) {
+            BasicCapability capability = project.getCapabilities().get(softwareProjectId);
+            if (capability instanceof MetricCapability) {
+                if (project.getLastNotBuildingNumber() != 0) {
+                    QualityResult qualityResult = ((MetricCapability) capability).analyzeQuality(softwareProjectId,
+                            metrics);
+                    Build build = project.findCreatedBuild(project.getLastNotBuildingNumber());
+                    build.setQualityResult(qualityResult);
+                }
+            }
+        }
+    }
+
     void enhanceWithQualityAnalysis(Project analyzedProject, BasicCapability plugin, String... metrics) {
         SoftwareProjectId projectId = null;// analyzedProject.getProjectId();
         Build build = null;
@@ -52,7 +66,9 @@ public class MetricCapabilityProcess {
             integrationTestResultToMerge = build.getIntegrationTestResult();
         }
 
-        QualityResult qualityResultToMerge = analyzedProject.getQualityResult();
+        //TODO remove all function
+        //        QualityResult qualityResultToMerge = analyzedProject.getQualityResult();
+        QualityResult qualityResultToMerge = null;
         if (plugin instanceof MetricCapability) {
             addQualityAnalysis((MetricCapability) plugin, projectId, qualityResultToMerge, metrics);
         }

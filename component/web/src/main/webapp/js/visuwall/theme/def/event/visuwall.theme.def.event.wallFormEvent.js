@@ -112,7 +112,9 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 
 	this["#softTabs span.ui-icon-close|click|live"] = function() {
 		var index = $("li", $this.tabs).index($(this).parent());
-		$this.tabs.tabs("remove", index);
+		if (index != -1) { 
+			$this.tabs.tabs("remove", index);
+		}
 	};
 
 	
@@ -128,7 +130,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 			$("#modal .failure").html("Wall name is mandatory");
 			return false;
 		}
-		$("w#wallForm .loader").empty().html('<img src="res/img/ajax-loader.gif" />');
+		$("#wallForm .loader").empty().html('<img src="res/img/ajax-loader.gif" />');
 		$this.wallFormController.submitWallData(this, function() { // success
 			$("#wallForm .loader").empty();
 			$("#modal .success").html("Success");

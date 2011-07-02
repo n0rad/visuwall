@@ -22,6 +22,7 @@ import java.util.TreeSet;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
+import net.awired.visuwall.api.domain.quality.QualityResult;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
@@ -38,6 +39,7 @@ public class Build {
     //TODO use composition for capabilities ? 
     private TestResult unitTestResult = new TestResult();
     private TestResult integrationTestResult = new TestResult();
+    private QualityResult qualityResult = new QualityResult();
 
     public Build(int buildNumber) {
         this.buildNumber = buildNumber;
@@ -153,5 +155,13 @@ public class Build {
 
     public Date getEstimatedFinishTime() {
         return estimatedFinishTime;
+    }
+
+    public void setQualityResult(QualityResult qualityResult) {
+        this.qualityResult = qualityResult;
+    }
+
+    public QualityResult getQualityResult() {
+        return qualityResult;
     }
 }

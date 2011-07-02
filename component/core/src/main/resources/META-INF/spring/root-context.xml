@@ -51,7 +51,6 @@
 	
 	
 	<!-- TASK -->
-	<task:scheduler id="taskScheduler" />
-	<task:executor id="taskExecutor" pool-size="3" />
+	<task:scheduler id="taskScheduler" pool-size="5" />
 
 </beans>

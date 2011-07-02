@@ -54,7 +54,6 @@ ajsl.event = {
                 } else {
                 	var elements = $(selector, context);
                 }
-				
 				if (elements.length == 0 && event != 'init') {
 					LOG.error('nothing found to register event : ', ev);
 					continue;

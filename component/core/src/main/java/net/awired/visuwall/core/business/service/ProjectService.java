@@ -24,6 +24,7 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.Project;
 import net.awired.visuwall.core.business.process.capabilities.BuildCapabilityProcess;
+import net.awired.visuwall.core.business.process.capabilities.MetricCapabilityProcess;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
 import org.slf4j.Logger;
@@ -43,6 +44,9 @@ public class ProjectService {
 
     @Autowired
     BuildCapabilityProcess buildProcess;
+
+    @Autowired
+    MetricCapabilityProcess metricCapabilityProcess;
 
     public Runnable getProjectCreationRunner(final Wall wallWhereToAdd, final SoftwareAccess buildSoftwareAccess,
             final SoftwareProjectId projectId) {
@@ -106,17 +110,17 @@ public class ProjectService {
                             LOG.warn("Can not found description for project " + project, e);
                         }
 
-                        for (int buildId : buildsToUpdate) {
-                            buildProcess.updateBuild(project, buildId);
-                        }
-
                         try {
                             List<Integer> buildNumbers = project.getBuildConnection().getBuildNumbers(projectId);
                             project.setBuildNumbers(buildNumbers);
-                            buildProcess.updatePreviousCompletedBuild(project);
                             buildProcess.updateLastNotBuildingNumber(project);
+                            buildProcess.updatePreviousCompletedBuild(project);
                         } catch (Exception e) {
                             LOG.warn("Can not update previous completed build for project " + project, e);
+                        }
+
+                        for (int buildId : buildsToUpdate) {
+                            buildProcess.updateBuild(project, buildId);
                         }
 
                         // TODO check for new software to update

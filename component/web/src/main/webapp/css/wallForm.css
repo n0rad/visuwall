@@ -86,7 +86,7 @@ FIELDSET.buildField LEGEND {
 	background-color: grey;
 } 
 
-#modal DIV#softTabs INPUT, #modal DIV#softTabs LABEL {
+#modal DIV#softTabs INPUT, #modal DIV#softTabs LABEL, #modal DIV#softTabs SELECT  {
 	display: block;
 	width: 250px;
 }

@@ -65,6 +65,9 @@ visuwall.theme.def.view.navigationView = new function() {
 			close: function(event, ui) {
 				var v = $('LABEL:regex(id,softwareAccesses.*\.urlcheck)');
 				v.mouseout();
+		        $this.wallFormEvent.__getObject__(function(bean) {
+		        	ajsl.event.unregisterLive(bean, domObject);
+		        }); 
 				$.history.queryBuilder().removeController(closeController).load();
 			}
 		});
