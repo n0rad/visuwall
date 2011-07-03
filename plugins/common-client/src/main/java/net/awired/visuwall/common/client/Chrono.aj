@@ -28,13 +28,13 @@ public aspect Chrono {
         	String prefix = "";
             long end = System.currentTimeMillis();
             long duration = end - start;
-            if (duration > 200) {
+            if (duration > 900) {
             	prefix = "[SLOW DOWNLOAD] ";
             }
-            if (duration > 500) {
+            if (duration > 2000) {
                 prefix = "[VERY SLOW DOWNLOAD] ";
             }
-            if (duration >= 200) {
+            if (duration >= 900) {
             	Object[] args = thisJoinPoint.getArgs();
                 System.err.print("Chronometer "+prefix+" "+Arrays.toString(args)+", "+duration+" ms\r\n");
             }
