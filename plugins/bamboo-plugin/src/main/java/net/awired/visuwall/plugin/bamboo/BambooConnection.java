@@ -227,8 +227,8 @@ public class BambooConnection implements BuildCapability {
         checkSoftwareProjectId(softwareProjectId);
         try {
             String projectKey = softwareProjectId.getProjectId();
-            Plan project = bamboo.findPlan(projectKey);
-            String name = project.getName();
+            Plan plan = bamboo.findPlan(projectKey);
+            String name = plan.getName();
             return name;
         } catch (BambooPlanNotFoundException e) {
             throw new ProjectNotFoundException("Can't find name of software project id: " + softwareProjectId);

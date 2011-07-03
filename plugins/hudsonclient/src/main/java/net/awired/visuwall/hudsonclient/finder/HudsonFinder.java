@@ -242,7 +242,8 @@ public class HudsonFinder {
     private HudsonJob createHudsonProjectFrom(HudsonMavenMavenModuleSet moduleSet) {
         String name = moduleSet.getName();
         String description = moduleSet.getDescription();
-        boolean disabled = moduleSet.getColor() == HudsonModelBallColor.DISABLED;
+        HudsonModelBallColor color = moduleSet.getColor();
+        boolean disabled = color == HudsonModelBallColor.DISABLED || color == HudsonModelBallColor.GREY;
 
         HudsonJob hudsonJob = new HudsonJob();
         hudsonJob.setName(name);

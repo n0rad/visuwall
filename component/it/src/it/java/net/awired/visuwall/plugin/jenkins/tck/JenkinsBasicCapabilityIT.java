@@ -29,7 +29,6 @@ import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
@@ -114,8 +113,9 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
 
     @Override
     @Test
-    @Ignore
     public void should_get_a_disabled_project() throws Exception {
-
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("neverbuild");
+        boolean isDisabled = jenkins.isProjectDisabled(softwareProjectId);
+        assertTrue(isDisabled);
     }
 }
