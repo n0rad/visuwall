@@ -45,11 +45,30 @@ import net.awired.visuwall.teamcityclient.resource.TeamCityRelatedIssue;
 import net.awired.visuwall.teamcityclient.resource.TeamCityRevision;
 import net.awired.visuwall.teamcityclient.resource.TeamCityTag;
 import net.awired.visuwall.teamcityclient.resource.TeamCityVcsRoot;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import com.sun.jersey.api.client.WebResource;
 
 public class TeamCityTest {
 
+    @Mock
+    GenericSoftwareClient client;
+
+    @Mock
+    TeamCityUrlBuilder urlBuilder;
+
+    TeamCity teamcity;
+
+    @Before
+    public void init() {
+        MockitoAnnotations.initMocks(this);
+        teamcity = new TeamCity();
+        teamcity.client = client;
+        teamcity.urlBuilder = urlBuilder;
+    }
+    
     @Test(expected = NullPointerException.class)
     public void cant_pass_null_as_parameter_in_constructor() {
         new TeamCity(null);
@@ -58,10 +77,7 @@ public class TeamCityTest {
     @Test
     public void should_list_all_project_names() throws TeamCityProjectsNotFoundException {
         TeamCityProjects teamcityProjects = createProjects();
-        TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProjects);
-
-        TeamCity teamcity = new TeamCity();
-        teamcity.teamcityFinder = teamcityJerseyClient;
+        prepareClientFor(teamcityProjects);
 
         List<String> projectNames = teamcity.findProjectNames();
         assertFalse(projectNames.isEmpty());
@@ -73,10 +89,7 @@ public class TeamCityTest {
     @Test
     public void should_find_all_project() throws TeamCityProjectsNotFoundException {
         TeamCityProjects teamcityProjects = createProjects();
-        TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProjects);
-
-        TeamCity teamcity = new TeamCity();
-        teamcity.teamcityFinder = teamcityJerseyClient;
+        prepareClientFor(teamcityProjects);
 
         List<TeamCityProject> projects = teamcity.findAllProjects();
         assertFalse(projects.isEmpty());
@@ -90,10 +103,7 @@ public class TeamCityTest {
     @Test
     public void should_load_project() throws TeamCityProjectNotFoundException {
         TeamCityProject teamcityProject = createProject();
-        TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProject);
-
-        TeamCity teamcity = new TeamCity();
-        teamcity.teamcityFinder = teamcityJerseyClient;
+        prepareClientFor(teamcityProject);
 
         TeamCityProject project = teamcity.findProject("project54");
         assertEquals("http://teamcity.jetbrains.com/project.html?projectId=project54", project.getWebUrl());
@@ -107,10 +117,7 @@ public class TeamCityTest {
     @Test
     public void should_load_project_with_build_types() throws TeamCityProjectNotFoundException {
         TeamCityProject teamcityProject = createProject();
-        TeamCityFinder teamcityJerseyClient = prepareClientFor(teamcityProject);
-
-        TeamCity teamcity = new TeamCity();
-        teamcity.teamcityFinder = teamcityJerseyClient;
+        prepareClientFor(teamcityProject);
 
         TeamCityProject project = teamcity.findProject("project54");
 
@@ -130,9 +137,7 @@ public class TeamCityTest {
     @Test
     public void should_load_build() throws TeamCityBuildNotFoundException {
         TeamCityBuild teamcityBuild = createBuild();
-
-        TeamCity teamcity = new TeamCity();
-        teamcity.teamcityFinder = prepareClientFor(teamcityBuild);
+        prepareClientFor(teamcityBuild);
 
         TeamCityBuild build = teamcity.findBuild(47068);
 
@@ -189,8 +194,7 @@ public class TeamCityTest {
     public void should_load_build_type_with_builds() throws TeamCityBuildListNotFoundException {
         TeamCityBuilds builds = createBuilds();
 
-        TeamCity teamcity = new TeamCity();
-        teamcity.teamcityFinder = prepareClientFor(builds);
+        prepareClientFor(builds);
 
         TeamCityBuilds teamCityBuilds = teamcity.findBuildList("47068");
 
@@ -217,20 +221,14 @@ public class TeamCityTest {
     }
 
     @SuppressWarnings("unchecked")
-    private TeamCityFinder prepareClientFor(Object o) {
+    private void prepareClientFor(Object o) {
         WebResource resource = mock(WebResource.class);
         when(resource.get(any(Class.class))).thenReturn(o);
-
-        GenericSoftwareClient client = mock(GenericSoftwareClient.class);
         try {
             when(client.resource(anyString(), any(Class.class))).thenReturn(o);
         } catch (ResourceNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-        TeamCityUrlBuilder teamCityUrlBuilder = mock(TeamCityUrlBuilder.class);
-
-        return new TeamCityFinder(client, teamCityUrlBuilder);
     }
 
     private TeamCityBuild createBuild() {

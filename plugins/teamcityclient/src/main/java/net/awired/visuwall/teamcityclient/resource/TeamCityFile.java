@@ -16,50 +16,57 @@
 
 package net.awired.visuwall.teamcityclient.resource;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "changes")
+@XmlRootElement(name="file")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class TeamCityChanges {
+public class TeamCityFile {
 
+    @XmlAttribute(name="relative-file")
+    private String relativeFile;
+    
     @XmlAttribute
-    private String href;
-
-    @XmlAttribute
-    private int count;
+    private String file;
     
-    @XmlElements({@XmlElement(name="change")})
-    private List<TeamCityChange> changes = new ArrayList<TeamCityChange>(); 
-
-    public String getHref() {
-        return href;
-    }
-
-    public void setHref(String href) {
-        this.href = href;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
+    @XmlAttribute(name="after-revision")
+    private String afterRevision;
     
-    public List<TeamCityChange> getChanges() {
-        return changes;
+    @XmlAttribute(name="before-revision")
+    private String beforeRevision;
+
+    public String getRelativeFile() {
+        return relativeFile;
     }
-    
-    public void setChanges(List<TeamCityChange> changes) {
-        this.changes = changes;
+
+    public void setRelativeFile(String relativeFile) {
+        this.relativeFile = relativeFile;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
+    }
+
+    public String getAfterRevision() {
+        return afterRevision;
+    }
+
+    public void setAfterRevision(String afterRevision) {
+        this.afterRevision = afterRevision;
+    }
+
+    public String getBeforeRevision() {
+        return beforeRevision;
+    }
+
+    public void setBeforeRevision(String beforeRevision) {
+        this.beforeRevision = beforeRevision;
     }
 
 }

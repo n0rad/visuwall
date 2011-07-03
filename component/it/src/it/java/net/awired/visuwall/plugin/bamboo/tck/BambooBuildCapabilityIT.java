@@ -30,6 +30,7 @@ import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.tck.BuildCapabilityTCK;
 import net.awired.visuwall.plugin.bamboo.BambooConnection;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class BambooBuildCapabilityIT implements BuildCapabilityTCK {
@@ -103,5 +104,11 @@ public class BambooBuildCapabilityIT implements BuildCapabilityTCK {
         int buildNumber = bamboo.getLastBuildNumber(softwareProjectId);
         BuildTime buildTime = bamboo.getBuildTime(softwareProjectId, buildNumber);
         assertNotNull(buildTime);
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void should_get_commiters() throws Exception {
     }
 }

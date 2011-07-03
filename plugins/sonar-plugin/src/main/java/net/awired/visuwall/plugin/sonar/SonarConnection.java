@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import net.awired.visuwall.api.domain.BuildTime;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -38,7 +39,6 @@ import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
@@ -386,14 +386,6 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
         }
     }
 
-    private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
-        Preconditions.checkNotNull(softwareProjectId, "softwareProjectId is mandatory");
-    }
-
-    private void checkConnected() {
-        Preconditions.checkState(connected, "You must connect your plugin");
-    }
-
     @Override
     public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
             throws BuildNotFoundException, ProjectNotFoundException {
@@ -413,8 +405,8 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
     }
 
     @Override
-    public State getBuildState(SoftwareProjectId softwareProjectId, Integer buildNumber) throws ProjectNotFoundException,
-            BuildNotFoundException {
+    public State getBuildState(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         return State.SUCCESS;
@@ -429,8 +421,8 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
     }
 
     @Override
-    public boolean isBuilding(SoftwareProjectId softwareProjectId, Integer buildNumber) throws ProjectNotFoundException,
-            BuildNotFoundException {
+    public boolean isBuilding(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         return false;
@@ -442,6 +434,27 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         return 1;
+    }
+
+    @Override
+    public List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws BuildNotFoundException, ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        checkBuildNumber(buildNumber);
+        return new ArrayList<Commiter>();
+    }
+
+    private void checkBuildNumber(int buildNumber) {
+        Preconditions.checkArgument(buildNumber >= 0, "buildNumber must be >= 0");
+    }
+
+    private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
+        Preconditions.checkNotNull(softwareProjectId, "softwareProjectId is mandatory");
+    }
+
+    private void checkConnected() {
+        Preconditions.checkState(connected, "You must connect your plugin");
     }
 
 }

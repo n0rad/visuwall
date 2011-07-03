@@ -19,11 +19,13 @@ package net.awired.visuwall.plugin.teamcity;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -32,6 +34,7 @@ import net.awired.visuwall.teamcityclient.exception.TeamCityProjectNotFoundExcep
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuildItem;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
+import net.awired.visuwall.teamcityclient.resource.TeamCityChange;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
 import net.awired.visuwall.teamcityclient.resource.TeamCityStatus;
 import org.junit.Before;
@@ -121,6 +124,23 @@ public class TeamCityConnectionTest {
 
         SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
         teamCityConnection.isProjectDisabled(softwareProjectId);
+    }
+
+    @Test
+    public void should_get_commiters() throws Exception {
+        List<TeamCityChange> changes = new ArrayList<TeamCityChange>() {
+            {
+                TeamCityChange change = new TeamCityChange();
+                change.setUsername("npryce");
+                add(change);
+            }
+        };
+        when(teamCity.findChanges(anyInt())).thenReturn(changes);
+
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        List<Commiter> commiters = teamCityConnection.getBuildCommiters(softwareProjectId, 1);
+        Commiter commiter = commiters.get(0);
+        assertEquals("npryce", commiter.getName());
     }
 
     private TeamCityConnection createConnectionPlugin() {

@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.awired.visuwall.api.domain.BuildTime;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -35,6 +36,7 @@ import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.hudsonclient.Hudson;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
+import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonJob;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
@@ -301,6 +303,35 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
         } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException("Can't find job with software project id: " + softwareProjectId, e);
         }
+    }
+
+    @Override
+    public List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws BuildNotFoundException, ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        checkBuildNumber(buildNumber);
+        List<Commiter> commiters = new ArrayList<Commiter>();
+        try {
+            String jobName = softwareProjectId.getProjectId();
+            HudsonBuild build = hudson.findBuild(jobName, buildNumber);
+            Set<HudsonCommiter> commiterSet = build.getCommiters();
+            for (HudsonCommiter hudsonCommiter : commiterSet) {
+                Commiter commiter = new Commiter(hudsonCommiter.getId());
+                commiter.setName(hudsonCommiter.getName());
+                commiter.setEmail(hudsonCommiter.getEmail());
+                if (!commiters.contains(commiter)) {
+                    commiters.add(commiter);
+                }
+            }
+        } catch (HudsonJobNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find job with software project id: " + softwareProjectId, e);
+        } catch (HudsonBuildNotFoundException e) {
+            throw new BuildNotFoundException("Can't find build with software project id: " + softwareProjectId
+                    + " and buildNumber: " + buildNumber, e);
+        }
+
+        return commiters;
     }
 
     private void checkBuildNumber(Integer buildNumber) {

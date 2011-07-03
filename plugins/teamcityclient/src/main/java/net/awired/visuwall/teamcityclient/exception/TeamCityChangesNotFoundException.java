@@ -14,28 +14,14 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.plugin.tck;
+package net.awired.visuwall.teamcityclient.exception;
 
-public interface BuildCapabilityTCK {
+public class TeamCityChangesNotFoundException extends Exception {
 
-    // getBuildNumbers
-    void should_get_build_numbers() throws Exception;
+    private static final long serialVersionUID = 6692531144956830877L;
 
-    // getEstimatedFinishTime
-    void should_get_estimated_date() throws Exception;
+    public TeamCityChangesNotFoundException(String msg, Throwable t) {
+        super(msg, t);
+    }
 
-    // getLastBuildNumber
-    void should_get_last_build_number() throws Exception;
-
-    // getLastBuildState
-    void should_get_build_state() throws Exception;
-
-    // isBuilding
-    void should_get_is_building() throws Exception;
-
-    // getBuildTime
-    void should_get_build_time() throws Exception;
-
-    // getBuildCommiters
-    void should_get_commiters() throws Exception;
 }
