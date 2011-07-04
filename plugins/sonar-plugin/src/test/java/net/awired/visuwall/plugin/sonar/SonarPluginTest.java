@@ -30,8 +30,8 @@ import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
-import net.awired.visuwall.plugin.sonar.resource.Properties;
-import net.awired.visuwall.plugin.sonar.resource.Property;
+import net.awired.visuwall.sonarclient.resource.Properties;
+import net.awired.visuwall.sonarclient.resource.Property;
 import org.junit.Before;
 import org.junit.Test;
 

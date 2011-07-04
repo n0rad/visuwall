@@ -14,17 +14,17 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.exception;
+package net.awired.visuwall.sonarclient.exception;
 
-public class SonarMeasureNotFoundException extends Exception {
+public class SonarResourceNotFoundException extends Exception {
 
-    private static final long serialVersionUID = -7205356356110212352L;
+    private static final long serialVersionUID = 633618427408818570L;
 
-    public SonarMeasureNotFoundException(String msg) {
+    public SonarResourceNotFoundException(String msg) {
         super(msg);
     }
 
-    public SonarMeasureNotFoundException(String msg, Throwable cause) {
+    public SonarResourceNotFoundException(String msg, Throwable cause) {
         super(msg, cause);
     }
 

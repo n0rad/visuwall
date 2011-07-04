@@ -14,18 +14,17 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.exception;
+package net.awired.visuwall.sonarclient.domain;
 
-public class SonarResourceNotFoundException extends Exception {
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
-    private static final long serialVersionUID = 633618427408818570L;
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "metrics")
+public class SonarMetrics {
 
-    public SonarResourceNotFoundException(String msg) {
-        super(msg);
-    }
-
-    public SonarResourceNotFoundException(String msg, Throwable cause) {
-        super(msg, cause);
-    }
+    public List<SonarQualityMetric> metric;
 
 }

@@ -18,16 +18,17 @@ package net.awired.visuwall.plugin.sonar;
 
 import static org.junit.Assert.assertTrue;
 import net.awired.visuwall.IntegrationTestData;
-import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
+import net.awired.visuwall.sonarclient.SonarClient;
+import net.awired.visuwall.sonarclient.exception.SonarMeasureNotFoundException;
 import org.junit.Test;
 import org.sonar.wsclient.services.Measure;
 
-public class MeasureFinderIT {
+public class SonarClientIT {
 
     @Test
     public void should_find_measure() throws SonarMeasureNotFoundException {
-        SonarFinder measureFinder = new SonarFinder(IntegrationTestData.SONAR_URL);
-        Measure measure = measureFinder.findMeasure(IntegrationTestData.STRUTS_ARTIFACT_ID, "violations_density");
+        SonarClient sonarClient = new SonarClient(IntegrationTestData.SONAR_URL);
+        Measure measure = sonarClient.findMeasure(IntegrationTestData.STRUTS_ARTIFACT_ID, "violations_density");
         assertTrue(measure.getFormattedValue().length() > 0);
         assertTrue(measure.getValue() > 0);
     }

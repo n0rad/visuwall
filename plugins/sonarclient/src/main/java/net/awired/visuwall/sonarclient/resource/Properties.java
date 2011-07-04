@@ -14,18 +14,29 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.domain;
+package net.awired.visuwall.sonarclient.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
-import net.awired.visuwall.api.domain.quality.QualityMetric;
 
+@XmlRootElement(name = "properties")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "metrics")
-public class SonarMetrics {
+public class Properties {
 
-    public List<QualityMetric> metric;
+    @XmlElements({ @XmlElement(name = "property") })
+    private List<Property> properties = new ArrayList<Property>();
+
+    public List<Property> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
+    }
 
 }

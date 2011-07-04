@@ -14,18 +14,38 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.exception;
+package net.awired.visuwall.sonarclient.resource;
 
-public class SonarMetricsNotFoundException extends Exception {
+import javax.xml.bind.annotation.XmlRootElement;
 
-    private static final long serialVersionUID = -405181214114015401L;
+@XmlRootElement(name = "property")
+public class Property {
 
-    public SonarMetricsNotFoundException(String cause, Exception e) {
-        super(cause, e);
+    private String key;
+
+    private String value;
+
+    public String getKey() {
+        return key;
     }
 
-    public SonarMetricsNotFoundException(String msg) {
-        super(msg);
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public boolean isKey(String key) {
+        if (key == null || this.key == null) {
+            return false;
+        }
+        return key.equals(this.key);
     }
 
 }

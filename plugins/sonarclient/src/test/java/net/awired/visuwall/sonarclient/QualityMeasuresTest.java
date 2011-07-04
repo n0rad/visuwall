@@ -14,10 +14,10 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar;
+package net.awired.visuwall.sonarclient;
 
 import static org.junit.Assert.assertEquals;
-import net.awired.visuwall.api.domain.quality.QualityMeasure;
+import net.awired.visuwall.sonarclient.domain.SonarQualityMeasure;
 import org.junit.Test;
 import org.sonar.wsclient.services.Measure;
 
@@ -30,7 +30,7 @@ public class QualityMeasuresTest {
         coverageMeasure.setValue(5D);
         coverageMeasure.setMetricName("Coverage");
 
-        QualityMeasure qualityMeasure = QualityMeasures.asQualityMeasure(coverageMeasure, "measureKey");
+        SonarQualityMeasure qualityMeasure = QualityMeasures.asQualityMeasure(coverageMeasure, "measureKey");
 
         assertEquals("5%", qualityMeasure.getFormattedValue());
         assertEquals(5D, qualityMeasure.getValue(), 0);

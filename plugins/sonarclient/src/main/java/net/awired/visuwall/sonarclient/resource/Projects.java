@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.resource;
+package net.awired.visuwall.sonarclient.resource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,19 +24,18 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "properties")
+@XmlRootElement(name = "projects")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Properties {
+public class Projects {
 
-    @XmlElements({ @XmlElement(name = "property") })
-    private List<Property> properties = new ArrayList<Property>();
+    @XmlElements({ @XmlElement(name = "project") })
+    private List<Project> projects = new ArrayList<Project>();
 
-    public List<Property> getProperties() {
-        return properties;
+    public List<Project> getProjects() {
+        return projects;
     }
 
-    public void setProperties(List<Property> properties) {
-        this.properties = properties;
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
-
 }

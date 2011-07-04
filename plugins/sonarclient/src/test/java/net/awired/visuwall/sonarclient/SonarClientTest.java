@@ -14,11 +14,20 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar;
+package net.awired.visuwall.sonarclient;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
-import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
+import java.util.ArrayList;
+import java.util.Map;
+import net.awired.visuwall.common.client.GenericSoftwareClient;
+import net.awired.visuwall.common.client.ResourceNotFoundException;
+import net.awired.visuwall.sonarclient.domain.SonarMetrics;
+import net.awired.visuwall.sonarclient.domain.SonarQualityMetric;
+import net.awired.visuwall.sonarclient.exception.SonarMeasureNotFoundException;
+import net.awired.visuwall.sonarclient.exception.SonarMetricsNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -31,18 +40,22 @@ import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
-public class SonarFinderTest {
+public class SonarClientTest {
 
     @Mock
     Sonar sonar;
 
-    SonarFinder measureFinder;
+    @Mock
+    GenericSoftwareClient genericSoftwareClient;
+
+    SonarClient sonarClient;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        measureFinder = new SonarFinder("http://sonar:9000");
-        measureFinder.sonar = sonar;
+        sonarClient = new SonarClient("http://sonar:9000");
+        sonarClient.sonar = sonar;
+        sonarClient.client = genericSoftwareClient;
     }
 
     @Test
@@ -57,7 +70,7 @@ public class SonarFinderTest {
 
         when(sonar.find((ResourceQuery) Matchers.anyObject())).thenReturn(resource);
 
-        Measure measure = measureFinder.findMeasure("artifactId", "coverage");
+        Measure measure = sonarClient.findMeasure("artifactId", "coverage");
 
         assertEquals(coverageMeasure.getFormattedValue(), measure.getFormattedValue());
         assertEquals(coverageMeasure.getValue(), measure.getValue());
@@ -68,28 +81,52 @@ public class SonarFinderTest {
     public void should_throw_exception_when_sonar_connection_fails() throws SonarMeasureNotFoundException {
         when(sonar.find(Mockito.any(ResourceQuery.class))).thenThrow(new ConnectionException());
 
-        measureFinder.findMeasure("artifactId", "measureKey");
+        sonarClient.findMeasure("artifactId", "measureKey");
     }
 
     @Test(expected = SonarMeasureNotFoundException.class)
     public void should_throw_exception_when_resource_is_not_fond() throws SonarMeasureNotFoundException {
         when(sonar.find(Mockito.any(ResourceQuery.class))).thenReturn(null);
 
-        measureFinder.findMeasure("artifactId", "measureKey");
+        sonarClient.findMeasure("artifactId", "measureKey");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void should_throw_exception_when_artifact_id_is_empty() throws SonarMeasureNotFoundException {
-        measureFinder.findMeasure("", "measureKey");
+        sonarClient.findMeasure("", "measureKey");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void should_throw_exception_when_sonar_url_is_empty() {
-        new SonarFinder("");
+        new SonarClient("");
     }
 
     @Test
     public void should_create_sonar_with_login_and_password() {
-        new SonarFinder("sonarUrl", "login", "password");
+        new SonarClient("sonarUrl", "login", "password");
     }
+
+    @Test
+    public void should_find_metrics() throws Exception {
+        SonarQualityMetric qualityMetric = new SonarQualityMetric();
+        qualityMetric.setKey("metricKey");
+
+        SonarMetrics sonarMetrics = new SonarMetrics();
+        sonarMetrics.metric = new ArrayList<SonarQualityMetric>();
+        sonarMetrics.metric.add(qualityMetric);
+
+        when(genericSoftwareClient.resource(anyString(), any(Class.class))).thenReturn(sonarMetrics);
+
+        Map<String, SonarQualityMetric> metrics = sonarClient.findMetrics();
+        assertEquals(qualityMetric, metrics.get("metricKey"));
+    }
+
+    @Test(expected = SonarMetricsNotFoundException.class)
+    public void should_throw_exception_if_sonar_metrics_are_not_found() throws Exception {
+        Object call = genericSoftwareClient.resource(anyString(), any(Class.class));
+        when(call).thenThrow(new ResourceNotFoundException("not found"));
+
+        sonarClient.findMetrics();
+    }
+
 }

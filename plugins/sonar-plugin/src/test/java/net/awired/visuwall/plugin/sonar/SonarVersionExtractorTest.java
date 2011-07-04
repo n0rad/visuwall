@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.InputStream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
-import net.awired.visuwall.plugin.sonar.resource.Properties;
+import net.awired.visuwall.sonarclient.resource.Properties;
 import org.junit.Test;
 
 public class SonarVersionExtractorTest {
