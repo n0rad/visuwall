@@ -116,7 +116,6 @@ public class BuildCapabilityProcess {
             Build build = project.findCreatedBuild(buildNumber);
 
             State state = project.getBuildConnection().getBuildState(projectId, buildNumber);
-
             build.setState(state);
 
             // buildTime

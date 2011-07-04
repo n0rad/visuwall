@@ -11,14 +11,14 @@ public class CapabilitiesResult {
     private QualityResult qualityResult;
 
     public void setIntegrationTestResult(TestResult integrationTestResult) {
-        if (integrationTestResult == null) {
+        if (this.integrationTestResult == null) {
             this.integrationTestResult = new TestResult();
         }
         setTestResult(integrationTestResult, this.integrationTestResult);
     }
 
     public void setUnitTestResult(TestResult unitTestResult) {
-        if (unitTestResult == null) {
+        if (this.unitTestResult == null) {
             this.unitTestResult = new TestResult();
         }
         setTestResult(unitTestResult, this.unitTestResult);

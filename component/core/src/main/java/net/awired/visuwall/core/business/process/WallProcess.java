@@ -122,7 +122,8 @@ public class WallProcess {
                     }
                     Runnable projectCreationRunner = WallProcess.this.projectService.getProjectCreationRunner(wall,
                             softwareAccess, projectId);
-                    taskScheduler.schedule(projectCreationRunner, new Date());
+                    projectCreationRunner.run();
+                    //                    taskScheduler.schedule(projectCreationRunner, new Date());
                 }
             }
         };

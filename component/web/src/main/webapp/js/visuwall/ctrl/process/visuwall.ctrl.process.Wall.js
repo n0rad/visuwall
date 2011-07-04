@@ -90,19 +90,29 @@ visuwall.ctrl.process.Wall = function(wallName) {
 		$this._updateBuilding(project.id, project.building, project.finishTime);
 		$this._updateTimers(project, lastBuild);
 		$this.wallView.updateCommiters(project.id, $this._getCommiterNames(lastBuild.commiters));
-	//	$this.wallView.updateQuality(project.id, lastBuild.qualityResult.measures);
+		if (lastBuild.qualityResult) {
+			$this.wallView.updateQuality(project.id, lastBuild.qualityResult.measures);
+		}
+		
+		if (lastBuild.unitTestResult && lastBuild.unitTestResult.coverage) {
+			$this.wallView.updateUTCoverage(project.id, lastBuild.unitTestResult.coverage);
+		}
+		if (lastBuild.unitTestResult) {
+			$this.wallView.updateUT(project.id,
+					lastBuild.unitTestResult.failCount,
+					lastBuild.unitTestResult.passCount,
+					lastBuild.unitTestResult.skipCount);
+		}
 
-		$this.wallView.updateUTCoverage(project.id, lastBuild.unitTestResult.coverage);
-		$this.wallView.updateUT(project.id,
-				lastBuild.unitTestResult.failCount,
-				lastBuild.unitTestResult.passCount,
-				lastBuild.unitTestResult.skipCount);
-
-		$this.wallView.updateITCoverage(project.id, lastBuild.integrationTestResult.coverage);
-		$this.wallView.updateIT(project.id,
-				lastBuild.integrationTestResult.failCount,
-				lastBuild.integrationTestResult.passCount,
-				lastBuild.integrationTestResult.skipCount);
+		if (lastBuild.integrationTestResult && lastBuild.integrationTestResult.coverage) {
+			$this.wallView.updateITCoverage(project.id, lastBuild.integrationTestResult.coverage);
+		}
+		if (lastBuild.integrationTestResult) {
+			$this.wallView.updateIT(project.id,
+					lastBuild.integrationTestResult.failCount,
+					lastBuild.integrationTestResult.passCount,
+					lastBuild.integrationTestResult.skipCount);
+		}
 		
 		if (project.previousCompletedBuildNumber != 0) {
 //			var failDiff = lastBuild.unitTestResult.failCount - previousBuild.unitTestResult.failCount;

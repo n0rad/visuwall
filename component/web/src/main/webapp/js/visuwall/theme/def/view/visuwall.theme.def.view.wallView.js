@@ -36,7 +36,7 @@ visuwall.theme.def.view.wallView = new function() {
 	
 	this.getProjectIds = function(callback) {
 		var res = [];
-		var projects = $('LI', $this.table);
+		var projects = $('LI.project', $this.table);
 		for (var i = 0; i < projects.length; i++) {
 			res[i] = projects[i].id;
 		}
