@@ -43,12 +43,20 @@ visuwall.ctrl.process.Wall = function(wallName) {
 										if (!isProjectRes) {
 											$this.wallView.addProject(newProject.id, newProject.name);
 											$this._updateProject(newProject);
+											$this.wallView.setLastUpdate(newProject.id, status.lastUpdate);
 										}
 									});
 								});
 					} else {
 						$this._updateBuilding(status.id, status.building, status.buildingTimeleftSecond);
-//						$this._checkVersionChange(status.id, status);
+						$this.wallView.getLastUpdate(status.id, function(lastUpdate) {
+							if (lastUpdate != status.lastUpdate) {
+								$this.projectService.findProject($this.wallName, status.id, function(newProjectData) {
+									$this._updateProject(newProjectData);
+									$this.wallView.setLastUpdate(newProjectData.id, newProjectData.lastUpdate);
+								});
+							}
+						});
 					}
 					projectDone.push(status.id);
 				
@@ -152,16 +160,16 @@ visuwall.ctrl.process.Wall = function(wallName) {
 		}
 	};
 
-	this._checkVersionChange = function(projectId, building, latestBuildId) {
-		if (!building) {
-			$this.wallView.getBuildId(projectId, function(buildId) {
-				if (latestBuildId != buildId) {
-					$this.projectService.project($this.wallName, projectId, function(newProjectData) {
-						$this._updateProject(newProjectData);
-					});					
-				}
-			});
-		}
-	};
+//	this._checkVersionChange = function(projectId, building, latestBuildId) {
+//		if (!building) {
+//			$this.wallView.getBuildId(projectId, function(buildId) {
+//				if (latestBuildId != buildId) {
+//					$this.projectService.project($this.wallName, projectId, function(newProjectData) {
+//						$this._updateProject(newProjectData);
+//					});					
+//				}
+//			});
+//		}
+//	};
 
 };

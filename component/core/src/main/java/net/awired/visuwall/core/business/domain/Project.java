@@ -18,6 +18,7 @@ package net.awired.visuwall.core.business.domain;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,7 @@ public class Project implements Comparable<Project> {
     private int lastBuildNumber;
     private int lastNotBuildingNumber;
     private int previousCompletedBuildNumber;
+    private Date lastUpdate;
 
     @Transient
     private ProjectKey projectKey;
@@ -240,6 +242,14 @@ public class Project implements Comparable<Project> {
     @JsonIgnore
     public void setProjectKey(ProjectKey projectKey) {
         this.projectKey = projectKey;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
     }
 
 }

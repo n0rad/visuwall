@@ -28,6 +28,16 @@ visuwall.theme.def.view.wallView = new function() {
 //	$('ul#projectsTable li:last-child').live('click', function() {
 //	    $(this).prependTo('ul#projectsTable');
 //	});
+	
+	this.setLastUpdate = function(projectId, date) {
+		var lastUpdate = $this._getElement(projectId, 'SPAN.lastUpdate');
+		lastUpdate.html(date);		
+	};
+
+	this.getLastUpdate = function(projectId, callback) {
+		var lastUpdate = $this._getElement(projectId, 'SPAN.lastUpdate');
+		callback(lastUpdate.html());
+	};
 
 	this.isProject = function(projectId, callback) {
 		var isproject = $this._getElement(projectId, '').length > 0;
@@ -301,7 +311,7 @@ visuwall.theme.def.view.wallView = new function() {
 		projectTD.append(projectInnerTable);
 		
 		projectInnerTable.append($('<tr><td class="projectName">' + projectName
-				+ ' <div class="inlineInfo"><abbr class="timeago" title=""></abbr> <span class="duration"></span><div></td></tr>'));
+				+ ' <div class="inlineInfo"><abbr class="timeago" title=""></abbr> <span class="duration"></span><div><span class="lastUpdate"></span></td></tr>'));
 		projectInnerTable.append($('<tr style="display:none" class="commitersTR"><td><ul class="commiters marquee"></ul></tr></td>'));
 		projectInnerTable.append($('<tr style="display:none" class="qualityTR"><td><ul class="quality marquee"></ul></tr></td>'));
 		projectInnerTable.append($('<tr style="display:none" class= "timeleftTR"><td><p class="timeleft"></p></tr></td>'));

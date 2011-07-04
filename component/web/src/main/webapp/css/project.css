@@ -85,6 +85,10 @@ TABLE.uTest TD, TABLE.iTest TD {
 	valign: middle;
 }
 
+SPAN.lastUpdate {
+	display: none;
+}
+
 .project .projectName {
 	color: white;
 	text-align: center;
