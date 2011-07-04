@@ -25,7 +25,7 @@ import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
 
-public enum CapabilitiesEnum {
+public enum CapabilityEnum {
     build(BuildCapability.class), //
     test(TestCapability.class), //
     metric(MetricCapability.class), //
@@ -34,7 +34,7 @@ public enum CapabilitiesEnum {
 
     private final Class<? extends BasicCapability> capabilityClass;
 
-    private CapabilitiesEnum(Class<? extends BasicCapability> capabilityClass) {
+    private CapabilityEnum(Class<? extends BasicCapability> capabilityClass) {
         this.capabilityClass = capabilityClass;
     }
 
@@ -42,9 +42,9 @@ public enum CapabilitiesEnum {
         return capabilityClass;
     }
 
-    public static List<CapabilitiesEnum> getCapabilitiesForClass(Class<? extends BasicCapability> pluginConnection) {
-        List<CapabilitiesEnum> capabilitiesEnums = new ArrayList<CapabilitiesEnum>();
-        for (CapabilitiesEnum capabilitiesEnum : values()) {
+    public static List<CapabilityEnum> getCapabilitiesForClass(Class<? extends BasicCapability> pluginConnection) {
+        List<CapabilityEnum> capabilitiesEnums = new ArrayList<CapabilityEnum>();
+        for (CapabilityEnum capabilitiesEnum : values()) {
             //TODO create classImplements with a list of interfaces in params and a list of intefaces in result ?
             if (ReflectTool.classImplement(pluginConnection, capabilitiesEnum.getCapabilityClass())) {
                 capabilitiesEnums.add(capabilitiesEnum);

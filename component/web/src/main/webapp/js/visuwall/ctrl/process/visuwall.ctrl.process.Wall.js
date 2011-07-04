@@ -38,8 +38,13 @@ visuwall.ctrl.process.Wall = function(wallName) {
 						// this is a new project
 						$this.projectService.findProject($this.wallName, stat.id,
 								function(newProject) {
-									$this.wallView.addProject(newProject.id, newProject.name);
-									$this._updateProject(newProject);
+									// seems to be necessary to check if project exists after reception from server
+									$this.wallView.isProject(status.id, function(isProjectRes) {
+										if (!isProjectRes) {
+											$this.wallView.addProject(newProject.id, newProject.name);
+											$this._updateProject(newProject);
+										}
+									});
 								});
 					} else {
 						$this._updateBuilding(status.id, status.building, status.buildingTimeleftSecond);

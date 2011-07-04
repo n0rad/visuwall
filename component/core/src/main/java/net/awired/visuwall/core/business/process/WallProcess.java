@@ -22,9 +22,11 @@ import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
+import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.core.business.domain.Project;
 import net.awired.visuwall.core.business.service.PluginService;
 import net.awired.visuwall.core.business.service.ProjectService;
 import net.awired.visuwall.core.business.service.SoftwareAccessService;
@@ -62,12 +64,31 @@ public class WallProcess {
                 //TODO prevent wall hiding (exception causing wall not added to wall list) if software not found
                 rebuildConnectionPluginsInSoftwareAccess(wall);
                 for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
-                    Runnable task = getDiscoverProjectsRunner(wall, softwareAccess);
-                    @SuppressWarnings("unchecked")
-                    ScheduledFuture<Object> futur = taskScheduler.scheduleWithFixedDelay(task,
-                            softwareAccess.getProjectFinderDelaySecond() * 1000);
-                    softwareAccess.setProjectFinderTask(futur);
+                    if (softwareAccess.getConnection() instanceof BuildCapability) {
+                        Runnable task = getDiscoverBuildProjectsRunner(wall, softwareAccess);
+                        task.run();
+                        //TODO skip first immediate schedule run as called by hand upper 
+                        @SuppressWarnings("unchecked")
+                        ScheduledFuture<Object> futur = taskScheduler.scheduleWithFixedDelay(task,
+                                softwareAccess.getProjectFinderDelaySecond() * 1000);
+                        softwareAccess.setProjectFinderTask(futur);
+                    }
                 }
+
+                // here as task war run ones without schedule, projects exists, we need that for first run 
+                // to add other software without waiting for the second project discover
+                for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
+                    if (!(softwareAccess.getConnection() instanceof BuildCapability)) {
+                        Runnable task = getDiscoverOtherProjectsRunner(wall, softwareAccess);
+                        task.run();
+                        //TODO skip first immediate schedule run as called by hand upper 
+                        @SuppressWarnings("unchecked")
+                        ScheduledFuture<Object> futur = taskScheduler.scheduleWithFixedDelay(task,
+                                softwareAccess.getProjectFinderDelaySecond() * 1000);
+                        softwareAccess.setProjectFinderTask(futur);
+                    }
+                }
+
             }
         }, new Date());
     }
@@ -84,34 +105,46 @@ public class WallProcess {
         }
     }
 
-    private Runnable getDiscoverProjectsRunner(final Wall wall, final SoftwareAccess softwareAccess) {
+    private Runnable getDiscoverBuildProjectsRunner(final Wall wall, final SoftwareAccess softwareAccess) {
+        if (!(softwareAccess.getConnection() instanceof BuildCapability)) {
+            throw new RuntimeException("Software should be a build one " + softwareAccess);
+        }
         return new Runnable() {
             @Override
             public void run() {
                 LOG.info("Running Project Discover task for " + softwareAccess + " in wall " + wall);
-                if (softwareAccess.getConnection() instanceof BuildCapability) {
-                    Set<SoftwareProjectId> projectIds = softwareAccessService.discoverBuildProjects(softwareAccess);
-                    List<SoftwareProjectId> wallBuildProjectIds = wall.getProjects().getBuildProjectIds();
-                    for (SoftwareProjectId projectId : projectIds) {
-                        if (wallBuildProjectIds.contains(projectId)) {
-                            // this project is already registered in list
-                            continue;
-                        }
-                        Runnable projectCreationRunner = WallProcess.this.projectService.getProjectCreationRunner(
-                                wall, softwareAccess, projectId);
-                        taskScheduler.schedule(projectCreationRunner, new Date());
+                Set<SoftwareProjectId> projectIds = softwareAccessService.discoverBuildProjects(softwareAccess);
+                List<SoftwareProjectId> wallBuildProjectIds = wall.getProjects().getBuildProjectIds();
+                for (SoftwareProjectId projectId : projectIds) {
+                    if (wallBuildProjectIds.contains(projectId)) {
+                        // this project is already registered in list
+                        continue;
                     }
-                } else {
-                    //                    TODO when using SoftwareProjectId
-                    //                    for (ConnectedProject project : wall.getProjects()) {
-                    //                        boolean contains = softwareAccess.getConnection().contains(project.getProjectId());
-                    //                        if (contains) {
-                    //                            project.getCapabilities().add(softwareAccess.getConnection());
-                    //                        }
-                    //                    }
+                    Runnable projectCreationRunner = WallProcess.this.projectService.getProjectCreationRunner(wall,
+                            softwareAccess, projectId);
+                    taskScheduler.schedule(projectCreationRunner, new Date());
                 }
             }
+        };
+    }
 
+    private Runnable getDiscoverOtherProjectsRunner(final Wall wall, final SoftwareAccess softwareAccess) {
+        if (softwareAccess.getConnection() instanceof BuildCapability) {
+            throw new RuntimeException("Software should not be a build one " + softwareAccess);
+        }
+        return new Runnable() {
+            @Override
+            public void run() {
+                for (Project project : wall.getProjects()) {
+                    try {
+                        SoftwareProjectId softwareProjectId = softwareAccess.getConnection().identify(
+                                project.getProjectKey());
+                        project.getCapabilities().put(softwareProjectId, softwareAccess.getConnection());
+                    } catch (ProjectNotFoundException e) {
+                        LOG.debug("ProjectKey {} not found in software {}", project.getProjectKey(), softwareAccess);
+                    }
+                }
+            }
         };
     }
 }

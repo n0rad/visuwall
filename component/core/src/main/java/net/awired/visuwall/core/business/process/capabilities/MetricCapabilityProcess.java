@@ -17,7 +17,6 @@
 package net.awired.visuwall.core.business.process.capabilities;
 
 import java.util.Map.Entry;
-import javax.persistence.Transient;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
@@ -32,20 +31,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MetricCapabilityProcess {
-    @Transient
-    String[] metrics = new String[] { "coverage", "ncloc", "violations_density", "it_coverage" };
+    public static String[] metrics = new String[] { "coverage", "ncloc", "violations_density", "it_coverage" };
 
     public void updateLastBuildMetrics(Project project) {
         for (SoftwareProjectId softwareProjectId : project.getCapabilities().keySet()) {
             BasicCapability capability = project.getCapabilities().get(softwareProjectId);
-            if (capability instanceof MetricCapability) {
-                if (project.getLastNotBuildingNumber() != 0) {
-                    QualityResult qualityResult = ((MetricCapability) capability).analyzeQuality(softwareProjectId,
-                            metrics);
-                    Build build = project.findCreatedBuild(project.getLastNotBuildingNumber());
-                    build.setQualityResult(qualityResult);
-                }
-            }
+
         }
     }
 
@@ -62,8 +53,8 @@ public class MetricCapabilityProcess {
         TestResult unitTestResultToMerge = null;
         TestResult integrationTestResultToMerge = null;
         if (build != null) {
-            unitTestResultToMerge = build.getUnitTestResult();
-            integrationTestResultToMerge = build.getIntegrationTestResult();
+            //            unitTestResultToMerge = build.getUnitTestResult();
+            //            integrationTestResultToMerge = build.getIntegrationTestResult();
         }
 
         //TODO remove all function

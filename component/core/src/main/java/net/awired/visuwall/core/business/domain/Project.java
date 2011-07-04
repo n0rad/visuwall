@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
+import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
@@ -49,6 +50,8 @@ public class Project implements Comparable<Project> {
     private int lastNotBuildingNumber;
     private int previousCompletedBuildNumber;
 
+    @Transient
+    private ProjectKey projectKey;
     @Transient
     private Map<SoftwareProjectId, BasicCapability> capabilities = new HashMap<SoftwareProjectId, BasicCapability>();
     @Transient
@@ -227,6 +230,16 @@ public class Project implements Comparable<Project> {
     @JsonIgnore
     public void setCapabilities(Map<SoftwareProjectId, BasicCapability> capabilities) {
         this.capabilities = capabilities;
+    }
+
+    @JsonIgnore
+    public ProjectKey getProjectKey() {
+        return projectKey;
+    }
+
+    @JsonIgnore
+    public void setProjectKey(ProjectKey projectKey) {
+        this.projectKey = projectKey;
     }
 
 }
