@@ -30,7 +30,6 @@ import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.hudson.HudsonConnection;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
@@ -105,8 +104,9 @@ public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
 
     @Override
     @Test
-    @Ignore
     public void should_get_a_disabled_project() throws Exception {
-
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("neverbuild");
+        boolean isDisabled = hudson.isProjectDisabled(softwareProjectId);
+        assertTrue(isDisabled);
     }
 }

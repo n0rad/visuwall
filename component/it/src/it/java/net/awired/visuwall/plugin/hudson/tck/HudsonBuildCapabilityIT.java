@@ -19,10 +19,13 @@ package net.awired.visuwall.plugin.hudson.tck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.BuildTime;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -103,6 +106,22 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
         int buildNumber = hudson.getLastBuildNumber(softwareProjectId);
         BuildTime buildTime = hudson.getBuildTime(softwareProjectId, buildNumber);
         assertNotNull(buildTime);
+    }
+
+    @Override
+    @Test
+    public void should_get_commiters() throws Exception {
+        List<String> commiterNames = Arrays.asList("Julien Smadja");
+
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("visuwall");
+        List<Commiter> commiters = hudson.getBuildCommiters(softwareProjectId, 654);
+
+        assertEquals(commiterNames.size(), commiters.size());
+
+        for (Commiter commiter : commiters) {
+            String commiterName = commiter.getName();
+            assertTrue(commiterNames.contains(commiterName));
+        }
     }
 
     private SoftwareProjectId struts() {

@@ -35,4 +35,7 @@ public interface BuildCapabilityTCK {
 
     // getBuildTime
     void should_get_build_time() throws Exception;
+
+    // getBuildCommiters
+    void should_get_commiters() throws Exception;
 }

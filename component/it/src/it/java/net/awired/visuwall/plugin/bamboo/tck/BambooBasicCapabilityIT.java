@@ -19,6 +19,7 @@ package net.awired.visuwall.plugin.bamboo.tck;
 import static net.awired.visuwall.IntegrationTestData.BAMBOO_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -96,16 +97,18 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
 
     @Override
     @Test
-    @Ignore
     public void should_get_name_of_a_project() throws Exception {
-
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("NEVERBUILDPROJECTKEY-NEVERBUILDPLANKEY");
+        String name = bamboo.getName(softwareProjectId);
+        assertEquals("neverbuildProjectName - neverbuildPlanName", name);
     }
 
     @Override
     @Test
-    @Ignore
     public void should_get_a_disabled_project() throws Exception {
-
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("NEVERBUILDPROJECTKEY-NEVERBUILDPLANKEY");
+        boolean isDisabled = bamboo.isProjectDisabled(softwareProjectId);
+        assertTrue(isDisabled);
     }
 
 }

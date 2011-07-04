@@ -17,7 +17,6 @@
 package net.awired.visuwall.hudsonclient.builder;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
@@ -27,10 +26,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
-import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
 import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
-import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import org.junit.Test;
 
 public class HudsonBuildBuilderTest {
@@ -43,16 +40,8 @@ public class HudsonBuildBuilderTest {
         commiters.add(new HudsonCommiter("dude"));
         commiters.add(new HudsonCommiter("sweet"));
 
-        HudsonTestResult integrationTests = new HudsonTestResult();
-        HudsonTestResult unitTests = new HudsonTestResult();
         Date startTime = new Date();
         String state = "UNKNOWN";
-
-        TestResultBuilder testResultBuilder = mock(TestResultBuilder.class);
-        when(testResultBuilder.buildIntegrationTestResult(any(HudsonMavenReportersSurefireAggregatedReport.class)))
-                .thenReturn(integrationTests);
-        when(testResultBuilder.buildUnitTestResult(any(HudsonMavenReportersSurefireAggregatedReport.class)))
-                .thenReturn(unitTests);
 
         List<HudsonModelUser> users = new ArrayList<HudsonModelUser>();
         users.add(new HudsonModelUser());
@@ -66,18 +55,14 @@ public class HudsonBuildBuilderTest {
         when(setBuild.getNumber()).thenReturn(buildNumber);
         when(setBuild.getTimestamp()).thenReturn(startTime.getTime());
 
-        HudsonMavenReportersSurefireAggregatedReport surefireReport = mock(HudsonMavenReportersSurefireAggregatedReport.class);
-
         HudsonBuildBuilder hudsonBuildBuilder = new HudsonBuildBuilder();
-        hudsonBuildBuilder.testResultBuilder = testResultBuilder;
-        HudsonBuild hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport, commiters);
+        HudsonBuild hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, commiters);
 
         assertEquals(duration, hudsonBuild.getDuration());
         assertEquals(buildNumber, hudsonBuild.getBuildNumber());
         assertEquals(commiters, hudsonBuild.getCommiters());
         assertEquals(startTime, hudsonBuild.getStartTime());
         assertEquals(state, hudsonBuild.getState());
-        assertEquals(integrationTests, hudsonBuild.getIntegrationTestResult());
-        assertEquals(unitTests, hudsonBuild.getUnitTestResult());
     }
+
 }

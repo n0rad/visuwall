@@ -14,67 +14,59 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.resource;
+package net.awired.visuwall.teamcityclient.resource;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "project")
+@XmlRootElement(name="file")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Project {
+public class TeamCityFile {
 
+    @XmlAttribute(name="relative-file")
+    private String relativeFile;
+    
     @XmlAttribute
-    private Integer id;
+    private String file;
+    
+    @XmlAttribute(name="after-revision")
+    private String afterRevision;
+    
+    @XmlAttribute(name="before-revision")
+    private String beforeRevision;
 
-    @XmlAttribute
-    private String key;
-
-    private String name;
-
-    private String scope;
-
-    private String qualifier;
-
-    public Integer getId() {
-        return id;
+    public String getRelativeFile() {
+        return relativeFile;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setRelativeFile(String relativeFile) {
+        this.relativeFile = relativeFile;
     }
 
-    public String getKey() {
-        return key;
+    public String getFile() {
+        return file;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setFile(String file) {
+        this.file = file;
     }
 
-    public String getName() {
-        return name;
+    public String getAfterRevision() {
+        return afterRevision;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAfterRevision(String afterRevision) {
+        this.afterRevision = afterRevision;
     }
 
-    public String getScope() {
-        return scope;
+    public String getBeforeRevision() {
+        return beforeRevision;
     }
 
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-
-    public String getQualifier() {
-        return qualifier;
-    }
-
-    public void setQualifier(String qualifier) {
-        this.qualifier = qualifier;
+    public void setBeforeRevision(String beforeRevision) {
+        this.beforeRevision = beforeRevision;
     }
 
 }

@@ -16,9 +16,13 @@
 
 package net.awired.visuwall.teamcityclient.resource;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "changes")
@@ -30,6 +34,9 @@ public class TeamCityChanges {
 
     @XmlAttribute
     private int count;
+    
+    @XmlElements({@XmlElement(name="change")})
+    private List<TeamCityChange> changes = new ArrayList<TeamCityChange>(); 
 
     public String getHref() {
         return href;
@@ -45,6 +52,14 @@ public class TeamCityChanges {
 
     public void setCount(int count) {
         this.count = count;
+    }
+    
+    public List<TeamCityChange> getChanges() {
+        return changes;
+    }
+    
+    public void setChanges(List<TeamCityChange> changes) {
+        this.changes = changes;
     }
 
 }

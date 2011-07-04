@@ -73,17 +73,11 @@ public class HudsonFinder {
         HudsonMavenMavenModuleSetBuild setBuild = findBuildByJobNameAndBuildNumber(jobName, buildNumber);
         String[] commiterNames = HudsonXmlHelper.getCommiterNames(setBuild);
         Set<HudsonCommiter> commiters = findCommiters(commiterNames);
-        HudsonMavenReportersSurefireAggregatedReport surefireReport = findSurefireReport(jobName, setBuild);
-        HudsonBuild hudsonBuild;
-        if (surefireReport == null) {
-            hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, commiters);
-        } else {
-            hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, surefireReport, commiters);
-        }
+        HudsonBuild hudsonBuild = hudsonBuildBuilder.createHudsonBuild(setBuild, commiters);
         return hudsonBuild;
     }
 
-    private HudsonMavenReportersSurefireAggregatedReport findSurefireReport(String jobName,
+    public HudsonMavenReportersSurefireAggregatedReport findSurefireReport(String jobName,
             HudsonMavenMavenModuleSetBuild setBuild) {
         String testResultUrl = hudsonUrlBuilder.getTestResultUrl(jobName, setBuild.getNumber());
         try {
@@ -248,7 +242,8 @@ public class HudsonFinder {
     private HudsonJob createHudsonProjectFrom(HudsonMavenMavenModuleSet moduleSet) {
         String name = moduleSet.getName();
         String description = moduleSet.getDescription();
-        boolean disabled = moduleSet.getColor() == HudsonModelBallColor.DISABLED;
+        HudsonModelBallColor color = moduleSet.getColor();
+        boolean disabled = color == HudsonModelBallColor.DISABLED || color == HudsonModelBallColor.GREY;
 
         HudsonJob hudsonJob = new HudsonJob();
         hudsonJob.setName(name);

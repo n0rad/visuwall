@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.BuildTime;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -96,6 +97,14 @@ public class TeamBuildCapabilityIT implements BuildCapabilityTCK {
         int buildNumber = teamcity.getLastBuildNumber(softwareProjectId);
         BuildTime buildTime = teamcity.getBuildTime(softwareProjectId, buildNumber);
         assertNotNull(buildTime);
+    }
+
+    @Override
+    @Test
+    public void should_get_commiters() throws Exception {
+        SoftwareProjectId softwareProjectId = amazonProjectSoftwareId();
+        List<Commiter> commiters = teamcity.getBuildCommiters(softwareProjectId, 37438);
+        assertFalse(commiters.isEmpty());
     }
 
     private SoftwareProjectId amazonProjectSoftwareId() {

@@ -27,13 +27,13 @@ public aspect Chrono {
         	Object method = thisJoinPointStaticPart.getSignature();
             long end = System.currentTimeMillis();
             long duration = end - start;
-            if (duration > 200) {
+            if (duration > 1100) {
             	prefix = "[SLOW QUERY] ";
             }
-            if (duration > 500) {
+            if (duration > 2100) {
                 prefix = "[VERY SLOW QUERY] ";
             }
-            if (duration >= 200) {
+            if (duration >= 1100) {
                 System.err.print("Chronometer "+prefix+method+" "+duration+" ms\r\n");
             }
         }

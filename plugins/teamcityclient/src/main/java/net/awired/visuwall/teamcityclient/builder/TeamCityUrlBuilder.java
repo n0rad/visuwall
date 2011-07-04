@@ -52,7 +52,17 @@ public class TeamCityUrlBuilder {
         Preconditions.checkArgument(buildId >= 0, "buildId must be >= 0");
         return build("/builds/id:" + buildId);
     }
+    
+    public String getChanges(int buildId) {
+        Preconditions.checkArgument(buildId >= 0, "buildId must be >= 0");
+        return build("/changes?build=id:" + buildId);
+    }
 
+    public String getChange(String changeId) {
+        Preconditions.checkNotNull(changeId, "changeId is mandatory");
+        return build("/changes/id:"+changeId);
+    }
+    
     public String getVersion() {
         return build("/version");
     }

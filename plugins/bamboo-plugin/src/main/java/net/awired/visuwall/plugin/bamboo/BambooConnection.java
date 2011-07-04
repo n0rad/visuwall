@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import net.awired.visuwall.api.domain.BuildTime;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -67,8 +68,8 @@ public class BambooConnection implements BuildCapability {
     }
 
     @Override
-    public boolean isBuilding(SoftwareProjectId softwareProjectId, Integer buildNumber) throws ProjectNotFoundException,
-            BuildNotFoundException {
+    public boolean isBuilding(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         checkBuildNumber(buildNumber);
@@ -226,8 +227,8 @@ public class BambooConnection implements BuildCapability {
         checkSoftwareProjectId(softwareProjectId);
         try {
             String projectKey = softwareProjectId.getProjectId();
-            Plan project = bamboo.findPlan(projectKey);
-            String name = project.getName();
+            Plan plan = bamboo.findPlan(projectKey);
+            String name = plan.getName();
             return name;
         } catch (BambooPlanNotFoundException e) {
             throw new ProjectNotFoundException("Can't find name of software project id: " + softwareProjectId);
@@ -269,6 +270,15 @@ public class BambooConnection implements BuildCapability {
         } catch (BambooPlanNotFoundException e) {
             throw new ProjectNotFoundException("Can't find plan with software project id: " + softwareProjectId, e);
         }
+    }
+
+    @Override
+    public List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws BuildNotFoundException, ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        checkBuildNumber(buildNumber);
+        return new ArrayList<Commiter>();
     }
 
     private void checkBuildNumber(Integer buildNumber) {

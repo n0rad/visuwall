@@ -14,18 +14,14 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.exception;
+package net.awired.visuwall.teamcityclient.exception;
 
-public class SonarResourceNotFoundException extends Exception {
+public class TeamCityChangesNotFoundException extends Exception {
 
-    private static final long serialVersionUID = 633618427408818570L;
+    private static final long serialVersionUID = 6692531144956830877L;
 
-    public SonarResourceNotFoundException(String msg) {
-        super(msg);
-    }
-
-    public SonarResourceNotFoundException(String msg, Throwable cause) {
-        super(msg, cause);
+    public TeamCityChangesNotFoundException(String msg, Throwable t) {
+        super(msg, t);
     }
 
 }

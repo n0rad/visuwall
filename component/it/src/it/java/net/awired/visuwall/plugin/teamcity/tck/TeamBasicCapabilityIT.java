@@ -31,7 +31,6 @@ import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.teamcity.TeamCityConnection;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
@@ -114,9 +113,10 @@ public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
 
     @Override
     @Test
-    @Ignore
     public void should_get_a_disabled_project() throws Exception {
-
+        SoftwareProjectId projectSoftwareId = amazonProjectSoftwareId();
+        boolean isDisabled = teamcity.isProjectDisabled(projectSoftwareId);
+        assertFalse(isDisabled);
     }
 
     private SoftwareProjectId amazonProjectSoftwareId() {

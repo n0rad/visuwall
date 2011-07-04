@@ -19,10 +19,12 @@ package net.awired.visuwall.plugin.teamcity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import net.awired.visuwall.api.domain.BuildTime;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -34,12 +36,15 @@ import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.teamcityclient.TeamCity;
 import net.awired.visuwall.teamcityclient.exception.TeamCityBuildListNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityBuildNotFoundException;
+import net.awired.visuwall.teamcityclient.exception.TeamCityChangesNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuildItem;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuildType;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
+import net.awired.visuwall.teamcityclient.resource.TeamCityChange;
+import net.awired.visuwall.teamcityclient.resource.TeamCityChanges;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -307,6 +312,32 @@ public class TeamCityConnection implements BuildCapability {
             throw new ProjectNotFoundException("Can't find project with software project id:" + softwareProjectId, e);
         }
     }
+    
+    @Override
+    public List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws BuildNotFoundException, ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        checkBuildNumber(buildNumber);
+        List<Commiter> commiters = new ArrayList<Commiter>();
+        try {
+            List<TeamCityChange> changes = teamCity.findChanges(buildNumber);
+            for (TeamCityChange change:changes) {
+                String username = change.getUsername();
+                Commiter commiter = new Commiter(username);
+                commiter.setName(username);
+                if(!commiters.contains(commiter)) {
+                    commiters.add(commiter);
+                }
+            }
+            return commiters;
+        } catch (TeamCityChangesNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(e.getMessage());
+            }
+        }
+        return commiters;
+    }
 
     private void addBuildNumbers(Set<Integer> numbers, TeamCityBuildType buildType) {
         try {
@@ -373,5 +404,5 @@ public class TeamCityConnection implements BuildCapability {
     private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
         Preconditions.checkNotNull(softwareProjectId, "softwareProjectId is mandatory");
     }
-
+    
 }

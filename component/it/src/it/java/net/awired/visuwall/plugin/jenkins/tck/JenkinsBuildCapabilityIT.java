@@ -19,10 +19,13 @@ package net.awired.visuwall.plugin.jenkins.tck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.BuildTime;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -85,10 +88,6 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
         assertNotNull(date);
     }
 
-    private SoftwareProjectId struts() {
-        return new SoftwareProjectId("struts");
-    }
-
     @Override
     @Test
     public void should_get_build_numbers() throws Exception {
@@ -107,5 +106,29 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
         int buildNumber = jenkins.getLastBuildNumber(softwareProjectId);
         BuildTime buildTime = jenkins.getBuildTime(softwareProjectId, buildNumber);
         assertNotNull(buildTime);
+    }
+
+    @Override
+    @Test
+    public void should_get_commiters() throws Exception {
+        List<String> commiterNames = Arrays.asList("mcucchiara", "lukaszlenart", "jogep", "rgielen");
+
+        SoftwareProjectId softwareProjectId = struts2();
+        List<Commiter> commiters = jenkins.getBuildCommiters(softwareProjectId, 4);
+
+        assertEquals(commiterNames.size(), commiters.size());
+
+        for (Commiter commiter : commiters) {
+            String commiterName = commiter.getName();
+            assertTrue(commiterNames.contains(commiterName));
+        }
+    }
+
+    private SoftwareProjectId struts2() {
+        return new SoftwareProjectId("struts 2 instable");
+    }
+
+    private SoftwareProjectId struts() {
+        return new SoftwareProjectId("struts");
     }
 }

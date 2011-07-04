@@ -19,19 +19,27 @@ package net.awired.visuwall.plugin.sonar;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import net.awired.visuwall.api.domain.BuildTime;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
@@ -49,7 +57,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
 
-public class SonarConnection implements MetricCapability, TestCapability {
+public class SonarConnection implements MetricCapability, TestCapability, BuildCapability {
 
     private static final Logger LOG = LoggerFactory.getLogger(SonarConnection.class);
 
@@ -376,6 +384,69 @@ public class SonarConnection implements MetricCapability, TestCapability {
                 LOG.debug("Can't initialize metrics", e);
             }
         }
+    }
+
+    @Override
+    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws BuildNotFoundException, ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        BuildTime buildTime = new BuildTime();
+        buildTime.setDuration(0);
+        buildTime.setStartTime(new Date());
+        return buildTime;
+    }
+
+    @Override
+    public List<Integer> getBuildNumbers(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        return Arrays.asList(1);
+    }
+
+    @Override
+    public State getBuildState(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws ProjectNotFoundException, BuildNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        return State.SUCCESS;
+    }
+
+    @Override
+    public Date getEstimatedFinishTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws ProjectNotFoundException, BuildNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        return new Date();
+    }
+
+    @Override
+    public boolean isBuilding(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws ProjectNotFoundException, BuildNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        return false;
+    }
+
+    @Override
+    public int getLastBuildNumber(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
+            BuildNumberNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        return 1;
+    }
+
+    @Override
+    public List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, Integer buildNumber)
+            throws BuildNotFoundException, ProjectNotFoundException {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        checkBuildNumber(buildNumber);
+        return new ArrayList<Commiter>();
+    }
+
+    private void checkBuildNumber(int buildNumber) {
+        Preconditions.checkArgument(buildNumber >= 0, "buildNumber must be >= 0");
     }
 
     private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {

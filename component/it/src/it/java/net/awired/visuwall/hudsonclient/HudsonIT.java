@@ -24,7 +24,6 @@ import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonJob;
-import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 import org.junit.Test;
@@ -36,23 +35,6 @@ public class HudsonIT {
     @Test
     public void should_find_not_built_project() throws HudsonJobNotFoundException {
         hudson.findJob("neverbuild");
-    }
-
-    @Test
-    public void should_count_it_and_ut() throws HudsonBuildNotFoundException, HudsonJobNotFoundException {
-        HudsonBuild build = hudson.findBuild("itcoverage-project", 17);
-        HudsonTestResult unitTestResult = build.getUnitTestResult();
-        HudsonTestResult integrationTestResult = build.getIntegrationTestResult();
-
-        assertEquals(1, unitTestResult.getFailCount());
-        assertEquals(5, unitTestResult.getSkipCount());
-        assertEquals(3, unitTestResult.getPassCount());
-        assertEquals(9, unitTestResult.getTotalCount());
-
-        assertEquals(4, integrationTestResult.getFailCount());
-        assertEquals(6, integrationTestResult.getSkipCount());
-        assertEquals(2, integrationTestResult.getPassCount());
-        assertEquals(12, integrationTestResult.getTotalCount());
     }
 
     @Test

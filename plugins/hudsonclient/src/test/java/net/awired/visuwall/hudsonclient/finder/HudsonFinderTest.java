@@ -17,13 +17,10 @@
 package net.awired.visuwall.hudsonclient.finder;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.net.URL;
 import java.util.ArrayList;
@@ -38,7 +35,6 @@ import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.builder.TestResultBuilder;
-import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.generated.hudson.HudsonUser;
 import net.awired.visuwall.hudsonclient.generated.hudson.HudsonView;
@@ -47,7 +43,6 @@ import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.Hud
 import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
 import net.awired.visuwall.hudsonclient.util.ClasspathFiles;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -90,25 +85,6 @@ public class HudsonFinderTest {
         assertEquals("jsmadja", commiter.getId());
         assertEquals("Julien Smadja", commiter.getName());
         assertEquals("jsmadja@xebia.fr", commiter.getEmail());
-    }
-
-    @Ignore
-    @Test
-    public void testFind() throws Exception {
-        Class<Class> clazz1 = Class.class;
-        Class<Class> clazz2 = Class.class;
-        when(client.resource(anyString(), any(clazz1))).thenReturn(moduleSetBuild);
-        when(client.resource(anyString(), any(clazz2))).thenReturn(surefireReport);
-        when(
-                hudsonBuildBuilder.createHudsonBuild(any(HudsonMavenMavenModuleSetBuild.class),
-                        any(HudsonMavenReportersSurefireAggregatedReport.class), any(Set.class))).thenReturn(
-                new HudsonBuild());
-
-        HudsonBuild hudsonBuild = hudsonFinder.find("projectName", 5);
-
-        assertNotNull(hudsonBuild);
-        verify(hudsonUrlBuilder).getBuildUrl(anyString(), anyInt());
-        verify(client).resource(anyString(), HudsonMavenMavenModuleSetBuild.class);
     }
 
     @Test

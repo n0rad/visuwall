@@ -17,7 +17,6 @@
 package net.awired.visuwall.plugin;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -44,13 +43,13 @@ public class BasicCapabilityParametersTest {
 
     @Parameters
     public static Collection<Object[]> createData() {
-        @SuppressWarnings("unchecked")
-        List<Class<? extends BasicCapability>> connections = Arrays.asList(//
-                JenkinsConnection.class, //
-                HudsonConnection.class, //
-                TeamCityConnection.class, //
-                BambooConnection.class, //
-                SonarConnection.class);
+        List<Class<? extends BasicCapability>> connections = new ArrayList<Class<? extends BasicCapability>>(){{
+            add(JenkinsConnection.class);
+            add(HudsonConnection.class);
+            add(TeamCityConnection.class);
+            add(BambooConnection.class);
+            add(SonarConnection.class);
+        }};
         List<Object[]> objects = new ArrayList<Object[]>();
         for (Class<? extends BasicCapability> clazz : connections) {
             objects.add(new Object[] { clazz });

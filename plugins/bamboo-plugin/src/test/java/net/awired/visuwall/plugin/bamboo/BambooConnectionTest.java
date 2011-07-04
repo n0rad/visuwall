@@ -20,6 +20,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
+import java.util.List;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.bambooclient.Bamboo;
@@ -75,9 +77,18 @@ public class BambooConnectionTest {
     public void should_throw_exception_when_project_is_not_found() throws Exception {
         Throwable notFound = new BambooPlanNotFoundException("not found");
         when(bamboo.findPlan(anyString())).thenThrow(notFound);
-        
+
         SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
         bambooConnection.isProjectDisabled(softwareProjectId);
+    }
+
+    @Test
+    public void should_return_empty_list_because_there_is_no_commiter_infos_in_rest_api() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+
+        List<Commiter> buildCommiters = bambooConnection.getBuildCommiters(softwareProjectId, 0);
+
+        assertTrue(buildCommiters.isEmpty());
     }
 
 }

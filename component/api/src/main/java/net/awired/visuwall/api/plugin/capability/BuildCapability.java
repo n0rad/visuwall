@@ -18,7 +18,9 @@ package net.awired.visuwall.api.plugin.capability;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import net.awired.visuwall.api.domain.BuildTime;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -27,8 +29,16 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BuildCapability extends BasicCapability {
 
-    //    List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, Integer buildNumber)
-    //            throws BuildNotFoundException, ProjectNotFoundException;
+    
+    /**
+     * Return a list of commiters
+     * @param softwareProjectId
+     * @param buildNumber
+     * @return
+     * @throws BuildNotFoundException
+     * @throws ProjectNotFoundException
+     */
+    List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, Integer buildNumber) throws BuildNotFoundException, ProjectNotFoundException;
 
     /**
      * Return build time information
