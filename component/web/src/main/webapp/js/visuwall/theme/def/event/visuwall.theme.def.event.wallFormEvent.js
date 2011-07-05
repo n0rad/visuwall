@@ -273,6 +273,9 @@ var ff = '				<table class="softwareInfo">'
 			// project Names
 			var projectNamesFormElem = $('SELECT:regex(id,softwareAccesses.*\.projectNames)', tabContent);
 			var oldVal = projectNamesFormElem.val();
+			if (oldVal == null) {
+				oldVal = $(projectNamesFormElem).data('newVal');
+			}
 			projectNamesFormElem.empty();
 			for (var i = 0; i < softwareInfo.projectNames.length; i++) {
 				var projectName = softwareInfo.projectNames[i];
@@ -283,6 +286,9 @@ var ff = '				<table class="softwareInfo">'
 			// views
 			var projectViewsFormElem = $('SELECT:regex(id,softwareAccesses.*\.viewNames)', tabContent);
 			var oldVal = projectViewsFormElem.val();
+			if (oldVal == null) {
+				oldVal = $(projectViewsFormElem).data('newVal');
+			}
 			projectViewsFormElem.empty();
 			if (softwareInfo.viewNames) {
 				for (var i = 0; i < softwareInfo.viewNames.length; i++) {
@@ -299,7 +305,6 @@ var ff = '				<table class="softwareInfo">'
 		});
 	};
 	this['INPUT:regex(id,softwareAccesses.*\.url)|change|live'] = urlFunc;
-
 
 	var delayChange = function(context, id) {
 		$('DIV.' + id + 'Slider', $(context).parent()).slider("option", "value", $(context).val());

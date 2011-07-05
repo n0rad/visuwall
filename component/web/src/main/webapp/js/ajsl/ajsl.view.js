@@ -20,6 +20,21 @@ ajsl.view = new function() {
 	this.formFields = "input, checkbox, select, textarea";
 	this.valueFormFields = "input[type=text], input[type=hidden], checkbox, select, textarea";
 
+	this.setValue = function(elem, value) {
+		if (elem.is(':checkbox')) {
+			//TODO change to prop with jquery 1.6
+			elem.attr('checked', value == true ? 'checked' : '').change();
+//			elem.prop("checked", );
+		} else {
+//			jQuery.data(elem, 'oldVal', elem.val());
+//			jQuery.data(elem, 'newVal', value);
+
+			elem.data('oldVal', elem.val());
+			elem.data('newVal', value);
+			elem.val(value).change();
+		}
+	};
+	
 	this.rebuildFormRec = function(form, data, formManager, root, rootMethod) {
 		if (root == undefined) {
 			root = '';
@@ -28,28 +43,35 @@ ajsl.view = new function() {
 			rootMethod = 'addForm';
 		}
 
-		for (var formElem in data) {
-			if (data[formElem] instanceof Array) {
-				var assertMethodName = rootMethod + formElem.ucfirst();
-				for ( var i = 0; i < data[formElem].length; i++) {
-					if (assertMethodName in formManager) {
-						formManager[assertMethodName](i);
+		
+		if (!(jQuery.isArray(data) && typeof(data[0]) != 'object')) {
+			for (var formElem in data) {
+				if (data[formElem] instanceof Array) {
+					var assertMethodName = rootMethod + formElem.ucfirst();
+					if (jQuery.isArray(data[formElem]) && typeof(data[formElem][0]) != 'object') {
+						if (assertMethodName in formManager) {
+							formManager[assertMethodName](i);
+						}
+						$this.rebuildFormRec(form, data[formElem], formManager, root + formElem, assertMethodName);
+					} else {
+						for ( var i = 0; i < data[formElem].length; i++) {
+							if (assertMethodName in formManager) {
+								formManager[assertMethodName](i);
+							}
+							$this.rebuildFormRec(form, data[formElem][i], formManager, root + formElem
+									+ '[' + i + '].', assertMethodName);
+						}
 					}
-					$this.rebuildFormRec(form, data[formElem][i], formManager, root + formElem
-							+ '[' + i + '].', assertMethodName);
-				}
-			} else {
-				var elem = $('[name="' + root + formElem + '"]', form);
-				if (elem.is(':checkbox')) {
-					//TODO change to prop with jquery 1.6
-					elem.attr('checked', data[formElem] == true ? 'checked' : '').change();
-//					elem.prop("checked", );
 				} else {
-					// .trigger('change');
-					elem.val(data[formElem]).change();					
+					var elem = $('[name="' + root + formElem + '"]', form);
+					$this.setValue(elem, data[formElem]);
 				}
-			}
+			}			
+		} else {
+			var elem = $('[name="' + root + '"]', form);
+			$this.setValue(elem, data);			
 		}
+		
 	};
 
 	this.resetFormValues = function(element) {
