@@ -50,9 +50,6 @@ public class SonarClient {
 
     private String sonarUrl;
 
-    public SonarClient() {
-    }
-
     public SonarClient(String url) {
         this(url, null, null);
     }
@@ -80,10 +77,6 @@ public class SonarClient {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(artifactId), "artifactId is a mandatory parameter");
         Preconditions.checkNotNull(measureKey, "measureKey is a mandatory parameter");
         Measure measure = findMeasureFromSonar(artifactId, measureKey);
-        if (measure == null) {
-            throw new SonarMeasureNotFoundException("Can't find measure key: " + measureKey + ", artifactId: "
-                    + artifactId);
-        }
         return measure;
     }
 

@@ -21,7 +21,7 @@ import net.awired.visuwall.sonarclient.domain.SonarQualityMeasure;
 import org.junit.Test;
 import org.sonar.wsclient.services.Measure;
 
-public class QualityMeasuresTest {
+public class SonarQualityMeasuresTest {
 
     @Test
     public void should_find_quality_measure() {

@@ -63,20 +63,7 @@ public final class SonarQualityMeasure {
             return false;
         }
         SonarQualityMeasure qm = (SonarQualityMeasure) o;
-        boolean isEqual = true;
-        if (key != null) {
-            isEqual &= key.equals(qm.key);
-        }
-        if (name != null) {
-            isEqual &= name.equals(qm.name);
-        }
-        if (value != null) {
-            isEqual &= value.equals(qm.value);
-        }
-        if (formattedValue != null) {
-            isEqual &= formattedValue.equals(qm.formattedValue);
-        }
-        return isEqual;
+        return Objects.equal(key, qm.key);
     }
 
     @Override

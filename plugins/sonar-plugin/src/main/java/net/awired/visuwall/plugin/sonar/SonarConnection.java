@@ -16,8 +16,6 @@
 
 package net.awired.visuwall.plugin.sonar;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -59,7 +57,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import com.google.common.io.ByteStreams;
 
 public class SonarConnection implements MetricCapability, TestCapability, BuildCapability {
 
@@ -91,19 +88,6 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
             sonarClient = new SonarClient(url, login, password);
         }
         connected = true;
-    }
-
-    public boolean isSonarInstance(URL url) {
-        checkConnected();
-        Preconditions.checkNotNull(url, "url is mandatory");
-        try {
-            url = new URL(url.toString() + "/api/properties");
-            byte[] content = ByteStreams.toByteArray(url.openStream());
-            String xml = new String(content);
-            return xml.contains("sonar.core.version");
-        } catch (IOException e) {
-            return false;
-        }
     }
 
     @Override
@@ -179,8 +163,7 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
         Preconditions.checkNotNull(projectKey, "projectKey is mandatory");
         try {
             String mavenId = projectKey.getMavenId();
-            Resource resource;
-            resource = sonarClient.findResource(mavenId);
+            Resource resource = sonarClient.findResource(mavenId);
             SoftwareProjectId softwareProjectId = new SoftwareProjectId(resource.getKey());
             return softwareProjectId;
         } catch (SonarResourceNotFoundException e) {
@@ -315,12 +298,12 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
             MavenIdNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
-        String artifactId = softwareProjectId.getProjectId();
         try {
+            String artifactId = softwareProjectId.getProjectId();
             Resource resource = sonarClient.findResource(artifactId);
             return resource.getKey();
         } catch (SonarResourceNotFoundException e) {
-            throw new ProjectNotFoundException("Can't get name of software project id: " + softwareProjectId, e);
+            throw new MavenIdNotFoundException("Can't get maven id of software project id: " + softwareProjectId, e);
         }
     }
 
@@ -418,7 +401,7 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         BuildTime buildTime = new BuildTime();
-        buildTime.setDuration(0);
+        buildTime.setDuration(1);
         buildTime.setStartTime(new Date());
         return buildTime;
     }

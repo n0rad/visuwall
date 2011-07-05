@@ -14,38 +14,25 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.sonarclient.resource;
+package net.awired.visuwall.plugin.sonar;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "property")
-public class Property {
+@XmlRootElement(name = "properties")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Properties {
 
-    private String key;
+    @XmlElements({ @XmlElement(name = "property") })
+    private List<Property> properties = new ArrayList<Property>();
 
-    private String value;
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public boolean isKey(String key) {
-        if (key == null || this.key == null) {
-            return false;
-        }
-        return key.equals(this.key);
+    public List<Property> getProperties() {
+        return properties;
     }
 
 }

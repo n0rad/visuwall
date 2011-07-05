@@ -22,19 +22,28 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.awired.visuwall.api.domain.BuildTime;
+import net.awired.visuwall.api.domain.Commiter;
+import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
+import net.awired.visuwall.api.exception.MavenIdNotFoundException;
+import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.sonarclient.SonarClient;
 import net.awired.visuwall.sonarclient.domain.SonarQualityMetric;
 import net.awired.visuwall.sonarclient.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.sonarclient.exception.SonarMetricsNotFoundException;
+import net.awired.visuwall.sonarclient.exception.SonarResourceNotFoundException;
 import net.awired.visuwall.sonarclient.resource.Project;
 import net.awired.visuwall.sonarclient.resource.Projects;
 import org.junit.Before;
@@ -42,6 +51,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sonar.wsclient.services.Measure;
+import org.sonar.wsclient.services.Resource;
 
 public class SonarConnectionTest {
 
@@ -228,8 +238,201 @@ public class SonarConnectionTest {
     }
 
     @Test
-    public void should_return_false_when_url_is_not_sonar_instance() throws MalformedURLException {
-        assertFalse(sonar.isSonarInstance(new URL("http://foo.bar")));
+    public void projects_should_never_be_disabled() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        boolean isDisabled = sonar.isProjectDisabled(softwareProjectId);
+        assertFalse(isDisabled);
+    }
+
+    @Test
+    public void build_numbers_should_not_be_empty() throws ProjectNotFoundException {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        List<Integer> buildNumbers = sonar.getBuildNumbers(softwareProjectId);
+        assertFalse(buildNumbers.isEmpty());
+    }
+
+    @Test
+    public void build_state_should_always_be_success() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        State state = sonar.getBuildState(softwareProjectId, 1);
+        assertEquals(State.SUCCESS, state);
+    }
+
+    @Test
+    public void build_time_should_always_be_set() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        BuildTime buildTime = sonar.getBuildTime(softwareProjectId, 1);
+        assertNotNull(buildTime);
+        assertNotNull(buildTime.getStartTime());
+        assertTrue(buildTime.getDuration() > 0);
+    }
+
+    @Test
+    public void builds_should_never_be_building() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        boolean isBuilding = sonar.isBuilding(softwareProjectId, 1);
+        assertFalse(isBuilding);
+    }
+
+    @Test
+    public void last_build_number_should_always_be_1() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        int lastBuildNumber = sonar.getLastBuildNumber(softwareProjectId);
+        assertEquals(1, lastBuildNumber);
+    }
+
+    @Test
+    public void commiter_list_should_always_be_empty() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        List<Commiter> commiters = sonar.getBuildCommiters(softwareProjectId, 1);
+        assertTrue(commiters.isEmpty());
+    }
+
+    @Test
+    public void estimated_finish_time_must_not_be_null() throws Exception {
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        Date estimatedFinishTime = sonar.getEstimatedFinishTime(softwareProjectId, 1);
+        assertNotNull(estimatedFinishTime);
+    }
+
+    @Test
+    public void should_get_maven_id() throws Exception {
+        Resource resource = new Resource();
+        resource.setKey("artifactId");
+        when(sonarClient.findResource(anyString())).thenReturn(resource);
+
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        String mavenId = sonar.getMavenId(softwareProjectId);
+
+        assertEquals("artifactId", mavenId);
+    }
+
+    @Test
+    public void should_get_project_name() throws Exception {
+        Resource resource = new Resource();
+        resource.setName("name");
+        when(sonarClient.findResource(anyString())).thenReturn(resource);
+
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        String name = sonar.getName(softwareProjectId);
+
+        assertEquals("name", name);
+    }
+
+    @Test(expected = ProjectNotFoundException.class)
+    public void should_throw_exception_when_searching_name_of_inexistant_project() throws Exception {
+        Throwable notFound = new SonarResourceNotFoundException("not found");
+        when(sonarClient.findResource(anyString())).thenThrow(notFound);
+
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        sonar.getName(softwareProjectId);
+    }
+
+    @Test
+    public void should_get_project_description() throws Exception {
+        Resource resource = new Resource();
+        resource.setLongName("description");
+        when(sonarClient.findResource(anyString())).thenReturn(resource);
+
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        String description = sonar.getDescription(softwareProjectId);
+
+        assertEquals("description", description);
+    }
+
+    @Test(expected = ProjectNotFoundException.class)
+    public void should_throw_exception_when_searching_description_of_inexistant_project() throws Exception {
+        Throwable notFound = new SonarResourceNotFoundException("not found");
+        when(sonarClient.findResource(anyString())).thenThrow(notFound);
+
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        sonar.getDescription(softwareProjectId);
+    }
+
+    @Test(expected = MavenIdNotFoundException.class)
+    public void should_throw_exception_when_searching_maven_id_of_inexistant_project() throws Exception {
+        Throwable notFound = new SonarResourceNotFoundException("not found");
+        when(sonarClient.findResource(anyString())).thenThrow(notFound);
+
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        sonar.getMavenId(softwareProjectId);
+    }
+
+    @Test
+    public void should_find_all_software_project_ids() throws Exception {
+        Project project = new Project();
+        project.setKey("key");
+
+        Projects projects = new Projects();
+        projects.getProjects().add(project);
+
+        when(sonarClient.findProjects()).thenReturn(projects);
+
+        List<SoftwareProjectId> softwareProjectIds = sonar.findAllSoftwareProjectIds();
+        assertFalse(softwareProjectIds.isEmpty());
+        SoftwareProjectId softwareProjectId = softwareProjectIds.get(0);
+        assertEquals("key", softwareProjectId.getProjectId());
+    }
+
+    @Test
+    public void should_not_fail_when_searching_all_software_project_ids() throws Exception {
+        Throwable notFound = new ResourceNotFoundException("not found");
+        when(sonarClient.findProjects()).thenThrow(notFound);
+
+        List<SoftwareProjectId> softwareProjectIds = sonar.findAllSoftwareProjectIds();
+        assertTrue(softwareProjectIds.isEmpty());
+    }
+
+    @Test
+    public void should_find_software_project_ids_by_name() throws Exception {
+        Project project1 = new Project();
+        project1.setName("name1");
+        Project project2 = new Project();
+        project2.setName("name2");
+        project2.setKey("sonarKey");
+
+        Projects projects = new Projects();
+        projects.getProjects().add(project1);
+        projects.getProjects().add(project2);
+
+        when(sonarClient.findProjects()).thenReturn(projects);
+
+        List<SoftwareProjectId> softwareProjectIds = sonar.findSoftwareProjectIdsByNames(Arrays.asList("name2"));
+        SoftwareProjectId softwareProjectId = softwareProjectIds.get(0);
+
+        assertEquals("sonarKey", softwareProjectId.getProjectId());
+    }
+
+    @Test
+    public void should_not_fail_when_searching_spi_by_names() throws Exception {
+        Throwable notFound = new ResourceNotFoundException("not found");
+        when(sonarClient.findProjects()).thenThrow(notFound);
+
+        List<SoftwareProjectId> softwareProjectIds = sonar.findSoftwareProjectIdsByNames(new ArrayList<String>());
+        assertTrue(softwareProjectIds.isEmpty());
+    }
+
+    @Test
+    public void should_identify_project_with_maven_id() throws Exception {
+        ProjectKey projectKey = new ProjectKey();
+        projectKey.setMavenId("groupId:artifactId");
+
+        Resource resource = new Resource();
+        resource.setKey("groupId:artifactId");
+        when(sonarClient.findResource("groupId:artifactId")).thenReturn(resource);
+
+        SoftwareProjectId softwareProjectId = sonar.identify(projectKey);
+
+        assertEquals("groupId:artifactId", softwareProjectId.getProjectId());
+    }
+
+    @Test(expected = ProjectNotFoundException.class)
+    public void should_throw_exception_when_identifying_inexistant_project() throws Exception {
+        Throwable notFound = new SonarResourceNotFoundException("not found");
+        when(sonarClient.findResource(anyString())).thenThrow(notFound);
+
+        ProjectKey projectKey = new ProjectKey();
+        sonar.identify(projectKey);
     }
 
     private Map<String, SonarQualityMetric> createMetricList() {

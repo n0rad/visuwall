@@ -17,17 +17,24 @@
 package net.awired.visuwall.sonarclient;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import javax.ws.rs.core.MediaType;
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.sonarclient.domain.SonarMetrics;
 import net.awired.visuwall.sonarclient.domain.SonarQualityMetric;
 import net.awired.visuwall.sonarclient.exception.SonarMeasureNotFoundException;
 import net.awired.visuwall.sonarclient.exception.SonarMetricsNotFoundException;
+import net.awired.visuwall.sonarclient.exception.SonarResourceNotFoundException;
+import net.awired.visuwall.sonarclient.resource.Project;
+import net.awired.visuwall.sonarclient.resource.Projects;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -121,6 +128,39 @@ public class SonarClientTest {
         assertEquals(qualityMetric, metrics.get("metricKey"));
     }
 
+    @Test(expected = SonarMeasureNotFoundException.class)
+    public void should_throw_exception_when_measure_is_not_found() throws Exception {
+        sonarClient.findMeasure("artifactId", "measureKey");
+    }
+
+    @Test
+    public void should_return_projects() throws Exception {
+        Project project = new Project();
+        project.setId(1);
+        project.setKey("key");
+        project.setName("name");
+        project.setQualifier("qualifier");
+        project.setScope("scope");
+
+        List<Project> projectList = new ArrayList<Project>();
+        projectList.add(project);
+
+        Projects projects = new Projects();
+        projects.setProjects(projectList);
+
+        when(genericSoftwareClient.resource(anyString(), any(Class.class), any(MediaType.class)))
+                .thenReturn(projects);
+
+        Projects foundProjects = sonarClient.findProjects();
+        assertFalse(foundProjects.getProjects().isEmpty());
+        Project foundProject = foundProjects.getProjects().get(0);
+        assertEquals(1, foundProject.getId().intValue());
+        assertEquals("key", foundProject.getKey());
+        assertEquals("name", foundProject.getName());
+        assertEquals("qualifier", foundProject.getQualifier());
+        assertEquals("scope", foundProject.getScope());
+    }
+
     @Test(expected = SonarMetricsNotFoundException.class)
     public void should_throw_exception_if_sonar_metrics_are_not_found() throws Exception {
         Object call = genericSoftwareClient.resource(anyString(), any(Class.class));
@@ -129,4 +169,22 @@ public class SonarClientTest {
         sonarClient.findMetrics();
     }
 
+    @Test(expected = SonarResourceNotFoundException.class)
+    public void should_throw_exception_when_resource_is_not_found() throws Exception {
+        sonarClient.findResource("resourceId");
+    }
+
+    @Test(expected = SonarResourceNotFoundException.class)
+    public void should_throw_exception_when_connection_exception() throws Exception {
+        when(sonar.find(any(ResourceQuery.class))).thenThrow(new ConnectionException());
+        sonarClient.findResource("resourceId");
+    }
+
+    @Test
+    public void should_find_resource() throws Exception {
+        Resource resource = new Resource();
+        when(sonar.find(any(ResourceQuery.class))).thenReturn(resource);
+        Resource foundResource = sonarClient.findResource("resourceId");
+        assertNotNull(foundResource);
+    }
 }
