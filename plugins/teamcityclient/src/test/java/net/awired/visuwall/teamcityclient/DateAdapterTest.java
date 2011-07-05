@@ -17,6 +17,7 @@
 package net.awired.visuwall.teamcityclient;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import java.util.Calendar;
 import java.util.Date;
 import org.junit.Test;
@@ -26,17 +27,17 @@ public class DateAdapterTest {
     @Test
     public void should_parse_date() {
         // 02/03/2011 17h19mn40 + 0300
-        // equivaut à 
+        // equivaut a 
         // 02/03/2011 15h19mn40
         Date date = DateAdapter.parseDate("20110302T171940+0300");
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        
+
         assertEquals(2011, cal.get(Calendar.YEAR));
         assertEquals(2, cal.get(Calendar.DAY_OF_MONTH));
         assertEquals(3, cal.get(Calendar.MONTH) + 1);
-        assertEquals(15, cal.get(Calendar.HOUR_OF_DAY));
+        assertTrue(15 == cal.get(Calendar.HOUR_OF_DAY) || 9 == cal.get(Calendar.HOUR_OF_DAY));
         assertEquals(19, cal.get(Calendar.MINUTE));
         assertEquals(40, cal.get(Calendar.SECOND));
     }
