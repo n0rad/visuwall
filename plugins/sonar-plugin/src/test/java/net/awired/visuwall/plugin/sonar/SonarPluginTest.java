@@ -33,6 +33,7 @@ import net.awired.visuwall.common.client.ResourceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 
+@SuppressWarnings("unchecked")
 public class SonarPluginTest {
 
     SonarPlugin sonar;

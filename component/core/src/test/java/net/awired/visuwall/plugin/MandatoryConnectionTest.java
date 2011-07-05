@@ -52,13 +52,13 @@ public class MandatoryConnectionTest {
 
     @Parameters
     public static Collection<Object[]> createData() throws InstantiationException, IllegalAccessException {
-        List<Class<? extends BasicCapability>> connections = new ArrayList<Class<? extends BasicCapability>>(){{
-            add(JenkinsConnection.class);
-            add(HudsonConnection.class);
-            add(TeamCityConnection.class);
-            add(BambooConnection.class);
-            add(SonarConnection.class);
-        }};
+        List<Class<? extends BasicCapability>> connections = new ArrayList<Class<? extends BasicCapability>>();
+        connections.add(JenkinsConnection.class);
+        connections.add(HudsonConnection.class);
+        connections.add(TeamCityConnection.class);
+        connections.add(BambooConnection.class);
+        connections.add(SonarConnection.class);
+
         List<Object[]> objects = new ArrayList<Object[]>();
         for (Class<? extends BasicCapability> clazz : connections) {
             addMethodsToTest(objects, clazz);

@@ -22,7 +22,6 @@ import java.util.List;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonJob;
-import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
@@ -181,18 +180,6 @@ public class Hudson {
     public List<String> findProjectNameByView(String viewName) throws HudsonViewNotFoundException {
         Preconditions.checkNotNull(viewName, "viewName is mandatory");
         return hudsonFinder.findJobNamesByView(viewName);
-    }
-
-    private boolean hasPassedTests(String jobName) throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
-        HudsonBuild hudsonBuild = hudsonFinder.getCompletedBuild(jobName);
-        if (hudsonBuild != null) {
-            HudsonTestResult unitTestResult = hudsonBuild.getUnitTestResult();
-            HudsonTestResult integrationTestResult = hudsonBuild.getIntegrationTestResult();
-            int passedUnitTests = unitTestResult == null ? 0 : unitTestResult.getPassCount();
-            int passedIntegrationTests = integrationTestResult == null ? 0 : integrationTestResult.getPassCount();
-            return (passedUnitTests + passedIntegrationTests) > 0;
-        }
-        return false;
     }
 
     private long computeAverageBuildDuration(HudsonJob hudsonJob) throws HudsonJobNotFoundException {

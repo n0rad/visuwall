@@ -47,6 +47,7 @@ import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
+@SuppressWarnings("unchecked")
 public class SonarClientTest {
 
     @Mock

@@ -128,13 +128,12 @@ public class TeamCityConnectionTest {
 
     @Test
     public void should_get_commiters() throws Exception {
-        List<TeamCityChange> changes = new ArrayList<TeamCityChange>() {
-            {
-                TeamCityChange change = new TeamCityChange();
-                change.setUsername("npryce");
-                add(change);
-            }
-        };
+        TeamCityChange change = new TeamCityChange();
+        change.setUsername("npryce");
+
+        List<TeamCityChange> changes = new ArrayList<TeamCityChange>();
+        changes.add(change);
+
         when(teamCity.findChanges(anyInt())).thenReturn(changes);
 
         SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");

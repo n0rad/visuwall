@@ -227,7 +227,7 @@ public class SonarConnectionTest {
 
     @Test
     public void should_not_throw_exception_if_sonar_metrics_are_not_found() throws Exception {
-        when(sonarClient.findMetrics()).thenThrow(new SonarMetricsNotFoundException("not found"));
+        when(sonarClient.findMetrics()).thenThrow(new SonarMetricsNotFoundException("not found", null));
         sonar.connect("http://sonar:9000");
     }
 
