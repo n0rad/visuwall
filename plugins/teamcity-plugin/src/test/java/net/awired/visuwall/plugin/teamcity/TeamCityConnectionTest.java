@@ -18,6 +18,7 @@ package net.awired.visuwall.plugin.teamcity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
+import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -32,13 +34,10 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.teamcityclient.TeamCity;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
-import net.awired.visuwall.teamcityclient.resource.TeamCityBuildItem;
-import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
+import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
 import net.awired.visuwall.teamcityclient.resource.TeamCityChange;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
-import net.awired.visuwall.teamcityclient.resource.TeamCityStatus;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -69,24 +68,14 @@ public class TeamCityConnectionTest {
         verify(teamCity).findProjectNames();
     }
 
-    @Ignore
     @Test
     public void should_find_state_build() throws Exception {
-        TeamCityBuildItem buildItem = new TeamCityBuildItem();
-        buildItem.setStatus(TeamCityStatus.SUCCESS);
-
-        List<TeamCityBuildItem> buildItems = new ArrayList<TeamCityBuildItem>();
-        buildItems.add(buildItem);
-
-        TeamCityBuilds builds = new TeamCityBuilds();
-        builds.setBuilds(buildItems);
-
-        TeamCityProject teamCityProject = new TeamCityProject();
-        when(teamCity.findProject("projectId")).thenReturn(teamCityProject);
-        when(teamCity.findBuildList("bt297"));
+        TeamCityBuild build = new TeamCityBuild();
+        build.setStatus(States.SUCCESS);
+        when(teamCity.findBuild(anyString(), anyString())).thenReturn(build);
 
         SoftwareProjectId projectId = new SoftwareProjectId("projectId");
-        State state = teamCityConnection.getBuildState(projectId, 0);
+        State state = teamCityConnection.getBuildState(projectId, 1234);
 
         assertEquals(State.SUCCESS, state);
     }
@@ -140,6 +129,55 @@ public class TeamCityConnectionTest {
         List<Commiter> commiters = teamCityConnection.getBuildCommiters(softwareProjectId, 1);
         Commiter commiter = commiters.get(0);
         assertEquals("npryce", commiter.getName());
+    }
+
+    @Test
+    public void should_get_description() throws Exception {
+        TeamCityProject project = new TeamCityProject();
+        project.setDescription("description");
+
+        when(teamCity.findProject(anyString())).thenReturn(project);
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        String description = teamCityConnection.getDescription(softwareProjectId);
+
+        assertEquals("description", description);
+    }
+
+    @Test
+    public void should_get_name() throws Exception {
+        TeamCityProject project = new TeamCityProject();
+        project.setName("name");
+
+        when(teamCity.findProject(anyString())).thenReturn(project);
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
+        String name = teamCityConnection.getName(softwareProjectId);
+
+        assertEquals("name", name);
+    }
+
+    @Test
+    public void should_get_build_time() throws Exception {
+        TeamCityBuild build = new TeamCityBuild();
+        build.setStartDate("20110302T171940+0300");
+        build.setFinishDate("20110302T171941+0300");
+
+        when(teamCity.findBuild(anyString(), anyString())).thenReturn(build);
+
+        BuildTime buildTime = teamCityConnection.getBuildTime(softwareProjectId(), 1);
+
+        assertEquals(1000, buildTime.getDuration());
+        assertNotNull(buildTime.getStartTime());
+    }
+
+    @Test
+    public void connection_should_be_closed() {
+        assertFalse(teamCityConnection.isClosed());
+        teamCityConnection.close();
+        assertTrue(teamCityConnection.isClosed());
+    }
+
+    private SoftwareProjectId softwareProjectId() {
+        return new SoftwareProjectId("projectId");
     }
 
     private TeamCityConnection createConnectionPlugin() {

@@ -29,10 +29,14 @@ public class States {
 
     private static final Map<String, State> STATE_MAPPING = new HashMap<String, State>();
 
+    public static final String SUCCESS = "SUCCESS";
+    public static final String ERROR = "ERROR";
+    public static final String FAILURE = "FAILURE";
+
     static {
-        STATE_MAPPING.put("ERROR", State.FAILURE);
-        STATE_MAPPING.put("FAILURE", State.UNSTABLE);
-        STATE_MAPPING.put("SUCCESS", State.SUCCESS);
+        STATE_MAPPING.put(ERROR, State.FAILURE);
+        STATE_MAPPING.put(FAILURE, State.UNSTABLE);
+        STATE_MAPPING.put(SUCCESS, State.SUCCESS);
     }
 
     public static final State asVisuwallState(String teamcityState) {
