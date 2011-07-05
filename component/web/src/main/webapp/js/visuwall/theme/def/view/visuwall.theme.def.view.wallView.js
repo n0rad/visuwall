@@ -102,7 +102,7 @@ visuwall.theme.def.view.wallView = new function() {
 	
 	this.updateBuildTime = function(projectId, duration) {
 		var good = buildVisualDuration(duration);
-		$this._getElement(projectId, 'span.duration').replaceWith(' ~ ' + good);
+		$this._getElement(projectId, 'span.duration').html(' ~ ' + good);
 	};
 	
 	this.updateQuality = function(projectId, quality) {
