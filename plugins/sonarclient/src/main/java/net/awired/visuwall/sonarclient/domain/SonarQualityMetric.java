@@ -14,11 +14,16 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.domain.quality;
+package net.awired.visuwall.sonarclient.domain;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
 import com.google.common.base.Objects;
 
-public final class QualityMetric {
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "metric")
+public final class SonarQualityMetric {
 
     private String key;
     private String name;
@@ -119,8 +124,8 @@ public final class QualityMetric {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof QualityMetric) {
-            return Objects.equal(key, ((QualityMetric) o).key);
+        if (o instanceof SonarQualityMetric) {
+            return Objects.equal(key, ((SonarQualityMetric) o).key);
         }
         return false;
     }

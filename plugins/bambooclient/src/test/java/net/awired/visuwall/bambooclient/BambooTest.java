@@ -43,6 +43,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+@SuppressWarnings("unchecked")
 public class BambooTest {
 
     BambooUrlBuilder bambooUrlBuilder;

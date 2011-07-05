@@ -14,21 +14,28 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar;
+package net.awired.visuwall.sonarclient.resource;
 
-import static org.junit.Assert.assertTrue;
-import net.awired.visuwall.IntegrationTestData;
-import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
-import org.junit.Test;
-import org.sonar.wsclient.services.Measure;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class MeasureFinderIT {
+@XmlRootElement(name = "projects")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Projects {
 
-    @Test
-    public void should_find_measure() throws SonarMeasureNotFoundException {
-        SonarFinder measureFinder = new SonarFinder(IntegrationTestData.SONAR_URL);
-        Measure measure = measureFinder.findMeasure(IntegrationTestData.STRUTS_ARTIFACT_ID, "violations_density");
-        assertTrue(measure.getFormattedValue().length() > 0);
-        assertTrue(measure.getValue() > 0);
+    @XmlElements({ @XmlElement(name = "project") })
+    private List<Project> projects = new ArrayList<Project>();
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 }

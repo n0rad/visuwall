@@ -90,8 +90,10 @@ public class Bamboo {
             if (!resultList.isEmpty()) {
                 Results subResults = resultList.get(0);
                 List<Result> subResultList = subResults.result;
-                Result result = subResultList.get(0);
-                return result.getNumber();
+                if (!subResultList.isEmpty()) {
+                    Result result = subResultList.get(0);
+                    return result.getNumber();
+                }
             }
         } catch (ResourceNotFoundException e) {
             throw new BambooBuildNumberNotFoundException("Can't find last build number of project: " + planKey, e);

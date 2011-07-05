@@ -18,8 +18,6 @@ package net.awired.visuwall.teamcityclient;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
@@ -29,11 +27,15 @@ import net.awired.visuwall.teamcityclient.exception.TeamCityChangesNotFoundExcep
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectNotFoundException;
 import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
+import net.awired.visuwall.teamcityclient.resource.TeamCityBuildItem;
+import net.awired.visuwall.teamcityclient.resource.TeamCityBuildType;
 import net.awired.visuwall.teamcityclient.resource.TeamCityBuilds;
 import net.awired.visuwall.teamcityclient.resource.TeamCityChange;
 import net.awired.visuwall.teamcityclient.resource.TeamCityChanges;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
 import net.awired.visuwall.teamcityclient.resource.TeamCityProjects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -66,13 +68,13 @@ public class TeamCity {
     }
 
     public List<TeamCityProject> findAllProjects() throws TeamCityProjectsNotFoundException {
-            try {
-                String projectsUrl = urlBuilder.getProjects();
-                TeamCityProjects teamCityProjects = client.resource(projectsUrl, TeamCityProjects.class);
-                return teamCityProjects.getProjects();
-            } catch (ResourceNotFoundException e) {
-                throw new TeamCityProjectsNotFoundException("Projects have not been found", e);
-            }
+        try {
+            String projectsUrl = urlBuilder.getProjects();
+            TeamCityProjects teamCityProjects = client.resource(projectsUrl, TeamCityProjects.class);
+            return teamCityProjects.getProjects();
+        } catch (ResourceNotFoundException e) {
+            throw new TeamCityProjectsNotFoundException("Projects have not been found", e);
+        }
     }
 
     public TeamCityProject findProject(String projectId) throws TeamCityProjectNotFoundException {
@@ -111,6 +113,41 @@ public class TeamCity {
         }
     }
 
+    public TeamCityBuild findBuild(String projectId, String buildNumber) throws TeamCityProjectNotFoundException,
+            TeamCityBuildNotFoundException {
+        TeamCityProject project = findProject(projectId);
+        List<TeamCityBuildType> buildTypes = project.getBuildTypes();
+        for (TeamCityBuildType buildType : buildTypes) {
+            TeamCityBuild build = findBuildInBuildType(buildNumber, buildType);
+            if (build != null) {
+                return build;
+            }
+        }
+        throw new TeamCityBuildNotFoundException("Can't find build #" + buildNumber + "of software project id "
+                + projectId);
+    }
+
+    private TeamCityBuild findBuildInBuildType(String buildNumber, TeamCityBuildType buildType)
+            throws TeamCityBuildNotFoundException {
+        try {
+            String buildTypeId = buildType.getId();
+            TeamCityBuilds buildList = findBuildList(buildTypeId);
+            List<TeamCityBuildItem> builds = buildList.getBuilds();
+            for (TeamCityBuildItem buildItem : builds) {
+                if (buildItem.getNumber().equals(buildNumber)) {
+                    String buildId = buildItem.getId();
+                    int buildIdAsString = Integer.parseInt(buildId);
+                    return findBuild(buildIdAsString);
+                }
+            }
+        } catch (TeamCityBuildListNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(e.getMessage());
+            }
+        }
+        return null;
+    }
+
     public List<TeamCityChange> findChanges(int buildId) throws TeamCityChangesNotFoundException {
         checkBuildId(buildId);
         List<TeamCityChange> changesList = new ArrayList<TeamCityChange>();
@@ -119,22 +156,22 @@ public class TeamCity {
             String changesUrl = urlBuilder.getChanges(buildId);
             changes = client.resource(changesUrl, TeamCityChanges.class);
         } catch (ResourceNotFoundException e) {
-            throw new TeamCityChangesNotFoundException("Changes of build "+buildId+" has not been found", e);
+            throw new TeamCityChangesNotFoundException("Changes of build " + buildId + " has not been found", e);
         }
-        for (TeamCityChange changeItem:changes.getChanges()) {
+        for (TeamCityChange changeItem : changes.getChanges()) {
             String changeUrl = urlBuilder.getChange(changeItem.getId());
             try {
                 TeamCityChange change = client.resource(changeUrl, TeamCityChange.class);
                 changesList.add(change);
-            } catch(ResourceNotFoundException e) {
+            } catch (ResourceNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Can't get change at "+changeUrl,e);
+                    LOG.debug("Can't get change at " + changeUrl, e);
                 }
             }
         }
         return changesList;
     }
-    
+
     private void checkProjectId(String projectId) {
         Preconditions.checkNotNull(projectId, "projectId is mandatory");
     }

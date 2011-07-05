@@ -144,7 +144,7 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
     @Override
     public List<String> findProjectNames() {
         checkConnected();
-        return hudson.findProjectNames();
+        return hudson.findJobNames();
     }
 
     @Override
@@ -158,7 +158,7 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
         checkConnected();
         Preconditions.checkNotNull(viewName, "viewName is mandatory");
         try {
-            return hudson.findProjectNameByView(viewName);
+            return hudson.findJobNameByView(viewName);
         } catch (HudsonViewNotFoundException e) {
             throw new ViewNotFoundException("can't find view named :" + viewName, e);
         }
@@ -171,7 +171,7 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
         Set<SoftwareProjectId> projectIds = new HashSet<SoftwareProjectId>();
         for (String viewName : views) {
             try {
-                List<String> projectNames = hudson.findProjectNameByView(viewName);
+                List<String> projectNames = hudson.findJobNameByView(viewName);
                 projectIds.addAll(findSoftwareProjectIdsByNames(projectNames));
             } catch (HudsonViewNotFoundException e) {
                 if (LOG.isDebugEnabled()) {

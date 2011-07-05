@@ -16,8 +16,6 @@
 
 package net.awired.visuwall.plugin.sonar;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -42,10 +40,14 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
-import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
-import net.awired.visuwall.plugin.sonar.exception.SonarMetricsNotFoundException;
-import net.awired.visuwall.plugin.sonar.exception.SonarResourceNotFoundException;
-import net.awired.visuwall.plugin.sonar.resource.Project;
+import net.awired.visuwall.sonarclient.QualityMeasures;
+import net.awired.visuwall.sonarclient.SonarClient;
+import net.awired.visuwall.sonarclient.domain.SonarQualityMeasure;
+import net.awired.visuwall.sonarclient.domain.SonarQualityMetric;
+import net.awired.visuwall.sonarclient.exception.SonarMeasureNotFoundException;
+import net.awired.visuwall.sonarclient.exception.SonarMetricsNotFoundException;
+import net.awired.visuwall.sonarclient.exception.SonarResourceNotFoundException;
+import net.awired.visuwall.sonarclient.resource.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.wsclient.services.Measure;
@@ -54,19 +56,12 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import com.google.common.io.ByteStreams;
 
 public class SonarConnection implements MetricCapability, TestCapability {
 
     private static final Logger LOG = LoggerFactory.getLogger(SonarConnection.class);
 
     private final UUID id = UUID.randomUUID();
-
-    @VisibleForTesting
-    SonarFinder sonarFinder;
-
-    @VisibleForTesting
-    MetricFinder metricFinder;
 
     @VisibleForTesting
     SonarClient sonarClient;
@@ -88,29 +83,10 @@ public class SonarConnection implements MetricCapability, TestCapability {
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize sonar with url " + url);
         }
-        if (metricFinder == null) {
-            metricFinder = new MetricFinder(url);
-        }
-        if (sonarFinder == null) {
-            sonarFinder = new SonarFinder(url, login, password);
-        }
         if (sonarClient == null) {
-            sonarClient = new SonarClient(url);
+            sonarClient = new SonarClient(url, login, password);
         }
         connected = true;
-    }
-
-    public boolean isSonarInstance(URL url) {
-        checkConnected();
-        Preconditions.checkNotNull(url, "url is mandatory");
-        try {
-            url = new URL(url.toString() + "/api/properties");
-            byte[] content = ByteStreams.toByteArray(url.openStream());
-            String xml = new String(content);
-            return xml.contains("sonar.core.version");
-        } catch (IOException e) {
-            return false;
-        }
     }
 
     @Override
@@ -172,7 +148,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
         checkSoftwareProjectId(softwareProjectId);
         try {
             String artifactId = softwareProjectId.getProjectId();
-            Resource resource = sonarFinder.findResource(artifactId);
+            Resource resource = sonarClient.findResource(artifactId);
             return resource.getName(true);
         } catch (SonarResourceNotFoundException e) {
             throw new ProjectNotFoundException("Can't get description of software project id: " + softwareProjectId,
@@ -186,13 +162,16 @@ public class SonarConnection implements MetricCapability, TestCapability {
         Preconditions.checkNotNull(projectKey, "projectKey is mandatory");
         try {
             String mavenId = projectKey.getMavenId();
-            Resource resource;
-            resource = sonarFinder.findResource(mavenId);
-            SoftwareProjectId softwareProjectId = new SoftwareProjectId(resource.getKey());
-            return softwareProjectId;
+            if (mavenId != null) {
+                Resource resource = sonarClient.findResource(mavenId);
+                SoftwareProjectId softwareProjectId = new SoftwareProjectId(resource.getKey());
+                return softwareProjectId;
+            }
         } catch (SonarResourceNotFoundException e) {
             throw new ProjectNotFoundException("Can't identify project key: " + projectKey, e);
         }
+        throw new ProjectNotFoundException("Can't identify project key, there is not enough informations: "
+                + projectKey);
     }
 
     @Override
@@ -261,8 +240,11 @@ public class SonarConnection implements MetricCapability, TestCapability {
                     LOG.debug("can't analyze project " + projectId + " without artifactId. Is it a maven project ?");
                 }
             } else {
-                Double itCoverage = sonarFinder.findMeasure(artifactId, "it_coverage").getValue();
-                integrationTestResult.setCoverage(itCoverage);
+                Measure itCoverageMeasure = sonarClient.findMeasure(artifactId, "it_coverage");
+                if (itCoverageMeasure != null) {
+                    Double itCoverage = itCoverageMeasure.getValue();
+                    integrationTestResult.setCoverage(itCoverage);
+                }
             }
         } catch (SonarMeasureNotFoundException e) {
             if (LOG.isDebugEnabled()) {
@@ -295,11 +277,11 @@ public class SonarConnection implements MetricCapability, TestCapability {
 
     private void addQualityMeasure(QualityResult qualityResult, String artifactId, String key) {
         try {
-            Measure measure = sonarFinder.findMeasure(artifactId, key);
-            if (measure.getValue() != null) {
-                QualityMeasure qualityMeasure = QualityMeasures.asQualityMeasure(measure, key);
+            Measure measure = sonarClient.findMeasure(artifactId, key);
+            if (measure != null && measure.getValue() != null) {
+                SonarQualityMeasure qualityMeasure = QualityMeasures.asQualityMeasure(measure, key);
                 qualityMeasure.setName(metricsMap.get(key).getName());
-                qualityResult.add(key, qualityMeasure);
+                qualityResult.add(key, asQualityMeasure(qualityMeasure));
             }
         } catch (SonarMeasureNotFoundException e) {
             if (LOG.isDebugEnabled()) {
@@ -308,17 +290,26 @@ public class SonarConnection implements MetricCapability, TestCapability {
         }
     }
 
+    private QualityMeasure asQualityMeasure(SonarQualityMeasure sonarQualityMeasure) {
+        QualityMeasure qualityMeasure = new QualityMeasure();
+        qualityMeasure.setFormattedValue(sonarQualityMeasure.getFormattedValue());
+        qualityMeasure.setKey(sonarQualityMeasure.getKey());
+        qualityMeasure.setName(sonarQualityMeasure.getName());
+        qualityMeasure.setValue(sonarQualityMeasure.getValue());
+        return qualityMeasure;
+    }
+
     @Override
     public String getMavenId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
             MavenIdNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
-        String artifactId = softwareProjectId.getProjectId();
         try {
-            Resource resource = sonarFinder.findResource(artifactId);
+            String artifactId = softwareProjectId.getProjectId();
+            Resource resource = sonarClient.findResource(artifactId);
             return resource.getKey();
         } catch (SonarResourceNotFoundException e) {
-            throw new ProjectNotFoundException("Can't get name of software project id: " + softwareProjectId, e);
+            throw new MavenIdNotFoundException("Can't get maven id of software project id: " + softwareProjectId, e);
         }
     }
 
@@ -328,7 +319,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
         checkSoftwareProjectId(softwareProjectId);
         try {
             String artifactId = softwareProjectId.getProjectId();
-            Resource resource = sonarFinder.findResource(artifactId);
+            Resource resource = sonarClient.findResource(artifactId);
             return resource.getName();
         } catch (SonarResourceNotFoundException e) {
             throw new ProjectNotFoundException("Can't get name of software project id: " + softwareProjectId, e);
@@ -350,12 +341,12 @@ public class SonarConnection implements MetricCapability, TestCapability {
     private TestResult createUnitTestAnalysis(String artifactId) {
         TestResult unitTestResult = new TestResult();
         try {
-            Double coverage = sonarFinder.findMeasure(artifactId, "coverage").getValue();
-            Double failures = sonarFinder.findMeasure(artifactId, "test_failures").getValue();
-            Double errors = sonarFinder.findMeasure(artifactId, "test_errors").getValue();
-            Double passTests = sonarFinder.findMeasure(artifactId, "tests").getValue();
+            Double coverage = sonarClient.findMeasure(artifactId, "coverage").getValue();
+            Double failures = sonarClient.findMeasure(artifactId, "test_failures").getValue();
+            Double errors = sonarClient.findMeasure(artifactId, "test_errors").getValue();
+            Double passTests = sonarClient.findMeasure(artifactId, "tests").getValue();
 
-            int skipCount = sonarFinder.findMeasure(artifactId, "skipped_tests").getIntValue();
+            int skipCount = sonarClient.findMeasure(artifactId, "skipped_tests").getIntValue();
             int failCount = failures.intValue() + errors.intValue();
             int passCount = passTests.intValue() - failCount;
 
@@ -374,7 +365,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
 
     private void initializeMetrics() {
         try {
-            metricsMap = metricFinder.findMetrics();
+            metricsMap = asMetrics(sonarClient.findMetrics());
             Set<String> metricKeysSet = metricsMap.keySet();
             int countMetricKeys = metricKeysSet.size();
             metricKeys = metricKeysSet.toArray(new String[countMetricKeys]);
@@ -385,12 +376,37 @@ public class SonarConnection implements MetricCapability, TestCapability {
         }
     }
 
+    private Map<String, QualityMetric> asMetrics(Map<String, SonarQualityMetric> sonarMetrics) {
+        Map<String, QualityMetric> metrics = new HashMap<String, QualityMetric>();
+        for (Map.Entry<String, SonarQualityMetric> metric : sonarMetrics.entrySet()) {
+            String key = metric.getKey();
+            SonarQualityMetric value = metric.getValue();
+            QualityMetric qualityMetric = asQualityMetric(value);
+            metrics.put(key, qualityMetric);
+        }
+        return metrics;
+    }
+
+    private QualityMetric asQualityMetric(SonarQualityMetric sonarQualityMetric) {
+        QualityMetric qualityMetric = new QualityMetric();
+        qualityMetric.setDescription(sonarQualityMetric.getDescription());
+        qualityMetric.setDirection(sonarQualityMetric.getDirection());
+        qualityMetric.setDomain(sonarQualityMetric.getDomain());
+        qualityMetric.setHidden(sonarQualityMetric.getHidden());
+        qualityMetric.setKey(sonarQualityMetric.getKey());
+        qualityMetric.setName(sonarQualityMetric.getName());
+        qualityMetric.setQualitative(sonarQualityMetric.getQualitative());
+        qualityMetric.setUserManaged(sonarQualityMetric.getUserManaged());
+        qualityMetric.setValTyp(sonarQualityMetric.getValTyp());
+        return qualityMetric;
+    }
+
     public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
             throws BuildNotFoundException, ProjectNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         BuildTime buildTime = new BuildTime();
-        buildTime.setDuration(0);
+        buildTime.setDuration(1);
         buildTime.setStartTime(new Date());
         return buildTime;
     }

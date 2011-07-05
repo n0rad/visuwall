@@ -16,25 +16,20 @@
 
 package net.awired.visuwall.plugin.sonar;
 
-import static org.junit.Assert.assertEquals;
-import net.awired.visuwall.api.domain.quality.QualityMeasure;
+import static org.junit.Assert.assertTrue;
+import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.sonarclient.SonarClient;
+import net.awired.visuwall.sonarclient.exception.SonarMeasureNotFoundException;
 import org.junit.Test;
 import org.sonar.wsclient.services.Measure;
 
-public class QualityMeasuresTest {
+public class SonarClientIT {
 
     @Test
-    public void should_find_quality_measure() {
-        Measure coverageMeasure = new Measure();
-        coverageMeasure.setFormattedValue("5%");
-        coverageMeasure.setValue(5D);
-        coverageMeasure.setMetricName("Coverage");
-
-        QualityMeasure qualityMeasure = QualityMeasures.asQualityMeasure(coverageMeasure, "measureKey");
-
-        assertEquals("5%", qualityMeasure.getFormattedValue());
-        assertEquals(5D, qualityMeasure.getValue(), 0);
-        assertEquals("measureKey", qualityMeasure.getKey());
+    public void should_find_measure() throws SonarMeasureNotFoundException {
+        SonarClient sonarClient = new SonarClient(IntegrationTestData.SONAR_URL);
+        Measure measure = sonarClient.findMeasure(IntegrationTestData.STRUTS_ARTIFACT_ID, "violations_density");
+        assertTrue(measure.getFormattedValue().length() > 0);
+        assertTrue(measure.getValue() > 0);
     }
-
 }

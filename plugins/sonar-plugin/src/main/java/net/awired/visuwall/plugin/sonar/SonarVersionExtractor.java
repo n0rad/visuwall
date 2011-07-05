@@ -16,8 +16,6 @@
 
 package net.awired.visuwall.plugin.sonar;
 
-import net.awired.visuwall.plugin.sonar.resource.Properties;
-import net.awired.visuwall.plugin.sonar.resource.Property;
 import com.google.common.base.Preconditions;
 
 public class SonarVersionExtractor {

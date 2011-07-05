@@ -14,18 +14,25 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.exception;
+package net.awired.visuwall.plugin.sonar;
 
-public class SonarMeasureNotFoundException extends Exception {
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
 
-    private static final long serialVersionUID = -7205356356110212352L;
+@XmlRootElement(name = "properties")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Properties {
 
-    public SonarMeasureNotFoundException(String msg) {
-        super(msg);
-    }
+    @XmlElements({ @XmlElement(name = "property") })
+    private List<Property> properties = new ArrayList<Property>();
 
-    public SonarMeasureNotFoundException(String msg, Throwable cause) {
-        super(msg, cause);
+    public List<Property> getProperties() {
+        return properties;
     }
 
 }

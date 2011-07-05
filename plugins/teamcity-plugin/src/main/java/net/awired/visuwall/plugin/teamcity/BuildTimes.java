@@ -14,18 +14,21 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.exception;
+package net.awired.visuwall.plugin.teamcity;
 
-public class SonarMetricsNotFoundException extends Exception {
+import java.util.Date;
+import net.awired.visuwall.api.domain.BuildTime;
+import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
 
-    private static final long serialVersionUID = -405181214114015401L;
+public class BuildTimes {
 
-    public SonarMetricsNotFoundException(String cause, Exception e) {
-        super(cause, e);
+    public static BuildTime createFrom(TeamCityBuild teamcityBuild) {
+        BuildTime buildTime = new BuildTime();
+        Date finishDate = teamcityBuild.getFinishDate();
+        Date startDate = teamcityBuild.getStartDate();
+        long duration = finishDate.getTime() - startDate.getTime();
+        buildTime.setDuration(duration);
+        buildTime.setStartTime(startDate);
+        return buildTime;
     }
-
-    public SonarMetricsNotFoundException(String msg) {
-        super(msg);
-    }
-
 }

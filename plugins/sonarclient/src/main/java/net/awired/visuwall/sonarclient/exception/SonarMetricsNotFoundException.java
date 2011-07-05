@@ -14,28 +14,14 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.resource;
+package net.awired.visuwall.sonarclient.exception;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlRootElement;
+public class SonarMetricsNotFoundException extends Exception {
 
-@XmlRootElement(name = "projects")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class Projects {
+    private static final long serialVersionUID = -405181214114015401L;
 
-    @XmlElements({ @XmlElement(name = "project") })
-    private List<Project> projects = new ArrayList<Project>();
-
-    public List<Project> getProjects() {
-        return projects;
+    public SonarMetricsNotFoundException(String cause, Exception e) {
+        super(cause, e);
     }
 
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
-    }
 }

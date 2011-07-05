@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.resource;
+package net.awired.visuwall.plugin.sonar;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

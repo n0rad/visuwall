@@ -107,6 +107,14 @@ public class TeamCityBuild extends TeamCityAbstractBuild {
         return DateAdapter.parseDate(finishDate);
     }
 
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setFinishDate(String finishDate) {
+        this.finishDate = finishDate;
+    }
+
     public TeamCityAgent getAgent() {
         return agent;
     }

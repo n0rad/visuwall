@@ -58,4 +58,9 @@ public class HudsonIT {
         assertEquals("Arnaud LEMAIRE", commiter.getName());
         assertEquals("alemaire@norad.fr", commiter.getEmail());
     }
+
+    @Test
+    public void should_get_only_maven_project() {
+        new Hudson("https://builds.apache.org").findJobNames();
+    }
 }

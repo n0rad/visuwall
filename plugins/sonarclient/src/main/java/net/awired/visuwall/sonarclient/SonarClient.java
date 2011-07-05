@@ -14,11 +14,20 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar;
+package net.awired.visuwall.sonarclient;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
-import net.awired.visuwall.plugin.sonar.exception.SonarMeasureNotFoundException;
-import net.awired.visuwall.plugin.sonar.exception.SonarResourceNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
+import javax.ws.rs.core.MediaType;
+import net.awired.visuwall.common.client.GenericSoftwareClient;
+import net.awired.visuwall.common.client.ResourceNotFoundException;
+import net.awired.visuwall.sonarclient.domain.SonarMetrics;
+import net.awired.visuwall.sonarclient.domain.SonarQualityMetric;
+import net.awired.visuwall.sonarclient.exception.SonarMeasureNotFoundException;
+import net.awired.visuwall.sonarclient.exception.SonarMetricsNotFoundException;
+import net.awired.visuwall.sonarclient.exception.SonarResourceNotFoundException;
+import net.awired.visuwall.sonarclient.resource.Projects;
 import org.sonar.wsclient.Sonar;
 import org.sonar.wsclient.connectors.ConnectionException;
 import org.sonar.wsclient.services.Measure;
@@ -28,9 +37,10 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
-public class SonarFinder {
+public class SonarClient {
 
-    private String sonarUrl;
+    @VisibleForTesting
+    GenericSoftwareClient client;
 
     /**
      * http://docs.codehaus.org/display/SONAR/Web+Service+API
@@ -38,29 +48,35 @@ public class SonarFinder {
     @VisibleForTesting
     Sonar sonar;
 
-    public SonarFinder(String sonarUrl) {
-        this(sonarUrl, null, null);
+    private String sonarUrl;
+
+    public SonarClient(String url) {
+        this(url, null, null);
     }
 
-    public SonarFinder(String sonarUrl, String login, String password) {
-        Preconditions.checkNotNull(sonarUrl, "sonarUrl is mandatory");
-        Preconditions.checkArgument(!sonarUrl.isEmpty(), "sonarUrl can't be empty");
-        this.sonarUrl = sonarUrl;
+    public SonarClient(String url, String login, String password) {
+        Preconditions.checkNotNull(url, "sonarUrl is mandatory");
+        Preconditions.checkArgument(!url.isEmpty(), "sonarUrl can't be empty");
+        this.sonarUrl = url;
         if (isNotBlank(login) && isNotBlank(password)) {
-            sonar = Sonar.create(sonarUrl, login, password);
+            sonar = Sonar.create(url, login, password);
+            client = new GenericSoftwareClient(login, password);
         } else {
-            sonar = Sonar.create(sonarUrl);
+            sonar = Sonar.create(url);
+            client = new GenericSoftwareClient();
         }
+    }
+
+    public Projects findProjects() throws ResourceNotFoundException {
+        String projectsUrl = sonarUrl + "/api/projects";
+        Projects projects = client.resource(projectsUrl, Projects.class, MediaType.APPLICATION_XML_TYPE);
+        return projects;
     }
 
     public Measure findMeasure(String artifactId, String measureKey) throws SonarMeasureNotFoundException {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(artifactId), "artifactId is a mandatory parameter");
         Preconditions.checkNotNull(measureKey, "measureKey is a mandatory parameter");
         Measure measure = findMeasureFromSonar(artifactId, measureKey);
-        if (measure == null) {
-            throw new SonarMeasureNotFoundException("Can't find measure key: " + measureKey + ", artifactId: "
-                    + artifactId);
-        }
         return measure;
     }
 
@@ -91,6 +107,20 @@ public class SonarFinder {
         } catch (ConnectionException e) {
             throw new SonarResourceNotFoundException("Resource " + resourceId + " not found in Sonar " + sonarUrl, e);
 
+        }
+    }
+
+    public Map<String, SonarQualityMetric> findMetrics() throws SonarMetricsNotFoundException {
+        try {
+            String metricUrl = sonarUrl + "/api/metrics?format=xml";
+            SonarMetrics sonarMetrics = client.resource(metricUrl, SonarMetrics.class);
+            Map<String, SonarQualityMetric> qualityMetrics = new HashMap<String, SonarQualityMetric>();
+            for (SonarQualityMetric metric : sonarMetrics.metric) {
+                qualityMetrics.put(metric.getKey(), metric);
+            }
+            return qualityMetrics;
+        } catch (ResourceNotFoundException e) {
+            throw new SonarMetricsNotFoundException("Can't find sonar metrics with Sonar: " + sonarUrl, e);
         }
     }
 

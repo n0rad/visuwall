@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar.exception;
+package net.awired.visuwall.sonarclient.exception;
 
 public class SonarResourceNotFoundException extends Exception {
 
