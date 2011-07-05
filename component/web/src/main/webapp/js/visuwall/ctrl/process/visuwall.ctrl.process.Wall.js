@@ -21,13 +21,36 @@ visuwall.ctrl.process.Wall = function(wallName) {
 
 	this.__inject__ = [ 'wallView', 'projectService', 'wallService'];
 
+	
+	this.addProject = function(projectData) {
+		$this.wallView.isProject(projectData.id, function(result) {
+			if (!result) {
+				$this.wallView.addProject(projectData.id, projectData.name);
+				$this._updateProject(projectData);
+			} else {
+				LOG.warn('project with name ', projectData.name, ' already exists');
+			}
+		});
+	};
+	
 	this.updateStatus = function() {
 		LOG.debug("run updater");
 		$this.wallService.status($this.wallName, function(projectsStatus) {
 			var projectDone = [];
 
-			var checkProjectToRemove = function(status) {
+			var updateFunc = function(status, projectsStatus) {
+				projectDone.push(status.id);
 
+				// looking for project to delete only when all done
+				if (projectDone.length == projectsStatus.length) {
+					$this.wallView.getProjectIds(function(projectIds) {
+						for (var i = 0; i < projectIds.length; i++) {
+							if (!projectDone.contains(projectIds[i])) {
+								$this.wallView.removeProject(projectIds[i]);
+							}
+						}
+					});
+				}
 			};
 
 			for (var i = 0; i < projectsStatus.length; i++) {
@@ -36,16 +59,11 @@ visuwall.ctrl.process.Wall = function(wallName) {
 					var stat = status;
 					if (!isProjectRes) {
 						// this is a new project
-						$this.projectService.findProject($this.wallName, stat.id,
-								function(newProject) {
-									// seems to be necessary to check if project exists after reception from server
-									$this.wallView.isProject(status.id, function(isProjectRes) {
-										if (!isProjectRes) {
-											$this.wallView.addProject(newProject.id, newProject.name);
-											$this._updateProject(newProject);
-											$this.wallView.setLastUpdate(newProject.id, status.lastUpdate);
-										}
-									});
+						$this.projectService.findProject($this.wallName,
+								stat.id, function(newProjectData) {
+									$this.addProject(newProjectData);
+									$this.wallView.setLastUpdate(newProjectData.id, status.lastUpdate);				
+									updateFunc(stat, projectsStatus);
 								});
 					} else {
 						$this._updateBuilding(status.id, status.building, status.buildingTimeleftSecond);
@@ -57,18 +75,7 @@ visuwall.ctrl.process.Wall = function(wallName) {
 								});
 							}
 						});
-					}
-					projectDone.push(status.id);
-				
-					//TODO check if fail on new projets as they are added asyncly cause of $this.projectService.findProject  
-					if (projectDone.length == projectsStatus.length) {
-						$this.wallView.getProjectIds(function(projectIds) {
-							for (var i = 0; i < projectIds.length; i++) {
-								if (!projectDone.contains(projectIds[i])) {
-									$this.wallView.removeProject(projectIds[i]);
-								}
-							}
-						});
+						updateFunc(stat, projectsStatus);
 					}
 				});
 			}
@@ -159,17 +166,5 @@ visuwall.ctrl.process.Wall = function(wallName) {
 			this.wallView.stopBuilding(projectId);			
 		}
 	};
-
-//	this._checkVersionChange = function(projectId, building, latestBuildId) {
-//		if (!building) {
-//			$this.wallView.getBuildId(projectId, function(buildId) {
-//				if (latestBuildId != buildId) {
-//					$this.projectService.project($this.wallName, projectId, function(newProjectData) {
-//						$this._updateProject(newProjectData);
-//					});					
-//				}
-//			});
-//		}
-//	};
 
 };
