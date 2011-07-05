@@ -34,6 +34,7 @@ import net.awired.visuwall.hudsonclient.domain.HudsonJob;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 import net.awired.visuwall.hudsonclient.finder.HudsonFinder;
+import net.awired.visuwall.hudsonclient.finder.HudsonRootModuleFinder;
 import org.joda.time.Minutes;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +44,7 @@ public class HudsonTest {
     GenericSoftwareClient client;
     HudsonFinder hudsonFinder;
     HudsonUrlBuilder hudsonUrlBuilder;
+    HudsonRootModuleFinder hudsonRootModuleFinder;
     Hudson hudson;
 
     @Before
@@ -50,14 +52,17 @@ public class HudsonTest {
         client = mock(GenericSoftwareClient.class);
         hudsonFinder = mock(HudsonFinder.class);
         hudsonUrlBuilder = mock(HudsonUrlBuilder.class);
+        hudsonRootModuleFinder = mock(HudsonRootModuleFinder.class);
         hudson = new Hudson("http://hudson.com");
         hudson.hudsonFinder = hudsonFinder;
+        hudson.hudsonRootModuleFinder = hudsonRootModuleFinder;
     }
 
     @Test
-    public void should_find_all_projects() throws HudsonJobNotFoundException {
+    public void should_find_all_projects() throws Exception {
         when(hudsonFinder.findJobNames()).thenReturn(Arrays.asList("project1"));
         when(hudsonFinder.findJob("project1")).thenReturn(new HudsonJob());
+        when(hudsonRootModuleFinder.findArtifactId(anyString())).thenReturn("artifactId");
 
         List<HudsonJob> projects = hudson.findAllProjects();
 
@@ -158,7 +163,7 @@ public class HudsonTest {
 
         when(hudsonFinder.findJobNames()).thenReturn(projectNames);
 
-        List<String> names = hudson.findProjectNames();
+        List<String> names = hudson.findJobNames();
 
         assertEquals("project1", names.get(0));
         assertEquals("project2", names.get(1));

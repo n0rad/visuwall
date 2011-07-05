@@ -41,7 +41,8 @@ public class Hudson {
     @VisibleForTesting
     HudsonFinder hudsonFinder;
 
-    private HudsonRootModuleFinder hudsonRootModuleFinder;
+    @VisibleForTesting
+    HudsonRootModuleFinder hudsonRootModuleFinder;
 
     public Hudson(String hudsonUrl) {
         HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(hudsonUrl);
@@ -57,14 +58,18 @@ public class Hudson {
      */
     public List<HudsonJob> findAllProjects() {
         List<HudsonJob> projects = new ArrayList<HudsonJob>();
-        for (String projectName : hudsonFinder.findJobNames()) {
+        for (String jobName : hudsonFinder.findJobNames()) {
             try {
-                HudsonJob hudsonProject = findJob(projectName);
-                projects.add(hudsonProject);
+                if (findArtifactId(jobName) != null) {
+                    HudsonJob hudsonProject = findJob(jobName);
+                    projects.add(hudsonProject);
+                }
             } catch (HudsonJobNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Can't add project with name [" + projectName + "]. cause:" + e.getMessage());
+                    LOG.debug("Can't add project with name [" + jobName + "]. cause:" + e.getMessage());
                 }
+            } catch (ArtifactIdNotFoundException e) {
+                // we only add maven projects
             }
         }
         return projects;
@@ -81,10 +86,6 @@ public class Hudson {
             HudsonJobNotFoundException {
         checkJobName(jobName);
         return hudsonFinder.find(jobName, buildNumber);
-    }
-
-    private void checkJobName(String jobName) {
-        Preconditions.checkNotNull(jobName, "jobName is mandatory");
     }
 
     /**
@@ -107,19 +108,6 @@ public class Hudson {
     public String getDescription(String jobName) throws HudsonJobNotFoundException {
         checkJobName(jobName);
         return hudsonFinder.getDescription(jobName);
-    }
-
-    private long computeBuildDurationTime(HudsonJob hudsonJob) throws HudsonJobNotFoundException {
-        long averageTime;
-        if (isNeverSuccessful(hudsonJob.getName())) {
-            averageTime = maxDuration(hudsonJob);
-        } else {
-            averageTime = computeAverageBuildDuration(hudsonJob);
-        }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Average build time of " + hudsonJob.getName() + " is " + averageTime + " ms");
-        }
-        return averageTime;
     }
 
     /**
@@ -168,39 +156,63 @@ public class Hudson {
         return hudsonFinder.getLastBuildNumber(projectName);
     }
 
-    public List<String> findProjectNames() {
-        List<String> projectNames = hudsonFinder.findJobNames();
-        return projectNames;
+    public List<String> findJobNames() {
+        List<String> jobNames = hudsonFinder.findJobNames();
+        List<String> filteredJobNames = new ArrayList<String>();
+        for (String jobName : jobNames) {
+            try {
+                findArtifactId(jobName);
+                filteredJobNames.add(jobName);
+            } catch (ArtifactIdNotFoundException e) {
+                // we only add maven projects
+            }
+        }
+        return filteredJobNames;
     }
 
     public List<String> findViews() {
         return hudsonFinder.findViews();
     }
 
-    public List<String> findProjectNameByView(String viewName) throws HudsonViewNotFoundException {
+    public List<String> findJobNameByView(String viewName) throws HudsonViewNotFoundException {
         Preconditions.checkNotNull(viewName, "viewName is mandatory");
-        return hudsonFinder.findJobNamesByView(viewName);
-    }
-
-    private long computeAverageBuildDuration(HudsonJob hudsonJob) throws HudsonJobNotFoundException {
-        String projectName = hudsonJob.getName();
-        float sumBuildDurationTime = 0;
-        List<Integer> buildNumbers = hudsonFinder.getBuildNumbers(projectName);
-
-        for (int buildNumber : buildNumbers) {
+        List<String> jobNames = hudsonFinder.findJobNamesByView(viewName);
+        List<String> filteredJobNames = new ArrayList<String>();
+        for (String jobName : jobNames) {
             try {
-                HudsonBuild build = findBuild(projectName, buildNumber);
-                if (build.isSuccessful()) {
-                    sumBuildDurationTime += build.getDuration();
-                }
-            } catch (HudsonBuildNotFoundException e) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(e.getMessage());
-                }
+                findArtifactId(jobName);
+                filteredJobNames.add(jobName);
+            } catch (ArtifactIdNotFoundException e) {
+                // we only add maven projects
             }
         }
+        return filteredJobNames;
+    }
 
-        return (long) (sumBuildDurationTime / buildNumbers.size());
+    public String findArtifactId(String jobName) throws ArtifactIdNotFoundException {
+        return hudsonRootModuleFinder.findArtifactId(jobName);
+    }
+
+    public List<Integer> getBuildNumbers(String jobName) throws HudsonJobNotFoundException {
+        checkJobName(jobName);
+        try {
+            return hudsonFinder.getBuildNumbers(jobName);
+        } catch (HudsonJobNotFoundException e) {
+            throw new HudsonJobNotFoundException("Can't find build numbers of jobName '" + jobName + "'", e);
+        }
+    }
+
+    private long computeBuildDurationTime(HudsonJob hudsonJob) throws HudsonJobNotFoundException {
+        long averageTime;
+        if (isNeverSuccessful(hudsonJob.getName())) {
+            averageTime = maxDuration(hudsonJob);
+        } else {
+            averageTime = computeAverageBuildDuration(hudsonJob);
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Average build time of " + hudsonJob.getName() + " is " + averageTime + " ms");
+        }
+        return averageTime;
     }
 
     private long maxDuration(HudsonJob hudsonProject) throws HudsonJobNotFoundException {
@@ -238,17 +250,29 @@ public class Hudson {
         return true;
     }
 
-    public String findArtifactId(String jobName) throws ArtifactIdNotFoundException {
-        return hudsonRootModuleFinder.findArtifactId(jobName);
+    private long computeAverageBuildDuration(HudsonJob hudsonJob) throws HudsonJobNotFoundException {
+        String projectName = hudsonJob.getName();
+        float sumBuildDurationTime = 0;
+        List<Integer> buildNumbers = hudsonFinder.getBuildNumbers(projectName);
+
+        for (int buildNumber : buildNumbers) {
+            try {
+                HudsonBuild build = findBuild(projectName, buildNumber);
+                if (build.isSuccessful()) {
+                    sumBuildDurationTime += build.getDuration();
+                }
+            } catch (HudsonBuildNotFoundException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(e.getMessage());
+                }
+            }
+        }
+
+        return (long) (sumBuildDurationTime / buildNumbers.size());
     }
 
-    public List<Integer> getBuildNumbers(String jobName) throws HudsonJobNotFoundException {
-        checkJobName(jobName);
-        try {
-            return hudsonFinder.getBuildNumbers(jobName);
-        } catch (HudsonJobNotFoundException e) {
-            throw new HudsonJobNotFoundException("Can't find build numbers of jobName '" + jobName + "'", e);
-        }
+    private void checkJobName(String jobName) {
+        Preconditions.checkNotNull(jobName, "jobName is mandatory");
     }
 
 }

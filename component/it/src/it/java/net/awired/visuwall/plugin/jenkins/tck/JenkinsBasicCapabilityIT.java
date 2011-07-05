@@ -56,9 +56,8 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
     @Override
     @Test
     public void should_find_all_project_names() {
-        List<String> names = Arrays.asList("errorproject", "failproject", "freestyle-project", "itcoverage-project",
-                "neverbuild", "newproject", "struts", "struts 2 instable", "successproject", "test-change-result",
-                "disabled");
+        List<String> names = Arrays.asList("errorproject", "failproject", "itcoverage-project", "neverbuild",
+                "newproject", "struts", "struts 2 instable", "successproject", "test-change-result", "disabled");
         List<String> projectNames = jenkins.findProjectNames();
         assertEquals(names.size(), projectNames.size());
         for (String name : names) {
