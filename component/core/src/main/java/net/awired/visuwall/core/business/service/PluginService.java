@@ -50,7 +50,9 @@ public class PluginService {
                 visuwallPlugin.getSoftwareId(url);
                 return visuwallPlugin;
             } catch (IncompatibleSoftwareException e) {
-                LOG.debug("Plugin " + visuwallPlugin + " can not manage url " + url);
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("Plugin " + visuwallPlugin + " can't manage url " + url);
+                }
             } catch (Throwable e) {
                 LOG.warn("Plugin " + visuwallPlugin + " throws exception on url " + url, e);
             }

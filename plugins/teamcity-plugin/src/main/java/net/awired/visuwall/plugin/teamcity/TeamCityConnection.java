@@ -349,8 +349,8 @@ public class TeamCityConnection implements BuildCapability {
             int number = Integer.parseInt(item.getNumber());
             numbers.add(number);
         } catch (NumberFormatException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Can't transform in a valid build number", e);
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Can't transform in a valid build number", e);
             }
         }
     }

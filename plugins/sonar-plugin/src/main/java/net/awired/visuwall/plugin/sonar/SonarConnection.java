@@ -162,12 +162,16 @@ public class SonarConnection implements MetricCapability, TestCapability {
         Preconditions.checkNotNull(projectKey, "projectKey is mandatory");
         try {
             String mavenId = projectKey.getMavenId();
-            Resource resource = sonarClient.findResource(mavenId);
-            SoftwareProjectId softwareProjectId = new SoftwareProjectId(resource.getKey());
-            return softwareProjectId;
+            if (mavenId != null) {
+                Resource resource = sonarClient.findResource(mavenId);
+                SoftwareProjectId softwareProjectId = new SoftwareProjectId(resource.getKey());
+                return softwareProjectId;
+            }
         } catch (SonarResourceNotFoundException e) {
             throw new ProjectNotFoundException("Can't identify project key: " + projectKey, e);
         }
+        throw new ProjectNotFoundException("Can't identify project key, there is not enough informations: "
+                + projectKey);
     }
 
     @Override
@@ -236,8 +240,11 @@ public class SonarConnection implements MetricCapability, TestCapability {
                     LOG.debug("can't analyze project " + projectId + " without artifactId. Is it a maven project ?");
                 }
             } else {
-                Double itCoverage = sonarClient.findMeasure(artifactId, "it_coverage").getValue();
-                integrationTestResult.setCoverage(itCoverage);
+                Measure itCoverageMeasure = sonarClient.findMeasure(artifactId, "it_coverage");
+                if (itCoverageMeasure != null) {
+                    Double itCoverage = itCoverageMeasure.getValue();
+                    integrationTestResult.setCoverage(itCoverage);
+                }
             }
         } catch (SonarMeasureNotFoundException e) {
             if (LOG.isDebugEnabled()) {
