@@ -25,9 +25,11 @@ import net.awired.visuwall.common.client.GenericSoftwareClient;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
 import net.awired.visuwall.hudsonclient.builder.HudsonBuildBuilder;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
+import net.awired.visuwall.hudsonclient.builder.TestResultBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonJob;
+import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonViewNotFoundException;
@@ -61,10 +63,14 @@ public class HudsonFinder {
     @VisibleForTesting
     HudsonBuildBuilder hudsonBuildBuilder;
 
+    @VisibleForTesting
+    TestResultBuilder testResultBuilder;
+
     public HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder) {
         this.client = new GenericSoftwareClient();
         this.hudsonUrlBuilder = hudsonUrlBuilder;
         this.hudsonBuildBuilder = new HudsonBuildBuilder();
+        this.testResultBuilder = new TestResultBuilder();
     }
 
     public HudsonBuild find(String jobName, int buildNumber) throws HudsonBuildNotFoundException {
@@ -307,6 +313,25 @@ public class HudsonFinder {
     private boolean getIsBuilding(HudsonModelJob modelJob) {
         String color = modelJob.getColor().value();
         return color.endsWith("_anime");
+    }
+
+    public HudsonTestResult findUnitTestResult(String jobName, int buildNumber) throws HudsonBuildNotFoundException {
+        HudsonMavenMavenModuleSetBuild setBuild = findBuildByJobNameAndBuildNumber(jobName, buildNumber);
+        HudsonMavenReportersSurefireAggregatedReport surefireReport = findSurefireReport(jobName, setBuild);
+        if (surefireReport != null) {
+            return testResultBuilder.buildUnitTestResult(surefireReport);
+        }
+        return new HudsonTestResult();
+    }
+
+    public HudsonTestResult findIntegrationTestResult(String jobName, int buildNumber)
+            throws HudsonBuildNotFoundException {
+        HudsonMavenMavenModuleSetBuild setBuild = findBuildByJobNameAndBuildNumber(jobName, buildNumber);
+        HudsonMavenReportersSurefireAggregatedReport surefireReport = findSurefireReport(jobName, setBuild);
+        if (surefireReport != null) {
+            return testResultBuilder.buildIntegrationTestResult(surefireReport);
+        }
+        return new HudsonTestResult();
     }
 
 }

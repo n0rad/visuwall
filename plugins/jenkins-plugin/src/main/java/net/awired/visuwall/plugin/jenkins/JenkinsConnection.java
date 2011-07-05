@@ -27,17 +27,20 @@ import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.hudsonclient.Hudson;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonCommiter;
 import net.awired.visuwall.hudsonclient.domain.HudsonJob;
+import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
@@ -47,7 +50,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
-public final class JenkinsConnection implements BuildCapability, ViewCapability {
+public final class JenkinsConnection implements BuildCapability, ViewCapability, TestCapability {
 
     private static final Logger LOG = LoggerFactory.getLogger(JenkinsConnection.class);
 
@@ -332,6 +335,50 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability 
         }
 
         return commiters;
+    }
+
+    @Override
+    public TestResult analyzeUnitTests(SoftwareProjectId softwareProjectId) {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        try {
+            String jobName = softwareProjectId.getProjectId();
+            int lastBuildNumber = hudson.getLastBuildNumber(jobName);
+            HudsonTestResult unitTestResult = hudson.findUnitTestResult(jobName, lastBuildNumber);
+            return TestResults.createFrom(unitTestResult);
+        } catch (HudsonJobNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't analyze integration test of project: " + softwareProjectId, e);
+            }
+            return new TestResult();
+        } catch (HudsonBuildNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't analyze integration test of project: " + softwareProjectId, e);
+            }
+            return new TestResult();
+        }
+    }
+
+    @Override
+    public TestResult analyzeIntegrationTests(SoftwareProjectId softwareProjectId) {
+        checkConnected();
+        checkSoftwareProjectId(softwareProjectId);
+        try {
+            String jobName = softwareProjectId.getProjectId();
+            int lastBuildNumber = hudson.getLastBuildNumber(jobName);
+            HudsonTestResult integrationTestResult = hudson.findIntegrationTestResult(jobName, lastBuildNumber);
+            return TestResults.createFrom(integrationTestResult);
+        } catch (HudsonJobNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't analyze integration test of project: " + softwareProjectId, e);
+            }
+            return new TestResult();
+        } catch (HudsonBuildNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't analyze integration test of project: " + softwareProjectId, e);
+            }
+            return new TestResult();
+        }
     }
 
     private void checkBuildNumber(Integer buildNumber) {

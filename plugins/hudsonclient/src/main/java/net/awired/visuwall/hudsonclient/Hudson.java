@@ -22,6 +22,7 @@ import java.util.List;
 import net.awired.visuwall.hudsonclient.builder.HudsonUrlBuilder;
 import net.awired.visuwall.hudsonclient.domain.HudsonBuild;
 import net.awired.visuwall.hudsonclient.domain.HudsonJob;
+import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 import net.awired.visuwall.hudsonclient.exception.ArtifactIdNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonBuildNotFoundException;
 import net.awired.visuwall.hudsonclient.exception.HudsonJobNotFoundException;
@@ -275,4 +276,13 @@ public class Hudson {
         Preconditions.checkNotNull(jobName, "jobName is mandatory");
     }
 
+    public HudsonTestResult findUnitTestResult(String jobName, int lastBuildNumber)
+            throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
+        return hudsonFinder.findUnitTestResult(jobName, lastBuildNumber);
+    }
+
+    public HudsonTestResult findIntegrationTestResult(String jobName, int lastBuildNumber)
+            throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
+        return hudsonFinder.findIntegrationTestResult(jobName, lastBuildNumber);
+    }
 }

@@ -69,6 +69,7 @@ public class HudsonFinderTest {
         hudsonFinder = new HudsonFinder(hudsonUrlBuilder);
         hudsonFinder.client = client;
         hudsonFinder.hudsonBuildBuilder = hudsonBuildBuilder;
+        hudsonFinder.testResultBuilder = testResultBuilder;
     }
 
     @Test
