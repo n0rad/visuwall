@@ -37,7 +37,6 @@ import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.common.client.ResourceNotFoundException;
@@ -58,7 +57,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
-public class SonarConnection implements MetricCapability, TestCapability, BuildCapability {
+public class SonarConnection implements MetricCapability, TestCapability {
 
     private static final Logger LOG = LoggerFactory.getLogger(SonarConnection.class);
 
@@ -395,7 +394,6 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
         return qualityMetric;
     }
 
-    @Override
     public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
             throws BuildNotFoundException, ProjectNotFoundException {
         checkConnected();
@@ -406,14 +404,12 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
         return buildTime;
     }
 
-    @Override
     public List<Integer> getBuildNumbers(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         return Arrays.asList(1);
     }
 
-    @Override
     public State getBuildState(SoftwareProjectId softwareProjectId, Integer buildNumber)
             throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
@@ -421,7 +417,6 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
         return State.SUCCESS;
     }
 
-    @Override
     public Date getEstimatedFinishTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
             throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
@@ -429,7 +424,6 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
         return new Date();
     }
 
-    @Override
     public boolean isBuilding(SoftwareProjectId softwareProjectId, Integer buildNumber)
             throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
@@ -437,7 +431,6 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
         return false;
     }
 
-    @Override
     public int getLastBuildNumber(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
             BuildNumberNotFoundException {
         checkConnected();
@@ -445,7 +438,6 @@ public class SonarConnection implements MetricCapability, TestCapability, BuildC
         return 1;
     }
 
-    @Override
     public List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, Integer buildNumber)
             throws BuildNotFoundException, ProjectNotFoundException {
         checkConnected();
