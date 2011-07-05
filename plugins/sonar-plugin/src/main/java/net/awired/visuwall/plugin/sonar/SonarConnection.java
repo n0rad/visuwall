@@ -271,7 +271,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
     private void addQualityMeasure(QualityResult qualityResult, String artifactId, String key) {
         try {
             Measure measure = sonarClient.findMeasure(artifactId, key);
-            if (measure.getValue() != null) {
+            if (measure != null && measure.getValue() != null) {
                 SonarQualityMeasure qualityMeasure = QualityMeasures.asQualityMeasure(measure, key);
                 qualityMeasure.setName(metricsMap.get(key).getName());
                 qualityResult.add(key, asQualityMeasure(qualityMeasure));
