@@ -23,7 +23,7 @@ public class PluginInfo {
 
     private String name;
     private float version;
-    private List<CapabilitiesEnum> capabilities;
+    private List<CapabilityEnum> capabilities;
 
     // //////////////////////
 
@@ -59,11 +59,11 @@ public class PluginInfo {
         return Objects.hashCode(name, version);
     }
 
-    public void setCapabilities(List<CapabilitiesEnum> capabilities) {
+    public void setCapabilities(List<CapabilityEnum> capabilities) {
         this.capabilities = capabilities;
     }
 
-    public List<CapabilitiesEnum> getCapabilities() {
+    public List<CapabilityEnum> getCapabilities() {
         return capabilities;
     }
 }

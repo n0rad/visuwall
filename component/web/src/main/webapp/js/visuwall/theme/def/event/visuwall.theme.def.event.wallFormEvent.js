@@ -118,10 +118,10 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 	};
 
 	
-	this["#wallForm #delete|click"] = function() {		
-		$this.wallService.deleteWall($('#wallForm INPUT#name').val());
-// $("#modal").dialog('close');
-	};
+//	this["#wallForm #delete|click"] = function() {		
+//		$this.wallService.deleteWall($('#wallForm INPUT#name').val());
+//// $("#modal").dialog('close');
+//	};
 	
 	this["#wallForm|submit"] = function() {
 		$("#modal .success").empty();

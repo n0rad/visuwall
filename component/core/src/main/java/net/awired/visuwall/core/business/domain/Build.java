@@ -17,9 +17,12 @@
 package net.awired.visuwall.core.business.domain;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import net.awired.visuwall.api.domain.Commiter;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityResult;
@@ -35,15 +38,43 @@ public class Build {
     private long duration;
     private Date startTime;
     private Date estimatedFinishTime;
-
-    //TODO use composition for capabilities ? 
-    private TestResult unitTestResult = new TestResult();
-    private TestResult integrationTestResult = new TestResult();
-    private QualityResult qualityResult = new QualityResult();
+    private final Map<SoftwareProjectId, CapabilitiesResult> capabilitiesResults = new HashMap<SoftwareProjectId, CapabilitiesResult>();
 
     public Build(int buildNumber) {
         this.buildNumber = buildNumber;
     }
+
+    public TestResult getUnitTestResult() {
+        for (SoftwareProjectId softwareProjectId : capabilitiesResults.keySet()) {
+            CapabilitiesResult capabilitiesResult = capabilitiesResults.get(softwareProjectId);
+            if (capabilitiesResult.getUnitTestResult() != null) {
+                return capabilitiesResult.getUnitTestResult();
+            }
+        }
+        return null;
+    }
+
+    public QualityResult getQualityResult() {
+        for (SoftwareProjectId softwareProjectId : capabilitiesResults.keySet()) {
+            CapabilitiesResult capabilitiesResult = capabilitiesResults.get(softwareProjectId);
+            if (capabilitiesResult.getQualityResult() != null) {
+                return capabilitiesResult.getQualityResult();
+            }
+        }
+        return null;
+    }
+
+    public TestResult getIntregrationTestResult() {
+        for (SoftwareProjectId softwareProjectId : capabilitiesResults.keySet()) {
+            CapabilitiesResult capabilitiesResult = capabilitiesResults.get(softwareProjectId);
+            if (capabilitiesResult.getIntegrationTestResult() != null) {
+                return capabilitiesResult.getIntegrationTestResult();
+            }
+        }
+        return null;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
 
     public long getDuration() {
         return duration;
@@ -59,14 +90,6 @@ public class Build {
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
-    }
-
-    public TestResult getUnitTestResult() {
-        return unitTestResult;
-    }
-
-    public TestResult getIntegrationTestResult() {
-        return integrationTestResult;
     }
 
     public State getState() {
@@ -89,28 +112,7 @@ public class Build {
                 .add("commiters", commiters) //
                 .add("duration", duration) //
                 .add("startTime", startTime);
-        if (unitTestResult != null) {
-            toString.add("unit test result", unitTestResult.toString());
-        }
-        if (integrationTestResult != null) {
-            toString.add("integration test result", integrationTestResult.toString());
-        }
         return toString.toString();
-    }
-
-    public void setIntegrationTestResult(TestResult integrationTestResult) {
-        setTestResult(integrationTestResult, this.integrationTestResult);
-    }
-
-    public void setUnitTestResult(TestResult unitTestResult) {
-        setTestResult(unitTestResult, this.unitTestResult);
-    }
-
-    private void setTestResult(TestResult from, TestResult to) {
-        to.setCoverage(from.getCoverage());
-        to.setFailCount(from.getFailCount());
-        to.setPassCount(from.getPassCount());
-        to.setSkipCount(from.getSkipCount());
     }
 
     public Set<Commiter> getCommiters() {
@@ -128,10 +130,8 @@ public class Build {
             return Objects.equal(buildNumber, b.buildNumber) && //
                     Objects.equal(commiters, b.commiters) && //
                     Objects.equal(duration, b.duration) && //
-                    Objects.equal(integrationTestResult, b.integrationTestResult) && //
                     Objects.equal(startTime, b.startTime) && //
-                    Objects.equal(state, b.state) && //
-                    Objects.equal(unitTestResult, b.unitTestResult);
+                    Objects.equal(state, b.state); //
         }
         return false;
     }
@@ -157,11 +157,8 @@ public class Build {
         return estimatedFinishTime;
     }
 
-    public void setQualityResult(QualityResult qualityResult) {
-        this.qualityResult = qualityResult;
+    public Map<SoftwareProjectId, CapabilitiesResult> getCapabilitiesResults() {
+        return capabilitiesResults;
     }
 
-    public QualityResult getQualityResult() {
-        return qualityResult;
-    }
 }

@@ -18,11 +18,13 @@ package net.awired.visuwall.core.business.domain;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
+import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
@@ -48,7 +50,10 @@ public class Project implements Comparable<Project> {
     private int lastBuildNumber;
     private int lastNotBuildingNumber;
     private int previousCompletedBuildNumber;
+    private Date lastUpdate;
 
+    @Transient
+    private ProjectKey projectKey;
     @Transient
     private Map<SoftwareProjectId, BasicCapability> capabilities = new HashMap<SoftwareProjectId, BasicCapability>();
     @Transient
@@ -227,6 +232,24 @@ public class Project implements Comparable<Project> {
     @JsonIgnore
     public void setCapabilities(Map<SoftwareProjectId, BasicCapability> capabilities) {
         this.capabilities = capabilities;
+    }
+
+    @JsonIgnore
+    public ProjectKey getProjectKey() {
+        return projectKey;
+    }
+
+    @JsonIgnore
+    public void setProjectKey(ProjectKey projectKey) {
+        this.projectKey = projectKey;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
     }
 
 }

@@ -84,9 +84,10 @@ public class WallController {
         List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
         for (Project project : wall.getProjects()) {
             ProjectStatus projectStatus = new ProjectStatus(project);
-            projectStatus.setLastBuildId(project.getLastBuildNumber());
+            projectStatus.setLastBuildId(project.getLastNotBuildingNumber());
             try {
                 projectStatus.setBuilding(project.getLastBuild().isBuilding());
+                projectStatus.setLastUpdate(project.getLastUpdate());
                 if (project.getLastBuild().getEstimatedFinishTime() != null) {
                     long durationFromNow = project.getLastBuild().getEstimatedFinishTime().getTime()
                             - new Date().getTime();

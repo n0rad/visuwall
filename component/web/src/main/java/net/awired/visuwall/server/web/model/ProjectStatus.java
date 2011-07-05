@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.server.web.model;
 
+import java.util.Date;
 import net.awired.visuwall.core.business.domain.Project;
 import com.google.common.base.Objects;
 
@@ -24,6 +25,7 @@ public final class ProjectStatus {
     private boolean building;
     private int buildingTimeleftSecond;
     private int lastBuildId;
+    private Date lastUpdate;
 
     public ProjectStatus(Project project) {
         this.id = project.getId();
@@ -65,5 +67,13 @@ public final class ProjectStatus {
 
     public int getBuildingTimeleftSecond() {
         return buildingTimeleftSecond;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

@@ -27,7 +27,7 @@ import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
-import net.awired.visuwall.core.business.domain.CapabilitiesEnum;
+import net.awired.visuwall.core.business.domain.CapabilityEnum;
 import net.awired.visuwall.core.business.domain.PluginInfo;
 import net.awired.visuwall.core.business.domain.SoftwareInfo;
 import org.slf4j.Logger;
@@ -95,7 +95,7 @@ public class PluginService {
         pluginInfo.setName(visuwallPlugin.getName());
         pluginInfo.setVersion(visuwallPlugin.getVersion());
         Class<BasicCapability> connectionClass = visuwallPlugin.getConnectionClass();
-        pluginInfo.setCapabilities(CapabilitiesEnum.getCapabilitiesForClass(connectionClass));
+        pluginInfo.setCapabilities(CapabilityEnum.getCapabilitiesForClass(connectionClass));
         return pluginInfo;
     }
 

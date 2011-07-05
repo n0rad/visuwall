@@ -16,12 +16,21 @@
 
 package net.awired.visuwall.core.business.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
+import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
+import net.awired.visuwall.api.domain.TestResult;
+import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
+import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.api.plugin.capability.MetricCapability;
+import net.awired.visuwall.api.plugin.capability.TestCapability;
+import net.awired.visuwall.core.business.domain.CapabilitiesResult;
 import net.awired.visuwall.core.business.domain.Project;
 import net.awired.visuwall.core.business.process.capabilities.BuildCapabilityProcess;
 import net.awired.visuwall.core.business.process.capabilities.MetricCapabilityProcess;
@@ -88,53 +97,103 @@ public class ProjectService {
                 try {
                     int[] buildsToUpdate = buildProcess.updateStatusAndReturnBuildsToUpdate(project);
                     if (neverRun || buildsToUpdate.length != 0) {
-                        if (!neverRun) {
-                            LOG.debug("Project build change and needs a update from software " + project);
-                        }
-
-                        SoftwareProjectId projectId = project.getBuildProjectId();
-
-                        // name
                         try {
-                            String name = project.getBuildConnection().getName(projectId);
-                            project.setName(name);
-                        } catch (Exception e) {
-                            LOG.warn("Can not found project name for project " + project, e);
-                        }
-
-                        // description
-                        try {
-                            String description = project.getBuildConnection().getDescription(projectId);
-                            project.setDescription(description);
-                        } catch (Exception e) {
-                            LOG.warn("Can not found description for project " + project, e);
-                        }
-
-                        try {
-                            List<Integer> buildNumbers = project.getBuildConnection().getBuildNumbers(projectId);
-                            project.setBuildNumbers(buildNumbers);
-                            buildProcess.updateLastNotBuildingNumber(project);
-                            buildProcess.updatePreviousCompletedBuild(project);
-                        } catch (Exception e) {
-                            LOG.warn("Can not update previous completed build for project " + project, e);
-                        }
-
-                        for (int buildId : buildsToUpdate) {
-                            buildProcess.updateBuild(project, buildId);
-
-                            if (buildId == project.getLastNotBuildingNumber()) {
-                                metricCapabilityProcess.updateLastBuildMetrics(project);
+                            if (!neverRun) {
+                                LOG.debug("Project build change and needs a update from software " + project);
                             }
+                            SoftwareProjectId projectId = project.getBuildProjectId();
+
+                            // name
+                            try {
+                                String name = project.getBuildConnection().getName(projectId);
+                                project.setName(name);
+                            } catch (Exception e) {
+                                LOG.warn("Can not found project name for project " + project, e);
+                            }
+
+                            if (neverRun) {
+                                try {
+                                    ProjectKey projectKey = new ProjectKey();
+                                    project.setProjectKey(projectKey);
+                                    String mavenId = project.getBuildConnection().getMavenId(
+                                            project.getBuildProjectId());
+                                    projectKey.setMavenId(mavenId);
+                                    projectKey.setName(project.getName());
+                                } catch (MavenIdNotFoundException e) {
+                                    LOG.debug("Maven project id not found for project" + project, e);
+                                }
+                            }
+
+                            // description
+                            try {
+                                String description = project.getBuildConnection().getDescription(projectId);
+                                project.setDescription(description);
+                            } catch (Exception e) {
+                                LOG.warn("Can not found description for project " + project, e);
+                            }
+
+                            try {
+                                List<Integer> buildNumbers = project.getBuildConnection().getBuildNumbers(projectId);
+                                project.setBuildNumbers(buildNumbers);
+                                buildProcess.updateLastNotBuildingNumber(project);
+                                buildProcess.updatePreviousCompletedBuild(project);
+                            } catch (Exception e) {
+                                LOG.warn("Can not update previous completed build for project " + project, e);
+                            }
+
+                            for (int buildId : buildsToUpdate) {
+                                buildProcess.updateBuild(project, buildId);
+                            }
+
+                            // TODO be sure to not remove a project cause of a capability ProjectNotFoundException 
+                        } finally {
+                            project.setLastUpdate(new Date());
                         }
-
-                        // TODO check for new software to update
-                        // TODO be sure to not remove a project cause of a capability ProjectNotFoundException 
-
-                        // projectEnhancerService.enhanceWithBuildInformations(project, service);
-                        // projectEnhancerService.enhanceWithQualityAnalysis(project, service, metrics);
-                        // projectAggregatorService.enhanceWithBuildInformations(connectedProject, buildPlugin);                        
                     }
 
+                    // update capabilities
+                    if (project.getLastNotBuildingNumber() != 0) {
+                        for (SoftwareProjectId softwareProjectId : project.getCapabilities().keySet()) {
+                            //TODO we currently be able to manage last build only 
+                            if (!project.getLastBuild().getCapabilitiesResults().containsKey(softwareProjectId)) {
+                                try {
+                                    BasicCapability capability = project.getCapabilities().get(softwareProjectId);
+                                    LOG.info("new Software {} for project {}", capability, project);
+
+                                    CapabilitiesResult capabilitiesResult = new CapabilitiesResult();
+                                    project.getLastBuild().getCapabilitiesResults()
+                                            .put(softwareProjectId, capabilitiesResult);
+
+                                    if (capability instanceof MetricCapability) {
+                                        if (project.getLastNotBuildingNumber() != 0) {
+                                            QualityResult qualityResult = ((MetricCapability) capability)
+                                                    .analyzeQuality(softwareProjectId,
+                                                            MetricCapabilityProcess.metrics);
+                                            capabilitiesResult.setQualityResult(qualityResult);
+                                        }
+                                    }
+
+                                    if (capability instanceof TestCapability) {
+                                        if (project.getLastNotBuildingNumber() != 0) {
+                                            TestResult testResult = ((TestCapability) capability)
+                                                    .analyzeUnitTests(softwareProjectId);
+                                            capabilitiesResult.setUnitTestResult(testResult);
+                                        }
+                                        if (project.getLastNotBuildingNumber() != 0) {
+                                            TestResult testResult = ((TestCapability) capability)
+                                                    .analyzeIntegrationTests(softwareProjectId);
+                                            capabilitiesResult.setIntegrationTestResult(testResult);
+                                        }
+                                    }
+                                    // projectEnhancerService.enhanceWithBuildInformations(project, service);
+                                    // projectEnhancerService.enhanceWithQualityAnalysis(project, service, metrics);
+                                    // projectAggregatorService.enhanceWithBuildInformations(connectedProject, buildPlugin);                        
+                                } finally {
+                                    project.setLastUpdate(new Date());
+                                }
+                            }
+                        }
+                    }
                 } catch (ProjectNotFoundException e) {
                     LOG.info("Project not found by build Software, and will be removed");
                     LOG.debug("Project not found cause", e);
