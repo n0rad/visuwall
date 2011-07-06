@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<groups>
+	<group href="/app/rest/userGroups/key:ADMINS" name="Administrators"
+		key="ADMINS" />
+	<group href="/app/rest/userGroups/key:ALL_USERS_GROUP" name="All Users"
+		key="ALL_USERS_GROUP" />
+	<group href="/app/rest/userGroups/key:EXTERNAL_USERS" name="External Users"
+		key="EXTERNAL_USERS" />
+	<group href="/app/rest/userGroups/key:GQ_TEAM" name="Genome Query  Team"
+		key="GQ_TEAM" />
+	<group href="/app/rest/userGroups/key:JETBRAINERS" name="JetBrainers"
+		key="JETBRAINERS" />
+	<group href="/app/rest/userGroups/key:RECOGNIZED_USERS" name="Recognized Users"
+		key="RECOGNIZED_USERS" />
+	<group href="/app/rest/userGroups/key:RESHARPER_ADMINS" name="ReSharper PowerToys Admins"
+		key="RESHARPER_ADMINS" />
+	<group href="/app/rest/userGroups/key:TEAMCITY_DEVS" name="TeamCity devs"
+		key="TEAMCITY_DEVS" />
+</groups>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vcs-roots>
+	<vcs-root href="/app/rest/vcs-roots/id:1"
+		name="svn: http://google-web-toolkit.googlecode.com/svn/trunk/" />
+	<vcs-root href="/app/rest/vcs-roots/id:2"
+		name="svn: http://google-web-toolkit.googlecode.com/svn/tools/" />
+	<vcs-root href="/app/rest/vcs-roots/id:3"
+		name="svn: http://svn.codehaus.org/groovy/trunk/groovy/groovy-core/" />
+	<vcs-root href="/app/rest/vcs-roots/id:4"
+		name="svn: http://svn.codehaus.org/jmock/trunk/jmock2" />
+	<vcs-root href="/app/rest/vcs-roots/id:5"
+		name="svn: https://joustim.svn.sourceforge.net/svnroot/joustim" />
+	<vcs-root href="/app/rest/vcs-roots/id:6"
+		name="svn: https://joustsim.svn.sourceforge.net/svnroot/joustsim/trunk/joustsim/" />
+	<vcs-root href="/app/rest/vcs-roots/id:7" name="http://juxy.tigris.org/svn/juxy/trunk" />
+	<vcs-root href="/app/rest/vcs-roots/id:8"
+		name="svn: http://svn.codehaus.org/picocontainer/java/2.x/trunk/pico" />
+	<vcs-root href="/app/rest/vcs-roots/id:10"
+		name="svn: http://svn.igniterealtime.org/svn/repos/smack/trunk" />
+	<vcs-root href="/app/rest/vcs-roots/id:11"
+		name="cvs: :pserver:springframework.cvs.sourceforge.net:/cvsroot/springframework spring" />
+	<vcs-root href="/app/rest/vcs-roots/id:12" name="svn: http://testng.googlecode.com/svn/trunk" />
+	<vcs-root href="/app/rest/vcs-roots/id:13" name="svn: http://svn.codehaus.org/xstream/trunk" />
+	<vcs-root href="/app/rest/vcs-roots/id:19" name="TestNG Trunk at GoogleCode" />
+	<vcs-root href="/app/rest/vcs-roots/id:18" name="Common SVN" />
+	<vcs-root href="/app/rest/vcs-roots/id:21" name="svn: http://svn.codehaus.org/gradle/trunk" />
+	<vcs-root href="/app/rest/vcs-roots/id:20"
+		name="svn: http://svn.jetbrains.org/teamcity/plugins/rake-runner/trunk" />
+	<vcs-root href="/app/rest/vcs-roots/id:23"
+		name="svn: http://svn.radiantcms.org/radiant/trunk/radiant" />
+	<vcs-root href="/app/rest/vcs-roots/id:22" name="svn: http://rspec.rubyforge.org/svn/trunk" />
+	<vcs-root href="/app/rest/vcs-roots/id:25" name="release-branch-windows" />
+	<vcs-root href="/app/rest/vcs-roots/id:24" name="TeamCity plugins repository (public SVN)" />
+	<vcs-root href="/app/rest/vcs-roots/id:27" name="release-branch-linux" />
+	<vcs-root href="/app/rest/vcs-roots/id:26"
+		name="svn: http://www.rousette.org.uk/svn/tracks-repos/tags/current/tracks" />
+	<vcs-root href="/app/rest/vcs-roots/id:29" name="Ivy Core @ apache.org" />
+	<vcs-root href="/app/rest/vcs-roots/id:28" name="TeamCity Mercurial Plugin Repository" />
+	<vcs-root href="/app/rest/vcs-roots/id:31" name="Scala trunk" />
+	<vcs-root href="/app/rest/vcs-roots/id:30" name="Apache Ant @ apache.org" />
+	<vcs-root href="/app/rest/vcs-roots/id:34"
+		name="svn: https://tento.svn.sourceforge.net/svnroot/tento/tento/trunk/" />
+	<vcs-root href="/app/rest/vcs-roots/id:35"
+		name="ssh://git@git.labs.intellij.net/teamcity/git-plugin.git#Darjeeling-5.1.x" />
+	<vcs-root href="/app/rest/vcs-roots/id:32"
+		name="svn: https://gal.svn.sourceforge.net/svnroot/gal" />
+	<vcs-root href="/app/rest/vcs-roots/id:33"
+		name="svn: https://freemis.svn.sourceforge.net/svnroot/freemis/trunk" />
+	<vcs-root href="/app/rest/vcs-roots/id:38"
+		name="svn: http://svn.jetbrains.org/teamcity/plugins" />
+	<vcs-root href="/app/rest/vcs-roots/id:39" name="Github" />
+	<vcs-root href="/app/rest/vcs-roots/id:36" name="tcPlugins on SourceForge" />
+	<vcs-root href="/app/rest/vcs-roots/id:37" name="JGit repository" />
+	<vcs-root href="/app/rest/vcs-roots/id:42" name="github-branch" />
+	<vcs-root href="/app/rest/vcs-roots/id:41" name="github-master" />
+	<vcs-root href="/app/rest/vcs-roots/id:47"
+		name="svn: http://subversion.jfrog.org/jfrog/teamcity-artifactory-plugin/trunk" />
+	<vcs-root href="/app/rest/vcs-roots/id:44" name="http://testng.googlecode.com/svn/trunk" />
+	<vcs-root href="/app/rest/vcs-roots/id:45"
+		name="TeamCity Mercurial Plugin Repository (5.0.x branch)" />
+	<vcs-root href="/app/rest/vcs-roots/id:51" name="git://github.com/dchelimsky/rspec.git#master" />
+	<vcs-root href="/app/rest/vcs-roots/id:50"
+		name="git://github.com/aslakhellesoy/cucumber.git#master" />
+	<vcs-root href="/app/rest/vcs-roots/id:49" name="http://github.com/carlhuda/bundler.git" />
+	<vcs-root href="/app/rest/vcs-roots/id:48"
+		name="svn: http://subversion.jfrog.org/jfrog/teamcity-artifactory-plugin/branches/release/" />
+	<vcs-root href="/app/rest/vcs-roots/id:59"
+		name="svn: http://svn.jetbrains.org/teamcity/plugins/priority-queue/" />
+	<vcs-root href="/app/rest/vcs-roots/id:57" name="http://github.com/aslakhellesoy/cuke4duke.git" />
+	<vcs-root href="/app/rest/vcs-roots/id:56" name="git://github.com/cucumber/cucumber.git#master" />
+	<vcs-root href="/app/rest/vcs-roots/id:63"
+		name="svn: http://teamcitycsharprunner.googlecode.com/svn/" />
+	<vcs-root href="/app/rest/vcs-roots/id:62"
+		name="TeamCity Mercurial Plugin Repository (5.1.x branch)" />
+	<vcs-root href="/app/rest/vcs-roots/id:61"
+		name="ssh://git@git.labs.intellij.net/teamcity/git-plugin.git#Calcutta-4.5.x" />
+	<vcs-root href="/app/rest/vcs-roots/id:68" name="NUnit 2 - debug linux test issues" />
+	<vcs-root href="/app/rest/vcs-roots/id:70" name="Genome Query (trunk)" />
+	<vcs-root href="/app/rest/vcs-roots/id:64"
+		name="TeamCity Mercurial Plugin Repository (6.x branch)" />
+	<vcs-root href="/app/rest/vcs-roots/id:65"
+		name="ssh://git@git.labs.intellij.net/teamcity/git-plugin.git#master" />
+	<vcs-root href="/app/rest/vcs-roots/id:66" name="NUnit 2 trunk @bazaar.launchpad.net" />
+	<vcs-root href="/app/rest/vcs-roots/id:67" name="NUnit 2 - nant 0.9" />
+	<vcs-root href="/app/rest/vcs-roots/id:76" name="TfsTeamcity (http://tfsteamcity.codeplex.com)" />
+	<vcs-root href="/app/rest/vcs-roots/id:77" name="ruby-debug-gems" />
+	<vcs-root href="/app/rest/vcs-roots/id:78" name="ruby-debug-ide-gem" />
+	<vcs-root href="/app/rest/vcs-roots/id:79" name="ruby-debug-base19" />
+	<vcs-root href="/app/rest/vcs-roots/id:75"
+		name="http://svn.jetbrains.org/teamcity/plugins/priority-queue/6.0.x" />
+	<vcs-root href="/app/rest/vcs-roots/id:85" name="https://github.com/olegs/ideavim" />
+	<vcs-root href="/app/rest/vcs-roots/id:84" name="git://github.com/jonnyzzz/maragogype.git" />
+	<vcs-root href="/app/rest/vcs-roots/id:87" name="github.com/milgner/TeamCityRedmine" />
+	<vcs-root href="/app/rest/vcs-roots/id:86" name="Genome Query (gq0.1)" />
+	<vcs-root href="/app/rest/vcs-roots/id:81"
+		name="ssh://git@git.labs.intellij.net/teamcity/git-plugin.git#Eluru-6.0.x" />
+	<vcs-root href="/app/rest/vcs-roots/id:80" name="TeamCityConfMonitor" />
+	<vcs-root href="/app/rest/vcs-roots/id:83" name="http://typica.googlecode.com/svn/trunk" />
+</vcs-roots>
