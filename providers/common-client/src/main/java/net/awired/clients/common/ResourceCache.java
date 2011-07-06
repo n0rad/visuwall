@@ -22,7 +22,7 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
-public class ResourceCache {
+class ResourceCache {
 
     private final Cache cache;
 

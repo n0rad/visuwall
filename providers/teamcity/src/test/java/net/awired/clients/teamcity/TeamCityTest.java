@@ -27,8 +27,6 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
-import net.awired.clients.teamcity.TeamCity;
-import net.awired.clients.teamcity.builder.TeamCityUrlBuilder;
 import net.awired.clients.teamcity.exception.TeamCityBuildListNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityProjectNotFoundException;
@@ -69,7 +67,7 @@ public class TeamCityTest {
         teamcity.client = client;
         teamcity.urlBuilder = urlBuilder;
     }
-    
+
     @Test(expected = NullPointerException.class)
     public void cant_pass_null_as_parameter_in_constructor() {
         new TeamCity(null);

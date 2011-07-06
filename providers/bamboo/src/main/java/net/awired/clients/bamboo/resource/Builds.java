@@ -14,30 +14,20 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.bamboo;
+package net.awired.clients.bamboo.resource;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import java.util.ArrayList;
 import java.util.List;
-import net.awired.clients.bamboo.Bamboo;
-import net.awired.clients.bamboo.exception.BambooPlanNotFoundException;
-import net.awired.clients.bamboo.resource.Plan;
-import org.junit.Test;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class BambooIT {
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "builds")
+public class Builds {
 
-    private Bamboo bamboo = new Bamboo("http://bamboo.visuwall.awired.net");
+    public List<Builds> builds = new ArrayList<Builds>();
 
-    @Test
-    public void should_find_all_plans() {
-        List<Plan> plans = bamboo.findAllPlans();
-        assertFalse(plans.isEmpty());
-    }
-
-    @Test
-    public void should_find_an_existing_plan() throws BambooPlanNotFoundException {
-        Plan project = bamboo.findPlan("STRUTS-STRUTS");
-        assertNotNull(project);
-    }
+    public List<Build> build = new ArrayList<Build>();
 
 }

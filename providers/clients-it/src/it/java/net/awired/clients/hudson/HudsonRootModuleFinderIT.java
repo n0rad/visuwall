@@ -16,8 +16,6 @@
 
 package net.awired.clients.hudson;
 
-import net.awired.clients.hudson.builder.HudsonUrlBuilder;
-import net.awired.clients.hudson.finder.HudsonRootModuleFinder;
 import org.junit.Assert;
 import org.junit.Test;
 
