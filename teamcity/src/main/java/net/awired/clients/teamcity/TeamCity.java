@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
-import net.awired.clients.teamcity.builder.TeamCityUrlBuilder;
 import net.awired.clients.teamcity.exception.TeamCityBuildListNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityChangesNotFoundException;
