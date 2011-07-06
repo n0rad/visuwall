@@ -14,13 +14,12 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.teamcity;
+package net.awired.clients.teamcity.resource;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.util.Calendar;
 import java.util.Date;
-import net.awired.clients.teamcity.DateAdapter;
 import org.junit.Test;
 
 public class DateAdapterTest {

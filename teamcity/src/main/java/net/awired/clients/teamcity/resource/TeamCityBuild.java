@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import net.awired.clients.teamcity.DateAdapter;
 
 @XmlRootElement(name = "build")
 public class TeamCityBuild extends TeamCityAbstractBuild {
