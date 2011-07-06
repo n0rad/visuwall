@@ -83,9 +83,9 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:git://github.com/jsmadja/clients.git</connection>
-		<developerConnection>scm:git:git@github.com:jsmadja/clients.git</developerConnection>
-		<url>http://github.com/jsmadja/clients</url>
+		<connection>scm:git:git://github.com/awired/clients.git</connection>
+		<developerConnection>scm:git:git@github.com:awired/clients.git</developerConnection>
+		<url>http://github.com/awired/clients</url>
 	</scm>
 
 
