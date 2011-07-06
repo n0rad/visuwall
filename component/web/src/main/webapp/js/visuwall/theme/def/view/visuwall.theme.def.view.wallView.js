@@ -197,10 +197,16 @@ visuwall.theme.def.view.wallView = new function() {
 	};
 
 	this.updateUTCoverage = function(projectId, coverage) {
+		if (coverage == 0) {
+			coverage = 100;
+		}
 		$this._updateCoverage(projectId, coverage, 'u');
 	};
 
 	this.updateITCoverage = function(projectId, coverage) {
+		if (coverage == 0) {
+			coverage = 100;
+		}
 		$this._updateCoverage(projectId, coverage, 'i');
 	};
 

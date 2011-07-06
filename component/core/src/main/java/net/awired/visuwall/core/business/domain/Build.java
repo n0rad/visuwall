@@ -64,7 +64,7 @@ public class Build {
         return null;
     }
 
-    public TestResult getIntregrationTestResult() {
+    public TestResult getIntegrationTestResult() {
         for (SoftwareProjectId softwareProjectId : capabilitiesResults.keySet()) {
             CapabilitiesResult capabilitiesResult = capabilitiesResults.get(softwareProjectId);
             if (capabilitiesResult.getIntegrationTestResult() != null) {
