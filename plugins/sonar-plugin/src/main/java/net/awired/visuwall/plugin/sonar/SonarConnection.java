@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import net.awired.clients.common.ResourceNotFoundException;
-import net.awired.clients.sonar.QualityMeasures;
 import net.awired.clients.sonar.Sonar;
 import net.awired.clients.sonar.domain.SonarQualityMeasure;
 import net.awired.clients.sonar.domain.SonarQualityMetric;

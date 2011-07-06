@@ -21,17 +21,16 @@ import java.util.Map;
 import net.awired.visuwall.api.domain.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.base.Preconditions;
 
-public class States {
+class States {
 
     private static final Logger LOG = LoggerFactory.getLogger(States.class);
 
     private static final Map<String, State> STATE_MAPPING = new HashMap<String, State>();
 
-    public static final String SUCCESS = "SUCCESS";
-    public static final String ERROR = "ERROR";
-    public static final String FAILURE = "FAILURE";
+    static final String SUCCESS = "SUCCESS";
+    static final String ERROR = "ERROR";
+    static final String FAILURE = "FAILURE";
 
     static {
         STATE_MAPPING.put(ERROR, State.FAILURE);
@@ -39,8 +38,7 @@ public class States {
         STATE_MAPPING.put(SUCCESS, State.SUCCESS);
     }
 
-    public static final State asVisuwallState(String teamcityState) {
-        Preconditions.checkNotNull(teamcityState, "teamcityState is mandatory");
+    static final State asVisuwallState(String teamcityState) {
         State state = STATE_MAPPING.get(teamcityState);
         if (state == null) {
             state = State.UNKNOWN;

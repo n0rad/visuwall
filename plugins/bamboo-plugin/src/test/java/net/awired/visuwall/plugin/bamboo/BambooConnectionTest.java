@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import net.awired.clients.bamboo.Bamboo;
 import net.awired.clients.bamboo.exception.BambooPlanNotFoundException;
-import net.awired.clients.bamboo.rest.Plan;
+import net.awired.clients.bamboo.resource.Plan;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;

@@ -20,7 +20,6 @@ import java.net.URL;
 import java.util.Properties;
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
-import net.awired.clients.teamcity.builder.TeamCityUrlBuilder;
 import net.awired.clients.teamcity.resource.TeamCityServer;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
@@ -92,8 +91,7 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
     }
 
     private String getVersion(String url) throws ResourceNotFoundException {
-        TeamCityUrlBuilder builder = new TeamCityUrlBuilder(url);
-        String serverUrl = builder.getServer();
+        String serverUrl = url + "/app/rest/server";
         TeamCityServer server = genericSoftwareClient.resource(serverUrl, TeamCityServer.class);
         return server.getVersionMajor() + "." + server.getVersionMinor();
     }
