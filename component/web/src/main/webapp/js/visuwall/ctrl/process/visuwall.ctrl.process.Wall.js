@@ -109,7 +109,7 @@ visuwall.ctrl.process.Wall = function(wallName) {
 			$this.wallView.updateQuality(project.id, lastBuild.qualityResult.measures);
 		}
 		
-		if (lastBuild.unitTestResult && lastBuild.unitTestResult.coverage) {
+		if (lastBuild.unitTestResult) {
 			$this.wallView.updateUTCoverage(project.id, lastBuild.unitTestResult.coverage);
 		}
 		if (lastBuild.unitTestResult) {
@@ -119,7 +119,7 @@ visuwall.ctrl.process.Wall = function(wallName) {
 					lastBuild.unitTestResult.skipCount);
 		}
 
-		if (lastBuild.integrationTestResult && lastBuild.integrationTestResult.coverage) {
+		if (lastBuild.integrationTestResult) {
 			$this.wallView.updateITCoverage(project.id, lastBuild.integrationTestResult.coverage);
 		}
 		if (lastBuild.integrationTestResult) {
