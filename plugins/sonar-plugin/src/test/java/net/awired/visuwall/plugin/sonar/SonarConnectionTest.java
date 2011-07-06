@@ -28,6 +28,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.awired.clients.common.ResourceNotFoundException;
+import net.awired.clients.sonar.Sonar;
+import net.awired.clients.sonar.domain.SonarQualityMetric;
+import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
+import net.awired.clients.sonar.exception.SonarMetricsNotFoundException;
+import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
+import net.awired.clients.sonar.resource.Project;
+import net.awired.clients.sonar.resource.Projects;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
@@ -38,14 +46,6 @@ import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.common.client.ResourceNotFoundException;
-import net.awired.visuwall.sonarclient.SonarClient;
-import net.awired.visuwall.sonarclient.domain.SonarQualityMetric;
-import net.awired.visuwall.sonarclient.exception.SonarMeasureNotFoundException;
-import net.awired.visuwall.sonarclient.exception.SonarMetricsNotFoundException;
-import net.awired.visuwall.sonarclient.exception.SonarResourceNotFoundException;
-import net.awired.visuwall.sonarclient.resource.Project;
-import net.awired.visuwall.sonarclient.resource.Projects;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -58,7 +58,7 @@ public class SonarConnectionTest {
     Map<String, SonarQualityMetric> metricList = createMetricList();
 
     @Mock
-    SonarClient sonarClient;
+    Sonar sonarClient;
 
     SonarConnection sonar;
 

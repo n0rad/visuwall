@@ -24,6 +24,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import net.awired.clients.common.ResourceNotFoundException;
+import net.awired.clients.sonar.QualityMeasures;
+import net.awired.clients.sonar.Sonar;
+import net.awired.clients.sonar.domain.SonarQualityMeasure;
+import net.awired.clients.sonar.domain.SonarQualityMetric;
+import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
+import net.awired.clients.sonar.exception.SonarMetricsNotFoundException;
+import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
+import net.awired.clients.sonar.resource.Project;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
@@ -39,15 +48,6 @@ import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
-import net.awired.visuwall.common.client.ResourceNotFoundException;
-import net.awired.visuwall.sonarclient.QualityMeasures;
-import net.awired.visuwall.sonarclient.SonarClient;
-import net.awired.visuwall.sonarclient.domain.SonarQualityMeasure;
-import net.awired.visuwall.sonarclient.domain.SonarQualityMetric;
-import net.awired.visuwall.sonarclient.exception.SonarMeasureNotFoundException;
-import net.awired.visuwall.sonarclient.exception.SonarMetricsNotFoundException;
-import net.awired.visuwall.sonarclient.exception.SonarResourceNotFoundException;
-import net.awired.visuwall.sonarclient.resource.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.wsclient.services.Measure;
@@ -64,7 +64,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
     private final UUID id = UUID.randomUUID();
 
     @VisibleForTesting
-    SonarClient sonarClient;
+    Sonar sonarClient;
 
     private Map<String, QualityMetric> metricsMap;
     private String[] metricKeys = new String[] {};
@@ -84,7 +84,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
             LOG.info("Initialize sonar with url " + url);
         }
         if (sonarClient == null) {
-            sonarClient = new SonarClient(url, login, password);
+            sonarClient = new Sonar(url, login, password);
         }
         connected = true;
     }

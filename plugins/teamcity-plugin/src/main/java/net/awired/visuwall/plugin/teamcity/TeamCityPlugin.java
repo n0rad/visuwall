@@ -18,13 +18,13 @@ package net.awired.visuwall.plugin.teamcity;
 
 import java.net.URL;
 import java.util.Properties;
+import net.awired.clients.common.GenericSoftwareClient;
+import net.awired.clients.common.ResourceNotFoundException;
+import net.awired.clients.teamcity.builder.TeamCityUrlBuilder;
+import net.awired.clients.teamcity.resource.TeamCityServer;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
-import net.awired.visuwall.common.client.GenericSoftwareClient;
-import net.awired.visuwall.common.client.ResourceNotFoundException;
-import net.awired.visuwall.teamcityclient.builder.TeamCityUrlBuilder;
-import net.awired.visuwall.teamcityclient.resource.TeamCityServer;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 

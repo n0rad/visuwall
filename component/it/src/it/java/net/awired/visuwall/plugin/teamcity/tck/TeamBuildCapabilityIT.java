@@ -50,7 +50,7 @@ public class TeamBuildCapabilityIT implements BuildCapabilityTCK {
         SoftwareProjectId projectId = amazonProjectSoftwareId();
         List<Integer> buildNumbers = teamcity.getBuildNumbers(projectId);
 
-        assertEquals(Arrays.asList(1, 2, 3, 4, 5, 6), buildNumbers);
+        assertEquals(Arrays.asList(1, 2, 3, 4, 5, 6, 8), buildNumbers);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class TeamBuildCapabilityIT implements BuildCapabilityTCK {
         SoftwareProjectId projectId = amazonProjectSoftwareId();
         int lastBuildNumber = teamcity.getLastBuildNumber(projectId);
 
-        assertEquals(6, lastBuildNumber);
+        assertEquals(8, lastBuildNumber);
     }
 
     @Override

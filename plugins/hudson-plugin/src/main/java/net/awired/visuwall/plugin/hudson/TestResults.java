@@ -16,8 +16,8 @@
 
 package net.awired.visuwall.plugin.hudson;
 
+import net.awired.clients.hudson.domain.HudsonTestResult;
 import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.hudsonclient.domain.HudsonTestResult;
 
 public class TestResults {
 

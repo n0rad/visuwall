@@ -17,8 +17,8 @@
 package net.awired.visuwall.plugin.teamcity;
 
 import java.util.Date;
+import net.awired.clients.teamcity.resource.TeamCityBuild;
 import net.awired.visuwall.api.domain.BuildTime;
-import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
 
 public class BuildTimes {
 

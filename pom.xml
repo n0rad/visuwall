@@ -34,12 +34,6 @@
 	</parent>
 
 	<modules>
-		<module>plugins/common-client</module>
-		<module>plugins/bambooclient</module>
-		<module>plugins/hudsonclient</module>
-		<module>plugins/teamcityclient</module>
-		<module>plugins/sonarclient</module>
-
 		<module>plugins/sonar-plugin</module>
 		<module>plugins/hudson-plugin</module>
 		<module>plugins/bamboo-plugin</module>
@@ -127,33 +121,6 @@
                         <dependency>
                                 <groupId>net.awired.visuwall</groupId>
                                 <artifactId>visuwall-it</artifactId>
-                                <version>${project.version}</version>
-                        </dependency>
-
-			<!-- clients -->
-			<dependency>
-                                <groupId>net.awired.visuwall</groupId>
-                                <artifactId>common-client</artifactId>
-                                <version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>net.awired.visuwall</groupId>
-				<artifactId>visuwall-hudsonclient</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>net.awired.visuwall</groupId>
-				<artifactId>visuwall-bambooclient</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-                                <groupId>net.awired.visuwall</groupId>
-                                <artifactId>visuwall-sonarclient</artifactId>
-                                <version>${project.version}</version>
-                        </dependency>
-                        <dependency>
-                                <groupId>net.awired.visuwall</groupId>
-                                <artifactId>visuwall-teamcityclient</artifactId>
                                 <version>${project.version}</version>
                         </dependency>
 
