@@ -14,21 +14,21 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.teamcity;
+package net.awired.clients.teamcity.resource;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import com.google.common.base.Preconditions;
 
-public class DateAdapter {
+class DateAdapter {
 
     private static final SimpleDateFormat TEAMCITY_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmssZ");
 
     private DateAdapter() {
     }
 
-    public static Date parseDate(String dateToParse) {
+    static Date parseDate(String dateToParse) {
         Preconditions.checkNotNull(dateToParse, "dateToParse is mandatory");
         try {
             return TEAMCITY_DATE_FORMAT.parse(dateToParse);
