@@ -21,7 +21,7 @@
 
 	<groupId>net.awired.visuwall</groupId>
 	<artifactId>visuwall-it</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.2-RC1</version>
 	<packaging>jar</packaging>
 
 	<name>Visuwall - Integration Tests</name>
@@ -29,7 +29,7 @@
 	<parent>
 		<groupId>net.awired.visuwall</groupId>
 		<artifactId>visuwall</artifactId>
-		<version>0.2-SNAPSHOT</version>
+		<version>0.2-RC1</version>
 		<relativePath>../../</relativePath>
 	</parent>
 
