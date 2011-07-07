@@ -16,11 +16,15 @@
       margin: 0 auto;
       width: 700px;
     }
-                h1 { font-size: 3.8em; color: black; margin-bottom: 3px; }
-                h1 .small { font-size: 0.4em; }
-                h1 a { text-decoration: none }
-                h2 { font-size: 1.5em; color: black; }
-    h3 { text-align: center; color: black; }
+    
+    h1 { font-size: 3.8em; color: black; margin-bottom: 3px; }
+    h1 .small { font-size: 0.4em; }
+    h1 a { text-decoration: none }
+
+    h2 { font-size: 1.5em; color: black; }
+
+/* text-align: center;  */
+    h3 { color: black; }
    .description { font-size: 1.2em; margin-bottom: 30px;
                     margin-top: 30px; }
     .download { float: right; }
@@ -51,12 +55,10 @@ Table.dl TD {
   </style>
 </head>
 
-<body>
+<body >
   <a href="http://github.com/awired/visuwall"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
-
   <div id="container">
-
-    <div class="download">
+    <div id="top" class="download">
     	<table class="dl">
     		<tr style="margin-right:10px">
     			<td><a href="http://dl.free.fr/dX9UJG5tP/visuwall.war">
@@ -76,35 +78,55 @@ Table.dl TD {
     <h1><a href="http://awired.github.com/visuwall/">Visuwall</a>
        <span style="font-size: 0.2em">On <a href="http://github.com/awired/visuwall">Github</a></span>
 	</h1>
-	
     <div class="description">
     	A visual status of your projects in a wall
     </div>
-    
-    <p>
-    Visuwall is a web application showing build and quality states of Projects in a very visual way that you can put it on a wall in your open space.
-    </p>
+    <p>Visuwall is a web application showing build and quality states of development projects in a very visual way that you can put it on a wall in your open space.</p>
+
+<h2>Description</h2>
 	
-    <h2>Demo</h2>
-	<span class="img-shadow"><img style="float:right" width="350" src="img/Capture-1-320.png"></span>
-    <p><a href="http://demo.visuwall.awired.net">demo</a></p>
+<span class="img-shadow" style="margin-left: 20px"><img style="float:right" width="350" src="img/Capture-1-320.png"></span>
     
-    <h2>Project Resources</h2>
-    <ul>
-    	<li>Quality in <a href="http://sonar.awired.net/project/index/net.awired.visuwall:visuwall">Sonar</a></li>
-    	<li>Builds in <a href="http://ci.awired.net/jenkins/job/visuwall/">Jenkins</a></li>
+    <p>Visuwall connects to softwares to get informations about projects and will display it in a web based client</p>
+	<p>Visuwall Currently support :</p>
+	<ul>
+		<li><a href="http://jenkins-ci.org/">Jenkins</a></li>
+		<li><a href="http://hudson-ci.org/">Hudson</a></li>
+		<li><a href="http://www.sonarsource.org/">Sonar</a></li>
+		<li><a href="http://www.atlassian.com/software/bamboo/">Bamboo</a> (from Version 0.2.X)</li>
+		<li><a href="http://www.jetbrains.com/teamcity/">Teamcity</a> (from Version 0.2.X)</li>
 	</ul>
 
-    <h2>License</h2>
+    <h3>Demo</h3>
+    <p>Visuwall demo <a href="http://demo.visuwall.awired.net">server</a> (hosted on slow connection)</p>
+    
+<h2>Installation</h2>
+	<p>Download the application with links on <a href="#top">top</a> of the page and then you have 2 ways to run it :</p>
+	<p>
+		You can launch Visuwall easily by running the next line and going to <strong>localhost:8081</strong> with a browser :
+		<pre>$ java -jar visuwall.war</pre>
+		You have more options by running :
+		<pre>$ java -jar visuwall.war --help</pre>
+		Or you can <strong>drop the war</strong> in your favorite Servlet container
+    </p>
+ 
+	<h3>Bug / feature request</h3>
+	<p>If you have found a <strong>bug</strong> or have <strong>any feature</strong> request you can create an issue
+		on our <a href="https://github.com/awired/visuwall/issues">github</a> or even send us a <a href="mailto:dev@norad.fr">mail</a>.
+		We will be pleased to have feedback and we will find a way to meet your needs</p>
+
+
+<h2>Project informations</h2>
+
+    <h3>License</h3>
 	<p>Apache License 2.0</p>
 	
-	<h2>Authors</h2>
+	<h3>Authors</h3>
 	<p>
-		Arnaud LEMAIRE (dev@norad.fr)		<br/>Julien SMADJA (julien.smadja@gmail.com)		<br/>		<br/>
-	</p>
+		Arnaud LEMAIRE (dev@norad.fr)		<br/>Julien SMADJA (julien.smadja@gmail.com)	</p>
 
-    
-    <h2>Source code</h2>
+<h2>Development</h2>
+    <h3>Source code</h3>
     <p>
       You can download this project in either
       <a href="http://github.com/awired/visuwall/zipball/master">zip</a> or
@@ -114,23 +136,14 @@ Table.dl TD {
       by running:
       <pre>$ git clone git://github.com/awired/visuwall</pre>
     </p>
-    
-    <h2>Run</h2>
-    <p>You can launch Visuwall easily by running the next line and going to <strong>localhost:8081</strong> with a browser :
-      <pre>$ java -jar visuwall.war</pre>
-    </p>
 
-    <p>You can have more options by running :
-      <pre>$ java -jar visuwall.war --help</pre>
-    </p>
-    
-
-    <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/awired/visuwall">awired/visuwall</a>
-    </div>
-
-  </div>
-
+    <h3>Project Resources</h3>
+    <ul>
+    	<li>Quality in <a href="http://sonar.awired.net/project/index/net.awired.visuwall:visuwall">Sonar</a></li>
+    	<li>Builds in <a href="http://ci.awired.net/jenkins/job/Visuwall-develop/">Jenkins</a></li>
+	</ul>
   
+    <div class="footer"><a href="http://awired.net">Awired.net</a> © 2011</div>
+  </div>
 </body>
 </html>
