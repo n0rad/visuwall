@@ -43,6 +43,11 @@ background-color: #fff; /* Background color of the border created by the padding
 border: 1px solid #cecece; /* A 1 pixel greyish border is applied to the white border created by the padding */
 margin: -6px 6px 6px -6px; /* Offset the image by certain pixels to reveal the shadow, as the shadows are 6 pixels wide, offset it by that amount to get a perfect shadow */
 }
+
+Table.dl TD {
+	text-align: center;
+}
+
   </style>
 </head>
 
@@ -52,8 +57,23 @@ margin: -6px 6px 6px -6px; /* Offset the image by certain pixels to reveal the s
   <div id="container">
 
     <div class="download">
-      <a href="http://dl.free.fr/tVoEgxLfO/visuwall-0.1.2.war">
-        <img border="0" width="90" src="img/dl.png"></a>
+    	<table class="dl">
+    		<tr style="margin-right:10px">
+    			<td><a href="http://dl.free.fr/dX9UJG5tP/visuwall.war">
+        			<img border="0" width="90" src="img/dl.png"></a></td>
+    			<td width="10px">&nbsp;</td>
+    			<td><a href="http://dl.free.fr/tVoEgxLfO/visuwall-0.1.2.war">
+        			<img border="0" width="90" src="img/dl.png"></a></td>
+    		</tr>
+    		<tr style="font-size: 0.8em">
+    			<td>Latest V0.2-RC1</td>
+    			<td>&nbsp;</td>
+    			<td style="font-weight: bold">Stable V0.1.2</td>
+    		</tr>
+    	</table>
+      
+<!--       <a href="http://dl.free.fr/tVoEgxLfO/visuwall-0.1.2.war"> -->
+<!--         <img border="0" width="90" src="img/dl.png"></a> -->
 <!--      <a href="http://github.com/awired/visuwall/zipball/master">
         <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
       <a href="http://github.com/awired/visuwall/tarball/master">
