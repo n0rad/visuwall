@@ -16,10 +16,53 @@
 
 package net.awired.visuwall.plugin.teamcity;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Properties;
+import net.awired.clients.common.GenericSoftwareClient;
+import net.awired.clients.common.ResourceNotFoundException;
+import net.awired.clients.teamcity.resource.TeamCityServer;
+import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class TeamCityPluginTest {
+
+    @Mock
+    GenericSoftwareClient genericSoftwareClient;
+
+    TeamCityPlugin plugin;
+
+    static URL teamcityUrl;
+
+    static {
+        try {
+            teamcityUrl = new URL("http://teamcity.com");
+        } catch (MalformedURLException e) {
+            throw new AssertionError(e);
+        }
+    }
+
+    @Before
+    public void init() {
+        MockitoAnnotations.initMocks(this);
+        plugin = new TeamCityPlugin();
+        plugin.genericSoftwareClient = genericSoftwareClient;
+    }
+
+    @Test
+    public void should_get_a_connection() {
+        TeamCityConnection connection = plugin.getConnection("http://teamcity.com", new Properties());
+        assertFalse(connection.isClosed());
+    }
 
     @Test(expected = NullPointerException.class)
     public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance()
@@ -27,4 +70,41 @@ public class TeamCityPluginTest {
         new TeamCityPlugin().getSoftwareId(null);
     }
 
+    @Test
+    public void should_get_a_valid_plugin_info() {
+        String name = plugin.getName();
+        float version = plugin.getVersion();
+        Class<TeamCityConnection> connectionClass = plugin.getConnectionClass();
+
+        assertEquals("TeamCity plugin", name);
+        assertEquals(1.0f, version, 0);
+        assertEquals(TeamCityConnection.class, connectionClass);
+        assertFalse(plugin.toString().isEmpty());
+    }
+
+    @Test
+    public void should_get_valid_software_id() throws Exception {
+        TeamCityServer server = new TeamCityServer();
+        server.setVersionMajor(1);
+        server.setVersionMinor(0);
+        when(genericSoftwareClient.resource(anyString(), any(Class.class))).thenReturn(server);
+
+        SoftwareId softwareId = plugin.getSoftwareId(teamcityUrl);
+
+        String name = softwareId.getName();
+        String version = softwareId.getVersion();
+        String warnings = softwareId.getWarnings();
+
+        assertEquals("TeamCity", name);
+        assertEquals("1.0", version);
+        assertEquals("", warnings);
+    }
+
+    @Test(expected = IncompatibleSoftwareException.class)
+    public void should_throw_exception_when_software_is_not_compatible() throws Exception {
+        Throwable notFound = new ResourceNotFoundException("not found");
+        when(genericSoftwareClient.resource(anyString(), any(Class.class))).thenThrow(notFound);
+
+        plugin.getSoftwareId(teamcityUrl);
+    }
 }
