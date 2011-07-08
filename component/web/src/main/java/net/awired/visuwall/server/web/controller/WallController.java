@@ -22,6 +22,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import net.awired.client303.js.domain.Element;
+import net.awired.client303.js.service.ValidationService;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.core.business.domain.Project;
 import net.awired.visuwall.core.business.service.PluginService;
@@ -52,6 +55,9 @@ public class WallController {
     private static final String WALL_JSP = "wall/wallForm";
 
     @Autowired
+    ValidationService validationService;
+
+    @Autowired
     private WallHolderService wallService;
 
     @Autowired
@@ -61,6 +67,12 @@ public class WallController {
     public void handleAllExceptions(HttpServletResponse response, Exception e) throws IOException {
         LOG.error("error :", e);
         response.sendError(500, e.getMessage());
+    }
+
+    @RequestMapping("test")
+    public @ResponseBody
+    Element test() {
+        return validationService.getValidationObject(Wall.class);
     }
 
     @RequestMapping
@@ -113,7 +125,7 @@ public class WallController {
 
     @RequestMapping(method = RequestMethod.POST)
     public @ResponseBody
-    Object update(Wall wall) {
+    Object update(@Valid Wall wall) {
         wallService.update(wall);
         return true;
     }

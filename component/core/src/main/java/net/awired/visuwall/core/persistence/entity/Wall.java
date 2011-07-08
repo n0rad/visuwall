@@ -27,6 +27,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import net.awired.ajsl.persistence.entity.implementation.abstracts.IdEntityImpl;
 import net.awired.visuwall.core.business.domain.Project;
 import net.awired.visuwall.core.business.domain.ProjectHolder;
@@ -48,9 +51,12 @@ public final class Wall extends IdEntityImpl<Long> {
 
     private static final long serialVersionUID = 1L;
 
+    @NotNull
+    @Size(min = 1)
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Valid
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "WALL_ID", nullable = false)
     @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.EVICT,

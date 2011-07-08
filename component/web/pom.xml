@@ -50,6 +50,12 @@
 			<artifactId>ajsl-web-java</artifactId>
 			<version>${ajsl.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>net.awired.client-bean-validation</groupId>
+			<artifactId>client-bean-validation-js</artifactId>
+			<version>${client-bean-validation.version}</version>
+		</dependency>
 
 		<!-- runnable war -->
 		<dependency>
