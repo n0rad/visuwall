@@ -76,7 +76,7 @@ public class TeamBuildCapabilityIT implements BuildCapabilityTCK {
     @Test
     public void should_get_build_state() throws Exception {
         SoftwareProjectId projectId = amazonProjectSoftwareId();
-        State state = teamcity.getBuildState(projectId, 6);
+        State state = teamcity.getBuildState(projectId, 8);
 
         assertEquals(State.SUCCESS, state);
     }

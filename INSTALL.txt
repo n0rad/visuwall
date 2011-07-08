@@ -14,3 +14,13 @@
         limitations under the License.
 ====
 
+
+you have 2 ways to run Visuwall :
+
+You can launch Visuwall easily by running the next line and going to localhost:8081 with a browser :
+
+$ java -jar visuwall.war
+You have more options by running :
+$ java -jar visuwall.war --help
+
+Or you can drop the war in your favorite Servlet container
