@@ -39,8 +39,9 @@
 			<artifactId>visuwall-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
-			<artifactId>visuwall-hudsonclient</artifactId>
+			<groupId>net.awired.clients</groupId>
+			<artifactId>hudson</artifactId>
+			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

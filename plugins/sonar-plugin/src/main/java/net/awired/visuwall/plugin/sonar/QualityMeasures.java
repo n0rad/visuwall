@@ -14,15 +14,18 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.sonarclient;
+package net.awired.visuwall.plugin.sonar;
 
-import net.awired.visuwall.sonarclient.domain.SonarQualityMeasure;
+import net.awired.clients.sonar.domain.SonarQualityMeasure;
 import org.sonar.wsclient.services.Measure;
 import com.google.common.base.Preconditions;
 
-public class QualityMeasures {
+class QualityMeasures {
 
-    public static SonarQualityMeasure asQualityMeasure(Measure measure, String measureKey) {
+    private QualityMeasures() {
+    }
+
+    static SonarQualityMeasure asQualityMeasure(Measure measure, String measureKey) {
         Preconditions.checkNotNull(measure, "measure is mandatory");
         Preconditions.checkArgument(!measureKey.isEmpty(), "measureKey is mandatory");
         Preconditions.checkNotNull(measure.getValue(), "measure must have a value");

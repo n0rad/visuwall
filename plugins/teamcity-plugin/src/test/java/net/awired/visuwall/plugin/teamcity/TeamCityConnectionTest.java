@@ -26,17 +26,22 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
+import net.awired.clients.teamcity.TeamCity;
+import net.awired.clients.teamcity.exception.TeamCityProjectNotFoundException;
+import net.awired.clients.teamcity.exception.TeamCityProjectsNotFoundException;
+import net.awired.clients.teamcity.resource.TeamCityBuild;
+import net.awired.clients.teamcity.resource.TeamCityBuildItem;
+import net.awired.clients.teamcity.resource.TeamCityBuildType;
+import net.awired.clients.teamcity.resource.TeamCityBuildTypes;
+import net.awired.clients.teamcity.resource.TeamCityBuilds;
+import net.awired.clients.teamcity.resource.TeamCityChange;
+import net.awired.clients.teamcity.resource.TeamCityProject;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.teamcityclient.TeamCity;
-import net.awired.visuwall.teamcityclient.exception.TeamCityProjectNotFoundException;
-import net.awired.visuwall.teamcityclient.exception.TeamCityProjectsNotFoundException;
-import net.awired.visuwall.teamcityclient.resource.TeamCityBuild;
-import net.awired.visuwall.teamcityclient.resource.TeamCityChange;
-import net.awired.visuwall.teamcityclient.resource.TeamCityProject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -174,6 +179,51 @@ public class TeamCityConnectionTest {
         assertFalse(teamCityConnection.isClosed());
         teamCityConnection.close();
         assertTrue(teamCityConnection.isClosed());
+    }
+
+    @Test(expected = MavenIdNotFoundException.class)
+    public void should_throw_exception_when_getting_maven_id() throws Exception {
+        teamCityConnection.getMavenId(softwareProjectId());
+    }
+
+    @Test(expected = ProjectNotFoundException.class)
+    public void should_throw_exception_when_getting_estimated_finish_time() throws Exception {
+        teamCityConnection.getEstimatedFinishTime(softwareProjectId(), 1);
+    }
+
+    @Test
+    public void should_get_is_building() throws Exception {
+        TeamCityBuild build = new TeamCityBuild();
+        build.setFinishDate("20310302T171940+0300");
+        when(teamCity.findBuild(anyString(), anyString())).thenReturn(build);
+
+        boolean isBuilding = teamCityConnection.isBuilding(softwareProjectId(), 1);
+
+        assertTrue(isBuilding);
+    }
+
+    @Test
+    public void should_get_last_build_number() throws Exception {
+        TeamCityBuilds buildList = new TeamCityBuilds();
+        for (int i = 1; i <= 10; i++) {
+            TeamCityBuildItem item = new TeamCityBuildItem();
+            item.setNumber(Integer.toString(i));
+            buildList.getBuilds().add(item);
+        }
+        when(teamCity.findBuildList(anyString())).thenReturn(buildList);
+
+        TeamCityBuildType buildType = new TeamCityBuildType();
+
+        TeamCityBuildTypes buildTypes = new TeamCityBuildTypes();
+        TeamCityProject project = new TeamCityProject();
+        project.setBuildTypes(buildTypes);
+        project.getBuildTypes().add(buildType);
+
+        when(teamCity.findProject(anyString())).thenReturn(project);
+
+        int lastBuildNumber = teamCityConnection.getLastBuildNumber(softwareProjectId());
+
+        assertEquals(10, lastBuildNumber);
     }
 
     private SoftwareProjectId softwareProjectId() {

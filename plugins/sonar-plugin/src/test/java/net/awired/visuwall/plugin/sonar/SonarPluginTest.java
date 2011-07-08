@@ -25,11 +25,11 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.net.URL;
+import net.awired.clients.common.GenericSoftwareClient;
+import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
-import net.awired.visuwall.common.client.GenericSoftwareClient;
-import net.awired.visuwall.common.client.ResourceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 
