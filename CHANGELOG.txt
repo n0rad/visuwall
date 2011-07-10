@@ -14,3 +14,26 @@
         limitations under the License.
 ====
 
+
+
+
+V0.2 (2011-07-06)
+=================
+
+NEW :
+ * Selection of projects to display
+ * Select one (or more) view(s) in Jenkins (#46 #37 #48 #49 #57)
+ * New plugin for teamcity (#24)
+ * New plugin for bamboo
+
+CHANGE :
+ * SoftwareAccess connection is now associated with projects to do only necesseray calls (#20)
+ * Wall creation and project discovery is now done in an other thread to release application boot (#21)
+ * Change log level to warn in Hudson/jenkins class for non maven project that can not be added (#53) 
+ * Server and client are now full separated, client does not tell the server to get info from software but only
+   get the server's info and the server know when a sofware info must be updated (#62 #67)
+
+FIX :
+ * Can create a config with an empty name (#40)
+ * Build duration does not update after build (#66)
+

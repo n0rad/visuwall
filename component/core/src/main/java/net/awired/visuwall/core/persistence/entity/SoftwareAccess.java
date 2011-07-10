@@ -24,6 +24,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.CollectionOfElements;
@@ -42,7 +43,10 @@ public class SoftwareAccess {
     private String login;
     private String password;
     private boolean allProject;
+
+    @NotNull
     private Integer projectFinderDelaySecond = 30;
+    @NotNull
     private Integer projectStatusDelaySecond = 10;
 
     @CollectionOfElements
