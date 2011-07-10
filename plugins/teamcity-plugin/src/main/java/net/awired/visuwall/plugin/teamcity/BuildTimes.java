@@ -27,8 +27,8 @@ class BuildTimes {
 
     static BuildTime createFrom(TeamCityBuild teamcityBuild) {
         BuildTime buildTime = new BuildTime();
-        Date finishDate = teamcityBuild.getFinishDate();
-        Date startDate = teamcityBuild.getStartDate();
+        Date finishDate = DateAdapter.parseDate(teamcityBuild.getFinishDate());
+        Date startDate = DateAdapter.parseDate(teamcityBuild.getStartDate());
         long duration = finishDate.getTime() - startDate.getTime();
         buildTime.setDuration(duration);
         buildTime.setStartTime(startDate);
