@@ -16,7 +16,6 @@
 
 package net.awired.clients.teamcity.resource;
 
-import java.util.Date;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -98,12 +97,12 @@ public class TeamCityBuild extends TeamCityAbstractBuild {
         this.buildType = buildType;
     }
 
-    public Date getStartDate() {
-        return DateAdapter.parseDate(startDate);
+    public String getStartDate() {
+        return startDate;
     }
 
-    public Date getFinishDate() {
-        return DateAdapter.parseDate(finishDate);
+    public String getFinishDate() {
+        return finishDate;
     }
 
     public void setStartDate(String startDate) {

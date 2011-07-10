@@ -57,7 +57,7 @@ public class GenericSoftwareClient {
             }
             return object;
         } catch (Throwable t) {
-            String errorMessage = "Can't get resource of type " + clazz.getName() + " at " + url;
+            String errorMessage = "Can't get resource of type " + clazz.getName() + " at '" + url + "'";
             throw new ResourceNotFoundException(errorMessage, t);
         }
     }

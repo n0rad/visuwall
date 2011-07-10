@@ -16,7 +16,6 @@
 
 package net.awired.clients.teamcity.resource;
 
-import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -68,16 +67,16 @@ public class TeamCityServer {
         this.version = version;
     }
 
-    public Date getStartTime() {
-        return DateAdapter.parseDate(startTime);
-    }
-
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getCurrentTime() {
-        return DateAdapter.parseDate(currentTime);
+    public String getCurrentTime() {
+        return currentTime;
+    }
+
+    public String getStartTime() {
+        return startTime;
     }
 
     public void setCurrentTime(String currentTime) {
