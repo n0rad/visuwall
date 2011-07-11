@@ -220,7 +220,8 @@ public class TeamCityConnection implements BuildCapability {
             String projectId = softwareProjectId.getProjectId();
             String strBuildNumber = buildNumber.toString();
             TeamCityBuild build = teamCity.findBuild(projectId, strBuildNumber);
-            return build.getFinishDate().after(new Date());
+            Date finishDate = DateAdapter.parseDate(build.getFinishDate());
+            return finishDate.after(new Date());
         } catch (TeamCityProjectNotFoundException e) {
             throw new ProjectNotFoundException("Can't find project for software project id:" + softwareProjectId, e);
         } catch (TeamCityBuildNotFoundException e) {

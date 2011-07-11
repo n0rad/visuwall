@@ -16,22 +16,23 @@
 
 package net.awired.visuwall.plugin.teamcity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import net.awired.clients.teamcity.resource.TeamCityBuild;
-import net.awired.visuwall.api.domain.BuildTime;
 
-class BuildTimes {
+class DateAdapter {
 
-    private BuildTimes() {
+    private static final SimpleDateFormat TEAMCITY_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmssZ");
+
+    private DateAdapter() {
     }
 
-    static BuildTime createFrom(TeamCityBuild teamcityBuild) {
-        BuildTime buildTime = new BuildTime();
-        Date finishDate = DateAdapter.parseDate(teamcityBuild.getFinishDate());
-        Date startDate = DateAdapter.parseDate(teamcityBuild.getStartDate());
-        long duration = finishDate.getTime() - startDate.getTime();
-        buildTime.setDuration(duration);
-        buildTime.setStartTime(startDate);
-        return buildTime;
+    static Date parseDate(String dateToParse) {
+        try {
+            return TEAMCITY_DATE_FORMAT.parse(dateToParse);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }

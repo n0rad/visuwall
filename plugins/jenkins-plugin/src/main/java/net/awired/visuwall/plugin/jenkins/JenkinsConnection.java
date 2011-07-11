@@ -163,7 +163,7 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
         try {
             return hudson.findJobNameByView(viewName);
         } catch (HudsonViewNotFoundException e) {
-            throw new ViewNotFoundException("can't find view named :" + viewName, e);
+            throw new ViewNotFoundException("can't find view named: " + viewName, e);
         }
     }
 
