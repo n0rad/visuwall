@@ -137,20 +137,29 @@ DIV#softAdd {
 	border-bottom: 1px solid #AAA !important;
 }
 
-#softwareTabs {
+.ui-tabs-nav li a {
+	outline: medium none;
+}
+
+#softTabs {
 	margin-top: 1em;
 	background-color: #eee;
 	padding: 0 !important;
 }
 
-#softwareTabs .ui-tabs-panel {
+
+#softTabs .ui-tabs-panel {
 	background-color: #eee;
 }
 
-#softwareTabs li .ui-icon-close {
+#softTabs li .ui-icon-close {
 	float: left;
 	margin: 0.4em 0.2em 0 0;
 	cursor: pointer;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+	background: repeat-x scroll 50% 50% #EEEEEE !important;
 }
 
 DIV.projects {

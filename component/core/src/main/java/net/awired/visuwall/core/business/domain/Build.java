@@ -44,14 +44,37 @@ public class Build {
         this.buildNumber = buildNumber;
     }
 
+    //TODO move and redo it with dates
+    public void mergeResult(TestResult dest, TestResult source) {
+        if (dest.getTotalCount() == 0) {
+            dest.setCoverage(source.getCoverage());
+            dest.setFailCount(source.getFailCount());
+            dest.setPassCount(source.getPassCount());
+            dest.setSkipCount(source.getSkipCount());
+        }
+        if (source.getCoverage() != 0) {
+            dest.setCoverage(source.getCoverage());
+        }
+
+        if (source.getTotalCount() != 0 && source.getCoverage() == 0) {
+            // try to force with build stats
+            dest.setFailCount(source.getFailCount());
+            dest.setPassCount(source.getPassCount());
+            dest.setSkipCount(source.getSkipCount());
+        }
+    }
+
     public TestResult getUnitTestResult() {
+        // TODO change that 
+        TestResult result = new TestResult();
         for (SoftwareProjectId softwareProjectId : capabilitiesResults.keySet()) {
             CapabilitiesResult capabilitiesResult = capabilitiesResults.get(softwareProjectId);
             if (capabilitiesResult.getUnitTestResult() != null) {
-                return capabilitiesResult.getUnitTestResult();
+                TestResult softwareRes = capabilitiesResult.getUnitTestResult();
+                mergeResult(result, softwareRes);
             }
         }
-        return null;
+        return result;
     }
 
     public QualityResult getQualityResult() {
@@ -65,13 +88,15 @@ public class Build {
     }
 
     public TestResult getIntegrationTestResult() {
+        TestResult result = new TestResult();
         for (SoftwareProjectId softwareProjectId : capabilitiesResults.keySet()) {
             CapabilitiesResult capabilitiesResult = capabilitiesResults.get(softwareProjectId);
             if (capabilitiesResult.getIntegrationTestResult() != null) {
-                return capabilitiesResult.getIntegrationTestResult();
+                TestResult softwareRes = capabilitiesResult.getIntegrationTestResult();
+                mergeResult(result, softwareRes);
             }
         }
-        return null;
+        return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////

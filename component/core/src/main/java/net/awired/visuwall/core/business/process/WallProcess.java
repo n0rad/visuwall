@@ -112,7 +112,7 @@ public class WallProcess {
         return new Runnable() {
             @Override
             public void run() {
-                LOG.info("Running Project Discover task for " + softwareAccess + " in wall " + wall);
+                LOG.debug("Running Project Discover task for " + softwareAccess + " in wall " + wall);
                 Set<SoftwareProjectId> projectIds = softwareAccessService.discoverBuildProjects(softwareAccess);
                 List<SoftwareProjectId> wallBuildProjectIds = wall.getProjects().getBuildProjectIds();
                 for (SoftwareProjectId projectId : projectIds) {

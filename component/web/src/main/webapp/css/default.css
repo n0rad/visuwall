@@ -33,6 +33,7 @@ SELECT, INPUT {
 	border: 1px solid grey;
 	padding:2px;
 	margin: 2px;
+	background-color: white;
 }
 
 BODY {
