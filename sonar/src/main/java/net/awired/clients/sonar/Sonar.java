@@ -18,6 +18,7 @@ package net.awired.clients.sonar;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import net.awired.clients.common.GenericSoftwareClient;
@@ -26,7 +27,9 @@ import net.awired.clients.sonar.domain.SonarMetrics;
 import net.awired.clients.sonar.domain.SonarQualityMetric;
 import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.clients.sonar.exception.SonarMetricsNotFoundException;
+import net.awired.clients.sonar.exception.SonarProjectNotFoundException;
 import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
+import net.awired.clients.sonar.resource.Project;
 import net.awired.clients.sonar.resource.Projects;
 import org.sonar.wsclient.connectors.ConnectionException;
 import org.sonar.wsclient.services.Measure;
@@ -120,6 +123,22 @@ public class Sonar {
             return qualityMetrics;
         } catch (ResourceNotFoundException e) {
             throw new SonarMetricsNotFoundException("Can't find sonar metrics with Sonar: " + sonarUrl, e);
+        }
+    }
+
+    public Project findProject(String resourceId) throws SonarProjectNotFoundException {
+        Preconditions.checkNotNull(resourceId);
+        try {
+            List<Project> projects = findProjects().getProjects();
+            for (Project project : projects) {
+                if (project.getKey().equals(resourceId)) {
+                    return project;
+                }
+            }
+            throw new SonarProjectNotFoundException("Can't find Sonar project with resourceId: '" + resourceId + "'");
+        } catch (ResourceNotFoundException e) {
+            throw new SonarProjectNotFoundException("Can't find Sonar project with resourceId: '" + resourceId + "'",
+                    e);
         }
     }
 
