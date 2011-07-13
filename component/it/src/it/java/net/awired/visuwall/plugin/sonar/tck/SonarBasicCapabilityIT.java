@@ -18,9 +18,7 @@ package net.awired.visuwall.plugin.sonar.tck;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -43,27 +41,8 @@ public class SonarBasicCapabilityIT implements BasicCapabilityTCK {
     @Override
     @Test
     public void should_find_all_projects_ids() {
-        SoftwareProjectId softwareProjectId = new SoftwareProjectId("net.awired.visuwall:visuwall");
-
-        List<SoftwareProjectId> projectNames = sonar.findAllSoftwareProjectIds();
-        assertTrue(projectNames.contains(softwareProjectId));
-    }
-
-    @Override
-    @Test
-    public void should_find_all_project_names() {
-        List<String> projectNames = sonar.findProjectNames();
-        assertTrue(projectNames.contains("Visuwall"));
-    }
-
-    @Override
-    @Test
-    public void should_find_project_ids_by_names() {
-        List<String> names = Arrays.asList("Visuwall");
-        List<SoftwareProjectId> softwareProjectIds = sonar.findSoftwareProjectIdsByNames(names);
-
-        SoftwareProjectId softwareProjectId = new SoftwareProjectId("net.awired.visuwall:visuwall");
-        assertEquals(softwareProjectId, softwareProjectIds.get(0));
+        Map<String, SoftwareProjectId> projects = sonar.listSoftwareProjectIds();
+        assertFalse(projects.isEmpty());
     }
 
     @Override

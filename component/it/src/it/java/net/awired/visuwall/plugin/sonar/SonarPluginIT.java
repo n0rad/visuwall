@@ -22,7 +22,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import java.net.URL;
 import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import org.junit.Test;
 
 public class SonarPluginIT {
@@ -35,13 +34,6 @@ public class SonarPluginIT {
         assertEquals("Sonar", softwareId.getName());
         assertEquals("2.8", softwareId.getVersion());
         assertNull(softwareId.getWarnings());
-    }
-
-    @Test(expected = IncompatibleSoftwareException.class)
-    public void should_not_fail_if_url_is_not_manageable() throws Exception {
-        SonarPlugin sonarPlugin = new SonarPlugin();
-        String url = "http://www.google.fr";
-        sonarPlugin.getSoftwareId(new URL(url));
     }
 
     @Test

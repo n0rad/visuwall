@@ -40,6 +40,6 @@ public class BambooPluginIT {
     @Test(expected = IncompatibleSoftwareException.class)
     public void should_not_be_manageable() throws Exception {
         BambooPlugin bamboo = new BambooPlugin();
-        bamboo.getSoftwareId(new URL("https://builds.apache.org"));
+        bamboo.getSoftwareId(new URL("http://ci.visuwall.awired.net"));
     }
 }

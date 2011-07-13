@@ -19,7 +19,9 @@ package net.awired.visuwall.plugin.teamcity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import net.awired.clients.teamcity.TeamCity;
@@ -151,6 +153,25 @@ public class TeamCityConnection implements BuildCapability {
                 String id = project.getId();
                 SoftwareProjectId softwareProjectId = new SoftwareProjectId(id);
                 projectIds.add(softwareProjectId);
+            }
+        } catch (TeamCityProjectsNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't build list of software project ids.", e);
+            }
+        }
+        return projectIds;
+    }
+
+    @Override
+    public Map<String, SoftwareProjectId> listSoftwareProjectIds() {
+        checkConnected();
+        Map<String, SoftwareProjectId> projectIds = new HashMap<String, SoftwareProjectId>();
+        try {
+            List<TeamCityProject> projects = teamCity.findAllProjects();
+            for (TeamCityProject project : projects) {
+                String id = project.getId();
+                SoftwareProjectId softwareProjectId = new SoftwareProjectId(id);
+                projectIds.put(project.getName(), softwareProjectId);
             }
         } catch (TeamCityProjectsNotFoundException e) {
             if (LOG.isDebugEnabled()) {

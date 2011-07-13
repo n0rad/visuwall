@@ -18,9 +18,7 @@ package net.awired.visuwall.plugin.teamcity.tck;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -45,39 +43,8 @@ public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
     @Override
     @Test
     public void should_find_all_projects_ids() {
-        List<SoftwareProjectId> projectIds = teamcity.findAllSoftwareProjectIds();
-
-        assertFalse(projectIds.isEmpty());
-        for (SoftwareProjectId projectId : projectIds) {
-            assertFalse(projectId.getProjectId().isEmpty());
-        }
-    }
-
-    @Override
-    @Test
-    public void should_find_project_ids_by_names() {
-        List<String> names = Arrays.asList("Apache Ant", "Gradle");
-        List<SoftwareProjectId> projectIds = teamcity.findSoftwareProjectIdsByNames(names);
-
-        assertFalse(projectIds.isEmpty());
-
-        SoftwareProjectId apacheAntId = projectIds.get(0);
-        assertEquals("project28", apacheAntId.getProjectId());
-
-        SoftwareProjectId gradleId = projectIds.get(1);
-        assertEquals("project22", gradleId.getProjectId());
-    }
-
-    @Override
-    @Test
-    public void should_find_all_project_names() {
-        List<String> names = Arrays.asList("Apache Ant", "Apache Ivy", "Gradle");
-
-        List<String> projectNames = teamcity.findProjectNames();
-
-        for (String name : names) {
-            assertTrue(projectNames.contains(name));
-        }
+        Map<String, SoftwareProjectId> projects = teamcity.listSoftwareProjectIds();
+        assertFalse(projects.isEmpty());
     }
 
     @Override

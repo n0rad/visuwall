@@ -26,8 +26,7 @@ public class SonarVersionExtractorTest {
 
     @Test
     public void should_extract_version_in_jenkins_page() {
-        Class<? extends SonarVersionExtractorTest> clazz = this.getClass();
-        ClassLoader classLoader = clazz.getClassLoader();
+        ClassLoader classLoader = SonarVersionExtractorTest.class.getClassLoader();
         InputStream stream = classLoader.getResourceAsStream("sonar_version_page.xml");
         SonarVersionExtractor sve = new SonarVersionExtractor(loadProperties(stream));
 

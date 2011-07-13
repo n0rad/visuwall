@@ -19,8 +19,7 @@ package net.awired.visuwall.plugin.hudson.tck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -44,28 +43,8 @@ public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
     @Override
     @Test
     public void should_find_all_projects_ids() {
-        List<SoftwareProjectId> projects = hudson.findAllSoftwareProjectIds();
+        Map<String, SoftwareProjectId> projects = hudson.listSoftwareProjectIds();
         assertFalse(projects.isEmpty());
-    }
-
-    @Override
-    @Test
-    public void should_find_project_ids_by_names() {
-        List<String> names = Arrays.asList("fluxx", "visuwall");
-        List<SoftwareProjectId> projectIds = hudson.findSoftwareProjectIdsByNames(names);
-        assertEquals(2, projectIds.size());
-        assertEquals("fluxx", projectIds.get(0).getProjectId());
-        assertEquals("visuwall", projectIds.get(1).getProjectId());
-    }
-
-    @Override
-    @Test
-    public void should_find_all_project_names() {
-        List<String> names = hudson.findProjectNames();
-        List<String> hudsonNames = Arrays.asList("fluxx", "visuwall", "dev-radar");
-        for (String hudsonName : hudsonNames) {
-            assertTrue(names.contains(hudsonName));
-        }
     }
 
     @Override

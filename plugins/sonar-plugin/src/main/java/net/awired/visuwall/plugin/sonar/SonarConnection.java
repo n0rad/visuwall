@@ -30,6 +30,7 @@ import net.awired.clients.sonar.domain.SonarQualityMeasure;
 import net.awired.clients.sonar.domain.SonarQualityMetric;
 import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.clients.sonar.exception.SonarMetricsNotFoundException;
+import net.awired.clients.sonar.exception.SonarProjectNotFoundException;
 import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
 import net.awired.clients.sonar.resource.Project;
 import net.awired.visuwall.api.domain.BuildTime;
@@ -70,6 +71,8 @@ public class SonarConnection implements MetricCapability, TestCapability {
 
     private boolean connected;
 
+    private String url;
+
     public SonarConnection() {
     }
 
@@ -79,6 +82,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
 
     @Override
     public void connect(String url, String login, String password) {
+        this.url = url;
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize sonar with url " + url);
         }
@@ -120,6 +124,22 @@ public class SonarConnection implements MetricCapability, TestCapability {
             LOG.warn(e.getMessage(), e);
         }
         return projectNames;
+    }
+
+    @Override
+    public Map<String, SoftwareProjectId> listSoftwareProjectIds() {
+        checkConnected();
+        Map<String, SoftwareProjectId> projects = new HashMap<String, SoftwareProjectId>();
+        try {
+            List<Project> names = sonarClient.findProjects().getProjects();
+            for (Project project : names) {
+                String key = project.getKey();
+                projects.put(project.getName(), new SoftwareProjectId(key));
+            }
+        } catch (ResourceNotFoundException e) {
+            LOG.warn(e.getMessage(), e);
+        }
+        return projects;
     }
 
     @Override
@@ -334,6 +354,13 @@ public class SonarConnection implements MetricCapability, TestCapability {
     public boolean isProjectDisabled(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
+        try {
+            String artifactId = softwareProjectId.getProjectId();
+            sonarClient.findProject(artifactId);
+        } catch (SonarProjectNotFoundException e) {
+            throw new ProjectNotFoundException("Can't find if project is disabled, softwareProjectId:"
+                    + softwareProjectId + ", url: " + url);
+        }
         return false;
     }
 

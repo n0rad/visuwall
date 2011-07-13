@@ -19,8 +19,10 @@ package net.awired.visuwall.plugin.hudson;
 import static org.apache.commons.lang.StringUtils.isBlank;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import net.awired.clients.hudson.Hudson;
 import net.awired.clients.hudson.domain.HudsonBuild;
@@ -82,6 +84,18 @@ public final class HudsonConnection implements BuildCapability, ViewCapability, 
             HudsonJob hudsonProject = projects.get(i);
             SoftwareProjectId projectId = new SoftwareProjectId(hudsonProject.getName());
             projectIds.add(projectId);
+        }
+        return projectIds;
+    }
+
+    @Override
+    public Map<String, SoftwareProjectId> listSoftwareProjectIds() {
+        checkConnected();
+        Map<String, SoftwareProjectId> projectIds = new HashMap<String, SoftwareProjectId>();
+        List<HudsonJob> jobs = hudson.findAllProjects();
+        for (HudsonJob job : jobs) {
+            SoftwareProjectId projectId = new SoftwareProjectId(job.getName());
+            projectIds.put(job.getName(), projectId);
         }
         return projectIds;
     }

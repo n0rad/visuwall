@@ -19,7 +19,9 @@ package net.awired.visuwall.plugin.bamboo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import net.awired.clients.bamboo.Bamboo;
 import net.awired.clients.bamboo.exception.BambooBuildNotFoundException;
 import net.awired.clients.bamboo.exception.BambooBuildNumberNotFoundException;
@@ -188,6 +190,19 @@ public class BambooConnection implements BuildCapability {
             projectIds.add(softwareProjectId);
         }
         return projectIds;
+    }
+
+    @Override
+    public Map<String, SoftwareProjectId> listSoftwareProjectIds() {
+        checkConnected();
+        Map<String, SoftwareProjectId> projects = new HashMap<String, SoftwareProjectId>();
+        List<Plan> plans = bamboo.findAllPlans();
+        for (Plan plan : plans) {
+            String key = plan.getKey();
+            SoftwareProjectId softwareProjectId = new SoftwareProjectId(key);
+            projects.put(plan.getName(), softwareProjectId);
+        }
+        return projects;
     }
 
     @Override

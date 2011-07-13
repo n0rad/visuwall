@@ -22,8 +22,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +44,7 @@ import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
+import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import org.junit.Before;
@@ -359,22 +360,6 @@ public class SonarConnectionTest {
     }
 
     @Test
-    public void should_find_all_software_project_ids() throws Exception {
-        Project project = new Project();
-        project.setKey("key");
-
-        Projects projects = new Projects();
-        projects.getProjects().add(project);
-
-        when(sonarClient.findProjects()).thenReturn(projects);
-
-        List<SoftwareProjectId> softwareProjectIds = sonar.findAllSoftwareProjectIds();
-        assertFalse(softwareProjectIds.isEmpty());
-        SoftwareProjectId softwareProjectId = softwareProjectIds.get(0);
-        assertEquals("key", softwareProjectId.getProjectId());
-    }
-
-    @Test
     public void should_not_fail_when_searching_all_software_project_ids() throws Exception {
         Throwable notFound = new ResourceNotFoundException("not found");
         when(sonarClient.findProjects()).thenThrow(notFound);
@@ -384,12 +369,13 @@ public class SonarConnectionTest {
     }
 
     @Test
-    public void should_find_software_project_ids_by_name() throws Exception {
+    public void should_find_all_software_project_ids() throws Exception {
         Project project1 = new Project();
         project1.setName("name1");
+        project1.setKey("key1");
         Project project2 = new Project();
         project2.setName("name2");
-        project2.setKey("sonarKey");
+        project2.setKey("key2");
 
         Projects projects = new Projects();
         projects.getProjects().add(project1);
@@ -397,10 +383,10 @@ public class SonarConnectionTest {
 
         when(sonarClient.findProjects()).thenReturn(projects);
 
-        List<SoftwareProjectId> softwareProjectIds = sonar.findSoftwareProjectIdsByNames(Arrays.asList("name2"));
-        SoftwareProjectId softwareProjectId = softwareProjectIds.get(0);
+        Map<String, SoftwareProjectId> softwareProjectIds = sonar.listSoftwareProjectIds();
 
-        assertEquals("sonarKey", softwareProjectId.getProjectId());
+        assertEquals("key1", softwareProjectIds.get("name1").getProjectId());
+        assertEquals("key2", softwareProjectIds.get("name2").getProjectId());
     }
 
     @Test
@@ -433,6 +419,13 @@ public class SonarConnectionTest {
 
         ProjectKey projectKey = new ProjectKey();
         sonar.identify(projectKey);
+    }
+
+    @Test(expected = IncompatibleSoftwareException.class)
+    public void should_not_fail_if_url_is_not_manageable() throws Exception {
+        SonarPlugin sonarPlugin = new SonarPlugin();
+        String url = "http://www.google.fr";
+        sonarPlugin.getSoftwareId(new URL(url));
     }
 
     private Map<String, SonarQualityMetric> createMetricList() {

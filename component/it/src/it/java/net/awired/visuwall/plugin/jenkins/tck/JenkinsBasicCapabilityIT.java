@@ -17,9 +17,9 @@
 package net.awired.visuwall.plugin.jenkins.tck;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 import net.awired.visuwall.IntegrationTestData;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -40,41 +40,9 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
         jenkins.connect(IntegrationTestData.JENKINS_URL, null, null);
     }
 
-    @Override
-    @Test
-    public void should_find_project_ids_by_names() {
-        List<String> names = Arrays.asList("struts", "struts 2 instable");
-        List<SoftwareProjectId> projectIds = jenkins.findSoftwareProjectIdsByNames(names);
-        SoftwareProjectId struts = projectIds.get(0);
-        SoftwareProjectId struts2instable = projectIds.get(1);
-
-        assertEquals(2, projectIds.size());
-        assertEquals("struts", struts.getProjectId());
-        assertEquals("struts 2 instable", struts2instable.getProjectId());
-    }
-
-    @Override
-    @Test
-    public void should_find_all_project_names() {
-        List<String> names = Arrays.asList("errorproject", "failproject", "itcoverage-project", "neverbuild",
-                "newproject", "struts", "struts 2 instable", "successproject", "test-change-result", "disabled");
-        List<String> projectNames = jenkins.findProjectNames();
-        assertEquals(names.size(), projectNames.size());
-        for (String name : names) {
-            assertTrue(projectNames.contains(name));
-        }
-    }
-
-    @Override
-    @Test
     public void should_find_all_projects_ids() {
-        List<String> names = Arrays.asList("errorproject", "failproject", "freestyle-project", "itcoverage-project",
-                "neverbuild", "newproject", "struts", "struts 2 instable", "successproject", "test-change-result",
-                "disabled");
-        List<SoftwareProjectId> projectNames = jenkins.findAllSoftwareProjectIds();
-        for (SoftwareProjectId projectId : projectNames) {
-            assertTrue(names.contains(projectId.getProjectId()));
-        }
+        Map<String, SoftwareProjectId> projects = jenkins.listSoftwareProjectIds();
+        assertFalse(projects.isEmpty());
     }
 
     @Override

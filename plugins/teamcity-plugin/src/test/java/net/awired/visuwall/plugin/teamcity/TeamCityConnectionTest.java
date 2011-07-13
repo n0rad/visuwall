@@ -26,6 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import net.awired.clients.teamcity.TeamCity;
 import net.awired.clients.teamcity.exception.TeamCityProjectNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityProjectsNotFoundException;
@@ -224,6 +225,28 @@ public class TeamCityConnectionTest {
         int lastBuildNumber = teamCityConnection.getLastBuildNumber(softwareProjectId());
 
         assertEquals(10, lastBuildNumber);
+    }
+
+    @Test
+    public void should_list_all_project_ids() throws Exception {
+        TeamCityProject project1 = new TeamCityProject();
+        project1.setId("id1");
+        project1.setName("name1");
+
+        TeamCityProject project2 = new TeamCityProject();
+        project2.setId("id2");
+        project2.setName("name2");
+
+        List<TeamCityProject> projects = new ArrayList<TeamCityProject>();
+        projects.add(project1);
+        projects.add(project2);
+
+        when(teamCity.findAllProjects()).thenReturn(projects);
+
+        Map<String, SoftwareProjectId> projectIds = teamCityConnection.listSoftwareProjectIds();
+
+        assertEquals("id1", projectIds.get("name1").getProjectId());
+        assertEquals("id2", projectIds.get("name2").getProjectId());
     }
 
     private SoftwareProjectId softwareProjectId() {

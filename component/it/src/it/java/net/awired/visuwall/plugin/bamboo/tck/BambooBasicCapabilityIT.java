@@ -21,8 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -45,29 +44,8 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
     @Override
     @Test
     public void should_find_all_projects_ids() {
-        List<SoftwareProjectId> projects = bamboo.findAllSoftwareProjectIds();
+        Map<String, SoftwareProjectId> projects = bamboo.listSoftwareProjectIds();
         assertFalse(projects.isEmpty());
-    }
-
-    @Override
-    @Test
-    public void should_find_project_ids_by_names() {
-        String ajslName = "ajsl - Awired Java Standard Library 1.0-ALPHA6";
-        String strutsName = "struts - struts";
-        String struts2Name = "struts 2 instable - struts_2_instable";
-        List<String> names = Arrays.asList(strutsName, struts2Name, ajslName);
-        List<SoftwareProjectId> projectIds = bamboo.findSoftwareProjectIdsByNames(names);
-
-        assertEquals("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6", projectIds.get(0).getProjectId());
-        assertEquals("STRUTS-STRUTS", projectIds.get(1).getProjectId());
-        assertEquals("STRUTS2INSTABLE-STRUTS2INSTABLE", projectIds.get(2).getProjectId());
-    }
-
-    @Override
-    @Test
-    public void should_find_all_project_names() {
-        List<String> names = bamboo.findProjectNames();
-        assertFalse(names.isEmpty());
     }
 
     @Override

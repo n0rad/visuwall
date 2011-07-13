@@ -17,6 +17,7 @@
 package net.awired.visuwall.api.plugin.capability;
 
 import java.util.List;
+import java.util.Map;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -82,13 +83,22 @@ public interface BasicCapability {
      * 
      * @return
      */
+    @Deprecated
     List<SoftwareProjectId> findAllSoftwareProjectIds();
+
+    /**
+     * Return the full list of project id contained in the software
+     * 
+     * @return
+     */
+    Map<String, SoftwareProjectId> listSoftwareProjectIds();
 
     /**
      * Return a list of project id contained in the software by a list of names
      * 
      * @return
      */
+    @Deprecated
     List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names);
 
     /**
@@ -96,6 +106,7 @@ public interface BasicCapability {
      * 
      * @return
      */
+    @Deprecated
     List<String> findProjectNames();
 
     /**

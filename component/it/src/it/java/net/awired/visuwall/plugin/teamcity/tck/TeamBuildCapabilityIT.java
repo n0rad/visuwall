@@ -19,7 +19,7 @@ package net.awired.visuwall.plugin.teamcity.tck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import java.util.Arrays;
+import static org.junit.Assert.assertTrue;
 import java.util.Date;
 import java.util.List;
 import net.awired.visuwall.IntegrationTestData;
@@ -49,8 +49,7 @@ public class TeamBuildCapabilityIT implements BuildCapabilityTCK {
     public void should_get_build_numbers() throws Exception {
         SoftwareProjectId projectId = amazonProjectSoftwareId();
         List<Integer> buildNumbers = teamcity.getBuildNumbers(projectId);
-
-        assertEquals(Arrays.asList(1, 2, 3, 4, 5, 6, 8), buildNumbers);
+        assertFalse(buildNumbers.isEmpty());
     }
 
     @Override
@@ -69,7 +68,7 @@ public class TeamBuildCapabilityIT implements BuildCapabilityTCK {
         SoftwareProjectId projectId = amazonProjectSoftwareId();
         int lastBuildNumber = teamcity.getLastBuildNumber(projectId);
 
-        assertEquals(8, lastBuildNumber);
+        assertTrue(lastBuildNumber > 0);
     }
 
     @Override

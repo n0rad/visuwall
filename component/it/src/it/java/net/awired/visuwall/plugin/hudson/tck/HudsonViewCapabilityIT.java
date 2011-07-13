@@ -59,16 +59,6 @@ public class HudsonViewCapabilityIT implements ViewCapabilityTCK {
 
     @Override
     @Test
-    public void should_find_project_ids_by_names() {
-        List<String> names = Arrays.asList("fluxx", "visuwall");
-        List<SoftwareProjectId> projectIds = hudson.findSoftwareProjectIdsByNames(names);
-        assertEquals(2, projectIds.size());
-        assertEquals("fluxx", projectIds.get(0).getProjectId());
-        assertEquals("visuwall", projectIds.get(1).getProjectId());
-    }
-
-    @Override
-    @Test
     public void should_find_all_projects_of_views() {
         List<String> views = Arrays.asList("View1", "View2");
         List<SoftwareProjectId> projectIds = hudson.findSoftwareProjectIdsByViews(views);

@@ -16,11 +16,14 @@
 
 package net.awired.visuwall.plugin.bamboo;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import net.awired.clients.bamboo.Bamboo;
 import net.awired.clients.bamboo.exception.BambooPlanNotFoundException;
 import net.awired.clients.bamboo.resource.Plan;
@@ -42,9 +45,30 @@ public class BambooConnectionTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-
         bambooConnection.connect("http://bamboo:8080");
         bambooConnection.bamboo = bamboo;
+    }
+
+    @Test
+    public void should_get_all_software_projects_ids() {
+        Plan plan1 = new Plan();
+        plan1.setKey("key1");
+        plan1.setName("planName1");
+
+        Plan plan2 = new Plan();
+        plan2.setKey("key2");
+        plan2.setName("planName2");
+
+        List<Plan> plans = new ArrayList<Plan>();
+        plans.add(plan1);
+        plans.add(plan2);
+
+        when(bamboo.findAllPlans()).thenReturn(plans);
+
+        Map<String, SoftwareProjectId> projectIds = bambooConnection.listSoftwareProjectIds();
+
+        assertEquals("key1", projectIds.get("planName1").getProjectId());
+        assertEquals("key2", projectIds.get("planName2").getProjectId());
     }
 
     @Test

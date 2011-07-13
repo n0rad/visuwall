@@ -36,16 +36,6 @@ public class JenkinsPluginIT {
         assertNull(softwareId.getWarnings());
     }
 
-    @Test
-    public void should_recognize_jenkins_instance_with_https() throws Exception {
-        JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-        SoftwareId softwareId = jenkinsPlugin.getSoftwareId(new URL("https://builds.apache.org"));
-
-        assertEquals("Jenkins", softwareId.getName());
-        assertEquals("1.413", softwareId.getVersion());
-        assertNull(softwareId.getWarnings());
-    }
-
     @Test(expected = IncompatibleSoftwareException.class)
     public void should_not_fail_if_url_is_not_manageable() throws Exception {
         JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
