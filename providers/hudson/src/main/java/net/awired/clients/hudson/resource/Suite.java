@@ -14,18 +14,27 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.exception;
+package net.awired.clients.hudson.resource;
 
-public final class HudsonBuildNotFoundException extends Exception {
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
 
-    private static final long serialVersionUID = -6609238015272249116L;
+@XmlRootElement(name = "suite")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Suite {
 
-    public HudsonBuildNotFoundException(String cause, Throwable t) {
-        super(cause, t);
+    @XmlElements({ @XmlElement(name = "case") })
+    private List<Case> cases;
+
+    public List<Case> getCases() {
+        return cases;
     }
 
-    public HudsonBuildNotFoundException(String cause) {
-        super(cause);
+    public void setCases(List<Case> cases) {
+        this.cases = cases;
     }
-
 }
