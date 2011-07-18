@@ -33,9 +33,6 @@
 
 	<context:component-scan base-package="net.awired.visuwall.server.web" />
 
-
-	<bean class="net.awired.client303.js.service.ValidationService"></bean>
-
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<mvc:annotation-driven />
 
