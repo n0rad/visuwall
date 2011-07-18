@@ -56,6 +56,10 @@ public class Bamboo {
         }
     }
 
+    @Deprecated
+    /***
+     * Deprecated: use findAllProjects
+     */
     public List<Plan> findAllPlans() {
         try {
             String projectsUrl = bambooUrlBuilder.getAllPlansUrl();
@@ -69,6 +73,10 @@ public class Bamboo {
         }
     }
 
+    @Deprecated
+    /***
+     * Deprecated: use findProject
+     */
     public Plan findPlan(String planKey) throws BambooPlanNotFoundException {
         checkPlanKey(planKey);
         try {
