@@ -14,15 +14,29 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.domain;
+package net.awired.clients.hudson.resource;
 
-import com.google.common.base.Objects;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class HudsonTestResult {
+@XmlRootElement(name = "surefireAggregatedReport")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class SurefireAggregatedReport {
 
     private int failCount;
-    private int passCount;
+
     private int skipCount;
+
+    private int totalCount;
+
+    private String urlName;
+
+    @XmlElements({ @XmlElement(name = "childReport") })
+    private List<ChildReport> childReports;
 
     public int getFailCount() {
         return failCount;
@@ -30,14 +44,6 @@ public class HudsonTestResult {
 
     public void setFailCount(int failCount) {
         this.failCount = failCount;
-    }
-
-    public int getPassCount() {
-        return passCount;
-    }
-
-    public void setPassCount(int passCount) {
-        this.passCount = passCount;
     }
 
     public int getSkipCount() {
@@ -49,16 +55,27 @@ public class HudsonTestResult {
     }
 
     public int getTotalCount() {
-        return passCount + skipCount + failCount;
+        return totalCount;
     }
 
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this) //
-                .add("passCount", passCount) //
-                .add("skipCount", skipCount) //
-                .add("failCount", failCount) //
-                .add("totalCount", getTotalCount()).toString();
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    public String getUrlName() {
+        return urlName;
+    }
+
+    public void setUrlName(String urlName) {
+        this.urlName = urlName;
+    }
+
+    public List<ChildReport> getChildReports() {
+        return childReports;
+    }
+
+    public void setChildReports(List<ChildReport> childReports) {
+        this.childReports = childReports;
     }
 
 }

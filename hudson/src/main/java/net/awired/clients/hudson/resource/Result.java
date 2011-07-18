@@ -14,15 +14,37 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.domain;
+package net.awired.clients.hudson.resource;
 
-import com.google.common.base.Objects;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class HudsonTestResult {
+@XmlRootElement(name = "result")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Result {
+
+    private double duration;
 
     private int failCount;
+
     private int passCount;
+
     private int skipCount;
+
+    @XmlElements({ @XmlElement(name = "suite") })
+    private List<Suite> suites;
+
+    public double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
+    }
 
     public int getFailCount() {
         return failCount;
@@ -48,17 +70,12 @@ public class HudsonTestResult {
         this.skipCount = skipCount;
     }
 
-    public int getTotalCount() {
-        return passCount + skipCount + failCount;
+    public List<Suite> getSuites() {
+        return suites;
     }
 
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this) //
-                .add("passCount", passCount) //
-                .add("skipCount", skipCount) //
-                .add("failCount", failCount) //
-                .add("totalCount", getTotalCount()).toString();
+    public void setSuites(List<Suite> suites) {
+        this.suites = suites;
     }
 
 }
