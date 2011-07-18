@@ -110,8 +110,7 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
     @Test
     public void should_get_commiters() throws Exception {
         SoftwareProjectId softwareProjectId = new SoftwareProjectId("visuwall");
-        int lastBuildNumber = hudson.getLastBuildNumber(softwareProjectId);
-        List<Commiter> commiters = hudson.getBuildCommiters(softwareProjectId, lastBuildNumber);
+        List<Commiter> commiters = hudson.getBuildCommiters(softwareProjectId, 689);
         assertFalse(commiters.isEmpty());
     }
 
