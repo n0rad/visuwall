@@ -26,8 +26,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import net.awired.clients.hudson.domain.HudsonBuild;
 import net.awired.clients.hudson.domain.HudsonCommiter;
-import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
-import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
+import net.awired.clients.hudson.resource.Build;
+import net.awired.clients.hudson.resource.Culprit;
 import org.junit.Test;
 
 public class HudsonBuildBuilderTest {
@@ -41,17 +41,17 @@ public class HudsonBuildBuilderTest {
         commiters.add(new HudsonCommiter("sweet"));
 
         Date startTime = new Date();
-        String state = "UNKNOWN";
+        String state = null;
 
-        List<HudsonModelUser> users = new ArrayList<HudsonModelUser>();
-        users.add(new HudsonModelUser());
-        users.add(new HudsonModelUser());
+        List<Culprit> users = new ArrayList<Culprit>();
+        users.add(new Culprit());
+        users.add(new Culprit());
         users.get(0).setFullName("dude");
         users.get(1).setFullName("sweet");
 
-        HudsonMavenMavenModuleSetBuild setBuild = mock(HudsonMavenMavenModuleSetBuild.class);
+        Build setBuild = mock(Build.class);
         when(setBuild.getDuration()).thenReturn(duration);
-        when(setBuild.getCulprit()).thenReturn(users);
+        when(setBuild.getCulprits()).thenReturn(users);
         when(setBuild.getNumber()).thenReturn(buildNumber);
         when(setBuild.getTimestamp()).thenReturn(startTime.getTime());
 

@@ -21,13 +21,13 @@ import java.util.Set;
 import net.awired.clients.hudson.domain.HudsonBuild;
 import net.awired.clients.hudson.domain.HudsonCommiter;
 import net.awired.clients.hudson.helper.HudsonXmlHelper;
-import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
+import net.awired.clients.hudson.resource.Build;
 
 class HudsonBuildBuilder {
 
-    HudsonBuild createHudsonBuild(HudsonMavenMavenModuleSetBuild setBuild, Set<HudsonCommiter> commiters) {
+    HudsonBuild createHudsonBuild(Build setBuild, Set<HudsonCommiter> commiters) {
         HudsonBuild hudsonBuild = new HudsonBuild();
-        hudsonBuild.setState(HudsonXmlHelper.getState(setBuild));
+        hudsonBuild.setState(setBuild.getResult());
         hudsonBuild.setDuration(setBuild.getDuration());
         hudsonBuild.setStartTime(new Date(setBuild.getTimestamp()));
         hudsonBuild.setSuccessful(HudsonXmlHelper.isSuccessful(setBuild));
