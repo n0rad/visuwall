@@ -16,6 +16,7 @@
 
 package net.awired.clients.hudson.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -32,7 +33,7 @@ public class Build {
     private String url;
 
     @XmlElements({ @XmlElement(name = "action") })
-    private List<Action> actions;
+    private List<Action> actions = new ArrayList<Action>();
 
     private boolean building;
 
@@ -53,7 +54,7 @@ public class Build {
     private ChangeSet changeSet;
 
     @XmlElements({ @XmlElement(name = "culprit") })
-    private List<Culprit> culprits;
+    private List<Culprit> culprits = new ArrayList<Culprit>();
 
     public int getNumber() {
         return number;
