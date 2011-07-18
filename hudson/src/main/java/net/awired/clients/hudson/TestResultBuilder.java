@@ -20,33 +20,32 @@ import java.util.ArrayList;
 import java.util.List;
 import net.awired.clients.hudson.domain.HudsonTest;
 import net.awired.clients.hudson.domain.HudsonTestResult;
-import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonMavenReportersSurefireAggregatedReport;
-import net.awired.visuwall.hudsonclient.generated.hudson.surefireaggregatedreport.HudsonTasksTestAggregatedTestResultActionChildReport;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import net.awired.clients.hudson.resource.Case;
+import net.awired.clients.hudson.resource.ChildReport;
+import net.awired.clients.hudson.resource.Result;
+import net.awired.clients.hudson.resource.Suite;
+import net.awired.clients.hudson.resource.SurefireAggregatedReport;
 
 /**
  * TestResultBuilder is used to manipulate Hudson Test data
  */
 public class TestResultBuilder {
 
-    public HudsonTestResult buildUnitTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+    public HudsonTestResult buildUnitTestResult(SurefireAggregatedReport surefireReport) {
         HudsonTestResult unitTestResult = new HudsonTestResult();
-        List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
+        List<ChildReport> tests = surefireReport.getChildReports();
         countUnitTests(unitTestResult, tests);
         return unitTestResult;
     }
 
-    public HudsonTestResult buildIntegrationTestResult(HudsonMavenReportersSurefireAggregatedReport surefireReport) {
+    public HudsonTestResult buildIntegrationTestResult(SurefireAggregatedReport surefireReport) {
         HudsonTestResult integrationTestResult = new HudsonTestResult();
-        List<HudsonTasksTestAggregatedTestResultActionChildReport> tests = surefireReport.getChildReport();
+        List<ChildReport> tests = surefireReport.getChildReports();
         countIntegrationTests(integrationTestResult, tests);
         return integrationTestResult;
     }
 
-    private void countUnitTests(HudsonTestResult unitTestsResult,
-            List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
+    private void countUnitTests(HudsonTestResult unitTestsResult, List<ChildReport> testReport) {
         List<HudsonTest> tests = createTestsFrom(testReport);
         for (HudsonTest test : tests) {
             if (test.isUnitTest()) {
@@ -55,8 +54,7 @@ public class TestResultBuilder {
         }
     }
 
-    private void countIntegrationTests(HudsonTestResult integrationTestsResult,
-            List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
+    private void countIntegrationTests(HudsonTestResult integrationTestsResult, List<ChildReport> testReport) {
         List<HudsonTest> tests = createTestsFrom(testReport);
         for (HudsonTest test : tests) {
             if (test.isIntegrationTest()) {
@@ -78,35 +76,25 @@ public class TestResultBuilder {
         }
     }
 
-    private List<HudsonTest> createTestsFrom(List<HudsonTasksTestAggregatedTestResultActionChildReport> testReport) {
+    private List<HudsonTest> createTestsFrom(List<ChildReport> testReport) {
         List<HudsonTest> tests = new ArrayList<HudsonTest>();
-        for (HudsonTasksTestAggregatedTestResultActionChildReport childReport : testReport) {
-            Element childReportResult = (Element) childReport.getResult();
-            NodeList cases = childReportResult.getElementsByTagName("case");
-            for (int i = 0; i < cases.getLength(); i++) {
-                Node testNode = cases.item(i);
-                HudsonTest test = createTestFrom(testNode);
-                tests.add(test);
+        for (ChildReport childReport : testReport) {
+            Result childReportResult = childReport.getResult();
+            List<Suite> suites = childReportResult.getSuites();
+            for (Suite suite : suites) {
+                for (Case case_ : suite.getCases()) {
+                    HudsonTest test = createTestFrom(case_);
+                    tests.add(test);
+                }
             }
         }
         return tests;
     }
 
-    private HudsonTest createTestFrom(Node testNode) {
+    private HudsonTest createTestFrom(Case case_) {
         HudsonTest test = new HudsonTest();
-        NodeList testAttributes = testNode.getChildNodes();
-        for (int j = 0; j < testAttributes.getLength(); j++) {
-            Node attributeNode = testAttributes.item(j);
-            String attributeName = attributeNode.getNodeName();
-            String attributeValue = attributeNode.getTextContent();
-            if ("className".equals(attributeName)) {
-                test.setClassName(attributeValue);
-            } else {
-                if ("status".equals(attributeName)) {
-                    test.setStatus(attributeValue);
-                }
-            }
-        }
+        test.setClassName(case_.getClassName());
+        test.setStatus(case_.getStatus());
         return test;
     }
 

@@ -17,10 +17,9 @@
 package net.awired.clients.hudson.helper;
 
 import java.util.List;
-import net.awired.visuwall.hudsonclient.generated.hudson.mavenmoduleset.HudsonModelJob;
-import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonMavenMavenModuleSetBuild;
-import net.awired.visuwall.hudsonclient.generated.hudson.mavenmodulesetbuild.HudsonModelUser;
-import org.w3c.dom.Node;
+import net.awired.clients.hudson.resource.Build;
+import net.awired.clients.hudson.resource.Culprit;
+import net.awired.clients.hudson.resource.MavenModuleSet;
 import com.google.common.base.Preconditions;
 
 public class HudsonXmlHelper {
@@ -28,43 +27,30 @@ public class HudsonXmlHelper {
     private HudsonXmlHelper() {
     }
 
-    public static boolean isSuccessful(HudsonMavenMavenModuleSetBuild setBuild) {
+    public static boolean isSuccessful(Build setBuild) {
         checkSetBuild(setBuild);
-        String state = getState(setBuild);
+        String state = setBuild.getResult();
         return "SUCCESS".equals(state);
     }
 
-    public static String[] getCommiterNames(HudsonMavenMavenModuleSetBuild setBuild) {
+    public static String[] getCommiterNames(Build setBuild) {
         checkSetBuild(setBuild);
-        List<HudsonModelUser> users = setBuild.getCulprit();
+        List<Culprit> users = setBuild.getCulprits();
         String[] commiters = new String[users.size()];
         for (int i = 0; i < users.size(); i++) {
-            HudsonModelUser hudsonModelUser = users.get(i);
+            Culprit hudsonModelUser = users.get(i);
             String name = hudsonModelUser.getFullName();
             commiters[i] = name;
         }
         return commiters;
     }
 
-    public static String getState(HudsonMavenMavenModuleSetBuild setBuild) {
-        checkSetBuild(setBuild);
-        Node result = (Node) setBuild.getResult();
-        if (result == null) {
-            return "UNKNOWN";
-        }
-        Node firstChild = result.getFirstChild();
-        if (firstChild == null) {
-            return "UNKNOWN";
-        }
-        return firstChild.getNodeValue();
-    }
-
-    public static boolean getIsBuilding(HudsonModelJob modelJob) {
-        String color = modelJob.getColor().value();
+    public static boolean getIsBuilding(MavenModuleSet modelJob) {
+        String color = modelJob.getColor();
         return color.endsWith("_anime");
     }
 
-    private static void checkSetBuild(HudsonMavenMavenModuleSetBuild setBuild) {
+    private static void checkSetBuild(Build setBuild) {
         Preconditions.checkNotNull(setBuild, "setBuild is mandatory");
     }
 
