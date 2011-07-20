@@ -47,7 +47,7 @@
 	</modules>
 
 	<properties>
-		<ajsl.version>0.2-SNAPSHOT</ajsl.version>
+		<ajsl.version>0.3-SNAPSHOT</ajsl.version>
 		<client-bean-validation.version>0.1-SNAPSHOT</client-bean-validation.version>
 
 		<spring.version>3.0.5.RELEASE</spring.version>
