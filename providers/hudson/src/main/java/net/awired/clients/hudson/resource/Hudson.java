@@ -16,6 +16,7 @@
 
 package net.awired.clients.hudson.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -49,10 +50,10 @@ public class Hudson {
     private boolean useSecurity;
 
     @XmlElements({ @XmlElement(name = "job") })
-    private List<Job> jobs;
+    private List<Job> jobs = new ArrayList<Job>();
 
     @XmlElements({ @XmlElement(name = "view") })
-    private List<View> views;
+    private List<View> views = new ArrayList<View>();
 
     public String getAssignedLabel() {
         return assignedLabel;

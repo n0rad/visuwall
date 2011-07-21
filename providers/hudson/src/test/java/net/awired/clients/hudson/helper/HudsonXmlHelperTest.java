@@ -22,7 +22,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
-import net.awired.clients.hudson.resource.Build;
+import net.awired.clients.hudson.resource.MavenModuleSetBuild;
 import net.awired.clients.hudson.resource.Culprit;
 import org.junit.Test;
 
@@ -30,7 +30,7 @@ public class HudsonXmlHelperTest {
 
     @Test
     public void testIsSuccessful() {
-        Build job = mock(Build.class);
+        MavenModuleSetBuild job = mock(MavenModuleSetBuild.class);
         when(job.getResult()).thenReturn("SUCCESS");
 
         boolean isSuccessful = HudsonXmlHelper.isSuccessful(job);
@@ -50,7 +50,7 @@ public class HudsonXmlHelperTest {
         users.add(user1);
         users.add(user2);
 
-        Build setBuild = mock(Build.class);
+        MavenModuleSetBuild setBuild = mock(MavenModuleSetBuild.class);
         when(setBuild.getCulprits()).thenReturn(users);
 
         String[] commiters = HudsonXmlHelper.getCommiterNames(setBuild);

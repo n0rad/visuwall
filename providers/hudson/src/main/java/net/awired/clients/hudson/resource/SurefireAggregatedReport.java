@@ -16,6 +16,7 @@
 
 package net.awired.clients.hudson.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -36,7 +37,7 @@ public class SurefireAggregatedReport {
     private String urlName;
 
     @XmlElements({ @XmlElement(name = "childReport") })
-    private List<ChildReport> childReports;
+    private List<ChildReport> childReports = new ArrayList<ChildReport>();
 
     public int getFailCount() {
         return failCount;

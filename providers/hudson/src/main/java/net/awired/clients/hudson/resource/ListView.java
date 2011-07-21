@@ -16,6 +16,7 @@
 
 package net.awired.clients.hudson.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -32,7 +33,7 @@ public class ListView {
     private String url;
 
     @XmlElements({ @XmlElement(name = "job") })
-    private List<Job> jobs;
+    private List<Job> jobs = new ArrayList<Job>();
 
     public String getName() {
         return name;

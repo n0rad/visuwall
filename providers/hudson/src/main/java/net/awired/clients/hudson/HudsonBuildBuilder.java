@@ -25,14 +25,14 @@ import net.awired.clients.hudson.resource.Build;
 
 class HudsonBuildBuilder {
 
-    HudsonBuild createHudsonBuild(Build setBuild, Set<HudsonCommiter> commiters) {
+    HudsonBuild createHudsonBuild(Build build, Set<HudsonCommiter> commiters) {
         HudsonBuild hudsonBuild = new HudsonBuild();
-        hudsonBuild.setState(setBuild.getResult());
-        hudsonBuild.setDuration(setBuild.getDuration());
-        hudsonBuild.setStartTime(new Date(setBuild.getTimestamp()));
-        hudsonBuild.setSuccessful(HudsonXmlHelper.isSuccessful(setBuild));
+        hudsonBuild.setState(build.getResult());
+        hudsonBuild.setDuration(build.getDuration());
+        hudsonBuild.setStartTime(new Date(build.getTimestamp()));
+        hudsonBuild.setSuccessful(HudsonXmlHelper.isSuccessful(build));
         hudsonBuild.setCommiters(commiters);
-        hudsonBuild.setBuildNumber(setBuild.getNumber());
+        hudsonBuild.setBuildNumber(build.getNumber());
         return hudsonBuild;
     }
 

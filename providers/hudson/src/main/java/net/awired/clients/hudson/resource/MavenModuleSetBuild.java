@@ -16,26 +16,12 @@
 
 package net.awired.clients.hudson.resource;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "suite")
+@XmlRootElement(name = "mavenModuleSetBuild")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Suite {
+public class MavenModuleSetBuild extends Build {
 
-    @XmlElements({ @XmlElement(name = "case") })
-    private List<Case> cases = new ArrayList<Case>();
-
-    public List<Case> getCases() {
-        return cases;
-    }
-
-    public void setCases(List<Case> cases) {
-        this.cases = cases;
-    }
 }

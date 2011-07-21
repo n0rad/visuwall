@@ -31,14 +31,19 @@ import net.awired.clients.hudson.exception.HudsonBuildNotFoundException;
 import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
 import net.awired.clients.hudson.exception.HudsonViewNotFoundException;
 import net.awired.clients.hudson.helper.HudsonXmlHelper;
-import net.awired.clients.hudson.helper.MavenHelper;
 import net.awired.clients.hudson.resource.Build;
 import net.awired.clients.hudson.resource.Color;
+import net.awired.clients.hudson.resource.ExternalJob;
+import net.awired.clients.hudson.resource.FreeStyleBuild;
+import net.awired.clients.hudson.resource.FreeStyleProject;
 import net.awired.clients.hudson.resource.Hudson;
 import net.awired.clients.hudson.resource.HudsonUser;
 import net.awired.clients.hudson.resource.Job;
 import net.awired.clients.hudson.resource.ListView;
+import net.awired.clients.hudson.resource.MatrixProject;
 import net.awired.clients.hudson.resource.MavenModuleSet;
+import net.awired.clients.hudson.resource.MavenModuleSetBuild;
+import net.awired.clients.hudson.resource.Project;
 import net.awired.clients.hudson.resource.SurefireAggregatedReport;
 import net.awired.clients.hudson.resource.View;
 import org.slf4j.Logger;
@@ -75,8 +80,8 @@ class HudsonFinder {
         return hudsonBuild;
     }
 
-    SurefireAggregatedReport findSurefireReport(String jobName, Build setBuild) {
-        String testResultUrl = hudsonUrlBuilder.getTestResultUrl(jobName, setBuild.getNumber());
+    SurefireAggregatedReport findSurefireReport(String jobName, Build build) {
+        String testResultUrl = hudsonUrlBuilder.getTestResultUrl(jobName, build.getNumber());
         try {
             return client.resource(testResultUrl, SurefireAggregatedReport.class);
         } catch (ResourceNotFoundException e) {
@@ -86,13 +91,22 @@ class HudsonFinder {
 
     @VisibleForTesting
     Build findBuildByJobNameAndBuildNumber(String jobName, int buildNumber) throws HudsonBuildNotFoundException {
+        String buildUrl = hudsonUrlBuilder.getBuildUrl(jobName, buildNumber);
+        Build setBuild = null;
         try {
-            String buildUrl = hudsonUrlBuilder.getBuildUrl(jobName, buildNumber);
-            Build setBuild = client.resource(buildUrl, Build.class);
-            return setBuild;
+            setBuild = client.resource(buildUrl, MavenModuleSetBuild.class);
         } catch (ResourceNotFoundException e) {
-            throw new HudsonBuildNotFoundException("Build #" + buildNumber + " not found for job " + jobName, e);
+            try {
+                setBuild = client.resource(buildUrl, FreeStyleBuild.class);
+            } catch (ResourceNotFoundException e1) {
+                throw new HudsonBuildNotFoundException("Build #" + buildNumber + " not found for job " + jobName, e1);
+            }
         }
+
+        if (setBuild == null) {
+            throw new HudsonBuildNotFoundException("Build #" + buildNumber + " not found for job " + jobName);
+        }
+        return setBuild;
     }
 
     List<String> findJobNames() {
@@ -143,17 +157,17 @@ class HudsonFinder {
     }
 
     String getDescription(String jobName) throws HudsonJobNotFoundException {
-        MavenModuleSet moduleSet = findJobByName(jobName);
+        Project moduleSet = findJobByName(jobName);
         return moduleSet.getDescription();
     }
 
     HudsonJob findJob(String projectName) throws HudsonJobNotFoundException {
-        MavenModuleSet moduleSet = findJobByName(projectName);
+        Project moduleSet = findJobByName(projectName);
         return createHudsonProjectFrom(moduleSet);
     }
 
     int getLastBuildNumber(String projectName) throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
-        MavenModuleSet job = findJobByName(projectName);
+        Project job = findJobByName(projectName);
         Build lastBuild = job.getLastBuild();
         if (lastBuild == null) {
             throw new HudsonBuildNotFoundException("Project " + projectName + " has no last build");
@@ -162,7 +176,7 @@ class HudsonFinder {
     }
 
     boolean isBuilding(String projectName) throws HudsonJobNotFoundException {
-        MavenModuleSet job = findJobByName(projectName);
+        Project job = findJobByName(projectName);
         return HudsonXmlHelper.getIsBuilding(job);
     }
 
@@ -190,25 +204,42 @@ class HudsonFinder {
         return build.getResult();
     }
 
-    private MavenModuleSet findJobByName(String jobName) throws HudsonJobNotFoundException {
-        try {
-            String jobUrl = hudsonUrlBuilder.getJobUrl(jobName);
-            if (MavenHelper.isNotMavenProject(jobUrl)) {
-                LOG.warn(jobName + " is not a maven project");
-                throw new HudsonJobNotFoundException(jobName + " is not a maven project");
-            }
-            MavenModuleSet moduleSet = client.resource(jobUrl, MavenModuleSet.class);
-            return moduleSet;
-        } catch (ResourceNotFoundException e) {
-            throw new HudsonJobNotFoundException(e);
+    private Project findJobByName(String jobName) throws HudsonJobNotFoundException {
+        String jobUrl = hudsonUrlBuilder.getJobUrl(jobName);
+        Project project = findProjectByName(jobName, jobUrl);
+        if (project == null) {
+            throw new HudsonJobNotFoundException("Can't find job with name '" + jobName + "'");
         }
+        return project;
     }
 
-    private HudsonJob createHudsonProjectFrom(MavenModuleSet moduleSet) {
-        String name = moduleSet.getName();
-        String description = moduleSet.getDescription();
-        String color = moduleSet.getColor();
-        boolean disabled = color == Color.DISABLED.value() || color == Color.GREY.value();
+    private Project findProjectByName(String jobName, String jobUrl) throws HudsonJobNotFoundException {
+        Project project = null;
+        try {
+            project = client.resource(jobUrl, MavenModuleSet.class);
+        } catch (ResourceNotFoundException e) {
+            try {
+                project = client.resource(jobUrl, FreeStyleProject.class);
+            } catch (ResourceNotFoundException e1) {
+                try {
+                    project = client.resource(jobUrl, MatrixProject.class);
+                } catch (ResourceNotFoundException e2) {
+                    try {
+                        project = client.resource(jobUrl, ExternalJob.class);
+                    } catch (ResourceNotFoundException e3) {
+                        throw new HudsonJobNotFoundException("Can't find job with name '" + jobName + "'", e3);
+                    }
+                }
+            }
+        }
+        return project;
+    }
+
+    private HudsonJob createHudsonProjectFrom(Project project) {
+        String name = project.getName();
+        String description = project.getDescription();
+        String color = project.getColor();
+        boolean disabled = Color.DISABLED.value().equals(color) || Color.GREY.value().equals(color);
 
         HudsonJob hudsonJob = new HudsonJob();
         hudsonJob.setName(name);
@@ -218,7 +249,7 @@ class HudsonFinder {
     }
 
     List<Integer> getBuildNumbers(String jobName) throws HudsonJobNotFoundException {
-        MavenModuleSet modelJob = findJobByName(jobName);
+        Project modelJob = findJobByName(jobName);
         List<Build> builds = modelJob.getBuilds();
         List<Integer> buildNumbers = new ArrayList<Integer>();
         for (Build build : builds) {
@@ -230,7 +261,7 @@ class HudsonFinder {
     }
 
     HudsonBuild getCompletedBuild(String jobName) throws HudsonBuildNotFoundException, HudsonJobNotFoundException {
-        MavenModuleSet modelJob = findJobByName(jobName);
+        Project modelJob = findJobByName(jobName);
 
         boolean isBuilding = getIsBuilding(modelJob);
         Build lastCompletedHudsonRun;
@@ -251,7 +282,7 @@ class HudsonFinder {
     }
 
     HudsonBuild getCurrentBuild(String jobName) throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
-        MavenModuleSet modelJob = findJobByName(jobName);
+        Project modelJob = findJobByName(jobName);
         Build currentHudsonRun = modelJob.getLastBuild();
         int currentBuildNumber = -1;
         if (currentHudsonRun != null) {
@@ -264,14 +295,14 @@ class HudsonFinder {
         return currentHudsonBuild;
     }
 
-    private boolean getIsBuilding(MavenModuleSet modelJob) {
+    private boolean getIsBuilding(Project modelJob) {
         String color = modelJob.getColor();
         return color.endsWith("_anime");
     }
 
     public HudsonTestResult findUnitTestResult(String jobName, int buildNumber) throws HudsonBuildNotFoundException {
-        Build setBuild = findBuildByJobNameAndBuildNumber(jobName, buildNumber);
-        SurefireAggregatedReport surefireReport = findSurefireReport(jobName, setBuild);
+        Build build = findBuildByJobNameAndBuildNumber(jobName, buildNumber);
+        SurefireAggregatedReport surefireReport = findSurefireReport(jobName, build);
         if (surefireReport != null) {
             return testResultBuilder.buildUnitTestResult(surefireReport);
         }
@@ -280,8 +311,8 @@ class HudsonFinder {
 
     public HudsonTestResult findIntegrationTestResult(String jobName, int buildNumber)
             throws HudsonBuildNotFoundException {
-        Build setBuild = findBuildByJobNameAndBuildNumber(jobName, buildNumber);
-        SurefireAggregatedReport surefireReport = findSurefireReport(jobName, setBuild);
+        Build build = findBuildByJobNameAndBuildNumber(jobName, buildNumber);
+        SurefireAggregatedReport surefireReport = findSurefireReport(jobName, build);
         if (surefireReport != null) {
             return testResultBuilder.buildIntegrationTestResult(surefireReport);
         }

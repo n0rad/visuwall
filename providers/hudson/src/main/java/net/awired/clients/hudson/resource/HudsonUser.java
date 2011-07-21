@@ -16,6 +16,7 @@
 
 package net.awired.clients.hudson.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -41,7 +42,7 @@ public class HudsonUser {
     private String name;
     private String email;
 
-    private List<Property> property;
+    private List<Property> property = new ArrayList<Property>();
 
     public String getId() {
         return id;
