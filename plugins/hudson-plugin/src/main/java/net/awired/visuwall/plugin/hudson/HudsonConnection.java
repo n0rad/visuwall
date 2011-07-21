@@ -80,8 +80,7 @@ public final class HudsonConnection implements BuildCapability, ViewCapability, 
         checkConnected();
         List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
         List<HudsonJob> projects = hudson.findAllProjects();
-        for (int i = 0; i < projects.size(); i++) {
-            HudsonJob hudsonProject = projects.get(i);
+        for (HudsonJob hudsonProject : projects) {
             SoftwareProjectId projectId = new SoftwareProjectId(hudsonProject.getName());
             projectIds.add(projectId);
         }

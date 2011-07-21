@@ -43,7 +43,8 @@ public class HudsonViewCapabilityIT implements ViewCapabilityTCK {
     @Test
     public void should_list_all_views() {
         List<String> views = hudson.findViews();
-        assertEquals(2, views.size());
+        assertEquals(3, views.size());
+        assertTrue(views.contains("Tous"));
         assertTrue(views.contains("View1"));
         assertTrue(views.contains("View2"));
     }

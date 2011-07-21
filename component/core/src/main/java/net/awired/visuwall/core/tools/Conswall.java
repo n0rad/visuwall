@@ -16,7 +16,7 @@
 
 package net.awired.visuwall.core.tools;
 
-import java.util.List;
+import java.util.Map;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -31,8 +31,7 @@ import net.awired.visuwall.plugin.teamcity.TeamCityConnection;
 public class Conswall {
 
     private BasicCapability capability;
-    private List<String> projectNames;
-    private List<SoftwareProjectId> softwareProjectIds;
+    private Map<String, SoftwareProjectId> projectNames;
     private BuildCapability buildCapability;
 
     public Conswall(BasicCapability capability) {
@@ -40,8 +39,7 @@ public class Conswall {
         if (capability instanceof BuildCapability) {
             buildCapability = (BuildCapability) capability;
         }
-        projectNames = capability.findProjectNames();
-        softwareProjectIds = capability.findAllSoftwareProjectIds();
+        projectNames = capability.listSoftwareProjectIds();
     }
 
     public static void main(String[] args) {
@@ -61,11 +59,11 @@ public class Conswall {
         sonarConnection.connect("http://nemo.sonarsource.org");
 
         BasicCapability[] plugins = { //
-        //jenkinsConnection, //
+        jenkinsConnection //, //
         //hudsonConnection, //
         //teamCityConnection, //
         //bambooConnection, //
-                sonarConnection
+        //                sonarConnection
         };
 
         for (BasicCapability capability : plugins) {
@@ -90,7 +88,7 @@ public class Conswall {
     private void printProjectNames() {
         System.out.println("\nproject names:");
         System.out.println("--------------");
-        for (String projectName : projectNames) {
+        for (String projectName : projectNames.keySet()) {
             System.out.println(projectName);
         }
     }
@@ -98,7 +96,7 @@ public class Conswall {
     private void printProjectIds() {
         System.out.println("\nsoftware project ids:");
         System.out.println("---------------------");
-        for (SoftwareProjectId softwareProjectId : softwareProjectIds) {
+        for (SoftwareProjectId softwareProjectId : projectNames.values()) {
             System.out.println(softwareProjectId);
         }
     }
@@ -106,7 +104,7 @@ public class Conswall {
     private void printDescriptions() {
         System.out.println("\ndescriptions:");
         System.out.println("--------------");
-        for (SoftwareProjectId softwareProjectId : softwareProjectIds) {
+        for (SoftwareProjectId softwareProjectId : projectNames.values()) {
             String description = null;
             try {
                 description = capability.getDescription(softwareProjectId);
@@ -120,7 +118,7 @@ public class Conswall {
     private void printNames() {
         System.out.println("\nnames:");
         System.out.println("-------");
-        for (SoftwareProjectId softwareProjectId : softwareProjectIds) {
+        for (SoftwareProjectId softwareProjectId : projectNames.values()) {
             String name = null;
             try {
                 name = capability.getName(softwareProjectId);
@@ -134,7 +132,7 @@ public class Conswall {
     private void printMavenIds() {
         System.out.println("\nmaven ids:");
         System.out.println("-----------");
-        for (SoftwareProjectId softwareProjectId : softwareProjectIds) {
+        for (SoftwareProjectId softwareProjectId : projectNames.values()) {
             String mavenId = null;
             try {
                 mavenId = capability.getMavenId(softwareProjectId);
@@ -148,7 +146,7 @@ public class Conswall {
     private void printLastBuildDates() {
         System.out.println("\nlast build dates:");
         System.out.println("------------------");
-        for (SoftwareProjectId softwareProjectId : softwareProjectIds) {
+        for (SoftwareProjectId softwareProjectId : projectNames.values()) {
             String buildTimeInfo = null;
             try {
                 int buildNumber = buildCapability.getLastBuildNumber(softwareProjectId);
