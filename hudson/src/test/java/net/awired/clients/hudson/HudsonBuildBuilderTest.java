@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import net.awired.clients.hudson.domain.HudsonBuild;
 import net.awired.clients.hudson.domain.HudsonCommiter;
-import net.awired.clients.hudson.resource.Build;
+import net.awired.clients.hudson.resource.MavenModuleSetBuild;
 import net.awired.clients.hudson.resource.Culprit;
 import org.junit.Test;
 
@@ -49,7 +49,7 @@ public class HudsonBuildBuilderTest {
         users.get(0).setFullName("dude");
         users.get(1).setFullName("sweet");
 
-        Build setBuild = mock(Build.class);
+        MavenModuleSetBuild setBuild = mock(MavenModuleSetBuild.class);
         when(setBuild.getDuration()).thenReturn(duration);
         when(setBuild.getCulprits()).thenReturn(users);
         when(setBuild.getNumber()).thenReturn(buildNumber);

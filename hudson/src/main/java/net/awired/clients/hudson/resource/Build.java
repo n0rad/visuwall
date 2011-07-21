@@ -22,39 +22,37 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "mavenModuleSetBuild")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Build {
 
-    private int number;
+    protected int number;
 
-    private String url;
+    protected String url;
 
     @XmlElements({ @XmlElement(name = "action") })
-    private List<Action> actions = new ArrayList<Action>();
+    protected List<Action> actions = new ArrayList<Action>();
 
-    private boolean building;
+    protected boolean building;
 
-    private long duration;
+    protected long duration;
 
-    private String fullDisplayName;
+    protected String fullDisplayName;
 
-    private String id;
+    protected String id;
 
-    private boolean keepLog;
+    protected boolean keepLog;
 
-    private String result;
+    protected String result;
 
-    private long timestamp;
+    protected long timestamp;
 
-    private String buildOn;
+    protected String buildOn;
 
-    private ChangeSet changeSet;
+    protected ChangeSet changeSet;
 
     @XmlElements({ @XmlElement(name = "culprit") })
-    private List<Culprit> culprits = new ArrayList<Culprit>();
+    protected List<Culprit> culprits = new ArrayList<Culprit>();
 
     public int getNumber() {
         return number;

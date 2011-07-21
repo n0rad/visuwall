@@ -16,6 +16,7 @@
 
 package net.awired.clients.hudson.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -36,7 +37,7 @@ public class Result {
     private int skipCount;
 
     @XmlElements({ @XmlElement(name = "suite") })
-    private List<Suite> suites;
+    private List<Suite> suites = new ArrayList<Suite>();
 
     public double getDuration() {
         return duration;

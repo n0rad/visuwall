@@ -19,7 +19,7 @@ package net.awired.clients.hudson.helper;
 import java.util.List;
 import net.awired.clients.hudson.resource.Build;
 import net.awired.clients.hudson.resource.Culprit;
-import net.awired.clients.hudson.resource.MavenModuleSet;
+import net.awired.clients.hudson.resource.Project;
 import com.google.common.base.Preconditions;
 
 public class HudsonXmlHelper {
@@ -27,15 +27,15 @@ public class HudsonXmlHelper {
     private HudsonXmlHelper() {
     }
 
-    public static boolean isSuccessful(Build setBuild) {
-        checkSetBuild(setBuild);
-        String state = setBuild.getResult();
+    public static boolean isSuccessful(Build build) {
+        checkBuild(build);
+        String state = build.getResult();
         return "SUCCESS".equals(state);
     }
 
-    public static String[] getCommiterNames(Build setBuild) {
-        checkSetBuild(setBuild);
-        List<Culprit> users = setBuild.getCulprits();
+    public static String[] getCommiterNames(Build build) {
+        checkBuild(build);
+        List<Culprit> users = build.getCulprits();
         String[] commiters = new String[users.size()];
         for (int i = 0; i < users.size(); i++) {
             Culprit hudsonModelUser = users.get(i);
@@ -45,13 +45,13 @@ public class HudsonXmlHelper {
         return commiters;
     }
 
-    public static boolean getIsBuilding(MavenModuleSet modelJob) {
+    public static boolean getIsBuilding(Project modelJob) {
         String color = modelJob.getColor();
         return color.endsWith("_anime");
     }
 
-    private static void checkSetBuild(Build setBuild) {
-        Preconditions.checkNotNull(setBuild, "setBuild is mandatory");
+    private static void checkBuild(Build build) {
+        Preconditions.checkNotNull(build, "build is mandatory");
     }
 
 }

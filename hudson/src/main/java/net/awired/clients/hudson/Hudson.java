@@ -58,16 +58,12 @@ public class Hudson {
         List<HudsonJob> projects = new ArrayList<HudsonJob>();
         for (String jobName : hudsonFinder.findJobNames()) {
             try {
-                if (findArtifactId(jobName) != null) {
-                    HudsonJob hudsonProject = findJob(jobName);
-                    projects.add(hudsonProject);
-                }
+                HudsonJob hudsonProject = findJob(jobName);
+                projects.add(hudsonProject);
             } catch (HudsonJobNotFoundException e) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Can't add project with name [" + jobName + "]. cause:" + e.getMessage());
                 }
-            } catch (ArtifactIdNotFoundException e) {
-                // we only add maven projects
             }
         }
         return projects;
@@ -156,16 +152,7 @@ public class Hudson {
 
     public List<String> findJobNames() {
         List<String> jobNames = hudsonFinder.findJobNames();
-        List<String> filteredJobNames = new ArrayList<String>();
-        for (String jobName : jobNames) {
-            try {
-                findArtifactId(jobName);
-                filteredJobNames.add(jobName);
-            } catch (ArtifactIdNotFoundException e) {
-                // we only add maven projects
-            }
-        }
-        return filteredJobNames;
+        return jobNames;
     }
 
     public List<String> findViews() {
@@ -175,16 +162,7 @@ public class Hudson {
     public List<String> findJobNameByView(String viewName) throws HudsonViewNotFoundException {
         Preconditions.checkNotNull(viewName, "viewName is mandatory");
         List<String> jobNames = hudsonFinder.findJobNamesByView(viewName);
-        List<String> filteredJobNames = new ArrayList<String>();
-        for (String jobName : jobNames) {
-            try {
-                findArtifactId(jobName);
-                filteredJobNames.add(jobName);
-            } catch (ArtifactIdNotFoundException e) {
-                // we only add maven projects
-            }
-        }
-        return filteredJobNames;
+        return jobNames;
     }
 
     public String findArtifactId(String jobName) throws ArtifactIdNotFoundException {
