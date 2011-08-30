@@ -19,14 +19,14 @@ package net.awired.clients.bamboo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import java.util.List;
-import net.awired.clients.bamboo.Bamboo;
+import net.awired.clients.Urls;
 import net.awired.clients.bamboo.exception.BambooPlanNotFoundException;
 import net.awired.clients.bamboo.resource.Plan;
 import org.junit.Test;
 
 public class BambooIT {
 
-    private Bamboo bamboo = new Bamboo("http://bamboo.visuwall.awired.net");
+    private Bamboo bamboo = new Bamboo(Urls.AWIRED_BAMBOO);
 
     @Test
     public void should_find_all_plans() {

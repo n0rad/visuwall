@@ -16,6 +16,7 @@
 
 package net.awired.clients.hudson;
 
+import net.awired.clients.Urls;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,17 +24,10 @@ public class HudsonRootModuleFinderIT {
 
     @Test
     public void should_find_synthesis_root_module_from_hudson() throws Exception {
-        HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder("http://fluxx.fr.cr:8080/hudson");
+        HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(Urls.FLUXX_HUDSON);
         HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
         String artifactId = hudsonRootModuleFinder.findArtifactId("struts");
         Assert.assertEquals("org.apache.struts:struts-parent", artifactId);
     }
 
-    @Test
-    public void should_find_synthesis_root_module_from_jenkins() throws Exception {
-        HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder("http://ci.visuwall.awired.net");
-        HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
-        String artifactId = hudsonRootModuleFinder.findArtifactId("struts 2 instable");
-        Assert.assertEquals("org.apache.struts:struts2-parent", artifactId);
-    }
 }

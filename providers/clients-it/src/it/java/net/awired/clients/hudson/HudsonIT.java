@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import java.util.List;
 import java.util.Set;
+import net.awired.clients.Urls;
 import net.awired.clients.hudson.domain.HudsonBuild;
 import net.awired.clients.hudson.domain.HudsonCommiter;
 import net.awired.clients.hudson.domain.HudsonJob;
@@ -29,7 +30,7 @@ import org.junit.Test;
 
 public class HudsonIT {
 
-    private Hudson hudson = new Hudson("http://fluxx.fr.cr:8080/hudson");
+    private Hudson hudson = new Hudson(Urls.FLUXX_HUDSON);
 
     @Test
     public void should_find_not_built_project() throws HudsonJobNotFoundException {
@@ -48,7 +49,7 @@ public class HudsonIT {
 
     @Test
     public void should_retrieve_commiter_email() throws HudsonBuildNotFoundException, HudsonJobNotFoundException {
-        Hudson hudsonAwired = new Hudson("http://ci.visuwall.awired.net");
+        Hudson hudsonAwired = new Hudson(Urls.AWIRED_HUDSON);
         HudsonBuild build = hudsonAwired.findBuild("successproject", 9);
         Set<HudsonCommiter> set = build.getCommiters();
         HudsonCommiter commiter = set.iterator().next();
