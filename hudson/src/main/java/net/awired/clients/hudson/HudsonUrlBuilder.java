@@ -16,7 +16,7 @@
 
 package net.awired.clients.hudson;
 
-class HudsonUrlBuilder {
+public class HudsonUrlBuilder {
 
     private final String hudsonUrl;
 
@@ -26,7 +26,7 @@ class HudsonUrlBuilder {
     private static final String USER_URI = "/user";
     private static final String VIEW_URI = "/view";
 
-    HudsonUrlBuilder(String hudsonUrl) {
+    public HudsonUrlBuilder(String hudsonUrl) {
         this.hudsonUrl = hudsonUrl;
     }
 

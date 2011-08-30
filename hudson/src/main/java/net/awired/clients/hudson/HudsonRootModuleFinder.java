@@ -24,7 +24,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import com.google.common.annotations.VisibleForTesting;
 
-class HudsonRootModuleFinder {
+public class HudsonRootModuleFinder {
 
     @VisibleForTesting
     HudsonUrlBuilder hudsonUrlBuilder;
@@ -32,11 +32,11 @@ class HudsonRootModuleFinder {
     @VisibleForTesting
     DocumentLoader documentLoader = new DocumentLoader();
 
-    HudsonRootModuleFinder(HudsonUrlBuilder hudsonUrlBuilder) {
+    public HudsonRootModuleFinder(HudsonUrlBuilder hudsonUrlBuilder) {
         this.hudsonUrlBuilder = hudsonUrlBuilder;
     }
 
-    String findArtifactId(String jobName) throws ArtifactIdNotFoundException {
+    public String findArtifactId(String jobName) throws ArtifactIdNotFoundException {
         String pomUrl = hudsonUrlBuilder.getPomUrl(jobName);
         try {
             return createArtifactIdFrom(pomUrl);
