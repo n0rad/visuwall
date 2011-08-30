@@ -16,15 +16,17 @@
 
 package net.awired.visuwall;
 
-public interface IntegrationTestData {
-    String BAMBOO_URL = "http://bamboo.visuwall.awired.net";
-    String JENKINS_URL = "http://ci.visuwall.awired.net";
-    String HUDSON_URL = "http://fluxx.fr.cr:8080/hudson";
-    String TEAMCITY_URL = "http://teamcity.jetbrains.com";
+public class Urls {
 
-    String SONAR_URL = "http://sonar.awired.net";
+    public static final String AWIRED_BAMBOO = "http://bamboo.visuwall.awired.net";
+    public static final String AWIRED_SONAR = "http://sonar.awired.net";
+    public static final String AWIRED_JENKINS = "http://ci.visuwall.awired.net";
 
-    String STRUTS_ARTIFACT_ID = "org.apache.struts:struts-core";
-    String STRUTS_2_ARTIFACT_ID = "org.apache.struts:struts2-parent";
+    public static final String FLUXX_HUDSON = "http://fluxx.fr.cr:8081";
+    public static final String FLUXX_SONAR = "http://fluxx.fr.cr:9000";
+
+    public static final String JETBRAINS_TEAMCITY = "http://teamcity.jetbrains.com";
+
+    public static final String SONARSOURCE_SONAR = "http://nemo.sonarsource.org";
 
 }

@@ -16,7 +16,7 @@
 
 package net.awired.visuwall.plugin.hudson;
 
-import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import org.junit.BeforeClass;
@@ -28,7 +28,7 @@ public class HudsonConnectionPluginExceptionIT {
 
     @BeforeClass
     public static void setUp() {
-        hudsonConnectionPlugin.connect(IntegrationTestData.HUDSON_URL);
+        hudsonConnectionPlugin.connect(Urls.FLUXX_HUDSON);
     }
 
     @Test(expected = ProjectNotFoundException.class)

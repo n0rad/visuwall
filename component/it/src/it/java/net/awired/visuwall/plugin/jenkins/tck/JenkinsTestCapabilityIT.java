@@ -16,7 +16,7 @@
 
 package net.awired.visuwall.plugin.jenkins.tck;
 
-import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.tck.TestCapabilityTCK;
@@ -29,7 +29,7 @@ public class JenkinsTestCapabilityIT implements TestCapabilityTCK {
 
     @Before
     public void init() throws ConnectionException {
-        jenkins.connect(IntegrationTestData.HUDSON_URL, null, null);
+        jenkins.connect(Urls.FLUXX_HUDSON, null, null);
     }
 
     @Override

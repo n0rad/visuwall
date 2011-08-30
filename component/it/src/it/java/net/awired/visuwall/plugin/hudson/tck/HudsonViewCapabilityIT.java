@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
-import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
@@ -36,7 +36,7 @@ public class HudsonViewCapabilityIT implements ViewCapabilityTCK {
 
     @Before
     public void setUp() throws ConnectionException {
-        hudson.connect(IntegrationTestData.HUDSON_URL, null, null);
+        hudson.connect(Urls.FLUXX_HUDSON, null, null);
     }
 
     @Override

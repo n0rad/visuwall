@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.util.Map;
-import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -37,7 +37,7 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
 
     @Before
     public void init() throws ConnectionException {
-        jenkins.connect(IntegrationTestData.JENKINS_URL, null, null);
+        jenkins.connect(Urls.AWIRED_JENKINS, null, null);
     }
 
     public void should_find_all_projects_ids() {

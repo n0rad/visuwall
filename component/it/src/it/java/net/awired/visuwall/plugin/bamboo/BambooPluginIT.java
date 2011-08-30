@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import java.net.URL;
-import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class BambooPluginIT {
     @Test
     public void should_be_manageable() throws Exception {
         BambooPlugin bamboo = new BambooPlugin();
-        SoftwareId softwareId = bamboo.getSoftwareId(new URL(IntegrationTestData.BAMBOO_URL));
+        SoftwareId softwareId = bamboo.getSoftwareId(new URL(Urls.AWIRED_BAMBOO));
         assertNotNull(softwareId);
         assertEquals("Bamboo", softwareId.getName());
         assertEquals("2.7.1", softwareId.getVersion());

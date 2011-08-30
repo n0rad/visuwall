@@ -16,11 +16,11 @@
 
 package net.awired.visuwall.plugin.sonar;
 
-import static net.awired.visuwall.IntegrationTestData.SONAR_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import java.net.URL;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.SoftwareId;
 import org.junit.Test;
 
@@ -29,7 +29,7 @@ public class SonarPluginIT {
     @Test
     public void should_recognize_sonar_instance_with_valid_url() throws Exception {
         SonarPlugin sonarPlugin = new SonarPlugin();
-        SoftwareId softwareId = sonarPlugin.getSoftwareId(new URL(SONAR_URL));
+        SoftwareId softwareId = sonarPlugin.getSoftwareId(new URL(Urls.AWIRED_SONAR));
 
         assertEquals("Sonar", softwareId.getName());
         assertEquals("2.8", softwareId.getVersion());
@@ -39,7 +39,7 @@ public class SonarPluginIT {
     @Test
     public void should_recognize_nemo_sonar() throws Exception {
         SonarPlugin sonarPlugin = new SonarPlugin();
-        URL url = new URL("http://nemo.sonarsource.org");
+        URL url = new URL(Urls.SONARSOURCE_SONAR);
         SoftwareId softwareId = sonarPlugin.getSoftwareId(url);
         assertNotNull(softwareId);
     }

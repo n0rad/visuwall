@@ -21,7 +21,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import java.util.Date;
 import java.util.List;
-import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -42,7 +42,7 @@ public class HudsonBuildCapabilityIT implements BuildCapabilityTCK {
 
     @Before
     public void setUp() throws ConnectionException {
-        hudson.connect(IntegrationTestData.HUDSON_URL, null, null);
+        hudson.connect(Urls.FLUXX_HUDSON, null, null);
     }
 
     @Override

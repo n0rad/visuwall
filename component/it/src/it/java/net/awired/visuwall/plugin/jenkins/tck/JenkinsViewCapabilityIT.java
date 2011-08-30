@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
-import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
@@ -37,7 +37,7 @@ public class JenkinsViewCapabilityIT implements ViewCapabilityTCK {
 
     @Before
     public void init() throws ConnectionException {
-        jenkins.connect(IntegrationTestData.JENKINS_URL, null, null);
+        jenkins.connect(Urls.AWIRED_JENKINS, null, null);
     }
 
     @Override
