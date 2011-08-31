@@ -92,6 +92,9 @@ class HudsonFinder {
     @VisibleForTesting
     Build findBuildByJobNameAndBuildNumber(String jobName, int buildNumber) throws HudsonBuildNotFoundException {
         String buildUrl = hudsonUrlBuilder.getBuildUrl(jobName, buildNumber);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(buildUrl);
+        }
         Build setBuild = null;
         try {
             setBuild = client.resource(buildUrl, MavenModuleSetBuild.class);

@@ -29,6 +29,7 @@ import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityBuildListNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
+import net.awired.clients.teamcity.exception.TeamCityChangesNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityProjectNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityProjectsNotFoundException;
 import net.awired.clients.teamcity.resource.TeamCityAgent;
@@ -36,6 +37,7 @@ import net.awired.clients.teamcity.resource.TeamCityBuild;
 import net.awired.clients.teamcity.resource.TeamCityBuildItem;
 import net.awired.clients.teamcity.resource.TeamCityBuildType;
 import net.awired.clients.teamcity.resource.TeamCityBuilds;
+import net.awired.clients.teamcity.resource.TeamCityChange;
 import net.awired.clients.teamcity.resource.TeamCityChanges;
 import net.awired.clients.teamcity.resource.TeamCityProject;
 import net.awired.clients.teamcity.resource.TeamCityProjects;
@@ -217,6 +219,14 @@ public class TeamCityTest {
     public void cant_pass_negative_number_to_find_build_method() throws TeamCityBuildNotFoundException {
         TeamCity teamcity = new TeamCity();
         teamcity.findBuild(-1);
+    }
+
+    @Test
+    public void should_find_changes() throws TeamCityChangesNotFoundException {
+
+        int buildId = 47068;
+        List<TeamCityChange> findChanges = teamcity.findChanges(buildId);
+
     }
 
     @SuppressWarnings("unchecked")
