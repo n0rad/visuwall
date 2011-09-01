@@ -36,16 +36,13 @@ import net.awired.clients.common.ResourceNotFoundException;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 public class Bamboo {
 
-    @VisibleForTesting
-    BambooUrlBuilder bambooUrlBuilder;
+    private BambooUrlBuilder bambooUrlBuilder;
 
-    @VisibleForTesting
-    GenericSoftwareClient client = new GenericSoftwareClient();
+    private GenericSoftwareClient client = new GenericSoftwareClient();
 
     private static final Logger LOG = LoggerFactory.getLogger(Bamboo.class);
 

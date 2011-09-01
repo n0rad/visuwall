@@ -28,6 +28,7 @@ import net.awired.clients.sonar.domain.SonarQualityMetric;
 import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.clients.sonar.exception.SonarMetricsNotFoundException;
 import net.awired.clients.sonar.exception.SonarProjectNotFoundException;
+import net.awired.clients.sonar.exception.SonarProjectsNotFoundException;
 import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
 import net.awired.clients.sonar.resource.Project;
 import net.awired.clients.sonar.resource.Projects;
@@ -69,17 +70,10 @@ public class Sonar {
         }
     }
 
-    public Projects findProjects() throws ResourceNotFoundException {
-        String projectsUrl = sonarUrl + "/api/projects";
-        Projects projects = client.resource(projectsUrl, Projects.class, MediaType.APPLICATION_XML_TYPE);
-        return projects;
-    }
-
     public Measure findMeasure(String artifactId, String measureKey) throws SonarMeasureNotFoundException {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(artifactId), "artifactId is a mandatory parameter");
         Preconditions.checkNotNull(measureKey, "measureKey is a mandatory parameter");
-        Measure measure = findMeasureFromSonar(artifactId, measureKey);
-        return measure;
+        return findMeasureFromSonar(artifactId, measureKey);
     }
 
     private Measure findMeasureFromSonar(String artifactId, String measureKey) throws SonarMeasureNotFoundException {
@@ -126,18 +120,27 @@ public class Sonar {
         }
     }
 
-    public Project findProject(String resourceId) throws SonarProjectNotFoundException {
-        Preconditions.checkNotNull(resourceId);
+    public Projects findProjects() throws SonarProjectsNotFoundException {
+        String projectsUrl = sonarUrl + "/api/projects";
+        try {
+            return client.resource(projectsUrl, Projects.class, MediaType.APPLICATION_XML_TYPE);
+        } catch (ResourceNotFoundException e) {
+            throw new SonarProjectsNotFoundException("Can't find Sonar projects", e);
+        }
+    }
+
+    public Project findProject(String projectKey) throws SonarProjectNotFoundException {
+        Preconditions.checkNotNull(projectKey, "projectKey is mandatory");
         try {
             List<Project> projects = findProjects().getProjects();
             for (Project project : projects) {
-                if (project.getKey().equals(resourceId)) {
+                if (project.getKey().equals(projectKey)) {
                     return project;
                 }
             }
-            throw new SonarProjectNotFoundException("Can't find Sonar project with resourceId: '" + resourceId + "'");
-        } catch (ResourceNotFoundException e) {
-            throw new SonarProjectNotFoundException("Can't find Sonar project with resourceId: '" + resourceId + "'",
+            throw new SonarProjectNotFoundException("Can't find Sonar project with resourceId: '" + projectKey + "'");
+        } catch (SonarProjectsNotFoundException e) {
+            throw new SonarProjectNotFoundException("Can't find Sonar project with resourceId: '" + projectKey + "'",
                     e);
         }
     }

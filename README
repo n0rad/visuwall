@@ -1,0 +1,11 @@
+Jenkins
+
+disabled: Create a disabled Maven job
+errorproject: git://github.com/jsmadja/project-wall.git, pom testProjects/errorproject/pom.xml
+failproject: git://github.com/jsmadja/project-wall.git, pom testProjects/failproject/pom.xml
+freestyle-project: just a freestyle project
+itcoverage-project: git://github.com/jsmadja/itcoverage-project.git, goal and option: clean install -Djacoco.agent.path=/opt/jacoco/lib/jacocoagent.jar -Djacoco.file.path=/tmp/jacoco-dump_1428, sonar -Dsonar.jacoco.itReportPath=/tmp/jacoco-dump_1428
+neverbuild: create a Maven job, don't build it
+struts: http://svn.apache.org/repos/asf/struts/struts1/trunk
+struts 2 instable: http://svn.apache.org/repos/asf/struts/struts2/trunk
+successproject: git://github.com/jsmadja/project-wall.git, pom testProjects/successproject/pom.xml

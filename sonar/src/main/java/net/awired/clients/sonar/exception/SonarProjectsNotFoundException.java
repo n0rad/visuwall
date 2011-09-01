@@ -14,25 +14,14 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.sonar.resource;
+package net.awired.clients.sonar.exception;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlRootElement;
+public class SonarProjectsNotFoundException extends Exception {
 
-@XmlRootElement(name = "projects")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class Projects {
+    private static final long serialVersionUID = -1691847221841907738L;
 
-    @XmlElements({ @XmlElement(name = "project") })
-    private List<Project> projects = new ArrayList<Project>();
-
-    public List<Project> getProjects() {
-        return projects;
+    public SonarProjectsNotFoundException(String msg, Throwable t) {
+        super(msg, t);
     }
 
 }

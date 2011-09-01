@@ -14,25 +14,14 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.sonar.resource;
+package net.awired.clients.jenkins;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlRootElement;
+import net.awired.clients.hudson.Hudson;
 
-@XmlRootElement(name = "projects")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class Projects {
+public class Jenkins extends Hudson {
 
-    @XmlElements({ @XmlElement(name = "project") })
-    private List<Project> projects = new ArrayList<Project>();
-
-    public List<Project> getProjects() {
-        return projects;
+    public Jenkins(String jenkinsUrl) {
+        super(jenkinsUrl);
     }
 
 }

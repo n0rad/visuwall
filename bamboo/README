@@ -1,0 +1,7 @@
+How to setup your test environment.
+
+Install your Bamboo server X.Y.Z on your workstation
+The HTTP port must be 8888
+
+Install your Bamboo server X.Y.A on your workstation
+The HTTP port must be 8889
