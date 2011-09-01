@@ -25,86 +25,50 @@ import com.google.common.base.Objects;
 @XmlType(name = "metric")
 public final class SonarQualityMetric {
 
-    private String key;
-    private String name;
-    private String description;
-    private String domain;
-    private Boolean qualitative;
-    private Integer direction;
-    private Boolean userManaged;
-    private String valTyp;
-    private Boolean hidden;
+    String key;
+    String name;
+    String description;
+    String domain;
+    Boolean qualitative;
+    Integer direction;
+    Boolean userManaged;
+    String valTyp;
+    Boolean hidden;
 
     public String getKey() {
         return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getDomain() {
         return domain;
     }
 
-    public void setDomain(String domain) {
-        this.domain = domain;
-    }
-
     public Boolean getQualitative() {
         return qualitative;
-    }
-
-    public void setQualitative(Boolean qualitative) {
-        this.qualitative = qualitative;
     }
 
     public Integer getDirection() {
         return direction;
     }
 
-    public void setDirection(Integer direction) {
-        this.direction = direction;
-    }
-
     public Boolean getUserManaged() {
         return userManaged;
-    }
-
-    public void setUserManaged(Boolean userManaged) {
-        this.userManaged = userManaged;
     }
 
     public String getValTyp() {
         return valTyp;
     }
 
-    public void setValTyp(String valTyp) {
-        this.valTyp = valTyp;
-    }
-
     public Boolean getHidden() {
         return hidden;
-    }
-
-    public void setHidden(Boolean hidden) {
-        this.hidden = hidden;
     }
 
     @Override
@@ -134,4 +98,41 @@ public final class SonarQualityMetric {
     public int hashCode() {
         return Objects.hashCode(description, domain, key, name);
     }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
+    public void setQualitative(Boolean qualitative) {
+        this.qualitative = qualitative;
+    }
+
+    public void setDirection(Integer direction) {
+        this.direction = direction;
+    }
+
+    public void setUserManaged(Boolean userManaged) {
+        this.userManaged = userManaged;
+    }
+
+    public void setValTyp(String valTyp) {
+        this.valTyp = valTyp;
+    }
+
+    public void setHidden(Boolean hidden) {
+        this.hidden = hidden;
+    }
+
 }

@@ -16,34 +16,25 @@
 
 package net.awired.clients.sonar;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
-import net.awired.clients.sonar.domain.SonarMetrics;
-import net.awired.clients.sonar.domain.SonarQualityMetric;
 import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.clients.sonar.exception.SonarMetricsNotFoundException;
+import net.awired.clients.sonar.exception.SonarProjectNotFoundException;
+import net.awired.clients.sonar.exception.SonarProjectsNotFoundException;
 import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
-import net.awired.clients.sonar.resource.Project;
 import net.awired.clients.sonar.resource.Projects;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.sonar.wsclient.connectors.ConnectionException;
-import org.sonar.wsclient.services.Measure;
-import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
 @SuppressWarnings("unchecked")
@@ -63,25 +54,6 @@ public class SonarTest {
         sonarClient = new Sonar("http://sonar:9000");
         sonarClient.sonar = sonar;
         sonarClient.client = genericSoftwareClient;
-    }
-
-    @Test
-    public void should_find_measure() throws SonarMeasureNotFoundException {
-        Measure coverageMeasure = new Measure();
-        coverageMeasure.setFormattedValue("5%");
-        coverageMeasure.setValue(5D);
-        coverageMeasure.setMetricName("Coverage");
-
-        Resource resource = Mockito.mock(Resource.class);
-        when(resource.getMeasure(Matchers.anyString())).thenReturn(coverageMeasure);
-
-        when(sonar.find((ResourceQuery) Matchers.anyObject())).thenReturn(resource);
-
-        Measure measure = sonarClient.findMeasure("artifactId", "coverage");
-
-        assertEquals(coverageMeasure.getFormattedValue(), measure.getFormattedValue());
-        assertEquals(coverageMeasure.getValue(), measure.getValue());
-        assertEquals(coverageMeasure.getMetricName(), measure.getMetricName());
     }
 
     @Test(expected = SonarMeasureNotFoundException.class)
@@ -108,57 +80,9 @@ public class SonarTest {
         new Sonar("");
     }
 
-    @Test
-    public void should_create_sonar_with_login_and_password() {
-        new Sonar("sonarUrl", "login", "password");
-    }
-
-    @Test
-    public void should_find_metrics() throws Exception {
-        SonarQualityMetric qualityMetric = new SonarQualityMetric();
-        qualityMetric.setKey("metricKey");
-
-        SonarMetrics sonarMetrics = new SonarMetrics();
-        sonarMetrics.metric = new ArrayList<SonarQualityMetric>();
-        sonarMetrics.metric.add(qualityMetric);
-
-        when(genericSoftwareClient.resource(anyString(), any(Class.class))).thenReturn(sonarMetrics);
-
-        Map<String, SonarQualityMetric> metrics = sonarClient.findMetrics();
-        assertEquals(qualityMetric, metrics.get("metricKey"));
-    }
-
     @Test(expected = SonarMeasureNotFoundException.class)
     public void should_throw_exception_when_measure_is_not_found() throws Exception {
         sonarClient.findMeasure("artifactId", "measureKey");
-    }
-
-    @Test
-    public void should_return_projects() throws Exception {
-        Project project = new Project();
-        project.setId(1);
-        project.setKey("key");
-        project.setName("name");
-        project.setQualifier("qualifier");
-        project.setScope("scope");
-
-        List<Project> projectList = new ArrayList<Project>();
-        projectList.add(project);
-
-        Projects projects = new Projects();
-        projects.setProjects(projectList);
-
-        when(genericSoftwareClient.resource(anyString(), any(Class.class), any(MediaType.class)))
-                .thenReturn(projects);
-
-        Projects foundProjects = sonarClient.findProjects();
-        assertFalse(foundProjects.getProjects().isEmpty());
-        Project foundProject = foundProjects.getProjects().get(0);
-        assertEquals(1, foundProject.getId().intValue());
-        assertEquals("key", foundProject.getKey());
-        assertEquals("name", foundProject.getName());
-        assertEquals("qualifier", foundProject.getQualifier());
-        assertEquals("scope", foundProject.getScope());
     }
 
     @Test(expected = SonarMetricsNotFoundException.class)
@@ -180,11 +104,27 @@ public class SonarTest {
         sonarClient.findResource("resourceId");
     }
 
-    @Test
-    public void should_find_resource() throws Exception {
-        Resource resource = new Resource();
-        when(sonar.find(any(ResourceQuery.class))).thenReturn(resource);
-        Resource foundResource = sonarClient.findResource("resourceId");
-        assertNotNull(foundResource);
+    @Test(expected = SonarProjectNotFoundException.class)
+    public void should_throw_exception_when_project_is_not_found() throws Exception {
+        Projects projects = new Projects();
+        when(genericSoftwareClient.resource(anyString(), eq(Projects.class), eq(MediaType.APPLICATION_XML_TYPE)))
+                .thenReturn(projects);
+        sonarClient.findProject("");
+    }
+
+    @Test(expected = SonarProjectsNotFoundException.class)
+    public void should_throw_exception_when_projects_are_not_found() throws Exception {
+        Throwable exception = new ResourceNotFoundException("");
+        when(genericSoftwareClient.resource(anyString(), eq(Projects.class), eq(MediaType.APPLICATION_XML_TYPE)))
+                .thenThrow(exception);
+        sonarClient.findProjects();
+    }
+
+    @Test(expected = SonarProjectNotFoundException.class)
+    public void should_throw_exception_when_projects_are_not_found_and_searching_for_a_project() throws Exception {
+        Throwable exception = new ResourceNotFoundException("");
+        when(genericSoftwareClient.resource(anyString(), eq(Projects.class), eq(MediaType.APPLICATION_XML_TYPE)))
+                .thenThrow(exception);
+        sonarClient.findProject("");
     }
 }

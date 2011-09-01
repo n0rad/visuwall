@@ -41,36 +41,36 @@ public class Project {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getKey() {
         return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getScope() {
         return scope;
     }
 
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-
     public String getQualifier() {
         return qualifier;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 
     public void setQualifier(String qualifier) {

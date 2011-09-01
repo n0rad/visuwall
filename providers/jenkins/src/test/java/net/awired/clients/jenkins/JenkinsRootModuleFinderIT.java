@@ -14,25 +14,18 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.sonar.resource;
+package net.awired.clients.jenkins;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlRootElement;
+import org.junit.Assert;
+import org.junit.Test;
 
-@XmlRootElement(name = "projects")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class Projects {
+public class JenkinsRootModuleFinderIT {
 
-    @XmlElements({ @XmlElement(name = "project") })
-    private List<Project> projects = new ArrayList<Project>();
-
-    public List<Project> getProjects() {
-        return projects;
+    @Test
+    public void should_find_synthesis_root_module_from_jenkins() throws Exception {
+        JenkinsUrlBuilder jenkinsUrlBuilder = new JenkinsUrlBuilder(Urls.AWIRED_JENKINS);
+        JenkinsRootModuleFinder jenkinsRootModuleFinder = new JenkinsRootModuleFinder(jenkinsUrlBuilder);
+        String artifactId = jenkinsRootModuleFinder.findArtifactId("struts 2 instable");
+        Assert.assertEquals("org.apache.struts:struts2-parent", artifactId);
     }
-
 }
