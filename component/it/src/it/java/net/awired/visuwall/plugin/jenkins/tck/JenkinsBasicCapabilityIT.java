@@ -29,6 +29,7 @@ import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.tck.BasicCapabilityTCK;
 import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
@@ -62,6 +63,7 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
         assertEquals("struts", softwareProjectId.getProjectId());
     }
 
+    @Ignore
     @Override
     @Test
     public void should_get_maven_id() throws Exception {

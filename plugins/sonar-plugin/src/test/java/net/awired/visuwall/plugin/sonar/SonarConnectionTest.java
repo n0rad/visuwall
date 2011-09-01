@@ -28,11 +28,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.clients.sonar.Sonar;
 import net.awired.clients.sonar.domain.SonarQualityMetric;
 import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.clients.sonar.exception.SonarMetricsNotFoundException;
+import net.awired.clients.sonar.exception.SonarProjectsNotFoundException;
 import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
 import net.awired.clients.sonar.resource.Project;
 import net.awired.clients.sonar.resource.Projects;
@@ -361,7 +361,7 @@ public class SonarConnectionTest {
 
     @Test
     public void should_not_fail_when_searching_all_software_project_ids() throws Exception {
-        Throwable notFound = new ResourceNotFoundException("not found");
+        Throwable notFound = new SonarProjectsNotFoundException("not found", null);
         when(sonarClient.findProjects()).thenThrow(notFound);
 
         List<SoftwareProjectId> softwareProjectIds = sonar.findAllSoftwareProjectIds();
@@ -391,7 +391,7 @@ public class SonarConnectionTest {
 
     @Test
     public void should_not_fail_when_searching_spi_by_names() throws Exception {
-        Throwable notFound = new ResourceNotFoundException("not found");
+        Throwable notFound = new SonarProjectsNotFoundException("not found", null);
         when(sonarClient.findProjects()).thenThrow(notFound);
 
         List<SoftwareProjectId> softwareProjectIds = sonar.findSoftwareProjectIdsByNames(new ArrayList<String>());

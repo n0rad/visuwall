@@ -25,6 +25,7 @@ import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.tck.TestCapabilityTCK;
 import net.awired.visuwall.plugin.sonar.SonarConnection;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SonarTestCapabilityIT implements TestCapabilityTCK {
@@ -49,6 +50,7 @@ public class SonarTestCapabilityIT implements TestCapabilityTCK {
         assertEquals(1832, unitTestsAnalysis.getTotalCount());
     }
 
+    @Ignore
     @Test
     public void should_analyze_integration_tests() throws ConnectionException {
         TestCapability sonar = new SonarConnection();

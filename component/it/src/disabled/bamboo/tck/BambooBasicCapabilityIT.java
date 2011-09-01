@@ -16,12 +16,12 @@
 
 package net.awired.visuwall.plugin.bamboo.tck;
 
+import static net.awired.visuwall.IntegrationTestData.BAMBOO_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Map;
-import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -38,7 +38,7 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
 
     @Before
     public void init() throws ConnectionException {
-        bamboo.connect(Urls.AWIRED_BAMBOO, null, null);
+        bamboo.connect(BAMBOO_URL, null, null);
     }
 
     @Override

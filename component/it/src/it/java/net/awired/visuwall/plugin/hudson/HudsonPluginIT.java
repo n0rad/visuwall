@@ -42,7 +42,7 @@ public class HudsonPluginIT {
         SoftwareId softwareId = hudsonPlugin.getSoftwareId(new URL(Urls.FLUXX_HUDSON));
 
         assertEquals("Hudson", softwareId.getName());
-        assertEquals("1.396", softwareId.getVersion());
+        assertEquals("2.1.0", softwareId.getVersion());
         assertNull(softwareId.getWarnings());
     }
 

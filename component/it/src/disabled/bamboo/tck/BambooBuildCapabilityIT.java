@@ -16,12 +16,12 @@
 
 package net.awired.visuwall.plugin.bamboo.tck;
 
+import static net.awired.visuwall.IntegrationTestData.BAMBOO_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import java.util.Date;
 import java.util.List;
-import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
@@ -39,7 +39,7 @@ public class BambooBuildCapabilityIT implements BuildCapabilityTCK {
 
     @Before
     public void init() throws ConnectionException {
-        bamboo.connect(Urls.AWIRED_BAMBOO, null, null);
+        bamboo.connect(BAMBOO_URL, null, null);
     }
 
     private SoftwareProjectId strutsProjectId() {

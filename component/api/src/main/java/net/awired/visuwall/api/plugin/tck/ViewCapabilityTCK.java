@@ -24,7 +24,7 @@ public interface ViewCapabilityTCK {
     void should_list_all_project_in_a_view() throws ViewNotFoundException;
 
     // findProjectNamesByView
-    void should_find_all_projects_of_views();
+    void should_find_all_projects_of_views() throws ViewNotFoundException;
 
     // findViews
     void should_list_all_views();
