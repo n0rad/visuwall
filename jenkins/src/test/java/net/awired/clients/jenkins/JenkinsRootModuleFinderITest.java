@@ -19,7 +19,7 @@ package net.awired.clients.jenkins;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class JenkinsRootModuleFinderIT {
+public class JenkinsRootModuleFinderITest {
 
     @Test
     public void should_find_synthesis_root_module_from_jenkins() throws Exception {

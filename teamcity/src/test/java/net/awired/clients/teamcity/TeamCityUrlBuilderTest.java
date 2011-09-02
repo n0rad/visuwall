@@ -66,4 +66,10 @@ public class TeamCityUrlBuilderTest {
         String serverUrl = builder.getServer();
         assertEquals(TEAM_CITY_URL + "/app/rest/server", serverUrl);
     }
+
+    @Test
+    public void should_create_valid_change_url() {
+        String changeUrl = builder.getChange("3");
+        assertEquals(TEAM_CITY_URL + "/app/rest/changes/id:3", changeUrl);
+    }
 }

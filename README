@@ -9,3 +9,6 @@ neverbuild: create a Maven job, don't build it
 struts: http://svn.apache.org/repos/asf/struts/struts1/trunk
 struts 2 instable: http://svn.apache.org/repos/asf/struts/struts2/trunk
 successproject: git://github.com/jsmadja/project-wall.git, pom testProjects/successproject/pom.xml
+
+
+-DsonarInstances="http://localhost:9024" -DbambooInstances="http://localhost:8085" -DteamcityInstances="http://localhost:8111"
