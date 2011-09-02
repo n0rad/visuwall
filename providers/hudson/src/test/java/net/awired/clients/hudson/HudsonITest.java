@@ -1,5 +1,5 @@
 /**
- *     Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
+ *     Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com>
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -14,31 +14,48 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.jenkins;
+package net.awired.clients.hudson;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import net.awired.clients.common.Tests;
 import net.awired.clients.hudson.domain.HudsonBuild;
 import net.awired.clients.hudson.domain.HudsonCommiter;
 import net.awired.clients.hudson.domain.HudsonJob;
 import net.awired.clients.hudson.exception.HudsonBuildNotFoundException;
 import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
-public class JenkinsIT {
+@RunWith(Parameterized.class)
+public class HudsonITest {
 
-    private Jenkins jenkins = new Jenkins(Urls.AWIRED_JENKINS);
+    Hudson hudson;
+
+    @Parameters
+    public static Collection<Object[]> createParameters() {
+        String instanceProperty = "jenkinsInstances";
+        return Tests.createUrlInstanceParametersFromProperty(instanceProperty);
+    }
+
+    public HudsonITest(String hudsonUrl) {
+        this.hudson = new Hudson(hudsonUrl);
+    }
 
     @Test
     public void should_find_not_built_project() throws HudsonJobNotFoundException {
-        jenkins.findJob("neverbuild");
+        hudson.findJob("neverbuild");
     }
 
     @Test
     public void should_not_find_non_maven_projects() throws Exception {
-        List<HudsonJob> projects = jenkins.findAllProjects();
+        List<HudsonJob> projects = hudson.findAllProjects();
         for (HudsonJob project : projects) {
             if ("freestyle-project".equals(project.getName())) {
                 fail(project.getName() + " is not a maven project");
@@ -46,9 +63,11 @@ public class JenkinsIT {
         }
     }
 
+    @Ignore("Bug with git")
     @Test
     public void should_retrieve_commiter_email() throws HudsonBuildNotFoundException, HudsonJobNotFoundException {
-        HudsonBuild build = jenkins.findBuild("successproject", 13);
+        Hudson hudsonAwired = new Hudson(Urls.FLUXX_HUDSON);
+        HudsonBuild build = hudsonAwired.findBuild("successproject", 13);
         Set<HudsonCommiter> set = build.getCommiters();
         HudsonCommiter commiter = set.iterator().next();
 

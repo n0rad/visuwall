@@ -38,11 +38,8 @@
 		<module>hudson</module>
 		<module>jenkins</module>
 		<module>sonar</module>
-<!-- these modules will be disabled while I have no free server instance to test them   -->
-<!-- 
 		<module>teamcity</module>
 		<module>bamboo</module>
- -->
 	</modules>
 
 	<licenses>
@@ -90,7 +87,6 @@
 				<artifactId>visuwall-sonarclient</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			<!-- 
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-bambooclient</artifactId>
@@ -101,7 +97,6 @@
 				<artifactId>visuwall-teamcityclient</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			 -->
 		</dependencies>
 	</dependencyManagement>
 

@@ -17,80 +17,59 @@
 package net.awired.clients.bamboo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import net.awired.clients.bamboo.exception.BambooBuildNotFoundException;
 import net.awired.clients.bamboo.exception.BambooBuildNumberNotFoundException;
 import net.awired.clients.bamboo.exception.BambooPlanNotFoundException;
-import net.awired.clients.bamboo.resource.Link;
 import net.awired.clients.bamboo.resource.Plan;
 import net.awired.clients.bamboo.resource.Result;
 import net.awired.clients.common.ResourceNotFoundException;
+import net.awired.clients.common.Tests;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class BambooTest {
+public class BambooITest {
 
     @Parameters
     public static Collection<Object[]> createParameters() {
-        Object[] bambooTargets = new Object[] { //
-        "http://bamboo.visuwall.awired.net", "X.Y.Z" // 
-        };
-        Object[][] data = new Object[][] { bambooTargets };
-        return Arrays.asList(data);
+        String instanceProperty = "bambooInstances";
+        return Tests.createUrlInstanceParametersFromProperty(instanceProperty);
     }
 
     private Bamboo bamboo;
-    private String bambooUrl;
-    private String bambooVersion;
 
-    public BambooTest(String bambooUrl, String bambooVersion) {
-        System.out.println("Testing Bamboo url:'" + bambooUrl + "', version:'" + bambooVersion + "'");
+    public BambooITest(String bambooUrl) {
+        System.out.println("Testing Bamboo url:'" + bambooUrl + "'");
         this.bamboo = new Bamboo(bambooUrl);
-        this.bambooUrl = bambooUrl;
-        this.bambooVersion = bambooVersion;
     }
 
     @Test
     public void should_find_an_existing_plan() throws BambooPlanNotFoundException {
-        Plan project = bamboo.findPlan("STRUTS-STRUTS");
+        Plan plan = getFirstPlanOfTheInstance();
+        Plan project = bamboo.findPlan(plan.getKey());
         assertNotNull(project);
     }
 
     @Test
     public void should_find_all_plans() throws ResourceNotFoundException {
         List<Plan> projects = bamboo.findAllPlans();
-
-        Link link = new Link();
-        link.href = "http://bamboo.visuwall.awired.net/rest/api/latest/plan/AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6";
-        link.rel = "self";
-
-        Plan ajsl = projects.get(0);
-        assertEquals("ajsl - Awired Java Standard Library 1.0-ALPHA6", ajsl.getName());
-        assertEquals("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6", ajsl.getKey());
-        assertEquals(link, ajsl.getLink());
-    }
-
-    @Test
-    public void should_return_empty_list_if_plans_are_not_found() throws ResourceNotFoundException {
-        //        when(client.resource(anyString(), any(Class.class))).thenThrow(new ResourceNotFoundException("not found"));
-        //
-        //        List<Plan> projects = bamboo.findAllPlans();
-        //
-        //        assertTrue(projects.isEmpty());
+        assertFalse(projects.isEmpty());
     }
 
     @Test
     public void should_find_last_build_number() throws Exception {
-        int lastBuildNumber = bamboo.getLastResultNumber("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
-        assertEquals(1, lastBuildNumber);
+        Plan plan = getFirstPlanOfTheInstance();
+
+        int lastBuildNumber = bamboo.getLastResultNumber(plan.getKey());
+        assertTrue(lastBuildNumber > 0);
     }
 
     @Test(expected = BambooPlanNotFoundException.class)
@@ -110,64 +89,85 @@ public class BambooTest {
 
     @Test
     public void should_find_result() throws Exception {
-        Result result = bamboo.findResult("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6", 1);
+        Plan plan = getFirstPlanOfTheInstance();
+        int lastBuildNumber = getLastBuildNumberOfTheFirstPlan();
+
+        Result result = bamboo.findResult(plan.getKey(), lastBuildNumber);
 
         assertNotNull(result);
-        assertEquals(1, result.getNumber());
-        assertEquals(114817, result.getBuildDuration());
-        assertEquals(0, result.getFailedTestCount());
-        assertEquals(18, result.getSuccessfulTestCount());
+        assertEquals(lastBuildNumber, result.getNumber());
+        assertTrue(result.getBuildDuration() > 0);
+        assertTrue(result.getFailedTestCount() >= 0);
+        assertTrue(result.getSuccessfulTestCount() >= 18);
         assertNotNull(result.getBuildStartedTime());
-        assertEquals("Successful", result.getState());
+        assertNotNull(result.getState());
     }
 
     @Test
     public void should_find_state() throws Exception {
-        String state = bamboo.getState("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
+        Plan plan = getFirstPlanOfTheInstance();
+        String state = bamboo.getState(plan.getKey());
 
-        assertEquals("Successful", state);
+        assertNotNull(state);
     }
 
     @Test
     public void should_get_average_build_duration_time() throws Exception {
-        long duration = bamboo.getAverageBuildDurationTime("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
+        Plan plan = getFirstPlanOfTheInstance();
 
-        assertEquals(114, duration);
+        long duration = bamboo.getAverageBuildDurationTime(plan.getKey());
+
+        assertTrue(duration > 0);
     }
 
     @Test
     public void should_get_estimated_finish_time() throws Exception {
-        Date finishTime = bamboo.getEstimatedFinishTime("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
+        Plan plan = getFirstPlanOfTheInstance();
+
+        Date finishTime = bamboo.getEstimatedFinishTime(plan.getKey());
 
         assertNotNull(finishTime);
     }
 
     @Test
     public void should_get_is_building() throws Exception {
-        boolean isBuilding = bamboo.isBuilding("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6", 0);
+        Plan plan = getFirstPlanOfTheInstance();
+        int buildNumber = getLastBuildNumberOfTheFirstPlan();
 
-        assertTrue(isBuilding);
+        boolean isBuilding = bamboo.isBuilding(plan.getKey(), buildNumber);
+
+        assertFalse(isBuilding);
     }
 
     @Test
     public void should_find_project() throws Exception {
-        Plan plan = bamboo.findPlan("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6");
+        Plan plan = getFirstPlanOfTheInstance();
 
-        Link link = new Link();
-        link.rel = "self";
-        link.href = "http://bamboo.visuwall.awired.net/rest/api/latest/plan/AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6";
+        plan = bamboo.findPlan(plan.getKey());
 
         assertTrue(plan.isEnabled());
-        assertEquals("chain", plan.getType());
-        assertEquals("ajsl - Awired Java Standard Library 1.0-ALPHA6", plan.getName());
-        assertEquals("AJSL-AWIREDJAVASTANDARDLIBRARY10ALPHA6", plan.getKey());
-        assertEquals("AJSL", plan.getProjectKey());
-        assertEquals("ajsl", plan.getProjectName());
-        assertEquals(link, plan.getLink());
-        assertTrue(plan.isFavourite());
-        assertTrue(plan.isActive());
-        assertTrue(plan.isBuilding());
-        assertEquals(114.0d, plan.getAverageBuildTimeInSeconds(), 0);
+        assertNotNull(plan.getType());
+        assertNotNull(plan.getName());
+        assertNotNull(plan.getKey());
+        assertNotNull(plan.getProjectKey());
+        assertNotNull(plan.getProjectName());
+        assertNotNull(plan.getLink());
+        assertFalse(plan.isFavourite());
+        assertFalse(plan.isActive());
+        assertFalse(plan.isBuilding());
+        assertTrue(plan.getAverageBuildTimeInSeconds() > 0);
+    }
+
+    private Plan getFirstPlanOfTheInstance() {
+        List<Plan> plans = bamboo.findAllPlans();
+        Plan plan = plans.get(0);
+        return plan;
+    }
+
+    private int getLastBuildNumberOfTheFirstPlan() throws BambooBuildNumberNotFoundException {
+        Plan plan = getFirstPlanOfTheInstance();
+        int lastBuildNumber = bamboo.getLastResultNumber(plan.getKey());
+        return lastBuildNumber;
     }
 
 }
