@@ -19,7 +19,7 @@ package net.awired.visuwall.plugin.teamcity.tck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import java.util.Map;
-import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -37,7 +37,7 @@ public class TeamBasicCapabilityIT implements BasicCapabilityTCK {
 
     @Before
     public void init() throws ConnectionException {
-        teamcity.connect(IntegrationTestData.TEAMCITY_URL, "guest", "");
+        teamcity.connect(Urls.JETBRAINS_TEAMCITY, "guest", "");
     }
 
     @Override

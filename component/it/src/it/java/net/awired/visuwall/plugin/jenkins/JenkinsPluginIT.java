@@ -16,10 +16,10 @@
 
 package net.awired.visuwall.plugin.jenkins;
 
-import static net.awired.visuwall.IntegrationTestData.JENKINS_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import java.net.URL;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class JenkinsPluginIT {
     @Test
     public void should_recognize_jenkins_instance_with_valid_url() throws Exception {
         JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-        SoftwareId softwareId = jenkinsPlugin.getSoftwareId(new URL(JENKINS_URL));
+        SoftwareId softwareId = jenkinsPlugin.getSoftwareId(new URL(Urls.AWIRED_JENKINS));
 
         assertEquals("Jenkins", softwareId.getName());
         assertEquals("1.407", softwareId.getVersion());

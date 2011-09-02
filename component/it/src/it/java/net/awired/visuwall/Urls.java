@@ -14,25 +14,19 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.bamboo;
+package net.awired.visuwall;
 
-import static org.junit.Assert.assertEquals;
-import java.net.URL;
-import net.awired.visuwall.IntegrationTestData;
-import org.junit.Test;
+public class Urls {
 
-public class BambooVersionExtractorIT {
+    public static final String AWIRED_BAMBOO = "http://bamboo.visuwall.awired.net";
+    public static final String AWIRED_SONAR = "http://sonar.awired.net";
+    public static final String AWIRED_JENKINS = "http://ci.visuwall.awired.net";
 
-    @Test
-    public void should_extract_version() throws Exception {
-        URL url = new URL(IntegrationTestData.BAMBOO_URL);
-        String version = BambooVersionExtractor.extractVersion(url);
-        assertEquals("2.7.1", version);
-    }
+    public static final String FLUXX_HUDSON = "http://fluxx.fr.cr:8081";
+    public static final String FLUXX_SONAR = "http://fluxx.fr.cr:9000";
 
-    @Test(expected = BambooVersionNotFoundException.class)
-    public void should_not_fail_with_jenkins_url() throws Exception {
-        URL url = new URL(IntegrationTestData.JENKINS_URL);
-        BambooVersionExtractor.extractVersion(url);
-    }
+    public static final String JETBRAINS_TEAMCITY = "http://teamcity.jetbrains.com";
+
+    public static final String SONARSOURCE_SONAR = "http://nemo.sonarsource.org";
+
 }

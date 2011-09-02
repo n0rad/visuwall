@@ -17,7 +17,6 @@
 package net.awired.visuwall.plugin.sonar;
 
 import static org.junit.Assert.assertEquals;
-import net.awired.clients.sonar.domain.SonarQualityMeasure;
 import org.junit.Test;
 import org.sonar.wsclient.services.Measure;
 

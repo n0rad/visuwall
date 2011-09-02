@@ -24,13 +24,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.clients.sonar.Sonar;
-import net.awired.clients.sonar.domain.SonarQualityMeasure;
 import net.awired.clients.sonar.domain.SonarQualityMetric;
 import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.clients.sonar.exception.SonarMetricsNotFoundException;
 import net.awired.clients.sonar.exception.SonarProjectNotFoundException;
+import net.awired.clients.sonar.exception.SonarProjectsNotFoundException;
 import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
 import net.awired.clients.sonar.resource.Project;
 import net.awired.visuwall.api.domain.BuildTime;
@@ -120,7 +119,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
             for (Project project : names) {
                 projectNames.add(project.getName());
             }
-        } catch (ResourceNotFoundException e) {
+        } catch (SonarProjectsNotFoundException e) {
             LOG.warn(e.getMessage(), e);
         }
         return projectNames;
@@ -136,7 +135,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
                 String key = project.getKey();
                 projects.put(project.getName(), new SoftwareProjectId(key));
             }
-        } catch (ResourceNotFoundException e) {
+        } catch (SonarProjectsNotFoundException e) {
             LOG.warn(e.getMessage(), e);
         }
         return projects;
@@ -204,7 +203,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
                 SoftwareProjectId softwareProjectId = new SoftwareProjectId(key);
                 softwareProjectIds.add(softwareProjectId);
             }
-        } catch (ResourceNotFoundException e) {
+        } catch (SonarProjectsNotFoundException e) {
             LOG.warn(e.getMessage(), e);
         }
         return softwareProjectIds;
@@ -225,7 +224,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
                     softwareProjectIds.add(softwareProjectId);
                 }
             }
-        } catch (ResourceNotFoundException e) {
+        } catch (SonarProjectsNotFoundException e) {
             LOG.warn(e.getMessage(), e);
         }
         return softwareProjectIds;

@@ -18,6 +18,7 @@ package net.awired.visuwall.plugin.sonar;
 
 import static org.junit.Assert.assertFalse;
 import java.util.List;
+import net.awired.visuwall.Urls;
 import org.junit.Test;
 
 public class SonarConnectionIT {
@@ -25,7 +26,7 @@ public class SonarConnectionIT {
     @Test
     public void should_find_project_names() {
         SonarConnection sonar = new SonarConnection();
-        sonar.connect("http://nemo.sonarsource.org");
+        sonar.connect(Urls.SONARSOURCE_SONAR);
         List<String> projectNames = sonar.findProjectNames();
         assertFalse(projectNames.isEmpty());
     }

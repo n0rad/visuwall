@@ -19,6 +19,7 @@ package net.awired.visuwall.plugin.hudson;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import java.net.URL;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.core.business.domain.PluginInfo;
@@ -38,10 +39,10 @@ public class HudsonPluginIT {
     @Test
     public void should_recognize_hudson_instance_with_valid_url() throws Exception {
         HudsonPlugin hudsonPlugin = new HudsonPlugin();
-        SoftwareId softwareId = hudsonPlugin.getSoftwareId(new URL("http://fluxx.fr.cr:8080/hudson"));
+        SoftwareId softwareId = hudsonPlugin.getSoftwareId(new URL(Urls.FLUXX_HUDSON));
 
         assertEquals("Hudson", softwareId.getName());
-        assertEquals("1.396", softwareId.getVersion());
+        assertEquals("2.1.0", softwareId.getVersion());
         assertNull(softwareId.getWarnings());
     }
 

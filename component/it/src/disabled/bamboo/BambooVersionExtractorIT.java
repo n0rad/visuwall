@@ -14,17 +14,25 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall;
+package net.awired.visuwall.plugin.bamboo;
 
-public interface IntegrationTestData {
-    String BAMBOO_URL = "http://bamboo.visuwall.awired.net";
-    String JENKINS_URL = "http://ci.visuwall.awired.net";
-    String HUDSON_URL = "http://fluxx.fr.cr:8080/hudson";
-    String TEAMCITY_URL = "http://teamcity.jetbrains.com";
+import static org.junit.Assert.assertEquals;
+import java.net.URL;
+import net.awired.visuwall.Urls;
+import org.junit.Test;
 
-    String SONAR_URL = "http://sonar.awired.net";
+public class BambooVersionExtractorIT {
 
-    String STRUTS_ARTIFACT_ID = "org.apache.struts:struts-core";
-    String STRUTS_2_ARTIFACT_ID = "org.apache.struts:struts2-parent";
+    @Test
+    public void should_extract_version() throws Exception {
+        URL url = new URL(Urls.AWIRED_BAMBOO);
+        String version = BambooVersionExtractor.extractVersion(url);
+        assertEquals("2.7.1", version);
+    }
 
+    @Test(expected = BambooVersionNotFoundException.class)
+    public void should_not_fail_with_jenkins_url() throws Exception {
+        URL url = new URL(Urls.AWIRED_JENKINS);
+        BambooVersionExtractor.extractVersion(url);
+    }
 }

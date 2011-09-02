@@ -16,9 +16,9 @@
 
 package net.awired.visuwall.plugin.teamcity;
 
-import static net.awired.visuwall.IntegrationTestData.TEAMCITY_URL;
 import static org.junit.Assert.assertEquals;
 import java.net.URL;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class TeamCityPluginIT {
     @Test
     public void should_recognize_teamcity_instance_with_valid_url() throws Exception {
         TeamCityPlugin teamcityPlugin = new TeamCityPlugin();
-        SoftwareId softwareId = teamcityPlugin.getSoftwareId(new URL(TEAMCITY_URL));
+        SoftwareId softwareId = teamcityPlugin.getSoftwareId(new URL(Urls.JETBRAINS_TEAMCITY));
         assertEquals("TeamCity", softwareId.getName());
         assertEquals("6.5", softwareId.getVersion());
     }

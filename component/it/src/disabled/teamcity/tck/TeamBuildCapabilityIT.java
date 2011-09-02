@@ -22,7 +22,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import java.util.Date;
 import java.util.List;
-import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -41,7 +41,7 @@ public class TeamBuildCapabilityIT implements BuildCapabilityTCK {
 
     @Before
     public void init() throws ConnectionException {
-        teamcity.connect(IntegrationTestData.TEAMCITY_URL, "guest", "");
+        teamcity.connect(Urls.JETBRAINS_TEAMCITY, "guest", "");
     }
 
     @Override

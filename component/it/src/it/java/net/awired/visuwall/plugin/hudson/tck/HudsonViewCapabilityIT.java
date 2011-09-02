@@ -17,10 +17,11 @@
 package net.awired.visuwall.plugin.hudson.tck;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
-import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
@@ -36,7 +37,7 @@ public class HudsonViewCapabilityIT implements ViewCapabilityTCK {
 
     @Before
     public void setUp() throws ConnectionException {
-        hudson.connect(IntegrationTestData.HUDSON_URL, null, null);
+        hudson.connect(Urls.FLUXX_HUDSON, null, null);
     }
 
     @Override
@@ -53,22 +54,19 @@ public class HudsonViewCapabilityIT implements ViewCapabilityTCK {
     @Test
     public void should_list_all_project_in_a_view() throws ViewNotFoundException {
         List<String> projectNames = hudson.findProjectNamesByView("View1");
-        assertEquals(2, projectNames.size());
-        assertTrue(projectNames.contains("client-teamcity"));
-        assertTrue(projectNames.contains("dev-radar"));
+        assertFalse(projectNames.isEmpty());
     }
 
     @Override
     @Test
-    public void should_find_all_projects_of_views() {
+    public void should_find_all_projects_of_views() throws ViewNotFoundException {
+        List<String> projectView1 = hudson.findProjectNamesByView("View1");
+        List<String> projectView2 = hudson.findProjectNamesByView("View2");
+
         List<String> views = Arrays.asList("View1", "View2");
         List<SoftwareProjectId> projectIds = hudson.findSoftwareProjectIdsByViews(views);
-        List<String> names = Arrays.asList("itcoverage-project", "dev-radar", "fluxx", "dev-radar-sonar",
-                "client-teamcity");
-        assertEquals(names.size(), projectIds.size());
-        for (int i = 0; i < projectIds.size(); i++) {
-            assertTrue(names.contains(projectIds.get(i).getProjectId()));
-        }
+
+        assertEquals(projectView1.size() + projectView2.size(), projectIds.size());
     }
 
 }

@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -44,7 +44,7 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
 
     @Before
     public void init() throws ConnectionException {
-        jenkins.connect(IntegrationTestData.JENKINS_URL, null, null);
+        jenkins.connect(Urls.AWIRED_JENKINS, null, null);
     }
 
     @Override

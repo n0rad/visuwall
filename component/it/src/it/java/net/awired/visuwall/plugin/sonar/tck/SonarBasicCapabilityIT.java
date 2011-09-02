@@ -19,7 +19,7 @@ package net.awired.visuwall.plugin.sonar.tck;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import java.util.Map;
-import net.awired.visuwall.IntegrationTestData;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -35,7 +35,7 @@ public class SonarBasicCapabilityIT implements BasicCapabilityTCK {
 
     @BeforeClass
     public static void init() throws ConnectionException {
-        sonar.connect(IntegrationTestData.SONAR_URL, null, null);
+        sonar.connect(Urls.AWIRED_SONAR, null, null);
     }
 
     @Override

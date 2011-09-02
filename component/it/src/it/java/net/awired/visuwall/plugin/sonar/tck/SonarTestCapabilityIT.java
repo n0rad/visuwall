@@ -16,9 +16,8 @@
 
 package net.awired.visuwall.plugin.sonar.tck;
 
-import static net.awired.visuwall.IntegrationTestData.SONAR_URL;
-import static net.awired.visuwall.IntegrationTestData.STRUTS_2_ARTIFACT_ID;
 import static org.junit.Assert.assertEquals;
+import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -26,6 +25,7 @@ import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.tck.TestCapabilityTCK;
 import net.awired.visuwall.plugin.sonar.SonarConnection;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SonarTestCapabilityIT implements TestCapabilityTCK {
@@ -34,7 +34,7 @@ public class SonarTestCapabilityIT implements TestCapabilityTCK {
 
     @BeforeClass
     public static void init() throws ConnectionException {
-        sonar.connect(SONAR_URL, null, null);
+        sonar.connect(Urls.AWIRED_SONAR, null, null);
     }
 
     @Test
@@ -50,10 +50,11 @@ public class SonarTestCapabilityIT implements TestCapabilityTCK {
         assertEquals(1832, unitTestsAnalysis.getTotalCount());
     }
 
+    @Ignore
     @Test
     public void should_analyze_integration_tests() throws ConnectionException {
         TestCapability sonar = new SonarConnection();
-        sonar.connect("http://fluxx.fr.cr:9000", null, null);
+        sonar.connect(Urls.FLUXX_SONAR, null, null);
 
         SoftwareProjectId projectId = librestry();
 
@@ -71,7 +72,7 @@ public class SonarTestCapabilityIT implements TestCapabilityTCK {
     }
 
     private SoftwareProjectId struts2() {
-        return new SoftwareProjectId(STRUTS_2_ARTIFACT_ID);
+        return new SoftwareProjectId("org.apache.struts:struts2-parent");
     }
 
 }
