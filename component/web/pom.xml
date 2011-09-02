@@ -22,7 +22,6 @@
 
 	<groupId>net.awired.visuwall</groupId>
 	<artifactId>visuwall-web</artifactId>
-	<version>0.2-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>Visuwall - Web</name>
@@ -30,7 +29,7 @@
 	<parent>
 		<groupId>net.awired.visuwall</groupId>
 		<artifactId>visuwall</artifactId>
-		<version>0.2-SNAPSHOT</version>
+		<version>0.3-SNAPSHOT</version>
 		<relativePath>../../</relativePath>
 	</parent>
 

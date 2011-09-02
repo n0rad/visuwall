@@ -35,9 +35,9 @@
 	<modules>
 		<module>plugins/sonar-plugin</module>
 		<module>plugins/hudson-plugin</module>
-<!--		<module>plugins/bamboo-plugin</module> -->
+		<module>plugins/bamboo-plugin</module>
 		<module>plugins/jenkins-plugin</module>
-<!--		<module>plugins/teamcity-plugin</module> -->
+		<module>plugins/teamcity-plugin</module>
 
 		<module>component/core</module>
 		<module>component/cli</module>
@@ -136,7 +136,6 @@
 				<artifactId>visuwall-plugin-sonar</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-<!--
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-plugin-bamboo</artifactId>
@@ -147,12 +146,43 @@
                                 <artifactId>visuwall-plugin-teamcity</artifactId>
                                 <version>${project.version}</version>
                         </dependency>
--->
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-plugin-jenkins</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+
+			<!-- clients -->
+			<dependency>
+				<groupId>net.awired.clients</groupId>
+				<artifactId>hudson</artifactId>
+				<version>1.0-SNAPSHOT</version>
+			</dependency>
+
+                        <dependency>
+                                <groupId>net.awired.clients</groupId>
+                                <artifactId>jenkins</artifactId>
+                                <version>1.0-SNAPSHOT</version>
+                        </dependency>
+
+                        <dependency>
+                                <groupId>net.awired.clients</groupId>
+                                <artifactId>sonar</artifactId>
+                                <version>1.0-SNAPSHOT</version>
+                        </dependency>
+
+                        <dependency>
+                                <groupId>net.awired.clients</groupId>
+                                <artifactId>teamcity</artifactId>
+                                <version>1.0-SNAPSHOT</version>
+                        </dependency>
+
+                        <dependency>
+                                <groupId>net.awired.clients</groupId>
+                                <artifactId>bamboo</artifactId>
+                                <version>1.0-SNAPSHOT</version>
+                        </dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
