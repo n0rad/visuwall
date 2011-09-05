@@ -42,7 +42,10 @@ public class Hudson {
     @VisibleForTesting
     HudsonRootModuleFinder hudsonRootModuleFinder;
 
+    private String url;
+
     public Hudson(String hudsonUrl) {
+        this.url = hudsonUrl;
         HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(hudsonUrl);
         hudsonFinder = new HudsonFinder(hudsonUrlBuilder);
         hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
@@ -260,4 +263,9 @@ public class Hudson {
             throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
         return hudsonFinder.findIntegrationTestResult(jobName, lastBuildNumber);
     }
+
+    public String getUrl() {
+        return url;
+    }
+
 }
