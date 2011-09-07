@@ -43,7 +43,7 @@
 		<module>component/cli</module>
 		<module>component/web</module>
 		<module>component/api</module>
-		<module>component/it</module>
+<!--		<module>component/it</module> -->
 	</modules>
 
 	<properties>
