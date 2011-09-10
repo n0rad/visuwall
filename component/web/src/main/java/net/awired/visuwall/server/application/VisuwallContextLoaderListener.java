@@ -27,6 +27,9 @@ public class VisuwallContextLoaderListener extends ContextLoaderListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
         AnsiConsole.systemInstall();
+        String home = ApplicationHelper.findHomeDir();
+        System.setProperty(ApplicationHelper.HOME_KEY, home);
+        
         ApplicationHelper.changeLogLvl();
         super.contextInitialized(event);
     }

@@ -30,16 +30,14 @@ public class VisuwallApplication implements ServletContextAware {
 
     private ServletContext context;
     protected String version;
-    protected String home;
 
     // @PostConstruct
     public void init() {
         try {
-            home = ApplicationHelper.findHomeDir();
             version = ApplicationHelper.findVersion(context.getResourceAsStream("META-INF/MANIFEST.MF"));
             System.out.println("######################################");
             System.out.println("version : " + version);
-            System.out.println("home : " + home);
+            System.out.println("home : " + System.getProperty(ApplicationHelper.HOME_KEY));
             System.out.println("######################################");
         } catch (Exception e) {
             // e.printStackTrace();
@@ -49,7 +47,7 @@ public class VisuwallApplication implements ServletContextAware {
 
     public Properties visuwallProperties() {
         Properties prop = new Properties();
-        prop.setProperty(ApplicationHelper.HOME_KEY, home);
+//        prop.setProperty(ApplicationHelper.HOME_KEY, home);
         return prop;
     }
 

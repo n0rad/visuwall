@@ -46,6 +46,7 @@ public class Main {
     	AnsiConsole.systemInstall();
         argManager.parse(args);
 
+        System.setProperty(ApplicationHelper.HOME_KEY, ApplicationHelper.findHomeDir());
         System.setProperty(ApplicationHelper.LOG_LVL_KEY, argManager.logLevel.getParamOneValue().toString());
         ApplicationHelper.changeLogLvl();
 

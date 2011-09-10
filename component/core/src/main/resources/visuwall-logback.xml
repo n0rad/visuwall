@@ -11,16 +11,26 @@
 	<conversionRule conversionWord="colorlevel"
 		converterClass="net.awired.aclm.log.LogbackColorLevelConverter" />
 
-	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${VISUWALL_HOME}/logs/visuwall.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern><![CDATA[${VISUWALL_HOME}/logs/visuwall.%d{yyyy-MM-dd}.log]]></fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+				<pattern><![CDATA[%d{HH:mm:ss.SSS} [%-10.10thread] %-5level %-45.45(%41C{41}:%L) - %msg%n]]></pattern>
+		</encoder>
+	</appender>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<target>System.out</target>
 		<encoder>
-			<!-- %logger{36} %-5level -->
 			<pattern><![CDATA[%d{HH:mm:ss.SSS} [%-10.10thread] %colorlevel %-45.45(%41C{41}:%L) - %msg%n]]></pattern>
 		</encoder>
 		<filter class="net.awired.visuwall.core.application.log.OutFilter" />
 	</appender>
-
-	<appender name="stderr" class="ch.qos.logback.core.ConsoleAppender">
+	<appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
 		<target>System.err</target>
 		<encoder>
 			<pattern><![CDATA[%d{HH:mm:ss.SSS} [%-10.10thread] %colorlevel %-45.45(%41C{41}:%L) - %msg%n]]></pattern>
@@ -32,8 +42,10 @@
 
 	<root>
 		<level value="INFO" />
-		<appender-ref ref="stdout" />
-		<appender-ref ref="stderr" />
+
+		<appender-ref ref="FILE" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="STDERR" />
 	</root>
 
 </configuration>
