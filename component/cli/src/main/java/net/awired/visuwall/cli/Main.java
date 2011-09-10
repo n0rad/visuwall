@@ -21,13 +21,20 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.ProtectionDomain;
 import net.awired.visuwall.core.application.common.ApplicationHelper;
+
+import org.fusesource.jansi.AnsiConsole;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.io.Files;
 
 public class Main {
+	private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+	
 
     private final ArgumentManager argManager = new ArgumentManager(this);
 
@@ -36,6 +43,7 @@ public class Main {
     }
 
     public void run(String[] args) {
+    	AnsiConsole.systemInstall();
         argManager.parse(args);
 
         System.setProperty(ApplicationHelper.LOG_LVL_KEY, argManager.logLevel.getParamOneValue().toString());
@@ -55,6 +63,7 @@ public class Main {
             cleanDB();
             System.exit(0);
         }
+       
         runServer();
     }
 
