@@ -221,4 +221,68 @@ public class TeamCityITest {
         assertTrue(findChanges.isEmpty());
     }
 
+    @Test
+    public void should_find_build() throws Exception {
+        TeamCityProject project = teamcity.findAllProjects().get(0);
+        project = teamcity.findProject(project.getId());
+
+        String projectId = project.getId();
+
+        List<TeamCityBuildType> teamCitybuildTypes = project.getBuildTypes();
+        TeamCityBuildType buildType = teamCitybuildTypes.get(0);
+        TeamCityBuilds teamCityBuilds = teamcity.findBuildList(buildType.getId());
+        List<TeamCityBuildItem> buildList = teamCityBuilds.getBuilds();
+        TeamCityBuildItem build = buildList.get(0);
+
+        String buildNumber = build.getNumber();
+        TeamCityBuild teamcityBuild = teamcity.findBuild(projectId, buildNumber);
+
+        assertBuildIsOk(teamcityBuild);
+    }
+
+    private void assertBuildIsOk(TeamCityBuild teamcityBuild) {
+        assertNotNull(teamcityBuild.getFinishDate());
+        assertNotNull(teamcityBuild.getHref());
+        assertNotNull(teamcityBuild.getId());
+        assertNotNull(teamcityBuild.getNumber());
+        assertNotNull(teamcityBuild.getProperties());
+        assertNotNull(teamcityBuild.getRelatedIssues());
+        assertNotNull(teamcityBuild.getRevisions());
+        assertNotNull(teamcityBuild.getStartDate());
+        assertNotNull(teamcityBuild.getStatus());
+        assertNotNull(teamcityBuild.getStatusText());
+        assertNotNull(teamcityBuild.getTags());
+        //assertNotNull(teamcityBuild.getVcsRoot());
+        assertNotNull(teamcityBuild.getWebUrl());
+
+        TeamCityAgent agent = teamcityBuild.getAgent();
+        assertAgentIsOk(agent);
+
+        TeamCityBuildType buildType = teamcityBuild.getBuildType();
+        assertBuildTypeIsOk(buildType);
+
+        TeamCityChanges changes = teamcityBuild.getChanges();
+        assertChangesIsOk(changes);
+    }
+
+    private void assertChangesIsOk(TeamCityChanges changes) {
+        assertNotNull(changes);
+        assertNotNull(changes.getChanges());
+    }
+
+    private void assertAgentIsOk(TeamCityAgent agent) {
+        assertNotNull(agent);
+        assertNotNull(agent.getName());
+    }
+
+    private void assertBuildTypeIsOk(TeamCityBuildType buildType2) {
+        assertNotNull(buildType2);
+        assertNotNull(buildType2.getHref());
+        assertNotNull(buildType2.getId());
+        assertNotNull(buildType2.getName());
+        assertNotNull(buildType2.getProjectId());
+        assertNotNull(buildType2.getProjectName());
+        assertNotNull(buildType2.getWebUrl());
+    }
+
 }
