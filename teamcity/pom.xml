@@ -55,6 +55,11 @@
 			<groupId>net.awired.clients</groupId>
 			<artifactId>common-client</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>0.9.29</version>
+		</dependency>
 	</dependencies>
 
 </project>
