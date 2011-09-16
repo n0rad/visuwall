@@ -54,7 +54,7 @@ public class SonarITest {
 
     @Test
     public void should_find_measure() throws SonarMeasureNotFoundException {
-        Measure measure = sonar.findMeasure("org.apache.struts:struts-parent", "violations_density");
+        Measure measure = sonar.findMeasure("fr.xebia.librestry:librestry", "violations_density");
         assertTrue(measure.getFormattedValue().length() > 0);
         assertTrue(measure.getValue() > 0);
     }
@@ -63,7 +63,8 @@ public class SonarITest {
     public void should_find_projects() throws Exception {
         Projects projects = sonar.findProjects();
         List<Project> projectList = projects.getProjects();
-        assertFalse(projectList.isEmpty());
+        Project project = projectList.get(0);
+        assertEquals("librestry", project.getName());
     }
 
     @Test
@@ -93,18 +94,13 @@ public class SonarITest {
 
     @Test
     public void should_find_project() throws Exception {
-        Projects projects = sonar.findProjects();
-        List<Project> projectList = projects.getProjects();
-        Project project = projectList.get(0);
+        Project foundProject = sonar.findProject("fr.xebia.librestry:librestry");
 
-        Project foundProject = sonar.findProject(project.getKey().toString());
-
-        assertEquals(project, foundProject);
-        assertNotNull(foundProject.getId());
-        assertNotNull(foundProject.getKey());
-        assertNotNull(foundProject.getName());
-        assertNotNull(foundProject.getQualifier());
-        assertNotNull(foundProject.getScope());
+        assertTrue(foundProject.getId() > 0);
+        assertEquals("fr.xebia.librestry:librestry", foundProject.getKey());
+        assertEquals("librestry", foundProject.getName());
+        assertEquals("TRK", foundProject.getQualifier());
+        assertEquals("PRJ", foundProject.getScope());
     }
 
 }
