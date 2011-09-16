@@ -17,6 +17,8 @@
 package net.awired.visuwall;
 
 public class Urls {
+    public static final String LOCAL_TEAMCITY = "http://localhost:8111";
+    public static final String LOCAL_BAMBOO = "http://localhost:8085";
 
     public static final String AWIRED_BAMBOO = "http://bamboo.visuwall.awired.net";
     public static final String AWIRED_SONAR = "http://sonar.awired.net";

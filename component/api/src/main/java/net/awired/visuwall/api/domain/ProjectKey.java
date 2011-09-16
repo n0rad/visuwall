@@ -16,6 +16,8 @@
 
 package net.awired.visuwall.api.domain;
 
+import com.google.common.base.Objects;
+
 public class ProjectKey {
 
     private String name;
@@ -37,4 +39,11 @@ public class ProjectKey {
         this.mavenId = mavenId;
     }
 
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)//
+                .add("name", name) //
+                .add("mavenId", mavenId) //
+                .toString();
+    }
 }

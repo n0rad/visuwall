@@ -41,17 +41,19 @@ import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.api.plugin.capability.TestCapability;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 
-public class TeamCityConnection implements BuildCapability {
+public class TeamCityConnection implements BuildCapability, TestCapability {
 
     private static final Logger LOG = LoggerFactory.getLogger(TeamCityConnection.class);
 
@@ -349,6 +351,36 @@ public class TeamCityConnection implements BuildCapability {
             }
         }
         return commiters;
+    }
+
+    @Override
+    public TestResult analyzeUnitTests(SoftwareProjectId softwareProjectId) {
+        TestResult result = new TestResult();
+        try {
+            Integer lastBuildNumber = getLastBuildNumber(softwareProjectId);
+            TeamCityBuild build = teamCity.findBuild(softwareProjectId.getProjectId(), lastBuildNumber.toString());
+            String statusText = build.getStatusText();
+            int failed = TestResultExtractor.extractFailed(statusText);
+            int passed = TestResultExtractor.extractPassed(statusText);
+            int ignored = TestResultExtractor.extractIgnored(statusText);
+            result.setFailCount(failed);
+            result.setPassCount(passed);
+            result.setSkipCount(ignored);
+        } catch (ProjectNotFoundException e) {
+            LOG.warn("Can't analyze unit tests for softwareProjectId:" + softwareProjectId, e);
+        } catch (BuildNumberNotFoundException e) {
+            LOG.warn("Can't analyze unit tests for softwareProjectId:" + softwareProjectId, e);
+        } catch (TeamCityProjectNotFoundException e) {
+            LOG.warn("Can't analyze unit tests for softwareProjectId:" + softwareProjectId, e);
+        } catch (TeamCityBuildNotFoundException e) {
+            LOG.warn("Can't analyze unit tests for softwareProjectId:" + softwareProjectId, e);
+        }
+        return result;
+    }
+
+    @Override
+    public TestResult analyzeIntegrationTests(SoftwareProjectId softwareProjectId) {
+        return new TestResult();
     }
 
     private void addBuildNumbers(Set<Integer> numbers, TeamCityBuildType buildType) {

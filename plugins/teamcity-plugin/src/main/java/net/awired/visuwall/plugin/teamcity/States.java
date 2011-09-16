@@ -28,9 +28,9 @@ class States {
 
     private static final Map<String, State> STATE_MAPPING = new HashMap<String, State>();
 
-    static final String SUCCESS = "SUCCESS";
-    static final String ERROR = "ERROR";
-    static final String FAILURE = "FAILURE";
+    private static final String ERROR = "ERROR";
+    private static final String FAILURE = "FAILURE";
+    private static final String SUCCESS = "SUCCESS";
 
     static {
         STATE_MAPPING.put(ERROR, State.FAILURE);

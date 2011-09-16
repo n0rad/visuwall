@@ -35,18 +35,20 @@ import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.api.plugin.capability.TestCapability;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
-public class BambooConnection implements BuildCapability {
+public class BambooConnection implements BuildCapability, TestCapability {
 
     @VisibleForTesting
     Bamboo bamboo;
@@ -153,7 +155,17 @@ public class BambooConnection implements BuildCapability {
     @Override
     public SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException {
         checkConnected();
-        throw new ProjectNotFoundException("not implemented");
+        Preconditions.checkNotNull(projectKey, "projectKey is mandatory");
+        String name = projectKey.getName();
+        List<Plan> plans = bamboo.findAllPlans();
+        for (Plan plan : plans) {
+            String planName = plan.getName();
+            if (name.equals(planName)) {
+                SoftwareProjectId softwareProjectId = new SoftwareProjectId(plan.getKey());
+                return softwareProjectId;
+            }
+        }
+        throw new ProjectNotFoundException("Can't identify project with projectKey:" + projectKey);
     }
 
     @Override
@@ -225,15 +237,7 @@ public class BambooConnection implements BuildCapability {
     @Override
     public String getMavenId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
             MavenIdNotFoundException {
-        checkConnected();
-        checkSoftwareProjectId(softwareProjectId);
-        try {
-            String projectId = softwareProjectId.getProjectId();
-            Plan project = bamboo.findPlan(projectId);
-            return project.getName();
-        } catch (BambooPlanNotFoundException e) {
-            throw new ProjectNotFoundException("Can't find project with software project id: " + softwareProjectId);
-        }
+        throw new MavenIdNotFoundException("Not implemented!");
     }
 
     @Override
@@ -243,7 +247,7 @@ public class BambooConnection implements BuildCapability {
         try {
             String projectKey = softwareProjectId.getProjectId();
             Plan plan = bamboo.findPlan(projectKey);
-            String name = plan.getName();
+            String name = plan.getProjectName();
             return name;
         } catch (BambooPlanNotFoundException e) {
             throw new ProjectNotFoundException("Can't find name of software project id: " + softwareProjectId);
@@ -302,6 +306,30 @@ public class BambooConnection implements BuildCapability {
 
     private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
         Preconditions.checkNotNull(softwareProjectId, "softwareProjectId is mandatory");
+    }
+
+    @Override
+    public TestResult analyzeUnitTests(SoftwareProjectId projectId) {
+        TestResult result = new TestResult();
+        try {
+            String planKey = projectId.getProjectId();
+            int buildNumber = bamboo.getLastResultNumber(planKey);
+            Result findResult = bamboo.findResult(planKey, buildNumber);
+            int successfulTestCount = findResult.getSuccessfulTestCount();
+            int failedTestCount = findResult.getFailedTestCount();
+            result.setFailCount(failedTestCount);
+            result.setPassCount(successfulTestCount);
+        } catch (BambooBuildNumberNotFoundException e) {
+            LOG.warn("Can't analyze unit tests for projectId:" + projectId, e);
+        } catch (BambooBuildNotFoundException e) {
+            LOG.warn("Can't analyze unit tests for projectId:" + projectId, e);
+        }
+        return result;
+    }
+
+    @Override
+    public TestResult analyzeIntegrationTests(SoftwareProjectId projectId) {
+        return new TestResult();
     }
 
 }

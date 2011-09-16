@@ -62,7 +62,7 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
             TeamCityServer teamCityServer = getServer(url.toString());
             return createSoftwareId(teamCityServer);
         } catch (ResourceNotFoundException e) {
-            throw new IncompatibleSoftwareException("Url " + url + " is not compatible with TeamCity");
+            throw new IncompatibleSoftwareException("Url " + url + " is not compatible with TeamCity", e);
         }
     }
 

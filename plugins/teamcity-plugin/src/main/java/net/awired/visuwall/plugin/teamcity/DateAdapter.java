@@ -31,7 +31,7 @@ class DateAdapter {
         try {
             return TEAMCITY_DATE_FORMAT.parse(dateToParse);
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 

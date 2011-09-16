@@ -25,6 +25,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import net.awired.clients.teamcity.TeamCity;
@@ -39,6 +40,7 @@ import net.awired.clients.teamcity.resource.TeamCityChange;
 import net.awired.clients.teamcity.resource.TeamCityProject;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
+import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
@@ -77,7 +79,7 @@ public class TeamCityConnectionTest {
     @Test
     public void should_find_state_build() throws Exception {
         TeamCityBuild build = new TeamCityBuild();
-        build.setStatus(States.SUCCESS);
+        build.setStatus("SUCCESS");
         when(teamCity.findBuild(anyString(), anyString())).thenReturn(build);
 
         SoftwareProjectId projectId = new SoftwareProjectId("projectId");
@@ -229,6 +231,46 @@ public class TeamCityConnectionTest {
 
     @Test
     public void should_list_all_project_ids() throws Exception {
+        addTwoProjects();
+
+        Map<String, SoftwareProjectId> projectIds = teamCityConnection.listSoftwareProjectIds();
+
+        assertEquals("id1", projectIds.get("name1").getProjectId());
+        assertEquals("id2", projectIds.get("name2").getProjectId());
+    }
+
+    @Test
+    public void should_find_software_project_ids_by_names() throws TeamCityProjectsNotFoundException {
+        addTwoProjects();
+
+        List<String> names = Arrays.asList("name1", "name2");
+        List<SoftwareProjectId> softwareProjectIdsByNames = teamCityConnection.findSoftwareProjectIdsByNames(names);
+
+        assertEquals("id1", softwareProjectIdsByNames.get(0).getProjectId());
+        assertEquals("id2", softwareProjectIdsByNames.get(1).getProjectId());
+    }
+
+    @Test
+    public void should_find_all_software_project_ids() throws TeamCityProjectsNotFoundException {
+        addTwoProjects();
+
+        List<SoftwareProjectId> softwareProjectIdsByNames = teamCityConnection.findAllSoftwareProjectIds();
+
+        assertEquals("id1", softwareProjectIdsByNames.get(0).getProjectId());
+        assertEquals("id2", softwareProjectIdsByNames.get(1).getProjectId());
+    }
+
+    @Test
+    public void should_identify_project() throws Exception {
+        addTwoProjects();
+
+        ProjectKey projectKey = new ProjectKey();
+        projectKey.setName("name1");
+        SoftwareProjectId softwareProjectId = teamCityConnection.identify(projectKey);
+        assertEquals("id1", softwareProjectId.getProjectId());
+    }
+
+    private void addTwoProjects() throws TeamCityProjectsNotFoundException {
         TeamCityProject project1 = new TeamCityProject();
         project1.setId("id1");
         project1.setName("name1");
@@ -242,11 +284,6 @@ public class TeamCityConnectionTest {
         projects.add(project2);
 
         when(teamCity.findAllProjects()).thenReturn(projects);
-
-        Map<String, SoftwareProjectId> projectIds = teamCityConnection.listSoftwareProjectIds();
-
-        assertEquals("id1", projectIds.get("name1").getProjectId());
-        assertEquals("id2", projectIds.get("name2").getProjectId());
     }
 
     private SoftwareProjectId softwareProjectId() {

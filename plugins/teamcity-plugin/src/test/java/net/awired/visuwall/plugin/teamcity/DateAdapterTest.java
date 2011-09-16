@@ -47,4 +47,9 @@ public class DateAdapterTest {
         DateAdapter.parseDate(null);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void should_throw_exception_when_parameter_is_not_a_date() {
+        DateAdapter.parseDate("not_a_date");
+    }
+
 }
