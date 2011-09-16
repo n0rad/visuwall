@@ -17,11 +17,15 @@
 package net.awired.clients.teamcity;
 
 import java.net.URL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class TeamCityUrlBuilder {
 
     private String teamCityUrl;
     private static final String API_URI = "/app/rest";
+
+    private static final Logger LOG = LoggerFactory.getLogger(TeamCityUrlBuilder.class);
 
     TeamCityUrlBuilder(String teamCityUrl) {
         this.teamCityUrl = teamCityUrl;
@@ -64,7 +68,11 @@ class TeamCityUrlBuilder {
     }
 
     private String build(String url) {
-        return teamCityUrl + API_URI + url;
+        String finalUrl = teamCityUrl + API_URI + url;
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(finalUrl);
+        }
+        return finalUrl;
     }
 
     String getBuildList(String buildTypeId) {
