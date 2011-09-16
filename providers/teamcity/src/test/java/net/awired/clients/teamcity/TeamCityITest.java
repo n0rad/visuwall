@@ -46,7 +46,8 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class TeamCityITest {
 
-    private List<String> expectedProjectNames = Arrays.asList("mina", "zookeeper", "struts", "IT coverage");
+    private List<String> expectedProjectNames = Arrays.asList("mina", "zookeeper", "struts", "IT coverage",
+            "not_built");
     private int projectCount = expectedProjectNames.size();
 
     private static final String DATE_PATTERN = "\\d{8}T\\d{6}\\+\\d{4}";
