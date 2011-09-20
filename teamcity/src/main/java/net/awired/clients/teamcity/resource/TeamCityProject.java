@@ -47,7 +47,7 @@ public class TeamCityProject {
     private boolean archived;
 
     @XmlElement
-    private TeamCityBuildTypes buildTypes;
+    private TeamCityBuildTypes buildTypes = new TeamCityBuildTypes();
 
     public String getName() {
         return name;
