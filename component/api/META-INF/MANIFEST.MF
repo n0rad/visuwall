@@ -29,14 +29,14 @@ Copyright: Awired Network
 Bundle-Vendor: Awired Network
 Bundle-Version: 0.3.0.SNAPSHOT
 Build-Jdk: 1.6.0_26
-Bnd-LastModified: 1316503149066
+Bnd-LastModified: 1316518550532
 Bundle-ManifestVersion: 2
 Project-CreatorId: net.awired.visuwall
 Bundle-Description: Web application showing build and quality states o
  f Projects in a very visual Wall
 Specification-Version: 0.3-SNAPSHOT
 Bundle-DocURL: http://awired.net/
-Import-Package: com.google.common.base;version="[9.0,10)"
+Import-Package: com.google.common.base
 Project-Website: http://awired.net/parent-java/parent-java-bundle/visu
  wall/component/visuwall-api/
 

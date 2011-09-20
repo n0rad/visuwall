@@ -230,7 +230,6 @@
 				</executions>
 				<configuration>
 					<attach>false</attach>
-					<finalName>visuwall/</finalName>
 					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 			</plugin>
@@ -315,6 +314,30 @@
 									<fileset
 										dir="${project.build.directory}/karaf/WEB-INF/apache-karaf-${karaf.version}" />
 								</move>
+							</tasks>
+						</configuration>
+					</execution>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<delete>
+									<fileset 
+										dir="${project.build.directory}/${project.build.finalName}/WEB-INF/karaf/system">
+										<exclude name="**/*.jar"/>
+									</fileset>
+								</delete>
+								<delete includeemptydirs="true">
+									<fileset dir="${project.build.directory}/${project.build.finalName}/WEB-INF/karaf/system">
+										<and>
+											<size value="0" />
+											<type type="dir" />
+										</and>
+									</fileset>
+								</delete>
 							</tasks>
 						</configuration>
 					</execution>
