@@ -29,7 +29,7 @@ Copyright: Awired Network
 Bundle-Vendor: Awired Network
 Bundle-Version: 0.3.0.SNAPSHOT
 Build-Jdk: 1.6.0_26
-Bnd-LastModified: 1316518550532
+Bnd-LastModified: 1316560009377
 Bundle-ManifestVersion: 2
 Project-CreatorId: net.awired.visuwall
 Bundle-Description: Web application showing build and quality states o

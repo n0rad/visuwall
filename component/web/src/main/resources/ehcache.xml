@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
         Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
@@ -16,13 +17,13 @@
 
 -->
 
-
-<ehcache>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" >
 
     <diskStore path="java.io.tmpdir"/>
 
     <defaultCache
-
+			
             maxElementsInMemory="10000"
             eternal="false"
             timeToIdleSeconds="120"

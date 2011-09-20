@@ -40,7 +40,7 @@ import com.google.common.base.Preconditions;
 public class PluginService implements PluginServiceInterface {
 	
 	@Autowired
-	OsgiService osgiService;
+	FelixOsgiService osgiService;
 
     private static final Logger LOG = LoggerFactory.getLogger(PluginService.class);
 
@@ -145,14 +145,6 @@ public class PluginService implements PluginServiceInterface {
             result.add(plugin);
         }
         return result;
-    }
-
-    /* (non-Javadoc)
-	 * @see net.awired.visuwall.core.business.service.PluginServiceInterface#reload()
-	 */
-    @Override
-	public void reload() {
-        pluginLoader.reload();
     }
 
     //    public List<ConnectionPlugin> getConnectionPluginsFromSoftwares(List<SoftwareAccess> softwareAccesses) {

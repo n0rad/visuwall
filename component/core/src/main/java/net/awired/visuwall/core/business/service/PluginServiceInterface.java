@@ -10,17 +10,14 @@ import net.awired.visuwall.core.business.domain.SoftwareInfo;
 
 public interface PluginServiceInterface {
 
-	public abstract VisuwallPlugin<BasicCapability> getPluginFromUrl(URL url);
+	VisuwallPlugin<BasicCapability> getPluginFromUrl(URL url);
 
-	public abstract SoftwareInfo getSoftwareInfoFromUrl(URL url);
+	SoftwareInfo getSoftwareInfoFromUrl(URL url);
 
-	public abstract PluginInfo getPluginInfo(
-			VisuwallPlugin<BasicCapability> visuwallPlugin);
+	PluginInfo getPluginInfo(VisuwallPlugin<BasicCapability> visuwallPlugin);
 
-	public abstract List<PluginInfo> getPluginsInfo();
+	List<PluginInfo> getPluginsInfo();
 
-	public abstract List<VisuwallPlugin<BasicCapability>> getPlugins();
-
-	public abstract void reload();
+	List<VisuwallPlugin<BasicCapability>> getPlugins();
 
 }

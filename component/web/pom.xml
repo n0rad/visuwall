@@ -29,7 +29,6 @@
 	<properties>
 		<netbeans.hint.deploy.server>Tomcat70</netbeans.hint.deploy.server>
 		<bootstrap.version>1.0-SNAPSHOT</bootstrap.version>
-		<karaf.version>2.2.2</karaf.version>
 	</properties>
 
 	<dependencies>
@@ -146,16 +145,6 @@
 		</dependency>
 
 		<!-- OSGI -->
-		<dependency>
-			<groupId>org.apache.karaf</groupId>
-			<artifactId>org.apache.karaf.main</artifactId>
-			<version>${karaf.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.karaf.jaas</groupId>
-			<artifactId>org.apache.karaf.jaas.boot</artifactId>
-			<version>${karaf.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.karaf</groupId>
 			<artifactId>apache-karaf</artifactId>
@@ -317,28 +306,28 @@
 							</tasks>
 						</configuration>
 					</execution>
+				</executions>
+			</plugin>
+
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.5</version>
+				<executions>
 					<execution>
+						<id>copy-resources</id>
 						<phase>prepare-package</phase>
 						<goals>
-							<goal>run</goal>
+							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<tasks>
-								<delete>
-									<fileset 
-										dir="${project.build.directory}/${project.build.finalName}/WEB-INF/karaf/system">
-										<exclude name="**/*.jar"/>
-									</fileset>
-								</delete>
-								<delete includeemptydirs="true">
-									<fileset dir="${project.build.directory}/${project.build.finalName}/WEB-INF/karaf/system">
-										<and>
-											<size value="0" />
-											<type type="dir" />
-										</and>
-									</fileset>
-								</delete>
-							</tasks>
+							<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/karaf</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/karaf</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
 						</configuration>
 					</execution>
 				</executions>

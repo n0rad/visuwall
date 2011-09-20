@@ -41,11 +41,11 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Preconditions;
 
-@Service
-public class OsgiService implements PluginServiceInterface {
+//@Service
+public class FelixOsgiService implements PluginServiceInterface {
 
 	private static final Logger LOG = LoggerFactory
-			.getLogger(OsgiService.class);
+			.getLogger(FelixOsgiService.class);
 
 	@Autowired
 	ApplicationContext context;
@@ -80,10 +80,6 @@ public class OsgiService implements PluginServiceInterface {
 								+ "net.awired.visuwall.api.plugin.tck; version=0.3.0.SNAPSHOT,"
 								+ "net.awired.visuwall.api.plugin.capability; version=0.3.0.SNAPSHOT,"
 								+ "net.awired.visuwall.api.domain.quality; version=0.3.0.SNAPSHOT");
-
-		// "net.awired.visuwall.api.plugin.VisuwallPlugin;version=0.3.0.SNAPSHOT,"
-		// +
-		// "net.awired.visuwall.api.plugin.VisuwallPlugin;version=0.3.0.SNAPSHOT,");
 
 		properties.put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, list);
 
@@ -289,11 +285,6 @@ public class OsgiService implements PluginServiceInterface {
 			result.add(visuwallPlugin);
 		}
 		return result;
-	}
-
-	@Override
-	public void reload() {
-		// TODO Auto-generated method stub
 	}
 
 }

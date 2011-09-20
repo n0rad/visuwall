@@ -33,16 +33,10 @@
 		</param-value>
 	</context-param>
 
-	<listener>
-		<listener-class>net.awired.visuwall.server.application.WebAppListener</listener-class>
-	</listener>
-
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
 	<listener>
 		<listener-class>net.awired.visuwall.server.application.VisuwallContextLoaderListener</listener-class>
 	</listener>
-
-
 
 	<!-- Processes application requests -->
 	<servlet>

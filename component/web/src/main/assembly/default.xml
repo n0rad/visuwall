@@ -31,6 +31,7 @@
 				<include>ch.qos.logback:logback-classic</include>
 				<include>commons-lang:commons-lang</include>
 				<include>com.google.guava:guava</include>
+				<include>org.codehaus.jackson:jackson-mapper-asl</include>
 			</includes>
 			<scope>runtime</scope>
 			<useTransitiveDependencies>true</useTransitiveDependencies>
