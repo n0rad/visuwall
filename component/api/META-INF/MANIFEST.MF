@@ -1,3 +1,42 @@
 Manifest-Version: 1.0
-Class-Path: 
+Export-Package: net.awired.visuwall.api.exception;version="0.3.0.SNAPS
+ HOT",net.awired.visuwall.api.plugin;uses:="net.awired.visuwall.api.pl
+ ugin.capability,net.awired.visuwall.api.domain,net.awired.visuwall.ap
+ i.exception";version="0.3.0.SNAPSHOT",net.awired.visuwall.api.plugin.
+ tck;uses:="net.awired.visuwall.api.exception";version="0.3.0.SNAPSHOT
+ ",net.awired.visuwall.api.plugin.capability;uses:="net.awired.visuwal
+ l.api.domain,net.awired.visuwall.api.exception,net.awired.visuwall.ap
+ i.domain.quality";version="0.3.0.SNAPSHOT",net.awired.visuwall.api.do
+ main;uses:="com.google.common.base";version="0.3.0.SNAPSHOT",net.awir
+ ed.visuwall.api.domain.quality;uses:="com.google.common.base";version
+ ="0.3.0.SNAPSHOT"
+Implementation-Title: Visuwall - API
+Built-By: n0
+Tool: Bnd-1.43.0
+Project-Creator: Awired Network
+Implementation-Vendor: Awired Network
+Implementation-Vendor-Id: net.awired.visuwall
+Project-Version: 0.3-SNAPSHOT
+Specification-Title: Visuwall - API
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-SymbolicName: net.awired.visuwall.api
+Implementation-Version: 0.3-SNAPSHOT
+Specification-Vendor: Awired Network
+Bundle-Name: Visuwall - API
+Created-By: Apache Maven Bundle Plugin
+Project-Name: Visuwall - API
+Copyright: Awired Network
+Bundle-Vendor: Awired Network
+Bundle-Version: 0.3.0.SNAPSHOT
+Build-Jdk: 1.6.0_26
+Bnd-LastModified: 1316503149066
+Bundle-ManifestVersion: 2
+Project-CreatorId: net.awired.visuwall
+Bundle-Description: Web application showing build and quality states o
+ f Projects in a very visual Wall
+Specification-Version: 0.3-SNAPSHOT
+Bundle-DocURL: http://awired.net/
+Import-Package: com.google.common.base;version="[9.0,10)"
+Project-Website: http://awired.net/parent-java/parent-java-bundle/visu
+ wall/component/visuwall-api/
 

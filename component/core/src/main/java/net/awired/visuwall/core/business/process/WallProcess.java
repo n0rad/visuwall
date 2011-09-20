@@ -27,7 +27,7 @@ import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.Project;
-import net.awired.visuwall.core.business.service.PluginService;
+import net.awired.visuwall.core.business.service.PluginServiceInterface;
 import net.awired.visuwall.core.business.service.ProjectService;
 import net.awired.visuwall.core.business.service.SoftwareAccessService;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
@@ -50,7 +50,7 @@ public class WallProcess {
     ProjectService projectService;
 
     @Autowired
-    PluginService pluginService;
+    PluginServiceInterface pluginService;
 
     @Autowired
     SoftwareAccessService softwareAccessService;

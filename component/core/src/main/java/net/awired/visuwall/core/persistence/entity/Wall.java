@@ -31,10 +31,14 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import net.awired.ajsl.persistence.entity.implementation.abstracts.IdEntityImpl;
+import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.core.business.domain.Project;
 import net.awired.visuwall.core.business.domain.ProjectHolder;
 import net.awired.visuwall.core.utils.ShrinkList;
 import org.hibernate.annotations.Cascade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Objects;
 
 @Entity
@@ -49,6 +53,9 @@ public final class Wall extends IdEntityImpl<Long> {
     public static final String QUERY_WALLBYNAME = "wallByName";
     public static final String QUERY_PARAM_NAME = "wallName";
 
+    
+    private static final Logger LOG = LoggerFactory.getLogger(Wall.class);
+    
     private static final long serialVersionUID = 1L;
 
     @NotNull
@@ -78,7 +85,14 @@ public final class Wall extends IdEntityImpl<Long> {
             if (projectFinderTask != null) {
                 projectFinderTask.cancel(true);
             }
-            softwareAccess.getConnection().close();
+            BasicCapability connection = softwareAccess.getConnection();
+            if (connection != null) {
+            	try {
+            		connection.close();
+            	} catch (Exception e) {
+            		LOG.warn("can not close softwareAccess connection", e);
+            	}
+            }
         }
     }
 

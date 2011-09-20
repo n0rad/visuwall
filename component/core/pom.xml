@@ -31,28 +31,9 @@
 
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>
-			<artifactId>visuwall-plugin-bamboo</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.awired.visuwall</groupId>
-			<artifactId>visuwall-plugin-sonar</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.awired.visuwall</groupId>
-			<artifactId>visuwall-plugin-hudson</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-api</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>net.awired.visuwall</groupId>
-			<artifactId>visuwall-plugin-jenkins</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.awired.visuwall</groupId>
-			<artifactId>visuwall-plugin-teamcity</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>net.awired.ajsl</groupId>
 			<artifactId>ajsl-persistence</artifactId>
@@ -69,6 +50,19 @@
 					<groupId>commons-logging</groupId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<!-- OSGI -->
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.framework</artifactId>
+			<version>3.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.main</artifactId>
+			<version>3.2.2</version>
 		</dependency>
 
 		<!-- DB -->
@@ -129,19 +123,6 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>0.9.26</version>
-		</dependency>
-
-		<!-- OSGI -->
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.framework</artifactId>
-			<version>3.2.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.main</artifactId>
-			<version>3.2.2</version>
 		</dependency>
 
 		<!-- json -->

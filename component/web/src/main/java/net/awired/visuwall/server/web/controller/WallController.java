@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.core.business.domain.Project;
-import net.awired.visuwall.core.business.service.PluginService;
+import net.awired.visuwall.core.business.service.PluginServiceInterface;
 import net.awired.visuwall.core.business.service.WallHolderService;
 import net.awired.visuwall.core.exception.NotFoundException;
 import net.awired.visuwall.core.persistence.entity.Wall;
@@ -56,7 +56,7 @@ public class WallController {
     private WallHolderService wallService;
 
     @Autowired
-    private PluginService pluginService;
+    private PluginServiceInterface pluginService;
 
     @ExceptionHandler(Exception.class)
     public void handleAllExceptions(HttpServletResponse response, Exception e) throws IOException {
