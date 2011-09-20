@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.jenkins;
+package net.awired.clients.common;
 
 import java.util.Arrays;
 
