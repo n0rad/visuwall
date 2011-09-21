@@ -55,21 +55,6 @@ public class KarafOsgiService implements PluginServiceInterface {
 
 	@PostConstruct
 	void postconstruct() {
-		// ServletContext ctx = sce.getServletContext();
-		// WebApplicationContext springContext =
-		// WebApplicationContextUtils.getWebApplicationContext(ctx);
-		// IBeanDAO beanRep = (IBeanDAO) springContext.getBean("beanDAO");
-		// ctx.setAttribute("INFO", beanRep.getInfoFromDB());
-
-		// try {
-		// URL res = sce.getServletContext().getResource("/WEB-INF/karaf/");
-		// File file = new File(res.getFile());
-		// System.out.println(">>" + file);
-		// } catch (IOException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// }
-
 		String home = System.getProperty(ApplicationHelper.HOME_KEY) + "/karaf";
 		new File(home + "/etc").mkdirs();
 
@@ -83,25 +68,26 @@ public class KarafOsgiService implements PluginServiceInterface {
 							+ "net.awired.visuwall.api.plugin.capability; version=0.3.0.SNAPSHOT,"
 							+ "net.awired.visuwall.api.domain.quality; version=0.3.0.SNAPSHOT");
 
-			System.err.println("contextInitialized");
 			Resource resource = context.getResource("/WEB-INF/karaf");
 			if (resource == null || !resource.exists()) {
-				throw new RuntimeException("karaf root folder not found : " + resource);
+				throw new RuntimeException("Karaf root folder not found : " + resource);
 			}
 
+			String root;
+			try {
+				File file = resource.getFile();
+			root = file.getAbsolutePath();
+			} catch (IOException e) {
+				throw new RuntimeException("Karaf root folder : '" + resource + "' is not a file, non unpacked wars servlet containers is currently not supported");
+			}
 
-			
-			String root = resource.getURL().getFile();
-//			String root = new File(context.sce.getServletContext().getRealPath("/")
-//					+ "/WEB-INF/karaf").getAbsolutePath();
-			LOG.info("Osgi root directory : " + root);
 			home = root;
 			System.setProperty("karaf.home", root);
 			System.setProperty("karaf.base", home);
 			System.setProperty("karaf.data", home + "/data");
 			System.setProperty("karaf.history", home + "/data/history.txt");
 			System.setProperty("karaf.instances", home + "/instances");
-			System.setProperty("karaf.startLocalConsole", "true");
+			System.setProperty("karaf.startLocalConsole", "false");
 			System.setProperty("karaf.startRemoteShell", "true");
 			System.setProperty("karaf.lock", "false");
 			main = new KarafMain(new String[0]);
@@ -115,6 +101,7 @@ public class KarafOsgiService implements PluginServiceInterface {
 			main.setAdditionalProperties(p);
 			
 			
+			LOG.info("Starting Karaf with root directory : " + root);
 			main.launch();
 			osgi = main.getFramework();
 		} catch (Exception e) {
