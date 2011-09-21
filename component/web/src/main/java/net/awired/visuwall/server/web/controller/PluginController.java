@@ -21,7 +21,8 @@ import java.net.URL;
 import java.util.List;
 import net.awired.visuwall.core.business.domain.PluginInfo;
 import net.awired.visuwall.core.business.domain.SoftwareInfo;
-import net.awired.visuwall.core.business.service.PluginService;
+import net.awired.visuwall.core.business.service.PluginServiceInterface;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PluginController {
 
     @Autowired
-    private PluginService pluginService;
+    private PluginServiceInterface pluginService;
 
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody

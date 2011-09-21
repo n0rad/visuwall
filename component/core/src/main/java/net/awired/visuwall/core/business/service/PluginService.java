@@ -32,18 +32,26 @@ import net.awired.visuwall.core.business.domain.PluginInfo;
 import net.awired.visuwall.core.business.domain.SoftwareInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.common.base.Preconditions;
 
-@Service
-public class PluginService {
+//@Service
+public class PluginService implements PluginServiceInterface {
+	
+	@Autowired
+	FelixOsgiService osgiService;
 
     private static final Logger LOG = LoggerFactory.getLogger(PluginService.class);
 
     @SuppressWarnings("rawtypes")
     private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader.load(VisuwallPlugin.class);
 
-    public VisuwallPlugin<BasicCapability> getPluginFromUrl(URL url) {
+    /* (non-Javadoc)
+	 * @see net.awired.visuwall.core.business.service.PluginServiceInterface#getPluginFromUrl(java.net.URL)
+	 */
+    @Override
+	public VisuwallPlugin<BasicCapability> getPluginFromUrl(URL url) {
         List<VisuwallPlugin<BasicCapability>> visuwallPlugins = getPlugins();
         for (VisuwallPlugin<BasicCapability> visuwallPlugin : visuwallPlugins) {
             try {
@@ -60,7 +68,11 @@ public class PluginService {
         throw new RuntimeException("no plugin to manage url " + url);
     }
 
-    public SoftwareInfo getSoftwareInfoFromUrl(URL url) {
+    /* (non-Javadoc)
+	 * @see net.awired.visuwall.core.business.service.PluginServiceInterface#getSoftwareInfoFromUrl(java.net.URL)
+	 */
+    @Override
+	public SoftwareInfo getSoftwareInfoFromUrl(URL url) {
         List<VisuwallPlugin<BasicCapability>> visuwallPlugins = getPlugins();
         for (VisuwallPlugin<BasicCapability> visuwallPlugin : visuwallPlugins) {
             SoftwareId softwareId = null;
@@ -92,7 +104,11 @@ public class PluginService {
         throw new RuntimeException("no plugin to manage url " + url);
     }
 
-    public PluginInfo getPluginInfo(VisuwallPlugin<BasicCapability> visuwallPlugin) {
+    /* (non-Javadoc)
+	 * @see net.awired.visuwall.core.business.service.PluginServiceInterface#getPluginInfo(net.awired.visuwall.api.plugin.VisuwallPlugin)
+	 */
+    @Override
+	public PluginInfo getPluginInfo(VisuwallPlugin<BasicCapability> visuwallPlugin) {
         PluginInfo pluginInfo = new PluginInfo();
         pluginInfo.setName(visuwallPlugin.getName());
         pluginInfo.setVersion(visuwallPlugin.getVersion());
@@ -101,7 +117,11 @@ public class PluginService {
         return pluginInfo;
     }
 
-    public List<PluginInfo> getPluginsInfo() {
+    /* (non-Javadoc)
+	 * @see net.awired.visuwall.core.business.service.PluginServiceInterface#getPluginsInfo()
+	 */
+    @Override
+	public List<PluginInfo> getPluginsInfo() {
         List<VisuwallPlugin<BasicCapability>> visuwallPlugins = getPlugins();
         List<PluginInfo> pluginInfos = new ArrayList<PluginInfo>(visuwallPlugins.size());
         for (VisuwallPlugin<BasicCapability> visuwallPlugin : visuwallPlugins) {
@@ -111,7 +131,11 @@ public class PluginService {
         return pluginInfos;
     }
 
-    public List<VisuwallPlugin<BasicCapability>> getPlugins() {
+    /* (non-Javadoc)
+	 * @see net.awired.visuwall.core.business.service.PluginServiceInterface#getPlugins()
+	 */
+    @Override
+	public List<VisuwallPlugin<BasicCapability>> getPlugins() {
         @SuppressWarnings("rawtypes")
         Iterator<VisuwallPlugin> pluginIt = pluginLoader.iterator();
         List<VisuwallPlugin<BasicCapability>> result = new ArrayList<VisuwallPlugin<BasicCapability>>();
@@ -121,10 +145,6 @@ public class PluginService {
             result.add(plugin);
         }
         return result;
-    }
-
-    public void reload() {
-        pluginLoader.reload();
     }
 
     //    public List<ConnectionPlugin> getConnectionPluginsFromSoftwares(List<SoftwareAccess> softwareAccesses) {

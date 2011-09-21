@@ -1,5 +1,5 @@
-package net.awired.visuwall.server.application;
-
+package net.awired.visuwall.core.business.service;
+ 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
