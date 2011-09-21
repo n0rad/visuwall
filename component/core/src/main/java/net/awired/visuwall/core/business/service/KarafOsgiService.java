@@ -56,7 +56,8 @@ public class KarafOsgiService implements PluginServiceInterface {
 	@PostConstruct
 	void postconstruct() {
 		String home = System.getProperty(ApplicationHelper.HOME_KEY) + "/karaf";
-		new File(home + "/etc").mkdirs();
+		new File(home + "/data").mkdirs();
+		new File(home + "/deploy").mkdirs();
 
 		try {
 			System.setProperty(
