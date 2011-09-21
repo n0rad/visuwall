@@ -182,7 +182,7 @@
 							<mainClass>Bootstrap</mainClass>
 						</manifest>
 						<manifestEntries>
-							<Bundle-MainClass>net.awired.visuwall.cli.Main</Bundle-MainClass>
+							<Bootstrap-MainClass>net.awired.visuwall.cli.Main</Bootstrap-MainClass>
 							<VisuwallVersion>${project.version}</VisuwallVersion>
 						</manifestEntries>
 					</archive>
