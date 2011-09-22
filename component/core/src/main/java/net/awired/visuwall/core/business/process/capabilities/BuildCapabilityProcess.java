@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import net.awired.visuwall.api.domain.BuildTime;
+import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -122,7 +123,10 @@ public class BuildCapabilityProcess {
             BuildTime buildTime = project.getBuildConnection().getBuildTime(projectId, buildNumber);
             build.setStartTime(buildTime.getStartTime());
             build.setDuration(buildTime.getDuration());
-
+            
+            List<Commiter> commiters = project.getBuildConnection().getBuildCommiters(projectId, buildNumber);
+            build.setCommiters(commiters);
+            
             //            // projectSoftwareId
             //            ProjectResourceId projectResourceId = new ProjectResourceId();
             //            projectResourceId.setDate(new Date(build.getStartTime().getTime() + build.getDuration()));

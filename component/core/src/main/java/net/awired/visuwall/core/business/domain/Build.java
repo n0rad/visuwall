@@ -16,8 +16,10 @@
 
 package net.awired.visuwall.core.business.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -34,7 +36,7 @@ public class Build {
     private final int buildNumber;
     private boolean building;
     private State state = State.UNKNOWN;
-    private Set<Commiter> commiters = new TreeSet<Commiter>();
+    private List<Commiter> commiters = new ArrayList<Commiter>();
     private long duration;
     private Date startTime;
     private Date estimatedFinishTime;
@@ -140,11 +142,11 @@ public class Build {
         return toString.toString();
     }
 
-    public Set<Commiter> getCommiters() {
+    public List<Commiter> getCommiters() {
         return commiters;
     }
 
-    public void setCommiters(Set<Commiter> commiters) {
+    public void setCommiters(List<Commiter> commiters) {
         this.commiters = commiters;
     }
 
