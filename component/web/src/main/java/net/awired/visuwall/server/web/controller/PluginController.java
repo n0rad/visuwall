@@ -46,7 +46,7 @@ public class PluginController {
     @RequestMapping(value = "getSoftwareInfo", method = RequestMethod.GET)
     public @ResponseBody
     SoftwareInfo getSoftwareInfo(@RequestParam String url) throws MalformedURLException {
-        SoftwareInfo softwareInfo = pluginService.getSoftwareInfoFromUrl(new URL(url));
+        SoftwareInfo softwareInfo = pluginService.getSoftwareInfoFromUrl(new URL(url), null);
         return softwareInfo;
     }
 

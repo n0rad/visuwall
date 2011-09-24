@@ -42,6 +42,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Preconditions;
 
 //@Service
+@Deprecated
 public class FelixOsgiService implements PluginServiceInterface {
 
 	private static final Logger LOG = LoggerFactory
@@ -208,7 +209,7 @@ public class FelixOsgiService implements PluginServiceInterface {
 	}
 
 	@Override
-	public SoftwareInfo getSoftwareInfoFromUrl(URL url) {
+	public SoftwareInfo getSoftwareInfoFromUrl(URL url, Map<String, String> properties) {
 		Object[] services = m_tracker.getServices();
 		for (int i = 0; (services != null) && (i < services.length); i++) {
 			VisuwallPlugin<BasicCapability> visuwallPlugin = (VisuwallPlugin<BasicCapability>) services[i];

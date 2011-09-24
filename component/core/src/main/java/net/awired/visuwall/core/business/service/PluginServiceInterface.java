@@ -2,6 +2,7 @@ package net.awired.visuwall.core.business.service;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
@@ -12,7 +13,7 @@ public interface PluginServiceInterface {
 
 	VisuwallPlugin<BasicCapability> getPluginFromUrl(URL url);
 
-	SoftwareInfo getSoftwareInfoFromUrl(URL url);
+	SoftwareInfo getSoftwareInfoFromUrl(URL url, Map<String, String> properties);
 
 	PluginInfo getPluginInfo(VisuwallPlugin<BasicCapability> visuwallPlugin);
 

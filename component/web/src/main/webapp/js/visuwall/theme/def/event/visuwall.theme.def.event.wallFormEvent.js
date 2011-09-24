@@ -71,6 +71,7 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 						});
 
 						$("FIELDSET.buildField", newContent).hide();
+						$("FIELDSET.propertiesField", newContent).hide();
 						
 						var childrens = newContent.children();
 						for (var i = 0; i < childrens.length; i++) {
@@ -181,6 +182,13 @@ visuwall.theme.def.event.wallFormEvent = new function() {
 		var classes = ['failureCheck', 'successCheck', 'loadingCheck', 'warningCheck'];
 		var domObj = $('#' + $(this).attr('id').replace(".", "\\.") + "check", $(this).parent());
 		var tabContent = $(this).parent();
+
+		var id = $(this).attr('id');
+		var preId = id.substring(0, id.lastIndexOf('.') + 1);
+
+		var name = $(this).attr('name');
+		var preName = name.substring(0, name.lastIndexOf('.') + 1);
+
 		
 		if (!$(this).val().trim()) {
 			domObj.switchClasses(classes, '', 1);			
@@ -269,6 +277,19 @@ var ff = '				<table class="softwareInfo">'
 			} else {
 				$('FIELDSET.buildField', tabContent).hide();				
 			}
+			
+			// display properties			
+			var propertyDiv = $(".properties", tabContent);
+			propertyDiv.empty();
+			for (var propertyName in softwareInfo.pluginInfo.properties) {
+				var propertyValue = softwareInfo.pluginInfo.properties[propertyName];
+				var str = '<div style="float:left">';
+				str += '<label for="' + preId + 'properties-' + propertyName + '">' + propertyName.ucfirst() + '</label>';
+				str += '<input id="' + preId + 'properties-' + propertyName + '" class="ui-widget-content ui-corner-all" name="' + preName + 'properties[' + propertyName + ']" value="' + propertyValue + '" />';
+				str += '</div>';
+				propertyDiv.append(str);
+			}
+			
 			
 			// project Names
 			var projectNamesFormElem = $('SELECT:regex(id,softwareAccesses.*\.projectNames)', tabContent);

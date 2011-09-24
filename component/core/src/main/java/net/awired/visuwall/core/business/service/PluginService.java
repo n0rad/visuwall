@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -37,11 +38,9 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Preconditions;
 
 //@Service
+@Deprecated
 public class PluginService implements PluginServiceInterface {
 	
-	@Autowired
-	FelixOsgiService osgiService;
-
     private static final Logger LOG = LoggerFactory.getLogger(PluginService.class);
 
     @SuppressWarnings("rawtypes")
@@ -72,7 +71,7 @@ public class PluginService implements PluginServiceInterface {
 	 * @see net.awired.visuwall.core.business.service.PluginServiceInterface#getSoftwareInfoFromUrl(java.net.URL)
 	 */
     @Override
-	public SoftwareInfo getSoftwareInfoFromUrl(URL url) {
+	public SoftwareInfo getSoftwareInfoFromUrl(URL url, Map<String, String> properties) {
         List<VisuwallPlugin<BasicCapability>> visuwallPlugins = getPlugins();
         for (VisuwallPlugin<BasicCapability> visuwallPlugin : visuwallPlugins) {
             SoftwareId softwareId = null;

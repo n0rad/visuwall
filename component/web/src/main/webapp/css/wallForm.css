@@ -38,7 +38,7 @@ TABLE.softwareInfo .label {
 	font-weight: bold;
 }
 
-FIELDSET.idField LEGEND {
+FIELDSET.propertiesField LEGEND {
 	display: none;
 }
 FIELDSET.timerField LEGEND {
@@ -80,6 +80,8 @@ FIELDSET.buildField LEGEND {
 
 #wallForm .slider {
 	margin: 7px 5px;
+	width: 250px;
+	float: left;
 }
 
 #wallForm .disabled {

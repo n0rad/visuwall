@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
@@ -148,7 +149,7 @@ public class KarafOsgiService implements PluginServiceInterface {
 	}
 
 	@Override
-	public SoftwareInfo getSoftwareInfoFromUrl(URL url) {
+	public SoftwareInfo getSoftwareInfoFromUrl(URL url, Map<String, String> properties) {
 		Object[] services = m_tracker.getServices();
 		for (int i = 0; (services != null) && (i < services.length); i++) {
 			VisuwallPlugin<BasicCapability> visuwallPlugin = (VisuwallPlugin<BasicCapability>) services[i];
@@ -174,7 +175,7 @@ public class KarafOsgiService implements PluginServiceInterface {
 			// TODO change that null
 			try {
 				BasicCapability connectionPlugin = visuwallPlugin
-						.getConnection(url.toString(), null);
+						.getConnection(url.toString(), properties);
 				softwareInfo.setProjectNames(connectionPlugin
 						.findProjectNames());
 				if (connectionPlugin instanceof ViewCapability) {
@@ -196,6 +197,7 @@ public class KarafOsgiService implements PluginServiceInterface {
 		PluginInfo pluginInfo = new PluginInfo();
 		pluginInfo.setName(visuwallPlugin.getName());
 		pluginInfo.setVersion(visuwallPlugin.getVersion());
+		pluginInfo.setProperties(visuwallPlugin.getPropertiesWithDefaultValue());
 		Class<BasicCapability> connectionClass = visuwallPlugin
 				.getConnectionClass();
 		pluginInfo.setCapabilities(CapabilityEnum

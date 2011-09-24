@@ -17,6 +17,8 @@
 package net.awired.visuwall.core.persistence.dao;
 
 import java.util.List;
+import java.util.Map;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -60,6 +62,11 @@ public class WallDAOImpl implements WallDAO {
                 for (String string : projectViews) {
 
                 }
+                
+                Map<String, String> properties = softwareInfo.getProperties();
+                for (String string : properties.keySet()) {
+
+                }                
             }
         }
         return resultList;

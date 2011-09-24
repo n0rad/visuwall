@@ -17,12 +17,15 @@
 package net.awired.visuwall.core.business.domain;
 
 import java.util.List;
+import java.util.Map;
+
 import com.google.common.base.Objects;
 
 public class PluginInfo {
 
     private String name;
     private float version;
+    private Map<String, String> properties;
     private List<CapabilityEnum> capabilities;
 
     // //////////////////////
@@ -66,4 +69,12 @@ public class PluginInfo {
     public List<CapabilityEnum> getCapabilities() {
         return capabilities;
     }
+
+	public void setProperties(Map<String, String> properties) {
+		this.properties = properties;
+	}
+
+	public Map<String, String> getProperties() {
+		return properties;
+	}
 }

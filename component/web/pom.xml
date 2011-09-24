@@ -291,6 +291,18 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>clean-karaf-inline</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<delete dir="${basedir}/src/main/webapp/WEB-INF/karaf"/>
+							</tasks>
+						</configuration>
+					</execution>
+					<execution>
 						<id>copy-karaf</id>
 						<phase>process-resources</phase>
 						<goals>
@@ -362,11 +374,11 @@
 								</goals>
 								<configuration>
 									<tasks>
-										<move
+										<copy
 											todir="${basedir}/src/main/webapp/WEB-INF/karaf">
 											<fileset
 												dir="${project.build.directory}/${project.build.finalName}/WEB-INF/karaf" />
-										</move>
+										</copy>
 									</tasks>
 								</configuration>
 							</execution>

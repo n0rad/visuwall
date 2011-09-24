@@ -62,24 +62,35 @@
 				<label id="softwareAccesses0.urlcheck" class="check"></label>
 				<input id="softwareAccesses0.url" name="softwareAccesses[0].url" class="ui-widget-content ui-corner-all url" type="text" value=""/>
 
-				<fieldset class="idField" style="float: left">
-					<legend>Identification</legend>
-					<label for="softwareAccesses0.login">Login</label> 
+				<fieldset class="timerField">
+					<legend>Timers</legend>
+					
+					<div class="test42" style="float:left">	
+						<label for="softwareAccesses0.projectFinderDelaySecond">Software Refresh Time : <span class="bold projectFinderDelaySecond">45s</span></label>
+						<div class="slider projectFinderDelaySecondSlider"></div>
+						<input type="hidden" id="softwareAccesses0.projectFinderDelaySecond" name="softwareAccesses[0].projectFinderDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
+					</div>
+								
+					<div class="test42" style="float:left">	
+						<label for="softwareAccesses0.projectStatusDelaySecond">Project Refresh Time <span class="bold projectStatusDelaySecond">45s</span></label>
+						<div class="slider projectStatusDelaySecondSlider"></div>
+						<input type="hidden" id="softwareAccesses0.projectStatusDelaySecond" name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
+					</div>
+				</fieldset>
+
+				<fieldset class="propertiesField">
+					<legend>Properties</legend>
+					
+					<div class="properties">
+					
+					</div>
+<!-- 					<label for="softwareAccesses0.login">Login</label> 
 					<input id="softwareAccesses0.login" name="softwareAccesses[0].login" class="ui-widget-content ui-corner-all disabled" type="text" value="" disabled="disabled"/> 
 					<label for="softwareAccesses0.password">Password</label> 
 					<input id="softwareAccesses0.password" name="softwareAccesses[0].password" class="ui-widget-content ui-corner-all disabled" type="password" value="" disabled="disabled"/> 
+ -->
 				</fieldset>
 
-				<fieldset class="timerField" style="float: right">
-					<legend>Timers</legend>
-					<label for="softwareAccesses0.projectFinderDelaySecond">Software Refresh Time : <span class="bold projectFinderDelaySecond">45s</span></label>
-					<div class="slider projectFinderDelaySecondSlider"></div>
-					<input type="hidden" id="softwareAccesses0.projectFinderDelaySecond" name="softwareAccesses[0].projectFinderDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
-					
-					<label for="softwareAccesses0.projectStatusDelaySecond">Project Refresh Time <span class="bold projectStatusDelaySecond">45s</span></label>
-					<div class="slider projectStatusDelaySecondSlider"></div>
-					<input type="hidden" id="softwareAccesses0.projectStatusDelaySecond" name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
-				</fieldset>
 				<div style="clear: both;"></div>
 				<fieldset class="buildField" style="display: none">
 					<legend>Builds</legend>

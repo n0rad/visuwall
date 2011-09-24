@@ -18,7 +18,9 @@ package net.awired.visuwall.core.persistence.entity;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,8 +42,10 @@ public class SoftwareAccess {
     private Long id;
 
     private String url;
-    private String login;
-    private String password;
+
+    @CollectionOfElements
+    private Map<String, String> properties = new HashMap<String, String>();
+
     private boolean allProject;
 
     @NotNull
@@ -65,12 +69,6 @@ public class SoftwareAccess {
 
     public SoftwareAccess(String url) {
         this.url = url;
-    }
-
-    public SoftwareAccess(String url, String login, String password) {
-        this(url);
-        this.login = login;
-        this.password = password;
     }
 
     @Override
@@ -135,22 +133,6 @@ public class SoftwareAccess {
         this.url = url.toString();
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public boolean isAllProject() {
         return allProject;
     }
@@ -210,5 +192,13 @@ public class SoftwareAccess {
     public Integer getProjectStatusDelaySecond() {
         return projectStatusDelaySecond;
     }
+
+	public void setProperties(Map<String, String> properties) {
+		this.properties = properties;
+	}
+
+	public Map<String, String> getProperties() {
+		return properties;
+	}
 
 }

@@ -17,6 +17,8 @@
 package net.awired.visuwall.plugin.bamboo;
 
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
@@ -27,7 +29,7 @@ import com.google.common.base.Preconditions;
 public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
 
     @Override
-    public BambooConnection getConnection(String url, Properties info) {
+    public BambooConnection getConnection(String url, Map<String, String> properties) {
         BambooConnection connection = new BambooConnection();
         connection.connect(url);
         return connection;
@@ -67,4 +69,10 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
                 .add("name", getName()) //
                 .add("version", getVersion()).toString();
     }
+
+	@Override
+	public Map<String, String> getPropertiesWithDefaultValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

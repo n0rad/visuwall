@@ -16,6 +16,7 @@
 
 package net.awired.visuwall.core.business.process;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -97,7 +98,7 @@ public class WallProcess {
         for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
             try {
                 VisuwallPlugin<BasicCapability> plugin = pluginService.getPluginFromUrl(softwareAccess.getUrl());
-                BasicCapability connection = plugin.getConnection(softwareAccess.getUrl().toString(), null);
+                BasicCapability connection = plugin.getConnection(softwareAccess.getUrl().toString(), Collections.unmodifiableMap(softwareAccess.getProperties()));
                 softwareAccess.setConnection(connection);
             } catch (ConnectionException e) {
                 LOG.warn("Can't rebuild connection. " + softwareAccess, e);

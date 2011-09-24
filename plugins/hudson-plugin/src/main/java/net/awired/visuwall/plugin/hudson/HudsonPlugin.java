@@ -19,6 +19,8 @@ package net.awired.visuwall.plugin.hudson;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
@@ -35,7 +37,7 @@ public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
     private static final Logger LOG = LoggerFactory.getLogger(HudsonPlugin.class);
 
     @Override
-    public HudsonConnection getConnection(String url, Properties info) {
+    public HudsonConnection getConnection(String url, Map<String, String> properties) {
         HudsonConnection hudsonConnectionPlugin = new HudsonConnection();
         hudsonConnectionPlugin.connect(url);
         return hudsonConnectionPlugin;
@@ -106,4 +108,10 @@ public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
             Closeables.closeQuietly(stream);
         }
     }
+
+	@Override
+	public Map<String, String> getPropertiesWithDefaultValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

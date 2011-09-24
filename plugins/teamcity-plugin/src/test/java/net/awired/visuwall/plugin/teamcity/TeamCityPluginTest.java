@@ -23,6 +23,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Properties;
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
@@ -60,7 +61,7 @@ public class TeamCityPluginTest {
 
     @Test
     public void should_get_a_connection() {
-        TeamCityConnection connection = plugin.getConnection("http://teamcity.com", new Properties());
+        TeamCityConnection connection = plugin.getConnection("http://teamcity.com", new HashMap<String, String>());
         assertFalse(connection.isClosed());
     }
 
