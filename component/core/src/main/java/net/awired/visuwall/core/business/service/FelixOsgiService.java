@@ -237,7 +237,7 @@ public class FelixOsgiService implements PluginServiceInterface {
 				BasicCapability connectionPlugin = visuwallPlugin
 						.getConnection(url.toString(), null);
 				softwareInfo.setProjectNames(connectionPlugin
-						.findProjectNames());
+						.listSoftwareProjectIds());
 				if (connectionPlugin instanceof ViewCapability) {
 					softwareInfo
 							.setViewNames(((ViewCapability) connectionPlugin)

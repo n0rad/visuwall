@@ -46,9 +46,6 @@ public class PluginService implements PluginServiceInterface {
     @SuppressWarnings("rawtypes")
     private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader.load(VisuwallPlugin.class);
 
-    /* (non-Javadoc)
-	 * @see net.awired.visuwall.core.business.service.PluginServiceInterface#getPluginFromUrl(java.net.URL)
-	 */
     @Override
 	public VisuwallPlugin<BasicCapability> getPluginFromUrl(URL url) {
         List<VisuwallPlugin<BasicCapability>> visuwallPlugins = getPlugins();
@@ -67,9 +64,6 @@ public class PluginService implements PluginServiceInterface {
         throw new RuntimeException("no plugin to manage url " + url);
     }
 
-    /* (non-Javadoc)
-	 * @see net.awired.visuwall.core.business.service.PluginServiceInterface#getSoftwareInfoFromUrl(java.net.URL)
-	 */
     @Override
 	public SoftwareInfo getSoftwareInfoFromUrl(URL url, Map<String, String> properties) {
         List<VisuwallPlugin<BasicCapability>> visuwallPlugins = getPlugins();
@@ -91,7 +85,7 @@ public class PluginService implements PluginServiceInterface {
             // TODO change that null
             try {
                 BasicCapability connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
-                softwareInfo.setProjectNames(connectionPlugin.findProjectNames());
+                softwareInfo.setProjectNames(connectionPlugin.listSoftwareProjectIds());
                 if (connectionPlugin instanceof ViewCapability) {
                     softwareInfo.setViewNames(((ViewCapability) connectionPlugin).findViews());
                 }
@@ -103,9 +97,6 @@ public class PluginService implements PluginServiceInterface {
         throw new RuntimeException("no plugin to manage url " + url);
     }
 
-    /* (non-Javadoc)
-	 * @see net.awired.visuwall.core.business.service.PluginServiceInterface#getPluginInfo(net.awired.visuwall.api.plugin.VisuwallPlugin)
-	 */
     @Override
 	public PluginInfo getPluginInfo(VisuwallPlugin<BasicCapability> visuwallPlugin) {
         PluginInfo pluginInfo = new PluginInfo();
@@ -116,9 +107,6 @@ public class PluginService implements PluginServiceInterface {
         return pluginInfo;
     }
 
-    /* (non-Javadoc)
-	 * @see net.awired.visuwall.core.business.service.PluginServiceInterface#getPluginsInfo()
-	 */
     @Override
 	public List<PluginInfo> getPluginsInfo() {
         List<VisuwallPlugin<BasicCapability>> visuwallPlugins = getPlugins();
@@ -130,9 +118,6 @@ public class PluginService implements PluginServiceInterface {
         return pluginInfos;
     }
 
-    /* (non-Javadoc)
-	 * @see net.awired.visuwall.core.business.service.PluginServiceInterface#getPlugins()
-	 */
     @Override
 	public List<VisuwallPlugin<BasicCapability>> getPlugins() {
         @SuppressWarnings("rawtypes")

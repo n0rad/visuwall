@@ -52,26 +52,6 @@ public class HudsonConnectionTest {
     }
 
     @Test
-    public void should_find_all_projects_from_hudson() {
-        List<HudsonJob> hudsonProjects = new ArrayList<HudsonJob>();
-        HudsonJob hudsonProject = new HudsonJob();
-        hudsonProject.setName("name");
-
-        hudsonProjects.add(hudsonProject);
-
-        when(hudson.findAllProjects()).thenReturn(hudsonProjects);
-
-        HudsonConnection hudsonPlugin = new HudsonConnection();
-        hudsonPlugin.connect("url");
-        hudsonPlugin.hudson = hudson;
-
-        List<SoftwareProjectId> projectIds = hudsonPlugin.findAllSoftwareProjectIds();
-        SoftwareProjectId projectId = projectIds.get(0);
-
-        assertEquals("name", projectId.getProjectId());
-    }
-
-    @Test
     public void should_get_is_building_information() throws Exception {
         when(hudson.isBuilding("project1")).thenReturn(true);
         when(hudson.isBuilding("project2")).thenReturn(false);

@@ -65,10 +65,10 @@ public class BambooConnectionTest {
 
         when(bamboo.findAllPlans()).thenReturn(plans);
 
-        Map<String, SoftwareProjectId> projectIds = bambooConnection.listSoftwareProjectIds();
+        Map<SoftwareProjectId, String> projectIds = bambooConnection.listSoftwareProjectIds();
 
-        assertEquals("key1", projectIds.get("planName1").getProjectId());
-        assertEquals("key2", projectIds.get("planName2").getProjectId());
+        assertEquals("planName1", projectIds.get(new SoftwareProjectId("key1")));
+        assertEquals("planName2", projectIds.get(new SoftwareProjectId("key2")));
     }
 
     @Test

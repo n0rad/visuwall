@@ -18,6 +18,7 @@ package net.awired.visuwall.core.persistence.entity;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.CollectionOfElements;
@@ -111,6 +114,22 @@ public class SoftwareAccess {
         return toString.toString();
     }
 
+    public List<SoftwareProjectId> getProjectIds() {
+    	ArrayList<SoftwareProjectId> softwareProjectIds = new ArrayList<SoftwareProjectId>();
+    	for (String projectIdSerialized : projectNames) {
+			softwareProjectIds.add(new SoftwareProjectId(projectIdSerialized));
+		}
+        return softwareProjectIds;
+    }
+
+    public void setProjectIds(List<SoftwareProjectId> projectIds) {
+    	ArrayList<String> res = new ArrayList<String>();
+    	for (SoftwareProjectId softwareProjectId : projectIds) {
+			res.add(softwareProjectId.getProjectId());
+		}
+    	projectNames = res;
+    }
+    
     // ///////////////////////////////////////////////////////////
 
     public Long getId() {
@@ -139,14 +158,6 @@ public class SoftwareAccess {
 
     public void setAllProject(boolean allProject) {
         this.allProject = allProject;
-    }
-
-    public List<String> getProjectNames() {
-        return projectNames;
-    }
-
-    public void setProjectNames(List<String> projectNames) {
-        this.projectNames = projectNames;
     }
 
     public List<String> getViewNames() {
@@ -199,6 +210,14 @@ public class SoftwareAccess {
 
 	public Map<String, String> getProperties() {
 		return properties;
+	}
+
+	public List<String> getProjectNames() {
+		return projectNames;
+	}
+
+	public void setProjectNames(List<String> projectNames) {
+		this.projectNames = projectNames;
 	}
 
 }

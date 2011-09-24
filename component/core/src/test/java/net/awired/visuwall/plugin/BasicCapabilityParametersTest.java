@@ -75,21 +75,10 @@ public class BasicCapabilityParametersTest {
         connection.close();
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void cant_call_findAllSoftwareProjectIds_when_disconnected() {
-        connection.findAllSoftwareProjectIds();
-    }
-
     @Test(expected = NullPointerException.class)
     public void cant_call_find_getDescription_with_null_param() throws Exception {
         connection.connect("url", null, null);
         connection.getDescription(null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void cant_call_findSoftwareProjectIdsByNames_with_null_param() throws Exception {
-        connection.connect("url", null, null);
-        connection.findSoftwareProjectIdsByNames(null);
     }
 
 }

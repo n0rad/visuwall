@@ -79,16 +79,6 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
     }
 
     @Override
-    public List<String> findProjectNames() {
-        checkConnected();
-        try {
-            return teamCity.findProjectNames();
-        } catch (TeamCityProjectsNotFoundException e) {
-            return new ArrayList<String>();
-        }
-    }
-
-    @Override
     public void close() {
         connected = false;
     }
@@ -145,61 +135,22 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
         }
     }
 
+
     @Override
-    public List<SoftwareProjectId> findAllSoftwareProjectIds() {
+    public Map<SoftwareProjectId, String> listSoftwareProjectIds() {
         checkConnected();
-        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
+        Map<SoftwareProjectId, String> projectIds = new HashMap<SoftwareProjectId, String>();
         try {
             List<TeamCityProject> projects = teamCity.findAllProjects();
             for (TeamCityProject project : projects) {
                 String id = project.getId();
                 SoftwareProjectId softwareProjectId = new SoftwareProjectId(id);
-                projectIds.add(softwareProjectId);
+                projectIds.put(softwareProjectId, project.getName());
             }
         } catch (TeamCityProjectsNotFoundException e) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Can't build list of software project ids.", e);
             }
-        }
-        return projectIds;
-    }
-
-    @Override
-    public Map<String, SoftwareProjectId> listSoftwareProjectIds() {
-        checkConnected();
-        Map<String, SoftwareProjectId> projectIds = new HashMap<String, SoftwareProjectId>();
-        try {
-            List<TeamCityProject> projects = teamCity.findAllProjects();
-            for (TeamCityProject project : projects) {
-                String id = project.getId();
-                SoftwareProjectId softwareProjectId = new SoftwareProjectId(id);
-                projectIds.put(project.getName(), softwareProjectId);
-            }
-        } catch (TeamCityProjectsNotFoundException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Can't build list of software project ids.", e);
-            }
-        }
-        return projectIds;
-    }
-
-    @Override
-    public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
-        checkConnected();
-        Preconditions.checkNotNull(names, "names is mandatory");
-        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
-        try {
-            List<TeamCityProject> projects = teamCity.findAllProjects();
-            for (TeamCityProject project : projects) {
-                String name = project.getName();
-                if (names.contains(name)) {
-                    String id = project.getId();
-                    SoftwareProjectId projectId = new SoftwareProjectId(id);
-                    projectIds.add(projectId);
-                }
-            }
-        } catch (TeamCityProjectsNotFoundException e) {
-            LOG.warn("Can't find projects by name with this Team City connection," + this.url, e);
         }
         return projectIds;
     }

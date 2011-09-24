@@ -298,9 +298,9 @@ var ff = '				<table class="softwareInfo">'
 				oldVal = $(projectNamesFormElem).data('newVal');
 			}
 			projectNamesFormElem.empty();
-			for (var i = 0; i < softwareInfo.projectNames.length; i++) {
-				var projectName = softwareInfo.projectNames[i];
-				projectNamesFormElem.append($("<option></option>").attr("value",projectName).text(projectName));
+			for (var key in softwareInfo.projectNames) {
+				var projectName = softwareInfo.projectNames[key];
+				projectNamesFormElem.append($("<option></option>").attr("value", key).text(projectName));
 			}
 			projectNamesFormElem.val(oldVal);
 			

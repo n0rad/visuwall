@@ -79,35 +79,11 @@ public interface BasicCapability {
     SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException;
 
     /**
-     * Return the full list of project id contained in the software
+     * Return the full list of project id contained in the software with there display name
      * 
      * @return
      */
-    @Deprecated
-    List<SoftwareProjectId> findAllSoftwareProjectIds();
-
-    /**
-     * Return the full list of project id contained in the software
-     * 
-     * @return
-     */
-    Map<String, SoftwareProjectId> listSoftwareProjectIds();
-
-    /**
-     * Return a list of project id contained in the software by a list of names
-     * 
-     * @return
-     */
-    @Deprecated
-    List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names);
-
-    /**
-     * Find all project names of projects handle by the software
-     * 
-     * @return
-     */
-    @Deprecated
-    List<String> findProjectNames();
+    Map<SoftwareProjectId, String> listSoftwareProjectIds();
 
     /**
      * Returns true is project is disabled in the software

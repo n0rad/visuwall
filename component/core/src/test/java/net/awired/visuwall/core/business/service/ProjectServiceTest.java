@@ -46,7 +46,6 @@ public class ProjectServiceTest {
         List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
         projectIds.add(new SoftwareProjectId("name1"));
         projectIds.add(new SoftwareProjectId("name2"));
-        when(connectionPlugin.findAllSoftwareProjectIds()).thenReturn(projectIds);
         return connectionPlugins;
     }
 

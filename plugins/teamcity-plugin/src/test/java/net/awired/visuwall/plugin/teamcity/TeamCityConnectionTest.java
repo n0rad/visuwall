@@ -71,12 +71,6 @@ public class TeamCityConnectionTest {
     }
 
     @Test
-    public void should_call_find_project_names() throws TeamCityProjectsNotFoundException {
-        teamCityConnection.findProjectNames();
-        verify(teamCity).findProjectNames();
-    }
-
-    @Test
     public void should_find_state_build() throws Exception {
         TeamCityBuild build = new TeamCityBuild();
         build.setStatus("SUCCESS");
@@ -233,31 +227,11 @@ public class TeamCityConnectionTest {
     public void should_list_all_project_ids() throws Exception {
         addTwoProjects();
 
-        Map<String, SoftwareProjectId> projectIds = teamCityConnection.listSoftwareProjectIds();
+        Map<SoftwareProjectId, String> projectIds = teamCityConnection.listSoftwareProjectIds();
 
-        assertEquals("id1", projectIds.get("name1").getProjectId());
-        assertEquals("id2", projectIds.get("name2").getProjectId());
-    }
+        assertEquals("name1", projectIds.get(new SoftwareProjectId("id1")));
+        assertEquals("name2", projectIds.get(new SoftwareProjectId("id2")));
 
-    @Test
-    public void should_find_software_project_ids_by_names() throws TeamCityProjectsNotFoundException {
-        addTwoProjects();
-
-        List<String> names = Arrays.asList("name1", "name2");
-        List<SoftwareProjectId> softwareProjectIdsByNames = teamCityConnection.findSoftwareProjectIdsByNames(names);
-
-        assertEquals("id1", softwareProjectIdsByNames.get(0).getProjectId());
-        assertEquals("id2", softwareProjectIdsByNames.get(1).getProjectId());
-    }
-
-    @Test
-    public void should_find_all_software_project_ids() throws TeamCityProjectsNotFoundException {
-        addTwoProjects();
-
-        List<SoftwareProjectId> softwareProjectIdsByNames = teamCityConnection.findAllSoftwareProjectIds();
-
-        assertEquals("id1", softwareProjectIdsByNames.get(0).getProjectId());
-        assertEquals("id2", softwareProjectIdsByNames.get(1).getProjectId());
     }
 
     @Test

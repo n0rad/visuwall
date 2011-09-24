@@ -17,14 +17,17 @@
 package net.awired.visuwall.core.business.domain;
 
 import java.util.List;
+import java.util.Map;
+
 import net.awired.visuwall.api.domain.SoftwareId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 
 public class SoftwareInfo {
     private SoftwareId softwareId;
     private PluginInfo pluginInfo;
 
     //TODO move to manage also quality
-    private List<String> projectNames;
+    private Map<SoftwareProjectId, String> projectNames;
     private List<String> viewNames;
 
     public PluginInfo getPluginInfo() {
@@ -33,14 +36,6 @@ public class SoftwareInfo {
 
     public void setPluginInfo(PluginInfo pluginInfo) {
         this.pluginInfo = pluginInfo;
-    }
-
-    public List<String> getProjectNames() {
-        return projectNames;
-    }
-
-    public void setProjectNames(List<String> projectNames) {
-        this.projectNames = projectNames;
     }
 
     public List<String> getViewNames() {
@@ -58,5 +53,13 @@ public class SoftwareInfo {
     public void setSoftwareId(SoftwareId softwareId) {
         this.softwareId = softwareId;
     }
+
+	public void setProjectNames(Map<SoftwareProjectId, String> projectNames) {
+		this.projectNames = projectNames;
+	}
+
+	public Map<SoftwareProjectId, String> getProjectNames() {
+		return projectNames;
+	}
 
 }

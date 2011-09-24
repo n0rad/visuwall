@@ -197,17 +197,6 @@ public class SonarConnectionTest {
     }
 
     @Test
-    public void should_not_return_empty_list_when_finding_project_names() throws Exception {
-        Project project = new Project();
-
-        Projects projects = new Projects();
-        projects.getProjects().add(project);
-
-        when(this.sonarClient.findProjects()).thenReturn(projects);
-        assertFalse(sonar.findProjectNames().isEmpty());
-    }
-
-    @Test
     public void should_not_be_equals() {
         SonarConnection s1 = new SonarConnection();
         SonarConnection s2 = new SonarConnection();
@@ -360,15 +349,6 @@ public class SonarConnectionTest {
     }
 
     @Test
-    public void should_not_fail_when_searching_all_software_project_ids() throws Exception {
-        Throwable notFound = new SonarProjectsNotFoundException("not found", null);
-        when(sonarClient.findProjects()).thenThrow(notFound);
-
-        List<SoftwareProjectId> softwareProjectIds = sonar.findAllSoftwareProjectIds();
-        assertTrue(softwareProjectIds.isEmpty());
-    }
-
-    @Test
     public void should_find_all_software_project_ids() throws Exception {
         Project project1 = new Project();
         project1.setName("name1");
@@ -383,19 +363,10 @@ public class SonarConnectionTest {
 
         when(sonarClient.findProjects()).thenReturn(projects);
 
-        Map<String, SoftwareProjectId> softwareProjectIds = sonar.listSoftwareProjectIds();
+        Map<SoftwareProjectId, String> softwareProjectIds = sonar.listSoftwareProjectIds();
 
-        assertEquals("key1", softwareProjectIds.get("name1").getProjectId());
-        assertEquals("key2", softwareProjectIds.get("name2").getProjectId());
-    }
-
-    @Test
-    public void should_not_fail_when_searching_spi_by_names() throws Exception {
-        Throwable notFound = new SonarProjectsNotFoundException("not found", null);
-        when(sonarClient.findProjects()).thenThrow(notFound);
-
-        List<SoftwareProjectId> softwareProjectIds = sonar.findSoftwareProjectIdsByNames(new ArrayList<String>());
-        assertTrue(softwareProjectIds.isEmpty());
+        assertEquals("name1", softwareProjectIds.get(new SoftwareProjectId("key1")));
+        assertEquals("name2", softwareProjectIds.get(new SoftwareProjectId("key2")));
     }
 
     @Test

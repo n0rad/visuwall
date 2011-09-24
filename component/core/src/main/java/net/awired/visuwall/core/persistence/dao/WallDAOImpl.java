@@ -22,6 +22,8 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.core.exception.NotFoundException;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
@@ -54,8 +56,8 @@ public class WallDAOImpl implements WallDAO {
         for (Wall wall : resultList) {
             // TODO replace with lazy load with extended entityManager or eager request 
             for (SoftwareAccess softwareInfo : wall.getSoftwareAccesses()) {
-                List<String> projectNames = softwareInfo.getProjectNames();
-                for (String string : projectNames) {
+                List<SoftwareProjectId> projectNames = softwareInfo.getProjectIds();
+                for (SoftwareProjectId softwareProjectId : projectNames) {
 
                 }
                 List<String> projectViews = softwareInfo.getViewNames();
@@ -80,7 +82,7 @@ public class WallDAOImpl implements WallDAO {
 
         // TODO replace with lazy load with extended entityManager or eager request 
         for (SoftwareAccess softwareInfo : wall.getSoftwareAccesses()) {
-            softwareInfo.getProjectNames();
+            softwareInfo.getProjectIds();
             softwareInfo.getViewNames();
         }
         return wall;

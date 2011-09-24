@@ -18,6 +18,7 @@ package net.awired.visuwall.core.business.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
@@ -43,11 +44,11 @@ public class SoftwareAccessService {
         Set<SoftwareProjectId> res = new HashSet<SoftwareProjectId>();
         BuildCapability buildPlugin = (BuildCapability) softwareAccess.getConnection();
         if (softwareAccess.isAllProject()) {
-            List<SoftwareProjectId> projectIds = buildPlugin.findAllSoftwareProjectIds();
-            res.addAll(projectIds);
+            Map<SoftwareProjectId, String> projectIds = buildPlugin.listSoftwareProjectIds();
+            res.addAll(projectIds.keySet());
         } else {
-            List<SoftwareProjectId> nameProjectIds = buildPlugin.findSoftwareProjectIdsByNames(softwareAccess
-                    .getProjectNames());
+            List<SoftwareProjectId> nameProjectIds = softwareAccess
+                    .getProjectIds();
             if (nameProjectIds == null) {
                 LOG.warn("plugin return null on findSoftwareProjectIdsByNames", buildPlugin);
             } else {

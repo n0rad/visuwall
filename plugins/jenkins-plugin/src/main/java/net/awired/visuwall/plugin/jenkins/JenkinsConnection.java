@@ -75,27 +75,15 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
         connected = true;
     }
 
-    @Override
-    public List<SoftwareProjectId> findAllSoftwareProjectIds() {
-        checkConnected();
-        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
-        List<HudsonJob> projects = hudson.findAllProjects();
-        for (int i = 0; i < projects.size(); i++) {
-            HudsonJob hudsonProject = projects.get(i);
-            SoftwareProjectId projectId = new SoftwareProjectId(hudsonProject.getName());
-            projectIds.add(projectId);
-        }
-        return projectIds;
-    }
 
     @Override
-    public Map<String, SoftwareProjectId> listSoftwareProjectIds() {
+    public Map<SoftwareProjectId, String> listSoftwareProjectIds() {
         checkConnected();
-        Map<String, SoftwareProjectId> projectIds = new HashMap<String, SoftwareProjectId>();
+        Map<SoftwareProjectId, String> projectIds = new HashMap<SoftwareProjectId, String>();
         List<HudsonJob> jobs = hudson.findAllProjects();
         for (HudsonJob job : jobs) {
             SoftwareProjectId projectId = new SoftwareProjectId(job.getName());
-            projectIds.put(job.getName(), projectId);
+            projectIds.put(projectId, job.getName());
         }
         return projectIds;
     }
@@ -159,12 +147,6 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
     }
 
     @Override
-    public List<String> findProjectNames() {
-        checkConnected();
-        return hudson.findJobNames();
-    }
-
-    @Override
     public List<String> findViews() {
         checkConnected();
         return hudson.findViews();
@@ -199,7 +181,8 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
         return new ArrayList<SoftwareProjectId>(projectIds);
     }
 
-    @Override
+    //TODO remove
+    @Deprecated
     public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
         checkConnected();
         Preconditions.checkNotNull(names, "names is mandatory");

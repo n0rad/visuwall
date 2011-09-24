@@ -177,7 +177,7 @@ public class KarafOsgiService implements PluginServiceInterface {
 				BasicCapability connectionPlugin = visuwallPlugin
 						.getConnection(url.toString(), properties);
 				softwareInfo.setProjectNames(connectionPlugin
-						.findProjectNames());
+						.listSoftwareProjectIds());
 				if (connectionPlugin instanceof ViewCapability) {
 					softwareInfo
 							.setViewNames(((ViewCapability) connectionPlugin)

@@ -111,29 +111,14 @@ public class SonarConnection implements MetricCapability, TestCapability {
     }
 
     @Override
-    public List<String> findProjectNames() {
+    public Map<SoftwareProjectId, String> listSoftwareProjectIds() {
         checkConnected();
-        List<String> projectNames = new ArrayList<String>();
-        try {
-            List<Project> names = sonarClient.findProjects().getProjects();
-            for (Project project : names) {
-                projectNames.add(project.getName());
-            }
-        } catch (SonarProjectsNotFoundException e) {
-            LOG.warn(e.getMessage(), e);
-        }
-        return projectNames;
-    }
-
-    @Override
-    public Map<String, SoftwareProjectId> listSoftwareProjectIds() {
-        checkConnected();
-        Map<String, SoftwareProjectId> projects = new HashMap<String, SoftwareProjectId>();
+        Map<SoftwareProjectId, String> projects = new HashMap<SoftwareProjectId, String>();
         try {
             List<Project> names = sonarClient.findProjects().getProjects();
             for (Project project : names) {
                 String key = project.getKey();
-                projects.put(project.getName(), new SoftwareProjectId(key));
+                projects.put(new SoftwareProjectId(key), project.getName());
             }
         } catch (SonarProjectsNotFoundException e) {
             LOG.warn(e.getMessage(), e);
@@ -190,44 +175,6 @@ public class SonarConnection implements MetricCapability, TestCapability {
         }
         throw new ProjectNotFoundException("Can't identify project key, there is not enough informations: "
                 + projectKey);
-    }
-
-    @Override
-    public List<SoftwareProjectId> findAllSoftwareProjectIds() {
-        checkConnected();
-        List<SoftwareProjectId> softwareProjectIds = new ArrayList<SoftwareProjectId>();
-        try {
-            List<Project> names = sonarClient.findProjects().getProjects();
-            for (Project project : names) {
-                String key = project.getKey();
-                SoftwareProjectId softwareProjectId = new SoftwareProjectId(key);
-                softwareProjectIds.add(softwareProjectId);
-            }
-        } catch (SonarProjectsNotFoundException e) {
-            LOG.warn(e.getMessage(), e);
-        }
-        return softwareProjectIds;
-    }
-
-    @Override
-    public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
-        checkConnected();
-        Preconditions.checkNotNull(names, "names is mandatory");
-        List<SoftwareProjectId> softwareProjectIds = new ArrayList<SoftwareProjectId>();
-        try {
-            List<Project> projects = sonarClient.findProjects().getProjects();
-            for (Project project : projects) {
-                String name = project.getName();
-                if (names.contains(name)) {
-                    String key = project.getKey();
-                    SoftwareProjectId softwareProjectId = new SoftwareProjectId(key);
-                    softwareProjectIds.add(softwareProjectId);
-                }
-            }
-        } catch (SonarProjectsNotFoundException e) {
-            LOG.warn(e.getMessage(), e);
-        }
-        return softwareProjectIds;
     }
 
     @Override

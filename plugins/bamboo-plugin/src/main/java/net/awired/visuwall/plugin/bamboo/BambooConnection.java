@@ -114,33 +114,6 @@ public class BambooConnection implements BuildCapability, TestCapability {
     }
 
     @Override
-    public List<String> findProjectNames() {
-        checkConnected();
-        List<String> projectNames = new ArrayList<String>();
-        List<Plan> plans = bamboo.findAllPlans();
-        for (Plan plan : plans) {
-            projectNames.add(plan.getName());
-        }
-        return projectNames;
-    }
-
-    @Override
-    public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
-        checkConnected();
-        Preconditions.checkNotNull(names, "names is mandatory");
-        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
-        List<Plan> plans = bamboo.findAllPlans();
-        for (Plan plan : plans) {
-            String name = plan.getName();
-            if (names.contains(name)) {
-                SoftwareProjectId projectId = new SoftwareProjectId(plan.getKey());
-                projectIds.add(projectId);
-            }
-        }
-        return projectIds;
-    }
-
-    @Override
     public void close() {
         connected = false;
     }
@@ -192,27 +165,14 @@ public class BambooConnection implements BuildCapability, TestCapability {
     }
 
     @Override
-    public List<SoftwareProjectId> findAllSoftwareProjectIds() {
+    public Map<SoftwareProjectId, String> listSoftwareProjectIds() {
         checkConnected();
-        List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
+        Map<SoftwareProjectId, String> projects = new HashMap<SoftwareProjectId, String>();
         List<Plan> plans = bamboo.findAllPlans();
         for (Plan plan : plans) {
             String key = plan.getKey();
             SoftwareProjectId softwareProjectId = new SoftwareProjectId(key);
-            projectIds.add(softwareProjectId);
-        }
-        return projectIds;
-    }
-
-    @Override
-    public Map<String, SoftwareProjectId> listSoftwareProjectIds() {
-        checkConnected();
-        Map<String, SoftwareProjectId> projects = new HashMap<String, SoftwareProjectId>();
-        List<Plan> plans = bamboo.findAllPlans();
-        for (Plan plan : plans) {
-            String key = plan.getKey();
-            SoftwareProjectId softwareProjectId = new SoftwareProjectId(key);
-            projects.put(plan.getName(), softwareProjectId);
+            projects.put(softwareProjectId, plan.getName());
         }
         return projects;
     }
