@@ -104,7 +104,7 @@ visuwall.ctrl.process.Wall = function(wallName) {
 		
 		$this._updateBuilding(project.id, project.building, project.finishTime);
 		$this._updateTimers(project, lastBuild);
-		$this.wallView.updateCommiters(project.id, $this._getCommiterNames(lastBuild.commiters));
+		$this.wallView.updateCommiters(project.id, lastBuild.commiters);
 		if (lastBuild.qualityResult) {
 			$this.wallView.updateQuality(project.id, lastBuild.qualityResult.measures);
 		}
@@ -135,14 +135,6 @@ visuwall.ctrl.process.Wall = function(wallName) {
 //			var skipDiff = lastBuild.unitTestResult.skipCount - previousBuild.unitTestResult.skipCount;
 //			$this.wallView.updateUTDiff(project.id, failDiff, successDiff, skipDiff);
 		}
-	};
-	
-	this._getCommiterNames = function(commiters) {
-		var res = [];
-		for (var i = 0; i < commiters.length; i++) {
-			res[i] = commiters[i].name;
-		}
-		return res;
 	};
 
 	this._updateTimers = function(project, build) {

@@ -136,14 +136,19 @@ visuwall.theme.def.view.wallView = new function() {
 	};
 
 	this.updateCommiters = function(projectId, commiters) {
-		if (commiters.length == 0) {
+		var nameDiv = $this._getElement(projectId, '.projectName');
+		var statusNeedCommiters = false;
+		if (nameDiv.hasClass('failure-state') || nameDiv.hasClass('unstable-state')) {
+			statusNeedCommiters = true;
+		}
+		if (commiters.length == 0 || !statusNeedCommiters) {
 			$this._hideCommiters(projectId);
 			return;
 		}
 		var commiterString = '';
 		for ( var i = 0; i < commiters.length; i++) {
 			var commiter = commiters[i];
-			commiterString += '<li>' + commiter + '</li>';
+			commiterString += '<li><img src="' + get_gravatar(commiter.email, 250) + '" style="height:100%" /></li>';
 		}
 		$this._getElement(projectId, 'ul.commiters').html($(commiterString))
 				.marquee({
@@ -318,7 +323,7 @@ visuwall.theme.def.view.wallView = new function() {
 		
 		projectInnerTable.append($('<tr><td class="projectName">' + projectName
 				+ ' <div class="inlineInfo"><abbr class="timeago" title=""></abbr> <span class="duration"></span><div><span class="lastUpdate"></span></td></tr>'));
-		projectInnerTable.append($('<tr style="display:none" class="commitersTR"><td><ul class="commiters marquee"></ul></tr></td>'));
+		projectInnerTable.append($('<tr style="display:none; height: 80%" class="commitersTR"><td><ul class="commiters marquee" style="height: 100%"></ul></tr></td>'));
 		projectInnerTable.append($('<tr style="display:none" class="qualityTR"><td><ul class="quality marquee"></ul></tr></td>'));
 		projectInnerTable.append($('<tr style="display:none" class= "timeleftTR"><td><p class="timeleft"></p></tr></td>'));
 		projectInnerTable.append($('<tr style="display:none" class="iTestTR"><td class="iTestTD"><table class="iTest"><tr><td class="failure"><span class="num"></span><span class="diff"></span></td><td class="ignore"><span class="num"></span><span class="diff"></span></td><td class="success"><span class="num"></span><span class="diff"></span></td></tr></table></tr></td>'));

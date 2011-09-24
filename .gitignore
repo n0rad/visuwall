@@ -13,3 +13,4 @@ jwall-database.log
 ucdetector_reports
 /component/*/META-INF
 /plugins/*/META-INF
+component/web/src/main/webapp/WEB-INF/karaf/
