@@ -19,10 +19,13 @@ package net.awired.visuwall.plugin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
-
+import net.awired.visuwall.plugin.bamboo.BambooConnection;
+import net.awired.visuwall.plugin.hudson.HudsonConnection;
+import net.awired.visuwall.plugin.jenkins.JenkinsConnection;
+import net.awired.visuwall.plugin.sonar.SonarConnection;
+import net.awired.visuwall.plugin.teamcity.TeamCityConnection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -41,12 +44,11 @@ public class BasicCapabilityParametersTest {
     @Parameters
     public static Collection<Object[]> createData() {
         List<Class<? extends BasicCapability>> connections = new ArrayList<Class<? extends BasicCapability>>();
-        //TODO put back
-//        connections.add(JenkinsConnection.class);
-//        connections.add(HudsonConnection.class);
-        //        connections.add(TeamCityConnection.class);
-        //        connections.add(BambooConnection.class);
-//        connections.add(SonarConnection.class);
+        connections.add(JenkinsConnection.class);
+        connections.add(HudsonConnection.class);
+        connections.add(TeamCityConnection.class);
+        connections.add(BambooConnection.class);
+        connections.add(SonarConnection.class);
 
         List<Object[]> objects = new ArrayList<Object[]>();
         for (Class<? extends BasicCapability> clazz : connections) {

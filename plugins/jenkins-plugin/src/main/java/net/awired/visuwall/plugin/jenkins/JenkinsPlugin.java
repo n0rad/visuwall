@@ -18,11 +18,7 @@ package net.awired.visuwall.plugin.jenkins;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
@@ -34,13 +30,22 @@ import com.google.common.collect.ImmutableMap;
 
 public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
-    private static final Map<String, String> PROPERTIES = new ImmutableMap.Builder<String, String>().put("login", "").put("password", "").build();
-    
+    private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
+    private static final Map<String, String> PROPERTIES = new ImmutableMap.Builder<String, String>().put("login", "")
+            .put("password", "").build();
+
+    @Deprecated
     @Override
     public JenkinsConnection getConnection(String url, Map<String, String> properties) {
         JenkinsConnection jenkinsConnectionPlugin = new JenkinsConnection();
         jenkinsConnectionPlugin.connect(url);
+        return jenkinsConnectionPlugin;
+    }
+
+    @Override
+    public JenkinsConnection getConnection(URL url, Map<String, String> properties) {
+        JenkinsConnection jenkinsConnectionPlugin = new JenkinsConnection();
+        jenkinsConnectionPlugin.connect(url.toString());
         return jenkinsConnectionPlugin;
     }
 
@@ -84,9 +89,9 @@ public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
                 .add("version", getVersion()).toString();
     }
 
-	@Override
-	public Map<String, String> getPropertiesWithDefaultValue() {
-		return PROPERTIES;
-	}
+    @Override
+    public Map<String, String> getPropertiesWithDefaultValue() {
+        return PROPERTIES;
+    }
 
 }

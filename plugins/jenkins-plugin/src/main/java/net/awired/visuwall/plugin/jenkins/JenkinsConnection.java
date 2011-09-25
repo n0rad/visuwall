@@ -186,9 +186,7 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
         return new ArrayList<SoftwareProjectId>(projectIds);
     }
 
-    //TODO remove
-    @Deprecated
-    public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
+    private List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
         checkConnected();
         Preconditions.checkNotNull(names, "names is mandatory");
         List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();
