@@ -33,6 +33,9 @@ public class TeamCityBuild extends TeamCityAbstractBuild {
     private boolean pinned;
 
     @XmlAttribute
+    private boolean running;
+
+    @XmlAttribute
     private String number;
 
     private String statusText;
@@ -175,6 +178,14 @@ public class TeamCityBuild extends TeamCityAbstractBuild {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 
 }
