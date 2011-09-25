@@ -106,6 +106,8 @@ public class KarafOsgiService implements PluginServiceInterface {
 			LOG.info("Starting Karaf with root directory : " + root);
 			main.launch();
 			osgi = main.getFramework();
+			
+			Thread.sleep(10000);
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot start osgi container", e);
 		}

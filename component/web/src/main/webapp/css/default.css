@@ -40,6 +40,7 @@ BODY {
 	margin: 0;
 	font-size:0.7em;
 	font-family: Verdana, "Lucida Grande","Trebuchet MS",Verdana,sans-serif;
+	background: black url('../img/logo-large-back3.png') no-repeat 50%;
 }
 
 HTML, BODY {
