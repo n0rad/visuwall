@@ -68,8 +68,12 @@ public class BambooITest {
     public void should_find_last_build_number() throws Exception {
         Plan plan = getFirstPlanOfTheInstance();
 
-        int lastBuildNumber = bamboo.getLastResultNumber(plan.getKey());
-        assertTrue(lastBuildNumber > 0);
+        String planKey = "ZOO-ZOOKEY";
+        int lastBuildNumber = bamboo.getLastResultNumber(planKey);
+        assertEquals(10, lastBuildNumber);
+        assertTrue(bamboo.isBuilding(planKey, 0));
+        System.out.println(bamboo.getAverageBuildDurationTime(planKey));
+        System.out.println(bamboo.getEstimatedFinishTime(planKey));
     }
 
     @Test(expected = BambooPlanNotFoundException.class)
@@ -98,7 +102,7 @@ public class BambooITest {
         assertEquals(lastBuildNumber, result.getNumber());
         assertTrue(result.getBuildDuration() > 0);
         assertTrue(result.getFailedTestCount() >= 0);
-        assertTrue(result.getSuccessfulTestCount() >= 18);
+        assertTrue(0 < result.getSuccessfulTestCount());
         assertNotNull(result.getBuildStartedTime());
         assertNotNull(result.getState());
     }
@@ -116,7 +120,7 @@ public class BambooITest {
         Plan plan = getFirstPlanOfTheInstance();
 
         long duration = bamboo.getAverageBuildDurationTime(plan.getKey());
-
+        System.out.println(duration);
         assertTrue(duration > 0);
     }
 

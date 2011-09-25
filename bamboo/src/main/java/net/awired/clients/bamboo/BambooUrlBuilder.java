@@ -16,37 +16,50 @@
 
 package net.awired.clients.bamboo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 class BambooUrlBuilder {
 
     private String bambooUrl;
+
+    private static final Logger LOG = LoggerFactory.getLogger(BambooUrlBuilder.class);
 
     BambooUrlBuilder(String bambooUrl) {
         this.bambooUrl = bambooUrl + "/rest/api/";
     }
 
     String getAllPlansUrl() {
-        return bambooUrl + "latest/plan";
+        return build("/plan");
     }
 
     String getAllBuildsUrl() {
-        return bambooUrl + "latest/build";
+        return build("/build");
     }
 
     String getAllResultsUrl() {
-        return bambooUrl + "latest/result";
+        return build("/result");
     }
 
     String getPlanUrl(String planKey) {
-        return bambooUrl + "latest/plan/" + planKey;
+        return build("/plan/" + planKey);
     }
 
     String getResultUrl(String planKey, int buildNumber) {
-        return bambooUrl + "latest/result/" + planKey + "-" + buildNumber
-                + "?expand=changes,metadata,stages,labels,jiraIssues,comments";
+        return build("/result/" + planKey + "-" + buildNumber
+                + "?expand=changes,metadata,stages,labels,jiraIssues,comments");
     }
 
     String getResultsUrl(String planKey) {
-        return bambooUrl + "latest/result/" + planKey;
+        return build("/result/" + planKey);
+    }
+
+    private String build(String uri) {
+        String url = bambooUrl + "latest" + uri;
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(url);
+        }
+        return url;
     }
 
 }

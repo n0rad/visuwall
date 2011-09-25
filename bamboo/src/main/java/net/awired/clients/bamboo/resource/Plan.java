@@ -19,6 +19,7 @@ package net.awired.clients.bamboo.resource;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import com.google.common.base.Objects;
 
@@ -51,6 +52,12 @@ public class Plan {
     private double averageBuildTimeInSeconds;
 
     private Link link;
+
+    @XmlElement(name = "actions")
+    private Actions actions;
+
+    @XmlElement(name = "stages")
+    private Stages stages;
 
     public String getName() {
         return name;
@@ -138,6 +145,22 @@ public class Plan {
 
     public void setLink(Link link) {
         this.link = link;
+    }
+
+    public Actions getActions() {
+        return actions;
+    }
+
+    public void setActions(Actions actions) {
+        this.actions = actions;
+    }
+
+    public Stages getStages() {
+        return stages;
+    }
+
+    public void setStages(Stages stages) {
+        this.stages = stages;
     }
 
     @Override
