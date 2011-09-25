@@ -171,6 +171,16 @@ public class TeamCity {
         return changesList;
     }
 
+    public TeamCityBuild findRunningBuild() throws TeamCityBuildNotFoundException {
+        String runningBuildUrl = urlBuilder.getRunningBuild();
+        try {
+            TeamCityBuild teamCityBuild = client.resource(runningBuildUrl, TeamCityBuild.class);
+            return teamCityBuild;
+        } catch (ResourceNotFoundException e) {
+            throw new TeamCityBuildNotFoundException("There is no running build", e);
+        }
+    }
+
     private void checkProjectId(String projectId) {
         Preconditions.checkNotNull(projectId, "projectId is mandatory");
     }
