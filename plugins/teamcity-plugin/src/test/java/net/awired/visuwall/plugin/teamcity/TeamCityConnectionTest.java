@@ -22,13 +22,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import net.awired.clients.teamcity.TeamCity;
+import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityProjectNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityProjectsNotFoundException;
 import net.awired.clients.teamcity.resource.TeamCityBuild;
@@ -191,8 +190,12 @@ public class TeamCityConnectionTest {
     @Test
     public void should_get_is_building() throws Exception {
         TeamCityBuild build = new TeamCityBuild();
-        build.setFinishDate("20310302T171940+0300");
-        when(teamCity.findBuild(anyString(), anyString())).thenReturn(build);
+        build.setRunning(true);
+        build.setNumber("1");
+        TeamCityBuildType buildType = new TeamCityBuildType();
+        buildType.setProjectId("projectId");
+        build.setBuildType(buildType);
+        when(teamCity.findRunningBuild()).thenReturn(build);
 
         boolean isBuilding = teamCityConnection.isBuilding(softwareProjectId(), 1);
 
@@ -208,6 +211,7 @@ public class TeamCityConnectionTest {
             buildList.getBuilds().add(item);
         }
         when(teamCity.findBuildList(anyString())).thenReturn(buildList);
+        when(teamCity.findRunningBuild()).thenThrow(new TeamCityBuildNotFoundException(""));
 
         TeamCityBuildType buildType = new TeamCityBuildType();
 
