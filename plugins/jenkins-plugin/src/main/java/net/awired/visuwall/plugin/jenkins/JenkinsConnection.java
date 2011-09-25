@@ -18,6 +18,8 @@ package net.awired.visuwall.plugin.jenkins;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -61,6 +63,8 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
 
     private boolean connected;
 
+    private static final Collection<String> DEFAULT_VIEWS = Arrays.asList("Tous", "All");
+
     @Override
     public void connect(String url, String login, String password) {
         connect(url);
@@ -74,7 +78,6 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
         hudson = new Hudson(url);
         connected = true;
     }
-
 
     @Override
     public Map<SoftwareProjectId, String> listSoftwareProjectIds() {
@@ -149,7 +152,9 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
     @Override
     public List<String> findViews() {
         checkConnected();
-        return hudson.findViews();
+        List<String> views = hudson.findViews();
+        views.removeAll(DEFAULT_VIEWS);
+        return views;
     }
 
     @Override
