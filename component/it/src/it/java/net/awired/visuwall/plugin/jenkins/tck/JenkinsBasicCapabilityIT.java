@@ -42,7 +42,7 @@ public class JenkinsBasicCapabilityIT implements BasicCapabilityTCK {
     }
 
     public void should_find_all_projects_ids() {
-        Map<String, SoftwareProjectId> projects = jenkins.listSoftwareProjectIds();
+        Map<SoftwareProjectId, String> projects = jenkins.listSoftwareProjectIds();
         assertFalse(projects.isEmpty());
     }
 

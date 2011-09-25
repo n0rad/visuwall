@@ -42,7 +42,7 @@ public class BambooBasicCapabilityIT implements BasicCapabilityTCK {
     }
 
     public void should_find_all_projects_ids() {
-        Map<String, SoftwareProjectId> projects = bamboo.listSoftwareProjectIds();
+        Map<SoftwareProjectId, String> projects = bamboo.listSoftwareProjectIds();
         assertFalse(projects.isEmpty());
     }
 

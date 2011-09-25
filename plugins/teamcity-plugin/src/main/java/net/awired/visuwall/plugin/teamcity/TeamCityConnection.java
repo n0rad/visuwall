@@ -306,6 +306,7 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
 
     @Override
     public TestResult analyzeUnitTests(SoftwareProjectId softwareProjectId) {
+        checkConnected();
         TestResult result = new TestResult();
         try {
             Integer lastBuildNumber = getLastBuildNumber(softwareProjectId);
@@ -331,6 +332,7 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
 
     @Override
     public TestResult analyzeIntegrationTests(SoftwareProjectId softwareProjectId) {
+        checkConnected();
         return new TestResult();
     }
 

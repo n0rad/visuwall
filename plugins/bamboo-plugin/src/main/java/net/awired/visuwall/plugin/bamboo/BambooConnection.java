@@ -197,6 +197,7 @@ public class BambooConnection implements BuildCapability, TestCapability {
     @Override
     public String getMavenId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
             MavenIdNotFoundException {
+        checkConnected();
         throw new MavenIdNotFoundException("Not implemented!");
     }
 
@@ -270,6 +271,7 @@ public class BambooConnection implements BuildCapability, TestCapability {
 
     @Override
     public TestResult analyzeUnitTests(SoftwareProjectId projectId) {
+        checkConnected();
         TestResult result = new TestResult();
         try {
             String planKey = projectId.getProjectId();
@@ -289,6 +291,7 @@ public class BambooConnection implements BuildCapability, TestCapability {
 
     @Override
     public TestResult analyzeIntegrationTests(SoftwareProjectId projectId) {
+        checkConnected();
         return new TestResult();
     }
 
