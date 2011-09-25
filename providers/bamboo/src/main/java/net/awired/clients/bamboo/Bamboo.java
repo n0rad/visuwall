@@ -96,10 +96,16 @@ public class Bamboo {
                 List<Result> subResultList = subResults.result;
                 if (!subResultList.isEmpty()) {
                     Result result = subResultList.get(0);
-                    return result.getNumber();
+                    int number = result.getNumber();
+                    if (isBuilding(planKey, number + 1)) {
+                        number++;
+                    }
+                    return number;
                 }
             }
         } catch (ResourceNotFoundException e) {
+            throw new BambooBuildNumberNotFoundException("Can't find last build number of project: " + planKey, e);
+        } catch (BambooPlanNotFoundException e) {
             throw new BambooBuildNumberNotFoundException("Can't find last build number of project: " + planKey, e);
         }
         throw new BambooBuildNumberNotFoundException("Can't find last build number of project: " + planKey);
@@ -144,12 +150,11 @@ public class Bamboo {
             BambooEstimatedFinishTimeNotFoundException {
         checkPlanKey(planKey);
         try {
-            Result result;
-            result = getLastResult(planKey);
+            Result result = getLastResult(planKey);
             Date startTime = result.getBuildStartedTime();
             long duration = getAverageBuildDurationTime(planKey);
             DateTime startDate = new DateTime(startTime.getTime());
-            DateTime estimatedFinishTime = startDate.plus(duration);
+            DateTime estimatedFinishTime = startDate.plus(duration * 1000);
             return estimatedFinishTime.toDate();
         } catch (BambooResultNotFoundException e) {
             throw new BambooEstimatedFinishTimeNotFoundException("Can't find estimated finish time of plan:"
@@ -176,29 +181,16 @@ public class Bamboo {
     }
 
     private Result getLastResult(String planKey) throws BambooResultNotFoundException {
-        String resultsUrl = bambooUrlBuilder.getAllResultsUrl();
-        Results resultsNode;
         try {
-            resultsNode = client.resource(resultsUrl, Results.class);
+            int buildNumber = getLastResultNumber(planKey);
+            String resultUrl = bambooUrlBuilder.getResultUrl(planKey, buildNumber);
+            Result result = client.resource(resultUrl, Result.class);
+            return result;
+        } catch (BambooBuildNumberNotFoundException e) {
+            throw new BambooResultNotFoundException("Can't find last result of:" + planKey, e);
         } catch (ResourceNotFoundException e) {
-            throw new BambooResultNotFoundException("Can't find results at:" + resultsUrl, e);
+            throw new BambooResultNotFoundException("Can't find last result of:" + planKey, e);
         }
-        List<Results> resultsList = resultsNode.results;
-        for (Results results : resultsList) {
-            for (Result result : results.result) {
-                if (result.getKey().startsWith(planKey)) {
-                    String resultUrl = result.getLink().href;
-                    Result fullResult;
-                    try {
-                        fullResult = client.resource(resultUrl, Result.class);
-                    } catch (ResourceNotFoundException e) {
-                        throw new BambooResultNotFoundException("Can't find result at:" + resultUrl, e);
-                    }
-                    return fullResult;
-                }
-            }
-        }
-        throw new BambooResultNotFoundException("Can't find last result of plan:" + planKey);
     }
 
     private void checkPlanKey(String planKey) {
