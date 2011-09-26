@@ -95,7 +95,7 @@ public class ProjectService {
             public void run() {
                 LOG.debug("Running Project Updater task for project " + project);
                 try {
-                    int[] buildsToUpdate = buildProcess.updateStatusAndReturnBuildsToUpdate(project);
+                    String[] buildsToUpdate = buildProcess.updateStatusAndReturnBuildsToUpdate(project);
                     if (neverRun || buildsToUpdate.length != 0) {
                         try {
                             if (!neverRun) {
@@ -133,15 +133,15 @@ public class ProjectService {
                             }
 
                             try {
-                                List<Integer> buildNumbers = project.getBuildConnection().getBuildNumbers(projectId);
-                                project.setBuildNumbers(buildNumbers);
-                                buildProcess.updateLastNotBuildingNumber(project);
+                                List<String> buildIds = project.getBuildConnection().getBuildIds(projectId);
+                                project.setBuildId(buildIds);
+                                buildProcess.updateLastNotBuildingId(project);
                                 buildProcess.updatePreviousCompletedBuild(project);
                             } catch (Exception e) {
                                 LOG.warn("Can not update previous completed build for project " + project, e);
                             }
 
-                            for (int buildId : buildsToUpdate) {
+                            for (String buildId : buildsToUpdate) {
                                 buildProcess.updateBuild(project, buildId);
                             }
 
@@ -152,7 +152,7 @@ public class ProjectService {
                     }
 
                     // update capabilities
-                    if (project.getLastNotBuildingNumber() != 0) {
+                    if (project.getLastNotBuildingId() != null) {
                         for (SoftwareProjectId softwareProjectId : project.getCapabilities().keySet()) {
                             //TODO we currently be able to manage last build only 
                             if (!project.getLastBuild().getCapabilitiesResults().containsKey(softwareProjectId)) {
@@ -165,7 +165,7 @@ public class ProjectService {
                                             .put(softwareProjectId, capabilitiesResult);
 
                                     if (capability instanceof MetricCapability) {
-                                        if (project.getLastNotBuildingNumber() != 0) {
+                                        if (project.getLastNotBuildingId() != null) {
                                             QualityResult qualityResult = ((MetricCapability) capability)
                                                     .analyzeQuality(softwareProjectId,
                                                             MetricCapabilityProcess.metrics);
@@ -174,12 +174,12 @@ public class ProjectService {
                                     }
 
                                     if (capability instanceof TestCapability) {
-                                        if (project.getLastNotBuildingNumber() != 0) {
+                                        if (project.getLastNotBuildingId() != null) {
                                             TestResult testResult = ((TestCapability) capability)
                                                     .analyzeUnitTests(softwareProjectId);
                                             capabilitiesResult.setUnitTestResult(testResult);
                                         }
-                                        if (project.getLastNotBuildingNumber() != 0) {
+                                        if (project.getLastNotBuildingId() != null) {
                                             TestResult testResult = ((TestCapability) capability)
                                                     .analyzeIntegrationTests(softwareProjectId);
                                             capabilitiesResult.setIntegrationTestResult(testResult);

@@ -16,15 +16,15 @@
 
 package net.awired.visuwall.api.exception;
 
-public class BuildNumberNotFoundException extends Exception {
+public class BuildIdNotFoundException extends Exception {
 
     private static final long serialVersionUID = -1518312632648478201L;
 
-    public BuildNumberNotFoundException(Exception e) {
+    public BuildIdNotFoundException(Exception e) {
         super(e);
     }
 
-    public BuildNumberNotFoundException(String msg) {
+    public BuildIdNotFoundException(String msg) {
         super(msg);
     }
 

@@ -91,11 +91,11 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	
 
 	this._updateLastBuild = function(project) {		
-		if (project.lastNotBuildingNumber == 0) {
+		if (project.lastNotBuildingId == 0) {
 			$this.wallView.displayNew(project.id);
 			return;
 		}
-		var lastBuild = project.builds[project.lastNotBuildingNumber]; 
+		var lastBuild = project.builds[project.lastNotBuildingId]; 
 	
 		
 		var stateFunction = 'display' + lastBuild.state.toLowerCase().ucfirst();
@@ -129,7 +129,7 @@ visuwall.ctrl.process.Wall = function(wallName) {
 					lastBuild.integrationTestResult.skipCount);
 		}
 		
-		if (project.previousCompletedBuildNumber != 0) {
+		if (project.previousCompletedBuildId != 0) {
 //			var failDiff = lastBuild.unitTestResult.failCount - previousBuild.unitTestResult.failCount;
 //			var successDiff = lastBuild.unitTestResult.totalCount - previousBuild.unitTestResult.totalCount;
 //			var skipDiff = lastBuild.unitTestResult.skipCount - previousBuild.unitTestResult.skipCount;
@@ -138,8 +138,8 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	};
 
 	this._updateTimers = function(project, build) {
-		if (project.lastNotBuildingNumber != 0) {
-			var build = project.builds[project.lastNotBuildingNumber]; 
+		if (project.lastNotBuildingId != 0) {
+			var build = project.builds[project.lastNotBuildingId]; 
 			var finishDate = new Date(build.startTime + build.duration);
 			$this.wallView.updateAgo(project.id, finishDate);
 			$this.wallView.updateBuildTime(project.id, build.duration);

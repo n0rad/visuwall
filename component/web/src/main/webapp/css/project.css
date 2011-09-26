@@ -97,6 +97,7 @@ SPAN.lastUpdate {
 	line-height: 1.1em;
 	font-weight: bold;
 	text-shadow: black 2px 2px 5px;
+	white-space: nowrap;
 }
 
 .project .inlineInfo {

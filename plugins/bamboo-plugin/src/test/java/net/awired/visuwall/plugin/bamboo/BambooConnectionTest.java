@@ -110,7 +110,7 @@ public class BambooConnectionTest {
     public void should_return_empty_list_because_there_is_no_commiter_infos_in_rest_api() throws Exception {
         SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
 
-        List<Commiter> buildCommiters = bambooConnection.getBuildCommiters(softwareProjectId, 0);
+        List<Commiter> buildCommiters = bambooConnection.getBuildCommiters(softwareProjectId, "");
 
         assertTrue(buildCommiters.isEmpty());
     }

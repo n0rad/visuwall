@@ -85,7 +85,7 @@ public class WallController {
         List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
         for (Project project : wall.getProjects()) {
             ProjectStatus projectStatus = new ProjectStatus(project);
-            projectStatus.setLastBuildId(project.getLastNotBuildingNumber());
+            projectStatus.setLastBuildId(project.getLastNotBuildingId());
             try {
                 projectStatus.setBuilding(project.getLastBuild().isBuilding());
                 projectStatus.setLastUpdate(project.getLastUpdate());

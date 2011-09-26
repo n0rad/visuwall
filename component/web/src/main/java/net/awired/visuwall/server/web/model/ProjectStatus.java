@@ -24,7 +24,7 @@ public final class ProjectStatus {
     private final String id;
     private boolean building;
     private int buildingTimeleftSecond;
-    private int lastBuildId;
+    private String lastBuildId;
     private Date lastUpdate;
 
     public ProjectStatus(Project project) {
@@ -49,11 +49,11 @@ public final class ProjectStatus {
         this.building = building;
     }
 
-    public int getLastBuildId() {
+    public String getLastBuildId() {
         return lastBuildId;
     }
 
-    public void setLastBuildId(int lastBuildId) {
+    public void setLastBuildId(String lastBuildId) {
         this.lastBuildId = lastBuildId;
     }
 

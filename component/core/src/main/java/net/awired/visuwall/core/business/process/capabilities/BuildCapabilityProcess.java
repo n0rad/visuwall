@@ -24,7 +24,7 @@ import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
+import net.awired.visuwall.api.exception.BuildIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.core.business.domain.Build;
 import net.awired.visuwall.core.business.domain.Project;
@@ -44,30 +44,30 @@ public class BuildCapabilityProcess {
     TaskScheduler scheduler;
 
     public void updatePreviousCompletedBuild(Project project) throws ProjectNotFoundException {
-        List<Integer> buildNumbers = project.getBuildNumbers();
-        if (buildNumbers.size() < 2) {
+        List<String> buildIds = project.getBuildId();
+        if (buildIds.size() < 2) {
             // with only a build there is no previous completed build
             return;
         }
         try {
             int skip = 1;
             if (project.getLastBuild().isBuilding()) {
-                if (buildNumbers.size() < 3) {
+                if (buildIds.size() < 3) {
                     // first build is building so we do not have enough builds to have a previous completed 
                     return;
                 }
                 skip = 2;
             }
 
-            ListIterator<Integer> reverseBuildIt = project.getBuildNumbers().listIterator(
-                    project.getBuildNumbers().size());
+            ListIterator<String> reverseBuildIt = project.getBuildId().listIterator(
+                    project.getBuildId().size());
 
             for (int i = 0; reverseBuildIt.hasPrevious(); i++) {
-                Integer buildNumber = reverseBuildIt.previous();
+                String buildId = reverseBuildIt.previous();
                 if (i < skip) {
                     continue;
                 }
-                Build build = getCreatedWithContentBuild(project, buildNumber);
+                Build build = getCreatedWithContentBuild(project, buildId);
                 if (build == null) {
                     continue;
                 }
@@ -76,7 +76,7 @@ public class BuildCapabilityProcess {
                     continue;
                 }
 
-                project.setPreviousCompletedBuildNumber(build.getBuildNumber());
+                project.setPreviousCompletedBuildId(build.getBuildId());
                 break;
             }
         } catch (BuildNotFoundException e) {
@@ -84,68 +84,63 @@ public class BuildCapabilityProcess {
         }
     }
 
-    private Build getCreatedWithContentBuild(Project project, int buildNumber) throws ProjectNotFoundException {
-        Build build = project.getBuilds().get(buildNumber);
+    private Build getCreatedWithContentBuild(Project project, String buildId) throws ProjectNotFoundException {
+        Build build = project.getBuilds().get(buildId);
         if (build == null) {
-            updateBuild(project, buildNumber);
-            build = project.getBuilds().get(buildNumber);
+            updateBuild(project, buildId);
+            build = project.getBuilds().get(buildId);
             if (build == null) {
-                LOG.warn("Build " + buildNumber + " not found after update for project " + project);
+                LOG.warn("Build " + buildId + " not found after update for project " + project);
             }
         }
         return build;
     }
 
-    public void updateLastNotBuildingNumber(Project project) throws ProjectNotFoundException {
-        ListIterator<Integer> reverseBuildIt = project.getBuildNumbers().listIterator(
-                project.getBuildNumbers().size());
+    public void updateLastNotBuildingId(Project project) throws ProjectNotFoundException {
+        ListIterator<String> reverseBuildIt = project.getBuildId().listIterator(
+                project.getBuildId().size());
         while (reverseBuildIt.hasPrevious()) {
-            Integer buildNumber = reverseBuildIt.previous();
-            Build build = getCreatedWithContentBuild(project, buildNumber);
+            String buildId = reverseBuildIt.previous();
+            Build build = getCreatedWithContentBuild(project, buildId);
             if (build.isBuilding()) {
                 continue;
             }
-            project.setLastNotBuildingNumber(buildNumber);
+            project.setLastNotBuildingId(buildId);
             break;
         }
     }
 
-    public void updateBuild(Project project, Integer buildNumber) throws ProjectNotFoundException {
+    public void updateBuild(Project project, String buildId) throws ProjectNotFoundException {
         try {
-            LOG.info("Updating build " + buildNumber + " for project " + project);
+            LOG.info("Updating build " + buildId + " for project " + project);
             SoftwareProjectId projectId = project.getBuildProjectId();
-            Build build = project.findCreatedBuild(buildNumber);
+            Build build = project.findCreatedBuild(buildId);
 
-            State state = project.getBuildConnection().getBuildState(projectId, buildNumber);
+            State state = project.getBuildConnection().getBuildState(projectId, buildId);
             build.setState(state);
 
             // buildTime
-            BuildTime buildTime = project.getBuildConnection().getBuildTime(projectId, buildNumber);
+            BuildTime buildTime = project.getBuildConnection().getBuildTime(projectId, buildId);
             build.setStartTime(buildTime.getStartTime());
             build.setDuration(buildTime.getDuration());
             
-            List<Commiter> commiters = project.getBuildConnection().getBuildCommiters(projectId, buildNumber);
+            List<Commiter> commiters = project.getBuildConnection().getBuildCommiters(projectId, buildId);
             build.setCommiters(commiters);
             
-            //            // projectSoftwareId
-            //            ProjectResourceId projectResourceId = new ProjectResourceId();
-            //            projectResourceId.setDate(new Date(build.getStartTime().getTime() + build.getDuration()));
-            //            projectResourceId.setBuildNumber(build.getBuildNumber());
-
         } catch (BuildNotFoundException e) {
-            LOG.warn("BuildNumber " + buildNumber + " not found in software to update project " + project, e);
-            //TODO remove buildNumber from buildNumbers as its removed from software
+            LOG.warn("BuildId " + buildId + " not found in software to update project " + project, e);
+            //TODO remove buildId from buildIds as its removed from software
         }
     }
 
-    public int[] updateStatusAndReturnBuildsToUpdate(Project project) throws ProjectNotFoundException,
+    public String[] updateStatusAndReturnBuildsToUpdate(Project project) throws ProjectNotFoundException,
             BuildNotFoundException {
         try {
-            int lastBuildNumber = project.getBuildConnection().getLastBuildNumber(project.getBuildProjectId());
+            String lastBuildId = project.getBuildConnection().getLastBuildId(project.getBuildProjectId());
             boolean lastBuilding = project.getBuildConnection().isBuilding(project.getBuildProjectId(),
-                    lastBuildNumber);
+                    lastBuildId);
 
-            int previousLastBuildNumber = project.getLastBuildNumber();
+            String previousLastBuildId = project.getLastBuildId();
             boolean previousBuilding = false;
             try {
                 previousBuilding = project.getLastBuild().isBuilding();
@@ -153,51 +148,51 @@ public class BuildCapabilityProcess {
                 LOG.debug("No lastBuild found to say the project was building before refresh " + project);
             }
 
-            Build lastBuild = project.findCreatedBuild(lastBuildNumber);
+            Build lastBuild = project.findCreatedBuild(lastBuildId);
 
             try {
-                if (previousBuilding == false && lastBuilding == false && previousLastBuildNumber != lastBuildNumber) {
-                    LOG.info("there is an already finished new build {}  {}", lastBuildNumber, project);
-                    return new int[] { lastBuildNumber };
+                if (previousBuilding == false && lastBuilding == false && previousLastBuildId != lastBuildId) {
+                    LOG.info("there is an already finished new build {}  {}", lastBuildId, project);
+                    return new String[] { lastBuildId };
                 }
                 if (previousBuilding == false && lastBuilding == true) {
-                    LOG.info("Build {} is now running {}", lastBuild.getBuildNumber(), project);
+                    LOG.info("Build {} is now running {}", lastBuild.getBuildId(), project);
                     Runnable finishTimeRunner = getEstimatedFinishTimeRunner(project, lastBuild);
                     scheduler.schedule(finishTimeRunner, new Date());
                 }
                 if (previousBuilding == true && lastBuilding == true) {
-                    if (previousLastBuildNumber != lastBuildNumber) {
+                    if (previousLastBuildId != lastBuildId) {
                         LOG.info("Previous build {} is over and a new build {} is already running {}", new Object[] {
-                                previousLastBuildNumber, lastBuildNumber, project });
-                        project.getBuilds().get(previousLastBuildNumber).setEstimatedFinishTime(null);
-                        project.getBuilds().get(previousLastBuildNumber).setBuilding(false);
+                                previousLastBuildId, lastBuildId, project });
+                        project.getBuilds().get(previousLastBuildId).setEstimatedFinishTime(null);
+                        project.getBuilds().get(previousLastBuildId).setBuilding(false);
                         Runnable finishTimeRunner = getEstimatedFinishTimeRunner(project, lastBuild);
                         scheduler.schedule(finishTimeRunner, new Date());
-                        return new int[] { previousLastBuildNumber };
+                        return new String[] { previousLastBuildId };
                     }
                     // building is still running
                 }
 
                 if (previousBuilding == true && lastBuilding == false) {
                     // build is over
-                    project.getBuilds().get(previousLastBuildNumber).setEstimatedFinishTime(null);
-                    project.getBuilds().get(previousLastBuildNumber).setBuilding(false);
-                    if (lastBuildNumber != previousLastBuildNumber) {
+                    project.getBuilds().get(previousLastBuildId).setEstimatedFinishTime(null);
+                    project.getBuilds().get(previousLastBuildId).setBuilding(false);
+                    if (lastBuildId != previousLastBuildId) {
                         LOG.info("previous build {} is over and a new build {} is also over {}", new Object[] {
-                                previousLastBuildNumber, lastBuildNumber, project });
-                        return new int[] { previousLastBuildNumber, lastBuildNumber };
+                                previousLastBuildId, lastBuildId, project });
+                        return new String[] { previousLastBuildId, lastBuildId };
                     }
-                    LOG.info("Previous build {} is over and no new build ", previousLastBuildNumber, project);
-                    return new int[] { previousLastBuildNumber };
+                    LOG.info("Previous build {} is over and no new build ", previousLastBuildId, project);
+                    return new String[] { previousLastBuildId };
                 }
             } finally {
                 lastBuild.setBuilding(lastBuilding);
-                project.setLastBuildNumber(lastBuildNumber);
+                project.setLastBuildId(lastBuildId);
             }
-        } catch (BuildNumberNotFoundException e) {
-            LOG.debug("No last build number found to update project " + project);
+        } catch (BuildIdNotFoundException e) {
+            LOG.debug("No last build id found to update project " + project);
         }
-        return new int[] {};
+        return new String[] {};
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -214,7 +209,7 @@ public class BuildCapabilityProcess {
                 LOG.debug("Running getEstimatedFinishTime for project " + project);
                 try {
                     Date estimatedFinishTime = project.getBuildConnection().getEstimatedFinishTime(
-                            project.getBuildProjectId(), build.getBuildNumber());
+                            project.getBuildProjectId(), build.getBuildId());
                     if (estimatedFinishTime != null) {
                         build.setEstimatedFinishTime(estimatedFinishTime);
                     }

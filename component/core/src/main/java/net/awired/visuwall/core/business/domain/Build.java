@@ -33,7 +33,7 @@ import com.google.common.base.Objects.ToStringHelper;
 
 public class Build {
 
-    private final int buildNumber;
+    private final String buildId;
     private boolean building;
     private State state = State.UNKNOWN;
     private List<Commiter> commiters = new ArrayList<Commiter>();
@@ -42,8 +42,8 @@ public class Build {
     private Date estimatedFinishTime;
     private final Map<SoftwareProjectId, CapabilitiesResult> capabilitiesResults = new HashMap<SoftwareProjectId, CapabilitiesResult>();
 
-    public Build(int buildNumber) {
-        this.buildNumber = buildNumber;
+    public Build(String buildId) {
+        this.buildId = buildId;
     }
 
     //TODO move and redo it with dates
@@ -127,14 +127,14 @@ public class Build {
         this.state = state;
     }
 
-    public int getBuildNumber() {
-        return buildNumber;
+    public String getBuildId() {
+        return buildId;
     }
 
     @Override
     public String toString() {
         ToStringHelper toString = Objects.toStringHelper(this) //
-                .add("builderNumber", buildNumber) //
+                .add("buildId", buildId) //
                 .add("state", state) //
                 .add("commiters", commiters) //
                 .add("duration", duration) //
@@ -154,7 +154,7 @@ public class Build {
     public boolean equals(Object o) {
         if (o instanceof Build) {
             Build b = (Build) o;
-            return Objects.equal(buildNumber, b.buildNumber) && //
+            return Objects.equal(buildId, b.buildId) && //
                     Objects.equal(commiters, b.commiters) && //
                     Objects.equal(duration, b.duration) && //
                     Objects.equal(startTime, b.startTime) && //
@@ -165,7 +165,7 @@ public class Build {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(duration, buildNumber, startTime);
+        return Objects.hashCode(duration, buildId, startTime);
     }
 
     public boolean isBuilding() {

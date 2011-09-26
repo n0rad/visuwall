@@ -42,7 +42,7 @@ import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
+import net.awired.visuwall.api.exception.BuildIdNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
@@ -373,7 +373,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
         return qualityMetric;
     }
 
-    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
+    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildId)
             throws BuildNotFoundException, ProjectNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
@@ -383,50 +383,57 @@ public class SonarConnection implements MetricCapability, TestCapability {
         return buildTime;
     }
 
-    public List<Integer> getBuildNumbers(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
+    @Deprecated // NOT USED
+    public List<Integer> getBuildIds(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         return Arrays.asList(1);
     }
 
-    public State getBuildState(SoftwareProjectId softwareProjectId, Integer buildNumber)
+    
+    @Deprecated // NOT USED
+    public State getBuildState(SoftwareProjectId softwareProjectId, Integer buildId)
             throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         return State.SUCCESS;
     }
 
-    public Date getEstimatedFinishTime(SoftwareProjectId softwareProjectId, Integer buildNumber)
+    @Deprecated // NOT USED
+    public Date getEstimatedFinishTime(SoftwareProjectId softwareProjectId, Integer buildId)
             throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         return new Date();
     }
 
-    public boolean isBuilding(SoftwareProjectId softwareProjectId, Integer buildNumber)
+    @Deprecated // NOT USED
+    public boolean isBuilding(SoftwareProjectId softwareProjectId, Integer buildId)
             throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         return false;
     }
 
-    public int getLastBuildNumber(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
-            BuildNumberNotFoundException {
+    @Deprecated // NOT USED
+    public int getLastBuildId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
+            BuildIdNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         return 1;
     }
 
-    public List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, Integer buildNumber)
+    @Deprecated // NOT USED
+    public List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, Integer buildId)
             throws BuildNotFoundException, ProjectNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
-        checkBuildNumber(buildNumber);
+        checkBuildId(buildId);
         return new ArrayList<Commiter>();
     }
 
-    private void checkBuildNumber(int buildNumber) {
-        Preconditions.checkArgument(buildNumber >= 0, "buildNumber must be >= 0");
+    private void checkBuildId(int buildId) {
+        Preconditions.checkNotNull(buildId, "buildId is mandatory");
     }
 
     private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {

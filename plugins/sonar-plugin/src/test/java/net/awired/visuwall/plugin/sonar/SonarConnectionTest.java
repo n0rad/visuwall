@@ -237,8 +237,8 @@ public class SonarConnectionTest {
     @Test
     public void build_numbers_should_not_be_empty() throws ProjectNotFoundException {
         SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
-        List<Integer> buildNumbers = sonar.getBuildNumbers(softwareProjectId);
-        assertFalse(buildNumbers.isEmpty());
+        List<Integer> buildIds = sonar.getBuildIds(softwareProjectId);
+        assertFalse(buildIds.isEmpty());
     }
 
     @Test
@@ -267,8 +267,8 @@ public class SonarConnectionTest {
     @Test
     public void last_build_number_should_always_be_1() throws Exception {
         SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
-        int lastBuildNumber = sonar.getLastBuildNumber(softwareProjectId);
-        assertEquals(1, lastBuildNumber);
+        int lastBuildId = sonar.getLastBuildId(softwareProjectId);
+        assertEquals(1, lastBuildId);
     }
 
     @Test

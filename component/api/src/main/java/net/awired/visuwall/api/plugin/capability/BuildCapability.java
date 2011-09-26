@@ -23,7 +23,7 @@ import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
+import net.awired.visuwall.api.exception.BuildIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BuildCapability extends BasicCapability {
@@ -32,82 +32,82 @@ public interface BuildCapability extends BasicCapability {
      * Return a list of commiters
      * 
      * @param softwareProjectId
-     * @param buildNumber
+     * @param buildId
      * @return
      * @throws BuildNotFoundException
      * @throws ProjectNotFoundException
      */
-    List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, Integer buildNumber)
+    List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, String buildId)
             throws BuildNotFoundException, ProjectNotFoundException;
 
     /**
      * Return build time information
      * 
      * @param softwareProjectId
-     * @param buildNumber
+     * @param buildId
      * @return
      * @throws ProjectNotFoundException
      */
-    BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildNumber) throws BuildNotFoundException,
+    BuildTime getBuildTime(SoftwareProjectId softwareProjectId, String buildId) throws BuildNotFoundException,
             ProjectNotFoundException;
 
     /**
-     * Returns the build numbers order by integer ASC
+     * Returns the build ids order by integer ASC
      * Pending builds not included.
      * 
      * @param softwareProjectId
      * @return
      * @throws ProjectNotFoundException
      */
-    List<Integer> getBuildNumbers(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException;
+    List<String> getBuildIds(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException;
 
     /**
      * Builds are in a certain state which may vary between software You'll have to try to associate them with common
      * States
      * 
      * @param projectId
-     * @param buildNumber
+     * @param buildId
      * @return
      * @throws ProjectNotFoundException
      * @throws BuildNotFoundException
      */
-    State getBuildState(SoftwareProjectId projectId, Integer buildNumber) throws ProjectNotFoundException,
+    State getBuildState(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException;
 
     /**
      * If a project is building, plugin can calculate the estimated finish time
      * 
      * @param projectId
-     * @param buildNumber
+     * @param buildId
      * @return
      * @throws ProjectNotFoundException
      * @throws BuildNotFoundException
      */
-    Date getEstimatedFinishTime(SoftwareProjectId projectId, Integer buildNumber) throws ProjectNotFoundException,
+    Date getEstimatedFinishTime(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException;
 
     /**
      * Return true if project is building
      * 
      * @param projectId
-     * @param buildNumber
+     * @param buildId
      * @return
      * @throws ProjectNotFoundException
      * @throws BuildNotFoundException
      */
-    boolean isBuilding(SoftwareProjectId projectId, Integer buildNumber) throws ProjectNotFoundException,
+    boolean isBuilding(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException;
 
     /**
-     * Return the last build number of a project
+     * Return the last build id of a project
      * Pending builds not included.
      * 
      * @param softwareProjectId
-     * @return
+     * @return buildId
      * @throws ProjectNotFoundException
-     * @throws BuildNumberNotFoundException
+     * @throws BuildIdNotFoundException
      */
-    int getLastBuildNumber(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
-            BuildNumberNotFoundException;
+    String getLastBuildId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
+            BuildIdNotFoundException;
 
 }

@@ -56,10 +56,10 @@ public class JenkinsConnectionTest {
 
         SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
-        assertTrue(jenkinsConnection.isBuilding(projectId, 0));
+        assertTrue(jenkinsConnection.isBuilding(projectId, ""));
 
         projectId = new SoftwareProjectId("project2");
-        assertFalse(jenkinsConnection.isBuilding(projectId, 0));
+        assertFalse(jenkinsConnection.isBuilding(projectId, ""));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class JenkinsConnectionTest {
 
         SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
-        assertEquals(date, jenkinsConnection.getEstimatedFinishTime(projectId, 0));
+        assertEquals(date, jenkinsConnection.getEstimatedFinishTime(projectId, ""));
     }
 
     @Test
@@ -78,9 +78,9 @@ public class JenkinsConnectionTest {
 
         SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
-        int lastBuildNumber = jenkinsConnection.getLastBuildNumber(projectId);
+        String lastBuildId = jenkinsConnection.getLastBuildId(projectId);
 
-        assertEquals(5, lastBuildNumber);
+        assertEquals("5", lastBuildId);
     }
 
     @Test(expected = IllegalStateException.class)

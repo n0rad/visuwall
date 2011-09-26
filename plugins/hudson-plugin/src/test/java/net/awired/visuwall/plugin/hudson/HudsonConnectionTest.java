@@ -58,10 +58,10 @@ public class HudsonConnectionTest {
 
         SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
-        assertTrue(hudsonConnection.isBuilding(projectId, 0));
+        assertTrue(hudsonConnection.isBuilding(projectId, ""));
 
         projectId = new SoftwareProjectId("project2");
-        assertFalse(hudsonConnection.isBuilding(projectId, 0));
+        assertFalse(hudsonConnection.isBuilding(projectId, ""));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class HudsonConnectionTest {
 
         SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
-        assertEquals(date, hudsonConnection.getEstimatedFinishTime(projectId, 0));
+        assertEquals(date, hudsonConnection.getEstimatedFinishTime(projectId, ""));
     }
 
     @Test
@@ -80,9 +80,9 @@ public class HudsonConnectionTest {
 
         SoftwareProjectId projectId = new SoftwareProjectId("project1");
 
-        int lastBuildNumber = hudsonConnection.getLastBuildNumber(projectId);
+        String lastBuildId = hudsonConnection.getLastBuildId(projectId);
 
-        assertEquals(5, lastBuildNumber);
+        assertEquals("5", lastBuildId);
     }
 
     @Test

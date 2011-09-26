@@ -44,12 +44,12 @@ public class Project implements Comparable<Project> {
     private String name;
     private String description;
 
-    private List<Integer> buildNumbers;
-    protected Map<Integer, Build> builds = new HashMap<Integer, Build>();
+    private List<String> buildIds;
+    protected Map<String, Build> builds = new HashMap<String, Build>();
 
-    private int lastBuildNumber;
-    private int lastNotBuildingNumber;
-    private int previousCompletedBuildNumber;
+    private String lastBuildId;
+    private String lastNotBuildingId;
+    private String previousCompletedBuildId;
     private Date lastUpdate;
 
     @Transient
@@ -77,19 +77,19 @@ public class Project implements Comparable<Project> {
         updateProjectTask.cancel(true);
     }
 
-    public Build findCreatedBuild(Integer buildNumber) {
-        Build build = builds.get(buildNumber);
+    public Build findCreatedBuild(String buildId) {
+        Build build = builds.get(buildId);
         if (build == null) {
-            LOG.debug("Build with id " + lastBuildNumber + " not found and will be created for project " + this);
-            build = new Build(buildNumber);
-            this.builds.put(buildNumber, build);
+            LOG.debug("Build with id " + lastBuildId + " not found and will be created for project " + this);
+            build = new Build(buildId);
+            this.builds.put(buildId, build);
         }
         return build;
     }
 
     @JsonIgnore
     public Build getLastBuild() throws BuildNotFoundException {
-        Build lastBuild = builds.get(lastBuildNumber);
+        Build lastBuild = builds.get(lastBuildId);
         if (lastBuild == null) {
             throw new BuildNotFoundException("No last build found for project " + this);
         }
@@ -184,44 +184,44 @@ public class Project implements Comparable<Project> {
         return name;
     }
 
-    public void setLastBuildNumber(int lastBuildNumber) {
-        this.lastBuildNumber = lastBuildNumber;
+    public void setLastBuildId(String lastBuildId) {
+        this.lastBuildId = lastBuildId;
     }
 
-    public int getLastBuildNumber() {
-        return lastBuildNumber;
+    public String getLastBuildId() {
+        return lastBuildId;
     }
 
-    public Map<Integer, Build> getBuilds() {
+    public Map<String, Build> getBuilds() {
         return builds;
     }
 
-    public void setBuilds(Map<Integer, Build> builds) {
+    public void setBuilds(Map<String, Build> builds) {
         this.builds = builds;
     }
 
-    public void setBuildNumbers(List<Integer> buildNumbers) {
-        this.buildNumbers = buildNumbers;
+    public void setBuildId(List<String> buildId) {
+        this.buildIds = buildId;
     }
 
-    public List<Integer> getBuildNumbers() {
-        return buildNumbers;
+    public List<String> getBuildId() {
+        return buildIds;
     }
 
-    public void setLastNotBuildingNumber(int lastNotBuildingNumber) {
-        this.lastNotBuildingNumber = lastNotBuildingNumber;
+    public void setLastNotBuildingId(String lastNotBuildingId) {
+        this.lastNotBuildingId = lastNotBuildingId;
     }
 
-    public int getLastNotBuildingNumber() {
-        return lastNotBuildingNumber;
+    public String getLastNotBuildingId() {
+        return lastNotBuildingId;
     }
 
-    public void setPreviousCompletedBuildNumber(int previousCompletedBuildNumber) {
-        this.previousCompletedBuildNumber = previousCompletedBuildNumber;
+    public void setPreviousCompletedBuildId(String previousCompletedBuildId) {
+        this.previousCompletedBuildId = previousCompletedBuildId;
     }
 
-    public int getPreviousCompletedBuildNumber() {
-        return previousCompletedBuildNumber;
+    public String getPreviousCompletedBuildId() {
+        return previousCompletedBuildId;
     }
 
     @JsonIgnore

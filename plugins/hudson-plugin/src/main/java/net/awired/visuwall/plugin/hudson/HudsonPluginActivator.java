@@ -19,6 +19,7 @@ public class HudsonPluginActivator implements BundleActivator {
 	
 	@Override
 	public void start(BundleContext context) throws Exception {
+		System.out.println("salut!");
 		registration = context.registerService(VisuwallPlugin.class.getName(), HudsonPlugin, new Properties());
 	}
 
