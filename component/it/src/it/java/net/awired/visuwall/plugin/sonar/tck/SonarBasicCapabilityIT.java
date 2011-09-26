@@ -41,7 +41,7 @@ public class SonarBasicCapabilityIT implements BasicCapabilityTCK {
     @Override
     @Test
     public void should_find_all_projects_ids() {
-        Map<String, SoftwareProjectId> projects = sonar.listSoftwareProjectIds();
+        Map<SoftwareProjectId, String> projects = sonar.listSoftwareProjectIds();
         assertFalse(projects.isEmpty());
     }
 

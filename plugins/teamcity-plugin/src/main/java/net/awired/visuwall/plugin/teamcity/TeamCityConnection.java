@@ -135,7 +135,6 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
         }
     }
 
-
     @Override
     public Map<SoftwareProjectId, String> listSoftwareProjectIds() {
         checkConnected();
@@ -183,6 +182,7 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
         throw new ProjectNotFoundException("not implemented");
     }
 
+    
     @Override
     public boolean isBuilding(SoftwareProjectId softwareProjectId, String buildId)
             throws ProjectNotFoundException, BuildNotFoundException {
@@ -191,14 +191,11 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
         checkBuildId(buildId);
         try {
             String projectId = softwareProjectId.getProjectId();
-            TeamCityBuild build = teamCity.findBuild(projectId, buildId);
-            Date finishDate = DateAdapter.parseDate(build.getFinishDate());
-            return finishDate.after(new Date());
-        } catch (TeamCityProjectNotFoundException e) {
-            throw new ProjectNotFoundException("Can't find project for software project id:" + softwareProjectId, e);
+            TeamCityBuild build = teamCity.findRunningBuild();
+            TeamCityBuildType buildType = build.getBuildType();
+            return projectId.equals(buildType.getProjectId()) && buildId.equals(build.getNumber());
         } catch (TeamCityBuildNotFoundException e) {
-            throw new BuildNotFoundException("Can't find build #" + buildId + " for software project id:"
-                    + softwareProjectId, e);
+            return false;
         }
     }
 
@@ -207,13 +204,18 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
             BuildIdNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
-        List<String> buildIds = getBuildIds(softwareProjectId);
-        if (buildIds.isEmpty()) {
-            throw new BuildIdNotFoundException("Can't find build numbers for software project id : "
-                    + softwareProjectId);
+        try {
+            TeamCityBuild runningBuild = teamCity.findRunningBuild();
+            return runningBuild.getNumber();
+        } catch (TeamCityBuildNotFoundException e) {
+            List<String> buildIds = getBuildIds(softwareProjectId);
+            if (buildIds.isEmpty()) {
+                throw new BuildIdNotFoundException("Can't find build numbers for software project id : "
+                        + softwareProjectId);
+            }
+            String lastBuildId = Collections.max(buildIds);
+            return lastBuildId;
         }
-        String lastBuildId = Collections.max(buildIds);
-        return lastBuildId;
     }
 
     @Override
@@ -303,6 +305,7 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
 
     @Override
     public TestResult analyzeUnitTests(SoftwareProjectId softwareProjectId) {
+        checkConnected();
         TestResult result = new TestResult();
         try {
             String lastBuildId = getLastBuildId(softwareProjectId);
@@ -328,6 +331,7 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
 
     @Override
     public TestResult analyzeIntegrationTests(SoftwareProjectId softwareProjectId) {
+        checkConnected();
         return new TestResult();
     }
 

@@ -43,7 +43,7 @@ public class HudsonBasicCapabilityIT implements BasicCapabilityTCK {
     @Override
     @Test
     public void should_find_all_projects_ids() {
-        Map<String, SoftwareProjectId> projects = hudson.listSoftwareProjectIds();
+        Map<SoftwareProjectId, String> projects = hudson.listSoftwareProjectIds();
         assertFalse(projects.isEmpty());
     }
 

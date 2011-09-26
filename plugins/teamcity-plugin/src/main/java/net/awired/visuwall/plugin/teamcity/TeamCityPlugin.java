@@ -17,9 +17,8 @@
 package net.awired.visuwall.plugin.teamcity;
 
 import java.net.URL;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.clients.teamcity.resource.TeamCityServer;
@@ -35,10 +34,18 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
     @VisibleForTesting
     GenericSoftwareClient genericSoftwareClient = new GenericSoftwareClient("guest", "");
 
+    @Deprecated
     @Override
     public TeamCityConnection getConnection(String url, Map<String, String> properties) {
         TeamCityConnection connectionPlugin = new TeamCityConnection();
         connectionPlugin.connect(url);
+        return connectionPlugin;
+    }
+
+    @Override
+    public TeamCityConnection getConnection(URL url, Map<String, String> properties) {
+        TeamCityConnection connectionPlugin = new TeamCityConnection();
+        connectionPlugin.connect(url.toString());
         return connectionPlugin;
     }
 
@@ -94,10 +101,9 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
                 .add("version", getVersion()).toString();
     }
 
-	@Override
-	public Map<String, String> getPropertiesWithDefaultValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Map<String, String> getPropertiesWithDefaultValue() {
+        return new HashMap<String, String>();
+    }
 
 }

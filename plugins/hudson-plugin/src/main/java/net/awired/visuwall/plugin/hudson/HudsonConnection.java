@@ -18,6 +18,8 @@ package net.awired.visuwall.plugin.hudson;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,6 +57,8 @@ import com.google.common.base.Preconditions;
 public final class HudsonConnection implements BuildCapability, ViewCapability, TestCapability {
 
     private static final Logger LOG = LoggerFactory.getLogger(HudsonConnection.class);
+
+    private static final Collection<String> DEFAULT_VIEWS = Arrays.asList("Tous", "All");
 
     @VisibleForTesting
     Hudson hudson;
@@ -151,7 +155,9 @@ public final class HudsonConnection implements BuildCapability, ViewCapability, 
     @Override
     public List<String> findViews() {
         checkConnected();
-        return hudson.findViews();
+        List<String> views = hudson.findViews();
+        views.removeAll(DEFAULT_VIEWS);
+        return views;
     }
 
     @Override
@@ -183,9 +189,7 @@ public final class HudsonConnection implements BuildCapability, ViewCapability, 
         return new ArrayList<SoftwareProjectId>(projectIds);
     }
 
-    //TODO remove
-    @Deprecated
-    public List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
+    private List<SoftwareProjectId> findSoftwareProjectIdsByNames(List<String> names) {
         checkConnected();
         Preconditions.checkNotNull(names, "names is mandatory");
         List<SoftwareProjectId> projectIds = new ArrayList<SoftwareProjectId>();

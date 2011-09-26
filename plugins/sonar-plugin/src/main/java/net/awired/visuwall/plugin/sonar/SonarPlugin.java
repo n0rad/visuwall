@@ -17,9 +17,8 @@
 package net.awired.visuwall.plugin.sonar;
 
 import java.net.URL;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-
 import javax.ws.rs.core.MediaType;
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
@@ -46,10 +45,18 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
         sonarConnectionFactory = new SonarConnectionFactory();
     }
 
+    @Deprecated
     @Override
     public SonarConnection getConnection(String url, Map<String, String> properties) throws ConnectionException {
         Preconditions.checkNotNull(url, "url is mandatory");
         SonarConnection sonarConnection = sonarConnectionFactory.create(url);
+        return sonarConnection;
+    }
+
+    @Override
+    public SonarConnection getConnection(URL url, Map<String, String> properties) throws ConnectionException {
+        Preconditions.checkNotNull(url, "url is mandatory");
+        SonarConnection sonarConnection = sonarConnectionFactory.create(url.toString());
         return sonarConnection;
     }
 
@@ -106,10 +113,9 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
         return false;
     }
 
-	@Override
-	public Map<String, String> getPropertiesWithDefaultValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Map<String, String> getPropertiesWithDefaultValue() {
+        return new HashMap<String, String>();
+    }
 
 }

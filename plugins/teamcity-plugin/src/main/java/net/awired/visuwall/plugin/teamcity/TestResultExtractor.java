@@ -1,6 +1,11 @@
 package net.awired.visuwall.plugin.teamcity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 class TestResultExtractor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TestResultExtractor.class);
 
     public static int extractFailed(String statusText) {
         String key = "failed";
@@ -11,14 +16,19 @@ class TestResultExtractor {
         String[] split = statusText.split(",");
         for (String s : split) {
             if (s.contains(key)) {
-                String t = s.split(":")[1].trim();
-                int indexOfBlank = t.indexOf(" ");
-                if (indexOfBlank != -1) {
-                    String substring = t.substring(0, indexOfBlank);
-                    int parseInt = Integer.parseInt(substring);
-                    return parseInt;
+                String[] split2 = s.split(":");
+                if (split.length > 1) {
+                    String t = split2[1].trim();
+                    int indexOfBlank = t.indexOf(" ");
+                    if (indexOfBlank != -1) {
+                        String substring = t.substring(0, indexOfBlank);
+                        int parseInt = Integer.parseInt(substring);
+                        return parseInt;
+                    } else {
+                        return Integer.parseInt(t);
+                    }
                 } else {
-                    return Integer.parseInt(t);
+                    LOG.warn("statusText is invalid: '" + statusText + "'");
                 }
             }
         }

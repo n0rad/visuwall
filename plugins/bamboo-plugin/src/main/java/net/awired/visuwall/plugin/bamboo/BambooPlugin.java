@@ -17,9 +17,8 @@
 package net.awired.visuwall.plugin.bamboo;
 
 import java.net.URL;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
@@ -28,10 +27,18 @@ import com.google.common.base.Preconditions;
 
 public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
 
+    @Deprecated
     @Override
     public BambooConnection getConnection(String url, Map<String, String> properties) {
         BambooConnection connection = new BambooConnection();
         connection.connect(url);
+        return connection;
+    }
+
+    @Override
+    public BambooConnection getConnection(URL url, Map<String, String> properties) {
+        BambooConnection connection = new BambooConnection();
+        connection.connect(url.toString());
         return connection;
     }
 
@@ -70,9 +77,8 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
                 .add("version", getVersion()).toString();
     }
 
-	@Override
-	public Map<String, String> getPropertiesWithDefaultValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Map<String, String> getPropertiesWithDefaultValue() {
+        return new HashMap<String, String>();
+    }
 }
