@@ -119,6 +119,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<dependency>
 			<groupId>aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<version>1.5.3</version>
@@ -297,7 +302,7 @@
 						</goals>
 						<configuration>
 							<tasks>
-								<delete dir="${basedir}/src/main/webapp/WEB-INF/karaf"/>
+								<delete dir="${basedir}/src/main/webapp/WEB-INF/karaf" />
 							</tasks>
 						</configuration>
 					</execution>
@@ -373,8 +378,7 @@
 								</goals>
 								<configuration>
 									<tasks>
-										<copy
-											todir="${basedir}/src/main/webapp/WEB-INF/karaf">
+										<copy todir="${basedir}/src/main/webapp/WEB-INF/karaf">
 											<fileset
 												dir="${project.build.directory}/${project.build.finalName}/WEB-INF/karaf" />
 										</copy>
