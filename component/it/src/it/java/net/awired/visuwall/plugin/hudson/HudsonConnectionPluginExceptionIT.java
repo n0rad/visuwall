@@ -34,18 +34,18 @@ public class HudsonConnectionPluginExceptionIT {
     @Test(expected = ProjectNotFoundException.class)
     public void should_throw_exception_when_searching_estimated_finish_time_of_inexistant_project() throws Exception {
         SoftwareProjectId projectId = new SoftwareProjectId("");
-        hudsonConnectionPlugin.getEstimatedFinishTime(projectId, 0);
+        hudsonConnectionPlugin.getEstimatedFinishTime(projectId, "0");
     }
 
     @Test(expected = ProjectNotFoundException.class)
     public void should_throw_exception_when_searching_last_build_number_of_inexistant_project() throws Exception {
         SoftwareProjectId projectId = new SoftwareProjectId("");
-        hudsonConnectionPlugin.getLastBuildNumber(projectId);
+        hudsonConnectionPlugin.getLastBuildId(projectId);
     }
 
     @Test(expected = ProjectNotFoundException.class)
     public void should_throw_exception_when_searching_is_building_of_inexistant_project() throws Exception {
         SoftwareProjectId projectId = new SoftwareProjectId("");
-        hudsonConnectionPlugin.isBuilding(projectId, 0);
+        hudsonConnectionPlugin.isBuilding(projectId, "0");
     }
 }

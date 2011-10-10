@@ -28,8 +28,8 @@ import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.exception.BuildIdNotFoundException;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.BuildNumberNotFoundException;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
@@ -51,8 +51,8 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
     @Test
     public void should_get_last_build_number() throws Exception {
         SoftwareProjectId projectId = struts();
-        int number = jenkins.getLastBuildNumber(projectId);
-        assertEquals(4, number);
+        String number = jenkins.getLastBuildId(projectId);
+        assertEquals("4", number);
     }
 
     @Override
@@ -62,10 +62,10 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
         assertEquals(State.FAILURE, getLastBuildState("errorproject"));
     }
 
-    private State getLastBuildState(String jobName) throws ProjectNotFoundException, BuildNumberNotFoundException,
+    private State getLastBuildState(String jobName) throws ProjectNotFoundException, BuildIdNotFoundException,
             BuildNotFoundException {
         SoftwareProjectId projectId = new SoftwareProjectId(jobName);
-        int buildNumber = jenkins.getLastBuildNumber(projectId);
+        String buildNumber = jenkins.getLastBuildId(projectId);
         State state = jenkins.getBuildState(projectId, buildNumber);
         return state;
     }
@@ -74,7 +74,7 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
     @Test
     public void should_get_is_building() throws Exception {
         SoftwareProjectId softwareProjectId = struts();
-        int buildNumber = jenkins.getLastBuildNumber(softwareProjectId);
+        String buildNumber = jenkins.getLastBuildId(softwareProjectId);
         boolean isBuilding = jenkins.isBuilding(softwareProjectId, buildNumber);
         assertFalse(isBuilding);
     }
@@ -83,7 +83,7 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
     @Test
     public void should_get_estimated_date() throws Exception {
         SoftwareProjectId softwareProjectId = struts();
-        int buildNumber = jenkins.getLastBuildNumber(softwareProjectId);
+        String buildNumber = jenkins.getLastBuildId(softwareProjectId);
         Date date = jenkins.getEstimatedFinishTime(softwareProjectId, buildNumber);
         assertNotNull(date);
     }
@@ -92,18 +92,18 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
     @Test
     public void should_get_build_numbers() throws Exception {
         SoftwareProjectId softwareProjectId = struts();
-        List<Integer> buildNumbers = jenkins.getBuildNumbers(softwareProjectId);
-        assertEquals(1, buildNumbers.get(0).intValue());
-        assertEquals(2, buildNumbers.get(1).intValue());
-        assertEquals(3, buildNumbers.get(2).intValue());
-        assertEquals(4, buildNumbers.get(3).intValue());
+        List<String> buildNumbers = jenkins.getBuildIds(softwareProjectId);
+        assertEquals("1", buildNumbers.get(0));
+        assertEquals("2", buildNumbers.get(1));
+        assertEquals("3", buildNumbers.get(2));
+        assertEquals("4", buildNumbers.get(3));
     }
 
     @Override
     @Test
     public void should_get_build_time() throws Exception {
         SoftwareProjectId softwareProjectId = struts();
-        int buildNumber = jenkins.getLastBuildNumber(softwareProjectId);
+        String buildNumber = jenkins.getLastBuildId(softwareProjectId);
         BuildTime buildTime = jenkins.getBuildTime(softwareProjectId, buildNumber);
         assertNotNull(buildTime);
     }
@@ -114,7 +114,7 @@ public class JenkinsBuildCapabilityIT implements BuildCapabilityTCK {
         List<String> commiterNames = Arrays.asList("mcucchiara", "lukaszlenart", "jogep", "rgielen");
 
         SoftwareProjectId softwareProjectId = struts2();
-        List<Commiter> commiters = jenkins.getBuildCommiters(softwareProjectId, 4);
+        List<Commiter> commiters = jenkins.getBuildCommiters(softwareProjectId, "4");
 
         assertEquals(commiterNames.size(), commiters.size());
 
