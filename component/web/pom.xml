@@ -42,7 +42,7 @@
 
 		<dependency>
 			<groupId>net.awired.ajsl</groupId>
-			<artifactId>ajsl-web-java</artifactId>
+			<artifactId>ajsl-web</artifactId>
 			<version>${ajsl.version}</version>
 		</dependency>
 
@@ -66,7 +66,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.awired.bootstrap</groupId>
-			<artifactId>bootstrap</artifactId>
+			<artifactId>bootstrap-java</artifactId>
 			<version>${bootstrap.version}</version>
 			<scope>provided</scope>
 		</dependency>
