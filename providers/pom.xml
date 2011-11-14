@@ -16,12 +16,12 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Clients</name>
-	<description>Clients for TeamCity, Bamboo, Sonar,Jenkins, Hudson</description>
+	<description>Clients for TeamCity, Bamboo, Sonar, Jenkins, Hudson</description>
 
 	<parent>
 		<groupId>net.awired.parent.parent-java</groupId>
 		<artifactId>parent-java-bundle</artifactId>
-		<version>1.12-SNAPSHOT</version>
+		<version>1.13</version>
 	</parent>
 
 	<modules>
@@ -69,6 +69,8 @@
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>
+
+
 	</dependencyManagement>
 
 	<build>
@@ -116,17 +118,43 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											aspectj-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.3.1,)
+										</versionRange>
+										<goals>
+											<goal>compile</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
-
-
-	<!-- distribution -->
-	<distributionManagement>
-		<site>
-			<id>awired-web</id>
-			<name>awired web deployment</name>
-			<url>dav:http://projs.awired.net/visuwall</url>
-		</site>
-	</distributionManagement>
 
 	<!-- plugin repos -->
 	<pluginRepositories>
@@ -134,11 +162,6 @@
 			<id>maven2-repository.java.net</id>
 			<name>Java.net Repository for Maven</name>
 			<url>http://download.java.net/maven/2/</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>awired</id>
-			<name>Awired public</name>
-			<url>http://mvn.awired.net/nexus/content/groups/public/</url>
 		</pluginRepository>
 	</pluginRepositories>
 
@@ -154,12 +177,6 @@
 			<id>maven2-repository.java.net</id>
 			<name>Java.net Repository for Maven</name>
 			<url>http://download.java.net/maven/2/</url>
-		</repository>
-
-		<repository>
-			<id>awired</id>
-			<name>Awired public</name>
-			<url>http://mvn.awired.net/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
 
