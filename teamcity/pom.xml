@@ -23,7 +23,6 @@
 	<groupId>net.awired.clients</groupId>
 	<artifactId>teamcity</artifactId>
 	<name>TeamCity Client</name>
-	<version>1.0-SNAPSHOT</version>
 
 	<parent>
 		<groupId>net.awired</groupId>

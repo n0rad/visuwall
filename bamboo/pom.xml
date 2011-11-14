@@ -22,7 +22,6 @@
 	<groupId>net.awired.clients</groupId>
 	<artifactId>bamboo</artifactId>
 	<name>Bamboo Client</name>
-	<version>1.0-SNAPSHOT</version>
 
 	<parent>
 		<groupId>net.awired</groupId>
