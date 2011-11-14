@@ -20,8 +20,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.awired.clients</groupId>
-	<artifactId>bamboo</artifactId>
-	<name>Bamboo Client</name>
+	<artifactId>clients-bamboo</artifactId>
+	<name>Clients - Bamboo</name>
 
 	<parent>
 		<groupId>net.awired</groupId>

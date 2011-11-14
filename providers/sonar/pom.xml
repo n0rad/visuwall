@@ -20,8 +20,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.awired.clients</groupId>
-	<artifactId>sonar</artifactId>
-	<name>Sonar Client</name>
+	<artifactId>clients-sonar</artifactId>
+	<name>Clients - Sonar</name>
 
 	<parent>
 		<groupId>net.awired</groupId>
