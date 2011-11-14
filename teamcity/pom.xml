@@ -21,8 +21,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.awired.clients</groupId>
-	<artifactId>teamcity</artifactId>
-	<name>TeamCity Client</name>
+	<artifactId>clients-teamcity</artifactId>
+	<name>Clients - TeamCity</name>
 
 	<parent>
 		<groupId>net.awired</groupId>

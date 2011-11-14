@@ -20,8 +20,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.awired.clients</groupId>
-	<artifactId>jenkins</artifactId>
-	<name>Jenkins Client</name>
+	<artifactId>clients-jenkins</artifactId>
+	<name>Clients - Jenkins</name>
 
 	<parent>
 		<groupId>net.awired</groupId>
