@@ -173,7 +173,7 @@ visuwall.theme.def.view.wallView = new function() {
 		for ( var i = 0; i < commiters.length; i++) {
 			var commiter = commiters[i];
 			commiterString += '<li><img src="'
-					+ get_gravatar(commiter.email, 250)
+					+ get_gravatar(commiter.email == null ? "" : commiter.email, 250)
 					+ '" style="height:100%" /></li>';
 		}
 		$this._getElement(projectId, 'ul.commiters').html($(commiterString))

@@ -38,8 +38,10 @@ visuwall.ctrl.process.Wall = function(wallName) {
 		$this.wallService.status($this.wallName, function(projectsStatus) {
 			var projectDone = [];
 
-			var updateFunc = function(status, projectsStatus) {
-				projectDone.push(status.id);
+			var updateFunc = function(status) {
+				if(status != null) {
+					projectDone.push(status.id);
+				}
 
 				// looking for project to delete only when all done
 				if (projectDone.length == projectsStatus.length) {
@@ -63,7 +65,7 @@ visuwall.ctrl.process.Wall = function(wallName) {
 								stat.id, function(newProjectData) {
 									$this.addProject(newProjectData);
 									$this.wallView.setLastUpdate(newProjectData.id, status.lastUpdate);				
-									updateFunc(stat, projectsStatus);
+									updateFunc(stat);
 								});
 					} else {
 						$this._updateBuilding(status.id, status.building, status.buildingTimeleftSecond);
@@ -75,10 +77,14 @@ visuwall.ctrl.process.Wall = function(wallName) {
 								});
 							}
 						});
-						updateFunc(stat, projectsStatus);
+						updateFunc(stat);
 					}
 				});
 			}
+			if (projectsStatus.length == 0) {
+				updateFunc(null);
+			}
+			
 		});
 	};
 
@@ -91,42 +97,42 @@ visuwall.ctrl.process.Wall = function(wallName) {
 	
 
 	this._updateLastBuild = function(project) {		
-		if (project.lastNotBuildingId == 0) {
+		if (!project.lastNotBuildingId) {
 			$this.wallView.displayNew(project.id);
 			return;
 		}
-		var lastBuild = project.builds[project.lastNotBuildingId]; 
-	
+		var lastNotBuild = project.builds[project.lastNotBuildingId];
+		var lastBuild = project.builds[project.lastBuildId];
 		
-		var stateFunction = 'display' + lastBuild.state.toLowerCase().ucfirst();
+		var stateFunction = 'display' + lastNotBuild.state.toLowerCase().ucfirst();
 		$this.wallView[stateFunction](project.id);
 
 		
-		$this._updateBuilding(project.id, project.building, project.finishTime);
+		$this._updateBuilding(project.id, lastBuild.building, lastBuild.estimatedFinishTime);
 		$this._updateTimers(project, lastBuild);
-		$this.wallView.updateCommiters(project.id, lastBuild.commiters);
-		if (lastBuild.qualityResult) {
-			$this.wallView.updateQuality(project.id, lastBuild.qualityResult.measures);
+		$this.wallView.updateCommiters(project.id, lastNotBuild.commiters);
+		if (lastNotBuild.qualityResult) {
+			$this.wallView.updateQuality(project.id, lastNotBuild.qualityResult.measures);
 		}
 		
-		if (lastBuild.unitTestResult) {
-			$this.wallView.updateUTCoverage(project.id, lastBuild.unitTestResult.coverage);
+		if (lastNotBuild.unitTestResult) {
+			$this.wallView.updateUTCoverage(project.id, lastNotBuild.unitTestResult.coverage);
 		}
-		if (lastBuild.unitTestResult) {
+		if (lastNotBuild.unitTestResult) {
 			$this.wallView.updateUT(project.id,
-					lastBuild.unitTestResult.failCount,
-					lastBuild.unitTestResult.passCount,
-					lastBuild.unitTestResult.skipCount);
+					lastNotBuild.unitTestResult.failCount,
+					lastNotBuild.unitTestResult.passCount,
+					lastNotBuild.unitTestResult.skipCount);
 		}
 
-		if (lastBuild.integrationTestResult) {
-			$this.wallView.updateITCoverage(project.id, lastBuild.integrationTestResult.coverage);
+		if (lastNotBuild.integrationTestResult) {
+			$this.wallView.updateITCoverage(project.id, lastNotBuild.integrationTestResult.coverage);
 		}
-		if (lastBuild.integrationTestResult) {
+		if (lastNotBuild.integrationTestResult) {
 			$this.wallView.updateIT(project.id,
-					lastBuild.integrationTestResult.failCount,
-					lastBuild.integrationTestResult.passCount,
-					lastBuild.integrationTestResult.skipCount);
+					lastNotBuild.integrationTestResult.failCount,
+					lastNotBuild.integrationTestResult.passCount,
+					lastNotBuild.integrationTestResult.skipCount);
 		}
 		
 		if (project.previousCompletedBuildId != 0) {
