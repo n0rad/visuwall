@@ -16,12 +16,17 @@
 
 package net.awired.clients.teamcity.resource;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
+
 import com.google.common.base.Objects;
 
 @XmlRootElement(name = "project")
@@ -46,8 +51,9 @@ public class TeamCityProject {
     @XmlAttribute
     private boolean archived;
 
-    @XmlElement
-    private TeamCityBuildTypes buildTypes = new TeamCityBuildTypes();
+    @XmlElementWrapper(name = "buildTypes")
+    @XmlElements(value = { @XmlElement(name = "buildType") })
+    private List<TeamCityBuildType> buildTypes = new ArrayList<TeamCityBuildType>();
 
     public String getName() {
         return name;
@@ -98,10 +104,10 @@ public class TeamCityProject {
     }
 
     public List<TeamCityBuildType> getBuildTypes() {
-        return buildTypes.getBuildTypes();
+        return buildTypes;
     }
 
-    public void setBuildTypes(TeamCityBuildTypes buildTypes) {
+    public void setBuildTypes(List<TeamCityBuildType> buildTypes) {
         this.buildTypes = buildTypes;
     }
 
