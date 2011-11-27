@@ -16,8 +16,13 @@
 
 package net.awired.clients.teamcity.resource;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "build")
@@ -48,17 +53,25 @@ public class TeamCityBuild extends TeamCityAbstractBuild {
 
     private TeamCityAgent agent;
 
-    private TeamCityTags tags;
+    @XmlElementWrapper(name = "tags")
+    @XmlElements({ @XmlElement(name = "tag") })
+    private List<TeamCityTag> tags = new ArrayList<TeamCityTag>();
 
-    private TeamCityProperties properties;
+    @XmlElementWrapper(name = "properties")
+    @XmlElements(@XmlElement(name = "property"))
+    private List<TeamCityProperty> properties = new ArrayList<TeamCityProperty>();
 
-    private TeamCityRevisions revisions;
+    @XmlElementWrapper(name = "revisions")
+    @XmlElements(@XmlElement(name = "revision"))
+    private List<TeamCityRevision> revisions = new ArrayList<TeamCityRevision>();
 
     private TeamCityVcsRoot vcsRoot;
 
     private TeamCityChanges changes;
 
-    private TeamCityRelatedIssues relatedIssues;
+    @XmlElementWrapper(name = "relatedIssues")
+    @XmlElements({ @XmlElement(name = "relatedIssue") })
+    private List<TeamCityRelatedIssue> relatedIssues = new ArrayList<TeamCityRelatedIssue>();
 
     public boolean isPersonal() {
         return personal;
@@ -124,30 +137,6 @@ public class TeamCityBuild extends TeamCityAbstractBuild {
         this.agent = agent;
     }
 
-    public List<TeamCityTag> getTags() {
-        return tags.getTags();
-    }
-
-    public void setTags(TeamCityTags tags) {
-        this.tags = tags;
-    }
-
-    public List<TeamCityProperty> getProperties() {
-        return properties.getProperties();
-    }
-
-    public void setProperties(TeamCityProperties properties) {
-        this.properties = properties;
-    }
-
-    public List<TeamCityRevision> getRevisions() {
-        return revisions.getRevisions();
-    }
-
-    public void setRevision(TeamCityRevisions revisions) {
-        this.revisions = revisions;
-    }
-
     public TeamCityVcsRoot getVcsRoot() {
         return vcsRoot;
     }
@@ -164,14 +153,6 @@ public class TeamCityBuild extends TeamCityAbstractBuild {
         this.changes = changes;
     }
 
-    public List<TeamCityRelatedIssue> getRelatedIssues() {
-        return relatedIssues.getRelatedIssues();
-    }
-
-    public void setRelatedIssues(TeamCityRelatedIssues relatedIssues) {
-        this.relatedIssues = relatedIssues;
-    }
-
     public String getNumber() {
         return number;
     }
@@ -186,6 +167,38 @@ public class TeamCityBuild extends TeamCityAbstractBuild {
 
     public void setRunning(boolean running) {
         this.running = running;
+    }
+
+    public List<TeamCityProperty> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(List<TeamCityProperty> properties) {
+        this.properties = properties;
+    }
+
+    public List<TeamCityRevision> getRevisions() {
+        return revisions;
+    }
+
+    public void setRevisions(List<TeamCityRevision> revisions) {
+        this.revisions = revisions;
+    }
+
+    public List<TeamCityTag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<TeamCityTag> tags) {
+        this.tags = tags;
+    }
+
+    public List<TeamCityRelatedIssue> getRelatedIssues() {
+        return relatedIssues;
+    }
+
+    public void setRelatedIssues(List<TeamCityRelatedIssue> relatedIssues) {
+        this.relatedIssues = relatedIssues;
     }
 
 }

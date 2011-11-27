@@ -20,9 +20,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
 import net.awired.clients.common.Tests;
 import net.awired.clients.teamcity.exception.TeamCityProjectsNotFoundException;
 import net.awired.clients.teamcity.resource.TeamCityAgent;
@@ -38,6 +40,7 @@ import net.awired.clients.teamcity.resource.TeamCityRelatedIssue;
 import net.awired.clients.teamcity.resource.TeamCityRevision;
 import net.awired.clients.teamcity.resource.TeamCityTag;
 import net.awired.clients.teamcity.resource.TeamCityVcsRoot;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -46,8 +49,8 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class TeamCityITest {
 
-    private List<String> expectedProjectNames = Arrays.asList("mina", "zookeeper", "struts", "IT coverage",
-            "not_built");
+    private List<String> expectedProjectNames = Arrays
+            .asList("mina", "zookeeper", "struts", "IT coverage", "not_built");
     private int projectCount = expectedProjectNames.size();
 
     private static final String DATE_PATTERN = "\\d{8}T\\d{6}\\+\\d{4}";
@@ -70,7 +73,6 @@ public class TeamCityITest {
 
     @Test
     public void should_list_all_project_names() throws TeamCityProjectsNotFoundException {
-
         List<String> projectNames = teamcity.findProjectNames();
         assertEquals(expectedProjectNames.size(), projectNames.size());
         for (String expectedProjectName : expectedProjectNames) {
