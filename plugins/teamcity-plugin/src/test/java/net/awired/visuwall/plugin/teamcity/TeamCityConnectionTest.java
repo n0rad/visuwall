@@ -23,9 +23,11 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import net.awired.clients.teamcity.TeamCity;
 import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityProjectNotFoundException;
@@ -33,7 +35,6 @@ import net.awired.clients.teamcity.exception.TeamCityProjectsNotFoundException;
 import net.awired.clients.teamcity.resource.TeamCityBuild;
 import net.awired.clients.teamcity.resource.TeamCityBuildItem;
 import net.awired.clients.teamcity.resource.TeamCityBuildType;
-import net.awired.clients.teamcity.resource.TeamCityBuildTypes;
 import net.awired.clients.teamcity.resource.TeamCityBuilds;
 import net.awired.clients.teamcity.resource.TeamCityChange;
 import net.awired.clients.teamcity.resource.TeamCityProject;
@@ -44,6 +45,7 @@ import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -217,7 +219,7 @@ public class TeamCityConnectionTest {
 
         TeamCityBuildType buildType = new TeamCityBuildType();
 
-        TeamCityBuildTypes buildTypes = new TeamCityBuildTypes();
+        List<TeamCityBuildType> buildTypes = new ArrayList<TeamCityBuildType>();
         TeamCityProject project = new TeamCityProject();
         project.setBuildTypes(buildTypes);
         project.getBuildTypes().add(buildType);
