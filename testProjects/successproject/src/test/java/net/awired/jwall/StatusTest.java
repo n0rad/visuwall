@@ -28,7 +28,7 @@ public class StatusTest {
         String valueProp = System.getProperty("status");
         System.out.println("##########" + value);
         System.out.println("##########" + valueProp);
-        Thread.currentThread().sleep(60000L);
+        Thread.currentThread().sleep(30000L);
         //        if (value != null && !value.trim().equals("")) {
         //            System.out.println("status value :" + value);
         //            if ("fail".equals(value)) {
