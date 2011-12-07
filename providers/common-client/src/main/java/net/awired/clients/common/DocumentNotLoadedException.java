@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.exception;
+package net.awired.clients.common;
 
 public class DocumentNotLoadedException extends Exception {
 

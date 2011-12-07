@@ -11,7 +11,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>net.awired.clients</groupId>
+	<groupId>net.awired</groupId>
 	<artifactId>clients</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -68,9 +68,12 @@
 				<artifactId>common-client</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>net.awired.clients</groupId>
+				<artifactId>hudson-client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 		</dependencies>
-
-
 	</dependencyManagement>
 
 	<build>

@@ -17,6 +17,7 @@
 package net.awired.clients.teamcity;
 
 import java.net.URL;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,6 +82,10 @@ class TeamCityUrlBuilder {
 
     String getBuildList(String buildTypeId) {
         return build("/buildTypes/id:" + buildTypeId + "/builds");
+    }
+
+    String getPomUrl(int buildId) {
+        return build("/builds/id:" + buildId + "/pom.xml");
     }
 
 }

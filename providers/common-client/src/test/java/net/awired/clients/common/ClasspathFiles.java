@@ -14,19 +14,23 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson;
+package net.awired.clients.common;
 
-import org.junit.Assert;
-import org.junit.Test;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
-public class HudsonRootModuleFinderIT {
+public class ClasspathFiles {
 
-    @Test
-    public void should_find_synthesis_root_module_from_hudson() throws Exception {
-        HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(Urls.FLUXX_HUDSON);
-        HudsonRootModuleFinder hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
-        String artifactId = hudsonRootModuleFinder.findArtifactId("struts");
-        Assert.assertEquals("org.apache.struts:struts-parent", artifactId);
+    public static String getAbsolutePathFile(String fileName) {
+        try {
+            Class<?> clazz = ClasspathFiles.class;
+            ClassLoader classLoader = clazz.getClassLoader();
+            URL resource = classLoader.getResource(fileName);
+            URI uri = resource.toURI();
+            return "file://" + uri.getPath();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
-
 }

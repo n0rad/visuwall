@@ -23,15 +23,18 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.hudson.domain.HudsonBuild;
 import net.awired.clients.hudson.domain.HudsonJob;
 import net.awired.clients.hudson.exception.HudsonBuildNotFoundException;
 import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
+
 import org.joda.time.Minutes;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +44,6 @@ public class HudsonTest {
     GenericSoftwareClient client;
     HudsonFinder hudsonFinder;
     HudsonUrlBuilder hudsonUrlBuilder;
-    HudsonRootModuleFinder hudsonRootModuleFinder;
     Hudson hudson;
 
     @Before
@@ -49,17 +51,14 @@ public class HudsonTest {
         client = mock(GenericSoftwareClient.class);
         hudsonFinder = mock(HudsonFinder.class);
         hudsonUrlBuilder = mock(HudsonUrlBuilder.class);
-        hudsonRootModuleFinder = mock(HudsonRootModuleFinder.class);
         hudson = new Hudson("http://hudson.com");
         hudson.hudsonFinder = hudsonFinder;
-        hudson.hudsonRootModuleFinder = hudsonRootModuleFinder;
     }
 
     @Test
     public void should_find_all_projects() throws Exception {
         when(hudsonFinder.findJobNames()).thenReturn(Arrays.asList("project1"));
         when(hudsonFinder.findJob("project1")).thenReturn(new HudsonJob());
-        when(hudsonRootModuleFinder.findArtifactId(anyString())).thenReturn("artifactId");
 
         List<HudsonJob> projects = hudson.findAllProjects();
 
@@ -67,8 +66,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_not_fail_if_there_is_hudson_project_name_not_found_exception()
-            throws HudsonJobNotFoundException {
+    public void should_not_fail_if_there_is_hudson_project_name_not_found_exception() throws HudsonJobNotFoundException {
         when(hudsonFinder.findJobNames()).thenReturn(Arrays.asList("project1"));
         when(hudsonFinder.findJob("project1")).thenThrow(new HudsonJobNotFoundException("cause"));
         hudson.findAllProjects();
@@ -113,8 +111,7 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_get_estimated_finish_time_even_if_there_is_no_current_build()
-            throws HudsonJobNotFoundException {
+    public void should_get_estimated_finish_time_even_if_there_is_no_current_build() throws HudsonJobNotFoundException {
         HudsonJob hudsonProject = new HudsonJob();
         hudsonProject.setName("projectName");
         when(hudsonFinder.findJob("projectName")).thenReturn(hudsonProject);

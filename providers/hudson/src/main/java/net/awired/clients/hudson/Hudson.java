@@ -19,16 +19,20 @@ package net.awired.clients.hudson;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import net.awired.clients.common.Maven;
+import net.awired.clients.common.MavenIdNotFoundException;
 import net.awired.clients.hudson.domain.HudsonBuild;
 import net.awired.clients.hudson.domain.HudsonJob;
 import net.awired.clients.hudson.domain.HudsonTestResult;
-import net.awired.clients.hudson.exception.ArtifactIdNotFoundException;
 import net.awired.clients.hudson.exception.HudsonBuildNotFoundException;
 import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
 import net.awired.clients.hudson.exception.HudsonViewNotFoundException;
+
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -40,15 +44,17 @@ public class Hudson {
     HudsonFinder hudsonFinder;
 
     @VisibleForTesting
-    HudsonRootModuleFinder hudsonRootModuleFinder;
+    HudsonUrlBuilder hudsonUrlBuilder;
+
+    @VisibleForTesting
+    Maven maven = new Maven();
 
     private String url;
 
     public Hudson(String hudsonUrl) {
         this.url = hudsonUrl;
-        HudsonUrlBuilder hudsonUrlBuilder = new HudsonUrlBuilder(hudsonUrl);
+        hudsonUrlBuilder = new HudsonUrlBuilder(hudsonUrl);
         hudsonFinder = new HudsonFinder(hudsonUrlBuilder);
-        hudsonRootModuleFinder = new HudsonRootModuleFinder(hudsonUrlBuilder);
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize hudson with url " + hudsonUrl);
         }
@@ -168,8 +174,9 @@ public class Hudson {
         return jobNames;
     }
 
-    public String findArtifactId(String jobName) throws ArtifactIdNotFoundException {
-        return hudsonRootModuleFinder.findArtifactId(jobName);
+    public String findMavenId(String jobName) throws MavenIdNotFoundException {
+        String pomUrl = hudsonUrlBuilder.getPomUrl(jobName);
+        return maven.findMavenIdFrom(pomUrl);
     }
 
     public List<Integer> getBuildNumbers(String jobName) throws HudsonJobNotFoundException {
@@ -254,8 +261,8 @@ public class Hudson {
         Preconditions.checkNotNull(jobName, "jobName is mandatory");
     }
 
-    public HudsonTestResult findUnitTestResult(String jobName, int lastBuildNumber)
-            throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
+    public HudsonTestResult findUnitTestResult(String jobName, int lastBuildNumber) throws HudsonJobNotFoundException,
+            HudsonBuildNotFoundException {
         return hudsonFinder.findUnitTestResult(jobName, lastBuildNumber);
     }
 
