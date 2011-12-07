@@ -18,16 +18,18 @@ package net.awired.clients.jenkins;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+
 import net.awired.clients.common.Tests;
 import net.awired.clients.hudson.domain.HudsonBuild;
 import net.awired.clients.hudson.domain.HudsonCommiter;
 import net.awired.clients.hudson.domain.HudsonJob;
 import net.awired.clients.hudson.exception.HudsonBuildNotFoundException;
 import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
-import org.junit.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -74,11 +76,4 @@ public class JenkinsITest {
         assertEquals("alemaire@norad.fr", commiter.getEmail());
     }
 
-    @Test
-    public void should_find_synthesis_root_module_from_jenkins() throws Exception {
-        JenkinsUrlBuilder jenkinsUrlBuilder = new JenkinsUrlBuilder(jenkins.getUrl());
-        JenkinsRootModuleFinder jenkinsRootModuleFinder = new JenkinsRootModuleFinder(jenkinsUrlBuilder);
-        String artifactId = jenkinsRootModuleFinder.findArtifactId("struts 2 instable");
-        Assert.assertEquals("org.apache.struts:struts2-parent", artifactId);
-    }
 }

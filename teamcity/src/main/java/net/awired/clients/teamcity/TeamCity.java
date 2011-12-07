@@ -18,7 +18,10 @@ package net.awired.clients.teamcity;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import net.awired.clients.common.GenericSoftwareClient;
+import net.awired.clients.common.Maven;
+import net.awired.clients.common.MavenIdNotFoundException;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityBuildListNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
@@ -33,20 +36,21 @@ import net.awired.clients.teamcity.resource.TeamCityChange;
 import net.awired.clients.teamcity.resource.TeamCityChanges;
 import net.awired.clients.teamcity.resource.TeamCityProject;
 import net.awired.clients.teamcity.resource.TeamCityProjects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.annotations.VisibleForTesting;
+
 import com.google.common.base.Preconditions;
 
 public class TeamCity {
 
     private static final Logger LOG = LoggerFactory.getLogger(TeamCity.class);
 
-    @VisibleForTesting
-    GenericSoftwareClient client;
+    private GenericSoftwareClient client;
 
-    @VisibleForTesting
-    TeamCityUrlBuilder urlBuilder;
+    private TeamCityUrlBuilder urlBuilder;
+
+    private Maven maven = new Maven();
 
     public TeamCity() {
     }
@@ -81,8 +85,7 @@ public class TeamCity {
         Preconditions.checkNotNull(projectId, "projectId is mandatory");
         try {
             String projectUrl = urlBuilder.getProject(projectId);
-            TeamCityProject teamCityProject = client.resource(projectUrl, TeamCityProject.class);
-            return teamCityProject;
+            return client.resource(projectUrl, TeamCityProject.class);
         } catch (ResourceNotFoundException e) {
             throw new TeamCityProjectNotFoundException("Project #" + projectId + " has not been found", e);
         }
@@ -178,6 +181,23 @@ public class TeamCity {
             return teamCityBuild;
         } catch (ResourceNotFoundException e) {
             throw new TeamCityBuildNotFoundException("There is no running build", e);
+        }
+    }
+
+    public String findMavenId(String projectId) throws MavenIdNotFoundException {
+        try {
+            TeamCityProject project = findProject(projectId);
+            List<TeamCityBuildType> buildTypes = project.getBuildTypes();
+            TeamCityBuildType buildType = buildTypes.get(0);
+            TeamCityBuilds buildList = findBuildList(buildType.getId());
+            TeamCityBuildItem build = buildList.getBuilds().get(0);
+            int buildId = Integer.valueOf(build.getId());
+            String pomUrl = urlBuilder.getPomUrl(buildId);
+            return maven.findMavenIdFrom(pomUrl);
+        } catch (TeamCityProjectNotFoundException e) {
+            throw new MavenIdNotFoundException("Cannot find maven id for " + projectId, e);
+        } catch (TeamCityBuildListNotFoundException e) {
+            throw new MavenIdNotFoundException("Cannot find maven id for " + projectId, e);
         }
     }
 

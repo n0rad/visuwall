@@ -1,5 +1,5 @@
 /**
- *     Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com>
+ *     Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -14,14 +14,18 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.exception;
+package net.awired.clients.common;
 
-public class ArtifactIdNotFoundException extends Exception {
+public class MavenIdNotFoundException extends Exception {
 
-    private static final long serialVersionUID = 6187422971413955095L;
+    private static final long serialVersionUID = 1869112629963801100L;
 
-    public ArtifactIdNotFoundException(String message, Throwable t) {
-        super(message, t);
+    public MavenIdNotFoundException(String msg) {
+        super(msg);
+    }
+
+    public MavenIdNotFoundException(String msg, Throwable t) {
+        super(msg, t);
     }
 
 }

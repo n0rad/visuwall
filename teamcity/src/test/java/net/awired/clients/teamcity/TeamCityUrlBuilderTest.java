@@ -17,6 +17,7 @@
 package net.awired.clients.teamcity;
 
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 public class TeamCityUrlBuilderTest {
@@ -71,5 +72,11 @@ public class TeamCityUrlBuilderTest {
     public void should_create_valid_change_url() {
         String changeUrl = builder.getChange("3");
         assertEquals(TEAM_CITY_URL + "/app/rest/changes/id:3", changeUrl);
+    }
+
+    @Test
+    public void should_create_pom_url() {
+        String pomUrl = builder.getPomUrl(26);
+        assertEquals(TEAM_CITY_URL + "/app/rest/builds/id:26/pom.xml", pomUrl);
     }
 }

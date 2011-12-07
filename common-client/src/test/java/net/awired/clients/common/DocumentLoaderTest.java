@@ -14,12 +14,10 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.loader;
+package net.awired.clients.common;
 
 import static org.junit.Assert.assertNotNull;
-import net.awired.clients.hudson.exception.DocumentNotLoadedException;
-import net.awired.clients.hudson.loader.DocumentLoader;
-import net.awired.clients.hudson.util.ClasspathFiles;
+
 import org.junit.Test;
 import org.w3c.dom.Document;
 

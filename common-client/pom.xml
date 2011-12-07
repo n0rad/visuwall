@@ -12,8 +12,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.awired.clients</groupId>
-	<artifactId>clients-common</artifactId>
-	<name>Clients - Common</name>
+	<artifactId>common-client</artifactId>
+	<name>Common</name>
 
 	<parent>
 		<groupId>net.awired</groupId>
