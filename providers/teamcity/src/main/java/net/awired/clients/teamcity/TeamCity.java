@@ -28,6 +28,7 @@ import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityChangesNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityProjectNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityProjectsNotFoundException;
+import net.awired.clients.teamcity.resource.TeamCityAbstractBuild;
 import net.awired.clients.teamcity.resource.TeamCityBuild;
 import net.awired.clients.teamcity.resource.TeamCityBuildItem;
 import net.awired.clients.teamcity.resource.TeamCityBuildType;
@@ -125,7 +126,7 @@ public class TeamCity {
                 return build;
             }
         }
-        throw new TeamCityBuildNotFoundException("Can't find build #" + buildNumber + "of software project id "
+        throw new TeamCityBuildNotFoundException("Can't find build #" + buildNumber + " of software project id "
                 + projectId);
     }
 
@@ -186,12 +187,7 @@ public class TeamCity {
 
     public String findMavenId(String projectId) throws MavenIdNotFoundException {
         try {
-            TeamCityProject project = findProject(projectId);
-            List<TeamCityBuildType> buildTypes = project.getBuildTypes();
-            TeamCityBuildType buildType = buildTypes.get(0);
-            TeamCityBuilds buildList = findBuildList(buildType.getId());
-            TeamCityBuildItem build = buildList.getBuilds().get(0);
-            int buildId = Integer.valueOf(build.getId());
+            int buildId = Integer.valueOf(findLastBuild(projectId).getId());
             String pomUrl = urlBuilder.getPomUrl(buildId);
             return maven.findMavenIdFrom(pomUrl);
         } catch (TeamCityProjectNotFoundException e) {
@@ -199,6 +195,16 @@ public class TeamCity {
         } catch (TeamCityBuildListNotFoundException e) {
             throw new MavenIdNotFoundException("Cannot find maven id for " + projectId, e);
         }
+    }
+
+    private TeamCityAbstractBuild findLastBuild(String projectId) throws TeamCityProjectNotFoundException,
+            TeamCityBuildListNotFoundException {
+        TeamCityProject project = findProject(projectId);
+        List<TeamCityBuildType> buildTypes = project.getBuildTypes();
+        TeamCityBuildType buildType = buildTypes.get(0);
+        TeamCityBuilds buildList = findBuildList(buildType.getId());
+        TeamCityBuildItem build = buildList.getBuilds().get(0);
+        return build;
     }
 
     private void checkProjectId(String projectId) {
