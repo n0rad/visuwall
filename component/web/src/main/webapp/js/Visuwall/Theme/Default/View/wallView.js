@@ -118,6 +118,10 @@ define(['jquery', //
 				$this._runResize($('LI.project', $this.table).length - 1);
 				$this._getElement(projectId).fadeOut("slow").remove();
 			};
+			
+			this.removeAllProjects = function() {
+				$('LI.project', $this.table).remove();
+			};
 
 			this.setCountdown = function(projectId, finishDate) {
 				$this._hideQuality(projectId);

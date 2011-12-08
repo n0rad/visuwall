@@ -8,6 +8,9 @@ define(['Visuwall/Process/WallProcess'], function(WallProcess) {
 		this.currentWallUpdater;
 
 		this.showWall = function(wallName) {
+			if ($this.currentWall) {
+				$this.currentWall.close();
+			}
 			$this.currentWall = new WallProcess(wallName);
 		};
 

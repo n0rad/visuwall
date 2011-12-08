@@ -49,8 +49,20 @@ define(['jquery', //
 		if (jsData.init.wallNames.length == 0) {
 			$.history.queryBuilder().addController('wall/create').load();
 		} else {
-			$('#wallSelector #wallSelect').val(jsData.init.wallNames[0]).change();
-		//	$.history.queryBuilder().addController('wall',  jsData.init.wallNames[0]).load();
+			var wallNames = jsData.init.wallNames;
+			var queryBuilder = $.history.queryBuilder();
+			var flag = false;
+			for (var i = 0; i < wallNames.length; i++) {
+				if (queryBuilder.contains('wall', wallNames[i])) {
+					$('#wallSelector #wallSelect').val(jsData.init.wallNames[i]).change();
+					flag = true;
+					break;
+					//	$.history.queryBuilder().addController('wall',  jsData.init.wallNames[0]).load();					
+				}
+			}
+			if (!flag) {
+				$.history.queryBuilder().addController('wall',  jsData.init.wallNames[0]).load();				
+			}
 		}
 
 	};
