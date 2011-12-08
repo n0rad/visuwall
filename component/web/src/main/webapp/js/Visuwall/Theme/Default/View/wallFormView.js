@@ -1,9 +1,10 @@
 define(['jquery', //
         'curl', //
         'Ajsl/event', //
+        'Ajsl/view', //
         'Visuwall/Service/pluginService', //
         'Visuwall/Service/wallService' //
-        ], function($, curl, event, pluginService, wallService) {
+        ], function($, curl, event, view, pluginService, wallService) {
 	'use strict';
 	
 	var wallFormEvent = new function() {
@@ -47,8 +48,8 @@ define(['jquery', //
 							var newContent = $(contents[contents.length - 2])
 									.clone();
 
-							ajsl.view.incrementFormIndexes(newContent);
-							ajsl.view.resetFormValues(newContent);
+							view.incrementFormIndexes(newContent);
+							view.resetFormValues(newContent);
 
 							sliderInit($('DIV.projectFinderDelaySecondSlider', newContent), 'projectFinderDelaySecond');
 							$('INPUT:regex(id,softwareAccesses.*\.projectFinderDelaySecond)', newContent).change(function() {

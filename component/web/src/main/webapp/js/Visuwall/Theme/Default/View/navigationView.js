@@ -2,7 +2,7 @@ define(['jquery', //
         'Visuwall/Theme/Default/View/wallFormView', //
         'Visuwall/Service/wallService', //
         'Ajsl/event', //
-        'Ajsl/View', //
+        'Ajsl/view', //
         ], function($, wallFormView, wallService, event, view) {
 	"use strict";
 	
@@ -103,14 +103,13 @@ define(['jquery', //
 		};
 
 		this['#wallSelector #wallSelect|change'] = function() {
-			var wallCtrlUrl = 'wall/' + $('#wallSelector #wallSelect').val();
-			$.history.queryBuilder().addController(wallCtrlUrl).load();
+			$.history.queryBuilder().addController('wall', $('#wallSelector #wallSelect').val()).load();
 		};
 
 		this['#wallSelector #edit|click'] = function() {
 			var wallId = $('#wallSelector #wallSelect').val();
 			if (wallId) {
-				$.history.queryBuilder().addController('wall/edit/' + wallId)
+				$.history.queryBuilder().addController('wall/edit', wallId)
 						.load();
 			}
 		};
@@ -147,7 +146,7 @@ define(['jquery', //
 		this.displayEditForm = function(htmlData, formData) {
 			var domObject = $("#modal").html(htmlData);
 			$this._displayForm(domObject, "Wall configuration", 'wall/edit');		
-			new view().rebuildFormRec(domObject, formData, wallFormView);
+			view.rebuildFormRec(domObject, formData, wallFormView);
 		};
 		
 		this.displayCreationForm = function(htmlData) {

@@ -16,8 +16,9 @@
 
 define(['jquery', //
         'Ajsl/Dispatcher', //
+        'Visuwall/Theme/Default/View/navigationView', //
         'js!ajsl-utils.js', //
-        ], function($, Dispatcher, event, navigationView) {
+        ], function($, Dispatcher, navigationView) {
 	"use strict";
 	
 	return function(jsData) {		
@@ -41,13 +42,15 @@ define(['jquery', //
 		
 		var dispatcher = new Dispatcher({modules : 'Visuwall/Command'});
 
-		$.history.init(dispatcher.dispatch, {unescape : true, ctrls : 'bad value'});
+		$.history.init(dispatcher.dispatch, {unescape : true});
 		
+		navigationView.replaceWallList(jsData.init.wallNames);
+
 		if (jsData.init.wallNames.length == 0) {
 			$.history.queryBuilder().addController('wall/create').load();
 		} else {
 			$('#wallSelector #wallSelect').val(jsData.init.wallNames[0]).change();
-			$.history.queryBuilder().addController('wall/' + jsData.init.wallNames[0]).load();
+		//	$.history.queryBuilder().addController('wall',  jsData.init.wallNames[0]).load();
 		}
 
 	};
