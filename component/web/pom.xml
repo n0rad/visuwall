@@ -191,24 +191,24 @@
 		<finalName>visuwall</finalName>
 		<plugins>
 
-			<plugin>
-				<groupId>com.github.searls</groupId>
-				<artifactId>jasmine-maven-plugin</artifactId>
-				<version>1.0.2-beta-5</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<preloadSources>
-						<source>${project.basedir}/src/test/lib/curl.js</source>
-					</preloadSources>
-					<jsSrcDir>${project.basedir}/src/main/webapp/js</jsSrcDir>
-				</configuration>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>com.github.searls</groupId> -->
+<!-- 				<artifactId>jasmine-maven-plugin</artifactId> -->
+<!-- 				<version>1.0.2-beta-5</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<goals> -->
+<!-- 							<goal>test</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 				<configuration> -->
+<!-- 					<preloadSources> -->
+<!-- 						<source>${project.basedir}/src/test/lib/curl.js</source> -->
+<!-- 					</preloadSources> -->
+<!-- 					<jsSrcDir>${project.basedir}/src/main/webapp/js</jsSrcDir> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 
 
 			<plugin>

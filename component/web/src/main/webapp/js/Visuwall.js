@@ -17,9 +17,7 @@
 define(['jquery', //
         'Ajsl/Dispatcher', //
         'js!ajsl-utils.js', //
-        'js!jquery/jquery.timeago.js!order', //
-        'js!jquery/jquery.history.js!order', //
-        'js!jquery/jquery.history.extended.js!order'], function($, Dispatcher) {
+        ], function($, Dispatcher, event, navigationView) {
 	"use strict";
 	
 	return function(jsData) {		
@@ -41,16 +39,16 @@ define(['jquery', //
 
 		$("abbr.timeago").timeago();
 		
-		var dispatcher = new Dispatcher({modules : 'Visuwall/Command/Action/'});
+		var dispatcher = new Dispatcher({modules : 'Visuwall/Command'});
 
 		$.history.init(dispatcher.dispatch, {unescape : true, ctrls : 'bad value'});
 		
 		if (jsData.init.wallNames.length == 0) {
 			$.history.queryBuilder().addController('wall/create').load();
 		} else {
-//			$('#wallSelector #wallSelect').val(initData.wallNames[0]).change();
-			$.history.queryBuilder().addController('wall/' + jsData.init.wallNames[0] + '?toto=titi').load();			
+			$('#wallSelector #wallSelect').val(jsData.init.wallNames[0]).change();
+			$.history.queryBuilder().addController('wall/' + jsData.init.wallNames[0]).load();
 		}
-		
+
 	};
 });

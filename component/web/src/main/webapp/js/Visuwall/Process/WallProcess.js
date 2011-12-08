@@ -1,16 +1,15 @@
-//	this.__inject__ = [ 'wallView', 'projectService'];
-
-define(['log', //
-        'Visuwall/Business/Service/WallService', //
-        'Visuwall/Theme/Default/View/WallView' //
-        ], function(log, WallService, WallView) {
+define(['jquery', // 
+        'log', //
+        'Visuwall/Service/wallService', //
+        'Visuwall/Theme/Default/View/wallView', //
+        'Visuwall/Service/projectService' //
+        ], function($, log, wallService, wallView, projectService) {
 	"use strict";
-	
-	var wallService = new WallService();
-	var wallView = new WallView();
-	
-	var WallController = function(wallName) {
+		
+	var wallProcess = function(wallName) {
 		var $this = this;
+		
+		var currentWallUpdater = setInterval(this.updateStatus, 10000);
 		
 		this.wallName = wallName;
 	
@@ -39,7 +38,7 @@ define(['log', //
 					if (projectDone.length == projectsStatus.length) {
 						wallView.getProjectIds(function(projectIds) {
 							for (var i = 0; i < projectIds.length; i++) {
-								if (!projectDone.contains(projectIds[i])) {
+								if (!$.contains(projectDone, projectIds[i])) {
 									wallView.removeProject(projectIds[i]);
 								}
 							}
@@ -53,7 +52,7 @@ define(['log', //
 						var stat = status;
 						if (!isProjectRes) {
 							// this is a new project
-							$this.projectService.findProject($this.wallName,
+							projectService.findProject($this.wallName,
 									stat.id, function(newProjectData) {
 										$this.addProject(newProjectData);
 										wallView.setLastUpdate(newProjectData.id, status.lastUpdate);				
@@ -63,7 +62,7 @@ define(['log', //
 							$this._updateBuilding(status.id, status.building, status.buildingTimeleftSecond);
 							wallView.getLastUpdate(status.id, function(lastUpdate) {
 								if (lastUpdate != status.lastUpdate) {
-									$this.projectService.findProject($this.wallName, status.id, function(newProjectData) {
+									projectService.findProject($this.wallName, status.id, function(newProjectData) {
 										$this._updateProject(newProjectData);
 										wallView.setLastUpdate(newProjectData.id, newProjectData.lastUpdate);
 									});
@@ -96,7 +95,7 @@ define(['log', //
 			var lastNotBuild = project.builds[project.lastNotBuildingId];
 			var lastBuild = project.builds[project.lastBuildId];
 			
-			var stateFunction = 'display' + lastNotBuild.state.toLowerCase().ucfirst();
+			var stateFunction = 'display' + lastNotBuild.state.toLowerCase().ucFirst();
 			wallView[stateFunction](project.id);
 
 			
@@ -157,7 +156,9 @@ define(['log', //
 			}
 		};
 
+		this.updateStatus();
+		
 	};
 		
-	return WallController;
+	return wallProcess;
 });

@@ -6,7 +6,21 @@ define([ 'js!Underscore.js!order', //
 		Backbone.noConflict();
 	});
 
-	define('jquery', function() {
+	
+	
+	define('jquery', ['js!jquery/jquery.ajsl.js',
+	                  'js!jquery/jquery.cookie.js',
+	                  'js!jquery/jquery.marquee.js',
+	                  'js!jquery/jquery.timeago.js',
+	                  'js!jquery/jquery.selector.js',
+	                  'js!jquery/jquery.selectBox.js',
+	                  'js!jquery/jquery.countdown.js',
+	                  'js!jquery/jquery.textfill.0.1.js',
+	                  'js!jquery/jquery.qtip-1.0.0-rc3.js',
+	                  'js!jquery/jquery.selectbox-0.6.1.js',
+	                  'js!jquery/jquery.history.js!order',
+	                  'js!jquery/jquery.history.extended.js!order'
+	                  ], function() {
 		var jquery = $;
 		$.noConflict();
 		return jquery;

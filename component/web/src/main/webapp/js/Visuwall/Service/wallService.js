@@ -1,10 +1,7 @@
 define(['jquery'], function($) {
 
-	var WallService = function() {
 
-	};
-
-	WallService.prototype = {
+	var wallService = {
 
 		wall : function(callback) {
 			$.getJSON('wall', {}, function(data) {
@@ -14,6 +11,20 @@ define(['jquery'], function($) {
 
 		getCreate : function(callback) {
 			$.get('wall/create', {}, callback);
+		},
+		
+		create : function(data, successCallback, failureCallback) {
+			$.ajax({
+				url : 'wall/',
+				type : 'POST',
+				data : $(data).serialize(),
+				error : function(jqXHR, textStatus, errorThrown) {
+					failureCallback(textStatus + " " + jqXHR.statusText);
+				},
+				success : function(data, textStatus, jqXHR) {
+					successCallback();
+				}
+			});	
 		},
 
 		get : function(wallName, callback) {
@@ -34,5 +45,5 @@ define(['jquery'], function($) {
 		}
 	};
 	
-	return WallService;
+	return wallService;
 });
