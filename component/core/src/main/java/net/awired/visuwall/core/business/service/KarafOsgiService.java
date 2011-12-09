@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
@@ -20,6 +22,7 @@ import net.awired.visuwall.core.application.common.ApplicationHelper;
 import net.awired.visuwall.core.business.domain.CapabilityEnum;
 import net.awired.visuwall.core.business.domain.PluginInfo;
 import net.awired.visuwall.core.business.domain.SoftwareInfo;
+
 import org.apache.felix.framework.util.FelixConstants;
 import org.osgi.framework.Constants;
 import org.osgi.framework.launch.Framework;
@@ -30,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+
 import com.google.common.base.Preconditions;
 
 @Service
@@ -158,7 +162,7 @@ public class KarafOsgiService implements PluginServiceInterface {
             softwareInfo.setPluginInfo(getPluginInfo(visuwallPlugin));
             // TODO change that null
             try {
-                BasicCapability connectionPlugin = visuwallPlugin.getConnection(url.toString(), properties);
+                BasicCapability connectionPlugin = visuwallPlugin.getConnection(url, properties);
                 softwareInfo.setProjectNames(connectionPlugin.listSoftwareProjectIds());
                 if (connectionPlugin instanceof ViewCapability) {
                     softwareInfo.setViewNames(((ViewCapability) connectionPlugin).findViews());

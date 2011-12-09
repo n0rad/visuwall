@@ -16,8 +16,9 @@
 
 package net.awired.visuwall.plugin.teamcity;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityChangesNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityProjectNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityProjectsNotFoundException;
+import net.awired.clients.teamcity.resource.TeamCityAbstractBuild;
 import net.awired.clients.teamcity.resource.TeamCityBuild;
 import net.awired.clients.teamcity.resource.TeamCityBuildItem;
 import net.awired.clients.teamcity.resource.TeamCityBuildType;
@@ -54,6 +56,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
 public class TeamCityConnection implements BuildCapability, TestCapability {
@@ -62,22 +65,21 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
 
     private boolean connected;
 
+    @VisibleForTesting
     TeamCity teamCity;
-
-    private String url;
 
     @Override
     public void connect(String url, String login, String password) {
-        connect(url);
-    }
-
-    public void connect(String url) {
         Preconditions.checkNotNull(url, "url is mandatory");
         if (StringUtils.isBlank(url)) {
             throw new IllegalArgumentException("url can't be null.");
         }
-        this.url = url;
-        teamCity = new TeamCity(url);
+        if (isBlank(login)) {
+            LOG.info("Login is blank, new value is 'guest'");
+            login = "guest";
+            password = "";
+        }
+        teamCity = new TeamCity(url, login, password);
         connected = true;
     }
 
@@ -205,17 +207,14 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
             BuildIdNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
+        TeamCityAbstractBuild lastBuild;
         try {
-            TeamCityBuild runningBuild = teamCity.findRunningBuild();
-            return runningBuild.getNumber();
-        } catch (TeamCityBuildNotFoundException e) {
-            List<String> buildIds = getBuildIds(softwareProjectId);
-            if (buildIds.isEmpty()) {
-                throw new BuildIdNotFoundException("Can't find build numbers for software project id : "
-                        + softwareProjectId);
-            }
-            String lastBuildId = Collections.max(buildIds);
-            return lastBuildId;
+            lastBuild = teamCity.findLastBuild(softwareProjectId.getProjectId());
+            return lastBuild.getId();
+        } catch (TeamCityProjectNotFoundException e) {
+            throw new BuildIdNotFoundException("Cannot find project with software project id " + softwareProjectId, e);
+        } catch (TeamCityBuildListNotFoundException e) {
+            throw new BuildIdNotFoundException("Cannot find project with software project id " + softwareProjectId, e);
         }
     }
 

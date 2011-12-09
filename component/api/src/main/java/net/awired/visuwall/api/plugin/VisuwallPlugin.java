@@ -18,16 +18,13 @@ package net.awired.visuwall.api.plugin;
 
 import java.net.URL;
 import java.util.Map;
+
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 
 public interface VisuwallPlugin<T extends BasicCapability> {
-
-    @Deprecated
-    // "use version with URL parameter"
-    T getConnection(String url, Map<String, String> properties) throws ConnectionException;
 
     T getConnection(URL url, Map<String, String> properties) throws ConnectionException;
 

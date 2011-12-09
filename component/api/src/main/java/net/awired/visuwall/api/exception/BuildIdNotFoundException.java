@@ -20,12 +20,15 @@ public class BuildIdNotFoundException extends Exception {
 
     private static final long serialVersionUID = -1518312632648478201L;
 
-    public BuildIdNotFoundException(Exception e) {
-        super(e);
+    public BuildIdNotFoundException(Throwable cause) {
+        super(cause);
     }
 
     public BuildIdNotFoundException(String msg) {
         super(msg);
     }
 
+    public BuildIdNotFoundException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

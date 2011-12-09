@@ -24,12 +24,16 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.net.MalformedURLException;
 import java.net.URL;
+
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -114,7 +118,7 @@ public class SonarPluginTest {
     }
 
     @Test
-    public void should_get_connection() throws ConnectionException {
+    public void should_get_connection() throws ConnectionException, MalformedURLException {
         SonarConnection mockedConnection = new SonarConnection();
 
         SonarConnectionFactory sonarConnectionFactory = mock(SonarConnectionFactory.class);
@@ -122,7 +126,7 @@ public class SonarPluginTest {
 
         sonar.sonarConnectionFactory = sonarConnectionFactory;
 
-        SonarConnection connection = sonar.getConnection("url", null);
+        SonarConnection connection = sonar.getConnection(new URL("http://url"), null);
         assertEquals(mockedConnection, connection);
     }
 }

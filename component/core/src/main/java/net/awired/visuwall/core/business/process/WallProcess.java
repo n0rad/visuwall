@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
+
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -33,6 +34,7 @@ import net.awired.visuwall.core.business.service.ProjectService;
 import net.awired.visuwall.core.business.service.SoftwareAccessService;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,19 +58,19 @@ public class WallProcess {
     @Autowired
     SoftwareAccessService softwareAccessService;
 
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
 
     public void rebuildFullWallInformations(final Wall wall) {
         taskScheduler.schedule(new Runnable() {
             @Override
             public void run() {
-                //TODO prevent wall hiding (exception causing wall not added to wall list) if software not found
+                // TODO prevent wall hiding (exception causing wall not added to wall list) if software not found
                 rebuildConnectionPluginsInSoftwareAccess(wall);
                 for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
                     if (softwareAccess.getConnection() instanceof BuildCapability) {
                         Runnable task = getDiscoverBuildProjectsRunner(wall, softwareAccess);
                         task.run();
-                        //TODO skip first immediate schedule run as called by hand upper 
+                        // TODO skip first immediate schedule run as called by hand upper
                         @SuppressWarnings("unchecked")
                         ScheduledFuture<Object> futur = taskScheduler.scheduleWithFixedDelay(task,
                                 softwareAccess.getProjectFinderDelaySecond() * 1000);
@@ -76,13 +78,13 @@ public class WallProcess {
                     }
                 }
 
-                // here as task war run ones without schedule, projects exists, we need that for first run 
+                // here as task war run ones without schedule, projects exists, we need that for first run
                 // to add other software without waiting for the second project discover
                 for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
                     if (!(softwareAccess.getConnection() instanceof BuildCapability)) {
                         Runnable task = getDiscoverOtherProjectsRunner(wall, softwareAccess);
                         task.run();
-                        //TODO skip first immediate schedule run as called by hand upper 
+                        // TODO skip first immediate schedule run as called by hand upper
                         @SuppressWarnings("unchecked")
                         ScheduledFuture<Object> futur = taskScheduler.scheduleWithFixedDelay(task,
                                 softwareAccess.getProjectFinderDelaySecond() * 1000);
@@ -98,7 +100,8 @@ public class WallProcess {
         for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
             try {
                 VisuwallPlugin<BasicCapability> plugin = pluginService.getPluginFromUrl(softwareAccess.getUrl());
-                BasicCapability connection = plugin.getConnection(softwareAccess.getUrl().toString(), Collections.unmodifiableMap(softwareAccess.getProperties()));
+                BasicCapability connection = plugin.getConnection(softwareAccess.getUrl(),
+                        Collections.unmodifiableMap(softwareAccess.getProperties()));
                 softwareAccess.setConnection(connection);
             } catch (ConnectionException e) {
                 LOG.warn("Can't rebuild connection. " + softwareAccess, e);
@@ -124,7 +127,7 @@ public class WallProcess {
                     Runnable projectCreationRunner = WallProcess.this.projectService.getProjectCreationRunner(wall,
                             softwareAccess, projectId);
                     projectCreationRunner.run();
-                    //                    taskScheduler.schedule(projectCreationRunner, new Date());
+                    // taskScheduler.schedule(projectCreationRunner, new Date());
                 }
             }
         };

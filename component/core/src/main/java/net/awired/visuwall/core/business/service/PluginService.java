@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
@@ -31,23 +32,23 @@ import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.core.business.domain.CapabilityEnum;
 import net.awired.visuwall.core.business.domain.PluginInfo;
 import net.awired.visuwall.core.business.domain.SoftwareInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 import com.google.common.base.Preconditions;
 
 //@Service
 @Deprecated
 public class PluginService implements PluginServiceInterface {
-	
+
     private static final Logger LOG = LoggerFactory.getLogger(PluginService.class);
 
     @SuppressWarnings("rawtypes")
     private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader.load(VisuwallPlugin.class);
 
     @Override
-	public VisuwallPlugin<BasicCapability> getPluginFromUrl(URL url) {
+    public VisuwallPlugin<BasicCapability> getPluginFromUrl(URL url) {
         List<VisuwallPlugin<BasicCapability>> visuwallPlugins = getPlugins();
         for (VisuwallPlugin<BasicCapability> visuwallPlugin : visuwallPlugins) {
             try {
@@ -65,7 +66,7 @@ public class PluginService implements PluginServiceInterface {
     }
 
     @Override
-	public SoftwareInfo getSoftwareInfoFromUrl(URL url, Map<String, String> properties) {
+    public SoftwareInfo getSoftwareInfoFromUrl(URL url, Map<String, String> properties) {
         List<VisuwallPlugin<BasicCapability>> visuwallPlugins = getPlugins();
         for (VisuwallPlugin<BasicCapability> visuwallPlugin : visuwallPlugins) {
             SoftwareId softwareId = null;
@@ -84,7 +85,7 @@ public class PluginService implements PluginServiceInterface {
             softwareInfo.setPluginInfo(getPluginInfo(visuwallPlugin));
             // TODO change that null
             try {
-                BasicCapability connectionPlugin = visuwallPlugin.getConnection(url.toString(), null);
+                BasicCapability connectionPlugin = visuwallPlugin.getConnection(url, null);
                 softwareInfo.setProjectNames(connectionPlugin.listSoftwareProjectIds());
                 if (connectionPlugin instanceof ViewCapability) {
                     softwareInfo.setViewNames(((ViewCapability) connectionPlugin).findViews());
@@ -98,7 +99,7 @@ public class PluginService implements PluginServiceInterface {
     }
 
     @Override
-	public PluginInfo getPluginInfo(VisuwallPlugin<BasicCapability> visuwallPlugin) {
+    public PluginInfo getPluginInfo(VisuwallPlugin<BasicCapability> visuwallPlugin) {
         PluginInfo pluginInfo = new PluginInfo();
         pluginInfo.setName(visuwallPlugin.getName());
         pluginInfo.setVersion(visuwallPlugin.getVersion());
@@ -108,7 +109,7 @@ public class PluginService implements PluginServiceInterface {
     }
 
     @Override
-	public List<PluginInfo> getPluginsInfo() {
+    public List<PluginInfo> getPluginsInfo() {
         List<VisuwallPlugin<BasicCapability>> visuwallPlugins = getPlugins();
         List<PluginInfo> pluginInfos = new ArrayList<PluginInfo>(visuwallPlugins.size());
         for (VisuwallPlugin<BasicCapability> visuwallPlugin : visuwallPlugins) {
@@ -119,7 +120,7 @@ public class PluginService implements PluginServiceInterface {
     }
 
     @Override
-	public List<VisuwallPlugin<BasicCapability>> getPlugins() {
+    public List<VisuwallPlugin<BasicCapability>> getPlugins() {
         @SuppressWarnings("rawtypes")
         Iterator<VisuwallPlugin> pluginIt = pluginLoader.iterator();
         List<VisuwallPlugin<BasicCapability>> result = new ArrayList<VisuwallPlugin<BasicCapability>>();
@@ -131,33 +132,33 @@ public class PluginService implements PluginServiceInterface {
         return result;
     }
 
-    //    public List<ConnectionPlugin> getConnectionPluginsFromSoftwares(List<SoftwareAccess> softwareAccesses) {
-    //        List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>(softwareAccesses.size());
-    //        for (SoftwareAccess softwareAccess : softwareAccesses) {
-    //            // TODO refactor as we recreate a connection
-    //            VisuwallPlugin plugin = getPluginFromSoftware(softwareAccess);
+    // public List<ConnectionPlugin> getConnectionPluginsFromSoftwares(List<SoftwareAccess> softwareAccesses) {
+    // List<ConnectionPlugin> connectionPlugins = new ArrayList<ConnectionPlugin>(softwareAccesses.size());
+    // for (SoftwareAccess softwareAccess : softwareAccesses) {
+    // // TODO refactor as we recreate a connection
+    // VisuwallPlugin plugin = getPluginFromSoftware(softwareAccess);
     //
-    //            // connect
-    //            Properties properties = new Properties();
-    //            // properties.put("login", softwareAccess.getLogin());
-    //            // properties.put("password", softwareAccess.getPassword());
-    //            ConnectionPlugin connection = plugin.getConnection(softwareAccess.getUrl(), properties);
-    //            connectionPlugins.add(connection);
-    //        }
-    //        return connectionPlugins;
-    //    }
+    // // connect
+    // Properties properties = new Properties();
+    // // properties.put("login", softwareAccess.getLogin());
+    // // properties.put("password", softwareAccess.getPassword());
+    // ConnectionPlugin connection = plugin.getConnection(softwareAccess.getUrl(), properties);
+    // connectionPlugins.add(connection);
+    // }
+    // return connectionPlugins;
+    // }
     //
-    //    public VisuwallPlugin getPluginFromSoftware(SoftwareAccess softwareAccess) {
-    //        Preconditions.checkNotNull(softwareAccess.getPluginClassName(), "softwareAccess.getPluginClassName");
+    // public VisuwallPlugin getPluginFromSoftware(SoftwareAccess softwareAccess) {
+    // Preconditions.checkNotNull(softwareAccess.getPluginClassName(), "softwareAccess.getPluginClassName");
     //
-    //        List<VisuwallPlugin> plugins = getPlugins();
-    //        for (VisuwallPlugin plugin : plugins) {
-    //            // TODO manage version
-    //            if (softwareAccess.getPluginClassName().equals(plugin.getClass().getName())) {
-    //                return plugin;
-    //            }
-    //        }
-    //        throw new RuntimeException("plugin not found");
-    //    }
+    // List<VisuwallPlugin> plugins = getPlugins();
+    // for (VisuwallPlugin plugin : plugins) {
+    // // TODO manage version
+    // if (softwareAccess.getPluginClassName().equals(plugin.getClass().getName())) {
+    // return plugin;
+    // }
+    // }
+    // throw new RuntimeException("plugin not found");
+    // }
 
 }

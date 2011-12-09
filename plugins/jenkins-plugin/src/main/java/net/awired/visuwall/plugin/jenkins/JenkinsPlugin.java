@@ -19,11 +19,14 @@ package net.awired.visuwall.plugin.jenkins;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
+
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
@@ -33,14 +36,6 @@ public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
     private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
     private static final Map<String, String> PROPERTIES = new ImmutableMap.Builder<String, String>().put("login", "")
             .put("password", "").build();
-
-    @Deprecated
-    @Override
-    public JenkinsConnection getConnection(String url, Map<String, String> properties) {
-        JenkinsConnection jenkinsConnectionPlugin = new JenkinsConnection();
-        jenkinsConnectionPlugin.connect(url);
-        return jenkinsConnectionPlugin;
-    }
 
     @Override
     public JenkinsConnection getConnection(URL url, Map<String, String> properties) {

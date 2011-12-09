@@ -19,13 +19,16 @@ package net.awired.visuwall.plugin.sonar;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.ws.rs.core.MediaType;
+
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -43,14 +46,6 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
     public SonarPlugin() {
         client = new GenericSoftwareClient();
         sonarConnectionFactory = new SonarConnectionFactory();
-    }
-
-    @Deprecated
-    @Override
-    public SonarConnection getConnection(String url, Map<String, String> properties) throws ConnectionException {
-        Preconditions.checkNotNull(url, "url is mandatory");
-        SonarConnection sonarConnection = sonarConnectionFactory.create(url);
-        return sonarConnection;
     }
 
     @Override

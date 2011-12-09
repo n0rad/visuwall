@@ -12,13 +12,6 @@ import net.awired.visuwall.api.plugin.VisuwallPlugin;
 public class ContinuumPlugin implements VisuwallPlugin<ContinuumConnection> {
 
     @Override
-    public ContinuumConnection getConnection(String url, Map<String, String> properties) throws ConnectionException {
-        ContinuumConnection continuumConnection = new ContinuumConnection();
-        continuumConnection.connect(url, "", "");
-        return continuumConnection;
-    }
-
-    @Override
     public ContinuumConnection getConnection(URL url, Map<String, String> properties) throws ConnectionException {
         ContinuumConnection continuumConnection = new ContinuumConnection();
         continuumConnection.connect(url.toString(), "", "");

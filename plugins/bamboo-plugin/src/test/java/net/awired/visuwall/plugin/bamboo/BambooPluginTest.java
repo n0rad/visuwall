@@ -18,9 +18,13 @@ package net.awired.visuwall.plugin.bamboo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+
+import java.net.MalformedURLException;
 import java.net.URL;
+
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -62,8 +66,8 @@ public class BambooPluginTest {
     }
 
     @Test
-    public void should_get_a_valid_connection() {
-        BambooConnection connection = bamboo.getConnection("url", null);
+    public void should_get_a_valid_connection() throws MalformedURLException {
+        BambooConnection connection = bamboo.getConnection(new URL("http://url"), null);
         assertFalse(connection.isClosed());
     }
 

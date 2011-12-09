@@ -19,21 +19,15 @@ package net.awired.visuwall.plugin.bamboo;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
-
-    @Deprecated
-    @Override
-    public BambooConnection getConnection(String url, Map<String, String> properties) {
-        BambooConnection connection = new BambooConnection();
-        connection.connect(url);
-        return connection;
-    }
 
     @Override
     public BambooConnection getConnection(URL url, Map<String, String> properties) {

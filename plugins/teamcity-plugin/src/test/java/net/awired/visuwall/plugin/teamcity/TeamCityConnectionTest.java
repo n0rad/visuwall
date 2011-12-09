@@ -22,7 +22,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -49,27 +48,31 @@ import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TeamCityConnectionTest {
 
     TeamCityConnection teamCityConnection;
 
+    @Mock
     TeamCity teamCity;
 
     @Before
     public void init() {
-        teamCity = mock(TeamCity.class);
         teamCityConnection = createConnectionPlugin();
     }
 
     @Test(expected = NullPointerException.class)
     public void should_fail_when_passing_null() {
-        teamCityConnection.connect(null);
+        teamCityConnection.connect(null, "", "");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void should_fail_when_passing_empty_string() {
-        teamCityConnection.connect("");
+        teamCityConnection.connect("", "", "");
     }
 
     @Test
@@ -280,7 +283,7 @@ public class TeamCityConnectionTest {
 
     private TeamCityConnection createConnectionPlugin() {
         TeamCityConnection connectionPlugin = new TeamCityConnection();
-        connectionPlugin.connect("http://");
+        connectionPlugin.connect("http://", "login", "password");
         connectionPlugin.teamCity = teamCity;
         return connectionPlugin;
     }

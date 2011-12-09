@@ -19,12 +19,14 @@ package net.awired.visuwall.plugin.teamcity;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.clients.teamcity.resource.TeamCityServer;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -34,18 +36,10 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
     @VisibleForTesting
     GenericSoftwareClient genericSoftwareClient = new GenericSoftwareClient("guest", "");
 
-    @Deprecated
-    @Override
-    public TeamCityConnection getConnection(String url, Map<String, String> properties) {
-        TeamCityConnection connectionPlugin = new TeamCityConnection();
-        connectionPlugin.connect(url);
-        return connectionPlugin;
-    }
-
     @Override
     public TeamCityConnection getConnection(URL url, Map<String, String> properties) {
         TeamCityConnection connectionPlugin = new TeamCityConnection();
-        connectionPlugin.connect(url.toString());
+        connectionPlugin.connect(url.toString(), properties.get("login"), properties.get("password"));
         return connectionPlugin;
     }
 
@@ -103,7 +97,10 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
 
     @Override
     public Map<String, String> getPropertiesWithDefaultValue() {
-        return new HashMap<String, String>();
+        Map<String, String> defaultValues = new HashMap<String, String>();
+        defaultValues.put("login", "guest");
+        defaultValues.put("password", "");
+        return defaultValues;
     }
 
 }
