@@ -30,6 +30,7 @@
 		<module>plugins/bamboo-plugin</module>
 		<module>plugins/jenkins-plugin</module>
 		<module>plugins/teamcity-plugin</module>
+		<module>plugins/continuum-plugin</module>
 
 		<module>component/core</module>
 		<module>component/cli</module>
@@ -153,6 +154,11 @@
 				<artifactId>visuwall-plugin-jenkins</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-plugin-continuum</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<!-- clients -->
 			<dependency>
@@ -178,6 +184,11 @@
 			<dependency>
 				<groupId>net.awired.clients</groupId>
 				<artifactId>bamboo</artifactId>
+				<version>${clients.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.awired.clients</groupId>
+				<artifactId>continuum</artifactId>
 				<version>${clients.version}</version>
 			</dependency>
 		</dependencies>
