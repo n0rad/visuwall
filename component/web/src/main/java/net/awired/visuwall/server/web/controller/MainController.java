@@ -75,9 +75,9 @@ public class MainController {
             }
         };
         Map<String, List<String>> val = Maps.filterValues(serviceMap, predicate);
-        Map<String, List<String>> serviceMethods = jsService.getServicesMethods(jsMap, val);
+        //   Map<String, List<String>> serviceMethods = jsService.getServicesMethods(jsMap, val);
 
-        jsData.put("jsServiceMethod", serviceMethods);
+        //     jsData.put("jsServiceMethod", serviceMethods);
         jsData.put("jsService", val);
         init.put("wallNames", wallService.getWallNames());
 
