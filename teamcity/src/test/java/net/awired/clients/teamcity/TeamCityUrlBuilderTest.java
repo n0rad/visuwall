@@ -77,6 +77,6 @@ public class TeamCityUrlBuilderTest {
     @Test
     public void should_create_pom_url() {
         String pomUrl = builder.getPomUrl(26);
-        assertEquals(TEAM_CITY_URL + "/app/rest/builds/id:26/pom.xml", pomUrl);
+        assertEquals(TEAM_CITY_URL + "/builds/id:26/pom.xml", pomUrl);
     }
 }

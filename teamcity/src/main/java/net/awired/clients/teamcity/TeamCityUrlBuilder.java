@@ -16,8 +16,6 @@
 
 package net.awired.clients.teamcity;
 
-import java.net.URL;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,10 +28,6 @@ class TeamCityUrlBuilder {
 
     TeamCityUrlBuilder(String teamCityUrl) {
         this.teamCityUrl = teamCityUrl;
-    }
-
-    TeamCityUrlBuilder(URL teamCityUrl) {
-        this.teamCityUrl = teamCityUrl.toString();
     }
 
     String getProjects() {
@@ -85,7 +79,6 @@ class TeamCityUrlBuilder {
     }
 
     String getPomUrl(int buildId) {
-        return build("/builds/id:" + buildId + "/pom.xml");
+        return teamCityUrl + "/builds/id:" + buildId + "/pom.xml";
     }
-
 }

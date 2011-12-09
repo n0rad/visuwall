@@ -27,6 +27,7 @@ import java.util.List;
 
 import net.awired.clients.common.Tests;
 import net.awired.clients.teamcity.exception.TeamCityProjectsNotFoundException;
+import net.awired.clients.teamcity.resource.TeamCityAbstractBuild;
 import net.awired.clients.teamcity.resource.TeamCityAgent;
 import net.awired.clients.teamcity.resource.TeamCityBuild;
 import net.awired.clients.teamcity.resource.TeamCityBuildItem;
@@ -49,15 +50,17 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class TeamCityITest {
 
-    private List<String> expectedProjectNames = Arrays
-            .asList("mina", "zookeeper", "struts", "IT coverage", "not_built");
-    private int projectCount = expectedProjectNames.size();
+    TeamCity teamcity;
 
-    private static final String DATE_PATTERN = "\\d{8}T\\d{6}\\+\\d{4}";
-    private static final String BUILD_TYPE_ID_PATTERN = "bt\\d*";
-    private static final String PROJECT_ID_PATTERN = "project\\d*";
-    private static final String BUILD_NUMBER_PATTERN = "\\d*";
-    private static final String BUILD_ID_PATTERN = "\\d*";
+    List<String> expectedProjectNames = Arrays.asList("mina", "zookeeper", "struts", "IT coverage", "not_built",
+            "visuwall", "project");
+    int projectCount = expectedProjectNames.size();
+
+    String DATE_PATTERN = "\\d{8}T\\d{6}\\+\\d{4}";
+    String BUILD_TYPE_ID_PATTERN = "bt\\d*";
+    String PROJECT_ID_PATTERN = "project\\d*";
+    String BUILD_NUMBER_PATTERN = "\\d*";
+    String BUILD_ID_PATTERN = "\\d*";
 
     @Parameters
     public static Collection<Object[]> createParameters() {
@@ -65,10 +68,10 @@ public class TeamCityITest {
         return Tests.createUrlInstanceParametersFromProperty(instanceProperty);
     }
 
-    TeamCity teamcity;
-
     public TeamCityITest(String teamcityUrl) {
-        teamcity = new TeamCity(teamcityUrl);
+        String login = "jsmadja";
+        String password = "password";
+        teamcity = new TeamCity(teamcityUrl, login, password);
     }
 
     @Test
@@ -208,6 +211,22 @@ public class TeamCityITest {
         TeamCityBuild foundBuild = teamcity.findBuild(projectId, buildNumber);
 
         assertEquals(buildNumber, foundBuild.getNumber());
+    }
+
+    @Test
+    public void should_find_last_build() throws Exception {
+        TeamCityProject project = findProject("struts");
+        String projectId = project.getId();
+        TeamCityAbstractBuild foundBuild = teamcity.findLastBuild(projectId);
+        assertEquals("19", foundBuild.getId());
+    }
+
+    @Test
+    public void should_find_maven_id() throws Exception {
+        TeamCityProject project = findProject("struts");
+        String projectId = project.getId();
+        String mavenId = teamcity.findMavenId(projectId);
+        assertEquals("net.awired.clients:clients", mavenId);
     }
 
     private TeamCityProject findProject(String projectName) throws Exception {
