@@ -16,6 +16,9 @@
 
 package net.awired.clients.common;
 
+import static com.google.common.io.Closeables.closeQuietly;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -29,7 +32,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.google.common.base.Preconditions;
-import com.google.common.io.Closeables;
 
 public class DocumentLoader {
 
@@ -51,7 +53,25 @@ public class DocumentLoader {
         } catch (ParserConfigurationException e) {
             throw new DocumentNotLoadedException("Can't load document from url: " + strUrl, e);
         } finally {
-            Closeables.closeQuietly(stream);
+            closeQuietly(stream);
+        }
+    }
+
+    public Document loadFromContent(String pomContent) throws DocumentNotLoadedException {
+        InputStream stream = null;
+        try {
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
+            stream = new ByteArrayInputStream(pomContent.getBytes());
+            return documentBuilder.parse(stream);
+        } catch (ParserConfigurationException e) {
+            throw new DocumentNotLoadedException("Can't load document : " + pomContent, e);
+        } catch (SAXException e) {
+            throw new DocumentNotLoadedException("Can't load document : " + pomContent, e);
+        } catch (IOException e) {
+            throw new DocumentNotLoadedException("Can't load document : " + pomContent, e);
+        } finally {
+            closeQuietly(stream);
         }
     }
 }

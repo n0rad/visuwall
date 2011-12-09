@@ -10,16 +10,29 @@ public class Maven {
 
     public String findMavenIdFrom(String pomUrl) throws MavenIdNotFoundException {
         try {
-            Document doc = documentLoader.loadFromUrl(pomUrl);
-            String groupId = findValueInFirstLevel(doc, "groupId");
-            String artifactId = findValueInFirstLevel(doc, "artifactId");
-            if (groupId == null || artifactId == null) {
-                throw new MavenIdNotFoundException("Can't find pom at " + pomUrl);
-            }
-            return groupId + ":" + artifactId;
+            Document document = documentLoader.loadFromUrl(pomUrl);
+            return findMavenId(document);
         } catch (DocumentNotLoadedException e) {
             throw new MavenIdNotFoundException("Can't find pom at " + pomUrl, e);
         }
+    }
+
+    public String findMavenIdFromContent(String pomContent) throws MavenIdNotFoundException {
+        try {
+            Document document = documentLoader.loadFromContent(pomContent);
+            return findMavenId(document);
+        } catch (DocumentNotLoadedException e) {
+            throw new MavenIdNotFoundException("Can't find maven id", e);
+        }
+    }
+
+    private String findMavenId(Document doc) throws MavenIdNotFoundException {
+        String groupId = findValueInFirstLevel(doc, "groupId");
+        String artifactId = findValueInFirstLevel(doc, "artifactId");
+        if (groupId == null || artifactId == null) {
+            throw new MavenIdNotFoundException("Can't find maven id");
+        }
+        return groupId + ":" + artifactId;
     }
 
     private String findValueInFirstLevel(Document doc, String tagName) {
