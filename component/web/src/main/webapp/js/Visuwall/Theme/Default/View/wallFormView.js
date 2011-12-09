@@ -117,7 +117,8 @@ define(['jquery', //
 		this["#wallForm|submit"] = function() {
 			$("#modal .success").empty();
 			$("#modal .failure").empty();
-			if ($('#wallForm INPUT#name').val().trim() == "") {
+			var wallName = $('#wallForm INPUT#name').val().trim();
+			if (!wallName) {
 				$("#modal .failure").html("Wall name is mandatory");
 				return false;
 			}
@@ -127,11 +128,14 @@ define(['jquery', //
 				$("#modal .success").html("Success");
 				setTimeout(function() {
 					wallService.wall(function(wallNameList) {
-						curl(['Visuwall/Theme/Default/View/navigationView'], function(navigationView) {
+						curl(['Visuwall/Theme/Default/View/navigationView' ,
+						      'Visuwall/Controller/wallController'], function(navigationView, wallController) {
 							navigationView.replaceWallList(wallNameList);
-							if (wallNameList.length == 1) {
-								$.history.queryBuilder().addController('wall/' + wallNameList[0]).load();
-							}							
+							if ($.history.queryBuilder().contains('wall', wallName)) {
+								wallController.showWall(wallName);
+							} else {
+								$.history.queryBuilder().addController('wall', wallName).load();
+							}
 						});
 					});
 					

@@ -9,15 +9,8 @@ define(['jquery', //
 	var wallProcess = function(wallName) {
 		var $this = this;
 		
-		this.currentWallUpdater = setInterval(this.updateStatus, 10000);
-		
 		this.wallName = wallName;
-		
-		this.close = function() {
-			clearInterval($this.currentWallUpdater);
-			wallView.removeAllProjects();
-		};
-	
+			
 		this.addProject = function(projectData) {
 			wallView.isProject(projectData.id, function(result) {
 				if (!result) {
@@ -161,7 +154,18 @@ define(['jquery', //
 			}
 		};
 
-		this.updateStatus();
+		
+		var currentWallUpdater = setInterval(this.updateStatus, 10000);
+
+		
+		this.close = function() {
+			clearInterval(currentWallUpdater);
+			wallView.removeAllProjects();
+		};
+
+		setTimeout(function() {
+			$this.updateStatus();
+		}, 1000);
 		
 	};
 		
