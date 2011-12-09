@@ -17,6 +17,7 @@
 package net.awired.visuwall.plugin.hudson;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,12 +27,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import net.awired.clients.hudson.Hudson;
 import net.awired.clients.hudson.domain.HudsonBuild;
 import net.awired.clients.hudson.domain.HudsonCommiter;
 import net.awired.clients.hudson.domain.HudsonJob;
 import net.awired.clients.hudson.domain.HudsonTestResult;
-import net.awired.clients.hudson.exception.ArtifactIdNotFoundException;
 import net.awired.clients.hudson.exception.HudsonBuildNotFoundException;
 import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
 import net.awired.clients.hudson.exception.HudsonViewNotFoundException;
@@ -41,16 +42,18 @@ import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildIdNotFoundException;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -92,8 +95,8 @@ public final class HudsonConnection implements BuildCapability, ViewCapability, 
     }
 
     @Override
-    public Date getEstimatedFinishTime(SoftwareProjectId projectId, String buildId)
-            throws ProjectNotFoundException, BuildNotFoundException {
+    public Date getEstimatedFinishTime(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
+            BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(projectId);
         checkBuildId(buildId);
@@ -138,8 +141,7 @@ public final class HudsonConnection implements BuildCapability, ViewCapability, 
     }
 
     @Override
-    public String getLastBuildId(SoftwareProjectId projectId) throws ProjectNotFoundException,
-            BuildIdNotFoundException {
+    public String getLastBuildId(SoftwareProjectId projectId) throws ProjectNotFoundException, BuildIdNotFoundException {
         checkConnected();
         checkSoftwareProjectId(projectId);
         try {
@@ -241,12 +243,11 @@ public final class HudsonConnection implements BuildCapability, ViewCapability, 
             List<Integer> buildIds = hudson.getBuildNumbers(jobName);
             List<String> res = new ArrayList<String>(buildIds.size());
             for (Integer buildId : buildIds) {
-				res.add(String.valueOf(buildId));
-			}
-			return res;
+                res.add(String.valueOf(buildId));
+            }
+            return res;
         } catch (HudsonJobNotFoundException e) {
-            throw new ProjectNotFoundException(
-                    "Can't find build Ids of software project id " + softwareProjectId, e);
+            throw new ProjectNotFoundException("Can't find build Ids of software project id " + softwareProjectId, e);
         }
     }
 
@@ -255,11 +256,11 @@ public final class HudsonConnection implements BuildCapability, ViewCapability, 
             MavenIdNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
+        String jobName = softwareProjectId.getProjectId();
         try {
-            String jobName = softwareProjectId.getProjectId();
-            return hudson.findArtifactId(jobName);
-        } catch (ArtifactIdNotFoundException e) {
-            throw new MavenIdNotFoundException("Can't get maven id of project " + softwareProjectId, e);
+            return hudson.findMavenId(jobName);
+        } catch (net.awired.clients.common.MavenIdNotFoundException e) {
+            throw new MavenIdNotFoundException("Cannot find maven id for " + softwareProjectId, e);
         }
     }
 
@@ -282,8 +283,7 @@ public final class HudsonConnection implements BuildCapability, ViewCapability, 
     }
 
     @Override
-    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, String buildId)
-            throws BuildNotFoundException {
+    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, String buildId) throws BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         checkBuildId(buildId);
@@ -295,8 +295,7 @@ public final class HudsonConnection implements BuildCapability, ViewCapability, 
             buildTime.setStartTime(hudsonBuild.getStartTime());
             return buildTime;
         } catch (HudsonBuildNotFoundException e) {
-            throw new BuildNotFoundException("Can't find build #" + buildId + " of project " + softwareProjectId,
-                    e);
+            throw new BuildNotFoundException("Can't find build #" + buildId + " of project " + softwareProjectId, e);
         } catch (HudsonJobNotFoundException e) {
             throw new BuildNotFoundException("Can't find project " + softwareProjectId, e);
         }

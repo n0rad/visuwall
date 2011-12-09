@@ -22,6 +22,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -43,22 +44,21 @@ import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
-import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class TeamCityConnectionTest {
 
-    private TeamCity teamCity;
-    private TeamCityConnection teamCityConnection;
+    TeamCityConnection teamCityConnection;
+
+    TeamCity teamCity;
 
     @Before
     public void init() {
-        teamCity = Mockito.mock(TeamCity.class);
+        teamCity = mock(TeamCity.class);
         teamCityConnection = createConnectionPlugin();
     }
 
@@ -180,9 +180,15 @@ public class TeamCityConnectionTest {
         assertTrue(teamCityConnection.isClosed());
     }
 
-    @Test(expected = MavenIdNotFoundException.class)
+    @Test
     public void should_throw_exception_when_getting_maven_id() throws Exception {
-        teamCityConnection.getMavenId(softwareProjectId());
+        SoftwareProjectId softwareProjectId = softwareProjectId();
+        String projectId = softwareProjectId.getProjectId();
+        when(teamCity.findMavenId(projectId)).thenReturn("groupId:artifactId");
+
+        String mavenId = teamCityConnection.getMavenId(softwareProjectId);
+
+        assertEquals("groupId:artifactId", mavenId);
     }
 
     @Test(expected = ProjectNotFoundException.class)

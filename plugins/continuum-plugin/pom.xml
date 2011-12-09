@@ -11,10 +11,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>visuwall-plugin-hudson</artifactId>
+	<artifactId>visuwall-plugin-continuum</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Visuwall - Plugin Hudson</name>
+	<name>Visuwall - Plugin Continuum</name>
 
 	<parent>
 		<groupId>net.awired.visuwall</groupId>
@@ -25,12 +25,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
-			<artifactId>visuwall-api</artifactId>
+			<groupId>net.awired.clients</groupId>
+			<artifactId>continuum</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.awired.clients</groupId>
-			<artifactId>hudson</artifactId>
+			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-api</artifactId>
 		</dependency>
 
 		<dependency>
@@ -44,11 +44,6 @@
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -65,13 +60,14 @@
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-Activator>net.awired.visuwall.plugin.hudson.HudsonPluginActivator</Bundle-Activator>
+						<Bundle-Activator>net.awired.visuwall.plugin.continuum.ContinuumPluginActivator</Bundle-Activator>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -93,5 +89,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

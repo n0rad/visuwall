@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
 import net.awired.clients.teamcity.TeamCity;
 import net.awired.clients.teamcity.exception.TeamCityBuildListNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
@@ -42,15 +43,17 @@ import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildIdNotFoundException;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Preconditions;
 
 public class TeamCityConnection implements BuildCapability, TestCapability {
@@ -112,8 +115,7 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
                 }
             }
         } catch (TeamCityProjectsNotFoundException e) {
-            throw new ProjectNotFoundException("Can't identify software project id with project key: " + projectKey,
-                    e);
+            throw new ProjectNotFoundException("Can't identify software project id with project key: " + projectKey, e);
         }
         throw new ProjectNotFoundException("Can't identify software project id with project key: " + projectKey);
     }
@@ -130,8 +132,8 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
             }
             return new ArrayList<String>(ids);
         } catch (TeamCityProjectNotFoundException e) {
-            throw new ProjectNotFoundException(
-                    "Can't find build numbers of software project id:" + softwareProjectId, e);
+            throw new ProjectNotFoundException("Can't find build numbers of software project id:" + softwareProjectId,
+                    e);
         }
     }
 
@@ -155,8 +157,8 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
     }
 
     @Override
-    public State getBuildState(SoftwareProjectId softwareProjectId, String buildId)
-            throws ProjectNotFoundException, BuildNotFoundException {
+    public State getBuildState(SoftwareProjectId softwareProjectId, String buildId) throws ProjectNotFoundException,
+            BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         checkBuildId(buildId);
@@ -182,10 +184,9 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
         throw new ProjectNotFoundException("not implemented");
     }
 
-    
     @Override
-    public boolean isBuilding(SoftwareProjectId softwareProjectId, String buildId)
-            throws ProjectNotFoundException, BuildNotFoundException {
+    public boolean isBuilding(SoftwareProjectId softwareProjectId, String buildId) throws ProjectNotFoundException,
+            BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         checkBuildId(buildId);
@@ -223,7 +224,12 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
             MavenIdNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
-        throw new MavenIdNotFoundException("TeamCity does not implemented this capability");
+        String projectId = softwareProjectId.getProjectId();
+        try {
+            return teamCity.findMavenId(projectId);
+        } catch (net.awired.clients.common.MavenIdNotFoundException e) {
+            throw new MavenIdNotFoundException("Cannot find maven id for " + softwareProjectId, e);
+        }
     }
 
     @Override
@@ -246,8 +252,8 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
     }
 
     @Override
-    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, String buildId)
-            throws BuildNotFoundException, ProjectNotFoundException {
+    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, String buildId) throws BuildNotFoundException,
+            ProjectNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         checkBuildId(buildId);
