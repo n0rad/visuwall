@@ -18,6 +18,7 @@ package net.awired.visuwall.plugin.hudson;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,17 +27,12 @@ import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 
 public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
-
-    private static final Logger LOG = LoggerFactory.getLogger(HudsonPlugin.class);
 
     @Override
     public HudsonConnection getConnection(URL url, Map<String, String> properties) {
@@ -63,11 +59,18 @@ public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
     @Override
     public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
         Preconditions.checkNotNull(url, "url is mandatory");
-        String xml = getContent(url);
-        if (isManageable(xml)) {
-            return createSoftwareId(xml);
+        try {
+            URL apiUrl = new URL(url.toString() + "/api/");
+            String xml = getContent(apiUrl);
+            if (isManageable(xml)) {
+                return createSoftwareId(xml);
+            }
+            throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Hudson, content: " + xml);
+        } catch (MalformedURLException e) {
+            throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Hudson", e);
+        } catch (IOException e) {
+            throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Hudson", e);
         }
-        throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Hudson");
     }
 
     @Override
@@ -93,19 +96,12 @@ public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
         return xml.contains("Remote API [Hudson]");
     }
 
-    private String getContent(URL url) {
+    private String getContent(URL url) throws IOException {
         InputStream stream = null;
         try {
-            url = new URL(url.toString() + "/api/");
             stream = url.openStream();
             byte[] content = ByteStreams.toByteArray(stream);
-            String xml = new String(content);
-            return xml;
-        } catch (IOException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Can't get content of " + url, e);
-            }
-            return "";
+            return new String(content);
         } finally {
             Closeables.closeQuietly(stream);
         }
