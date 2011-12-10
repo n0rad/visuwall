@@ -19,9 +19,6 @@ package net.awired.visuwall.server.application;
 import java.util.Properties;
 import javax.servlet.ServletContext;
 import net.awired.visuwall.core.application.common.ApplicationHelper;
-
-import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
 
@@ -35,10 +32,6 @@ public class VisuwallApplication implements ServletContextAware {
     public void init() {
         try {
             version = ApplicationHelper.findVersion(context.getResourceAsStream("META-INF/MANIFEST.MF"));
-            System.out.println("######################################");
-            System.out.println("version : " + version);
-            System.out.println("home : " + System.getProperty(ApplicationHelper.HOME_KEY));
-            System.out.println("######################################");
         } catch (Exception e) {
             // e.printStackTrace();
         }
@@ -47,7 +40,7 @@ public class VisuwallApplication implements ServletContextAware {
 
     public Properties visuwallProperties() {
         Properties prop = new Properties();
-//        prop.setProperty(ApplicationHelper.HOME_KEY, home);
+        //        prop.setProperty(ApplicationHelper.HOME_KEY, home);
         return prop;
     }
 

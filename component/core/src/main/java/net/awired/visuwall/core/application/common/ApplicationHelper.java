@@ -39,6 +39,7 @@ public class ApplicationHelper {
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(ApplicationHelper.class);
 
+    public static final String UNKNOW_VERSION = "Unknow Version";
     public static final String LOG_LVL_KEY = "VISUWALL_LOG";
     public static final String HOME_KEY = "VISUWALL_HOME";
     public static final String MANIFEST_VERSION_KEY = "VisuwallVersion";
@@ -68,7 +69,7 @@ public class ApplicationHelper {
             }
         } catch (IOException e) {
         }
-        return "Unknow Version";
+        return UNKNOW_VERSION;
     }
 
     public static Level findLogLvl() {
