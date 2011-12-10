@@ -19,20 +19,35 @@ package net.awired.visuwall.plugin.jenkins;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.io.InputStream;
+
 import net.awired.visuwall.api.domain.SoftwareId;
+
 import org.junit.Test;
+
 import com.google.common.io.ByteStreams;
 
 public class JenkinsVersionPageTest {
 
     @Test
-    public void should_load_api_page() throws IOException {
-        InputStream stream = this.getClass().getClassLoader().getResourceAsStream("jenkins_version_page.html");
-        byte[] data = ByteStreams.toByteArray(stream);
-        String content = new String(data);
-        JenkinsVersionPage versionPage = new JenkinsVersionPage(content);
+    public void should_load_api_page_with_warnings() throws Exception {
+        JenkinsVersionPage versionPage = loadJenkinsVersionPage("jenkins_version_page_v1404.html");
+        boolean isVersionPage = versionPage.isJenkinsApiPage();
+        assertTrue(isVersionPage);
+
+        SoftwareId softwareId = versionPage.createSoftwareId();
+
+        assertEquals("Jenkins", softwareId.getName());
+        assertEquals("1.404", softwareId.getVersion());
+        assertEquals("This jenkins version has a bug with git project. Git project wont be display.",
+                softwareId.getWarnings());
+    }
+
+    @Test
+    public void should_load_api_page() throws Exception {
+        JenkinsVersionPage versionPage = loadJenkinsVersionPage("jenkins_version_page.html");
         boolean isVersionPage = versionPage.isJenkinsApiPage();
         assertTrue(isVersionPage);
 
@@ -41,6 +56,23 @@ public class JenkinsVersionPageTest {
         assertEquals("Jenkins", softwareId.getName());
         assertEquals("1.407", softwareId.getVersion());
         assertNull(softwareId.getWarnings());
+    }
+
+    @Test
+    public void should_not_failed_if_version_is_not_a_number() throws Exception {
+        JenkinsVersionPage versionPage = loadJenkinsVersionPage("jenkins_ci_version_page.html");
+        SoftwareId softwareId = versionPage.createSoftwareId();
+        assertEquals("Jenkins", softwareId.getName());
+        assertEquals("1.443-SNAPSHOT (rc-12/05/2011 18:56 GMT-kohsuke)", softwareId.getVersion());
+        assertNull(softwareId.getWarnings());
+    }
+
+    private JenkinsVersionPage loadJenkinsVersionPage(String pageName) throws IOException {
+        InputStream stream = this.getClass().getClassLoader().getResourceAsStream(pageName);
+        byte[] data = ByteStreams.toByteArray(stream);
+        String content = new String(data);
+        JenkinsVersionPage versionPage = new JenkinsVersionPage(content);
+        return versionPage;
     }
 
 }
