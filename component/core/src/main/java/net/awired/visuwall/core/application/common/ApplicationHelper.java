@@ -44,7 +44,20 @@ public class ApplicationHelper {
     public static final String HOME_KEY = "VISUWALL_HOME";
     public static final String MANIFEST_VERSION_KEY = "VisuwallVersion";
 
-    public static String findVersion(InputStream manifestIn) {
+    private static String version;
+
+    public static String getVersion() {
+        return getVersion(null);
+    }
+
+    public static String getVersion(InputStream manifestIn) {
+        if (version == null) {
+            version = findVersion(manifestIn);
+        }
+        return version;
+    }
+
+    private static String findVersion(InputStream manifestIn) {
         // runnnable war
         try {
             Enumeration<URL> manifests = ApplicationHelper.class.getClassLoader()

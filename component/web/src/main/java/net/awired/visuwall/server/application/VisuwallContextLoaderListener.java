@@ -50,8 +50,7 @@ public class VisuwallContextLoaderListener extends ContextLoaderListener {
 
     private String getVersion(ServletContextEvent event) {
         InputStream in = event.getServletContext().getResourceAsStream("META-INF/MANIFEST.MF");
-        String currentVersion = ApplicationHelper.findVersion(in);
-        return currentVersion;
+        return ApplicationHelper.getVersion(in);
     }
 
     private void updateDbVersion(String home, String currentVersion) {
