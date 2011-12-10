@@ -16,6 +16,7 @@ import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.core.application.KarafMain;
 import net.awired.visuwall.core.application.common.ApplicationHelper;
+import net.awired.visuwall.core.application.common.VersionManager;
 import net.awired.visuwall.core.business.domain.CapabilityEnum;
 import net.awired.visuwall.core.business.domain.PluginInfo;
 import net.awired.visuwall.core.business.domain.SoftwareInfo;
@@ -50,14 +51,17 @@ public class KarafOsgiService implements PluginServiceInterface {
         new File(home + "/data").mkdirs();
         new File(home + "/deploy").mkdirs();
 
+        String mavenVersion = ApplicationHelper.getVersion();
+        String version = VersionManager.getOsgiVersionFromMavenVersion(mavenVersion);
+        LOG.info("visuwall OSGI version : " + version);
         try {
-            System.setProperty(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
-                    "net.awired.visuwall.api.plugin; version=0.3.0.SNAPSHOT,"
-                            + "net.awired.visuwall.api.domain; version=0.3.0.SNAPSHOT,"
-                            + "net.awired.visuwall.api.exception; version=0.3.0.SNAPSHOT,"
-                            + "net.awired.visuwall.api.plugin.tck; version=0.3.0.SNAPSHOT,"
-                            + "net.awired.visuwall.api.plugin.capability; version=0.3.0.SNAPSHOT,"
-                            + "net.awired.visuwall.api.domain.quality; version=0.3.0.SNAPSHOT");
+            System.setProperty(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, //
+                    "net.awired.visuwall.api.plugin; version=" + version + "," //
+                            + "net.awired.visuwall.api.domain; version=" + version + "," //
+                            + "net.awired.visuwall.api.exception; version=" + version + "," //
+                            + "net.awired.visuwall.api.plugin.tck; version=" + version + "," //
+                            + "net.awired.visuwall.api.plugin.capability; version=" + version + "," //
+                            + "net.awired.visuwall.api.domain.quality; version=" + version);
 
             Resource resource = context.getResource("/WEB-INF/karaf");
             if (resource == null || !resource.exists()) {

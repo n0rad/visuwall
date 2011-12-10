@@ -49,6 +49,7 @@ define(['jquery', //
 				$('#projectsTable').css({
 					fontSize : ui.value + 'em'
 				});
+				$.cookie('sliderValue', ui.value);
 			};
 
 			$(this).slider({
@@ -58,7 +59,13 @@ define(['jquery', //
 				slide : slideFunc,
 				change : slideFunc
 			});
-			$(this).slider("option", "value", 0.6);
+			
+			var start = $.cookie('sliderValue');
+			if (!start) {
+				start = 0.6;
+				$.cookie('sliderValue', start);
+			}
+			$(this).slider("option", "value", start);
 		};
 
 		this['#helperimg|init'] = function() {

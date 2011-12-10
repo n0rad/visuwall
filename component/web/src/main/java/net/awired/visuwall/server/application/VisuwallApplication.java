@@ -31,7 +31,8 @@ public class VisuwallApplication implements ServletContextAware {
     // @PostConstruct
     public void init() {
         try {
-            version = ApplicationHelper.findVersion(context.getResourceAsStream("META-INF/MANIFEST.MF"));
+            ApplicationHelper.getVersion(context.getResourceAsStream("META-INF/MANIFEST.MF"));
+            version = ApplicationHelper.getVersion();
         } catch (Exception e) {
             // e.printStackTrace();
         }
