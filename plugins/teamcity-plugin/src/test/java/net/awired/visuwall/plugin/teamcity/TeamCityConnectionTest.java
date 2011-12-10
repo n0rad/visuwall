@@ -203,7 +203,7 @@ public class TeamCityConnectionTest {
     public void should_get_is_building() throws Exception {
         TeamCityBuild build = new TeamCityBuild();
         build.setRunning(true);
-        build.setNumber("1");
+        build.setId("1");
         TeamCityBuildType buildType = new TeamCityBuildType();
         buildType.setProjectId("projectId");
         build.setBuildType(buildType);

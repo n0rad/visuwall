@@ -19,6 +19,7 @@ package net.awired.visuwall.plugin.teamcity;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -132,7 +133,9 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
             for (TeamCityBuildType buildType : buildTypes) {
                 addBuildIds(ids, buildType);
             }
-            return new ArrayList<String>(ids);
+            ArrayList<String> arrayList = new ArrayList<String>(ids);
+            Collections.sort(arrayList, new BuildIdComparator());
+            return arrayList;
         } catch (TeamCityProjectNotFoundException e) {
             throw new ProjectNotFoundException("Can't find build numbers of software project id:" + softwareProjectId,
                     e);
@@ -196,7 +199,7 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
             String projectId = softwareProjectId.getProjectId();
             TeamCityBuild build = teamCity.findRunningBuild();
             TeamCityBuildType buildType = build.getBuildType();
-            return projectId.equals(buildType.getProjectId()) && buildId.equals(build.getNumber());
+            return projectId.equals(buildType.getProjectId()) && buildId.equals(build.getId());
         } catch (TeamCityBuildNotFoundException e) {
             return false;
         }
@@ -211,9 +214,7 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
         try {
             lastBuild = teamCity.findLastBuild(softwareProjectId.getProjectId());
             return lastBuild.getId();
-        } catch (TeamCityProjectNotFoundException e) {
-            throw new BuildIdNotFoundException("Cannot find project with software project id " + softwareProjectId, e);
-        } catch (TeamCityBuildListNotFoundException e) {
+        } catch (TeamCityBuildNotFoundException e) {
             throw new BuildIdNotFoundException("Cannot find project with software project id " + softwareProjectId, e);
         }
     }
@@ -346,7 +347,7 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
             TeamCityBuilds buildList = teamCity.findBuildList(buildTypeId);
             List<TeamCityBuildItem> builds = buildList.getBuilds();
             for (TeamCityBuildItem item : builds) {
-                numbers.add(item.getNumber());
+                numbers.add(item.getId());
             }
         } catch (TeamCityBuildListNotFoundException e) {
             if (LOG.isDebugEnabled()) {
