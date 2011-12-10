@@ -21,6 +21,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.SoftwareId;
@@ -56,6 +58,17 @@ public class JenkinsPluginIT {
         SoftwareProjectId projectId = new SoftwareProjectId("test42");
         State buildState = connection.getBuildState(projectId, "1");
         assertEquals(DISABLED, buildState);
+    }
+
+    @Test(timeout = 5000)
+    public void should_get_all_projects() throws Exception {
+        URL hudsonUrl = new URL("http://hudson.jboss.org/jenkins/");
+        JenkinsConnection connection = jenkinsPlugin.getConnection(hudsonUrl,
+                jenkinsPlugin.getPropertiesWithDefaultValue());
+        List<String> views = connection.findViews();
+        System.out.println(views.size() + " views");
+        Map<SoftwareProjectId, String> softwareProjectIds = connection.listSoftwareProjectIds();
+        System.out.println(softwareProjectIds.size() + " projects");
     }
 
 }

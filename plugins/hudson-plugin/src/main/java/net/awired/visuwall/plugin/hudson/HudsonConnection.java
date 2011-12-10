@@ -90,10 +90,10 @@ public class HudsonConnection implements BuildCapability, ViewCapability, TestCa
     public Map<SoftwareProjectId, String> listSoftwareProjectIds() {
         checkConnected();
         Map<SoftwareProjectId, String> projectIds = new HashMap<SoftwareProjectId, String>();
-        List<HudsonJob> jobs = hudson.findAllProjects();
-        for (HudsonJob job : jobs) {
-            SoftwareProjectId projectId = new SoftwareProjectId(job.getName());
-            projectIds.put(projectId, job.getName());
+        List<String> names = hudson.findAllProjectNames();
+        for (String name : names) {
+            SoftwareProjectId projectId = new SoftwareProjectId(name);
+            projectIds.put(projectId, name);
         }
         return projectIds;
     }
