@@ -10,22 +10,23 @@ import org.osgi.framework.ServiceRegistration;
 
 public class BambooPluginActivator implements BundleActivator {
 
-	private BambooPlugin BambooPlugin;
-	private ServiceRegistration registration;
+    private BambooPlugin BambooPlugin;
+    private ServiceRegistration registration;
 
-	public BambooPluginActivator() {
-		BambooPlugin = new BambooPlugin();
-	}
+    public BambooPluginActivator() {
+        BambooPlugin = new BambooPlugin();
+    }
 
-	@Override
-	public void start(BundleContext context) throws Exception {
-		registration = context.registerService(VisuwallPlugin.class.getName(),
-				BambooPlugin, new Properties());
-	}
+    @Override
+    public void start(BundleContext context) throws Exception {
+        registration = context.registerService(VisuwallPlugin.class.getName(), BambooPlugin, new Properties());
+        System.out.println("Bamboo plugin successfully loaded.");
+    }
 
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		registration.unregister();
-		BambooPlugin = null;
-	}
+    @Override
+    public void stop(BundleContext context) throws Exception {
+        registration.unregister();
+        BambooPlugin = null;
+        System.out.println("Bamboo plugin successfully unloaded.");
+    }
 }

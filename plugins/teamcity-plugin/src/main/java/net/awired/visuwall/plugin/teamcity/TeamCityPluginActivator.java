@@ -8,23 +8,25 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-public class TeamCityPluginActivator  implements BundleActivator {
+public class TeamCityPluginActivator implements BundleActivator {
 
-	private TeamCityPlugin TeamCityPlugin;
-	private ServiceRegistration registration;
-	
-	public TeamCityPluginActivator() {
-		TeamCityPlugin = new TeamCityPlugin();
-	}
-	
-	@Override
-	public void start(BundleContext context) throws Exception {
-		registration = context.registerService(VisuwallPlugin.class.getName(), TeamCityPlugin, new Properties());
-	}
+    private TeamCityPlugin teamCityPlugin;
+    private ServiceRegistration registration;
 
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		registration.unregister();
-		TeamCityPlugin = null;
-	}
+    public TeamCityPluginActivator() {
+        teamCityPlugin = new TeamCityPlugin();
+    }
+
+    @Override
+    public void start(BundleContext context) throws Exception {
+        registration = context.registerService(VisuwallPlugin.class.getName(), teamCityPlugin, new Properties());
+        System.out.println("TeamCity plugin successfully loaded.");
+    }
+
+    @Override
+    public void stop(BundleContext context) throws Exception {
+        registration.unregister();
+        teamCityPlugin = null;
+        System.out.println("TeamCity plugin successfully unloaded.");
+    }
 }

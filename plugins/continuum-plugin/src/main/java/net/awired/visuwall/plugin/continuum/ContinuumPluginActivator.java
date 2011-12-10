@@ -19,13 +19,14 @@ public class ContinuumPluginActivator implements BundleActivator {
 
     @Override
     public void start(BundleContext context) throws Exception {
-        System.out.println("Continuum plugin loaded.");
         registration = context.registerService(VisuwallPlugin.class.getName(), continuumPlugin, new Properties());
+        System.out.println("Continuum plugin successfully loaded.");
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
         registration.unregister();
         continuumPlugin = null;
+        System.out.println("Continuum plugin successfully unloaded.");
     }
 }
