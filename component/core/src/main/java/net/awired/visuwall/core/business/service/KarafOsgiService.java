@@ -7,12 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-
 import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
@@ -22,7 +19,6 @@ import net.awired.visuwall.core.application.common.ApplicationHelper;
 import net.awired.visuwall.core.business.domain.CapabilityEnum;
 import net.awired.visuwall.core.business.domain.PluginInfo;
 import net.awired.visuwall.core.business.domain.SoftwareInfo;
-
 import org.apache.felix.framework.util.FelixConstants;
 import org.osgi.framework.Constants;
 import org.osgi.framework.launch.Framework;
@@ -33,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-
 import com.google.common.base.Preconditions;
 
 @Service
@@ -123,13 +118,13 @@ public class KarafOsgiService implements PluginServiceInterface {
     }
 
     @Override
-    public VisuwallPlugin<BasicCapability> getPluginFromUrl(URL url) {
+    public BasicCapability getPluginConnectionFromUrl(URL url, Map<String, String> properties) {
         Object[] services = m_tracker.getServices();
         for (int i = 0; (services != null) && (i < services.length); i++) {
             VisuwallPlugin<BasicCapability> visuwallPlugin = (VisuwallPlugin<BasicCapability>) services[i];
             try {
                 visuwallPlugin.getSoftwareId(url);
-                return visuwallPlugin;
+                return visuwallPlugin.getConnection(url, properties);
             } catch (IncompatibleSoftwareException e) {
                 if (LOG.isInfoEnabled()) {
                     LOG.info("Plugin " + visuwallPlugin + " can't manage url " + url);
@@ -150,26 +145,21 @@ public class KarafOsgiService implements PluginServiceInterface {
             try {
                 softwareId = visuwallPlugin.getSoftwareId(url);
                 Preconditions.checkNotNull(softwareId, "isManageable() should not return null", visuwallPlugin);
-            } catch (IncompatibleSoftwareException e) {
-                LOG.debug("Plugin " + visuwallPlugin + " can not manage url " + url);
-                continue;
-            } catch (Throwable e) {
-                LOG.warn("Plugin " + visuwallPlugin + " throws exception on url " + url, e);
-                continue;
-            }
-            SoftwareInfo softwareInfo = new SoftwareInfo();
-            softwareInfo.setSoftwareId(softwareId);
-            softwareInfo.setPluginInfo(getPluginInfo(visuwallPlugin));
-            // TODO change that null
-            try {
+
+                SoftwareInfo softwareInfo = new SoftwareInfo();
+                softwareInfo.setSoftwareId(softwareId);
+                softwareInfo.setPluginInfo(getPluginInfo(visuwallPlugin));
+
                 BasicCapability connectionPlugin = visuwallPlugin.getConnection(url, properties);
                 softwareInfo.setProjectNames(connectionPlugin.listSoftwareProjectIds());
                 if (connectionPlugin instanceof ViewCapability) {
                     softwareInfo.setViewNames(((ViewCapability) connectionPlugin).findViews());
                 }
                 return softwareInfo;
-            } catch (ConnectionException e) {
-                throw new RuntimeException("no plugin to manage url " + url, e);
+            } catch (IncompatibleSoftwareException e) {
+                LOG.debug("Plugin " + visuwallPlugin + " can not manage url " + url);
+            } catch (Throwable e) {
+                LOG.warn("Plugin " + visuwallPlugin + " throws exception on url " + url, e);
             }
         }
         throw new RuntimeException("no plugin to manage url " + url);
