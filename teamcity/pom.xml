@@ -20,12 +20,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>net.awired.clients</groupId>
-	<artifactId>teamcity</artifactId>
-	<name>TeamCity</name>
+	<artifactId>clients-teamcity</artifactId>
+	<name>Clients - TeamCity</name>
 
 	<parent>
-		<groupId>net.awired</groupId>
+		<groupId>net.awired.clients</groupId>
 		<artifactId>clients</artifactId>
 		<version>1.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
@@ -52,7 +51,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.awired.clients</groupId>
-			<artifactId>common-client</artifactId>
+			<artifactId>clients-common</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
