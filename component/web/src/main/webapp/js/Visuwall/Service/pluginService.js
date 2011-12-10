@@ -9,12 +9,14 @@ define(['jquery'], function($) {
 			});
 		};
 
-		this.manageable = function(url, success, failure) {
+		this.manageable = function(url, login, password, success, failure) {
 			$.ajax({
 				url : 'plugin/getSoftwareInfo',
 				dataType : 'json',
 				data : {
-					url : url
+					url : url,
+					login : login,
+					password : password
 				},
 				success : function(softwareInfo) {
 					success(softwareInfo);

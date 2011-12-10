@@ -61,7 +61,6 @@ define(['jquery', //
 							});
 
 							$("FIELDSET.buildField", newContent).hide();
-							$("FIELDSET.propertiesField", newContent).hide();
 							
 							var childrens = newContent.children();
 							for (var i = 0; i < childrens.length; i++) {
@@ -155,18 +154,18 @@ define(['jquery', //
 		// mouseup
 		// mousemove
 		
-		var urlFunc = function() {
-			var val = $(this).val();
+		var urlFunc = function(urlObj, loginObj, passObj) {
+			var val = urlObj.val();
 			if (val[val.length - 1] == '/') {
-				$(this).val(val.slice(0, -1));
-				val = $(this).val();
+				urlObj.val(val.slice(0, -1));
+				val = urlObj.val();
 			}
 			
 			var softTabs = $('#softTabs');
-			var tabIdFull = $('DIV[id^="tabs-"]', softTabs).has(this).attr('id');
-			var hostname = getHostname($(this).val());
+			var tabIdFull = $('DIV[id^="tabs-"]', softTabs).has(urlObj).attr('id');
+			var hostname = getHostname(urlObj.val());
 			if (!hostname) {
-				hostname = $(this).val();
+				hostname = urlObj.val();
 			}
 			if (!hostname) {
 				hostname = 'New';
@@ -176,23 +175,24 @@ define(['jquery', //
 			// //////////
 			
 			var classes = ['failureCheck', 'successCheck', 'loadingCheck', 'warningCheck'];
-			var domObj = $('#' + $(this).attr('id').replace(".", "\\.") + "check", $(this).parent());
-			var tabContent = $(this).parent();
+			var domObj = $('#' + urlObj.attr('id').replace(".", "\\.") + "check", urlObj.parent());
+			var tabContent = urlObj.parent();
 
-			var id = $(this).attr('id');
+			var id = urlObj.attr('id');
 			var preId = id.substring(0, id.lastIndexOf('.') + 1);
 
-			var name = $(this).attr('name');
+			var name = urlObj.attr('name');
 			var preName = name.substring(0, name.lastIndexOf('.') + 1);
 
 			
-			if (!$(this).val().trim()) {
+			if (!urlObj.val().trim()) {
 				domObj.switchClasses(classes, '', 1);			
 				return; 
 			}
 			
 			domObj.switchClasses(classes, 'loadingCheck', 1);
-			pluginService.manageable($(this).val(), function(softwareInfo) {
+			
+			pluginService.manageable(urlObj.val(), loginObj.val(), passObj.val(), function(softwareInfo) {
 				// success
 				if (softwareInfo.warnings) {
 					domObj.switchClasses(classes, 'warningCheck', 1);				
@@ -321,7 +321,24 @@ define(['jquery', //
 				domObj.switchClasses(classes, 'failureCheck', 1);			
 			});
 		};
-		this['INPUT:regex(id,softwareAccesses.*\.url)|change|live'] = urlFunc;
+		this['INPUT:regex(id,softwareAccesses.*\.url)|change|live'] = function() {
+			var login = $('INPUT:regex(id,softwareAccesses.*\.login)', $(this).parent());
+			var password = $('INPUT:regex(id,softwareAccesses.*\.password)', $(this).parent());			
+			urlFunc($(this), login, password);
+		};
+		
+		this['INPUT:regex(id,softwareAccesses.*\.login)|change|live'] = function() {
+			var url = $('INPUT:regex(id,softwareAccesses.*\.url)', $(this).parent().parent().parent());
+			var password = $('INPUT:regex(id,softwareAccesses.*\.password)', $(this).parent().parent());			
+			urlFunc(url, $(this), password);
+		};
+
+		this['INPUT:regex(id,softwareAccesses.*\.password)|change|live'] = function() {
+			var url = $('INPUT:regex(id,softwareAccesses.*\.url)', $(this).parent().parent().parent());		
+			var login = $('INPUT:regex(id,softwareAccesses.*\.login)', $(this).parent().parent());
+			urlFunc(url, login, $(this));
+		};
+		
 
 		var delayChange = function(context, id) {
 			$('DIV.' + id + 'Slider', $(context).parent()).slider("option", "value", $(context).val());
