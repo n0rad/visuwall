@@ -71,6 +71,18 @@
 				<label id="softwareAccesses0.urlcheck" class="check"></label>
 				<input id="softwareAccesses0.url" name="softwareAccesses[0].url" class="ui-widget-content ui-corner-all url" type="text" value=""/>
 
+				<fieldset class="propertiesField">
+					<legend>Properties</legend>
+					<div class="test42" style="float:left">	
+	 					<label for="softwareAccesses0.login">Login</label> 
+						<input id="softwareAccesses0.login" name="softwareAccesses[0].login" class="ui-widget-content ui-corner-all" type="text" value=""/> 
+					</div>
+					<div class="test42" style="float:left">	
+						<label for="softwareAccesses0.password">Password</label> 
+						<input id="softwareAccesses0.password" name="softwareAccesses[0].password" class="ui-widget-content ui-corner-all" type="password" value=""/> 
+					</div>
+				</fieldset>
+
 				<fieldset class="timerField">
 					<legend>Timers</legend>
 
@@ -85,19 +97,6 @@
 						<div class="slider projectStatusDelaySecondSlider"></div>
 						<input type="hidden" id="softwareAccesses0.projectStatusDelaySecond" name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value=""/>
 					</div>
-				</fieldset>
-
-				<fieldset class="propertiesField">
-					<legend>Properties</legend>
-
-					<div class="properties">
-
-					</div>
-<!-- 					<label for="softwareAccesses0.login">Login</label> 
-					<input id="softwareAccesses0.login" name="softwareAccesses[0].login" class="ui-widget-content ui-corner-all disabled" type="text" value="" disabled="disabled"/> 
-					<label for="softwareAccesses0.password">Password</label> 
-					<input id="softwareAccesses0.password" name="softwareAccesses[0].password" class="ui-widget-content ui-corner-all disabled" type="password" value="" disabled="disabled"/> 
- -->
 				</fieldset>
 
 				<div style="clear: both;"></div>

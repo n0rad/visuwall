@@ -28,7 +28,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -48,6 +47,10 @@ public class SoftwareAccess {
 
     @CollectionOfElements
     private Map<String, String> properties = new HashMap<String, String>();
+
+    private String login;
+
+    private String password;
 
     private boolean allProject;
 
@@ -115,21 +118,21 @@ public class SoftwareAccess {
     }
 
     public List<SoftwareProjectId> getProjectIds() {
-    	ArrayList<SoftwareProjectId> softwareProjectIds = new ArrayList<SoftwareProjectId>();
-    	for (String projectIdSerialized : projectNames) {
-			softwareProjectIds.add(new SoftwareProjectId(projectIdSerialized));
-		}
+        ArrayList<SoftwareProjectId> softwareProjectIds = new ArrayList<SoftwareProjectId>();
+        for (String projectIdSerialized : projectNames) {
+            softwareProjectIds.add(new SoftwareProjectId(projectIdSerialized));
+        }
         return softwareProjectIds;
     }
 
     public void setProjectIds(List<SoftwareProjectId> projectIds) {
-    	ArrayList<String> res = new ArrayList<String>();
-    	for (SoftwareProjectId softwareProjectId : projectIds) {
-			res.add(softwareProjectId.getProjectId());
-		}
-    	projectNames = res;
+        ArrayList<String> res = new ArrayList<String>();
+        for (SoftwareProjectId softwareProjectId : projectIds) {
+            res.add(softwareProjectId.getProjectId());
+        }
+        projectNames = res;
     }
-    
+
     // ///////////////////////////////////////////////////////////
 
     public Long getId() {
@@ -204,20 +207,36 @@ public class SoftwareAccess {
         return projectStatusDelaySecond;
     }
 
-	public void setProperties(Map<String, String> properties) {
-		this.properties = properties;
-	}
+    public void setProperties(Map<String, String> properties) {
+        this.properties = properties;
+    }
 
-	public Map<String, String> getProperties() {
-		return properties;
-	}
+    public Map<String, String> getProperties() {
+        return properties;
+    }
 
-	public List<String> getProjectNames() {
-		return projectNames;
-	}
+    public List<String> getProjectNames() {
+        return projectNames;
+    }
 
-	public void setProjectNames(List<String> projectNames) {
-		this.projectNames = projectNames;
-	}
+    public void setProjectNames(List<String> projectNames) {
+        this.projectNames = projectNames;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 
 }
