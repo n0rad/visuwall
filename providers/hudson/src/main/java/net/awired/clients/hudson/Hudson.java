@@ -78,6 +78,14 @@ public class Hudson {
         return projects;
     }
 
+    public List<String> findAllProjectNames() {
+        List<String> projectNames = new ArrayList<String>();
+        for (String jobName : hudsonFinder.findJobNames()) {
+            projectNames.add(jobName);
+        }
+        return projectNames;
+    }
+
     /**
      * @param jobName
      * @param buildNumber
