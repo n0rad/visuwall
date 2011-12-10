@@ -43,6 +43,12 @@ public class TeamCityBuildType {
     @XmlAttribute
     private String webUrl;
 
+    @Override
+    public String toString() {
+        return "TeamCityBuildType [id=" + id + ", name=" + name + ", href=" + href + ", projectName=" + projectName
+                + ", projectId=" + projectId + ", webUrl=" + webUrl + "]";
+    }
+
     public String getId() {
         return id;
     }

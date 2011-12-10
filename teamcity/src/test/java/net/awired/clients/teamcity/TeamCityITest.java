@@ -52,8 +52,7 @@ public class TeamCityITest {
 
     TeamCity teamcity;
 
-    List<String> expectedProjectNames = Arrays.asList("mina", "zookeeper", "struts", "IT coverage", "not_built",
-            "visuwall", "project");
+    List<String> expectedProjectNames = Arrays.asList("struts");
     int projectCount = expectedProjectNames.size();
 
     String DATE_PATTERN = "\\d{8}T\\d{6}\\+\\d{4}";
@@ -207,10 +206,10 @@ public class TeamCityITest {
         TeamCityBuild build = findLastBuild("struts");
 
         String projectId = project.getId();
-        String buildNumber = build.getNumber();
-        TeamCityBuild foundBuild = teamcity.findBuild(projectId, buildNumber);
+        String buildId = build.getId();
+        TeamCityBuild foundBuild = teamcity.findBuild(projectId, buildId);
 
-        assertEquals(buildNumber, foundBuild.getNumber());
+        assertEquals(buildId, foundBuild.getId());
     }
 
     @Test
@@ -219,6 +218,13 @@ public class TeamCityITest {
         String projectId = project.getId();
         TeamCityAbstractBuild foundBuild = teamcity.findLastBuild(projectId);
         assertEquals("19", foundBuild.getId());
+    }
+
+    @Test
+    public void should_build() throws Exception {
+        String projectId = "project8";
+        String buildNumber = "19";
+        teamcity.findBuild(projectId, buildNumber);
     }
 
     @Test
