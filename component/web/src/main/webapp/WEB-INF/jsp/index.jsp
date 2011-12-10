@@ -26,7 +26,7 @@
 	});
 	</script>
 </head>
-<body>
+<body class="visuwallBack">
 
 <div id="navigationContainer">
 	<div id="modal" style="display: none"></div>
