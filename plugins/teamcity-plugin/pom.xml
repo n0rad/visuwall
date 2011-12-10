@@ -26,7 +26,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.awired.clients</groupId>
-			<artifactId>teamcity</artifactId>
+			<artifactId>clients-teamcity</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>

@@ -26,7 +26,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.awired.clients</groupId>
-			<artifactId>continuum</artifactId>
+			<artifactId>clients-continuum</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>

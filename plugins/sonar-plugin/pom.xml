@@ -28,7 +28,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.awired.clients</groupId>
-			<artifactId>sonar</artifactId>
+			<artifactId>clients-sonar</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.aspectj</groupId>

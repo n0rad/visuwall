@@ -30,7 +30,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.awired.clients</groupId>
-			<artifactId>jenkins</artifactId>
+			<artifactId>clients-jenkins</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

@@ -36,7 +36,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.awired.clients</groupId>
-			<artifactId>bamboo</artifactId>
+			<artifactId>clients-bamboo</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>

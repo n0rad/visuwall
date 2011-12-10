@@ -30,7 +30,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.awired.clients</groupId>
-			<artifactId>hudson</artifactId>
+			<artifactId>clients-hudson</artifactId>
 		</dependency>
 
 		<dependency>

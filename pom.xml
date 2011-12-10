@@ -163,32 +163,32 @@
 			<!-- clients -->
 			<dependency>
 				<groupId>net.awired.clients</groupId>
-				<artifactId>hudson</artifactId>
+				<artifactId>clients-hudson</artifactId>
 				<version>${clients.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.awired.clients</groupId>
-				<artifactId>jenkins</artifactId>
+				<artifactId>clients-jenkins</artifactId>
 				<version>${clients.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.awired.clients</groupId>
-				<artifactId>sonar</artifactId>
+				<artifactId>clients-sonar</artifactId>
 				<version>${clients.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.awired.clients</groupId>
-				<artifactId>teamcity</artifactId>
+				<artifactId>clients-teamcity</artifactId>
 				<version>${clients.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.awired.clients</groupId>
-				<artifactId>bamboo</artifactId>
+				<artifactId>clients-bamboo</artifactId>
 				<version>${clients.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.awired.clients</groupId>
-				<artifactId>continuum</artifactId>
+				<artifactId>clients-continuum</artifactId>
 				<version>${clients.version}</version>
 			</dependency>
 		</dependencies>
