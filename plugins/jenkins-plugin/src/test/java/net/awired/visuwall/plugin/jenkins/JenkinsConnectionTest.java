@@ -20,12 +20,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import java.util.ArrayList;
+
 import java.util.Date;
-import java.util.List;
+
 import net.awired.clients.hudson.Hudson;
-import net.awired.clients.hudson.domain.HudsonJob;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -46,7 +46,6 @@ public class JenkinsConnectionTest {
         jenkinsConnection.connect("http://jenkins:8080");
         jenkinsConnection.hudson = hudson;
     }
-
 
     @Test
     public void should_get_is_building_information() throws Exception {

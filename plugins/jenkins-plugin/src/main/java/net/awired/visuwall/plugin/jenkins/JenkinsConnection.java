@@ -16,6 +16,10 @@
 
 package net.awired.visuwall.plugin.jenkins;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+import static net.awired.visuwall.api.domain.State.DISABLED;
+import static net.awired.visuwall.plugin.jenkins.States.asVisuwallState;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 import java.util.ArrayList;
@@ -124,12 +128,16 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
     public State getBuildState(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException {
         checkSoftwareProjectId(projectId);
+        checkBuildId(buildId);
         checkConnected();
+        if (isProjectDisabled(projectId)) {
+            return DISABLED;
+        }
         try {
             String projectName = jobName(projectId);
             HudsonBuild hudsonBuild = hudson.findBuild(projectName, Integer.valueOf(buildId));
             String hudsonState = hudsonBuild.getState();
-            return States.asVisuwallState(hudsonState);
+            return asVisuwallState(hudsonState);
         } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException(e);
         } catch (HudsonBuildNotFoundException e) {
@@ -386,25 +394,25 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
         }
     }
 
-    private void checkBuildId(String buildId) {
-        Preconditions.checkNotNull(buildId, "buildId is mandatory");
-    }
-
-    private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
-        checkConnected();
-        Preconditions.checkNotNull(softwareProjectId, "softwareProjectId is mandatory");
-    }
-
-    private void checkConnected() {
-        Preconditions.checkState(connected, "You must connect your plugin");
-    }
-
     private String jobName(SoftwareProjectId softwareProjectId) throws HudsonJobNotFoundException {
         String jobName = softwareProjectId.getProjectId();
         if (jobName == null) {
             throw new HudsonJobNotFoundException("Project id " + softwareProjectId + " does not contain id");
         }
         return jobName;
+    }
+
+    private void checkBuildId(String buildId) {
+        checkNotNull(buildId, "buildId is mandatory");
+    }
+
+    private void checkSoftwareProjectId(SoftwareProjectId softwareProjectId) {
+        checkConnected();
+        checkNotNull(softwareProjectId, "softwareProjectId is mandatory");
+    }
+
+    private void checkConnected() {
+        checkState(connected, "You must connect your plugin");
     }
 
 }

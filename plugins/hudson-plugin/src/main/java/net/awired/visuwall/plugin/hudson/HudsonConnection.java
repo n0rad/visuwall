@@ -19,6 +19,8 @@ package net.awired.visuwall.plugin.hudson;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Arrays.asList;
+import static net.awired.visuwall.api.domain.State.DISABLED;
+import static net.awired.visuwall.plugin.hudson.States.asVisuwallState;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 import java.util.ArrayList;
@@ -130,15 +132,18 @@ public class HudsonConnection implements BuildCapability, ViewCapability, TestCa
         checkConnected();
         checkSoftwareProjectId(projectId);
         checkBuildId(buildId);
+        if (isProjectDisabled(projectId)) {
+            return DISABLED;
+        }
         try {
             String projectName = jobName(projectId);
             HudsonBuild hudsonBuild = hudson.findBuild(projectName, Integer.valueOf(buildId));
             String hudsonState = hudsonBuild.getState();
-            return States.asVisuwallState(hudsonState);
+            return asVisuwallState(hudsonState);
         } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException(e);
         } catch (HudsonBuildNotFoundException e) {
-            throw new BuildNotFoundException(e);
+            throw new ProjectNotFoundException(e);
         }
     }
 

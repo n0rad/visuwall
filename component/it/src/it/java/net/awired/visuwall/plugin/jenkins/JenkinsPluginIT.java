@@ -16,19 +16,26 @@
 
 package net.awired.visuwall.plugin.jenkins;
 
+import static net.awired.visuwall.api.domain.State.DISABLED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+
 import java.net.URL;
+
 import net.awired.visuwall.Urls;
 import net.awired.visuwall.api.domain.SoftwareId;
+import net.awired.visuwall.api.domain.SoftwareProjectId;
+import net.awired.visuwall.api.domain.State;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+
 import org.junit.Test;
 
 public class JenkinsPluginIT {
 
+    JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
+
     @Test
     public void should_recognize_jenkins_instance_with_valid_url() throws Exception {
-        JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
         SoftwareId softwareId = jenkinsPlugin.getSoftwareId(new URL(Urls.AWIRED_JENKINS));
 
         assertEquals("Jenkins", softwareId.getName());
@@ -38,9 +45,17 @@ public class JenkinsPluginIT {
 
     @Test(expected = IncompatibleSoftwareException.class)
     public void should_not_fail_if_url_is_not_manageable() throws Exception {
-        JenkinsPlugin jenkinsPlugin = new JenkinsPlugin();
-        String url = "http://www.google.fr";
-        jenkinsPlugin.getSoftwareId(new URL(url));
+        jenkinsPlugin.getSoftwareId(new URL("http://www.google.fr"));
+    }
+
+    @Test
+    public void should_check_plugin_management() throws Exception {
+        URL hudsonUrl = new URL("http://ci.awired.net/jenkins/");
+        JenkinsConnection connection = jenkinsPlugin.getConnection(hudsonUrl,
+                jenkinsPlugin.getPropertiesWithDefaultValue());
+        SoftwareProjectId projectId = new SoftwareProjectId("test42");
+        State buildState = connection.getBuildState(projectId, "1");
+        assertEquals(DISABLED, buildState);
     }
 
 }
