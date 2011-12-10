@@ -16,7 +16,10 @@
 
 package net.awired.visuwall.plugin.jenkins;
 
+import static org.apache.commons.lang.StringUtils.isNumeric;
 import net.awired.visuwall.api.domain.SoftwareId;
+
+import org.apache.commons.lang.StringUtils;
 
 public class JenkinsVersionPage {
 
@@ -36,9 +39,12 @@ public class JenkinsVersionPage {
     }
 
     private void addWarnings(SoftwareId softwareInfo, String strVersion) {
-        double version = Double.parseDouble(strVersion);
-        if (version < 1.405) {
-            addWarningForVersionBefore1405(softwareInfo);
+        String cleanedVersion = StringUtils.remove(strVersion, ".");
+        if (isNumeric(cleanedVersion)) {
+            double version = Double.parseDouble(strVersion);
+            if (version < 1.405) {
+                addWarningForVersionBefore1405(softwareInfo);
+            }
         }
     }
 
