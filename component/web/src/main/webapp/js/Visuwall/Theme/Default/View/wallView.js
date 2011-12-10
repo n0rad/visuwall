@@ -4,6 +4,7 @@ define(['jquery', //
         ], function($, log) {
 	"use strict";
 	
+	var bodyBackClass = 'visuwallBack';
 	
 	var buildVisualDuration = function(duration) {
 		var inst = {
@@ -67,6 +68,7 @@ define(['jquery', //
 			};
 
 			this.addProject = function(projectId, name) {
+				$('BODY').removeClass(bodyBackClass);
 				log.info('add project to display : ' + projectId);
 
 				var newCss = $this._runResize($('LI.project', $this.table).length + 1);
@@ -117,10 +119,15 @@ define(['jquery', //
 			this.removeProject = function(projectId) {
 				$this._runResize($('LI.project', $this.table).length - 1);
 				$this._getElement(projectId).fadeOut("slow").remove();
+				
+				if ($('LI.project', $this.table).length == 0) {
+					$('BODY').addClass(bodyBackClass);					
+				}
 			};
 			
 			this.removeAllProjects = function() {
 				$('LI.project', $this.table).remove();
+				$('BODY').addClass(bodyBackClass);
 			};
 
 			this.setCountdown = function(projectId, finishDate) {

@@ -16,16 +16,12 @@
 
 package net.awired.visuwall.core.business.process;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
-
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.Project;
@@ -34,7 +30,6 @@ import net.awired.visuwall.core.business.service.ProjectService;
 import net.awired.visuwall.core.business.service.SoftwareAccessService;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,12 +94,11 @@ public class WallProcess {
     private void rebuildConnectionPluginsInSoftwareAccess(Wall wall) {
         for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
             try {
-                VisuwallPlugin<BasicCapability> plugin = pluginService.getPluginFromUrl(softwareAccess.getUrl());
-                BasicCapability connection = plugin.getConnection(softwareAccess.getUrl(),
-                        Collections.unmodifiableMap(softwareAccess.getProperties()));
+                BasicCapability connection = pluginService.getPluginConnectionFromUrl(softwareAccess.getUrl(),
+                        softwareAccess.getProperties());
                 softwareAccess.setConnection(connection);
-            } catch (ConnectionException e) {
-                LOG.warn("Can't rebuild connection. " + softwareAccess, e);
+            } catch (Throwable e) {
+                LOG.warn("Plugin throw an exception", e);
             }
         }
     }
@@ -121,7 +115,6 @@ public class WallProcess {
                 List<SoftwareProjectId> wallBuildProjectIds = wall.getProjects().getBuildProjectIds();
                 for (SoftwareProjectId projectId : projectIds) {
                     if (wallBuildProjectIds.contains(projectId)) {
-                        // this project is already registered in list
                         continue;
                     }
                     Runnable projectCreationRunner = WallProcess.this.projectService.getProjectCreationRunner(wall,
