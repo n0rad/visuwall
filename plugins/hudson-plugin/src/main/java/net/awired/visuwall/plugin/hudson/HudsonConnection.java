@@ -19,10 +19,8 @@ package net.awired.visuwall.plugin.hudson;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Arrays.asList;
-import static net.awired.visuwall.api.domain.BuildState.DISABLED;
 import static net.awired.visuwall.plugin.hudson.States.asVisuwallState;
 import static org.apache.commons.lang.StringUtils.isBlank;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -31,7 +29,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import net.awired.clients.hudson.Hudson;
 import net.awired.clients.hudson.domain.HudsonBuild;
 import net.awired.clients.hudson.domain.HudsonCommiter;
@@ -40,11 +37,11 @@ import net.awired.clients.hudson.domain.HudsonTestResult;
 import net.awired.clients.hudson.exception.HudsonBuildNotFoundException;
 import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
 import net.awired.clients.hudson.exception.HudsonViewNotFoundException;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildIdNotFoundException;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -54,10 +51,8 @@ import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.common.annotations.VisibleForTesting;
 
 public class HudsonConnection implements BuildCapability, ViewCapability, TestCapability {
@@ -132,9 +127,6 @@ public class HudsonConnection implements BuildCapability, ViewCapability, TestCa
         checkConnected();
         checkSoftwareProjectId(projectId);
         checkBuildId(buildId);
-        if (isProjectDisabled(projectId)) {
-            return DISABLED;
-        }
         try {
             String projectName = jobName(projectId);
             HudsonBuild hudsonBuild = hudson.findBuild(projectName, Integer.valueOf(buildId));
@@ -148,7 +140,8 @@ public class HudsonConnection implements BuildCapability, ViewCapability, TestCa
     }
 
     @Override
-    public String getLastBuildId(SoftwareProjectId projectId) throws ProjectNotFoundException, BuildIdNotFoundException {
+    public String getLastBuildId(SoftwareProjectId projectId) throws ProjectNotFoundException,
+            BuildIdNotFoundException {
         checkConnected();
         checkSoftwareProjectId(projectId);
         try {

@@ -18,10 +18,8 @@ package net.awired.visuwall.plugin.jenkins;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
-import static net.awired.visuwall.api.domain.BuildState.DISABLED;
 import static net.awired.visuwall.plugin.jenkins.States.asVisuwallState;
 import static org.apache.commons.lang.StringUtils.isBlank;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,7 +29,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import net.awired.clients.hudson.Hudson;
 import net.awired.clients.hudson.domain.HudsonBuild;
 import net.awired.clients.hudson.domain.HudsonCommiter;
@@ -40,11 +37,11 @@ import net.awired.clients.hudson.domain.HudsonTestResult;
 import net.awired.clients.hudson.exception.HudsonBuildNotFoundException;
 import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
 import net.awired.clients.hudson.exception.HudsonViewNotFoundException;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildIdNotFoundException;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -54,10 +51,8 @@ import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.common.annotations.VisibleForTesting;
 
 public final class JenkinsConnection implements BuildCapability, ViewCapability, TestCapability {
@@ -69,8 +64,8 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
 
     private boolean connected;
 
-    private static final Collection<String> DEFAULT_VIEWS = Arrays.asList("Alle", "Todo", "Tous", "\u3059\u3079\u3066",
-            "Tudo", "\u0412\u0441\u0435", "Hepsi", "All");
+    private static final Collection<String> DEFAULT_VIEWS = Arrays.asList("Alle", "Todo", "Tous",
+            "\u3059\u3079\u3066", "Tudo", "\u0412\u0441\u0435", "Hepsi", "All");
 
     @Override
     public void connect(String url, String login, String password) {
@@ -130,9 +125,6 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
         checkSoftwareProjectId(projectId);
         checkBuildId(buildId);
         checkConnected();
-        if (isProjectDisabled(projectId)) {
-            return DISABLED;
-        }
         try {
             String projectName = jobName(projectId);
             HudsonBuild hudsonBuild = hudson.findBuild(projectName, Integer.valueOf(buildId));
@@ -146,7 +138,8 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
     }
 
     @Override
-    public String getLastBuildId(SoftwareProjectId projectId) throws ProjectNotFoundException, BuildIdNotFoundException {
+    public String getLastBuildId(SoftwareProjectId projectId) throws ProjectNotFoundException,
+            BuildIdNotFoundException {
         checkSoftwareProjectId(projectId);
         checkConnected();
         try {
@@ -253,8 +246,8 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
             }
             return res;
         } catch (HudsonJobNotFoundException e) {
-            throw new ProjectNotFoundException("Can't find build numbers of software project id " + softwareProjectId,
-                    e);
+            throw new ProjectNotFoundException(
+                    "Can't find build numbers of software project id " + softwareProjectId, e);
         }
     }
 

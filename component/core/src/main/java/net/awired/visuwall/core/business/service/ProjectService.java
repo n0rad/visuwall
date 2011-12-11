@@ -132,6 +132,10 @@ public class ProjectService {
                                 LOG.warn("Can not found description for project " + project, e);
                             }
 
+                            // disabled
+                            boolean projectDisabled = project.getBuildConnection().isProjectDisabled(projectId);
+                            project.setDisabled(projectDisabled);
+
                             try {
                                 List<String> buildIds = project.getBuildConnection().getBuildIds(projectId);
                                 project.setBuildId(buildIds);

@@ -43,6 +43,7 @@ public class Project implements Comparable<Project> {
     private final String id = new BigInteger(42, new SecureRandom()).toString(36);
     private String name;
     private String description;
+    private boolean disabled;
 
     private List<String> buildIds;
     protected Map<String, Build> builds = new HashMap<String, Build>();
@@ -250,6 +251,14 @@ public class Project implements Comparable<Project> {
 
     public Date getLastUpdate() {
         return lastUpdate;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
     }
 
 }
