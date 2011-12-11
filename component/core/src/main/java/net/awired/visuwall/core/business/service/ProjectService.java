@@ -151,49 +151,7 @@ public class ProjectService {
                         }
                     }
 
-                    // update capabilities
-                    if (project.getLastNotBuildingId() != null) {
-                        for (SoftwareProjectId softwareProjectId : project.getCapabilities().keySet()) {
-                            //TODO we currently be able to manage last build only 
-                            if (!project.getLastBuild().getCapabilitiesResults().containsKey(softwareProjectId)) {
-                                try {
-                                    BasicCapability capability = project.getCapabilities().get(softwareProjectId);
-                                    LOG.info("new Software {} for project {}", capability, project);
-
-                                    CapabilitiesResult capabilitiesResult = new CapabilitiesResult();
-                                    project.getLastBuild().getCapabilitiesResults()
-                                            .put(softwareProjectId, capabilitiesResult);
-
-                                    if (capability instanceof MetricCapability) {
-                                        if (project.getLastNotBuildingId() != null) {
-                                            QualityResult qualityResult = ((MetricCapability) capability)
-                                                    .analyzeQuality(softwareProjectId,
-                                                            MetricCapabilityProcess.metrics);
-                                            capabilitiesResult.setQualityResult(qualityResult);
-                                        }
-                                    }
-
-                                    if (capability instanceof TestCapability) {
-                                        if (project.getLastNotBuildingId() != null) {
-                                            TestResult testResult = ((TestCapability) capability)
-                                                    .analyzeUnitTests(softwareProjectId);
-                                            capabilitiesResult.setUnitTestResult(testResult);
-                                        }
-                                        if (project.getLastNotBuildingId() != null) {
-                                            TestResult testResult = ((TestCapability) capability)
-                                                    .analyzeIntegrationTests(softwareProjectId);
-                                            capabilitiesResult.setIntegrationTestResult(testResult);
-                                        }
-                                    }
-                                    // projectEnhancerService.enhanceWithBuildInformations(project, service);
-                                    // projectEnhancerService.enhanceWithQualityAnalysis(project, service, metrics);
-                                    // projectAggregatorService.enhanceWithBuildInformations(connectedProject, buildPlugin);                        
-                                } finally {
-                                    project.setLastUpdate(new Date());
-                                }
-                            }
-                        }
-                    }
+                    updateCapabilities(project);
                 } catch (ProjectNotFoundException e) {
                     LOG.info("Project not found by build Software, and will be removed");
                     LOG.debug("Project not found cause", e);
@@ -205,6 +163,49 @@ public class ProjectService {
                     neverRun = false;
                 }
             }
+
         };
     }
+
+    private void updateCapabilities(final Project project) throws BuildNotFoundException {
+        // update capabilities
+        if (project.getLastNotBuildingId() != null) {
+            for (SoftwareProjectId softwareProjectId : project.getCapabilities().keySet()) {
+                //TODO we are currently able to manage last build only 
+                if (!project.getLastBuild().getCapabilitiesResults().containsKey(softwareProjectId)) {
+                    try {
+                        BasicCapability capability = project.getCapabilities().get(softwareProjectId);
+                        LOG.info("new Software {} for project {}", capability, project);
+
+                        CapabilitiesResult capabilitiesResult = new CapabilitiesResult();
+                        project.getLastBuild().getCapabilitiesResults().put(softwareProjectId, capabilitiesResult);
+
+                        if (capability instanceof MetricCapability) {
+                            if (project.getLastNotBuildingId() != null) {
+                                QualityResult qualityResult = ((MetricCapability) capability).analyzeQuality(
+                                        softwareProjectId, MetricCapabilityProcess.metrics);
+                                capabilitiesResult.setQualityResult(qualityResult);
+                            }
+                        }
+
+                        if (capability instanceof TestCapability) {
+                            if (project.getLastNotBuildingId() != null) {
+                                TestResult testResult = ((TestCapability) capability)
+                                        .analyzeUnitTests(softwareProjectId);
+                                capabilitiesResult.setUnitTestResult(testResult);
+                            }
+                            if (project.getLastNotBuildingId() != null) {
+                                TestResult testResult = ((TestCapability) capability)
+                                        .analyzeIntegrationTests(softwareProjectId);
+                                capabilitiesResult.setIntegrationTestResult(testResult);
+                            }
+                        }
+                    } finally {
+                        project.setLastUpdate(new Date());
+                    }
+                }
+            }
+        }
+    }
+
 }
