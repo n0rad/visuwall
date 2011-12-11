@@ -27,7 +27,6 @@
 	</script>
 </head>
 <body class="visuwallBack">
-
 <div id="navigationContainer">
 	<div id="modal" style="display: none"></div>
 	<ul id="navigation">

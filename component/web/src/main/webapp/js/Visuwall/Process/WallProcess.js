@@ -36,7 +36,7 @@ define(['jquery', //
 					if (projectDone.length == projectsStatus.length) {
 						wallView.getProjectIds(function(projectIds) {
 							for (var i = 0; i < projectIds.length; i++) {
-								if (!$.contains(projectDone, projectIds[i])) {
+								if ($.inArray(projectIds[i], projectDone) == -1) {
 									wallView.removeProject(projectIds[i]);
 								}
 							}
