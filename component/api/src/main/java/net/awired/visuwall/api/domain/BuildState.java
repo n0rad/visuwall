@@ -16,6 +16,6 @@
 
 package net.awired.visuwall.api.domain;
 
-public enum State {
+public enum BuildState {
     SUCCESS, ABORTED, FAILURE, UNSTABLE, UNKNOWN, DISABLED;
 }

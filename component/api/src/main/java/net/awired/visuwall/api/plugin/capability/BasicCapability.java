@@ -85,7 +85,7 @@ public interface BasicCapability {
     Map<SoftwareProjectId, String> listSoftwareProjectIds();
 
     /**
-     * Returns true is project is disabled in the software
+     * Returns true if project is disabled in the software
      * 
      * @param projectId
      * @return

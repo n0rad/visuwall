@@ -36,7 +36,7 @@ import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
@@ -392,11 +392,11 @@ public class SonarConnection implements MetricCapability, TestCapability {
 
     
     @Deprecated // NOT USED
-    public State getBuildState(SoftwareProjectId softwareProjectId, Integer buildId)
+    public BuildState getBuildState(SoftwareProjectId softwareProjectId, Integer buildId)
             throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
-        return State.SUCCESS;
+        return BuildState.SUCCESS;
     }
 
     @Deprecated // NOT USED

@@ -22,7 +22,7 @@ import java.util.ListIterator;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.exception.BuildIdNotFoundException;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -70,8 +70,8 @@ public class BuildCapabilityProcess {
                 if (build == null) {
                     continue;
                 }
-                State state = build.getState();
-                if (state == State.UNKNOWN || state == State.ABORTED) {
+                BuildState state = build.getState();
+                if (state == BuildState.UNKNOWN || state == BuildState.ABORTED) {
                     continue;
                 }
 
@@ -114,7 +114,7 @@ public class BuildCapabilityProcess {
             SoftwareProjectId projectId = project.getBuildProjectId();
             Build build = project.findCreatedBuild(buildId);
 
-            State state = project.getBuildConnection().getBuildState(projectId, buildId);
+            BuildState state = project.getBuildConnection().getBuildState(projectId, buildId);
             build.setState(state);
 
             // buildTime

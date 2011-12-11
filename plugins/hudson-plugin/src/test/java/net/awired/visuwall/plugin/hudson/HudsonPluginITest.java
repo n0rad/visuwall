@@ -1,12 +1,12 @@
 package net.awired.visuwall.plugin.hudson;
 
-import static net.awired.visuwall.api.domain.State.DISABLED;
+import static net.awired.visuwall.api.domain.BuildState.DISABLED;
 import static org.junit.Assert.assertEquals;
 
 import java.net.URL;
 
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.BuildState;
 
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ public class HudsonPluginITest {
         HudsonConnection connection = hudsonPlugin.getConnection(hudsonUrl,
                 hudsonPlugin.getPropertiesWithDefaultValue());
         SoftwareProjectId projectId = new SoftwareProjectId("test42");
-        State buildState = connection.getBuildState(projectId, "1");
+        BuildState buildState = connection.getBuildState(projectId, "1");
         assertEquals(DISABLED, buildState);
     }
 

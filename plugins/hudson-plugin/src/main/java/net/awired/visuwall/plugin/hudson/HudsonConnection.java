@@ -19,7 +19,7 @@ package net.awired.visuwall.plugin.hudson;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Arrays.asList;
-import static net.awired.visuwall.api.domain.State.DISABLED;
+import static net.awired.visuwall.api.domain.BuildState.DISABLED;
 import static net.awired.visuwall.plugin.hudson.States.asVisuwallState;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
@@ -44,7 +44,7 @@ import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildIdNotFoundException;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -127,7 +127,7 @@ public class HudsonConnection implements BuildCapability, ViewCapability, TestCa
     }
 
     @Override
-    public State getBuildState(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
+    public BuildState getBuildState(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(projectId);

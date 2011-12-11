@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import com.google.common.base.Objects;
@@ -35,7 +35,7 @@ public class Build {
 
     private final String buildId;
     private boolean building;
-    private State state = State.UNKNOWN;
+    private BuildState state = BuildState.UNKNOWN;
     private List<Commiter> commiters = new ArrayList<Commiter>();
     private long duration;
     private Date startTime;
@@ -119,11 +119,11 @@ public class Build {
         this.startTime = startTime;
     }
 
-    public State getState() {
+    public BuildState getState() {
         return state;
     }
 
-    public void setState(State state) {
+    public void setState(BuildState state) {
         this.state = state;
     }
 

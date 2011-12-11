@@ -44,7 +44,7 @@ import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildIdNotFoundException;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
@@ -162,7 +162,7 @@ public class TeamCityConnection implements BuildCapability, TestCapability {
     }
 
     @Override
-    public State getBuildState(SoftwareProjectId softwareProjectId, String buildId) throws ProjectNotFoundException,
+    public BuildState getBuildState(SoftwareProjectId softwareProjectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);

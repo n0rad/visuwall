@@ -18,7 +18,7 @@ package net.awired.visuwall.plugin.jenkins;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.BuildState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
@@ -27,21 +27,21 @@ public class States {
 
     private static final Logger LOG = LoggerFactory.getLogger(States.class);
 
-    private static final Map<String, State> STATE_MAPPING = new HashMap<String, State>();
+    private static final Map<String, BuildState> STATE_MAPPING = new HashMap<String, BuildState>();
 
     static {
-        STATE_MAPPING.put("success", State.SUCCESS);
-        STATE_MAPPING.put("aborted", State.ABORTED);
-        STATE_MAPPING.put("failure", State.FAILURE);
-        STATE_MAPPING.put("unstable", State.UNSTABLE);
+        STATE_MAPPING.put("success", BuildState.SUCCESS);
+        STATE_MAPPING.put("aborted", BuildState.ABORTED);
+        STATE_MAPPING.put("failure", BuildState.FAILURE);
+        STATE_MAPPING.put("unstable", BuildState.UNSTABLE);
     }
 
-    public static final State asVisuwallState(String jenkinsState) {
+    public static final BuildState asVisuwallState(String jenkinsState) {
         Preconditions.checkNotNull(jenkinsState, "jenkinsState is mandatory");
         jenkinsState = jenkinsState.toLowerCase();
-        State state = STATE_MAPPING.get(jenkinsState);
+        BuildState state = STATE_MAPPING.get(jenkinsState);
         if (state == null) {
-            state = State.UNKNOWN;
+            state = BuildState.UNKNOWN;
             LOG.warn(jenkinsState + " is not available in Jenkins plugin. Please report it to Visuwall dev team.");
         }
         return state;

@@ -18,7 +18,7 @@ package net.awired.visuwall.plugin.teamcity;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.BuildState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,22 +26,22 @@ class States {
 
     private static final Logger LOG = LoggerFactory.getLogger(States.class);
 
-    private static final Map<String, State> STATE_MAPPING = new HashMap<String, State>();
+    private static final Map<String, BuildState> STATE_MAPPING = new HashMap<String, BuildState>();
 
     private static final String ERROR = "ERROR";
     private static final String FAILURE = "FAILURE";
     private static final String SUCCESS = "SUCCESS";
 
     static {
-        STATE_MAPPING.put(ERROR, State.FAILURE);
-        STATE_MAPPING.put(FAILURE, State.UNSTABLE);
-        STATE_MAPPING.put(SUCCESS, State.SUCCESS);
+        STATE_MAPPING.put(ERROR, BuildState.FAILURE);
+        STATE_MAPPING.put(FAILURE, BuildState.UNSTABLE);
+        STATE_MAPPING.put(SUCCESS, BuildState.SUCCESS);
     }
 
-    static final State asVisuwallState(String teamcityState) {
-        State state = STATE_MAPPING.get(teamcityState);
+    static final BuildState asVisuwallState(String teamcityState) {
+        BuildState state = STATE_MAPPING.get(teamcityState);
         if (state == null) {
-            state = State.UNKNOWN;
+            state = BuildState.UNKNOWN;
             LOG.warn(teamcityState + " is not available in TeamCity plugin. Please report it to Visuwall dev team.");
         }
         return state;

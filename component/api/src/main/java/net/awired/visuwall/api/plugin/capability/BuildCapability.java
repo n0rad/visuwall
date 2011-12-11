@@ -21,7 +21,7 @@ import java.util.List;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -71,7 +71,7 @@ public interface BuildCapability extends BasicCapability {
      * @throws ProjectNotFoundException
      * @throws BuildNotFoundException
      */
-    State getBuildState(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
+    BuildState getBuildState(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException;
 
     /**

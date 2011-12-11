@@ -40,7 +40,7 @@ import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
@@ -244,8 +244,8 @@ public class SonarConnectionTest {
     @Test
     public void build_state_should_always_be_success() throws Exception {
         SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
-        State state = sonar.getBuildState(softwareProjectId, 1);
-        assertEquals(State.SUCCESS, state);
+        BuildState state = sonar.getBuildState(softwareProjectId, 1);
+        assertEquals(BuildState.SUCCESS, state);
     }
 
     @Test

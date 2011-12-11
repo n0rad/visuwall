@@ -42,7 +42,7 @@ import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.State;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 
 import org.junit.Before;
@@ -82,9 +82,9 @@ public class TeamCityConnectionTest {
         when(teamCity.findBuild(anyString(), anyString())).thenReturn(build);
 
         SoftwareProjectId projectId = new SoftwareProjectId("projectId");
-        State state = teamCityConnection.getBuildState(projectId, "1234");
+        BuildState state = teamCityConnection.getBuildState(projectId, "1234");
 
-        assertEquals(State.SUCCESS, state);
+        assertEquals(BuildState.SUCCESS, state);
     }
 
     @Test
