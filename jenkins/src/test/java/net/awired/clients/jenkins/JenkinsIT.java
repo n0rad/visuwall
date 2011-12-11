@@ -16,16 +16,22 @@
 
 package net.awired.clients.jenkins;
 
-import net.awired.clients.hudson.Hudson;
+import static org.junit.Assert.assertFalse;
 
-public class Jenkins extends Hudson {
+import java.util.List;
 
-    public Jenkins(String jenkinsUrl) {
-        super(jenkinsUrl);
-    }
+import net.awired.clients.hudson.domain.HudsonJob;
+import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
 
-    public Jenkins(String jenkinsUrl, String login, String password) {
-        super(jenkinsUrl, login, password);
+import org.junit.Test;
+
+public class JenkinsIT {
+
+    @Test
+    public void test() throws HudsonJobNotFoundException {
+        Jenkins jenkins = new Jenkins("http://localhost:8442", "admin", "password");
+        List<HudsonJob> projects = jenkins.findAllProjects();
+        assertFalse(projects.isEmpty());
     }
 
 }

@@ -60,6 +60,12 @@ public class Hudson {
         }
     }
 
+    public Hudson(String hudsonUrl, String login, String password) {
+        this.url = hudsonUrl;
+        hudsonUrlBuilder = new HudsonUrlBuilder(hudsonUrl);
+        hudsonFinder = new HudsonFinder(hudsonUrlBuilder, login, password);
+    }
+
     /**
      * @return List of all available projects on Hudson
      */

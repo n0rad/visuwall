@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.clients.hudson.domain.HudsonBuild;
@@ -46,8 +47,10 @@ import net.awired.clients.hudson.resource.MavenModuleSetBuild;
 import net.awired.clients.hudson.resource.Project;
 import net.awired.clients.hudson.resource.SurefireAggregatedReport;
 import net.awired.clients.hudson.resource.View;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.annotations.VisibleForTesting;
 
 class HudsonFinder {
@@ -67,6 +70,13 @@ class HudsonFinder {
 
     HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder) {
         this.client = new GenericSoftwareClient();
+        this.hudsonUrlBuilder = hudsonUrlBuilder;
+        this.hudsonBuildBuilder = new HudsonBuildBuilder();
+        this.testResultBuilder = new TestResultBuilder();
+    }
+
+    public HudsonFinder(HudsonUrlBuilder hudsonUrlBuilder, String login, String password) {
+        this.client = new GenericSoftwareClient(login, password);
         this.hudsonUrlBuilder = hudsonUrlBuilder;
         this.hudsonBuildBuilder = new HudsonBuildBuilder();
         this.testResultBuilder = new TestResultBuilder();
