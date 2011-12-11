@@ -146,6 +146,7 @@ public class KarafOsgiService implements PluginServiceInterface {
         for (int i = 0; (services != null) && (i < services.length); i++) {
             VisuwallPlugin<BasicCapability> visuwallPlugin = (VisuwallPlugin<BasicCapability>) services[i];
             SoftwareId softwareId = null;
+            BasicCapability connectionPlugin = null;
             try {
                 softwareId = visuwallPlugin.getSoftwareId(url);
                 Preconditions.checkNotNull(softwareId, "isManageable() should not return null", visuwallPlugin);
@@ -154,7 +155,8 @@ public class KarafOsgiService implements PluginServiceInterface {
                 softwareInfo.setSoftwareId(softwareId);
                 softwareInfo.setPluginInfo(getPluginInfo(visuwallPlugin));
 
-                BasicCapability connectionPlugin = visuwallPlugin.getConnection(url, properties);
+                connectionPlugin = visuwallPlugin.getConnection(url, properties);
+
                 softwareInfo.setProjectNames(connectionPlugin.listSoftwareProjectIds());
                 if (connectionPlugin instanceof ViewCapability) {
                     softwareInfo.setViewNames(((ViewCapability) connectionPlugin).findViews());
@@ -164,6 +166,10 @@ public class KarafOsgiService implements PluginServiceInterface {
                 LOG.debug("Plugin " + visuwallPlugin + " can not manage url " + url);
             } catch (Throwable e) {
                 LOG.warn("Plugin " + visuwallPlugin + " throws exception on url " + url, e);
+            } finally {
+                if (connectionPlugin != null) {
+                    connectionPlugin.close();
+                }
             }
         }
         throw new RuntimeException("no plugin to manage url " + url);

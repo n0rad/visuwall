@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-        Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
-
-        Licensed under the Apache License, Version 2.0 (the "License");
-        you may not use this file except in compliance with the License.
-        You may obtain a copy of the License at
-
-                http://www.apache.org/licenses/LICENSE-2.0
-
-        Unless required by applicable law or agreed to in writing, software
-        distributed under the License is distributed on an "AS IS" BASIS,
-        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-        See the License for the specific language governing permissions and
-        limitations under the License.
-
--->
+<!-- Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> 
+	- Arnaud LEMAIRE <alemaire at norad dot fr> Licensed under the Apache License, 
+	Version 2.0 (the "License"); you may not use this file except in compliance 
+	with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
@@ -37,9 +28,9 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-<!-- 				<property name="showSql" value="true" /> -->
+				<!-- <property name="showSql" value="true" /> -->
 				<property name="generateDdl" value="true" />
-				<property name="databasePlatform" value="org.hibernate.dialect.HSQLDialect" />
+				<property name="databasePlatform" value="org.hibernate.dialect.H2Dialect" />
 			</bean>
 		</property>
 	</bean>
@@ -52,9 +43,14 @@
 		<property name="password" value="${database.password}" />
 	</bean>
 
+	<!-- H2 server -->
+	<bean id="org.h2.tools.Server" class="org.h2.tools.Server"
+		lazy-init="false" factory-method="createTcpServer" init-method="start"
+		destroy-method="stop" depends-on="dataSource">
+		<constructor-arg value="-tcp,-tcpAllowOthers,-tcpPort,8043" />
+	</bean>
+
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" />
-
-
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
 
 </beans>
