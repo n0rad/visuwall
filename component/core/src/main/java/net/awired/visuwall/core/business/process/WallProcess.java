@@ -17,7 +17,9 @@
 package net.awired.visuwall.core.business.process;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
@@ -94,8 +96,16 @@ public class WallProcess {
     private void rebuildConnectionPluginsInSoftwareAccess(Wall wall) {
         for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
             try {
+                Map<String, String> properties = new HashMap<String, String>(softwareAccess.getProperties());
+                //TODO 
+                if (softwareAccess.getLogin() != null) {
+                    properties.put("login", softwareAccess.getLogin());
+                }
+                if (softwareAccess.getPassword() != null) {
+                    properties.put("password", softwareAccess.getPassword());
+                }
                 BasicCapability connection = pluginService.getPluginConnectionFromUrl(softwareAccess.getUrl(),
-                        softwareAccess.getProperties());
+                        properties);
                 softwareAccess.setConnection(connection);
             } catch (Throwable e) {
                 LOG.warn("Plugin throw an exception", e);
