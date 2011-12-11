@@ -38,7 +38,7 @@
 
 	<!-- allow access to js,css,img with url /res/* -->
 	<mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
-	<mvc:resources mapping="/res/**" location="/" />
+	<mvc:resources mapping="/res/**" location="/" cache-period="0" />
 
 	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 <!-- 	<property name=""></property> -->
