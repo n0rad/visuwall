@@ -57,9 +57,9 @@ define(['jquery', //
 										updateFunc(stat);
 									});
 						} else {
-							$this._updateBuilding(status.id, status.building, status.buildingTimeleftSecond);
 							wallView.getLastUpdate(status.id, function(lastUpdate) {
 								if (lastUpdate != status.lastUpdate) {
+									$this._updateBuilding(status.id, status.building, status.buildingTimeleftSecond);
 									projectService.findProject($this.wallName, status.id, function(newProjectData) {
 										$this._updateProject(newProjectData);
 										wallView.setLastUpdate(newProjectData.id, newProjectData.lastUpdate);
@@ -95,9 +95,8 @@ define(['jquery', //
 			
 			var stateFunction = 'display' + lastNotBuild.state.toLowerCase().ucFirst();
 			wallView[stateFunction](project.id);
-
 			
-			$this._updateBuilding(project.id, lastBuild.building, lastBuild.estimatedFinishTime);
+			$this._updateBuilding(project.id, lastBuild.building, 0 /* we don't have buildingTimeleftSecond here */);
 			$this._updateTimers(project, lastBuild);
 			wallView.updateCommiters(project.id, lastNotBuild.commiters);
 			if (lastNotBuild.qualityResult) {
@@ -146,7 +145,7 @@ define(['jquery', //
 		this._updateBuilding = function(projectId, building, finishTime) {
 			if (building) {
 				wallView.showBuilding(projectId);
-				if (finishTime) {
+				if (finishTime > 0) {
 					wallView.setCountdown(projectId, new Date(new Date().getTime() + (finishTime * 1000)));
 				}
 			} else {

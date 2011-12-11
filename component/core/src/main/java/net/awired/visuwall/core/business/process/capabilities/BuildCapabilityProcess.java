@@ -19,10 +19,10 @@ package net.awired.visuwall.core.business.process.capabilities;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.exception.BuildIdNotFoundException;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
@@ -121,6 +121,7 @@ public class BuildCapabilityProcess {
             BuildTime buildTime = project.getBuildConnection().getBuildTime(projectId, buildId);
             build.setStartTime(buildTime.getStartTime());
             build.setDuration(buildTime.getDuration());
+            build.setBuilding(project.getBuildConnection().isBuilding(projectId, buildId));
 
             List<Commiter> commiters = project.getBuildConnection().getBuildCommiters(projectId, buildId);
             build.setCommiters(commiters);
