@@ -46,7 +46,7 @@ public class JenkinsConnectionTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
         jenkinsConnection = new JenkinsConnection();
-        jenkinsConnection.connect("http://jenkins:8080");
+        jenkinsConnection.connect("http://jenkins:8080", "", "");
         jenkinsConnection.hudson = hudson;
     }
 
@@ -87,12 +87,12 @@ public class JenkinsConnectionTest {
 
     @Test(expected = IllegalStateException.class)
     public void should_throw_exception_if_no_url() {
-        new JenkinsConnection().connect("");
+        new JenkinsConnection().connect("", "", "");
     }
 
     @Test
     public void should_create_hudson() {
-        new JenkinsConnection().connect("url");
+        new JenkinsConnection().connect("url", "", "");
     }
 
     @Test

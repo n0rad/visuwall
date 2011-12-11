@@ -18,6 +18,7 @@ package net.awired.visuwall.plugin.jenkins;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 import net.awired.visuwall.api.domain.SoftwareId;
@@ -29,18 +30,17 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 
 public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
-    private static final Map<String, String> PROPERTIES = new ImmutableMap.Builder<String, String>().put("login", "")
-            .put("password", "").build();
 
     @Override
     public JenkinsConnection getConnection(URL url, Map<String, String> properties) {
         JenkinsConnection jenkinsConnectionPlugin = new JenkinsConnection();
-        jenkinsConnectionPlugin.connect(url.toString());
+        String login = properties.get("login");
+        String password = properties.get("password");
+        jenkinsConnectionPlugin.connect(url.toString(), login, password);
         return jenkinsConnectionPlugin;
     }
 
@@ -86,7 +86,7 @@ public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
 
     @Override
     public Map<String, String> getPropertiesWithDefaultValue() {
-        return PROPERTIES;
+        return new HashMap<String, String>();
     }
 
 }
