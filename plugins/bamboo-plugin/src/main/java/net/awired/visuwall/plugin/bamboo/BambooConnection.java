@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import net.awired.clients.bamboo.Bamboo;
 import net.awired.clients.bamboo.exception.BambooBuildNotFoundException;
 import net.awired.clients.bamboo.exception.BambooBuildNumberNotFoundException;
@@ -30,21 +31,23 @@ import net.awired.clients.bamboo.exception.BambooPlanNotFoundException;
 import net.awired.clients.bamboo.exception.BambooStateNotFoundException;
 import net.awired.clients.bamboo.resource.Plan;
 import net.awired.clients.bamboo.resource.Result;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildIdNotFoundException;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -59,21 +62,21 @@ public class BambooConnection implements BuildCapability, TestCapability {
 
     @Override
     public void connect(String url, String login, String password) {
-        connect(url);
-    }
-
-    public void connect(String url) {
         Preconditions.checkNotNull(url, "url is mandatory");
         if (StringUtils.isBlank(url)) {
             throw new IllegalArgumentException("url can't be null.");
         }
-        bamboo = new Bamboo(url);
+        if (StringUtils.isNotBlank(login)) {
+            bamboo = new Bamboo(url, login, password);
+        } else {
+            bamboo = new Bamboo(url);
+        }
         connected = true;
     }
 
     @Override
-    public boolean isBuilding(SoftwareProjectId softwareProjectId, String buildId)
-            throws ProjectNotFoundException, BuildNotFoundException {
+    public boolean isBuilding(SoftwareProjectId softwareProjectId, String buildId) throws ProjectNotFoundException,
+            BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         checkBuildId(buildId);
@@ -101,8 +104,7 @@ public class BambooConnection implements BuildCapability, TestCapability {
     }
 
     @Override
-    public String getLastBuildId(SoftwareProjectId projectId) throws ProjectNotFoundException,
-            BuildIdNotFoundException {
+    public String getLastBuildId(SoftwareProjectId projectId) throws ProjectNotFoundException, BuildIdNotFoundException {
         checkConnected();
         checkSoftwareProjectId(projectId);
         try {
@@ -142,8 +144,8 @@ public class BambooConnection implements BuildCapability, TestCapability {
     }
 
     @Override
-    public Date getEstimatedFinishTime(SoftwareProjectId projectId, String buildId)
-            throws ProjectNotFoundException, BuildNotFoundException {
+    public Date getEstimatedFinishTime(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
+            BuildNotFoundException {
         checkConnected();
         checkBuildId(buildId);
         String projectName = getProjectKey(projectId);
@@ -221,8 +223,7 @@ public class BambooConnection implements BuildCapability, TestCapability {
     }
 
     @Override
-    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, String buildId)
-            throws BuildNotFoundException {
+    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, String buildId) throws BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         checkBuildId(buildId);
@@ -234,8 +235,7 @@ public class BambooConnection implements BuildCapability, TestCapability {
             buildTime.setStartTime(bambooResult.getBuildStartedTime());
             return buildTime;
         } catch (BambooBuildNotFoundException e) {
-            throw new BuildNotFoundException("Can't find build #" + buildId + " of project " + softwareProjectId,
-                    e);
+            throw new BuildNotFoundException("Can't find build #" + buildId + " of project " + softwareProjectId, e);
         }
     }
 

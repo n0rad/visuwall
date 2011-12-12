@@ -21,15 +21,18 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import net.awired.clients.bamboo.Bamboo;
 import net.awired.clients.bamboo.exception.BambooPlanNotFoundException;
 import net.awired.clients.bamboo.resource.Plan;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -45,7 +48,7 @@ public class BambooConnectionTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        bambooConnection.connect("http://bamboo:8080");
+        bambooConnection.connect("http://bamboo:8080", "", "");
         bambooConnection.bamboo = bamboo;
     }
 
