@@ -19,6 +19,7 @@ package net.awired.clients.bamboo;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import net.awired.clients.bamboo.exception.BambooBuildNotFoundException;
 import net.awired.clients.bamboo.exception.BambooBuildNumberNotFoundException;
 import net.awired.clients.bamboo.exception.BambooEstimatedFinishTimeNotFoundException;
@@ -33,23 +34,34 @@ import net.awired.clients.bamboo.resource.Result;
 import net.awired.clients.bamboo.resource.Results;
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
+
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Preconditions;
 
 public class Bamboo {
 
     private BambooUrlBuilder bambooUrlBuilder;
 
-    private GenericSoftwareClient client = new GenericSoftwareClient();
+    private GenericSoftwareClient client;
 
     private static final Logger LOG = LoggerFactory.getLogger(Bamboo.class);
 
     public Bamboo(String bambooUrl) {
-        bambooUrlBuilder = new BambooUrlBuilder(bambooUrl);
+        this.client = new GenericSoftwareClient();
+        this.bambooUrlBuilder = new BambooUrlBuilder(bambooUrl);
         if (LOG.isInfoEnabled()) {
             LOG.info("Initialize bamboo with url " + bambooUrl);
+        }
+    }
+
+    public Bamboo(String bambooUrl, String login, String password) {
+        this.client = new GenericSoftwareClient(login, password);
+        this.bambooUrlBuilder = new BambooUrlBuilder(bambooUrl);
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Initialize bamboo with url " + bambooUrl + " and login " + login);
         }
     }
 
@@ -157,8 +169,8 @@ public class Bamboo {
             DateTime estimatedFinishTime = startDate.plus(duration * 1000);
             return estimatedFinishTime.toDate();
         } catch (BambooResultNotFoundException e) {
-            throw new BambooEstimatedFinishTimeNotFoundException("Can't find estimated finish time of plan:"
-                    + planKey, e);
+            throw new BambooEstimatedFinishTimeNotFoundException("Can't find estimated finish time of plan:" + planKey,
+                    e);
         }
     }
 
