@@ -20,10 +20,10 @@ import com.google.common.base.Preconditions;
 
 public class SonarConnectionFactory {
 
-    public SonarConnection create(String url) {
+    public SonarConnection create(String url, String login, String password) {
         Preconditions.checkNotNull(url, "url is mandatory");
         SonarConnection sonarConnection = new SonarConnection();
-        sonarConnection.connect(url);
+        sonarConnection.connect(url, login, password);
         return sonarConnection;
     }
 

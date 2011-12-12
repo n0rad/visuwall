@@ -122,7 +122,7 @@ public class SonarPluginTest {
         SonarConnection mockedConnection = new SonarConnection();
 
         SonarConnectionFactory sonarConnectionFactory = mock(SonarConnectionFactory.class);
-        when(sonarConnectionFactory.create(anyString())).thenReturn(mockedConnection);
+        when(sonarConnectionFactory.create(anyString(), anyString(), anyString())).thenReturn(mockedConnection);
 
         sonar.sonarConnectionFactory = sonarConnectionFactory;
 

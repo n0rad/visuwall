@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
 import net.awired.clients.sonar.Sonar;
 import net.awired.clients.sonar.domain.SonarQualityMetric;
 import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
@@ -32,25 +33,27 @@ import net.awired.clients.sonar.exception.SonarProjectNotFoundException;
 import net.awired.clients.sonar.exception.SonarProjectsNotFoundException;
 import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
 import net.awired.clients.sonar.resource.Project;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMeasure;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.BuildIdNotFoundException;
+import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -73,10 +76,6 @@ public class SonarConnection implements MetricCapability, TestCapability {
     private String url;
 
     public SonarConnection() {
-    }
-
-    public void connect(String url) {
-        connect(url, null, null);
     }
 
     @Override
@@ -154,8 +153,7 @@ public class SonarConnection implements MetricCapability, TestCapability {
             Resource resource = sonarClient.findResource(artifactId);
             return resource.getName(true);
         } catch (SonarResourceNotFoundException e) {
-            throw new ProjectNotFoundException("Can't get description of software project id: " + softwareProjectId,
-                    e);
+            throw new ProjectNotFoundException("Can't get description of software project id: " + softwareProjectId, e);
         }
     }
 
@@ -373,8 +371,8 @@ public class SonarConnection implements MetricCapability, TestCapability {
         return qualityMetric;
     }
 
-    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildId)
-            throws BuildNotFoundException, ProjectNotFoundException {
+    public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, Integer buildId) throws BuildNotFoundException,
+            ProjectNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         BuildTime buildTime = new BuildTime();
@@ -383,15 +381,16 @@ public class SonarConnection implements MetricCapability, TestCapability {
         return buildTime;
     }
 
-    @Deprecated // NOT USED
+    @Deprecated
+    // NOT USED
     public List<Integer> getBuildIds(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         return Arrays.asList(1);
     }
 
-    
-    @Deprecated // NOT USED
+    @Deprecated
+    // NOT USED
     public BuildState getBuildState(SoftwareProjectId softwareProjectId, Integer buildId)
             throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
@@ -399,7 +398,8 @@ public class SonarConnection implements MetricCapability, TestCapability {
         return BuildState.SUCCESS;
     }
 
-    @Deprecated // NOT USED
+    @Deprecated
+    // NOT USED
     public Date getEstimatedFinishTime(SoftwareProjectId softwareProjectId, Integer buildId)
             throws ProjectNotFoundException, BuildNotFoundException {
         checkConnected();
@@ -407,15 +407,17 @@ public class SonarConnection implements MetricCapability, TestCapability {
         return new Date();
     }
 
-    @Deprecated // NOT USED
-    public boolean isBuilding(SoftwareProjectId softwareProjectId, Integer buildId)
-            throws ProjectNotFoundException, BuildNotFoundException {
+    @Deprecated
+    // NOT USED
+    public boolean isBuilding(SoftwareProjectId softwareProjectId, Integer buildId) throws ProjectNotFoundException,
+            BuildNotFoundException {
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         return false;
     }
 
-    @Deprecated // NOT USED
+    @Deprecated
+    // NOT USED
     public int getLastBuildId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
             BuildIdNotFoundException {
         checkConnected();
@@ -423,7 +425,8 @@ public class SonarConnection implements MetricCapability, TestCapability {
         return 1;
     }
 
-    @Deprecated // NOT USED
+    @Deprecated
+    // NOT USED
     public List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, Integer buildId)
             throws BuildNotFoundException, ProjectNotFoundException {
         checkConnected();

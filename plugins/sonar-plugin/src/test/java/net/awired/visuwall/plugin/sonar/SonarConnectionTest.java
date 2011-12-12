@@ -22,31 +22,32 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
+
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import net.awired.clients.sonar.Sonar;
 import net.awired.clients.sonar.domain.SonarQualityMetric;
 import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
 import net.awired.clients.sonar.exception.SonarMetricsNotFoundException;
-import net.awired.clients.sonar.exception.SonarProjectsNotFoundException;
 import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
 import net.awired.clients.sonar.resource.Project;
 import net.awired.clients.sonar.resource.Projects;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -69,7 +70,7 @@ public class SonarConnectionTest {
         when(sonarClient.findMetrics()).thenReturn(metricList);
         sonar = new SonarConnection();
         sonar.sonarClient = sonarClient;
-        sonar.connect("http://sonar:9000");
+        sonar.connect("http://sonar:9000", "", "");
     }
 
     @Test
@@ -110,17 +111,9 @@ public class SonarConnectionTest {
     }
 
     /***
-     * <metric>
-     * <key>generated_lines</key>
-     * <name>Generated Lines</name>
-     * <description>Number of generated lines</description>
-     * <domain>Size</domain>
-     * <qualitative>false</qualitative>
-     * <direction>-1</direction>
-     * <user_managed>false</user_managed>
-     * <val_type>INT</val_type>
-     * <hidden>false</hidden>
-     * </metric>
+     * <metric> <key>generated_lines</key> <name>Generated Lines</name> <description>Number of generated
+     * lines</description> <domain>Size</domain> <qualitative>false</qualitative> <direction>-1</direction>
+     * <user_managed>false</user_managed> <val_type>INT</val_type> <hidden>false</hidden> </metric>
      */
     @Test
     public void should_build_valid_metric_map() throws Exception {
@@ -138,7 +131,7 @@ public class SonarConnectionTest {
         Map<String, SonarQualityMetric> qualityMetrics = new HashMap<String, SonarQualityMetric>();
         qualityMetrics.put("size", generatedLinesMetric);
         when(sonarClient.findMetrics()).thenReturn(qualityMetrics);
-        sonar.connect("http://sonar:9000");
+        sonar.connect("http://sonar:9000", "", "");
 
         Map<String, List<QualityMetric>> metrics = sonar.getMetricsByCategory();
         List<QualityMetric> sizeMetrics = metrics.get("Size");
@@ -218,7 +211,7 @@ public class SonarConnectionTest {
     @Test
     public void should_not_throw_exception_if_sonar_metrics_are_not_found() throws Exception {
         when(sonarClient.findMetrics()).thenThrow(new SonarMetricsNotFoundException("not found", null));
-        sonar.connect("http://sonar:9000");
+        sonar.connect("http://sonar:9000", "", "");
     }
 
     @Test

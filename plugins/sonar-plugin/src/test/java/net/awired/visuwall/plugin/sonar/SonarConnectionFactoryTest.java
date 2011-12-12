@@ -17,6 +17,7 @@
 package net.awired.visuwall.plugin.sonar;
 
 import static org.junit.Assert.assertFalse;
+
 import org.junit.Test;
 
 public class SonarConnectionFactoryTest {
@@ -25,12 +26,12 @@ public class SonarConnectionFactoryTest {
 
     @Test(expected = NullPointerException.class)
     public void can_t_pass_null_to_create_method() {
-        sonarConnectionFactory.create(null);
+        sonarConnectionFactory.create(null, "", "");
     }
 
     @Test
     public void should_create_sonar_connection() {
-        SonarConnection connection = sonarConnectionFactory.create("http://sonar:9000");
+        SonarConnection connection = sonarConnectionFactory.create("http://sonar:9000", "", "");
         assertFalse(connection.isClosed());
     }
 
