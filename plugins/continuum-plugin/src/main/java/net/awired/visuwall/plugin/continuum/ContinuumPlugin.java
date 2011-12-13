@@ -1,5 +1,6 @@
 package net.awired.visuwall.plugin.continuum;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class ContinuumPlugin implements VisuwallPlugin<ContinuumConnection> {
 
     @Override
     public float getVersion() {
-        return 0;
+        return 1.0f;
     }
 
     @Override
@@ -40,11 +41,24 @@ public class ContinuumPlugin implements VisuwallPlugin<ContinuumConnection> {
 
     @Override
     public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
-        SoftwareId softwareId = new SoftwareId();
-        softwareId.setName("Continuum");
-        softwareId.setVersion("0");
-        softwareId.setWarnings("");
-        return softwareId;
+        if (isManageable(url)) {
+            SoftwareId softwareId = new SoftwareId();
+            softwareId.setName("Continuum");
+            softwareId.setVersion("1.0");
+            softwareId.setWarnings("");
+            return softwareId;
+        }
+        throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Continuum");
     }
 
+    private boolean isManageable(URL url) {
+        try {
+            url = new URL(url.toString() + "/groupSummary.action");
+            String content;
+            content = Downloadables.getContent(url);
+            return content.contains("Continuum");
+        } catch (IOException e) {
+            return false;
+        }
+    }
 }

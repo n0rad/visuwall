@@ -32,8 +32,12 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
     @Override
     public BambooConnection getConnection(URL url, Map<String, String> properties) {
         BambooConnection connection = new BambooConnection();
-        String login = properties.get("login");
-        String password = properties.get("password");
+        String login = "";
+        String password = "";
+        if (properties != null) {
+            properties.get("login");
+            properties.get("password");
+        }
         connection.connect(url.toString(), login, password);
         return connection;
     }
