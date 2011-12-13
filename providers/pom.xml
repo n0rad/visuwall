@@ -31,7 +31,6 @@
 		<module>sonar</module>
 		<module>teamcity</module>
 		<module>bamboo</module>
-		<module>continuum</module>
 	</modules>
 
 	<licenses>
