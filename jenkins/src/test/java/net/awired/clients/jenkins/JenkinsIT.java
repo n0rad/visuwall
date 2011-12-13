@@ -29,7 +29,7 @@ public class JenkinsIT {
 
     @Test
     public void test() throws HudsonJobNotFoundException {
-        Jenkins jenkins = new Jenkins("http://localhost:8442", "admin", "password");
+        Jenkins jenkins = new Jenkins("http://10.2.40.63:8989", "", "");
         List<HudsonJob> projects = jenkins.findAllProjects();
         assertFalse(projects.isEmpty());
     }
