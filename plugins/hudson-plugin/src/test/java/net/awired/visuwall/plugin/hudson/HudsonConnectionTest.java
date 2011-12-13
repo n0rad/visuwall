@@ -51,7 +51,7 @@ public class HudsonConnectionTest {
         MockitoAnnotations.initMocks(this);
 
         hudsonConnection = new HudsonConnection();
-        hudsonConnection.connect("http://hudson:8080");
+        hudsonConnection.connect("http://hudson:8080", "", "");
         hudsonConnection.hudson = hudson;
     }
 
@@ -126,7 +126,7 @@ public class HudsonConnectionTest {
 
     @Test(expected = IllegalStateException.class)
     public void should_throw_exception_if_no_url() {
-        new HudsonConnection().connect("");
+        new HudsonConnection().connect("", "", "");
     }
 
     @Test
@@ -149,7 +149,7 @@ public class HudsonConnectionTest {
 
     @Test
     public void should_create_hudson() {
-        new HudsonConnection().connect("url");
+        new HudsonConnection().connect("url", "", "");
     }
 
 }

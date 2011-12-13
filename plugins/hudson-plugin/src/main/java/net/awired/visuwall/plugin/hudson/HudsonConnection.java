@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.util.Arrays.asList;
 import static net.awired.visuwall.plugin.hudson.States.asVisuwallState;
 import static org.apache.commons.lang.StringUtils.isBlank;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -29,6 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import net.awired.clients.hudson.Hudson;
 import net.awired.clients.hudson.domain.HudsonBuild;
 import net.awired.clients.hudson.domain.HudsonCommiter;
@@ -51,8 +53,11 @@ import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
+
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.annotations.VisibleForTesting;
 
 public class HudsonConnection implements BuildCapability, ViewCapability, TestCapability {
@@ -69,15 +74,15 @@ public class HudsonConnection implements BuildCapability, ViewCapability, TestCa
 
     @Override
     public void connect(String url, String login, String password) {
-        connect(url);
-    }
-
-    public void connect(String url) {
         checkNotNull(url, "url is mandatory");
         if (isBlank(url)) {
             throw new IllegalStateException("url can't be null.");
         }
-        hudson = new Hudson(url);
+        if (StringUtils.isBlank(login)) {
+            hudson = new Hudson(url);
+        } else {
+            hudson = new Hudson(url, login, password);
+        }
         connected = true;
     }
 
@@ -140,8 +145,7 @@ public class HudsonConnection implements BuildCapability, ViewCapability, TestCa
     }
 
     @Override
-    public String getLastBuildId(SoftwareProjectId projectId) throws ProjectNotFoundException,
-            BuildIdNotFoundException {
+    public String getLastBuildId(SoftwareProjectId projectId) throws ProjectNotFoundException, BuildIdNotFoundException {
         checkConnected();
         checkSoftwareProjectId(projectId);
         try {

@@ -27,6 +27,7 @@ import static org.mockito.Mockito.when;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
@@ -122,11 +123,11 @@ public class SonarPluginTest {
         SonarConnection mockedConnection = new SonarConnection();
 
         SonarConnectionFactory sonarConnectionFactory = mock(SonarConnectionFactory.class);
-        when(sonarConnectionFactory.create(anyString())).thenReturn(mockedConnection);
+        when(sonarConnectionFactory.create(anyString(), anyString(), anyString())).thenReturn(mockedConnection);
 
         sonar.sonarConnectionFactory = sonarConnectionFactory;
 
-        SonarConnection connection = sonar.getConnection(new URL("http://url"), null);
+        SonarConnection connection = sonar.getConnection(new URL("http://url"), new HashMap<String, String>());
         assertEquals(mockedConnection, connection);
     }
 }

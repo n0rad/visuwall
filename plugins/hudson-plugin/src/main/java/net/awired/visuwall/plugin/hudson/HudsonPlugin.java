@@ -37,7 +37,9 @@ public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
     @Override
     public HudsonConnection getConnection(URL url, Map<String, String> properties) {
         HudsonConnection hudsonConnectionPlugin = new HudsonConnection();
-        hudsonConnectionPlugin.connect(url.toString());
+        String login = properties.get("login");
+        String password = properties.get("password");
+        hudsonConnectionPlugin.connect(url.toString(), login, password);
         return hudsonConnectionPlugin;
     }
 
