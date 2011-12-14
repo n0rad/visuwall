@@ -17,9 +17,10 @@
 package net.awired.clients.hudson.helper;
 
 import java.util.List;
+
 import net.awired.clients.hudson.resource.Build;
 import net.awired.clients.hudson.resource.Culprit;
-import net.awired.clients.hudson.resource.Project;
+
 import com.google.common.base.Preconditions;
 
 public class HudsonXmlHelper {
@@ -43,11 +44,6 @@ public class HudsonXmlHelper {
             commiters[i] = name;
         }
         return commiters;
-    }
-
-    public static boolean getIsBuilding(Project modelJob) {
-        String color = modelJob.getColor();
-        return color.endsWith("_anime");
     }
 
     private static void checkBuild(Build build) {
