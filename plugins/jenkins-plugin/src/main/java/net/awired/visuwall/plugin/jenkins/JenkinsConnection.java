@@ -118,9 +118,20 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
         checkConnected();
         try {
             String projectName = jobName(projectId);
-            return hudson.isBuilding(projectName);
+            HudsonBuild build = hudson.findBuild(projectName, Integer.valueOf(buildId));
+            if (build.getState() == null) {
+                return true;
+            }
+            if (build.getDuration() == 0) {
+                return true;
+            }
+            return false;
         } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException(e);
+        } catch (NumberFormatException e) {
+            throw new BuildNotFoundException(e);
+        } catch (HudsonBuildNotFoundException e) {
+            throw new BuildNotFoundException(e);
         }
     }
 

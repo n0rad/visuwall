@@ -1,8 +1,9 @@
 package net.awired.visuwall.plugin.hudson;
 
-import static org.junit.Assert.assertTrue;
 import java.net.URL;
+
 import net.awired.visuwall.api.domain.SoftwareProjectId;
+
 import org.junit.Test;
 
 public class HudsonPluginITest {
@@ -14,8 +15,10 @@ public class HudsonPluginITest {
         URL hudsonUrl = new URL("http://ci.visuwall.awired.net/");
         HudsonConnection connection = hudsonPlugin.getConnection(hudsonUrl,
                 hudsonPlugin.getPropertiesWithDefaultValue());
-        SoftwareProjectId projectId = new SoftwareProjectId("disabled");
-        assertTrue(connection.isProjectDisabled(projectId));
+        SoftwareProjectId projectId = new SoftwareProjectId("struts 2 instable");
+        System.out.println(connection.isBuilding(projectId, "5"));
+        System.out.println(connection.isBuilding(projectId, "4"));
+
     }
 
 }
