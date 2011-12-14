@@ -141,15 +141,6 @@ public class HudsonTest {
     }
 
     @Test
-    public void should_get_is_building() throws HudsonJobNotFoundException {
-        when(hudsonFinder.isBuilding("projectName")).thenReturn(true);
-
-        boolean isBuilding = hudson.isBuilding("projectName");
-
-        assertTrue(isBuilding);
-    }
-
-    @Test
     public void should_get_project_names() {
         List<String> projectNames = new ArrayList<String>();
         projectNames.add("project1");
