@@ -18,7 +18,6 @@ package net.awired.visuwall.plugin.jenkins;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -48,20 +47,6 @@ public class JenkinsConnectionTest {
         jenkinsConnection = new JenkinsConnection();
         jenkinsConnection.connect("http://jenkins:8080", "", "");
         jenkinsConnection.hudson = hudson;
-    }
-
-    @Test
-    public void should_get_is_building_information() throws Exception {
-
-        when(hudson.isBuilding("project1")).thenReturn(true);
-        when(hudson.isBuilding("project2")).thenReturn(false);
-
-        SoftwareProjectId projectId = new SoftwareProjectId("project1");
-
-        assertTrue(jenkinsConnection.isBuilding(projectId, ""));
-
-        projectId = new SoftwareProjectId("project2");
-        assertFalse(jenkinsConnection.isBuilding(projectId, ""));
     }
 
     @Test

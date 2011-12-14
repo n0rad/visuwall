@@ -56,19 +56,6 @@ public class HudsonConnectionTest {
     }
 
     @Test
-    public void should_get_is_building_information() throws Exception {
-        when(hudson.isBuilding("project1")).thenReturn(true);
-        when(hudson.isBuilding("project2")).thenReturn(false);
-
-        SoftwareProjectId projectId = new SoftwareProjectId("project1");
-
-        assertTrue(hudsonConnection.isBuilding(projectId, ""));
-
-        projectId = new SoftwareProjectId("project2");
-        assertFalse(hudsonConnection.isBuilding(projectId, ""));
-    }
-
-    @Test
     public void should_get_estimated_finish_time() throws Exception {
         Date date = new Date();
         when(hudson.getEstimatedFinishTime(Matchers.anyString())).thenReturn(date);
