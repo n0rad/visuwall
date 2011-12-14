@@ -210,7 +210,6 @@ define(['jquery', //
 						$this.statusClasses, 'success-state', 3000);
 
 				$this._hideCommiters(projectId);
-				$this._showQuality(projectId);				
 			};
 
 			this.displayFailure = function(projectId) {
