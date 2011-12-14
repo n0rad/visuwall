@@ -203,25 +203,30 @@ define(['jquery', //
 						.marquee({
 							yScroll : 'bottom'
 						});
-				$this._showCommiters(projectId);
 			};
 
 			this.displaySuccess = function(projectId) {
-				$this._hideCommiters(projectId);
 				$this._getElement(projectId, '.projectName').switchClasses(
 						$this.statusClasses, 'success-state', 3000);
+
+				$this._hideCommiters(projectId);
+				$this._showQuality(projectId);				
 			};
 
 			this.displayFailure = function(projectId) {
 				$this._getElement(projectId, '.projectName').switchClasses(
 						$this.statusClasses, 'failure-state', 3000);
 				$this._getElement(projectId).prependTo($this.table);
+				
 				$this._hideQuality(projectId);
+				$this._showCommiters(projectId);
 			};
 			this.displayUnstable = function(projectId) {
 				$this._getElement(projectId, '.projectName').switchClasses(
 						$this.statusClasses, 'unstable-state', 3000);
 				$this._getElement(projectId).prependTo($this.table);
+				
+				$this._showCommiters(projectId);
 			};
 
 			this.displayNew = function(projectId) {
