@@ -1,17 +1,22 @@
 package net.awired.visuwall.plugin.continuum;
 
+import static net.awired.visuwall.plugin.continuum.States.asVisuwallState;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
-import net.awired.clients.continuum.Continuum;
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.exception.BuildIdNotFoundException;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -19,24 +24,46 @@ import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 
+import org.apache.maven.continuum.xmlrpc.client.ContinuumXmlRpcClient;
+import org.apache.maven.continuum.xmlrpc.project.BuildResult;
+import org.apache.maven.continuum.xmlrpc.project.ProjectGroupSummary;
 import org.apache.maven.continuum.xmlrpc.project.ProjectSummary;
+import org.apache.maven.continuum.xmlrpc.scm.ChangeSet;
+import org.apache.maven.continuum.xmlrpc.scm.ScmResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ContinuumConnection implements BuildCapability {
 
-    private Continuum continuum;
+    private static final Logger LOG = LoggerFactory.getLogger(ContinuumConnection.class);
+
+    private ContinuumXmlRpcClient client;
 
     private boolean connected;
 
     @Override
     public String getMavenId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
             MavenIdNotFoundException {
-        return null;
+        try {
+            ProjectSummary projectSummary = client.getProjectSummary(getId(softwareProjectId));
+            return projectSummary.getGroupId() + ":" + projectSummary.getArtifactId();
+        } catch (Exception e) {
+            throw new MavenIdNotFoundException("Cannot find Maven Id for " + softwareProjectId, e);
+        }
+    }
+
+    private int getId(SoftwareProjectId softwareProjectId) {
+        return Integer.parseInt(softwareProjectId.getProjectId());
     }
 
     @Override
     public void connect(String url, String login, String password) throws ConnectionException {
-        continuum = new Continuum(url);
-        connected = true;
+        try {
+            client = new ContinuumXmlRpcClient(new URL(url + "/xmlrpc"));
+            connected = true;
+        } catch (MalformedURLException e) {
+            throw new ConnectionException("Cannot open a connection to " + url, e);
+        }
     }
 
     @Override
@@ -68,18 +95,19 @@ public class ContinuumConnection implements BuildCapability {
         }
     }
 
-    private ProjectSummary findProject(SoftwareProjectId softwareProjectId) throws Exception {
-        String projectId = softwareProjectId.getProjectId();
-        Integer id = Integer.valueOf(projectId);
-        ProjectSummary project = continuum.findProject(id);
-        return project;
+    private ProjectSummary findProject(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
+        try {
+            return client.getProjectSummary(getId(softwareProjectId));
+        } catch (Exception e) {
+            throw new ProjectNotFoundException("Cannot find " + softwareProjectId, e);
+        }
     }
 
     @Override
     public SoftwareProjectId identify(ProjectKey projectKey) throws ProjectNotFoundException {
         try {
             String projectMavenId = projectKey.getMavenId();
-            List<ProjectSummary> projects = continuum.findAllProjects();
+            List<ProjectSummary> projects = findAllProjects();
             for (ProjectSummary project : projects) {
                 String groupId = project.getGroupId();
                 String artifactId = project.getArtifactId();
@@ -89,9 +117,18 @@ public class ContinuumConnection implements BuildCapability {
                 }
             }
         } catch (Exception e) {
-            throw new ProjectNotFoundException("Can't identify " + projectKey, e);
+            throw new ProjectNotFoundException("Cannot identify " + projectKey, e);
         }
-        throw new ProjectNotFoundException("Can't identify " + projectKey);
+        throw new ProjectNotFoundException("Cannot identify " + projectKey);
+    }
+
+    private List<ProjectSummary> findAllProjects() throws Exception {
+        List<ProjectGroupSummary> pgs = client.getAllProjectGroups();
+        List<ProjectSummary> ps = new ArrayList<ProjectSummary>();
+        for (ProjectGroupSummary projectGroupSummary : pgs) {
+            ps.addAll(client.getProjects(projectGroupSummary.getId()));
+        }
+        return ps;
     }
 
     @Override
@@ -99,13 +136,13 @@ public class ContinuumConnection implements BuildCapability {
         Map<SoftwareProjectId, String> projectIds = new HashMap<SoftwareProjectId, String>();
         List<ProjectSummary> projects;
         try {
-            projects = continuum.findAllProjects();
+            projects = findAllProjects();
             for (ProjectSummary project : projects) {
                 SoftwareProjectId projectId = new SoftwareProjectId(Integer.toString(project.getId()));
                 projectIds.put(projectId, project.getName());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.warn(e.getMessage());
         }
         return projectIds;
     }
@@ -118,24 +155,68 @@ public class ContinuumConnection implements BuildCapability {
     @Override
     public List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, String buildId)
             throws BuildNotFoundException, ProjectNotFoundException {
-        return new ArrayList<Commiter>();
+        Set<Commiter> commiters = new TreeSet<Commiter>();
+        try {
+            BuildResult buildResult = getBuildResult(softwareProjectId, buildId);
+            ScmResult scmResult = buildResult.getScmResult();
+            List<ChangeSet> changes = scmResult.getChanges();
+            for (ChangeSet change : changes) {
+                String author = change.getAuthor();
+                Commiter commiter = new Commiter(author);
+                commiter.setName(author);
+                commiters.add(commiter);
+            }
+        } catch (Exception e) {
+            LOG.warn(e.getMessage());
+        }
+        return new ArrayList<Commiter>(commiters);
+    }
+
+    private BuildResult getBuildResult(SoftwareProjectId softwareProjectId, String buildId) throws Exception {
+        BuildResult buildResult = client.getBuildResult(getId(softwareProjectId), Integer.parseInt(buildId));
+        return buildResult;
     }
 
     @Override
     public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, String buildId) throws BuildNotFoundException,
             ProjectNotFoundException {
-        throw new BuildNotFoundException("Not implemented!");
+        try {
+            BuildResult buildResult;
+            buildResult = getBuildResult(softwareProjectId, buildId);
+            long startTime = buildResult.getStartTime();
+            long endTime = buildResult.getEndTime();
+            BuildTime buildTime = new BuildTime();
+            buildTime.setStartTime(new Date(startTime));
+            buildTime.setDuration(endTime - startTime);
+            return buildTime;
+        } catch (Exception e) {
+            throw new BuildNotFoundException("Cannot get build time for " + softwareProjectId + " and build id "
+                    + buildId, e);
+        }
     }
 
     @Override
     public List<String> getBuildIds(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
-        return new ArrayList<String>();
+        List<String> buildIds = new ArrayList<String>();
+        ProjectSummary project = findProject(softwareProjectId);
+        Integer latestBuildId = project.getLatestBuildId();
+        buildIds.add(latestBuildId.toString());
+        return buildIds;
     }
 
     @Override
     public BuildState getBuildState(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException {
-        return BuildState.UNKNOWN;
+        int id = getId(projectId);
+        BuildResult buildResult;
+        try {
+            buildResult = client.getBuildResult(id, Integer.parseInt(buildId));
+            return asVisuwallState(buildResult.getState());
+        } catch (NumberFormatException e) {
+            throw new BuildNotFoundException(e);
+        } catch (Exception e) {
+            throw new BuildNotFoundException(e);
+        }
     }
 
     @Override
@@ -145,7 +226,7 @@ public class ContinuumConnection implements BuildCapability {
     }
 
     @Override
-    public boolean isBuilding(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
+    public boolean isBuilding(SoftwareProjectId softwareProjectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException {
         return false;
     }
@@ -153,7 +234,8 @@ public class ContinuumConnection implements BuildCapability {
     @Override
     public String getLastBuildId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
             BuildIdNotFoundException {
-        throw new BuildIdNotFoundException("Not implemented!");
+        ProjectSummary project = findProject(softwareProjectId);
+        return Integer.toString(project.getLatestBuildId());
     }
 
 }
