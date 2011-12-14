@@ -188,11 +188,6 @@ class HudsonFinder {
         return lastBuild.getNumber();
     }
 
-    boolean isBuilding(String projectName) throws HudsonJobNotFoundException {
-        Project job = findJobByName(projectName);
-        return HudsonXmlHelper.getIsBuilding(job);
-    }
-
     Set<HudsonCommiter> findCommiters(String[] commiterNames) {
         Set<HudsonCommiter> commiters = new TreeSet<HudsonCommiter>();
         for (String commiterName : commiterNames) {

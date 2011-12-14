@@ -163,11 +163,6 @@ public class Hudson {
         return new Date();
     }
 
-    public boolean isBuilding(String projectName) throws HudsonJobNotFoundException {
-        checkJobName(projectName);
-        return hudsonFinder.isBuilding(projectName);
-    }
-
     public int getLastBuildNumber(String projectName) throws HudsonJobNotFoundException, HudsonBuildNotFoundException {
         checkJobName(projectName);
         return hudsonFinder.getLastBuildNumber(projectName);
