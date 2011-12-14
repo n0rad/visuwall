@@ -1,7 +1,6 @@
 package net.awired.visuwall.plugin.continuum;
 
 import static net.awired.visuwall.plugin.continuum.States.asVisuwallState;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
 import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
@@ -23,7 +21,6 @@ import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
-
 import org.apache.maven.continuum.xmlrpc.client.ContinuumXmlRpcClient;
 import org.apache.maven.continuum.xmlrpc.project.BuildResult;
 import org.apache.maven.continuum.xmlrpc.project.ProjectGroupSummary;
@@ -58,11 +55,15 @@ public class ContinuumConnection implements BuildCapability {
 
     @Override
     public void connect(String url, String login, String password) throws ConnectionException {
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
         try {
             client = new ContinuumXmlRpcClient(new URL(url + "/xmlrpc"));
             connected = true;
         } catch (MalformedURLException e) {
             throw new ConnectionException("Cannot open a connection to " + url, e);
+        } finally {
+            Thread.currentThread().setContextClassLoader(contextClassLoader);
         }
     }
 
