@@ -27,7 +27,6 @@
 
 	<properties>
 		<netbeans.hint.deploy.server>Tomcat70</netbeans.hint.deploy.server>
-		<bootstrap.version>1.0-SNAPSHOT</bootstrap.version>
 	</properties>
 
 	<dependencies>
@@ -291,7 +290,7 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>net.awired.bootstrap</groupId>
-									<artifactId>bootstrap</artifactId>
+									<artifactId>bootstrap-java</artifactId>
 									<version>${bootstrap.version}</version>
 									<overWrite>false</overWrite>
 									<outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
