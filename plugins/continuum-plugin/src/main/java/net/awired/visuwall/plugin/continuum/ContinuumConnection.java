@@ -1,15 +1,18 @@
 package net.awired.visuwall.plugin.continuum;
 
 import static net.awired.visuwall.plugin.continuum.States.asVisuwallState;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
 import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
@@ -20,7 +23,10 @@ import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.api.plugin.capability.ViewCapability;
+
 import org.apache.maven.continuum.xmlrpc.client.ContinuumXmlRpcClient;
 import org.apache.maven.continuum.xmlrpc.project.BuildResult;
 import org.apache.maven.continuum.xmlrpc.project.ProjectGroupSummary;
@@ -30,7 +36,7 @@ import org.apache.maven.continuum.xmlrpc.scm.ScmResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ContinuumConnection implements BuildCapability {
+public class ContinuumConnection implements BuildCapability, ViewCapability {
 
     private static final Logger LOG = LoggerFactory.getLogger(ContinuumConnection.class);
 
@@ -143,7 +149,8 @@ public class ContinuumConnection implements BuildCapability {
                 projectIds.put(projectId, project.getName());
             }
         } catch (Exception e) {
-            LOG.warn(e.getMessage());
+            e.printStackTrace();
+            LOG.warn(e.getMessage(), e);
         }
         return projectIds;
     }
@@ -237,6 +244,63 @@ public class ContinuumConnection implements BuildCapability {
             BuildIdNotFoundException {
         ProjectSummary project = findProject(softwareProjectId);
         return Integer.toString(project.getLatestBuildId());
+    }
+
+    @Override
+    public List<SoftwareProjectId> findSoftwareProjectIdsByViews(List<String> views) {
+        List<SoftwareProjectId> softwareProjectIds = new ArrayList<SoftwareProjectId>();
+        try {
+            List<ProjectGroupSummary> pgs = client.getAllProjectGroups();
+            for (String viewName : views) {
+                for (ProjectGroupSummary projectGroupSummary : pgs) {
+                    if (projectGroupSummary.getName().equals(viewName)) {
+                        List<ProjectSummary> projects = client.getProjects(projectGroupSummary.getId());
+                        for (ProjectSummary project : projects) {
+                            SoftwareProjectId projectId = new SoftwareProjectId(Integer.toString(project.getId()));
+                            softwareProjectIds.add(projectId);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOG.warn("Cannot get all projects groups", e);
+        }
+        return softwareProjectIds;
+    }
+
+    @Override
+    public List<String> findViews() {
+        List<String> views = new ArrayList<String>();
+        try {
+            List<ProjectGroupSummary> pgs = client.getAllProjectGroups();
+            for (ProjectGroupSummary projectGroupSummary : pgs) {
+                String name = projectGroupSummary.getName();
+                views.add(name);
+            }
+            Collections.sort(views);
+        } catch (Exception e) {
+            LOG.warn("Cannot get all projects groups", e);
+        }
+        return views;
+    }
+
+    @Override
+    public List<String> findProjectNamesByView(String viewName) throws ViewNotFoundException {
+        List<String> projectNames = new ArrayList<String>();
+        try {
+            List<ProjectGroupSummary> pgs = client.getAllProjectGroups();
+            for (ProjectGroupSummary projectGroupSummary : pgs) {
+                if (projectGroupSummary.getName().equals(viewName)) {
+                    List<ProjectSummary> projects = client.getProjects(projectGroupSummary.getId());
+                    for (ProjectSummary project : projects) {
+                        projectNames.add(project.getName());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOG.warn("Cannot get all projects groups", e);
+        }
+        return projectNames;
     }
 
 }
