@@ -79,6 +79,7 @@
 							org.apache.maven.continuum.xmlrpc,
 							org.apache.continuum.xmlrpc.repository,
 							org.apache.maven.continuum.xmlrpc.system,
+							org.apache.maven.continuum.xmlrpc.project,
 							org.apache.continuum.xmlrpc.release,
 							*
 						</Import-Package>
