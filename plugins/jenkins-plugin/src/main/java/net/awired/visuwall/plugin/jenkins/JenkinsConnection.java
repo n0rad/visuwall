@@ -18,6 +18,7 @@ package net.awired.visuwall.plugin.jenkins;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static net.awired.visuwall.api.domain.BuildState.UNKNOWN;
 import static net.awired.visuwall.plugin.jenkins.States.asVisuwallState;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
@@ -145,6 +146,9 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
             String projectName = jobName(projectId);
             HudsonBuild hudsonBuild = hudson.findBuild(projectName, Integer.valueOf(buildId));
             String hudsonState = hudsonBuild.getState();
+            if (hudsonState == null) {
+                return UNKNOWN;
+            }
             return asVisuwallState(hudsonState);
         } catch (HudsonJobNotFoundException e) {
             throw new ProjectNotFoundException(e);
