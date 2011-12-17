@@ -71,9 +71,9 @@
 						<Bundle-Activator>net.awired.visuwall.plugin.continuum.ContinuumPluginActivator</Bundle-Activator>
 						<Import-Package>
 							org.apache.maven.continuum.xmlrpc,
+							org.apache.maven.continuum.xmlrpc.project.*,
 							org.apache.continuum.xmlrpc.repository,
 							org.apache.maven.continuum.xmlrpc.system,
-							org.apache.maven.continuum.xmlrpc.project,
 							org.apache.continuum.xmlrpc.release,
 							*
 						</Import-Package>

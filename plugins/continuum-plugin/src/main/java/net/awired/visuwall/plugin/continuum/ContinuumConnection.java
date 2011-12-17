@@ -149,7 +149,6 @@ public class ContinuumConnection implements BuildCapability, ViewCapability {
                 projectIds.put(projectId, project.getName());
             }
         } catch (Exception e) {
-            e.printStackTrace();
             LOG.warn(e.getMessage(), e);
         }
         return projectIds;
