@@ -38,10 +38,10 @@
 		<filter class="net.awired.visuwall.core.application.log.ErrFilter" />
 	</appender>
 
-	<logger name="net.awired" level="DEBUG" />
+	<logger name="net.awired" level="${log.visuwall.awired:-DEBUG}" />
 
 	<root>
-		<level value="INFO" />
+		<level value="${log.visuwall.root:-INFO}" />
 
 		<appender-ref ref="FILE" />
 		<appender-ref ref="STDOUT" />

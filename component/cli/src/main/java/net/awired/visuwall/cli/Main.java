@@ -44,7 +44,12 @@ public class Main {
         argManager.parse(args);
 
         System.setProperty(ApplicationHelper.HOME_KEY, ApplicationHelper.findHomeDir());
-        System.setProperty(ApplicationHelper.LOG_LVL_KEY, argManager.logLevel.getParamOneValue().toString());
+        System.setProperty(ApplicationHelper.LOG_VISUWALL_AWIRED, argManager.logLevel.getParamOneValue().toString());
+        System.setProperty(ApplicationHelper.LOG_VISUWALL_ROOT, argManager.logLevel.getParamOneValue().toString());
+        if (argManager.logRootLevel.isSet()) {
+            System.setProperty(ApplicationHelper.LOG_VISUWALL_ROOT, argManager.logRootLevel.getParamOneValue()
+                    .toString());
+        }
         ApplicationHelper.changeLogLvl();
 
         if (argManager.displayFile.isSet()) {

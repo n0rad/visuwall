@@ -26,9 +26,7 @@ import java.util.jar.Manifest;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import net.awired.visuwall.core.application.enumeration.LogLevelEnum;
 import org.slf4j.LoggerFactory;
-import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
@@ -40,9 +38,11 @@ public class ApplicationHelper {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(ApplicationHelper.class);
 
     public static final String UNKNOW_VERSION = "Unknow Version";
-    public static final String LOG_LVL_KEY = "VISUWALL_LOG";
     public static final String HOME_KEY = "VISUWALL_HOME";
     public static final String MANIFEST_VERSION_KEY = "VisuwallVersion";
+
+    public static final String LOG_VISUWALL_AWIRED = "log.visuwall.awired";
+    public static final String LOG_VISUWALL_ROOT = "log.visuwall.root";
 
     private static String version;
 
@@ -83,18 +83,6 @@ public class ApplicationHelper {
         } catch (IOException e) {
         }
         return UNKNOW_VERSION;
-    }
-
-    public static Level findLogLvl() {
-        String logLvl = System.getProperty(LOG_LVL_KEY);
-        LogLevelEnum logLevelEnum = null;
-        if (logLvl != null) {
-            logLevelEnum = LogLevelEnum.valueOf(logLvl);
-        }
-        if (logLevelEnum != null) {
-            return logLevelEnum.getLevel();
-        }
-        return null;
     }
 
     public static String findHomeDir() {
@@ -145,15 +133,9 @@ public class ApplicationHelper {
     }
 
     public static void changeLogLvl() {
-        Level loglvl = ApplicationHelper.findLogLvl();
         try {
             InputStream logConfStream = ApplicationHelper.class.getResourceAsStream("/visuwall-logback.xml");
             String logConfString = CharStreams.toString(new InputStreamReader(logConfStream));
-            if (loglvl != null) {
-                // TODO replace with a better regexp to replace all tags like that <logger name="net.awired" level="DEBUG" />
-                // TODO or replace by a xml parser or replace by a deep logback communication to set log lvl
-                logConfString = logConfString.replace("DEBUG", loglvl.toString());
-            }
             LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
             try {
                 JoranConfigurator configurator = new JoranConfigurator();

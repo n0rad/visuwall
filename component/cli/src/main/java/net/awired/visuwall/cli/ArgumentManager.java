@@ -32,17 +32,12 @@ import net.awired.visuwall.core.application.enumeration.LogLevelEnum;
 class ArgumentManager extends CliArgumentManager {
 
     public final CliOneParamArgument<Integer> portArg;
-
     public final CliOneParamArgument<String> contextPath;
-
     public final CliNoParamArgument info;
-
     public final CliOneParamArgument<File> rootFolder;
-
     public final CliNoParamArgument clearDb;
-
     public final CliOneParamArgument<LogLevelEnum> logLevel;
-
+    public final CliOneParamArgument<LogLevelEnum> logRootLevel;
     public final CliOneParamArgument<FileInfoEnum> displayFile;
 
     public ArgumentManager(Main main) {
@@ -105,5 +100,13 @@ class ArgumentManager extends CliArgumentManager {
         logLevel.setParamOneDefValue(LogLevelEnum.info);
         logLevel.setName("level");
         addArg(logLevel);
+
+        // -L
+        logRootLevel = new CliOneParamArgument<LogLevelEnum>('L', new CliParamEnum<LogLevelEnum>("level",
+                LogLevelEnum.class));
+        logRootLevel.setDescription("Change log level for non-awired libs");
+        logRootLevel.setParamOneDefValue(LogLevelEnum.info);
+        logRootLevel.setName("root-level");
+        addArg(logRootLevel);
     }
 }
