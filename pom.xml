@@ -223,8 +223,8 @@
 						<exclude>.settings/**</exclude>
 						<exclude>.project</exclude>
 						<exclude>.classpath</exclude>
-						<exclude>LICENCE</exclude>
-						<exclude>README</exclude>
+						<exclude>LICENCE.txt</exclude>
+						<exclude>README.rst</exclude>
 						<exclude>**/MANIFEST.MF</exclude>
 						<exclude>src/main/webapp/WEB-INF/lib/**</exclude>
 						<exclude>src/main/webapp/WEB-INF/classes/**</exclude>
@@ -236,6 +236,8 @@
 						<exclude>src/main/xsd/**</exclude>
 						<exclude>infinitest.filters</exclude>
 						<exclude>src/main/java/net/awired/visuwall/generated/**</exclude>
+						<exclude>CHANGELOG.txt</exclude>
+						<exclude>INSTALL.txt</exclude>
 					</excludes>
 					<executions>
 						<execution>
