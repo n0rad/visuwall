@@ -20,9 +20,9 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Preconditions;
 
 @Service
-public class SpiPluginService implements PluginServiceInterface {
+public class VisuwallSpiService implements PluginServiceInterface {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SpiPluginService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(VisuwallSpiService.class);
 
     @SuppressWarnings("rawtypes")
     private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader.load(VisuwallPlugin.class);
