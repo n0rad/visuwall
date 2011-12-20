@@ -51,30 +51,6 @@
 			</exclusions>
 		</dependency>
 
-		<!-- OSGI -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.felix</groupId> -->
-<!-- 			<artifactId>org.apache.felix.framework</artifactId> -->
-<!-- 			<version>3.2.2</version> -->
-<!-- 		</dependency> -->
-		<dependency>
-			<groupId>org.apache.karaf</groupId>
-			<artifactId>org.apache.karaf.main</artifactId>
-			<version>${karaf.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.karaf.jaas</groupId>
-			<artifactId>org.apache.karaf.jaas.boot</artifactId>
-			<version>${karaf.version}</version>
-		</dependency>
-		
-
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.main</artifactId>
-			<version>3.2.2</version>
-		</dependency>
-
 		<!-- DB -->
 		<dependency>
 			<groupId>javax.persistence</groupId>
@@ -96,7 +72,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>

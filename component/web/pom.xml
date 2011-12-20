@@ -30,6 +30,36 @@
 	</properties>
 
 	<dependencies>
+	
+		<!-- plugins -->
+		<dependency>
+			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-plugin-bamboo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-plugin-sonar</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-plugin-hudson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-plugin-teamcity</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-plugin-jenkins</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-plugin-continuum</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>net.awired.ajsl</groupId>
@@ -57,18 +87,6 @@
 			<groupId>net.awired.ajsl</groupId>
 			<artifactId>ajsl-web</artifactId>
 			<version>${ajsl.version}</version>
-		</dependency>
-
-		<!-- <dependency> -->
-		<!-- <groupId>net.awired.client-bean-validation</groupId> -->
-		<!-- <artifactId>client-bean-validation-js</artifactId> -->
-		<!-- <version>${client-bean-validation.version}</version> -->
-		<!-- </dependency> -->
-
-		<dependency>
-			<groupId>net.awired.visuwall</groupId>
-			<artifactId>visuwall-osgi</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
 		<!-- runnable war -->
@@ -190,26 +208,6 @@
 		<finalName>visuwall</finalName>
 		<plugins>
 
-<!-- 			<plugin> -->
-<!-- 				<groupId>com.github.searls</groupId> -->
-<!-- 				<artifactId>jasmine-maven-plugin</artifactId> -->
-<!-- 				<version>1.0.2-beta-5</version> -->
-<!-- 				<executions> -->
-<!-- 					<execution> -->
-<!-- 						<goals> -->
-<!-- 							<goal>test</goal> -->
-<!-- 						</goals> -->
-<!-- 					</execution> -->
-<!-- 				</executions> -->
-<!-- 				<configuration> -->
-<!-- 					<preloadSources> -->
-<!-- 						<source>${project.basedir}/src/test/lib/curl.js</source> -->
-<!-- 					</preloadSources> -->
-<!-- 					<jsSrcDir>${project.basedir}/src/main/webapp/js</jsSrcDir> -->
-<!-- 				</configuration> -->
-<!-- 			</plugin> -->
-
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -237,8 +235,6 @@
 					</webResources>
 				</configuration>
 			</plugin>
-
-
 
 			<plugin>
 				<groupId>org.apache.felix</groupId>
@@ -316,84 +312,6 @@
 							</artifactItems>
 						</configuration>
 					</execution>
-					<execution>
-						<id>unpack-unix</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>org.apache.karaf</groupId>
-									<artifactId>apache-karaf</artifactId>
-									<type>zip</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}/karaf/WEB-INF</outputDirectory>
-									<excludes>**/lib/*,**/*.txt,**/bin/*,**/demos/**,**/lib,**/bin,**/demos,**/README,**/karaf-manual*</excludes>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>clean-karaf-inline</id>
-						<phase>clean</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<tasks>
-								<delete dir="${basedir}/src/main/webapp/WEB-INF/karaf" />
-							</tasks>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-karaf</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<tasks>
-								<move
-									todir="${project.build.directory}/${project.build.finalName}/WEB-INF/karaf">
-									<fileset
-										dir="${project.build.directory}/karaf/WEB-INF/apache-karaf-${karaf.version}" />
-								</move>
-							</tasks>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.5</version>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/karaf</outputDirectory>
-							<resources>
-								<resource>
-									<directory>src/main/karaf</directory>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
 				</executions>
 			</plugin>
 
@@ -408,36 +326,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>inline</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>copy-inline</id>
-								<phase>package</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<tasks>
-										<copy todir="${basedir}/src/main/webapp/WEB-INF/karaf">
-											<fileset
-												dir="${project.build.directory}/${project.build.finalName}/WEB-INF/karaf" />
-										</copy>
-									</tasks>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 
 </project>
