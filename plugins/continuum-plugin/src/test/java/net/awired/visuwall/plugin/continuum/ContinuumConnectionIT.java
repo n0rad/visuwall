@@ -26,6 +26,7 @@ public class ContinuumConnectionIT {
             System.out.println(connection.getBuildIds(softwareProjectId));
             System.out.println(connection.getBuildState(softwareProjectId, buildId));
             System.out.println(connection.getEstimatedFinishTime(softwareProjectId, buildId));
+            System.out.println(connection.findViews());
         }
     }
 }
