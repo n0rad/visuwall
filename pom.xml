@@ -49,9 +49,6 @@
 		<jackson.version>1.8.5</jackson.version>
 		<jetty.version>6.1.26</jetty.version>
 
-
-
-		<karaf.version>2.2.2</karaf.version>
 		<guava.version>r09</guava.version>
 		<junit.version>4.8.2</junit.version>
 		<jersey.client.version>1.4</jersey.client.version>

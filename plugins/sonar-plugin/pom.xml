@@ -54,16 +54,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Bundle-Activator>net.awired.visuwall.plugin.sonar.SonarPluginActivator</Bundle-Activator>
-					</instructions>
-				</configuration>
-			</plugin>
 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
