@@ -21,7 +21,7 @@ public class SoftwareId {
     private String name;
     private String version;
     private String warnings;
-    private boolean compatible;
+    private boolean compatible = true;
 
     // ////////////////////////////////
 
