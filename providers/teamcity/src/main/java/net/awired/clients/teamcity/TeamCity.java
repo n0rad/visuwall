@@ -16,6 +16,9 @@
 
 package net.awired.clients.teamcity;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +30,7 @@ import net.awired.clients.common.MavenIdNotFoundException;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityBuildListNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
+import net.awired.clients.teamcity.exception.TeamCityBuildTypeNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityChangesNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityProjectNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityProjectsNotFoundException;
@@ -43,8 +47,6 @@ import net.awired.clients.teamcity.resource.TeamCityProjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-
 public class TeamCity {
 
     private static final Logger LOG = LoggerFactory.getLogger(TeamCity.class);
@@ -56,18 +58,9 @@ public class TeamCity {
     private Maven maven = new Maven();
 
     public TeamCity(String url, String login, String password) {
-        Preconditions.checkNotNull(url, "url is mandatory");
+        checkNotNull(url, "url is mandatory");
         this.urlBuilder = new TeamCityUrlBuilder(url);
         this.client = new GenericSoftwareClient(login, password);
-    }
-
-    public List<String> findProjectNames() throws TeamCityProjectsNotFoundException {
-        List<String> projectNames = new ArrayList<String>();
-        List<TeamCityProject> projects = findAllProjects();
-        for (TeamCityProject project : projects) {
-            projectNames.add(project.getName());
-        }
-        return projectNames;
     }
 
     public List<TeamCityProject> findAllProjects() throws TeamCityProjectsNotFoundException {
@@ -82,7 +75,7 @@ public class TeamCity {
 
     public TeamCityProject findProject(String projectId) throws TeamCityProjectNotFoundException {
         checkProjectId(projectId);
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+        checkNotNull(projectId, "projectId is mandatory");
         try {
             String projectUrl = urlBuilder.getProject(projectId);
             return client.resource(projectUrl, TeamCityProject.class);
@@ -93,7 +86,7 @@ public class TeamCity {
 
     public TeamCityBuild findBuild(int buildId) throws TeamCityBuildNotFoundException {
         checkBuildId(buildId);
-        Preconditions.checkArgument(buildId >= 0, "buildId must be >= 0");
+        checkArgument(buildId >= 0, "buildId must be >= 0");
         try {
             String buildUrl = urlBuilder.getBuild(buildId);
             TeamCityBuild teamCityBuild = client.resource(buildUrl, TeamCityBuild.class);
@@ -104,7 +97,7 @@ public class TeamCity {
     }
 
     public TeamCityBuilds findBuildList(String buildTypeId) throws TeamCityBuildListNotFoundException {
-        Preconditions.checkNotNull(buildTypeId, "buildTypeId is mandatory");
+        checkNotNull(buildTypeId, "buildTypeId is mandatory");
         try {
             String buildListUrl = urlBuilder.getBuildList(buildTypeId);
             TeamCityBuilds teamCityBuilds = client.resource(buildListUrl, TeamCityBuilds.class);
@@ -115,15 +108,12 @@ public class TeamCity {
         }
     }
 
-    public TeamCityBuild findBuild(String projectId, String buildId) throws TeamCityProjectNotFoundException,
-            TeamCityBuildNotFoundException {
-        TeamCityProject project = findProject(projectId);
-        List<TeamCityBuildType> buildTypes = project.getBuildTypes();
-        for (TeamCityBuildType buildType : buildTypes) {
-            TeamCityBuild build = findBuildInBuildType(buildId, buildType);
-            if (build != null) {
-                return build;
-            }
+    public TeamCityBuild findBuild(String projectId, String buildId) throws TeamCityBuildNotFoundException,
+            TeamCityBuildTypeNotFoundException {
+        TeamCityBuildType buildType = findBuildType(projectId);
+        TeamCityBuild build = findBuildInBuildType(buildId, buildType);
+        if (build != null) {
+            return build;
         }
         throw new TeamCityBuildNotFoundException("Can't find build #" + buildId + " of software project id "
                 + projectId);
@@ -202,18 +192,14 @@ public class TeamCity {
 
     public TeamCityAbstractBuild findLastBuild(String projectId) throws TeamCityBuildNotFoundException {
         try {
-            TeamCityProject project = findProject(projectId);
-            List<TeamCityBuildType> buildTypes = project.getBuildTypes();
-            if (!buildTypes.isEmpty()) {
-                TeamCityBuildType buildType = buildTypes.get(0);
-                TeamCityBuilds buildList = findBuildList(buildType.getId());
-                if (!buildList.getBuilds().isEmpty()) {
-                    TeamCityBuildItem build = buildList.getBuilds().get(0);
-                    return build;
-                }
+            TeamCityBuildType buildType = findBuildType(projectId);
+            TeamCityBuilds buildList = findBuildList(buildType.getId());
+            if (!buildList.getBuilds().isEmpty()) {
+                TeamCityBuildItem build = buildList.getBuilds().get(0);
+                return build;
             }
             throw new TeamCityBuildNotFoundException("Cannot find last build of " + projectId);
-        } catch (TeamCityProjectNotFoundException e) {
+        } catch (TeamCityBuildTypeNotFoundException e) {
             throw new TeamCityBuildNotFoundException("Cannot find last build of " + projectId, e);
         } catch (TeamCityBuildListNotFoundException e) {
             throw new TeamCityBuildNotFoundException("Cannot find last build of " + projectId, e);
@@ -221,11 +207,33 @@ public class TeamCity {
     }
 
     private void checkProjectId(String projectId) {
-        Preconditions.checkNotNull(projectId, "projectId is mandatory");
+        checkNotNull(projectId, "projectId is mandatory");
     }
 
     private void checkBuildId(int buildId) {
-        Preconditions.checkArgument(buildId >= 0, "buildId must be >= 0");
+        checkArgument(buildId >= 0, "buildId must be >= 0");
     }
 
+    public TeamCityProject findProjectByName(String projectName) throws TeamCityProjectNotFoundException {
+        try {
+            List<TeamCityProject> projects = findAllProjects();
+            for (TeamCityProject project : projects) {
+                if (projectName.equals(project.getName())) {
+                    return project;
+                }
+            }
+        } catch (TeamCityProjectsNotFoundException e) {
+            throw new TeamCityProjectNotFoundException("Cannot find project with name " + projectName, e);
+        }
+        throw new TeamCityProjectNotFoundException("Cannot find project with name " + projectName);
+    }
+
+    public TeamCityBuildType findBuildType(String buildTypeId) throws TeamCityBuildTypeNotFoundException {
+        try {
+            String buildTypeUrl = urlBuilder.getBuildType(buildTypeId);
+            return client.resource(buildTypeUrl, TeamCityBuildType.class);
+        } catch (ResourceNotFoundException e) {
+            throw new TeamCityBuildTypeNotFoundException("Cannot find build type with id: " + buildTypeId, e);
+        }
+    }
 }
