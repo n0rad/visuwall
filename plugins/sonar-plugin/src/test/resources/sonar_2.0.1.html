@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="gwt:property" content="locale=fr">
+
+<title>Sonar</title>
+<link href="/stylesheets/sonar.css?1268157540" media="all" rel="stylesheet" type="text/css" /><script src="/javascripts/sonar.js?1268157540" type="text/javascript"></script>
+<!--[if lte IE 6]>
+<link href="/ie6/index" media="all" rel="stylesheet" type="text/css" />
+<![endif]-->
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?1268157532" />
+
+<link rel="alternate" title="Sonar Alerts" href="/feeds/projects/Alert" type="application/atom+xml">
+
+</head><body>
+
+
+
+<div id="doc3" class="yui-t1"><div id="hd"><div id="hdnav">
+<div id="hdadmin">
+<ol>
+<li class="nav"><a href="/profiles">Configuration</a></li>
+
+<li class="nav"><a href="/sessions/new">Log in</a></li>
+
+<li class="nav"><a href="javascript:window.print()"><img src="/images/print.gif" alt="Print" title="Print" /></a>
+
+</ol>
+</div><!-- /hdadmin -->
+<ol>
+<li class="nav"><a href="/">Home</a></li>
+<li class="nav"><input type="text" autocomplete="off" size="15" name="search" id="projectSearch" onFocus="this.size=30;this.value='';autocompleteProjects('/api/resources?scopes=PRJ&qualifiers=VW,SVW,TRK', '/project/index/', this, $('projectResults'));return true;" onBlur="javacript:this.size=15" value="Search"/><div id="projectResults" style="display:none"></div></li>
+
+
+</ol>
+</div><!-- /hdnav -->
+</div><!-- /hd -->
+<div id="bd" >
+<div id="yui-main" >
+<div id="page">
+<div class="yui-b" id="content">
+
+<div class="error" id="error" style="display:none"><span id="errormsg"></span> &nbsp;&nbsp;[<a href="#" onclick="javascript:$('error').hide();return false;">hide</a>]</div>
+<div class="warning" id="warning" style="display:none"><span id="warningmsg"></span> &nbsp;&nbsp;[<a href="#" onclick="javascript:$('warning').hide();return false;">hide</a>]</div>
+
+<div class="notice" id="info" style="display:none"><span id="infomsg"></span> &nbsp;&nbsp;[<a href="#" onclick="javascript:$('info').hide();return false;">hide</a>]</div>
+
+
+<h3>No projects have been analysed.</h3>
+<p>If Maven and Sonar are installed with default parameters on the same box, just launch the command <code>mvn sonar:sonar</code> to analyse your first project. In any other case, please refer to the <a href="http://sonar.codehaus.org/documentation">documentation</a>.</p>
+
+</div><!-- /yui-b -->
+</div><!-- /page -->
+</div><!-- /main -->
+<div class="yui-b" id="sidebar">
+<div id="section">
+<ul>
+
+
+<li class="selected"><a href="/components/index">Projects</a></li>
+
+
+
+
+</ul>
+<div id="logo"><center><a href="http://sonar.codehaus.org/"><img alt="Embrace Quality" class="png" src="/images/sonar.png?1268157532" title="Embrace Quality" /></a></center></div>
+
+</div><!-- /section -->
+
+
+<div id="sidebarconf" class="hidden"> </div>
+
+</div><!-- /sidebar -->
+</div><!-- /yui-main -->
+
+<div id="ft">
+
+
+
+<div id="ftlinks">Powered by <a href="http://www.sonarsource.com" target="SonarSource">SonarSource</a> - Open Source <a href="http://sonar.codehaus.org/documentation/license/" target="license">LGPL</a> - v.2.0.1 - <a href="http://sonar-plugins.codehaus.org" class="external" target="plugins">Plugins</a> - <a href="http://sonar.codehaus.org/documentation" class="external" target="sonar_doc">Documentation</a> - <a href="http://sonar.codehaus.org/support/" target="support">Ask a question</a> - <a href="http://jira.codehaus.org/browse/SONAR" target="issuetracker">Bug/feature request</a></div>
+
+</div>
+
+</div>
+
+
+</body><script type="text/javascript">
+Event.observe(window, 'load', function(){
+$$('.tipable').each(function(element){
+title = element.readAttribute('title');
+if(!element.rel.blank()) {
+if(title ==null) {
+new Tip(element, element.rel);
+} else {
+new Tip(element, element.rel, {title: title});
+}
+} else if (title!=null && !title.blank()) {
+new Tip(element, title);
+}
+});
+});
+
+
+
+</script>
+</html>
+

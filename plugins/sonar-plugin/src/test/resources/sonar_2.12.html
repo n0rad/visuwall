@@ -1,0 +1,2746 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="gwt:property" content="locale=fr">
+
+<title>Sonar</title>
+<link href="/stylesheets/sonar.css?1322481112" media="all" rel="stylesheet" type="text/css" /><script src="/javascripts/sonar.js?1322481112" type="text/javascript"></script>
+<!--[if lte IE 6]>
+<link href="/ie6/index" media="all" rel="stylesheet" type="text/css" />
+<![endif]-->
+<!--[if lt IE 9]>
+<script src="/javascripts/protovis-msie-shim.js?1322481110" type="text/javascript"></script><![endif]-->
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?1322481110" />
+
+<link rel="alternate" title="Sonar Alerts" href="/feeds/projects/Alert" type="application/atom+xml">
+
+</head><body>
+
+
+<div id="container">
+<div id="hd">
+<ol id="crumbs">
+<li><a href="/">Accueil</a></li>
+
+</ol>
+
+<ol id="nav">
+<li><input type="text" autocomplete="off" size="15" name="search" id="projectSearch" onFocus="this.size=30;this.value='';autocompleteProjects('/api/resources?scopes=PRJ&qualifiers=VW,SVW,TRK', '/dashboard/index/', this, $('projectResults'));return true;" onBlur="javacript:this.size=15" value="Chercher"/><div id="projectResults" style="display:none"></div></li>
+<li>
+<a href="javascript:window.print()"><img src="/images/print.gif" alt="Imprimer" title="Imprimer" /></a>
+
+</li>
+
+<li><a href="/sessions/new">Connexion</a></li>
+
+<li><a href="/profiles">Configuration</a></li>
+</ol>
+</div>
+<div id="body">
+<div id="sb">
+<div id="sidebar">
+<ul>
+
+<li class="selected"><a href="/filters/index">Filtres</a></li>
+<li class=""><a href="/reviews/index">Revues</a></li>
+<li class=""><a href="/dependencies/index">Dépendances</a></li>
+
+<li class=""><a href="/plugins/home/org.sonar.plugins.motionchart.MotionChartPage">Motion chart</a></li>
+
+<li class=""><a href="/plugins/home/org.sonar.plugins.radiator.RadiatorPage">Radiator</a></li>
+
+<li class=""><a href="/plugins/home/views">Views</a></li>
+
+
+</ul>
+<div id="logo"><center><a href="http://www.sonarsource.org/"><img alt="Embrace Quality" class="png" src="/images/sonar.png?1322481110" title="Embrace Quality" /></a></center></div>
+</div>
+<div id="sidebarconf" class="hidden"> </div>
+</div>
+<div id="content"  class="with_sidebar">
+
+<div class="error" id="error" style="display:none"><span id="errormsg"></span> &nbsp;&nbsp;[<a href="#" onclick="javascript:$('error').hide();return false;">cacher</a>]</div>
+<div class="notice" id="info" style="display:none"><span id="infomsg"></span> &nbsp;&nbsp;[<a href="#" onclick="javascript:$('info').hide();return false;">cacher</a>]</div>
+<div class="warning" id="warning" style="display:none"><span id="warningmsg"></span> &nbsp;&nbsp;[<a href="#" onclick="javascript:$('warning').hide();return false;">cacher</a>]</div>
+
+<ul class="tabs" id="filter-tabs">
+
+<li>
+<a href="/filters/index/1" class="selected">Projects</a>
+</li>
+
+<li>
+<a href="/filters/index/23" class="">Activity over 90 days</a>
+</li>
+
+<li>
+<a href="/filters/index/4" class="">Open Source Forges</a>
+</li>
+
+<li>
+<a href="/filters/index/5" class="">Sonar Platform Activity</a>
+</li>
+
+<li>
+<a href="/filters/index/24" class="">Sonar Plugins</a>
+</li>
+
+</ul>
+
+
+<div class="tabs-panel">
+
+<div>
+
+<div class="line-block">
+<div class="operations">
+<form action="/" style="display: inline" method="get">
+<select name="period" onchange="submit()" class="small">
+<option value="">Evolution dans le temps...</option>
+
+<option value="1" >&Delta; depuis la dernière analyse</value>
+
+<option value="2" >&Delta; sur 30 jours</value>
+
+<option value="3" >&Delta; sur 90 jours</value>
+
+</select>
+</form>
+</div>
+</div>
+
+<table class="data nowrap width100" id="results">
+<thead id="results-head">
+<tr>
+<th width="1%"></th>
+
+<th width=1% nowrap class="right">
+<a href="/?asc=true&amp;sort=1">Alerte</a>
+</th>
+
+<th  class="left">
+
+<a href="/?asc=false&amp;sort=2">Nom</a><img alt="Asc12" src="/images/asc12.png?1322481110" />
+</th>
+
+<th  class="right">
+<a href="/?asc=true&amp;sort=3">Lignes de code</a>
+</th>
+
+<th  class="right">
+<a href="/?asc=true&amp;sort=5">Couverture</a>
+</th>
+
+<th  class="right">
+<a href="/?asc=true&amp;sort=182">SQALE Remediation Cost</a>
+
+</th>
+
+<th  class="right">
+<a href="/?asc=true&amp;sort=6">Lignes dupliquées (%)</a>
+</th>
+
+<th  class="right">
+<a href="/?asc=true&amp;sort=7">Date d'analyse</a>
+</th>
+
+</tr>
+
+</thead>
+<tfoot>
+<tr>
+
+<td colspan="8">
+<span id="results_count">166 résultats</span>
+
+|
+previous
+
+1
+
+<a href="/?page_id=2">2</a>
+
+<a href="/?page_id=3">3</a>
+
+<a href="/?page_id=4">4</a>
+
+<a href="/?page_id=5">5</a>
+
+<a href="/?page_id=2">next</a>
+
+
+&nbsp;&nbsp; <a href="/feeds/projects/Alert" class="nolink"><img alt="Rss-12x12" src="/images/rss-12x12.png?1322481110" /></a>
+<a href="/feeds/projects/Alert" class="action">Flux des alertes</a>
+
+</td>
+</tr>
+</tfoot>
+<tbody>
+
+<tr class="highlight">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+<img alt="Vue" src="/images/q/VW.png?1322481110" title="Vue" /> <a href="/dashboard/index/219971" title="MASTER_PROJECT">All projects</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >9 417 548</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >29,0%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >87 383,2</span>
+<img alt="2-red-small" src="/images/tendency/2-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >7,7%</span>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+25 déc. 2011
+
+</td>
+
+</tr>
+
+
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/78577" title="org.apache.activemq:activemq-parent">ActiveMQ</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >169 126</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >1 308,9</span>
+<img alt="1-red-small" src="/images/tendency/1-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_duplicated_lines_density' class='alert_WARN' >23,6%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+23 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit test success (%) &lt; 100, Duplicated lines (%) &gt; 5' title='Unit test success (%) &lt; 100, Duplicated lines (%) &gt; 5'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/327690" title="org.activiti:activiti-root">Activiti</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >59 451</span>
+
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >40,4%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+<span id='m_sqale_index'  >554,9</span>
+<img alt="1-red-small" src="/images/tendency/1-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_duplicated_lines_density' class='alert_WARN' >6,6%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit test success (%) &lt; 100' title='Unit test success (%) &lt; 100'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/246228" title="com.adobe.ac:flex-pmd-java-parent">Adobe Flex PMD Java Parent</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >16 696</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >89,4%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >24,3</span>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >2,3%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/13" title="net.sf.aislib:aislib">AisLib application framework</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >12 187</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >38,4%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >108,8</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >2,0%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+23 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Blocker violations &gt; 0, Critical violations &gt; 0, Commented-out LOC &gt; 5, Skipped unit tests &gt; 0' title='Blocker violations &gt; 0, Critical violations &gt; 0, Commented-out LOC &gt; 5, Skipped unit tests &gt; 0'><span id='m_alert_status'  ><img alt="Error" src="/images/levels/error.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/98436" title="org.codehaus.sonar-plugins:all">All Sonar plugins</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >48 973</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >55,1%</span>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >111,1</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+<span id='m_duplicated_lines_density'  >3,6%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+25 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/49471" title="org.apache.abdera:abdera">Apache Abdera</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >49 458</span>
+<img alt="-1-black-small" src="/images/tendency/-1-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >252,5</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >2,9%</span></a>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+23 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/348318" title="org.apache.amber:amber-parent">Apache Amber</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >5 060</span>
+<img alt="-2-black-small" src="/images/tendency/-2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >32,8%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >27,1</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >0,9%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit test success (%) &lt; 100, Unit tests duration &gt; 600000, Duplicated lines (%) &gt; 5' title='Unit test success (%) &lt; 100, Unit tests duration &gt; 600000, Duplicated lines (%) &gt; 5'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/55731" title="org.apache.archiva:archiva">Apache Archiva</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >33 488</span>
+
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >56,7%</span>
+<img alt="-1-red-small" src="/images/tendency/-1-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+<span id='m_sqale_index'  >203,8</span>
+<img alt="2-red-small" src="/images/tendency/2-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_duplicated_lines_density' class='alert_WARN' >5,8%</span></a>
+<img alt="1-red-small" src="/images/tendency/1-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+28 oct. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/216401" title="org.apache.aries:aries">Apache Aries</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >49 209</span>
+<img alt="-2-black-small" src="/images/tendency/-2-black-small.png?1322481110" />
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >38,6%</span>
+<img alt="2-green-small" src="/images/tendency/2-green-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >496,4</span>
+
+<img alt="-2-green-small" src="/images/tendency/-2-green-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >3,1%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+19 mar. 2011
+
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit test success (%) &lt; 100' title='Unit test success (%) &lt; 100'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/353202" title="org.apache.asyncweb:asyncweb-parent">Apache Asyncweb Parent</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >9 640</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >34,6%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >89,2</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >2,9%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/113098" title="org.apache.cocoon.root:cocoon-root">Apache Cocoon 3: Root</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >19 943</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >32,9%</span>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >153,7</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >1,5%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+23 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/321051" title="org.apache.commons:commons-digester3">Apache Commons Digester</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >9 917</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >71,2%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >49,5</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >3,9%</span></a>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit tests duration &gt; 600000, Duplicated lines (%) &gt; 5' title='Unit tests duration &gt; 600000, Duplicated lines (%) &gt; 5'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/337335" title="org.apache.commons:commons-ognl">Apache Commons OGNL - Object Graph Navigation Library</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >13 415</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >69,8%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >81,8</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_duplicated_lines_density' class='alert_WARN' >13,0%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit test success (%) &lt; 100, Unit tests duration &gt; 600000' title='Unit test success (%) &lt; 100, Unit tests duration &gt; 600000'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/117804" title="org.apache.cxf:cxf">Apache CXF</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >236 072</span>
+
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >40,5%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+<span id='m_sqale_index'  >2 510,0</span>
+<img alt="2-red-small" src="/images/tendency/2-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >4,1%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit tests duration &gt; 600000, Duplicated lines (%) &gt; 5' title='Unit tests duration &gt; 600000, Duplicated lines (%) &gt; 5'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/340845" title="org.apache.directory:apache-directory-trunks">Apache Directory Complete Build With All Projects</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >385 355</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >20,3%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_duplicated_lines_density' class='alert_WARN' >11,4%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+22 oct. 2011
+
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/304594" title="org.apache.empire-db:empire-db-parent">Apache Empire-db</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >32 247</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >13,9%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >367,8</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_duplicated_lines_density' class='alert_WARN' >10,1%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+23 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit test success (%) &lt; 100' title='Unit test success (%) &lt; 100'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/184934" title="org.apache.felix:reactor">Apache Felix</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >170 782</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >10,9%</span>
+
+<img alt="1-green-small" src="/images/tendency/1-green-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >2 423,8</span>
+<img alt="2-red-small" src="/images/tendency/2-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >2,4%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+27 août 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/348994" title="org.apache.hama:hama-parent">Apache Hama parent POM</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >13 847</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >42,0%</span>
+<img alt="2-green-small" src="/images/tendency/2-green-small.png?1322481110" />
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >142,2</span>
+<img alt="2-red-small" src="/images/tendency/2-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >0,3%</span></a>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+13 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit test success (%) &lt; 100' title='Unit test success (%) &lt; 100'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/344128" title="org.apache.isis:isis">Apache Isis</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >145 209</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >15,7%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >1 148,2</span>
+<img alt="1-red-small" src="/images/tendency/1-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >2,1%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit tests duration &gt; 600000, Duplicated lines (%) &gt; 5' title='Unit tests duration &gt; 600000, Duplicated lines (%) &gt; 5'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/31401" title="org.apache.jackrabbit:jackrabbit">Apache Jackrabbit</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >222 314</span>
+
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >31,3%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+<span id='m_sqale_index'  >2 313,8</span>
+<img alt="-2-green-small" src="/images/tendency/-2-green-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_duplicated_lines_density' class='alert_WARN' >5,2%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/195926" title="org.apache.james:james-server">Apache James Server</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >29 747</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >26,3%</span>
+<img alt="1-green-small" src="/images/tendency/1-green-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >364,8</span>
+
+<img alt="1-red-small" src="/images/tendency/1-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >3,4%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit test success (%) &lt; 100, Duplicated lines (%) &gt; 5, Rules compliance &lt; 80' title='Unit test success (%) &lt; 100, Duplicated lines (%) &gt; 5, Rules compliance &lt; 80'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/355976" title="org.apache.karaf:karaf">Apache Karaf</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >38 226</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >16,5%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >613,1</span>
+<img alt="2-red-small" src="/images/tendency/2-red-small.png?1322481110" />
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_duplicated_lines_density' class='alert_WARN' >7,2%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/267086" title="org.apache:lucene">Apache Lucene</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >73 522</span>
+<img alt="-2-black-small" src="/images/tendency/-2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >334,1</span>
+<img alt="2-red-small" src="/images/tendency/2-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >4,2%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit test success (%) &lt; 100, Unit tests duration &gt; 600000' title='Unit test success (%) &lt; 100, Unit tests duration &gt; 600000'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/333110" title="org.apache.mahout:mahout">Apache Mahout</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >85 175</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >51,6%</span>
+<img alt="2-green-small" src="/images/tendency/2-green-small.png?1322481110" />
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >723,8</span>
+<img alt="-2-green-small" src="/images/tendency/-2-green-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >4,1%</span></a>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/99176" title="org.apache.maven:maven">Apache Maven</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >55 356</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >34,3%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >418,6</span>
+<img alt="1-red-small" src="/images/tendency/1-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >3,0%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/339388" title="org.apache.maven.wagon:wagon">Apache Maven Wagon</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >14 191</span>
+
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >30,9%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+<span id='m_sqale_index'  >111,0</span>
+<img alt="1-red-small" src="/images/tendency/1-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_duplicated_lines_density' class='alert_WARN' >7,2%</span></a>
+<img alt="-1-green-small" src="/images/tendency/-1-green-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/88633" title="org.apache.mina:mina-parent">Apache MINA</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >4 419</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >24,7%</span>
+<img alt="-1-red-small" src="/images/tendency/-1-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >38,6</span>
+
+<img alt="2-red-small" src="/images/tendency/2-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >3,2%</span></a>
+<img alt="1-red-small" src="/images/tendency/1-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/337493" title="org.apache.myfaces.extensions.cdi:myfaces-extcdi-parent">Apache MyFaces CODI</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >23 992</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >20,9%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >155,9</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >3,6%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/335882" title="org.apache.opennlp:opennlp">Apache OpenNLP Reactor</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >30 876</span>
+<img alt="-2-black-small" src="/images/tendency/-2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >41,5%</span>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >299,9</span>
+<img alt="-2-green-small" src="/images/tendency/-2-green-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >3,0%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/333259" title="org.apache.openwebbeans:openwebbeans">Apache OpenWebBeans</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >40 406</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >46,6%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >260,2</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >4,5%</span></a>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Rules compliance &lt; 80' title='Rules compliance &lt; 80'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/340438" title="org.apache.photark:photark-parent">Apache PhotArk</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >4 988</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >5,2%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >67,0</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >2,9%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/104668" title="org.apache.portals.pluto:pluto">Apache Pluto</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >23 613</span>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >10,5%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+<span id='m_sqale_index'  >232,8</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_duplicated_lines_density' class='alert_WARN' >7,3%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/274568" title="org.apache:qpid">Apache Qpid</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >110 142</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+</td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >457,3</span>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_duplicated_lines_density' class='alert_WARN' >6,0%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+19 nov. 2011
+
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Complexity /method &gt; 4, Duplicated lines (%) &gt; 5' title='Complexity /method &gt; 4, Duplicated lines (%) &gt; 5'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/351728" title="org.apache.rampart:rampart-project">Apache Rampart</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >19 943</span>
+<img alt="-2-black-small" src="/images/tendency/-2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >1,0%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >307,8</span>
+<img alt="-2-green-small" src="/images/tendency/-2-green-small.png?1322481110" />
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_duplicated_lines_density' class='alert_WARN' >12,4%</span></a>
+<img alt="-1-green-small" src="/images/tendency/-1-green-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/340137" title="org.apache.rave:rave-trunks-reactor">Apache Rave :: rave-trunks-reactor</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >10 813</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >77,3%</span>
+
+<img alt="2-green-small" src="/images/tendency/2-green-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >33,3</span>
+<img alt="1-red-small" src="/images/tendency/1-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >1,5%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/107298" title="org.apache.shindig:shindig-project">Apache Shindig Project</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >50 372</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >72,3%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >260,1</span>
+<img alt="-1-green-small" src="/images/tendency/-1-green-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >0,4%</span></a>
+
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/201291" title="org.apache.shiro:shiro-root">Apache Shiro</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >22 604</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >48,4%</span>
+<img alt="1-green-small" src="/images/tendency/1-green-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >170,7</span>
+<img alt="-1-green-small" src="/images/tendency/-1-green-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >1,4%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+</td>
+
+<td class="right">
+23 déc. 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit test success (%) &lt; 100, Duplicated lines (%) &gt; 5' title='Unit test success (%) &lt; 100, Duplicated lines (%) &gt; 5'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/107290" title="org.apache.sling:sling-builder">Apache Sling (Builder)</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >116 274</span>
+
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >13,3%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+<span id='m_sqale_index'  >1 562,0</span>
+<img alt="2-red-small" src="/images/tendency/2-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Duplicated lines (%) &gt; 5' title='Duplicated lines (%) &gt; 5'><span id='m_duplicated_lines_density' class='alert_WARN' >20,9%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+19 nov. 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='Unit test success (%) &lt; 100' title='Unit test success (%) &lt; 100'><span id='m_alert_status'  ><img alt="Warn" src="/images/levels/warn.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/355722" title="org.apache.sqoop:sqoop">Apache Sqoop</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >19 226</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >57,8%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >135,3</span>
+
+<img alt="2-red-small" src="/images/tendency/2-red-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >4,2%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+15 oct. 2011
+
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_alert_status'  ><img alt="Ok" src="/images/levels/ok.png?1322481110" /></span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Projet" src="/images/q/TRK.png?1322481110" title="Projet" /> <a href="/dashboard/index/196712" title="org.apache.synapse:Apache-Synapse">Apache Synapse</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >68 537</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1322481110" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >28,8%</span>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_sqale_index'  >834,1</span>
+<img alt="2-red-small" src="/images/tendency/2-red-small.png?1322481110" />
+
+</td>
+
+<td class="right">
+
+
+<a href='#' style='cursor : default' class='nolink' rel='' title=''><span id='m_duplicated_lines_density' class='alert_OK' >3,5%</span></a>
+<img alt="" src="/images/transparent.gif?1322481110" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+24 déc. 2011
+
+</td>
+
+</tr>
+
+
+</tbody>
+</table>
+<br/>
+
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+<div id="footer">
+
+<div><script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-1880045-8");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script></div>
+
+<div><script type="text/javascript">
+    Event.observe(window, 'load', function(){
+        var companyLogo = document.createElement('img');
+        companyLogo.setAttribute('src', 'http://dist.sonarsource.com/Nemo-SonaaS-CloudBees.png');
+        companyLogo.setAttribute('alt', 'Company Logo');
+        companyLogo.setAttribute('title', 'Company');
+        var companyUrl = document.createElement('a');
+        companyUrl.setAttribute('href', 'http://www.cloudbees.com/platform-service-sonarsource.cb');
+        companyUrl.appendChild(companyLogo);
+        companyLogo = companyUrl;
+        var sonarLogo = $$('img[title="Embrace Quality"]').first();
+        var center = $($(sonarLogo.parentNode).parentNode);
+        center.appendChild(companyLogo);
+    });
+</script>
+</div>
+
+<div id="ftlinks">
+Powered by <a href="http://www.sonarsource.com" target="SonarSource" class="external">SonarSource</a> - Open Source <a href="http://www.sonarsource.org/documentation/license/" target="license" class="external">LGPL</a> - v.2.12 - <a href="http://sonar-plugins.codehaus.org" class="external" target="plugins">Extensions</a> - <a href="http://sonar.codehaus.org/documentation" class="external" target="sonar_doc" class="external">Documentation</a> - <a href="http://sonar.codehaus.org/support/" target="support" class="external">Poser une question</a>
+
+</div>
+</div>
+
+
+
+</body><script type="text/javascript">
+Event.observe(window, 'load', function(){
+$$('.tipable').each(function(element){
+title = element.readAttribute('title');
+if(!element.rel.blank()) {
+if(title ==null) {
+new Tip(element, element.rel);
+} else {
+new Tip(element, element.rel, {title: title});
+}
+} else if (title!=null && !title.blank()) {
+new Tip(element, title);
+}
+});
+});
+
+
+
+</script>
+</html>
+

@@ -1,0 +1,540 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="gwt:property" content="locale=fr">
+
+<title>Sonar</title>
+<link href="/lifeisbetteron/sonar/stylesheets/sonar.css?1317394754" media="all" rel="stylesheet" type="text/css" /><script src="/lifeisbetteron/sonar/javascripts/sonar.js?1317394754" type="text/javascript"></script>
+<!--[if lte IE 6]>
+<link href="/lifeisbetteron/sonar/ie6/index" media="all" rel="stylesheet" type="text/css" />
+<![endif]-->
+<!--[if lt IE 9]>
+<script src="/lifeisbetteron/sonar/javascripts/protovis-msie-shim.js?1317394742" type="text/javascript"></script><![endif]-->
+<link rel="shortcut icon" type="image/x-icon" href="/lifeisbetteron/sonar/images/favicon.ico?1317394742" />
+
+<link rel="alternate" title="Sonar Alerts" href="/lifeisbetteron/sonar/feeds/projects/Alert" type="application/atom+xml">
+
+</head><body>
+
+
+<div id="container">
+<div id="hd">
+<ol id="crumbs">
+<li><a href="/lifeisbetteron/sonar/">Home</a></li>
+
+</ol>
+
+<ol id="nav">
+<li><input type="text" autocomplete="off" size="15" name="search" id="projectSearch" onFocus="this.size=30;this.value='';autocompleteProjects('/lifeisbetteron/sonar/api/resources?scopes=PRJ&qualifiers=VW,SVW,TRK', '/lifeisbetteron/sonar/dashboard/index/', this, $('projectResults'));return true;" onBlur="javacript:this.size=15" value="Search"/><div id="projectResults" style="display:none"></div></li>
+<li>
+<a href="javascript:window.print()"><img src="/lifeisbetteron/sonar/images/print.gif" alt="Print" title="Print" /></a>
+
+</li>
+
+<li><a href="/lifeisbetteron/sonar/sessions/new">Log in</a></li>
+
+<li><a href="/lifeisbetteron/sonar/profiles">Configuration</a></li>
+</ol>
+</div>
+<div id="body">
+<div id="sb">
+<div id="sidebar">
+<ul>
+
+<li class="selected"><a href="/lifeisbetteron/sonar/filters/index">Filters</a></li>
+<li class=""><a href="/lifeisbetteron/sonar/reviews/index">Reviews</a></li>
+<li class=""><a href="/lifeisbetteron/sonar/dependencies/index">Dependencies</a></li>
+
+</ul>
+<div id="logo"><center><a href="http://www.sonarsource.org/"><img alt="Embrace Quality" class="png" src="/lifeisbetteron/sonar/images/sonar.png?1317394742" title="Embrace Quality" /></a></center></div>
+</div>
+<div id="sidebarconf" class="hidden"> </div>
+</div>
+<div id="content"  class="with_sidebar">
+
+<div class="error" id="error" style="display:none"><span id="errormsg"></span> &nbsp;&nbsp;[<a href="#" onclick="javascript:$('error').hide();return false;">hide</a>]</div>
+<div class="notice" id="info" style="display:none"><span id="infomsg"></span> &nbsp;&nbsp;[<a href="#" onclick="javascript:$('info').hide();return false;">hide</a>]</div>
+
+<div class="warning" id="warning" style="display:none"><span id="warningmsg"></span> &nbsp;&nbsp;[<a href="#" onclick="javascript:$('warning').hide();return false;">hide</a>]</div>
+
+
+<ul class="tabs" id="filter-tabs">
+
+<li>
+<a href="/lifeisbetteron/sonar/filters/index/1" class="selected">Projects</a>
+</li>
+
+<li>
+<a href="/lifeisbetteron/sonar/filters/index/2" class="">Treemap</a>
+
+</li>
+
+</ul>
+
+
+<div class="tabs-panel">
+
+<div>
+
+<div class="line-block">
+<div class="operations">
+<form action="/lifeisbetteron/sonar/" style="display: inline" method="get">
+<select name="period" onchange="submit()" class="small">
+<option value="">Time changes...</option>
+
+<option value="1" >&Delta; since previous analysis</value>
+
+<option value="2" >&Delta; over 5 days</value>
+
+<option value="3" >&Delta; over 30 days</value>
+
+</select>
+</form>
+</div>
+</div>
+
+<table class="data nowrap width100" id="results">
+<thead id="results-head">
+<tr>
+
+<th width="1%"></th>
+
+<th width=1% nowrap class="right">
+<a href="/lifeisbetteron/sonar/?asc=true&amp;sort=1">Alert</a>
+</th>
+
+<th  class="left">
+<a href="/lifeisbetteron/sonar/?asc=false&amp;sort=2">Name</a><img alt="Asc12" src="/lifeisbetteron/sonar/images/asc12.png?1317394742" />
+</th>
+
+<th  class="right">
+<a href="/lifeisbetteron/sonar/?asc=true&amp;sort=3">Version</a>
+</th>
+
+<th  class="right">
+<a href="/lifeisbetteron/sonar/?asc=true&amp;sort=4">Lines of code</a>
+</th>
+
+<th  class="right">
+<a href="/lifeisbetteron/sonar/?asc=true&amp;sort=6">Build date</a>
+</th>
+
+<th  class="right">
+<a href="/lifeisbetteron/sonar/?asc=true&amp;sort=16">Coverage</a>
+</th>
+
+<th  class="right">
+<a href="/lifeisbetteron/sonar/?asc=true&amp;sort=17">IT Coverage</a>
+
+</th>
+
+</tr>
+
+</thead>
+<tfoot>
+<tr>
+<td colspan="8">
+<span id="results_count">6 results</span>
+
+
+&nbsp;&nbsp; <a href="/lifeisbetteron/sonar/feeds/projects/Alert" class="nolink"><img alt="Rss-12x12" src="/lifeisbetteron/sonar/images/rss-12x12.png?1317394742" /></a>
+<a href="/lifeisbetteron/sonar/feeds/projects/Alert" class="action">Alerts feed</a>
+
+</td>
+</tr>
+</tfoot>
+<tbody>
+
+
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Project" src="/lifeisbetteron/sonar/images/q/TRK.png?1317394742" title="Project" /> <a href="/lifeisbetteron/sonar/dashboard/index/5269" title="com.orangevallee.on.android:android">Android</a>
+
+</td>
+
+<td class="right">
+1.13-SNAPSHOT
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >168 318</span>
+<img alt="2-black-small" src="/lifeisbetteron/sonar/images/tendency/2-black-small.png?1317394742" />
+
+
+</td>
+
+<td class="right">
+12 déc. 2011
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >0,0%</span>
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Project" src="/lifeisbetteron/sonar/images/q/TRK.png?1317394742" title="Project" /> <a href="/lifeisbetteron/sonar/dashboard/index/7398" title="com.orangevallee.on.server:core">Core</a>
+
+</td>
+
+<td class="right">
+2.5.0-SNAPSHOT
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >226 319</span>
+<img alt="2-black-small" src="/lifeisbetteron/sonar/images/tendency/2-black-small.png?1317394742" />
+
+
+</td>
+
+<td class="right">
+04:03
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >4,7%</span>
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_it_coverage'  >36,4%</span>
+
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Project" src="/lifeisbetteron/sonar/images/q/TRK.png?1317394742" title="Project" /> <a href="/lifeisbetteron/sonar/dashboard/index/7395" title="com.orangevallee.on.server:sync">On - Sync</a>
+
+</td>
+
+<td class="right">
+2.5.0-SNAPSHOT
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >66 330</span>
+<img alt="2-black-small" src="/lifeisbetteron/sonar/images/tendency/2-black-small.png?1317394742" />
+
+
+</td>
+
+<td class="right">
+03:01
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >0,3%</span>
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_it_coverage'  >22,5%</span>
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+</tr>
+
+<tr class="odd">
+
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Project" src="/lifeisbetteron/sonar/images/q/TRK.png?1317394742" title="Project" /> <a href="/lifeisbetteron/sonar/dashboard/index/4143" title="com.orangevallee.on.server.wme:wme">On - Wme</a>
+
+</td>
+
+<td class="right">
+2.5.0-SNAPSHOT
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >20 524</span>
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+02:02
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >0,0%</span>
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_it_coverage'  >17,9%</span>
+
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Project" src="/lifeisbetteron/sonar/images/q/TRK.png?1317394742" title="Project" /> <a href="/lifeisbetteron/sonar/dashboard/index/7396" title="com.orangevallee.on.server:api">On - api</a>
+
+</td>
+
+<td class="right">
+2.5.0-SNAPSHOT
+
+</td>
+
+<td class="right">
+
+
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+04:02
+
+</td>
+
+<td class="right">
+
+
+
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="Project" src="/lifeisbetteron/sonar/images/q/TRK.png?1317394742" title="Project" /> <a href="/lifeisbetteron/sonar/dashboard/index/1" title="com.orangevallee.on.server.synthesis:synthesis">Synthesis</a>
+
+</td>
+
+<td class="right">
+
+1.2-SNAPSHOT
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >3 283</span>
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+17 oct. 2011
+
+</td>
+
+<td class="right">
+
+
+<span id='m_coverage'  >35,3%</span>
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_it_coverage'  >0,0%</span>
+<img alt="" src="/lifeisbetteron/sonar/images/transparent.gif?1317394742" title="" width="16" />
+
+</td>
+
+</tr>
+
+
+</tbody>
+</table>
+<br/>
+
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+<div id="footer">
+
+
+
+<div id="ftlinks">
+Powered by <a href="http://www.sonarsource.com" target="SonarSource" class="external">SonarSource</a> - Open Source <a href="http://www.sonarsource.org/documentation/license/" target="license" class="external">LGPL</a> - v.2.11 - <a href="http://sonar-plugins.codehaus.org" class="external" target="plugins">Plugins</a> - <a href="http://sonar.codehaus.org/documentation" class="external" target="sonar_doc" class="external">Documentation</a> - <a href="http://sonar.codehaus.org/support/" target="support" class="external">Ask a question</a>
+
+</div>
+</div>
+
+
+
+</body><script type="text/javascript">
+Event.observe(window, 'load', function(){
+$$('.tipable').each(function(element){
+title = element.readAttribute('title');
+if(!element.rel.blank()) {
+if(title ==null) {
+new Tip(element, element.rel);
+} else {
+new Tip(element, element.rel, {title: title});
+}
+} else if (title!=null && !title.blank()) {
+new Tip(element, title);
+}
+});
+});
+
+
+
+</script>
+</html>
+

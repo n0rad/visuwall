@@ -18,35 +18,45 @@ package net.awired.visuwall.plugin.sonar;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_XML_TYPE;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
 public class SonarPluginTest {
 
+    @InjectMocks
     SonarPlugin sonar;
 
-    @Before
-    public void init() {
-        sonar = new SonarPlugin();
-    }
+    @Mock
+    GenericSoftwareClient client;
+
+    @Mock
+    SonarConnectionFactory sonarConnectionFactory;
+
+    @Mock
+    SonarVersionExtractor sonarVersionExtractor;
+
+    @Mock
+    SonarDetector sonarDetector;
 
     @Test(expected = NullPointerException.class)
     public void should_throw_exception_when_passing_null_to_is_sonar_instance() throws IncompatibleSoftwareException {
@@ -71,35 +81,20 @@ public class SonarPluginTest {
 
     @Test
     public void should_get_software_id() throws Exception {
-        Property property = new Property();
-        property.setKey(SonarPlugin.SONAR_CORE_VERSION_KEY);
-        property.setValue("1.0");
-
-        Properties properties = new Properties();
-        properties.getProperties().add(property);
-
-        GenericSoftwareClient client = mock(GenericSoftwareClient.class);
-        Object resourceCall = client.resource(anyString(), any(Class.class), eq(APPLICATION_XML_TYPE));
-        when(resourceCall).thenReturn(properties);
-
-        sonar.client = client;
-
         URL url = new URL("http://sonar:9000");
+
+        when(sonarDetector.isSonarPropertiesPage(url)).thenReturn(true);
+        when(sonarVersionExtractor.propertiesVersion(any(Properties.class))).thenReturn("1.3");
+
         SoftwareId softwareId = sonar.getSoftwareId(url);
 
         assertEquals("Sonar", softwareId.getName());
-        assertEquals("1.0", softwareId.getVersion());
+        assertEquals("1.3", softwareId.getVersion());
     }
 
     @Test(expected = IncompatibleSoftwareException.class)
     public void should_throw_exception_if_url_is_not_sonar() throws Exception {
-        Properties properties = new Properties();
-
-        GenericSoftwareClient client = mock(GenericSoftwareClient.class);
-        Object resourceCall = client.resource(anyString(), any(Class.class), eq(APPLICATION_XML_TYPE));
-        when(resourceCall).thenReturn(properties);
-
-        sonar.client = client;
+        when(client.exist(anyString(), any(Class.class))).thenReturn(false);
 
         URL url = new URL("http://www.google.fr");
         sonar.getSoftwareId(url);
@@ -108,26 +103,44 @@ public class SonarPluginTest {
     @Test(expected = IncompatibleSoftwareException.class)
     public void should_throw_exception_if_there_is_no_properties_page() throws Exception {
 
-        GenericSoftwareClient client = mock(GenericSoftwareClient.class);
         Object resourceCall = client.resource(anyString(), any(Class.class), eq(APPLICATION_XML_TYPE));
         when(resourceCall).thenThrow(new ResourceNotFoundException("not found"));
-
-        sonar.client = client;
 
         URL url = new URL("http://www.google.fr");
         sonar.getSoftwareId(url);
     }
 
     @Test
-    public void should_get_connection() throws ConnectionException, MalformedURLException {
+    public void should_get_connection() throws Exception {
         SonarConnection mockedConnection = new SonarConnection();
 
-        SonarConnectionFactory sonarConnectionFactory = mock(SonarConnectionFactory.class);
         when(sonarConnectionFactory.create(anyString(), anyString(), anyString())).thenReturn(mockedConnection);
-
-        sonar.sonarConnectionFactory = sonarConnectionFactory;
 
         SonarConnection connection = sonar.getConnection(new URL("http://url"), new HashMap<String, String>());
         assertEquals(mockedConnection, connection);
+    }
+
+    @Test
+    public void should_get_incompatible_property_when_version_is_inferior_of_24() throws Exception {
+        when(sonarDetector.isSonarPropertiesPage(any(URL.class))).thenReturn(true);
+        when(sonarVersionExtractor.propertiesVersion(any(Properties.class))).thenReturn("1.3");
+
+        URL url = new URL("http://sonar.com/v13");
+        SoftwareId softwareId = sonar.getSoftwareId(url);
+
+        assertFalse(softwareId.isCompatible());
+        assertEquals("Sonar version 1.3 is not compatible with Visuwall", softwareId.getWarnings());
+    }
+
+    @Test
+    public void should_extract_version_from_welcome_page() throws Exception {
+        when(sonarDetector.isSonarWelcomePage(any(URL.class))).thenReturn(true);
+
+        when(sonarVersionExtractor.welcomePageVersion(any(URL.class))).thenReturn("2.5");
+
+        URL url = new URL("http://sonar.com/v25");
+        SoftwareId softwareId = sonar.getSoftwareId(url);
+
+        assertTrue(softwareId.isCompatible());
     }
 }

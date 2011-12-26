@@ -16,24 +16,37 @@
 
 package net.awired.visuwall.plugin.sonar;
 
-import com.google.common.base.Preconditions;
+import java.io.IOException;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.google.common.io.ByteStreams;
 
 public class SonarVersionExtractor {
 
     private static final String SONAR_CORE_VERSION_KEY = "sonar.core.version";
 
-    private Properties properties;
-
-    public SonarVersionExtractor(Properties properties) {
-        Preconditions.checkNotNull(properties, "properties is mandatory");
-        this.properties = properties;
-    }
-
-    public String version() {
+    public String propertiesVersion(Properties properties) {
         for (Property property : properties.getProperties()) {
             if (property.isKey(SONAR_CORE_VERSION_KEY)) {
                 return property.getValue();
             }
+        }
+        return "unknown";
+    }
+
+    public String welcomePageVersion(URL url) {
+        try {
+            byte[] byteArray = ByteStreams.toByteArray(url.openStream());
+            String htmlContent = new String(byteArray);
+            Pattern p = Pattern.compile(".* - v\\.([0-9]\\.[0-9]*.[0-9]*) - .*");
+            Matcher m = p.matcher(htmlContent);
+            while (m.find()) {
+                return m.group(1);
+            }
+        } catch (IOException e) {
+            return "unknown";
         }
         return "unknown";
     }

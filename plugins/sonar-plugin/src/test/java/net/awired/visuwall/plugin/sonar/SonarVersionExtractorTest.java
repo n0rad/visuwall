@@ -17,21 +17,55 @@
 package net.awired.visuwall.plugin.sonar;
 
 import static org.junit.Assert.assertEquals;
+
 import java.io.InputStream;
+import java.net.URL;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
+
 import org.junit.Test;
 
 public class SonarVersionExtractorTest {
 
-    @Test
-    public void should_extract_version_in_jenkins_page() {
-        ClassLoader classLoader = SonarVersionExtractorTest.class.getClassLoader();
-        InputStream stream = classLoader.getResourceAsStream("sonar_version_page.xml");
-        SonarVersionExtractor sve = new SonarVersionExtractor(loadProperties(stream));
+    SonarVersionExtractor sve = new SonarVersionExtractor();
 
-        String version = sve.version();
+    ClassLoader classLoader = SonarVersionExtractorTest.class.getClassLoader();
+
+    @Test
+    public void should_extract_version_from_sonar_properties() {
+        InputStream stream = classLoader.getResourceAsStream("sonar_version_page.xml");
+
+        String version = sve.propertiesVersion(loadProperties(stream));
+
         assertEquals("2.8", version);
+    }
+
+    @Test
+    public void should_extract_version_from_sonar_welcome_page_v211() {
+        URL resource = classLoader.getResource("sonar_2.11.html");
+
+        String version = sve.welcomePageVersion(resource);
+
+        assertEquals("2.11", version);
+    }
+
+    @Test
+    public void should_extract_version_from_sonar_welcome_page_v201() {
+        URL resource = classLoader.getResource("sonar_2.0.1.html");
+
+        String version = sve.welcomePageVersion(resource);
+
+        assertEquals("2.0.1", version);
+    }
+
+    @Test
+    public void should_extract_version_from_sonar_welcome_page_v212() {
+        URL resource = classLoader.getResource("sonar_2.12.html");
+
+        String version = sve.welcomePageVersion(resource);
+
+        assertEquals("2.12", version);
     }
 
     private Properties loadProperties(InputStream is) {

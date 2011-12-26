@@ -6,7 +6,7 @@ import net.awired.visuwall.api.domain.SoftwareProjectId;
 
 import org.junit.Test;
 
-public class HudsonPluginITest {
+public class HudsonPluginIT {
 
     final HudsonPlugin hudsonPlugin = new HudsonPlugin();
 

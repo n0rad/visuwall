@@ -21,6 +21,7 @@ public class SoftwareId {
     private String name;
     private String version;
     private String warnings;
+    private boolean compatible;
 
     // ////////////////////////////////
 
@@ -48,4 +49,11 @@ public class SoftwareId {
         this.warnings = warnings;
     }
 
+    public boolean isCompatible() {
+        return compatible;
+    }
+
+    public void setCompatible(boolean compatible) {
+        this.compatible = compatible;
+    }
 }
