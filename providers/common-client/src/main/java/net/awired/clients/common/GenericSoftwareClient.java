@@ -16,8 +16,14 @@
 
 package net.awired.clients.common;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.io.InputStream;
+import java.net.URL;
+
 import javax.ws.rs.core.MediaType;
-import com.google.common.base.Preconditions;
+
+import com.google.common.io.ByteStreams;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
@@ -38,8 +44,8 @@ public class GenericSoftwareClient {
     }
 
     public GenericSoftwareClient(String login, String password) {
-        Preconditions.checkNotNull(login, "login is mandatory");
-        Preconditions.checkNotNull(password, "password is mandatory");
+        checkNotNull(login, "login is mandatory");
+        checkNotNull(password, "password is mandatory");
         ClientConfig clientConfig = new DefaultClientConfig();
         client = Client.create(clientConfig);
         client.addFilter(new HTTPBasicAuthFilter(login, password));
@@ -62,6 +68,15 @@ public class GenericSoftwareClient {
         }
     }
 
+    public <T> boolean exist(String url, Class<T> clazz) {
+        try {
+            resource(url, clazz);
+            return true;
+        } catch (ResourceNotFoundException e) {
+            return false;
+        }
+    }
+
     public <T> T resource(String url, Class<T> clazz, MediaType mediaType) throws ResourceNotFoundException {
         checkUrl(url);
         checkClass(clazz);
@@ -81,16 +96,35 @@ public class GenericSoftwareClient {
         }
     }
 
+    public <T> T existingResource(String url, Class<T> clazz, MediaType mediaType) {
+        try {
+            return resource(url, clazz, mediaType);
+        } catch (ResourceNotFoundException e) {
+            throw new RuntimeException("You should check your url before calling existingResource()", e);
+        }
+    }
+
     private void checkMediaType(MediaType mediaType) {
-        Preconditions.checkNotNull(mediaType, "mediaType is mandatory");
+        checkNotNull(mediaType, "mediaType is mandatory");
     }
 
     private <T> void checkClass(Class<T> clazz) {
-        Preconditions.checkNotNull(clazz, "clazz is mandatory");
+        checkNotNull(clazz, "clazz is mandatory");
     }
 
     private void checkUrl(String url) {
-        Preconditions.checkNotNull(url, "url is mandatory");
+        checkNotNull(url, "url is mandatory");
+    }
+
+    public boolean contains(URL url, String word) {
+        try {
+            InputStream stream = url.openStream();
+            byte[] byteArray = ByteStreams.toByteArray(stream);
+            String string = new String(byteArray);
+            return string.contains(word);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }
