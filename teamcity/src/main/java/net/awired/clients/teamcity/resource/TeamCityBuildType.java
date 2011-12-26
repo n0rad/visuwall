@@ -43,6 +43,12 @@ public class TeamCityBuildType {
     @XmlAttribute
     private String webUrl;
 
+    @XmlAttribute
+    private String description;
+
+    @XmlAttribute
+    private boolean paused;
+
     @Override
     public String toString() {
         return "TeamCityBuildType [id=" + id + ", name=" + name + ", href=" + href + ", projectName=" + projectName
@@ -95,6 +101,22 @@ public class TeamCityBuildType {
 
     public void setWebUrl(String webUrl) {
         this.webUrl = webUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
     }
 
 }
