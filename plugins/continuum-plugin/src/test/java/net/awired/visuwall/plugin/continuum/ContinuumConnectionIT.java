@@ -1,6 +1,8 @@
 package net.awired.visuwall.plugin.continuum;
 
-import java.util.Map;
+import static java.util.Arrays.asList;
+
+import java.util.List;
 
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 
@@ -14,19 +16,19 @@ public class ContinuumConnectionIT {
         ContinuumConnection connection = new ContinuumConnection();
         connection.connect("http://vmbuild.apache.org/continuum", "", "");
 
-        Map<SoftwareProjectId, String> softwareProjectIds = connection.listSoftwareProjectIds();
-        for (SoftwareProjectId softwareProjectId : softwareProjectIds.keySet()) {
+        List<SoftwareProjectId> softwareProjectIds = connection.findSoftwareProjectIdsByViews(asList("Apache Commons"));
+        for (SoftwareProjectId softwareProjectId : softwareProjectIds) {
             System.out.println("----");
             String buildId = connection.getLastBuildId(softwareProjectId);
-            System.out.println(connection.getName(softwareProjectId));
-            System.out.println(connection.getMavenId(softwareProjectId));
-            System.out.println(connection.getBuildCommiters(softwareProjectId, buildId));
-            System.out.println(connection.getBuildTime(softwareProjectId, buildId));
-            System.out.println(connection.getDescription(softwareProjectId));
-            System.out.println(connection.getBuildIds(softwareProjectId));
-            System.out.println(connection.getBuildState(softwareProjectId, buildId));
-            System.out.println(connection.getEstimatedFinishTime(softwareProjectId, buildId));
-            System.out.println(connection.findViews());
+            connection.getName(softwareProjectId);
+            connection.getMavenId(softwareProjectId);
+            connection.getBuildCommiters(softwareProjectId, buildId);
+            connection.getBuildTime(softwareProjectId, buildId);
+            connection.getDescription(softwareProjectId);
+            connection.getBuildIds(softwareProjectId);
+            connection.getBuildState(softwareProjectId, buildId);
+            connection.getEstimatedFinishTime(softwareProjectId, buildId);
+            connection.findViews();
         }
     }
 }

@@ -33,12 +33,42 @@
 					<artifactId>xml-apis</artifactId>
 					<groupId>xml-apis</groupId>
 				</exclusion>
+				<exclusion>
+					<artifactId>xmlrpc-common</artifactId>
+					<groupId>org.apache.xmlrpc</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>xmlrpc-client</artifactId>
+					<groupId>org.apache.xmlrpc</groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.continuum</groupId>
 			<artifactId>continuum-xmlrpc-api</artifactId>
 			<version>1.4.0</version>
+		</dependency>
+
+		<dependency>
+			<artifactId>xmlrpc-common</artifactId>
+			<groupId>org.apache.xmlrpc</groupId>
+			<version>3.1.1</version>
+		</dependency>
+		<dependency>
+			<artifactId>xmlrpc-client</artifactId>
+			<groupId>org.apache.xmlrpc</groupId>
+			<version>3.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ws-commons-util</groupId>
+			<artifactId>ws-commons-util</artifactId>
+			<version>1.0.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
