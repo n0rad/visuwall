@@ -2,10 +2,9 @@ package net.awired.visuwall.plugin.cruisecontrol;
 
 import java.net.URL;
 import java.util.Map;
-
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
 public class CruiseControlPlugin implements VisuwallPlugin<CruiseControlConnection> {
@@ -41,7 +40,7 @@ public class CruiseControlPlugin implements VisuwallPlugin<CruiseControlConnecti
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
+    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
         // TODO Auto-generated method stub
         return null;
     }
