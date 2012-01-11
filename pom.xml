@@ -41,7 +41,7 @@
 
 	<properties>
 		<bootstrap.version>1.0</bootstrap.version>
-		<ajsl.version>0.3</ajsl.version>
+		<ajsl.version>0.4-SNAPSHOT</ajsl.version>
 		<clients.version>1.0-SNAPSHOT</clients.version>
 
 		<spring.version>3.0.5.RELEASE</spring.version>
