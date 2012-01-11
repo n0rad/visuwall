@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
 import com.google.common.base.Objects;
@@ -58,7 +58,7 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
+    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
             SoftwareId softwareId = new SoftwareId();
@@ -66,7 +66,7 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
             softwareId.setVersion(BambooVersionExtractor.extractVersion(url));
             return softwareId;
         } catch (BambooVersionNotFoundException e) {
-            throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Jenkins");
+            throw new SoftwareNotFoundException("Url " + url + " is not compatible with Jenkins");
         }
     }
 

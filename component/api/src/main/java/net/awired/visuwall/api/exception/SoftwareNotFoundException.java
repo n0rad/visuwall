@@ -16,15 +16,15 @@
 
 package net.awired.visuwall.api.exception;
 
-public class IncompatibleSoftwareException extends Exception {
+public class SoftwareNotFoundException extends Exception {
 
     private static final long serialVersionUID = -8159361336473718472L;
 
-    public IncompatibleSoftwareException(String msg) {
+    public SoftwareNotFoundException(String msg) {
         super(msg);
     }
 
-    public IncompatibleSoftwareException(String msg, Exception cause) {
+    public SoftwareNotFoundException(String msg, Exception cause) {
         super(msg, cause);
     }
 

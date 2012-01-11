@@ -31,7 +31,7 @@ import java.util.HashMap;
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,7 +59,7 @@ public class SonarPluginTest {
     SonarDetector sonarDetector;
 
     @Test(expected = NullPointerException.class)
-    public void should_throw_exception_when_passing_null_to_is_sonar_instance() throws IncompatibleSoftwareException {
+    public void should_throw_exception_when_passing_null_to_is_sonar_instance() throws SoftwareNotFoundException {
         new SonarPlugin().getSoftwareId(null);
     }
 
@@ -92,7 +92,7 @@ public class SonarPluginTest {
         assertEquals("1.3", softwareId.getVersion());
     }
 
-    @Test(expected = IncompatibleSoftwareException.class)
+    @Test(expected = SoftwareNotFoundException.class)
     public void should_throw_exception_if_url_is_not_sonar() throws Exception {
         when(client.exist(anyString(), any(Class.class))).thenReturn(false);
 
@@ -100,7 +100,7 @@ public class SonarPluginTest {
         sonar.getSoftwareId(url);
     }
 
-    @Test(expected = IncompatibleSoftwareException.class)
+    @Test(expected = SoftwareNotFoundException.class)
     public void should_throw_exception_if_there_is_no_properties_page() throws Exception {
 
         Object resourceCall = client.resource(anyString(), any(Class.class), eq(APPLICATION_XML_TYPE));

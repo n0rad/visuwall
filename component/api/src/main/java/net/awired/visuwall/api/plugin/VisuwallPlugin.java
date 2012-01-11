@@ -21,7 +21,7 @@ import java.util.Map;
 
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 
 public interface VisuwallPlugin<T extends BasicCapability> {
@@ -37,6 +37,6 @@ public interface VisuwallPlugin<T extends BasicCapability> {
 
     String getName();
 
-    SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException;
+    SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException;
 
 }

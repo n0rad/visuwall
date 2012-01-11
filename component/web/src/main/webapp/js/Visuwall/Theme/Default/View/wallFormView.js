@@ -194,7 +194,7 @@ define(['jquery', //
 			
 			pluginService.manageable(urlObj.val(), loginObj.val(), passObj.val(), function(softwareInfo) {
 				// success
-				if (softwareInfo.warnings) {
+				if (softwareInfo.softwareId.warnings) {
 					domObj.switchClasses(classes, 'warningCheck', 1);				
 					
 
@@ -213,14 +213,14 @@ define(['jquery', //
 	+'				<th colspan="2">Software</th>'
 	+'				<tr>'
 	+'					<td class="label">name :</td>'
-	+'					<td>' + softwareInfo.name + '</td>'
+	+'					<td>' + softwareInfo.softwareId.name + '</td>'
 	+'				</tr>'
 	+'				<tr>'
 	+'					<td class="label">version :</td>'
-	+'					<td>' + softwareInfo.version + '</td>'
+	+'					<td>' + softwareInfo.softwareId.version + '</td>'
 	+'				</tr>'
 	+'				<tr>'
-	+'					<td colspan="2">' + softwareInfo.warnings + '</td>'
+	+'					<td colspan="2">' + softwareInfo.softwareId.warnings + '</td>'
 	+'				</tr>'
 	+'			</table>';
 					

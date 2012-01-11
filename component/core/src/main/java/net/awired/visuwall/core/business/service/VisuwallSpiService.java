@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
@@ -46,7 +46,7 @@ public class VisuwallSpiService implements PluginServiceInterface {
             try {
                 visuwallPlugin.getSoftwareId(url);
                 return visuwallPlugin.getConnection(url, properties);
-            } catch (IncompatibleSoftwareException e) {
+            } catch (SoftwareNotFoundException e) {
                 if (LOG.isInfoEnabled()) {
                     LOG.info("Plugin " + visuwallPlugin + " can't manage url " + url);
                 }
@@ -77,7 +77,7 @@ public class VisuwallSpiService implements PluginServiceInterface {
                     softwareInfo.setViewNames(((ViewCapability) connectionPlugin).findViews());
                 }
                 return softwareInfo;
-            } catch (IncompatibleSoftwareException e) {
+            } catch (SoftwareNotFoundException e) {
                 LOG.debug("Plugin " + visuwallPlugin + " can not manage url " + url);
             } catch (Throwable e) {
                 LOG.warn("Plugin " + visuwallPlugin + " throws exception on url " + url, e);

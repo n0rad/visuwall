@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
 import org.slf4j.Logger;
@@ -60,7 +60,7 @@ public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
+    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
             url = new URL(url.toString() + "/api/");
@@ -74,7 +74,7 @@ public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
                 LOG.debug("Can't get content of " + url, e);
             }
         }
-        throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Jenkins");
+        throw new SoftwareNotFoundException("Url " + url + " is not compatible with Jenkins");
     }
 
     @Override

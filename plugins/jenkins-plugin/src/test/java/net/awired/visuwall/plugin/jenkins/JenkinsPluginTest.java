@@ -18,7 +18,7 @@ package net.awired.visuwall.plugin.jenkins;
 
 import static org.junit.Assert.assertEquals;
 import java.net.URL;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +33,7 @@ public class JenkinsPluginTest {
 
     @Test(expected = NullPointerException.class)
     public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance()
-            throws IncompatibleSoftwareException {
+            throws SoftwareNotFoundException {
         jenkinsPlugin.getSoftwareId(null);
     }
 
@@ -44,7 +44,7 @@ public class JenkinsPluginTest {
         assertEquals(1.0f, jenkinsPlugin.getVersion(), 0);
     }
 
-    @Test(expected = IncompatibleSoftwareException.class)
+    @Test(expected = SoftwareNotFoundException.class)
     public void should_throw_exception_when_software_url_cant_be_reached() throws Exception {
         URL url = new URL("http://notfound");
         jenkinsPlugin.getSoftwareId(url);

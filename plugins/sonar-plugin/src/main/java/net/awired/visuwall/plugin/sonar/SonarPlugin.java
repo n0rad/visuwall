@@ -26,7 +26,7 @@ import java.util.Map;
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
 import com.google.common.base.Objects;
@@ -72,14 +72,14 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
+    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
         checkNotNull(url, "url is mandatory");
         if (sonarDetector.isSonarPropertiesPage(url)) {
             return createSoftwareIdFromProperties(url);
         } else if (sonarDetector.isSonarWelcomePage(url)) {
             return createSoftwareIdFromWelcomePage(url);
         }
-        throw new IncompatibleSoftwareException("Url " + url.toString() + " is not compatible with Sonar");
+        throw new SoftwareNotFoundException("Url " + url.toString() + " is not compatible with Sonar");
     }
 
     private SoftwareId createSoftwareIdFromWelcomePage(URL url) {
@@ -87,7 +87,7 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
         return createSoftwareId(version);
     }
 
-    private SoftwareId createSoftwareIdFromProperties(URL url) throws IncompatibleSoftwareException {
+    private SoftwareId createSoftwareIdFromProperties(URL url) throws SoftwareNotFoundException {
         String propertiesUrl = sonarDetector.buildPropertiesUrl(url);
         Properties properties = client.existingResource(propertiesUrl, Properties.class, APPLICATION_XML_TYPE);
         String version = sonarVersionExtractor.propertiesVersion(properties);

@@ -16,13 +16,13 @@
 
 package net.awired.visuwall.plugin.hudson;
 
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import org.junit.Test;
 
 public class HudsonPluginTest {
 
     @Test(expected = NullPointerException.class)
-    public void should_throw_exception_when_passing_null_to_hudson_instance() throws IncompatibleSoftwareException {
+    public void should_throw_exception_when_passing_null_to_hudson_instance() throws SoftwareNotFoundException {
         new HudsonPlugin().getSoftwareId(null);
     }
 

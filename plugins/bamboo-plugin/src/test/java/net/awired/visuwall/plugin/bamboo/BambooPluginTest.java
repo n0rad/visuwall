@@ -23,7 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +52,7 @@ public class BambooPluginTest {
         assertEquals(BambooConnection.class, bamboo.getConnectionClass());
     }
 
-    @Test(expected = IncompatibleSoftwareException.class)
+    @Test(expected = SoftwareNotFoundException.class)
     public void should_not_get_software_id_without_version() throws Exception {
         URL url = new URL("http://bamboo:8080");
         SoftwareId softwareId = bamboo.getSoftwareId(url);
@@ -61,7 +61,7 @@ public class BambooPluginTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void cant_pass_null_as_url_parameter() throws IncompatibleSoftwareException {
+    public void cant_pass_null_as_url_parameter() throws SoftwareNotFoundException {
         bamboo.getSoftwareId(null);
     }
 

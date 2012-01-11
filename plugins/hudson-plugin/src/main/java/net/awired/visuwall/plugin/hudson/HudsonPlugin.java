@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
 import com.google.common.base.Objects;
@@ -59,7 +59,7 @@ public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
+    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
             URL apiUrl = new URL(url.toString() + "/api/");
@@ -67,11 +67,11 @@ public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
             if (isManageable(xml)) {
                 return createSoftwareId(xml);
             }
-            throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Hudson, content: " + xml);
+            throw new SoftwareNotFoundException("Url " + url + " is not compatible with Hudson, content: " + xml);
         } catch (MalformedURLException e) {
-            throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Hudson", e);
+            throw new SoftwareNotFoundException("Url " + url + " is not compatible with Hudson", e);
         } catch (IOException e) {
-            throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Hudson", e);
+            throw new SoftwareNotFoundException("Url " + url + " is not compatible with Hudson", e);
         }
     }
 

@@ -30,7 +30,7 @@ import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.clients.teamcity.resource.TeamCityServer;
 import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -69,7 +69,7 @@ public class TeamCityPluginTest {
 
     @Test(expected = NullPointerException.class)
     public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance()
-            throws IncompatibleSoftwareException {
+            throws SoftwareNotFoundException {
         new TeamCityPlugin().getSoftwareId(null);
     }
 
@@ -103,7 +103,7 @@ public class TeamCityPluginTest {
         assertEquals("", warnings);
     }
 
-    @Test(expected = IncompatibleSoftwareException.class)
+    @Test(expected = SoftwareNotFoundException.class)
     public void should_throw_exception_when_software_is_not_compatible() throws Exception {
         Throwable notFound = new ResourceNotFoundException("not found");
         when(genericSoftwareClient.resource(anyString(), any(Class.class))).thenThrow(notFound);

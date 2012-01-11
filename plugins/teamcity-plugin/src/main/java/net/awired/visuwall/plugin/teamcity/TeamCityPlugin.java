@@ -24,7 +24,7 @@ import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.clients.teamcity.resource.TeamCityServer;
 import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -59,13 +59,13 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
+    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
             TeamCityServer teamCityServer = getServer(url.toString());
             return createSoftwareId(teamCityServer);
         } catch (ResourceNotFoundException e) {
-            throw new IncompatibleSoftwareException("Url " + url + " is not compatible with TeamCity", e);
+            throw new SoftwareNotFoundException("Url " + url + " is not compatible with TeamCity", e);
         }
     }
 

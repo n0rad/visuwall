@@ -7,7 +7,7 @@ import java.util.Map;
 
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.IncompatibleSoftwareException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
 public class ContinuumPlugin implements VisuwallPlugin<ContinuumConnection> {
@@ -40,7 +40,7 @@ public class ContinuumPlugin implements VisuwallPlugin<ContinuumConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws IncompatibleSoftwareException {
+    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
         if (isManageable(url)) {
             SoftwareId softwareId = new SoftwareId();
             softwareId.setName("Continuum");
@@ -48,7 +48,7 @@ public class ContinuumPlugin implements VisuwallPlugin<ContinuumConnection> {
             softwareId.setWarnings("");
             return softwareId;
         }
-        throw new IncompatibleSoftwareException("Url " + url + " is not compatible with Continuum");
+        throw new SoftwareNotFoundException("Url " + url + " is not compatible with Continuum");
     }
 
     private boolean isManageable(URL url) {
