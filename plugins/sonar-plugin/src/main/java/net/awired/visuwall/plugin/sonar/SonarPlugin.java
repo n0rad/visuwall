@@ -33,6 +33,8 @@ import com.google.common.base.Objects;
 
 public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
 
+    private static final double SONAR_MINIMUM_COMPATIBLE_VERSION = 2.4;
+
     static final String SONAR_CORE_VERSION_KEY = "sonar.core.version";
 
     private GenericSoftwareClient client;
@@ -42,6 +44,9 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
     private SonarDetector sonarDetector = new SonarDetector();
 
     private SonarVersionExtractor sonarVersionExtractor = new SonarVersionExtractor();
+
+    private SonarCompatibleVersionChecker sonarCompatibleVersionChecker = new SonarCompatibleVersionChecker(
+            SONAR_MINIMUM_COMPATIBLE_VERSION);
 
     public SonarPlugin() {
         client = new GenericSoftwareClient();
@@ -97,22 +102,14 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
     private SoftwareId createSoftwareId(String version) {
         SoftwareId softwareId = new SoftwareId();
         softwareId.setName("Sonar");
-        boolean versionIsCompatible = versionIsCompatible(version);
+        boolean versionIsCompatible = sonarCompatibleVersionChecker.versionIsCompatible(version);
         softwareId.setCompatible(versionIsCompatible);
         softwareId.setVersion(version);
         if (!versionIsCompatible) {
-            softwareId.setWarnings("Sonar version " + version + " is not compatible with Visuwall");
+            softwareId.setWarnings("Sonar version " + version
+                    + " is not compatible with Visuwall. Please use a version >= " + SONAR_MINIMUM_COMPATIBLE_VERSION);
         }
         return softwareId;
-    }
-
-    private boolean versionIsCompatible(String version) {
-        try {
-            float versionAsFloat = Float.valueOf(version);
-            return versionAsFloat >= 2.4;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     @Override

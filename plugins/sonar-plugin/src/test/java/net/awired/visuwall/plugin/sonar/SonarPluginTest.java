@@ -129,7 +129,8 @@ public class SonarPluginTest {
         SoftwareId softwareId = sonar.getSoftwareId(url);
 
         assertFalse(softwareId.isCompatible());
-        assertEquals("Sonar version 1.3 is not compatible with Visuwall", softwareId.getWarnings());
+        assertEquals("Sonar version 1.3 is not compatible with Visuwall. Please use a version >= 2.4",
+                softwareId.getWarnings());
     }
 
     @Test
