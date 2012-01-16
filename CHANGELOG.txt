@@ -1,3 +1,22 @@
+V0.3 (2012-01-16)
+=================
+
+NEW :
+ * Support no-maven projects
+ * Support software authentication (#98)
+ * Sonar plugin only support version <0.4 (#117)
+ * Auto flush DB if visuwall version change as we do not support migration yet (#107)
+ * Add logo to background to have something when there is no project and not only a black screen (#103)
+ * Save slider size in cookie (#68)
+ * Display developer's gravatar on fail and error projects (#27) 
+
+FIX :
+ * Teamcity plugin do not support view correctly (#118)
+ * Software cache is cleared every 9s (#110) 
+ * Exception when android emulator did not run and status is NOT_BUILT (#106)
+ * The all view should not be return by plugins (#102)
+ * Public software with custom version cannot be added (#89)
+
 
 V0.2 (2011-07-06)
 =================

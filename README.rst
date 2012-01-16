@@ -14,5 +14,5 @@ Visuwall Currently support :
  * Jenkins
  * Hudson
  * Sonar
- * Bamboo (from Version 0.2.X)
- * Teamcity (from Version 0.2.X)
+ * Bamboo
+ * Teamcity

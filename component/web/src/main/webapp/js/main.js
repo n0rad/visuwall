@@ -72,8 +72,8 @@ define([ 'js!Underscore.js!order', //
 		
 	});
 
-	define('log', [ 'Ajsl/Log' ], function(Log) {
-		return window.console;
+	define('log', [ 'Ajsl/Log' ], function(log) {
+		return log;
 	});
 
 	return {
