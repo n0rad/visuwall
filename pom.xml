@@ -12,7 +12,7 @@
 
 	<groupId>net.awired.clients</groupId>
 	<artifactId>clients</artifactId>
-	<version>1.0</version>
+	<version>1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Clients</name>
 	<description>Clients for TeamCity, Bamboo, Sonar, Jenkins, Hudson ...</description>
