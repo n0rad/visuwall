@@ -4,11 +4,12 @@ V0.3 (2012-01-16)
 NEW :
  * Support no-maven projects
  * Support software authentication (#98)
- * Sonar plugin only support version <0.4 (#117)
+ * Display info as sonar plugin only support version >=0.4 (#117)
  * Auto flush DB if visuwall version change as we do not support migration yet (#107)
- * Add logo to background to have something when there is no project and not only a black screen (#103)
+ * Add logo to background to display something instead of a black screen when there is no project (#103)
  * Save slider size in cookie (#68)
  * Display developer's gravatar on fail and error projects (#27) 
+ * New plugin for continuum
 
 FIX :
  * Teamcity plugin do not support view correctly (#118)
