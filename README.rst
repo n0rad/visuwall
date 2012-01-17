@@ -16,3 +16,4 @@ Visuwall Currently support :
  * Sonar
  * Bamboo
  * Teamcity
+ * Continuum
