@@ -12,7 +12,7 @@
 
 	<groupId>net.awired.visuwall</groupId>
 	<artifactId>visuwall</artifactId>
-	<version>0.3</version>
+	<version>0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Visuwall</name>
 	<description>Web application showing build and quality states of Projects in a very visual Wall</description>
