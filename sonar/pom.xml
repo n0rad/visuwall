@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>net.awired.clients</groupId>
 		<artifactId>clients</artifactId>
-		<version>1.1</version>
+		<version>1.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	
