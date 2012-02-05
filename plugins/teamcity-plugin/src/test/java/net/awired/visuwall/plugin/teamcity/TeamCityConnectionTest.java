@@ -194,18 +194,13 @@ public class TeamCityConnectionTest {
         assertEquals("groupId:artifactId", mavenId);
     }
 
-    @Test(expected = ProjectNotFoundException.class)
-    public void should_throw_exception_when_getting_estimated_finish_time() throws Exception {
-        teamCityConnection.getEstimatedFinishTime(softwareProjectId(), "1");
-    }
-
     @Test
     public void should_get_is_building() throws Exception {
         TeamCityBuild build = new TeamCityBuild();
         build.setRunning(true);
         build.setId("1");
         TeamCityBuildType buildType = new TeamCityBuildType();
-        buildType.setProjectId("projectId");
+        buildType.setId("projectId");
         build.setBuildType(buildType);
         when(teamCity.findRunningBuild()).thenReturn(build);
 
