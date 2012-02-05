@@ -17,7 +17,7 @@ class TestResultExtractor {
         for (String s : split) {
             if (s.contains(key)) {
                 String[] split2 = s.split(":");
-                if (split.length > 1) {
+                if (split2.length > 1) {
                     String t = split2[1].trim();
                     int indexOfBlank = t.indexOf(" ");
                     if (indexOfBlank != -1) {
