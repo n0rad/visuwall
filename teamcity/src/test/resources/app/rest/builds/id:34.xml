@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<build id="34" number="???.5" status="SUCCESS" href="/app/rest/builds/id:34"
+	webUrl="http://localhost:8111/viewLog.html?buildId=34&amp;buildTypeId=bt14"
+	personal="false" history="false" pinned="false" running="true">
+	<running-info percentageComplete="7" elapsedSeconds="3"
+		estimatedTotalSeconds="51"
+		currentStageText="Updating sources: agent side checkout... : VCS Root: http://svn.apache.org/repos/asf/struts/struts1/trunk : Will use fast SVN update"
+		outdated="false" probablyHanging="false" />
+	<statusText>Running</statusText>
+	<buildType id="bt14" name="Struts" href="/app/rest/buildTypes/id:bt14"
+		projectName="struts" projectId="project13"
+		webUrl="http://localhost:8111/viewType.html?buildTypeId=bt14" />
+	<startDate>20120201T211814+0100</startDate>
+	<agent name="Default Agent" id="1" href="/app/rest/agents/id:1" />
+	<tags />
+	<properties />
+	<revisions>
+		<revision display-version="1213049">
+			<vcs-root href="/app/rest/vcs-roots/id:8"
+				name="http://svn.apache.org/repos/asf/struts/struts1/trunk" />
+		</revision>
+	</revisions>
+	<changes href="/app/rest/changes?build=id:34" count="0" />
+	<relatedIssues />
+</build>

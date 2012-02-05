@@ -192,17 +192,22 @@ public class TeamCity {
 
     public TeamCityAbstractBuild findLastBuild(String projectId) throws TeamCityBuildNotFoundException {
         try {
-            TeamCityBuildType buildType = findBuildType(projectId);
-            TeamCityBuilds buildList = findBuildList(buildType.getId());
-            if (!buildList.getBuilds().isEmpty()) {
-                TeamCityBuildItem build = buildList.getBuilds().get(0);
-                return build;
+            TeamCityBuild runningBuild = findRunningBuild();
+            return runningBuild;
+        } catch (TeamCityBuildNotFoundException ex) {
+            try {
+                TeamCityBuildType buildType = findBuildType(projectId);
+                TeamCityBuilds buildList = findBuildList(buildType.getId());
+                if (!buildList.getBuilds().isEmpty()) {
+                    TeamCityBuildItem build = buildList.getBuilds().get(0);
+                    return build;
+                }
+                throw new TeamCityBuildNotFoundException("Cannot find last build of " + projectId);
+            } catch (TeamCityBuildTypeNotFoundException e) {
+                throw new TeamCityBuildNotFoundException("Cannot find last build of " + projectId, e);
+            } catch (TeamCityBuildListNotFoundException e) {
+                throw new TeamCityBuildNotFoundException("Cannot find last build of " + projectId, e);
             }
-            throw new TeamCityBuildNotFoundException("Cannot find last build of " + projectId);
-        } catch (TeamCityBuildTypeNotFoundException e) {
-            throw new TeamCityBuildNotFoundException("Cannot find last build of " + projectId, e);
-        } catch (TeamCityBuildListNotFoundException e) {
-            throw new TeamCityBuildNotFoundException("Cannot find last build of " + projectId, e);
         }
     }
 
