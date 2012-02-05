@@ -53,6 +53,9 @@ public class TeamCityBuild extends TeamCityAbstractBuild {
 
     private TeamCityAgent agent;
 
+    @XmlElement(name = "running-info")
+    private RunningInfo runningInfo;
+
     @XmlElementWrapper(name = "tags")
     @XmlElements({ @XmlElement(name = "tag") })
     private List<TeamCityTag> tags = new ArrayList<TeamCityTag>();
@@ -199,6 +202,14 @@ public class TeamCityBuild extends TeamCityAbstractBuild {
 
     public void setRelatedIssues(List<TeamCityRelatedIssue> relatedIssues) {
         this.relatedIssues = relatedIssues;
+    }
+
+    public void setRunningInfo(RunningInfo runningInfo) {
+        this.runningInfo = runningInfo;
+    }
+
+    public RunningInfo getRunningInfo() {
+        return runningInfo;
     }
 
 }
