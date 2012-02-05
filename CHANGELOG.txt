@@ -1,3 +1,13 @@
+V0.3.1 (2012-02-05)
+===================
+
+NEW :
+ * Teamcity plugin supports estimated finish time
+
+FIX :
+ * Teamcity plugin is now flashing when building
+ * Teamcity plugin had a bug in unit test count
+
 V0.3 (2012-01-16)
 =================
 

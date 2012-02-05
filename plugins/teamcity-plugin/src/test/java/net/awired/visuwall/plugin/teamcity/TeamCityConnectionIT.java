@@ -1,5 +1,9 @@
 package net.awired.visuwall.plugin.teamcity;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.util.Date;
+
 import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 
@@ -18,6 +22,9 @@ public class TeamCityConnectionIT {
         System.out.println("building:" + building);
         BuildState buildState = connection.getBuildState(softwareProjectId, lastBuildId);
         System.out.println("State:" + buildState);
+        Date estimatedFinishTime = connection.getEstimatedFinishTime(softwareProjectId, lastBuildId);
+        assertNotNull(estimatedFinishTime);
+        System.out.println(estimatedFinishTime);
     }
 
 }
