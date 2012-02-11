@@ -30,6 +30,7 @@
 		<module>plugins/jenkins-plugin</module>
 		<module>plugins/teamcity-plugin</module>
 		<module>plugins/continuum-plugin</module>
+		<module>plugins/demo-plugin</module>
 <!--		<module>plugins/cruisecontrol-plugin</module>-->
 
 		<module>component/core</module>
@@ -119,6 +120,11 @@
 			</dependency>
 
 			<!-- plugins -->
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-plugin-demo</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-plugin-hudson</artifactId>
