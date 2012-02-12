@@ -32,7 +32,7 @@ public class Task {
 
     private String user;
 
-    private String version;
+    private Integer version;
 
     public void setApplication(String application) {
         this.application = application;
@@ -98,11 +98,11 @@ public class Task {
         return user;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 
-    public String getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
