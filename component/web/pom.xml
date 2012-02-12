@@ -63,6 +63,10 @@
 			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-plugin-demo</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>net.awired.visuwall</groupId>
+			<artifactId>visuwall-plugin-deployit</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>net.awired.ajsl</groupId>
