@@ -15,7 +15,7 @@
 	<version>1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Clients</name>
-	<description>Clients for TeamCity, Bamboo, Sonar, Jenkins, Hudson ...</description>
+	<description>Clients for TeamCity, Bamboo, Jenkins, Hudson, DeployIt, Sonar</description>
 
 	<parent>
 		<groupId>net.awired.parent.parent-java</groupId>
@@ -30,7 +30,7 @@
 		<module>sonar</module>
 		<module>teamcity</module>
 		<module>bamboo</module>
-		<module>cruisecontrol</module>
+		<module>deployit</module>
 	</modules>
 
 	<licenses>
