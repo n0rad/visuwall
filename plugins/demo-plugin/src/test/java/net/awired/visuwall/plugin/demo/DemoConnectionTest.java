@@ -124,7 +124,7 @@ public class DemoConnectionTest {
     @Test
     public void last_build_id_is_always_0() throws ProjectNotFoundException, BuildIdNotFoundException {
         String lastBuildId = connection.getLastBuildId(earth);
-        assertEquals("0", lastBuildId);
+        assertEquals("1", lastBuildId);
     }
 
     @Test

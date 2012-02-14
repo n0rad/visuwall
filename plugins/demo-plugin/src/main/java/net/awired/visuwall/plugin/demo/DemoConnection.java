@@ -6,6 +6,7 @@ import static net.awired.visuwall.api.domain.BuildState.UNKNOWN;
 import static net.awired.visuwall.api.domain.BuildState.UNSTABLE;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.earth;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.mars;
+import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.mercury;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.moon;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.neptune;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.pluto;
@@ -62,6 +63,7 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
         softwareProjectIds.put(neptune, "Neptune");
         softwareProjectIds.put(uranus, "Uranus");
         softwareProjectIds.put(saturn, "Saturn");
+        softwareProjectIds.put(mercury, "Mercury");
 
         buildStates.put(mars, FAILURE);
         buildStates.put(pluto, UNKNOWN);
@@ -70,6 +72,7 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
         buildStates.put(saturn, UNSTABLE);
         buildStates.put(moon, SUCCESS);
         buildStates.put(earth, SUCCESS);
+        buildStates.put(mercury, SUCCESS);
 
         views.add("View 1");
         views.add("View 2");
@@ -85,14 +88,24 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
         neptuneTestResults.setCoverage(90);
         neptuneTestResults.setPassCount(872);
 
+        TestResult mercuryTestResults = new TestResult();
+        mercuryTestResults.setCoverage(78);
+        mercuryTestResults.setPassCount(439);
+
         unitTestResults.put(saturn, saturnTestResults);
         unitTestResults.put(neptune, neptuneTestResults);
+        unitTestResults.put(mercury, mercuryTestResults);
 
         TestResult neptuneIntegrationTestResults = new TestResult();
         neptuneIntegrationTestResults.setCoverage(78);
         neptuneIntegrationTestResults.setPassCount(163);
 
+        TestResult mercuryIntegrationTestResults = new TestResult();
+        mercuryIntegrationTestResults.setCoverage(89);
+        mercuryIntegrationTestResults.setPassCount(236);
+
         integrationTestResults.put(neptune, neptuneIntegrationTestResults);
+        integrationTestResults.put(mercury, mercuryIntegrationTestResults);
 
         QualityResult uranusQualityResult = new QualityResult();
         QualityMeasure coverageMeasure = new QualityMeasure();
@@ -101,7 +114,17 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
         coverageMeasure.setFormattedValue("76.5 %");
         coverageMeasure.setValue(76.5);
         uranusQualityResult.add("coverage", coverageMeasure);
+
+        QualityResult mercuryQualityResult = new QualityResult();
+        QualityMeasure locMeasure = new QualityMeasure();
+        locMeasure.setKey("ncloc");
+        locMeasure.setName("Lines of code");
+        locMeasure.setFormattedValue("121.988");
+        locMeasure.setValue(121988D);
+        mercuryQualityResult.add("ncloc", locMeasure);
+
         qualityResults.put(uranus, uranusQualityResult);
+        qualityResults.put(mercury, mercuryQualityResult);
     }
 
     @Override
@@ -284,7 +307,12 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     @Override
     public String getLastBuildId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
             BuildIdNotFoundException {
-        return "0";
+        return "1";
+    }
+
+    @Override
+    public String toString() {
+        return "Demo Connection";
     }
 
 }
