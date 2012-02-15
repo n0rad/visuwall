@@ -99,13 +99,17 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
         integrationTestResults.put(mercury, mercuryIntegrationTestResults);
         integrationTestResults.put(venus, venusIntegrationTestResults);
 
-        QualityMeasure coverageMeasure = createQualityMeasure("coverage", "Coverage", "76.5 %", 76.5);
+        QualityMeasure uranusCoverageMeasure = createQualityMeasure("coverage", "Coverage", "76.5 %", 76.5);
+        QualityMeasure uranusLocMeasure = createQualityMeasure("ncloc", "Lines of code", "78.001", 78001D);
+        QualityMeasure uranusViolationsMeasure = createQualityMeasure("violations_density", "Violations", "32", 32D);
         QualityResult uranusQualityResult = new QualityResult();
-        uranusQualityResult.add("coverage", coverageMeasure);
+        uranusQualityResult.add("coverage", uranusCoverageMeasure);
+        uranusQualityResult.add("ncloc", uranusLocMeasure);
+        uranusQualityResult.add("violations_density", uranusViolationsMeasure);
 
         QualityResult mercuryQualityResult = new QualityResult();
-        QualityMeasure locMeasure = createQualityMeasure("ncloc", "Lines of code", "121.988", 121988D);
-        mercuryQualityResult.add("ncloc", locMeasure);
+        QualityMeasure mercuryLocMeasure = createQualityMeasure("ncloc", "Lines of code", "121.988", 121988D);
+        mercuryQualityResult.add("ncloc", mercuryLocMeasure);
 
         qualityResults.put(uranus, uranusQualityResult);
         qualityResults.put(mercury, mercuryQualityResult);

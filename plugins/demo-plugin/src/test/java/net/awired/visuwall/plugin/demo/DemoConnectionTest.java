@@ -1,6 +1,5 @@
 package net.awired.visuwall.plugin.demo;
 
-import static net.awired.visuwall.api.domain.BuildState.FAILURE;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.earth;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.mars;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.moon;
@@ -19,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
@@ -132,12 +130,6 @@ public class DemoConnectionTest {
     public void moon_is_building_for_2_minutes() throws ProjectNotFoundException, BuildNotFoundException {
         Date estimatedFinishTime = connection.getEstimatedFinishTime(moon, "");
         assertNotNull(estimatedFinishTime);
-    }
-
-    @Test
-    public void mars_should_be_in_fail_state() throws ProjectNotFoundException, BuildNotFoundException {
-        BuildState state = connection.getBuildState(mars, "");
-        assertEquals(FAILURE, state);
     }
 
     @Test
