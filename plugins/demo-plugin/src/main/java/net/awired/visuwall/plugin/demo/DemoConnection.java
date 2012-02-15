@@ -12,6 +12,7 @@ import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.neptune;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.pluto;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.saturn;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.uranus;
+import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.venus;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,78 +54,79 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     private Map<SoftwareProjectId, TestResult> integrationTestResults = new HashMap<SoftwareProjectId, TestResult>();
     private Map<SoftwareProjectId, QualityResult> qualityResults = new HashMap<SoftwareProjectId, QualityResult>();
 
-    List<String> views = new ArrayList<String>();
+    private List<String> views = new ArrayList<String>();
 
     public DemoConnection() {
-        softwareProjectIds.put(earth, "Earth");
         softwareProjectIds.put(moon, "Moon");
+        softwareProjectIds.put(earth, "Earth");
         softwareProjectIds.put(mars, "Mars");
         softwareProjectIds.put(pluto, "Pluto");
         softwareProjectIds.put(neptune, "Neptune");
         softwareProjectIds.put(uranus, "Uranus");
         softwareProjectIds.put(saturn, "Saturn");
         softwareProjectIds.put(mercury, "Mercury");
+        softwareProjectIds.put(venus, "Venus");
 
         buildStates.put(mars, FAILURE);
         buildStates.put(pluto, UNKNOWN);
         buildStates.put(uranus, SUCCESS);
         buildStates.put(neptune, SUCCESS);
         buildStates.put(saturn, UNSTABLE);
+        buildStates.put(venus, UNSTABLE);
         buildStates.put(moon, SUCCESS);
         buildStates.put(earth, SUCCESS);
         buildStates.put(mercury, SUCCESS);
 
-        views.add("View 1");
-        views.add("View 2");
-        views.add("View 3");
+        views.add("Telluriques");
+        views.add("Gazeuses");
+        views.add("Other");
 
-        TestResult saturnTestResults = new TestResult();
-        saturnTestResults.setCoverage(78);
-        saturnTestResults.setFailCount(10);
-        saturnTestResults.setSkipCount(20);
-        saturnTestResults.setPassCount(120);
-
-        TestResult neptuneTestResults = new TestResult();
-        neptuneTestResults.setCoverage(90);
-        neptuneTestResults.setPassCount(872);
-
-        TestResult mercuryTestResults = new TestResult();
-        mercuryTestResults.setCoverage(78);
-        mercuryTestResults.setPassCount(439);
+        TestResult saturnTestResults = createTestResult(78, 120, 10, 20);
+        TestResult venusTestResults = createTestResult(25, 457, 3, 16);
+        TestResult neptuneTestResults = createTestResult(90, 872, 0, 0);
+        TestResult mercuryTestResults = createTestResult(78, 439, 0, 0);
 
         unitTestResults.put(saturn, saturnTestResults);
         unitTestResults.put(neptune, neptuneTestResults);
         unitTestResults.put(mercury, mercuryTestResults);
+        unitTestResults.put(venus, venusTestResults);
 
-        TestResult neptuneIntegrationTestResults = new TestResult();
-        neptuneIntegrationTestResults.setCoverage(78);
-        neptuneIntegrationTestResults.setPassCount(163);
-
-        TestResult mercuryIntegrationTestResults = new TestResult();
-        mercuryIntegrationTestResults.setCoverage(89);
-        mercuryIntegrationTestResults.setPassCount(236);
+        TestResult neptuneIntegrationTestResults = createTestResult(78, 163, 0, 0);
+        TestResult mercuryIntegrationTestResults = createTestResult(89, 236, 0, 0);
+        TestResult venusIntegrationTestResults = createTestResult(49, 178, 4, 2);
 
         integrationTestResults.put(neptune, neptuneIntegrationTestResults);
         integrationTestResults.put(mercury, mercuryIntegrationTestResults);
+        integrationTestResults.put(venus, venusIntegrationTestResults);
 
+        QualityMeasure coverageMeasure = createQualityMeasure("coverage", "Coverage", "76.5 %", 76.5);
         QualityResult uranusQualityResult = new QualityResult();
-        QualityMeasure coverageMeasure = new QualityMeasure();
-        coverageMeasure.setKey("coverage");
-        coverageMeasure.setName("Coverage");
-        coverageMeasure.setFormattedValue("76.5 %");
-        coverageMeasure.setValue(76.5);
         uranusQualityResult.add("coverage", coverageMeasure);
 
         QualityResult mercuryQualityResult = new QualityResult();
-        QualityMeasure locMeasure = new QualityMeasure();
-        locMeasure.setKey("ncloc");
-        locMeasure.setName("Lines of code");
-        locMeasure.setFormattedValue("121.988");
-        locMeasure.setValue(121988D);
+        QualityMeasure locMeasure = createQualityMeasure("ncloc", "Lines of code", "121.988", 121988D);
         mercuryQualityResult.add("ncloc", locMeasure);
 
         qualityResults.put(uranus, uranusQualityResult);
         qualityResults.put(mercury, mercuryQualityResult);
+    }
+
+    private QualityMeasure createQualityMeasure(String key, String name, String formattedValue, double value) {
+        QualityMeasure coverageMeasure = new QualityMeasure();
+        coverageMeasure.setKey(key);
+        coverageMeasure.setName(name);
+        coverageMeasure.setFormattedValue(formattedValue);
+        coverageMeasure.setValue(value);
+        return coverageMeasure;
+    }
+
+    private TestResult createTestResult(int coverage, int passCount, int failCount, int skipCount) {
+        TestResult saturnTestResults = new TestResult();
+        saturnTestResults.setCoverage(coverage);
+        saturnTestResults.setFailCount(failCount);
+        saturnTestResults.setSkipCount(skipCount);
+        saturnTestResults.setPassCount(passCount);
+        return saturnTestResults;
     }
 
     @Override
@@ -206,7 +208,7 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     @Override
     public List<SoftwareProjectId> findSoftwareProjectIdsByViews(List<String> views) {
         List<SoftwareProjectId> softwareProjectIds = new ArrayList<SoftwareProjectId>();
-        if (views.contains("View 1")) {
+        if (views.contains("Telluriques")) {
             softwareProjectIds.add(earth);
         }
         return softwareProjectIds;
@@ -220,7 +222,7 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     @Override
     public List<String> findProjectNamesByView(String viewName) throws ViewNotFoundException {
         List<String> projectNames = new ArrayList<String>();
-        if ("View 1".equals(viewName)) {
+        if ("Telluriques".equals(viewName)) {
             projectNames.add("Earth");
         }
         return projectNames;
@@ -248,7 +250,7 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     public List<Commiter> getBuildCommiters(SoftwareProjectId softwareProjectId, String buildId)
             throws BuildNotFoundException, ProjectNotFoundException {
         List<Commiter> commiters = new ArrayList<Commiter>();
-        if (softwareProjectId == mars) {
+        if (softwareProjectId.equals(mars)) {
             Commiter jsmadja = new Commiter("jsmadja");
             jsmadja.setEmail("jsmadja@xebia.fr");
             commiters.add(jsmadja);
@@ -264,9 +266,21 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, String buildId) throws BuildNotFoundException,
             ProjectNotFoundException {
         BuildTime buildTime = new BuildTime();
-        buildTime.setDuration(13 * 60);
-        buildTime.setStartTime(new DateTime().minusHours(3).toDate());
+        int milisDuration = randomDuration();
+        buildTime.setDuration(milisDuration);
+        Date startDate = randomPastDate();
+        buildTime.setStartTime(startDate);
         return buildTime;
+    }
+
+    private Date randomPastDate() {
+        int minutesAgo = (int) (Math.random() * 50);
+        Date startDate = new DateTime().minusHours(minutesAgo).toDate();
+        return startDate;
+    }
+
+    private int randomDuration() {
+        return (int) (Math.random() * 5000) * 60;
     }
 
     @Override
@@ -289,8 +303,9 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     @Override
     public Date getEstimatedFinishTime(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException {
-        if (projectId == moon) {
-            return new DateTime().plusMinutes(2).toDate();
+        if (projectId.equals(moon)) {
+            Date date = new DateTime().plusHours(8).toDate();
+            return date;
         }
         return new Date();
     }
@@ -298,7 +313,7 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     @Override
     public boolean isBuilding(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException {
-        if (projectId == moon) {
+        if (projectId.equals(moon)) {
             return true;
         }
         return false;

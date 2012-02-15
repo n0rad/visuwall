@@ -12,5 +12,6 @@ public class SoftwareProjectIds {
     public static final SoftwareProjectId uranus = new SoftwareProjectId("uranus");
     public static final SoftwareProjectId saturn = new SoftwareProjectId("saturn");
     public static final SoftwareProjectId mercury = new SoftwareProjectId("mercury");
+    public static final SoftwareProjectId venus = new SoftwareProjectId("venus");
 
 }

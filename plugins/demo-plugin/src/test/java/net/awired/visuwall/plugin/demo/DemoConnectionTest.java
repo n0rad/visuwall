@@ -1,5 +1,6 @@
 package net.awired.visuwall.plugin.demo;
 
+import static net.awired.visuwall.api.domain.BuildState.FAILURE;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.earth;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.mars;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.moon;
@@ -136,13 +137,13 @@ public class DemoConnectionTest {
     @Test
     public void mars_should_be_in_fail_state() throws ProjectNotFoundException, BuildNotFoundException {
         BuildState state = connection.getBuildState(mars, "");
-        assertEquals(BuildState.FAILURE, state);
+        assertEquals(FAILURE, state);
     }
 
     @Test
-    public void should_get_build_time_for_every_projects() throws BuildNotFoundException, ProjectNotFoundException {
+    public void should_get_build_time_for_earth() throws BuildNotFoundException, ProjectNotFoundException {
         BuildTime earthBuildTime = connection.getBuildTime(earth, "");
-        assertEquals(asMinutes(13), earthBuildTime.getDuration());
+        assertTrue(earthBuildTime.getDuration() > 1000);
         assertNotNull(earthBuildTime.getStartTime());
     }
 
@@ -165,21 +166,21 @@ public class DemoConnectionTest {
     public void should_have_three_views() {
         List<String> views = connection.findViews();
         assertEquals(3, views.size());
-        assertEquals("View 1", views.get(0));
-        assertEquals("View 2", views.get(1));
-        assertEquals("View 3", views.get(2));
+        assertEquals("Telluriques", views.get(0));
+        assertEquals("Gazeuses", views.get(1));
+        assertEquals("Other", views.get(2));
     }
 
     @Test
     public void should_get_earth_on_view_1() throws ViewNotFoundException {
-        List<String> projectNames = connection.findProjectNamesByView("View 1");
+        List<String> projectNames = connection.findProjectNamesByView("Telluriques");
         assertTrue(projectNames.contains("Earth"));
     }
 
     @Test
     public void should_get_earth_project_id_on_view_1() {
         List<String> views = new ArrayList<String>();
-        views.add("View 1");
+        views.add("Telluriques");
         List<SoftwareProjectId> softwareProjectIds = connection.findSoftwareProjectIdsByViews(views);
         assertTrue(softwareProjectIds.contains(earth));
     }
@@ -240,9 +241,5 @@ public class DemoConnectionTest {
         assertEquals(0, testResult.getFailCount());
         assertEquals(0, testResult.getSkipCount());
         assertEquals(0, testResult.getPassCount());
-    }
-
-    private long asMinutes(int minutes) {
-        return minutes * 60;
     }
 }
