@@ -22,12 +22,14 @@ import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.api.plugin.capability.ViewCapability;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DeployItConnection implements BuildCapability {
+public class DeployItConnection implements BuildCapability, ViewCapability {
 
     private DeployIt deployIt;
     private boolean connected;
@@ -248,4 +250,46 @@ public class DeployItConnection implements BuildCapability {
         return "DeployIt Connection";
     }
 
+    @Override
+    public List<SoftwareProjectId> findSoftwareProjectIdsByViews(List<String> views) {
+        List<SoftwareProjectId> softwareProjectIds = new ArrayList<SoftwareProjectId>();
+        for (String environmentName : views) {
+            try {
+                List<String> deployedApplications = deployIt.getDeployedApplicationsByEnvironment(environmentName);
+                for (String deployedApplication : deployedApplications) {
+                    SoftwareProjectId softwareProjectId = createSoftwareProjectId(deployedApplication, environmentName);
+                    softwareProjectIds.add(softwareProjectId);
+                }
+            } catch (ResourceNotFoundException e) {
+                LOG.warn("Cannot retrieve deployed applications on environment " + environmentName, e);
+            }
+        }
+        return softwareProjectIds;
+    }
+
+    private SoftwareProjectId createSoftwareProjectId(String deployedApplication, String environment) {
+        String projectId = deployedApplication.replaceFirst(environment + "/", environment + " - ");
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId(projectId);
+        return softwareProjectId;
+    }
+
+    @Override
+    public List<String> findViews() {
+        List<String> views = new ArrayList<String>();
+        try {
+            views = deployIt.getEnvironmentNames();
+        } catch (ResourceNotFoundException e) {
+            LOG.warn("Cannot retrieve views", e);
+        }
+        return views;
+    }
+
+    @Override
+    public List<String> findProjectNamesByView(String environmentName) throws ViewNotFoundException {
+        try {
+            return deployIt.getDeployedApplicationsByEnvironment(environmentName);
+        } catch (ResourceNotFoundException e) {
+            throw new ViewNotFoundException("Cannot retrieve projects for view " + environmentName, e);
+        }
+    }
 }
