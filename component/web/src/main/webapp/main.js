@@ -1,8 +1,8 @@
-define([ 'js!Underscore.js!order', //
-         'js!jquery-1.4.3.js!order', //
-         //'js!Backbone.js!order'
-         
-         ], function() {
+define(['require', //	
+        'js!Underscore.js!order', //
+        'js!jquery-1.4.3.js!order', //
+        //'js!Backbone.js!order'
+        ], function(require) {
 
 //	define('backbone', function() {
 //		Backbone.noConflict();
@@ -10,7 +10,10 @@ define([ 'js!Underscore.js!order', //
 
 	
 	
-	define('jquery', ['js!jquery/jquery.ajsl.js',
+	define('jquery', ['css!jquery.marquee.min.css',
+	                  'css!jquery.selectBox.css',
+	                  
+	                  'js!jquery/jquery.ajsl.js',
 	                  'js!jquery/jquery.cookie.js',
 	                  'js!jquery/jquery.marquee.js',
 	                  'js!jquery/jquery.timeago.js',
@@ -34,7 +37,9 @@ define([ 'js!Underscore.js!order', //
 		return _;
 	});
 	
-	define('jqueryui', ['js!jquery/ui/jquery.ui.core.js!order', //
+	define('jqueryui', ['css!jquery/jquery-ui-1.8.11.custom.css', //
+	                    
+	                    'js!jquery/ui/jquery.ui.core.js!order', //
 	                    'js!jquery/ui/jquery.ui.widget.js!order', //
 	                    'js!jquery/ui/jquery.effects.core.js!order', //
 
@@ -78,21 +83,23 @@ define([ 'js!Underscore.js!order', //
 		return log;
 	});
 	
-	define('visuwallRootUrl', [], function() {
-		var url = "${visuwallServerUrl}";
-		if (url[0] === '$') {
-			url = "ws/";
-		}
-		return url;
-	});
-	
-	define('visuwallWebVersion', [], function() {
-		return "${project.version}";
-	});
+
+   define('visuwallRootUrl', [], function() {
+           var url = "${visuwallServerUrl}";
+           if (url[0] === '$') {
+                   url = "ws/";
+           }
+           return url;
+   });
+   
+   define('visuwallWebVersion', [], function() {
+           return "${project.version}";
+   });
+
 
 	return {
 		start : function(data) {
-			curl([ 'Visuwall' ], function(Visuwall) {
+			require([ 'Visuwall' ], function(Visuwall) {
 				new Visuwall(data);
 			});
 		}
