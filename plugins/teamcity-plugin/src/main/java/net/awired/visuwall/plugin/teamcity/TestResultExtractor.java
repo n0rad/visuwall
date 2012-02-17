@@ -1,49 +1,31 @@
 package net.awired.visuwall.plugin.teamcity;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class TestResultExtractor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TestResultExtractor.class);
-
     public static int extractFailed(String statusText) {
-        String key = "failed";
-        return extract(statusText, key);
-    }
-
-    private static int extract(String statusText, String key) {
-        String[] split = statusText.split(",");
-        for (String s : split) {
-            if (s.contains(key)) {
-                String[] split2 = s.split(":");
-                if (split.length > 1) {
-                    String t = split2[1].trim();
-                    int indexOfBlank = t.indexOf(" ");
-                    if (indexOfBlank != -1) {
-                        String substring = t.substring(0, indexOfBlank);
-                        int parseInt = Integer.parseInt(substring);
-                        return parseInt;
-                    } else {
-                        return Integer.parseInt(t);
-                    }
-                } else {
-                    LOG.warn("statusText is invalid: '" + statusText + "'");
-                }
-            }
-        }
-        return 0;
+        return extract(statusText, "failed") + extract(statusText, "errors");
     }
 
     public static int extractPassed(String statusText) {
-        String key = "passed";
-        return extract(statusText, key);
+        return extract(statusText, "passed");
     }
 
     public static int extractIgnored(String statusText) {
-        String key = "ignored";
-        return extract(statusText, key);
+        return extract(statusText, "ignored");
+    }
 
+    private static int extract(String statusText, String key) {
+        if (!statusText.contains(key)) {
+            return 0;
+        }
+        String regexp = "(.*)(" + key + ")(: )([0-9]*)(.*)";
+        Pattern p = Pattern.compile(regexp);
+        Matcher m = p.matcher(statusText);
+        m.find();
+        return Integer.valueOf(m.group(4));
     }
 
 }

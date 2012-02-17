@@ -63,9 +63,10 @@ public class TeamCityIT {
         String buildTypeId = "bt132";
 
         SoftwareProjectId softwareProjectId = new SoftwareProjectId(buildTypeId);
+        String lastBuildId = connection.getLastBuildId(softwareProjectId);
 
         List<String> buildIds = connection.getBuildIds(softwareProjectId);
-        assertTrue(buildIds.contains("58562"));
+        assertTrue(buildIds.contains(lastBuildId));
     }
 
     @Ignore
@@ -96,7 +97,7 @@ public class TeamCityIT {
         String buildTypeId = "bt132";
 
         SoftwareProjectId softwareProjectId = new SoftwareProjectId(buildTypeId);
-        BuildState state = connection.getBuildState(softwareProjectId, "58562");
+        BuildState state = connection.getBuildState(softwareProjectId, connection.getLastBuildId(softwareProjectId));
         assertEquals(BuildState.SUCCESS, state);
     }
 }

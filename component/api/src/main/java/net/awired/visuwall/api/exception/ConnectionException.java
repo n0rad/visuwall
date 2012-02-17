@@ -24,4 +24,8 @@ public class ConnectionException extends Exception {
         super(message, t);
     }
 
+    public ConnectionException(String message) {
+        super(message);
+    }
+
 }

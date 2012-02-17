@@ -58,6 +58,7 @@ import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -185,6 +186,13 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
         } catch (TeamCityBuildTypeNotFoundException e) {
             throw new ProjectNotFoundException("Cannot find build type for software project id:" + softwareProjectId, e);
         } catch (TeamCityBuildNotFoundException e) {
+            try {
+                TeamCityBuild runningBuild = teamCity.findRunningBuild();
+                if (buildId.equals(runningBuild.getId())) {
+                    return BuildState.UNKNOWN;
+                }
+            } catch (TeamCityBuildNotFoundException e1) {
+            }
             throw new BuildNotFoundException("Cannot find build #" + buildId + " for software project id:"
                     + softwareProjectId, e);
         }
@@ -196,7 +204,17 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         checkBuildId(buildId);
-        throw new ProjectNotFoundException("not implemented");
+        try {
+            TeamCityBuild runningBuild = teamCity.findRunningBuild();
+            if (buildId.equals(runningBuild.getId())) {
+                int seconds = runningBuild.getRunningInfo().getEstimatedTotalSeconds();
+                return new DateTime().plusSeconds(seconds).toDate();
+            }
+            throw new BuildNotFoundException("Cannot find build #" + buildId + " for software project id:"
+                    + softwareProjectId);
+        } catch (TeamCityBuildNotFoundException e) {
+            throw new BuildNotFoundException("Cannot find a running build", e);
+        }
     }
 
     @Override
@@ -206,10 +224,9 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
         checkSoftwareProjectId(softwareProjectId);
         checkBuildId(buildId);
         try {
-            String projectId = softwareProjectId.getProjectId();
             TeamCityBuild build = teamCity.findRunningBuild();
-            TeamCityBuildType buildType = build.getBuildType();
-            return projectId.equals(buildType.getProjectId()) && buildId.equals(build.getId());
+            return softwareProjectId.getProjectId().equals(build.getBuildType().getId())
+                    && buildId.equals(build.getId());
         } catch (TeamCityBuildNotFoundException e) {
             return false;
         }
@@ -325,6 +342,9 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
         TestResult result = new TestResult();
         try {
             String lastBuildId = getLastBuildId(softwareProjectId);
+            if (isBuilding(softwareProjectId, lastBuildId)) {
+                return result;
+            }
             TeamCityBuild build = teamCity.findBuild(softwareProjectId.getProjectId(), lastBuildId.toString());
             String statusText = build.getStatusText();
             int failed = TestResultExtractor.extractFailed(statusText);
@@ -340,6 +360,8 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
         } catch (TeamCityBuildTypeNotFoundException e) {
             LOG.warn("Can't analyze unit tests for softwareProjectId:" + softwareProjectId, e);
         } catch (TeamCityBuildNotFoundException e) {
+            LOG.warn("Can't analyze unit tests for softwareProjectId:" + softwareProjectId, e);
+        } catch (BuildNotFoundException e) {
             LOG.warn("Can't analyze unit tests for softwareProjectId:" + softwareProjectId, e);
         }
         return result;
