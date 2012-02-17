@@ -34,15 +34,18 @@
 		<module>plugins/demo-plugin</module>
 		<module>plugins/deployit-plugin</module>
 
+		<module>component/api</module>
 		<module>component/core</module>
 		<module>component/cli</module>
+		<module>component/server</module>
 		<module>component/web</module>
-		<module>component/api</module>
+
+		<module>release</module>
 	</modules>
 
 	<properties>
 		<bootstrap.version>1.0</bootstrap.version>
-		<ajsl.version>0.4</ajsl.version>
+		<ajsl.version>0.5-SNAPSHOT</ajsl.version>
 		<clients.version>1.2-SNAPSHOT</clients.version>
 
 		<spring.version>3.0.5.RELEASE</spring.version>
@@ -91,6 +94,22 @@
 	</scm>
 
 
+	<dependencies>
+		<!-- Test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
 	<dependencyManagement>
 		<dependencies>
 			<!-- visuwall core modules -->
@@ -103,6 +122,18 @@
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-web</artifactId>
 				<version>${project.version}</version>
+				<type>war</type>
+			</dependency>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-server</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
+			</dependency>
+			<dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-server</artifactId>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
@@ -112,11 +143,6 @@
 			<dependency>
 				<groupId>net.awired.visuwall</groupId>
 				<artifactId>visuwall-cli</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>net.awired.visuwall</groupId>
-				<artifactId>visuwall-it</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
