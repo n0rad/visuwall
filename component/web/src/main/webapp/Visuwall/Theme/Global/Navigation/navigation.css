@@ -23,7 +23,7 @@ DIV#navigationContainer {
 }
 
 UL#navigation {
-	background: black url('../img/nav-back4.png') repeat-x;
+	background: black url('img/nav-back4.png') repeat-x;
 	border-bottom: 1px solid white;
 	height: 26px;
 }
@@ -100,6 +100,3 @@ LI#about A:HOVER {
 	padding: 2px;
 	text-align: left;
 }
-
-#modal {
-	overflow: hidden;

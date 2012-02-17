@@ -1,9 +1,8 @@
-define(['Visuwall/Controller/navigationController', //
+define(['Visuwall/Controller/wallFormController', //
         'Visuwall/Controller/wallController', //
-        ], function(navigationController, wallController) {
+        ], function(wallFormController, wallController) {
 	"use strict";
 	
-
 	var wallCommand = new function() {
 
 		this.run = function(vars, wallId) {
@@ -11,11 +10,11 @@ define(['Visuwall/Controller/navigationController', //
 		};
 
 		this.create = function() {
-			navigationController.create();
+			wallFormController.create();
 		};
 
 		this.edit = function(vars, wallId) {
-			navigationController.edit(wallId);		
+			wallFormController.edit(wallId);		
 		};
 		
 	};

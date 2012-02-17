@@ -1,0 +1,52 @@
+DIV#visuwallForm {
+	
+}
+
+DIV#over {
+	background: #666 url('img/phpThumb_generated_thumbnailpng.png') 50% 50%
+		repeat;
+	opacity: .50;
+	filter: Alpha(Opacity =     50);
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	display: none;
+}
+
+FORM#wallForm {
+	width: 950px;
+	margin: auto;
+}
+
+FORM#wallForm INPUT,FORM#wallForm LABEL
+	{
+	display: block;
+	width: 220px;
+}
+
+
+
+/*** sortables ***/
+FORM#wallForm UL.projectList LI,
+FORM#wallForm UL.viewList LI,
+FORM#wallForm UL.projectTabNav LI,
+FORM#wallForm UL.softwareElementList LI {
+	display: block;
+	height: 1.5em;
+	line-height: 1.5em;
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+}
+
+LI.projectItem {
+	display: block;
+	height: 1.5em;
+	line-height: 1.5em;
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+}
+
+LI.projectItem DIV.addProject {
+	display: inline-block;
+	float: right;
+}

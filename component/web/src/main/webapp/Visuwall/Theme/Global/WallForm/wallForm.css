@@ -48,6 +48,7 @@ FIELDSET.buildField LEGEND {
 	display: none;
 }
 
+
 #wallForm .loader {
 	display: inline;
 	float:left;
@@ -78,20 +79,9 @@ FIELDSET.buildField LEGEND {
 	margin: 10px;
 }
 
-#wallForm .slider {
-	margin: 7px 5px;
-	width: 250px;
-	float: left;
-}
-
 #wallForm .disabled {
 	background-color: grey;
 } 
-
-#modal DIV#softTabs INPUT, #modal DIV#softTabs LABEL, #modal DIV#softTabs SELECT  {
-	display: block;
-	width: 250px;
-}
 
 INPUT.disabled {
 	color: grey;
@@ -124,40 +114,6 @@ DIV#softAdd {
 
 #modal LABEL.warningCheck {
 	background: transparent url('../img/warning.png') no-repeat;
-}
-
-
-#modal INPUT.url {
-	width: 500px !important;
-}
-
-.ui-tabs-nav {
-	border: 0 !important;
-	-moz-border-radius: 0  !important;
-	-webkit-border-radius: 0  !important;
-	border-radius: 0  !important;
-	border-bottom: 1px solid #AAA !important;
-}
-
-.ui-tabs-nav li a {
-	outline: medium none;
-}
-
-#softTabs {
-	margin-top: 1em;
-	background-color: #eee;
-	padding: 0 !important;
-}
-
-
-#softTabs .ui-tabs-panel {
-	background-color: #eee;
-}
-
-#softTabs li .ui-icon-close {
-	float: left;
-	margin: 0.4em 0.2em 0 0;
-	cursor: pointer;
 }
 
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {

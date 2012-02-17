@@ -1,17 +1,33 @@
 define(['jquery', // 
-        'Visuwall/Theme/Default/View/wallFormView', //
+        'text!Visuwall/Theme/Global/Navigation/HelperTemplate.html', //
+        'text!Visuwall/Theme/Global/Navigation/Navigation.html', //
+        'Visuwall/Theme/Global/WallForm/wallFormView', //
         'Visuwall/Service/wallService', //
         'Ajsl/event', //
         'Ajsl/view', //
-        ], function($, wallFormView, wallService, event, view) {
+        
+        'css!Visuwall/Theme/Global/Navigation/navigation.css', //
+        ], function($, HelperTemplate, NavigationTemplate, wallFormView, wallService, event, view) {
 	"use strict";
+	
+	$("#navigationContainer").html(NavigationTemplate);
+	
+	var toggleFlag = 'show';
+	var navigationLeaveEvent = function() {
+		$("#navigation").each(function() {
+			if (toggleFlag != 'wait') {
+				return;
+			}
+			$(this).slideUp("fast", function() {
+				toggleFlag = 'hide';
+			});
+		});
+	};
 	
 	var navigationEvent = new function() {
 		var $this = this;
 
 		this.context;
-
-		this.toggleFlag = 'show';
 
 		$(function() {
 			$this.context = 'DIV#navigationContainer';
@@ -22,26 +38,17 @@ define(['jquery', //
 		};
 
 		this['|mouseenter'] = function() {
-			if ($this.toggleFlag == 'wait') {
-				$this.toggleFlag = 'show';
-			} else if ($this.toggleFlag == 'hide') {
-				$this.toggleFlag = 'show';
+			if (toggleFlag == 'wait') {
+				toggleFlag = 'show';
+			} else if (toggleFlag == 'hide') {
+				toggleFlag = 'show';
 				$("#navigation").slideDown("fast");
 			}
 		};
 
 		this['|mouseleave'] = function() {
-			$this.toggleFlag = 'wait';
-			window.setTimeout(function() {
-				$("#navigation").each(function() {
-					if ($this.toggleFlag != 'wait') {
-						return;
-					}
-					$(this).slideUp("fast", function() {
-						$this.toggleFlag = 'hide';
-					});
-				});
-			}, 1000);
+			toggleFlag = 'wait';
+			window.setTimeout(navigationLeaveEvent, 1000);
 		};
 
 		this['#fontSizeSlider|init'] = function() {
@@ -69,10 +76,8 @@ define(['jquery', //
 		};
 
 		this['#helperimg|init'] = function() {
-			var content = $('#helperdiv');
-			var data = content.clone().show();
 			$("#helperimg").qtip({
-				content : data,
+				content : $(HelperTemplate),
 				position : {
 					corner : {
 						tooltip : 'topRight',
@@ -114,6 +119,7 @@ define(['jquery', //
 		};
 
 		this['#wallSelector #edit|click'] = function() {
+			navigationLeaveEvent();
 			var wallId = $('#wallSelector #wallSelect').val();
 			if (wallId) {
 				$.history.queryBuilder().addController('wall/edit', wallId)
@@ -150,42 +156,9 @@ define(['jquery', //
 			select.val(selectedValue);
 		};
 		
-		this.displayEditForm = function(htmlData, formData) {
-			var domObject = $("#modal").html(htmlData);
-			$this._displayForm(domObject, "Wall configuration", 'wall/edit');		
-			view.rebuildFormRec(domObject, formData, wallFormView);
+		this.setVersion = function(version) {
+			$('A#visuwallVersion', this.navigation).html(version);
 		};
-		
-		this.displayCreationForm = function(htmlData) {
-			var domObject = $("#modal").html(htmlData);
-			$this._displayForm(domObject, "Wall creation", 'wall/create');
-		};
-		
-		///////////////////////////////////////////////////////////
-		
-		this._displayForm = function(domObject, title, closeController) {
-			domObject.dialog({
-				height: 470,
-				width: 600,
-				title: title,
-				resizable: false,
-				modal: true,
-				dragStart: function(event, ui) {
-					var v = $('LABEL:regex(id,softwareAccesses.*\.urlcheck)');
-					v.mouseout();
-				},
-				close: function(event, ui) {
-					var v = $('LABEL:regex(id,softwareAccesses.*\.urlcheck)');
-					v.mouseout();
-					// TODO unregister live events
-					//		        $this.wallFormEvent.__getObject__(function(bean) {
-					//		        	ajsl.event.unregisterLive(bean, domObject);
-					//		        }); 
-					$.history.queryBuilder().removeController(closeController).load();
-				}
-			});
-		};
-
 	};
 
 	event.register(navigationEvent, $('DIV#navigationContainer'));

@@ -1,0 +1,220 @@
+<form id="wallForm" method="post">
+	<input id="id" name="id" type="hidden" value="" /> <label for="name">Name</label>
+	<input id="name" name="name" class="ui-widget-content ui-corner-all"
+		type="text" value="" /> <label for="raise">Allow Raise
+		options</label> <input name="raise" class="ui-widget-content ui-corner-all"
+		type="text" value="" />
+
+	<div id="softTabs">
+		<ul>
+			<li><a href="#tabs-0">New</a> <span
+				class="ui-icon ui-icon-close">Remove Tab</span></li>
+			<li><div id="softAdd" class="ui-state-default ui-corner-all"
+					title=".ui-icon-plusthick">
+					<span class="ui-icon ui-icon-plusthick"></span>
+				</div>
+			</li>
+		</ul>
+		<div id="tabs-0">
+			<div class="softwareInfo">
+				<input id="softwareAccesses0.id" name="softwareAccesses[0].id"
+					type="hidden" value="" /> <label for="softwareAccesses0.url">Url</label>
+				<label id="softwareAccesses0.urlcheck" class="check"></label> <input
+					id="softwareAccesses0.url" name="softwareAccesses[0].url"
+					class="ui-widget-content ui-corner-all url" type="text" value="" />
+
+				<fieldset class="propertiesField">
+					<legend>Properties</legend>
+					<div class="element">
+						<label for="softwareAccesses0.login">Login</label> <input
+							id="softwareAccesses0.login" name="softwareAccesses[0].login"
+							class="ui-widget-content ui-corner-all" type="text" value="" />
+					</div>
+					<div class="element">
+						<label for="softwareAccesses0.password">Password</label> <input
+							id="softwareAccesses0.password"
+							name="softwareAccesses[0].password"
+							class="ui-widget-content ui-corner-all" type="password" value="" />
+					</div>
+				</fieldset>
+
+				<fieldset class="timerField">
+					<legend>Timers</legend>
+
+					<div class="element">
+						<label for="softwareAccesses0.projectFinderDelaySecond">Software
+							Refresh Time : <span class="bold projectFinderDelaySecond">45s</span>
+						</label>
+						<div class="slider projectFinderDelaySecondSlider"></div>
+						<input type="hidden"
+							id="softwareAccesses0.projectFinderDelaySecond"
+							name="softwareAccesses[0].projectFinderDelaySecond"
+							class="ui-widget-content ui-corner-all" value="" />
+					</div>
+
+					<div class="element">
+						<label for="softwareAccesses0.projectStatusDelaySecond">Project
+							Refresh Time <span class="bold projectStatusDelaySecond">45s</span>
+						</label>
+						<div class="slider projectStatusDelaySecondSlider"></div>
+						<input type="hidden"
+							id="softwareAccesses0.projectStatusDelaySecond"
+							name="softwareAccesses[0].projectStatusDelaySecond"
+							class="ui-widget-content ui-corner-all" value="" />
+					</div>
+				</fieldset>
+				
+				<fieldset>
+					<div class="element">
+						<label for="softwareAccesses0.login">Display name</label> <input
+						id="softwareAccesses0.login" name="softwareAccesses[0].login"
+						class="ui-widget-content ui-corner-all" type="text"
+						value="ci.visuwall.awired.net" />						
+					</div>
+					<div class="element">
+						<label>Display</label>
+						<input type="checkbox" id="allProjects" /><label for="allProjects">All Projects</label>
+					</div>
+				</fieldset>
+			</div>
+
+			<!-- 
+			<div style="clear: both;"></div>
+			<fieldset class="buildField" style="display: none">
+				<legend>Builds</legend>
+
+				<label for="softwareAccesses0.allProject">All Projects</label> <input
+					type="checkbox" id="softwareAccesses0.allProject"
+					name="softwareAccesses[0].allProject" value="true" /> <input
+					type="hidden" id="_softwareAccesses0.allProject"
+					name="_softwareAccesses[0].allProject" value="true" />
+
+				<div class="projectNamesSection" style="float: left">
+					<label for="softwareAccesses0.projectNames">Projects</label> <select
+						id="softwareAccesses0.projectNames"
+						name="softwareAccesses[0].projectNames" multiple="multiple"
+						size="5">
+					</select>
+				</div>
+				<div class="projectNamesSection" style="float: right">
+					<label for="softwareAccesses0.viewNames">Views</label> <select
+						id="softwareAccesses0.viewNames"
+						name="softwareAccesses[0].viewNames" multiple="multiple" size="5">
+					</select>
+				</div>
+			</fieldset> -->
+
+			<div class="projectsAccordion">
+				<h3>
+					<a href="#">Projects</a>
+				</h3>
+				<div class="accordionContent">
+
+					<ul class="projectList">
+						<li class="projectItem ui-state-default">Visuwall-develop
+							<div class="ui-state-default ui-corner-all addProject"
+								title=".ui-icon-plusthick">
+								<span class="ui-icon ui-icon-plusthick"></span>
+							</div></li>
+						<li class="ui-state-default">Item 2</li>
+						<li class="ui-state-default">Item 3</li>
+						<li class="ui-state-default">Item 4</li>
+						<li class="ui-state-default">Item 5</li>
+					</ul>
+				</div>
+				<h3>
+					<a href="#">Views</a>
+				</h3>
+				<div class="accordionContent">
+					<ul class="viewList">
+						<li class="ui-state-highlight">Item 1</li>
+						<li class="ui-state-highlight">Item 2</li>
+						<li class="ui-state-highlight">Item 3</li>
+						<li class="ui-state-highlight">Item 4</li>
+						<li class="ui-state-highlight">Item 5</li>
+					</ul>
+				</div>
+			</div>
+
+
+			<div style="clear: both;"></div>
+		</div>
+	</div>
+
+	<div id="projectTab">
+		<ul id="projectTabNav">
+			<li><a href="#tabs-1">
+				<span class="name">at-staging</span>
+				<span class="bold projectGroup">(4)</span>
+				<span class="projectDrop"></span>
+			</a></li>
+		</ul>
+		<div id="tabs-1">
+			<label>Software Projects</label>
+			<ul class="softwareElementList">
+				<li class="projectItem ui-state-highlight">
+					<span class="software">ci.visuwall.awired.net</span>
+					<span class="name">visuwall-Develop</span>
+					<div class="ui-state-default ui-corner-all addProject" title=".ui-icon-plusthick">
+						<span class="ui-icon ui-icon-plusthick"></span>
+					</div>
+				</li>
+				<li class="projectItem ui-state-highlight">
+					<span class="software">ci.awired.net</span>
+					<span class="name">visuwall-ci</span>
+				</li>
+			</ul>
+			
+			<label>Fail tests as fail project</label>
+			<input type="checkbox" >
+
+			<label>Display name</label> <input name="displayName" /> <label>Integration
+				test names</label> <input name="ItNames" /> <label>Raise only on
+				error / warning</label> <input type="checkbox" name="raiseOnErrorOnly" /> <label>Always
+				visible</label> <input type="checkbox" name="raiseOnErrorOnly" /> <label>Sonar
+				metrics</label> <select>
+				<option>number of lines</option>
+				<option>code coverage</option>
+				<option>critical violation</option>
+			</select>
+			
+			<label>Commiters</label>
+			<div id="radio">
+				<input type="radio" id="commiters1" name="commiters" /><label for="commiters1">None</label>
+				<input type="radio" id="commiters2" name="commiters" /><label for="commiters2">Pseudo</label>
+				<input type="radio" id="commiters3" name="commiters" checked="checked" /><label for="commiters3">Gravatar</label>
+			</div>
+
+			<label>Time</label>
+			<div id="format">
+				<input type="checkbox" id="check1" /><label for="check1">Duration</label>
+				<input type="checkbox" id="check2" /><label for="check2">Time Ago</label>
+			</div>
+
+			<style>
+			#slider-range .ui-slider-range {
+			background: #ef2929; 
+    background-image: -webkit-gradient(linear, left top, right top,
+    from(orange), to(#ef2929) ); /* for Chrome + Safari */
+    background-image: -moz-linear-gradient(  left,
+    orange, #ef2929 ); /* for Firefox */			
+			}
+			#slider-range .ui-slider-handle { border-color: #ef2929; }
+			#slider-range .warning { border-color: orange;}
+			</style>
+			<p>
+				<label for="amount">Price range:</label>
+				<input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;" />
+			</p>
+			<div id="slider-range"></div>
+		</div>
+	</div>
+
+	<input class="submit" type="submit" value="Save" /> <input
+		class="cancel" type="button" value="Cancel" />
+	<div class="loader"></div>
+	<div class="success"></div>
+	<div class="failure"></div>
+	<!-- 			<input id="delete" type="button" value="Delete"/>  -->
+
+</form>

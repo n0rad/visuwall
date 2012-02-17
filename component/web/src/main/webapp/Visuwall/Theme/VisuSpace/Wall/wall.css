@@ -14,14 +14,12 @@
  *     limitations under the License.
  */
 
-BODY {
-	background-color: black;
-	overflow: hidden;
-}
-
-#projectsTable {
+UL#projectsTable {
+	position: fixed;
 	height: 100%;
 	width: 100%;
+	background-color: black;
+	z-index: -1;
 }
 
 #projectsTable .project {
@@ -36,32 +34,33 @@ BODY {
 	border-bottom-right-radius: 10px 10px;
 	border-bottom-left-radius: 10px 10px;
 	color: black;
-	background-color: white;
+/* 	background-color: white; */
 	display: inline-block;
+	box-shadow: inset 3px 3px 10px #333, inset -1px -1px 5px #333;
 }
 
 .success-state {
-	background-color: green;
+	background-color: green !important;
 /*	background-color: #63b542;*/
 }
 .failure-state {
-	background-color: red;
+	background-color: red !important;
 /*	background-color: #f3373c;*/
 }
 .new-state {
-	background-color: #58aff3;
+	background-color: #58aff3 !important;
 }
 .aborted-state {
-	background-color: #cacaca;
+	background-color: #cacaca !important;
 }
 .unstable-state {
-	background-color: #FF9023;
+	background-color: #FF9023 !important;
 }
 .notbuilt-state {
-	background-color: #802c2c;
+	background-color: #802c2c !important;
 }
 .unknown-state {
-	background-color: black;
+	background-color: black !important;
 }
 
 

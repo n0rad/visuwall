@@ -1,11 +1,17 @@
-define(['jquery', 'visuwallRootUrl'], function($, rootUrl) {
+define(['jquery'], function($) {
 	"use strict";
 
 	var pluginService = new function() {
 		
+		this.wall = function(callback) {
+			$.getJSON('wall', {}, function(data) {
+				callback(data.data);
+			});
+		};
+
 		this.manageable = function(url, login, password, success, failure) {
 			$.ajax({
-				url : rootUrl + 'plugin/getSoftwareInfo',
+				url : 'plugin/getSoftwareInfo',
 				dataType : 'json',
 				data : {
 					url : url,

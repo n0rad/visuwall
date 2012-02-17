@@ -1,6 +1,8 @@
 define(['jquery', //
         'log', //
-        'jqueryui' //
+        
+        'jqueryui', //
+        'css!Visuwall/Theme/VisuSpace/Wall/wall.css', //
         ], function($, log) {
 	"use strict";
 
@@ -189,10 +191,10 @@ define(['jquery', //
 			};
 
 			this.updateCommiters = function(projectId, commiters) {
-				var nameDiv = $this._getElement(projectId, '.projectName');
+				var projectDiv = $this._getElement(projectId);
 				var statusNeedCommiters = false;
-				if (nameDiv.hasClass('failure-state')
-						|| nameDiv.hasClass('unstable-state')) {
+				if (projectDiv.hasClass('failure-state')
+						|| projectDiv.hasClass('unstable-state')) {
 					statusNeedCommiters = true;
 				}
 				if (commiters.length == 0 || !statusNeedCommiters) {
@@ -213,14 +215,15 @@ define(['jquery', //
 			};
 
 			this.displaySuccess = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._hideCommiters(projectId);
+				$this._getElement(projectId).switchClasses(
 						$this.statusClasses, 'success-state', 3000);
 
 				$this._hideCommiters(projectId);
 			};
 
 			this.displayFailure = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._getElement(projectId).switchClasses(
 						$this.statusClasses, 'failure-state', 3000);
 				$this._getElement(projectId).prependTo($this.table);
 				
@@ -228,7 +231,7 @@ define(['jquery', //
 				$this._showCommiters(projectId);
 			};
 			this.displayUnstable = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._getElement(projectId).switchClasses(
 						$this.statusClasses, 'unstable-state', 3000);
 				$this._getElement(projectId).prependTo($this.table);
 				
@@ -236,24 +239,24 @@ define(['jquery', //
 			};
 
 			this.displayNew = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._getElement(projectId).switchClasses(
 						$this.statusClasses, 'new-state', 3000);
 			};
 
 			this.displayAborted = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._getElement(projectId).switchClasses(
 						$this.statusClasses, 'aborted-state', 3000);
 				$this._getElement(projectId).prependTo($this.table);
 			};
 
 			this.displayNotbuilt = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._getElement(projectId).switchClasses(
 						$this.statusClasses, 'notbuilt-state', 3000);
 				$this._getElement(projectId).prependTo($this.table);
 			};
 
 			this.displayUnknown = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._getElement(projectId).switchClasses(
 						$this.statusClasses, 'unknown-state', 3000);
 				$this._getElement(projectId).prependTo($this.table);
 			};

@@ -1,9 +1,9 @@
-define([ 'jquery', 'visuwallRootUrl' ], function($, rootUrl) {
+define([ 'jquery' ], function($) {
 	"use strict";
 	
 	var projectService = {
 		findProject : function(wallName, projectName, callback) {
-			$.getJSON(rootUrl + 'wall/' + wallName + '/project/' + projectName + '/', {},
+			$.getJSON('wall/' + wallName + '/project/' + projectName + '/', {},
 					callback);
 		}
 	};
