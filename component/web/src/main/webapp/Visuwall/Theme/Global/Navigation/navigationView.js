@@ -1,4 +1,6 @@
-define(['jquery', // 
+define(['jquery', //
+        'underscore', //
+        'visuwallWebVersion', //
         'text!Visuwall/Theme/Global/Navigation/HelperTemplate.html', //
         'text!Visuwall/Theme/Global/Navigation/Navigation.html', //
         'Visuwall/Theme/Global/WallForm/wallFormView', //
@@ -7,10 +9,12 @@ define(['jquery', //
         'Ajsl/view', //
         
         'css!Visuwall/Theme/Global/Navigation/navigation.css', //
-        ], function($, HelperTemplate, NavigationTemplate, wallFormView, wallService, event, view) {
+        ], function($, _, visuwallVersion, HelperTemplate, NavigationTemplate, wallFormView, wallService, event, view) {
 	"use strict";
 	
-	$("#navigationContainer").html(NavigationTemplate);
+	var navtpl = _.template(NavigationTemplate);
+	
+	$("#navigationContainer").html(navtpl({'version' : visuwallVersion}));
 	
 	var toggleFlag = 'show';
 	var navigationLeaveEvent = function() {

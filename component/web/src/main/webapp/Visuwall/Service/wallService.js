@@ -1,21 +1,21 @@
-define(['jquery'], function($) {
+define(['jquery', 'visuwallRootUrl'], function($, rootUrl) {
 
 
 	var wallService = {
 
 		wall : function(callback) {
-			$.getJSON('wall', {}, function(data) {
+			$.getJSON(rootUrl + 'wall', {}, function(data) {
 				callback(data.data);
 			});
 		},
 
 		getCreate : function(callback) {
-			$.get('wall/create', {}, callback);
+			$.get(rootUrl +'wall/create', {}, callback);
 		},
 		
 		create : function(data, successCallback, failureCallback) {
 			$.ajax({
-				url : 'wall/',
+				url : rootUrl + 'wall/',
 				type : 'POST',
 				data : $(data).serialize(),
 				error : function(jqXHR, textStatus, errorThrown) {
@@ -28,20 +28,20 @@ define(['jquery'], function($) {
 		},
 
 		get : function(wallName, callback) {
-			$.getJSON('wall/' + wallName + '/', {}, function(data) {
+			$.getJSON(rootUrl + 'wall/' + wallName + '/', {}, function(data) {
 				callback(data.data);
 			});
 		},
 
 		deleteWall : function(wallName) {
 			$.ajax({
-				url : 'wall/' + wallName + '/',
+				url : rootUrl + 'wall/' + wallName + '/',
 				type : 'DELETE'
 			});
 		},
 
 		status : function(wallName, callback) {
-			$.getJSON('wall/' + wallName + '/status', {}, callback);
+			$.getJSON(rootUrl + 'wall/' + wallName + '/status', {}, callback);
 		}
 	};
 	

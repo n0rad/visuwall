@@ -3,7 +3,7 @@ DIV#visuwallForm {
 }
 
 DIV#over {
-	background: #666 url('img/phpThumb_generated_thumbnailpng.png') 50% 50%
+	background: #666 url('../Wall/back-texture.png') 50% 50%
 		repeat;
 	opacity: .50;
 	filter: Alpha(Opacity =     50);

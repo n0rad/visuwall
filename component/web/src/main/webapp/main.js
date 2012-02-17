@@ -1,10 +1,12 @@
 define([ 'js!Underscore.js!order', //
          'js!jquery-1.4.3.js!order', //
-         'js!Backbone.js!order'], function() {
+         //'js!Backbone.js!order'
+         
+         ], function() {
 
-	define('backbone', function() {
-		Backbone.noConflict();
-	});
+//	define('backbone', function() {
+//		Backbone.noConflict();
+//	});
 
 	
 	
