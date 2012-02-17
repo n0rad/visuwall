@@ -131,6 +131,18 @@ define(['jquery', //
 			}
 		};
 
+		this['#wallSelector #edit2|click'] = function() {
+			navigationLeaveEvent();
+			var wallId = $('#wallSelector #wallSelect').val();
+			if (wallId) {
+				$.history.queryBuilder().removeController('wall/edit').addController('wall/edit2', wallId)
+						.load();
+			}
+		};
+		this['#wallSelector #add2|click'] = function() {
+			$.history.queryBuilder().removeController('wall/create').addController('wall/create2').load();
+		};
+
 		this['#wallSelector #add|click'] = function() {
 			$.history.queryBuilder().addController('wall/create').load();
 		};

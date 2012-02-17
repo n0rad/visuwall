@@ -13,8 +13,16 @@ define(['Visuwall/Controller/wallFormController', //
 			wallFormController.create();
 		};
 
+		this.create2 = function() {
+			wallFormController.create2();
+		};
+
 		this.edit = function(vars, wallId) {
 			wallFormController.edit(wallId);		
+		};
+		
+		this.edit2 = function(vars, wallId) {
+			wallFormController.edit2(wallId);
 		};
 		
 	};
