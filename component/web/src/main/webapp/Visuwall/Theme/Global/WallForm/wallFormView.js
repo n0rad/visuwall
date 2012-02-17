@@ -1,16 +1,13 @@
 define(['jquery', //
-        'require', //
-        'text!Visuwall/Theme/Global/WallForm/WallFormTemplate.html', //
+        'curl', //
         'Ajsl/event', //
         'Ajsl/view', //
         'Visuwall/Service/pluginService', //
         'Visuwall/Service/wallService', //
-        
+        'text!Visuwall/Theme/Global/WallForm/WallFormTemplate.html', //
+
         'css!Visuwall/Theme/Global/WallForm/wallForm.css', //
-        'css!Visuwall/Theme/Global/WallForm/visuwallForm.css', //
-        'css!Visuwall/Theme/Global/WallForm/visuwallForm-softTab.css', //
-        'css!Visuwall/Theme/Global/WallForm/visuwallForm-projectTab.css', //
-        ], function($, require, WallFormTemplate, event, view, pluginService, wallService) {
+        ], function($, curl, event, view, pluginService, wallService, WallFormTemplate) {
 	'use strict';
 	
 	var wallFormEvent = new function() {
@@ -133,7 +130,7 @@ define(['jquery', //
 				$("#modal .success").html("Success");
 				setTimeout(function() {
 					wallService.wall(function(wallNameList) {
-						require(['Visuwall/Theme/Default/View/navigationView' ,
+						curl(['Visuwall/Theme/Global/Navigation/navigationView' ,
 						      'Visuwall/Controller/wallController'], function(navigationView, wallController) {
 							navigationView.replaceWallList(wallNameList);
 							if ($.history.queryBuilder().contains('wall', wallName)) {
@@ -410,10 +407,6 @@ define(['jquery', //
 		this['DIV#softAdd|click'] = function(event) {
 			wallFormView.addFormSoftwareAccesses();
 		};
-		
-		this['INPUT.cancel|click'] = function() {
-			alert('yo');
-		};
 
 	};
 
@@ -430,83 +423,48 @@ define(['jquery', //
 		this.context;
 		
 		this.displayForm = function(data) {
-			var formDiv = $('#visuwallForm');
-			$('#over').show();
-			formDiv.slideDown();
-			formDiv.html(WallFormTemplate);
-			event.register(wallFormEvent, formDiv);
-			view.rebuildFormRec(formDiv, data, this);
+			var domObject = $("#modal").html(WallFormTemplate);
 			
+			event.register(wallFormEvent, domObject);
+			view.rebuildFormRec(domObject, data, this);
 
-			$('#projectTab', formDiv).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
-			$('#projectTab li', formDiv).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
 			
-//			$( '#projectTab',  formDiv).tabs().find( ".ui-tabs-nav" ).sortable({ connectWith: ".connectedSortable" });
-			
-//			$( "#tabs li" ).draggable({ revert: "invalid" });
-//			
-//			$( "#tabs li" ).droppable({
-//				connectWith: ".connectedSortable",
-//				activeClass: "ui-state-hover42",
-//				hoverClass: "ui-state-active42",
-//				drop: function( event, ui ) {
-//					$( this )
-//						.addClass( "ui-state-highlight42" )
-//						.find( "p" )
-//							.html( "Dropped!" );
-//				}
-//			});
-//			
-			$( ".projectsAccordion", formDiv).accordion();
-			
-			
-			$("#radio", formDiv).buttonset();
-			$( "#format", formDiv ).buttonset();
-			$( "#allProjects", formDiv).button();
-			
-			
-			$( "#slider-range" ).slider({
-				range: true,
-				min: 0,
-				max: 500,
-				values: [ 75, 300 ],
-				slide: function( event, ui ) {
-					$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-				}
-			});
-			$( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-				" - $" + $( "#slider-range" ).slider( "values", 1 ) );
+            domObject.dialog({
+                height: 470,
+                width: 600,
+                title: "Wall creation",
+                resizable: false,
+                modal: true,
+                dragStart: function(event, ui) {
+                        var v = $('LABEL:regex(id,softwareAccesses.*\.urlcheck)');
+                        v.mouseout();
+                },
+                close: function(event, ui) {
+                        var v = $('LABEL:regex(id,softwareAccesses.*\.urlcheck)');
+                        v.mouseout();
+                        // TODO unregister live events
+                        //                      $this.wallFormEvent.__getObject__(function(bean) {
+                        //                              ajsl.event.unregisterLive(bean, domObject);
+                        //                      }); 
+                        $.history.queryBuilder().removeController('wall/create').load();
+                }
+        });
+		};
 
-			var el = $( "#slider-range a" )[0];
-			$(el).addClass('warning');
 			
-			
-			$("#projectTabNav", formDiv).sortable({connectWith: ".softwareElementList"});
-			$(".softwareElementList", formDiv).sortable({connectWith: "#projectTabNav" });
-			$('.projectList, .viewList', formDiv).sortable({
-				connectWith: "#projectTabNav",
-				helper: "clone",
-				appendTo: "body",
-				});
-			
-//			$( "#sortable1, #sortable2" ).sortable({
-//				connectWith: ".connectedSortable",
-//				helper: "clone", appendTo: "body",
-//			}).disableSelection();
+		this.getFormData = function(callback) {
+			//TODO get form from server instead of html dom element
+			if (!$this.wallFormData) {
+				var container = $('#formCreation');
+				$this.wallFormData = container.clone().show();
+				container.remove();
+			}
+			var data = $this.wallFormData.clone();		
+			$this.context = data;
+			event.register(wallFormEvent, data);
+			callback(data);
 		};
 		
-		this.hideForm = function() {
-			var formDiv = $('#visuwallForm');
-			formDiv.slideUp();
-			var v = $('LABEL:regex(id,softwareAccesses.*\.urlcheck)');
-			v.mouseout();
-			// TODO unregister live events
-			//		        $this.wallFormEvent.__getObject__(function(bean) {
-			//		        	ajsl.event.unregisterLive(bean, domObject);
-			//		        }); 
-			$.history.queryBuilder().removeController(closeController).load();			
-		};
-
 		this.addFormSoftwareAccesses = function(id) {
 			if ($('#tabs-' + id).length) {
 				return;

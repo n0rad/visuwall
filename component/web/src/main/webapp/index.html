@@ -9,12 +9,13 @@
 <script type="text/javascript" src="curl.js"></script>
 <script type="text/javascript">
 	var require = curl; 
-	require(['main'], function(main) {
+	require(['bootstrap'], function(main) {
 			main.start({wallNames : []});
 	});
 	</script>
 </head>
 <body class="visuwallBack">
+	<div id="modal" style="display: none"></div>
 	<div id="navigationContainer"></div>
 	<ul id="projectsTable"></ul>
 	<div id="over"></div>

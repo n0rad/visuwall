@@ -82,20 +82,6 @@ define(['require', //
 	define('log', [ 'Ajsl/Log' ], function(log) {
 		return log;
 	});
-	
-
-   define('visuwallRootUrl', [], function() {
-           var url = "${visuwallServerUrl}";
-           if (url[0] === '$') {
-                   url = "ws/";
-           }
-           return url;
-   });
-   
-   define('visuwallWebVersion', [], function() {
-           return "${project.version}";
-   });
-
 
 	return {
 		start : function(data) {

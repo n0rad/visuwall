@@ -68,10 +68,9 @@
 					<webResources>
 						<resource>
 							<directory>src/main</directory>
-							<targetPath>js</targetPath>
 							<filtering>true</filtering>
 							<includes>
-								<include>main.js</include>
+								<include>bootstrap.js</include>
 							</includes>
 						</resource>
 					</webResources>
@@ -79,7 +78,6 @@
 			</plugin>
 
 		</plugins>
-
 
 		<!-- <plugins> -->
 		<!-- <plugin> -->
