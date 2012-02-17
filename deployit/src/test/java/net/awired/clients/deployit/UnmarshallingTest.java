@@ -29,7 +29,6 @@ public class UnmarshallingTest {
         assertEquals("Thu Feb 09 11:10:42 CET 2012", task.getStartDate().toString());
         assertEquals(State.DONE, task.getState());
         assertEquals("admin", task.getUser());
-        assertEquals("9", task.getVersion());
+        assertEquals(9, task.getVersion().intValue());
     }
-
 }
