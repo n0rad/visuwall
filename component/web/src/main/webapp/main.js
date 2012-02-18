@@ -10,8 +10,8 @@ define(['require', //
 
 	
 	
-	define('jquery', ['css!jquery.marquee.min.css',
-	                  'css!jquery.selectBox.css',
+	define('jquery', ['css!jquery/jquery.marquee.min.css',
+	                  'css!jquery/jquery.selectBox.css',
 	                  
 	                  'js!jquery/jquery.ajsl.js',
 	                  'js!jquery/jquery.cookie.js',
@@ -37,43 +37,43 @@ define(['require', //
 		return _;
 	});
 	
-	define('jqueryui', ['css!jquery/jquery-ui-1.8.11.custom.css', //
+	define('jqueryui', ['css!jquery/ui/jquery-ui.css', //
 	                    
 	                    'js!jquery/ui/jquery.ui.core.js!order', //
 	                    'js!jquery/ui/jquery.ui.widget.js!order', //
 	                    'js!jquery/ui/jquery.effects.core.js!order', //
 
-	                    'js!jquery/ui/sub/jquery.ui.tabs.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.mouse.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.dialog.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.slider.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.button.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.position.js!order', //
-	                    'js!jquery/ui/sub/jquery.multiselect.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.sortable.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.draggable.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.resizable.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.droppable.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.accordion.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.datepicker.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.selectable.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.progressbar.js!order', //
-	                    'js!jquery/ui/sub/jquery.ui.autocomplete.js!order', //
+	                    'js!jquery/ui/jquery.ui.tabs-awired.js!order', //
+	                    'js!jquery/ui/jquery.ui.mouse.js!order', //
+	                    'js!jquery/ui/jquery.ui.dialog.js!order', //
+	                    'js!jquery/ui/jquery.ui.slider.js!order', //
+	                    'js!jquery/ui/jquery.ui.button.js!order', //
+	                    'js!jquery/ui/jquery.ui.position.js!order', //
+	                    'js!jquery/ui/jquery.multiselect.js!order', //
+	                    'js!jquery/ui/jquery.ui.sortable.js!order', //
+	                    'js!jquery/ui/jquery.ui.draggable.js!order', //
+	                    'js!jquery/ui/jquery.ui.resizable.js!order', //
+	                    'js!jquery/ui/jquery.ui.droppable.js!order', //
+	                    'js!jquery/ui/jquery.ui.accordion.js!order', //
+	                    'js!jquery/ui/jquery.ui.datepicker.js!order', //
+	                    'js!jquery/ui/jquery.ui.selectable.js!order', //
+	                    'js!jquery/ui/jquery.ui.progressbar.js!order', //
+	                    'js!jquery/ui/jquery.ui.autocomplete.js!order', //
 	                    
 	                    
-	                    'js!jquery/ui/effect/jquery.effects.clip.js!order', //
-	                    'js!jquery/ui/effect/jquery.effects.fold.js!order', //
-	                    'js!jquery/ui/effect/jquery.effects.drop.js!order', //
-	                    'js!jquery/ui/effect/jquery.effects.fade.js!order', //
-	                    'js!jquery/ui/effect/jquery.effects.slide.js!order', //
-	                    'js!jquery/ui/effect/jquery.effects.scale.js!order', //
-	                    'js!jquery/ui/effect/jquery.effects.blind.js!order', //
-	                    'js!jquery/ui/effect/jquery.effects.shake.js!order', //
-	                    'js!jquery/ui/effect/jquery.effects.bounce.js!order', //
-	                    'js!jquery/ui/effect/jquery.effects.explode.js!order', //
-	                    'js!jquery/ui/effect/jquery.effects.pulsate.js!order', //
-	                    'js!jquery/ui/effect/jquery.effects.transfer.js!order', //
-	                    'js!jquery/ui/effect/jquery.effects.highlight.js!order' //
+	                    'js!jquery/ui/jquery.effects.clip.js!order', //
+	                    'js!jquery/ui/jquery.effects.fold.js!order', //
+	                    'js!jquery/ui/jquery.effects.drop.js!order', //
+	                    'js!jquery/ui/jquery.effects.fade.js!order', //
+	                    'js!jquery/ui/jquery.effects.slide.js!order', //
+	                    'js!jquery/ui/jquery.effects.scale.js!order', //
+	                    'js!jquery/ui/jquery.effects.blind.js!order', //
+	                    'js!jquery/ui/jquery.effects.shake.js!order', //
+	                    'js!jquery/ui/jquery.effects.bounce.js!order', //
+	                    'js!jquery/ui/jquery.effects.explode.js!order', //
+	                    'js!jquery/ui/jquery.effects.pulsate.js!order', //
+	                    'js!jquery/ui/jquery.effects.transfer.js!order', //
+	                    'js!jquery/ui/jquery.effects.highlight.js!order' //
 
 	                    ], function() {
 		

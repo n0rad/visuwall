@@ -17,13 +17,14 @@
 define(['jquery', //
         'Ajsl/Dispatcher', //
         'Visuwall/Theme/Global/Navigation/navigationView', //
+        'Visuwall/Service/wallService', //
         'js!ajsl-utils.js', //
         
         'css!visuwall.css', //
-        ], function($, Dispatcher, navigationView) {
+        ], function($, Dispatcher, navigationView, wallService) {
 	"use strict";
 
-	return function(data) {		
+	return function() {		
 		$.timeago.settings.strings = {
 			suffixAgo : " ago",
 			suffixFromNow : "from now",
@@ -41,30 +42,29 @@ define(['jquery', //
 		};
 
 		$("abbr.timeago").timeago();
-		
 		var dispatcher = new Dispatcher({modules : 'Visuwall/Command'});
-
 		$.history.init(dispatcher.dispatch, {unescape : true});
-		
-		navigationView.replaceWallList(data.wallNames);
-		navigationView.setVersion(data.version);
 
-		if (data.wallNames.length === 0) {
-			$.history.queryBuilder().addController('wall/create').load();
-		} else {
-			var queryBuilder = $.history.queryBuilder();
-			var flag = false;
-			for (var i = 0; i < data.wallNames.length; i++) {
-				if (queryBuilder.contains('wall', data.wallNames[i])) {
-					$('#wallSelector #wallSelect').val(data.wallNames[i]).change();
-					flag = true;
-					break;
+		wallService.wall(function(wallNames){
+			navigationView.replaceWallList(wallNames);
+
+			if (wallNames.length === 0) {
+				$.history.queryBuilder().addController('wall/create').load();
+			} else {
+				var queryBuilder = $.history.queryBuilder();
+				var flag = false;
+				for (var i = 0; i < wallNames.length; i++) {
+					if (queryBuilder.contains('wall', wallNames[i])) {
+						$('#wallSelector #wallSelect').val(wallNames[i]).change();
+						flag = true;
+						break;
+					}
+				}
+				if (!flag) {
+					$.history.queryBuilder().addController('wall',  wallNames[0]).load();				
 				}
 			}
-			if (!flag) {
-				$.history.queryBuilder().addController('wall',  data.wallNames[0]).load();				
-			}
-		}
+		});
 
 	};
 });

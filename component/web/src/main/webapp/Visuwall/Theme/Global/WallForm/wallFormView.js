@@ -124,7 +124,7 @@ define(['jquery', //
 				$("#modal .failure").html("Wall name is mandatory");
 				return false;
 			}
-			$("#wallForm .loader").empty().html('<img src="res/img/ajax-loader.gif" />');
+			$("#wallForm .loader").empty().html('<img src="Visuwall/Theme/Global/WallForm/img/ajax-loader.gif" />');
 			wallService.create(this, function() { // success
 				$("#wallForm .loader").empty();
 				$("#modal .success").html("Success");
@@ -422,7 +422,7 @@ define(['jquery', //
 		
 		this.context;
 		
-		this.displayForm = function(data) {
+		this.displayForm = function(data, isCreate) {
 			var domObject = $("#modal").html(WallFormTemplate);
 			
 			event.register(wallFormEvent, domObject);
@@ -432,7 +432,7 @@ define(['jquery', //
             domObject.dialog({
                 height: 470,
                 width: 600,
-                title: "Wall creation",
+                title: "Wall edition",
                 resizable: false,
                 modal: true,
                 dragStart: function(event, ui) {
@@ -446,7 +446,7 @@ define(['jquery', //
                         //                      $this.wallFormEvent.__getObject__(function(bean) {
                         //                              ajsl.event.unregisterLive(bean, domObject);
                         //                      }); 
-                        $.history.queryBuilder().removeController('wall/create').load();
+                        $.history.queryBuilder().removeController(isCreate ? 'wall/create' : 'wall/edit').load();
                 }
         });
 		};

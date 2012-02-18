@@ -1,6 +1,5 @@
 define(['jquery', 'visuwallRootUrl'], function($, rootUrl) {
 
-
 	var wallService = {
 
 		wall : function(callback) {

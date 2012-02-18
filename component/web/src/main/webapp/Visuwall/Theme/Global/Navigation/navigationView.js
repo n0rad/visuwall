@@ -171,10 +171,6 @@ define(['jquery', //
 			}
 			select.val(selectedValue);
 		};
-		
-		this.setVersion = function(version) {
-			$('A#visuwallVersion', this.navigation).html(version);
-		};
 	};
 
 	event.register(navigationEvent, $('DIV#navigationContainer'));
