@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
@@ -233,5 +234,18 @@ public class DemoConnectionTest {
         assertEquals(0, testResult.getFailCount());
         assertEquals(0, testResult.getSkipCount());
         assertEquals(0, testResult.getPassCount());
+    }
+
+    @Test
+    public void should_change_mars_state() throws Exception {
+        String lastBuildId = connection.getLastBuildId(mars);
+        assertEquals("1", lastBuildId);
+
+        BuildState oldState = connection.getBuildState(mars, lastBuildId);
+        lastBuildId = connection.getLastBuildId(mars);
+        assertEquals("2", lastBuildId);
+
+        BuildState state = connection.getBuildState(mars, lastBuildId);
+        assertFalse(oldState.equals(state));
     }
 }

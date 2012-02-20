@@ -56,6 +56,10 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
 
     private List<String> views = new ArrayList<String>();
 
+    private Integer marsBuildId = 1;
+
+    private List<String> marsBuildIds = new ArrayList<String>();
+
     public DemoConnection() {
         softwareProjectIds.put(moon, "Moon");
         softwareProjectIds.put(earth, "Earth");
@@ -113,6 +117,8 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
 
         qualityResults.put(uranus, uranusQualityResult);
         qualityResults.put(mercury, mercuryQualityResult);
+
+        marsBuildIds.add("1");
     }
 
     private QualityMeasure createQualityMeasure(String key, String name, String formattedValue, double value) {
@@ -289,6 +295,9 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
 
     @Override
     public List<String> getBuildIds(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
+        if (mars.equals(softwareProjectId)) {
+            return marsBuildIds;
+        }
         List<String> buildIds = new ArrayList<String>();
         buildIds.add("1");
         return buildIds;
@@ -300,6 +309,11 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
         BuildState buildState = buildStates.get(projectId);
         if (buildState == null) {
             throw new ProjectNotFoundException("Cannot find project for " + projectId);
+        }
+        if (mars.equals(projectId)) {
+            int stateIndex = marsBuildId % BuildState.values().length;
+            BuildState marsState = BuildState.values()[stateIndex];
+            buildState = marsState;
         }
         return buildState;
     }
@@ -326,7 +340,13 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     @Override
     public String getLastBuildId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
             BuildIdNotFoundException {
-        return "1";
+        String lastBuildId = "1";
+        if (softwareProjectId.equals(mars)) {
+            lastBuildId = marsBuildId.toString();
+            marsBuildId++;
+            marsBuildIds.add(marsBuildId.toString());
+        }
+        return lastBuildId;
     }
 
     @Override
