@@ -296,7 +296,11 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     @Override
     public List<String> getBuildIds(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         if (mars.equals(softwareProjectId)) {
-            return marsBuildIds;
+            int start = marsBuildIds.size() - 5;
+            if (start < 0) {
+                start = 0;
+            }
+            return marsBuildIds.subList(start, marsBuildIds.size());
         }
         List<String> buildIds = new ArrayList<String>();
         buildIds.add("1");
