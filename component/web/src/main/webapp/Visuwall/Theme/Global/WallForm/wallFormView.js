@@ -446,7 +446,9 @@ define(['jquery', //
                         //                      $this.wallFormEvent.__getObject__(function(bean) {
                         //                              ajsl.event.unregisterLive(bean, domObject);
                         //                      }); 
-                        $.history.queryBuilder().removeController(isCreate ? 'wall/create' : 'wall/edit').load();
+                        $.history.queryBuilder()
+                        	.removeController(isCreate ? 'wall/create' : 'wall/edit')
+                        	.load();
                 }
         });
 		};

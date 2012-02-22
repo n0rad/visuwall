@@ -1,10 +1,10 @@
 DIV#visuwallForm {
-	
+	display: none;
+	position: absolute;
+	width: 100%;
 }
-
 DIV#over {
-	background: #666 url('../Wall/back-texture.png') 50% 50%
-		repeat;
+	background: #666 url('../Wall/back-texture.png') 50% 50% repeat;
 	opacity: .50;
 	filter: Alpha(Opacity =     50);
 	position: fixed;
@@ -12,32 +12,22 @@ DIV#over {
 	width: 100%;
 	display: none;
 }
-
 FORM#wallForm {
 	width: 950px;
 	margin: auto;
 }
-
-FORM#wallForm INPUT,FORM#wallForm LABEL
-	{
+FORM#wallForm INPUT, FORM#wallForm LABEL {
 	display: block;
 	width: 220px;
 }
-
-
-
 /*** sortables ***/
-FORM#wallForm UL.projectList LI,
-FORM#wallForm UL.viewList LI,
-FORM#wallForm UL.projectTabNav LI,
-FORM#wallForm UL.softwareElementList LI {
+FORM#wallForm UL.projectList LI, FORM#wallForm UL.viewList LI, FORM#wallForm UL.projectTabNav LI, FORM#wallForm UL.softwareElementList LI {
 	display: block;
 	height: 1.5em;
 	line-height: 1.5em;
 	margin: 0 5px 5px 5px;
 	padding: 5px;
 }
-
 LI.projectItem {
 	display: block;
 	height: 1.5em;
@@ -45,7 +35,6 @@ LI.projectItem {
 	margin: 0 5px 5px 5px;
 	padding: 5px;
 }
-
 LI.projectItem DIV.addProject {
 	display: inline-block;
 	float: right;

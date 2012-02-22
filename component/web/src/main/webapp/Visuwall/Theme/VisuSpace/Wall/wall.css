@@ -19,7 +19,7 @@ UL#projectsTable {
 	height: 100%;
 	width: 100%;
 	background-color: black;
-	z-index: -1;
+	z-index: 0;
 }
 
 #projectsTable .project {
@@ -81,7 +81,12 @@ TABLE.uTest TD, TABLE.iTest TD {
 #projectsTable TABLE.innerTable {
 	height: 100%;
 	width: 100%;
-	valign: middle;
+	font-size: 1em;
+	margin: 10px;
+}
+
+TABLE.iTest, TABLE.uTest {
+	font-size: 1em;	
 }
 
 SPAN.lastUpdate {
