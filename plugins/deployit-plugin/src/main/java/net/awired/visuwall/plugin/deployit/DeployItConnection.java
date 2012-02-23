@@ -11,23 +11,28 @@ import java.util.Map;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.clients.deployit.DeployIt;
 import net.awired.clients.deployit.resource.ArchivedTasks;
+import net.awired.clients.deployit.resource.Step;
 import net.awired.clients.deployit.resource.Task;
 import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
+import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildIdNotFoundException;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import net.awired.visuwall.api.plugin.capability.TestCapability;
+import net.awired.visuwall.api.plugin.capability.ViewCapability;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DeployItConnection implements BuildCapability {
+public class DeployItConnection implements BuildCapability, TestCapability, ViewCapability {
 
     private DeployIt deployIt;
     private boolean connected;
@@ -246,6 +251,74 @@ public class DeployItConnection implements BuildCapability {
     @Override
     public String toString() {
         return "DeployIt Connection";
+    }
+
+    @Override
+    public TestResult analyzeUnitTests(SoftwareProjectId projectId) {
+        TestResult testResult = new TestResult();
+        try {
+            Task task = getTask(projectId);
+            List<Step> steps = task.getSteps();
+            for (Step step : steps) {
+                switch (step.getState()) {
+                case SKIPPED:
+                    testResult.setSkipCount(testResult.getSkipCount() + 1);
+                    break;
+                case DONE:
+                    if (step.getFailureCount() == 0) {
+                        testResult.setPassCount(testResult.getPassCount() + 1);
+                    } else {
+                        testResult.setFailCount(testResult.getFailCount() + 1);
+                    }
+                    break;
+                }
+            }
+        } catch (ResourceNotFoundException e) {
+            LOG.warn("Cannot retrieve steps for " + projectId, e);
+        }
+        return testResult;
+    }
+
+    @Override
+    public TestResult analyzeIntegrationTests(SoftwareProjectId projectId) {
+        return new TestResult();
+    }
+
+    @Override
+    public List<SoftwareProjectId> findSoftwareProjectIdsByViews(List<String> views) {
+        List<SoftwareProjectId> softwareProjectIds = new ArrayList<SoftwareProjectId>();
+        for (String environmentName : views) {
+            try {
+                List<String> applications = deployIt.getDeployedApplicationsByEnvironment(environmentName);
+                for (String application : applications) {
+                    String projectId = application.replaceFirst(environmentName + "/", environmentName + " - ");
+                    SoftwareProjectId softwareProjectId = new SoftwareProjectId(projectId);
+                    softwareProjectIds.add(softwareProjectId);
+                }
+            } catch (ResourceNotFoundException e) {
+                LOG.warn("Cannot retrieve deployed applications for environment " + environmentName);
+            }
+        }
+        return softwareProjectIds;
+    }
+
+    @Override
+    public List<String> findViews() {
+        try {
+            return deployIt.getEnvironmentNames();
+        } catch (ResourceNotFoundException e) {
+            LOG.warn("Cannot retrieve environment names", e);
+            return new ArrayList<String>();
+        }
+    }
+
+    @Override
+    public List<String> findProjectNamesByView(String viewName) throws ViewNotFoundException {
+        try {
+            return deployIt.getDeployedApplicationsByEnvironment(viewName);
+        } catch (ResourceNotFoundException e) {
+            throw new ViewNotFoundException("Cannot retrieve project names for view " + viewName, e);
+        }
     }
 
 }
