@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.awired.visuwall.api.domain.SoftwareProjectId;
+import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.exception.BuildNotFoundException;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
@@ -76,29 +77,52 @@ public class DeployItConnectionIT {
         System.out.println(connection.getBuildTime(new SoftwareProjectId("Tomcat-Production - XkeTomcatPet"), "22"));
     }
 
+    public void should_get_num_of_pass_steps() throws Exception {
+        SoftwareProjectId projectId = new SoftwareProjectId("Tomcat-Dev - XkeTomcatPet");
+        TestResult steps = connection.analyzeUnitTests(projectId);
+        assertEquals(0, steps.getSkipCount());
+        assertEquals(8, steps.getPassCount());
+        assertEquals(0, steps.getFailCount());
+        assertEquals(8, steps.getTotalCount());
+        assertEquals(0, steps.getCoverage(), 0);
+    }
+
     @Test
-    public void should_get_environments_as_views() throws Exception {
+    public void should_not_analyze_integration_tests() throws Exception {
+        SoftwareProjectId projectId = new SoftwareProjectId("Tomcat-Dev - XkeTomcatPet");
+        TestResult steps = connection.analyzeIntegrationTests(projectId);
+        assertEquals(0, steps.getSkipCount());
+        assertEquals(0, steps.getPassCount());
+        assertEquals(0, steps.getFailCount());
+        assertEquals(0, steps.getTotalCount());
+        assertEquals(0, steps.getCoverage(), 0);
+    }
+
+    @Test
+    public void should_find_views() throws Exception {
         List<String> views = connection.findViews();
         assertEquals(4, views.size());
         assertTrue(views.contains("Tomcat-Dev"));
-        assertTrue(views.contains("Tomcat-Integration"));
         assertTrue(views.contains("Tomcat-Production"));
+        assertTrue(views.contains("Tomcat-Integration"));
         assertTrue(views.contains("Tomcat-QA"));
     }
 
     @Test
-    public void should_find_project_names_by_view() throws Exception {
+    public void should_retrieve_software_by_view() throws Exception {
         List<String> projectNames = connection.findProjectNamesByView("Tomcat-Dev");
         assertEquals(1, projectNames.size());
-        assertEquals("Tomcat-Dev/XkeTomcatPet", projectNames.get(0));
+        assertTrue(projectNames.contains("Tomcat-Dev/XkeTomcatPet"));
     }
 
     @Test
     public void should_find_software_project_ids_by_views() throws Exception {
-        List<String> views = Arrays.asList("Tomcat-Production", "Tomcat-Dev");
+        SoftwareProjectId dev = new SoftwareProjectId("Tomcat-Dev - XkeTomcatPet");
+        SoftwareProjectId integration = new SoftwareProjectId("Tomcat-Integration - XkeTomcatPet");
+        List<String> views = Arrays.asList("Tomcat-Dev", "Tomcat-Integration");
         List<SoftwareProjectId> softwareProjectIds = connection.findSoftwareProjectIdsByViews(views);
         assertEquals(2, softwareProjectIds.size());
-        assertEquals("Tomcat-Production - XkeTomcatPet", softwareProjectIds.get(0).getProjectId());
-        assertEquals("Tomcat-Dev - XkeTomcatPet", softwareProjectIds.get(1).getProjectId());
+        assertTrue(softwareProjectIds.contains(dev));
+        assertTrue(softwareProjectIds.contains(integration));
     }
 }
