@@ -242,7 +242,11 @@ public class DeployItConnection implements BuildCapability, TestCapability, View
         Task task;
         try {
             task = getTask(softwareProjectId);
-            return task.getVersion().toString();
+            if (task == null) {
+                throw new ProjectNotFoundException("Cannot find deployment for " + softwareProjectId);
+            }
+            Integer version = task.getVersion();
+            return version.toString();
         } catch (ResourceNotFoundException e) {
             throw new ProjectNotFoundException("Cannot find deployment for " + softwareProjectId);
         }
