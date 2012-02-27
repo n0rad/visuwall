@@ -1,10 +1,13 @@
 package net.awired.clients.deployit.resource;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import net.awired.clients.deployit.State;
@@ -33,6 +36,10 @@ public class Task {
     private String user;
 
     private Integer version;
+
+    @XmlElementWrapper(name = "steps")
+    @XmlElements({ @XmlElement(name = "step") })
+    private List<Step> steps;
 
     public void setApplication(String application) {
         this.application = application;
@@ -104,6 +111,14 @@ public class Task {
 
     public Integer getVersion() {
         return version;
+    }
+
+    public void setSteps(List<Step> steps) {
+        this.steps = steps;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
     }
 
 }
