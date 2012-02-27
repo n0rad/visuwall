@@ -30,7 +30,7 @@ SELECT, INPUT, PRE {
 }
 
 SELECT, INPUT {
-	border: 1px solid grey;
+	border: 1px solid #666;
 	padding:2px;
 	margin: 2px;
 	background-color: white;
@@ -67,4 +67,8 @@ A {
 
 .bold {
 	font-weight: bold;
+}
+
+#over {
+	display: none;
 }

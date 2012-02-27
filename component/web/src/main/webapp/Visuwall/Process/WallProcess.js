@@ -104,23 +104,23 @@ define(['jquery', //
 			}
 			
 			if (lastNotBuild.unitTestResult) {
-//				wallView.updateUTCoverage(project.id, lastNotBuild.unitTestResult.coverage);
+				wallView.updateUTCoverage(project.id, lastNotBuild.unitTestResult.coverage);
 			}
 			if (lastNotBuild.unitTestResult) {
-//				wallView.updateUT(project.id,
-//						lastNotBuild.unitTestResult.failCount,
-//						lastNotBuild.unitTestResult.passCount,
-//						lastNotBuild.unitTestResult.skipCount);
+				wallView.updateUT(project.id,
+						lastNotBuild.unitTestResult.failCount,
+						lastNotBuild.unitTestResult.passCount,
+						lastNotBuild.unitTestResult.skipCount);
 			}
 
 			if (lastNotBuild.integrationTestResult) {
-//				wallView.updateITCoverage(project.id, lastNotBuild.integrationTestResult.coverage);
+				wallView.updateITCoverage(project.id, lastNotBuild.integrationTestResult.coverage);
 			}
 			if (lastNotBuild.integrationTestResult) {
-//				wallView.updateIT(project.id,
-//						lastNotBuild.integrationTestResult.failCount,
-//						lastNotBuild.integrationTestResult.passCount,
-//						lastNotBuild.integrationTestResult.skipCount);
+				wallView.updateIT(project.id,
+						lastNotBuild.integrationTestResult.failCount,
+						lastNotBuild.integrationTestResult.passCount,
+						lastNotBuild.integrationTestResult.skipCount);
 			}
 			
 			if (project.previousCompletedBuildId != 0) {

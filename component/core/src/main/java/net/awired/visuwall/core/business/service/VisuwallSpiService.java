@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+import javax.annotation.PostConstruct;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
@@ -27,6 +28,13 @@ public class VisuwallSpiService implements PluginServiceInterface {
     @SuppressWarnings("rawtypes")
     private ServiceLoader<VisuwallPlugin> pluginLoader = ServiceLoader.load(VisuwallPlugin.class);
 
+    @PostConstruct
+    protected void postConstruct() {
+        // Lazy load of SPI implementation cause multiple thread calling getPlugins() for the first
+        // time to return a not full list for one of the thread. We need to preload plugins 
+        getPlugins();
+    }
+
     @Override
     public List<VisuwallPlugin<BasicCapability>> getPlugins() {
         @SuppressWarnings("rawtypes")
@@ -42,7 +50,8 @@ public class VisuwallSpiService implements PluginServiceInterface {
 
     @Override
     public BasicCapability getPluginConnectionFromUrl(URL url, Map<String, String> properties) {
-        for (VisuwallPlugin<BasicCapability> visuwallPlugin : getPlugins()) {
+        List<VisuwallPlugin<BasicCapability>> plugins = getPlugins();
+        for (VisuwallPlugin<BasicCapability> visuwallPlugin : plugins) {
             try {
                 visuwallPlugin.getSoftwareId(url);
                 return visuwallPlugin.getConnection(url, properties);

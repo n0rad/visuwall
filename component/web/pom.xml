@@ -79,26 +79,24 @@
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<groupId>net.awired.jstest</groupId>
+				<artifactId>jstest-maven-plugin</artifactId>
+				<version>0.1-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<serverPort>8234</serverPort>
+					<coverage>true</coverage>
+					<runnerType>CURL</runnerType>
+				</configuration>
+			</plugin>
 		</plugins>
-
-		<!-- <plugins> -->
-		<!-- <plugin> -->
-		<!-- <groupId>net.awired.jstest</groupId> -->
-		<!-- <artifactId>jstest-maven-plugin</artifactId> -->
-		<!-- <version>0.1-SNAPSHOT</version> -->
-		<!-- <executions> -->
-		<!-- <execution> -->
-		<!-- <goals> -->
-		<!-- <goal>test</goal> -->
-		<!-- </goals> -->
-		<!-- </execution> -->
-		<!-- </executions> -->
-		<!-- <configuration> -->
-		<!-- <serverPort>8235</serverPort> -->
-		<!-- <coverage>true</coverage> -->
-		<!-- </configuration> -->
-		<!-- </plugin> -->
-		<!-- </plugins> -->
 	</build>
 
 </project>

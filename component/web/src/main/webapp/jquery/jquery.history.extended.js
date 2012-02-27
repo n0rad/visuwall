@@ -33,6 +33,13 @@
 				} else {
 					result.vars = {};
 				}
+				
+				if (result.ctrl[result.ctrl.length - 1] === '!') {
+					result.ctrl = result.ctrl.substring(0, result.ctrl.length - 1);
+					result.forced = true;
+				} else {
+					result.forced = false;
+				}
 				return result;
 			},
 
@@ -53,6 +60,9 @@
 						res += ';';
 					}
 					res += this._data[i].ctrl;
+					if (this._data[i].forced) {
+						res += '!';
+					}
 					var ctrlVars = this._data[i].ctrlVars.join('/');
 					if (ctrlVars) {
 						res += '/' + ctrlVars;
@@ -73,19 +83,29 @@
 				}
 				return res;
 			},
+			
+			_toggleForce : function(force, currentCtrl, newCtrl) {
+	    		if (force) {
+	    			newCtrl.forced = currentCtrl.forced ? false : true;
+		    	}
+			},
 
-			addController : function(ctrlName, param) {
+			addController : function(ctrlName, param, force) {
 				var ctrlsNames = ctrlName.split('/');
 	    		var ctrl = this._parseController(param ? ctrlName + '/' + param : ctrlName);
+	    		
 	    		var replaced = false;
-	    		for (var i = 0; i < this._data.length; i++) {
+	    		var i = 0;
+	    		for (; i < this._data.length; i++) {
 	    			if (ctrlsNames.length > 1) {
 	    				if (this._data[i].ctrl == ctrlsNames[0] && this._data[i].ctrlVars[0] == ctrlsNames[1]) {
+	    					
 		    				this._data.splice(i, 1, ctrl);	    					
 		    				replaced = true;
 		    				break;
 	    				}
 	    			} else if (this._data[i].ctrl == ctrlsNames[0]) {
+	    				this._toggleForce(force, this._data[i], ctrl);
 	    				this._data.splice(i, 1, ctrl);
 	    				replaced = true;
 	    				break;
@@ -95,6 +115,11 @@
 	    		if (!replaced) {
 	    			this._data.push(ctrl);
 	    		}
+	    		return this;
+	    	},
+	    	
+	    	forceController : function(ctrlName, param) {
+	    		this.addController(ctrlName, param, true);
 	    		return this;
 	    	},
 	    	
@@ -127,15 +152,21 @@
 	    	},
 
 			load : function() {
-				$.history.load(this._buildRequest(this._data));
-	    		return this;
-			}
+				$.history.load(this.build());
+			},
+	    	
+	    	build : function() {
+	    		return this._buildRequest(this._data);
+	    	}
 	    	
 	    },
 
-		queryBuilder : function() {
+	    /**
+	     * @param currentLocation may be undefined
+	     */
+		queryBuilder : function(currentLocation) {
 	    	var builder = $.extend({}, this._queryBuilderObj);
-	    	builder._data = this.parseRequest(this.location.get());
+	    	builder._data = this.parseRequest(currentLocation === undefined ? this.location.get() : currentLocation);	    		
 	    	return builder;
 	    }
 	    		

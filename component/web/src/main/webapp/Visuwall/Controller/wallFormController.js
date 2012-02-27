@@ -1,6 +1,6 @@
 define(['Visuwall/Service/wallService', //
         'Visuwall/Theme/Global/WallForm/wallFormView', //
-       // 'Visuwall/Theme/Global/WallForm2/wallFormView' //
+        'Visuwall/Theme/Global/WallForm2/wallFormView' //
 ], function(wallService, wallFormView, wallFormView2) {
 	'use strict';
 
