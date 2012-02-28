@@ -242,7 +242,11 @@ public class DeployItConnection implements BuildCapability, TestCapability, View
         Task task;
         try {
             task = getTask(softwareProjectId);
-            return task.getVersion().toString();
+            if (task == null) {
+                throw new ProjectNotFoundException("Cannot find deployment for " + softwareProjectId);
+            }
+            Integer version = task.getVersion();
+            return version.toString();
         } catch (ResourceNotFoundException e) {
             throw new ProjectNotFoundException("Cannot find deployment for " + softwareProjectId);
         }
@@ -289,27 +293,33 @@ public class DeployItConnection implements BuildCapability, TestCapability, View
         List<SoftwareProjectId> softwareProjectIds = new ArrayList<SoftwareProjectId>();
         for (String environmentName : views) {
             try {
-                List<String> applications = deployIt.getDeployedApplicationsByEnvironment(environmentName);
-                for (String application : applications) {
-                    String projectId = application.replaceFirst(environmentName + "/", environmentName + " - ");
-                    SoftwareProjectId softwareProjectId = new SoftwareProjectId(projectId);
+                List<String> deployedApplications = deployIt.getDeployedApplicationsByEnvironment(environmentName);
+                for (String deployedApplication : deployedApplications) {
+                    SoftwareProjectId softwareProjectId = createSoftwareProjectId(deployedApplication, environmentName);
                     softwareProjectIds.add(softwareProjectId);
                 }
             } catch (ResourceNotFoundException e) {
-                LOG.warn("Cannot retrieve deployed applications for environment " + environmentName);
+                LOG.warn("Cannot retrieve deployed applications on environment " + environmentName, e);
             }
         }
         return softwareProjectIds;
     }
 
+    private SoftwareProjectId createSoftwareProjectId(String deployedApplication, String environment) {
+        String projectId = deployedApplication.replaceFirst(environment + "/", environment + " - ");
+        SoftwareProjectId softwareProjectId = new SoftwareProjectId(projectId);
+        return softwareProjectId;
+    }
+
     @Override
     public List<String> findViews() {
+        List<String> views = new ArrayList<String>();
         try {
-            return deployIt.getEnvironmentNames();
+            views = deployIt.getEnvironmentNames();
         } catch (ResourceNotFoundException e) {
-            LOG.warn("Cannot retrieve environment names", e);
-            return new ArrayList<String>();
+            LOG.warn("Cannot retrieve views", e);
         }
+        return views;
     }
 
     @Override

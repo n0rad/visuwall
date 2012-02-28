@@ -1,6 +1,5 @@
 package net.awired.visuwall.plugin.demo;
 
-import static net.awired.visuwall.api.domain.BuildState.FAILURE;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.earth;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.mars;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.moon;
@@ -135,12 +134,6 @@ public class DemoConnectionTest {
     }
 
     @Test
-    public void mars_should_be_in_fail_state() throws ProjectNotFoundException, BuildNotFoundException {
-        BuildState state = connection.getBuildState(mars, "");
-        assertEquals(FAILURE, state);
-    }
-
-    @Test
     public void should_get_build_time_for_earth() throws BuildNotFoundException, ProjectNotFoundException {
         BuildTime earthBuildTime = connection.getBuildTime(earth, "");
         assertTrue(earthBuildTime.getDuration() > 1000);
@@ -241,5 +234,18 @@ public class DemoConnectionTest {
         assertEquals(0, testResult.getFailCount());
         assertEquals(0, testResult.getSkipCount());
         assertEquals(0, testResult.getPassCount());
+    }
+
+    @Test
+    public void should_change_mars_state() throws Exception {
+        String lastBuildId = connection.getLastBuildId(mars);
+        assertEquals("1", lastBuildId);
+
+        BuildState oldState = connection.getBuildState(mars, lastBuildId);
+        lastBuildId = connection.getLastBuildId(mars);
+        assertEquals("2", lastBuildId);
+
+        BuildState state = connection.getBuildState(mars, lastBuildId);
+        assertFalse(oldState.equals(state));
     }
 }
