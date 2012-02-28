@@ -12,30 +12,34 @@ DIV#over {
 	width: 100%;
 	display: none;
 }
-FORM#wallForm {
+DIV#visuwallForm FORM#wallForm {
 	width: 950px;
 	margin: auto;
 }
-FORM#wallForm INPUT, FORM#wallForm LABEL {
+DIV#visuwallForm FORM#wallForm INPUT,
+DIV#visuwallForm FORM#wallForm LABEL {
 	display: block;
 	width: 220px;
 }
 /*** sortables ***/
-FORM#wallForm UL.projectList LI, FORM#wallForm UL.viewList LI, FORM#wallForm UL.projectTabNav LI, FORM#wallForm UL.softwareElementList LI {
+DIV#visuwallForm FORM#wallForm UL.projectList LI,
+DIV#visuwallForm FORM#wallForm UL.viewList LI,
+DIV#visuwallForm FORM#wallForm UL.projectTabNav LI,
+DIV#visuwallForm FORM#wallForm UL.softwareElementList LI {
 	display: block;
 	height: 1.5em;
 	line-height: 1.5em;
 	margin: 0 5px 5px 5px;
 	padding: 5px;
 }
-LI.projectItem {
+DIV#visuwallForm  LI.projectItem {
 	display: block;
 	height: 1.5em;
 	line-height: 1.5em;
 	margin: 0 5px 5px 5px;
 	padding: 5px;
 }
-LI.projectItem DIV.addProject {
+DIV#visuwallForm  LI.projectItem DIV.addProject {
 	display: inline-block;
 	float: right;
 }
