@@ -228,7 +228,7 @@
 				<artifactId>maven-license-plugin</artifactId>
 				<version>1.8.0</version>
 				<configuration>
-					<header>src/main/resources/header.txt</header>
+					<header>/HEADER.txt</header>
 					<strictCheck>true</strictCheck>
 					<useDefaultExcludes>false</useDefaultExcludes>
 					<excludes>

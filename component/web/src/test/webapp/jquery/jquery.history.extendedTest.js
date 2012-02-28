@@ -3,7 +3,7 @@ define(['js!Underscore.js!order',
         'js!jquery/jquery.history.js!order',
         'js!jquery/jquery.history.extended.js!order'], function() {
 	
-	describe('query Builder test', function() {
+	describe('Query builder test', function() {
 		
 		it('should remove forced when forcing on already forced url aka: toggle force', function() {
 			
