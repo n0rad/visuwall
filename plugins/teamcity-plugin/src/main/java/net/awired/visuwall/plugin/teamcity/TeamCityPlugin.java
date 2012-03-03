@@ -27,14 +27,23 @@ import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
 
+    private static final Logger LOG = LoggerFactory.getLogger(TeamCityPlugin.class);
+
     @VisibleForTesting
     GenericSoftwareClient genericSoftwareClient = new GenericSoftwareClient("guest", "");
+
+    public TeamCityPlugin() {
+        LOG.info("TeamCity plugin loaded.");
+    }
 
     @Override
     public TeamCityConnection getConnection(URL url, Map<String, String> properties) {
@@ -59,7 +68,7 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
             TeamCityServer teamCityServer = getServer(url.toString());

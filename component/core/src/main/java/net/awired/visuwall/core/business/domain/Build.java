@@ -21,13 +21,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+
+import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityResult;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
@@ -46,7 +46,7 @@ public class Build {
         this.buildId = buildId;
     }
 
-    //TODO move and redo it with dates
+    // TODO move and redo it with dates
     public void mergeResult(TestResult dest, TestResult source) {
         if (dest.getTotalCount() == 0) {
             dest.setCoverage(source.getCoverage());
@@ -67,7 +67,7 @@ public class Build {
     }
 
     public TestResult getUnitTestResult() {
-        // TODO change that 
+        // TODO change that
         TestResult result = new TestResult();
         for (SoftwareProjectId softwareProjectId : capabilitiesResults.keySet()) {
             CapabilitiesResult capabilitiesResult = capabilitiesResults.get(softwareProjectId);
@@ -101,7 +101,7 @@ public class Build {
         return result;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////////
 
     public long getDuration() {
         return duration;

@@ -44,9 +44,9 @@ import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
 import net.awired.visuwall.api.domain.quality.QualityMetric;
 import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -389,7 +389,7 @@ public class SonarConnectionTest {
     public void should_not_fail_if_url_is_not_manageable() throws Exception {
         SonarPlugin sonarPlugin = new SonarPlugin();
         String url = "http://www.google.fr";
-        sonarPlugin.getSoftwareId(new URL(url));
+        sonarPlugin.getSoftwareId(new URL(url), null);
     }
 
     private Map<String, SonarQualityMetric> createMetricList() {

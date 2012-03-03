@@ -55,14 +55,14 @@ public class BambooPluginTest {
     @Test(expected = SoftwareNotFoundException.class)
     public void should_not_get_software_id_without_version() throws Exception {
         URL url = new URL("http://bamboo:8080");
-        SoftwareId softwareId = bamboo.getSoftwareId(url);
+        SoftwareId softwareId = bamboo.getSoftwareId(url, null);
         assertEquals("Bamboo", softwareId.getName());
         assertEquals("version not found", softwareId.getVersion());
     }
 
     @Test(expected = NullPointerException.class)
     public void cant_pass_null_as_url_parameter() throws SoftwareNotFoundException {
-        bamboo.getSoftwareId(null);
+        bamboo.getSoftwareId(null, null);
     }
 
     @Test

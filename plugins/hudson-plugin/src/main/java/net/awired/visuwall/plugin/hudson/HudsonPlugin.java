@@ -16,23 +16,30 @@
 
 package net.awired.visuwall.plugin.hudson;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.awired.clients.common.GenericSoftwareClient;
+import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import com.google.common.io.ByteStreams;
-import com.google.common.io.Closeables;
 
 public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(HudsonPlugin.class);
+
+    public HudsonPlugin() {
+        LOG.info("Hudson plugin loaded.");
+    }
 
     @Override
     public HudsonConnection getConnection(URL url, Map<String, String> properties) {
@@ -59,20 +66,36 @@ public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
+        if (properties == null) {
+            properties = getPropertiesWithDefaultValue();
+        }
         try {
+            GenericSoftwareClient client = createClient(properties);
             URL apiUrl = new URL(url.toString() + "/api/");
-            String xml = getContent(apiUrl);
+            String xml = client.download(apiUrl);
             if (isManageable(xml)) {
                 return createSoftwareId(xml);
             }
             throw new SoftwareNotFoundException("Url " + url + " is not compatible with Hudson, content: " + xml);
         } catch (MalformedURLException e) {
             throw new SoftwareNotFoundException("Url " + url + " is not compatible with Hudson", e);
-        } catch (IOException e) {
+        } catch (ResourceNotFoundException e) {
             throw new SoftwareNotFoundException("Url " + url + " is not compatible with Hudson", e);
         }
+    }
+
+    private GenericSoftwareClient createClient(Map<String, String> properties) {
+        GenericSoftwareClient client;
+        if (properties.containsKey("login") && properties.containsKey("password")) {
+            String login = properties.get("login");
+            String password = properties.get("password");
+            client = new GenericSoftwareClient(login, password);
+        } else {
+            client = new GenericSoftwareClient();
+        }
+        return client;
     }
 
     @Override
@@ -98,19 +121,9 @@ public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
         return xml.contains("Remote API [Hudson]");
     }
 
-    private String getContent(URL url) throws IOException {
-        InputStream stream = null;
-        try {
-            stream = url.openStream();
-            byte[] content = ByteStreams.toByteArray(stream);
-            return new String(content);
-        } finally {
-            Closeables.closeQuietly(stream);
-        }
-    }
-
     @Override
     public Map<String, String> getPropertiesWithDefaultValue() {
         return new HashMap<String, String>();
     }
+
 }

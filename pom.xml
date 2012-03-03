@@ -7,7 +7,8 @@
 	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
 	the specific language governing permissions and limitations under the License. -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.awired.visuwall</groupId>
@@ -156,10 +157,10 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-                                <groupId>net.awired.visuwall</groupId>
-                                <artifactId>visuwall-plugin-deployit</artifactId>
-                                <version>${project.version}</version>
-                        </dependency>
+				<groupId>net.awired.visuwall</groupId>
+				<artifactId>visuwall-plugin-deployit</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<!-- clients -->
 			<dependency>
@@ -284,7 +285,7 @@
 									<action>
 										<ignore />
 									</action>
-								</pluginExecution>							
+								</pluginExecution>
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>

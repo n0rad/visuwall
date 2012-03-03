@@ -56,12 +56,12 @@ public class DeployItPluginTest {
 
     @Test(expected = NullPointerException.class)
     public void should_get_null_for_null_url() throws SoftwareNotFoundException {
-        assertNull(plugin.getSoftwareId(null));
+        assertNull(plugin.getSoftwareId(null, null));
     }
 
     @Test(expected = SoftwareNotFoundException.class)
     public void should_get_null_for_invalid_url() throws Exception {
-        assertNull(plugin.getSoftwareId(new URL("http://something.else")));
+        assertNull(plugin.getSoftwareId(new URL("http://something.else"), null));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class DeployItPluginTest {
         URL url = new URL("http://deployit:4516");
         when(genericSoftwareClient.exist(anyString(), eq(RepositoryObjectIds.class))).thenReturn(true);
 
-        SoftwareId softwareId = plugin.getSoftwareId(url);
+        SoftwareId softwareId = plugin.getSoftwareId(url, null);
         assertEquals("DeployIt", softwareId.getName());
         assertEquals("unknown", softwareId.getVersion());
         assertEquals("", softwareId.getWarnings());

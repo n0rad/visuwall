@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
@@ -14,9 +15,11 @@ import net.awired.visuwall.api.plugin.capability.ViewCapability;
 import net.awired.visuwall.core.business.domain.CapabilityEnum;
 import net.awired.visuwall.core.business.domain.PluginInfo;
 import net.awired.visuwall.core.business.domain.SoftwareInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import com.google.common.base.Preconditions;
 
 @Service
@@ -44,17 +47,20 @@ public class VisuwallSpiService implements PluginServiceInterface {
     public BasicCapability getPluginConnectionFromUrl(URL url, Map<String, String> properties) {
         for (VisuwallPlugin<BasicCapability> visuwallPlugin : getPlugins()) {
             try {
-                visuwallPlugin.getSoftwareId(url);
+                visuwallPlugin.getSoftwareId(url, properties);
+                if (LOG.isInfoEnabled()) {
+                    LOG.info(visuwallPlugin.getName() + " is compatible with url " + url);
+                }
                 return visuwallPlugin.getConnection(url, properties);
             } catch (SoftwareNotFoundException e) {
                 if (LOG.isInfoEnabled()) {
-                    LOG.info("Plugin " + visuwallPlugin + " can't manage url " + url);
+                    LOG.info(visuwallPlugin.getName() + " can't manage url " + url);
                 }
             } catch (Throwable e) {
-                LOG.warn("Plugin " + visuwallPlugin + " throws exception on url " + url, e);
+                LOG.warn(visuwallPlugin.getName() + " throws exception on url " + url, e);
             }
         }
-        throw new RuntimeException("no plugin to manage url " + url);
+        throw new RuntimeException("No plugin to manage url " + url);
     }
 
     @Override
@@ -63,7 +69,7 @@ public class VisuwallSpiService implements PluginServiceInterface {
             SoftwareId softwareId = null;
             BasicCapability connectionPlugin = null;
             try {
-                softwareId = visuwallPlugin.getSoftwareId(url);
+                softwareId = visuwallPlugin.getSoftwareId(url, properties);
                 Preconditions.checkNotNull(softwareId, "isManageable() should not return null", visuwallPlugin);
 
                 SoftwareInfo softwareInfo = new SoftwareInfo();
@@ -78,16 +84,17 @@ public class VisuwallSpiService implements PluginServiceInterface {
                 }
                 return softwareInfo;
             } catch (SoftwareNotFoundException e) {
-                LOG.debug("Plugin " + visuwallPlugin + " can not manage url " + url);
+                LOG.debug(visuwallPlugin.getName() + " can not manage url " + url);
             } catch (Throwable e) {
-                LOG.warn("Plugin " + visuwallPlugin + " throws exception on url " + url, e);
+                LOG.warn(visuwallPlugin.getName() + " throws exception on url " + url, e);
             } finally {
                 if (connectionPlugin != null) {
                     connectionPlugin.close();
                 }
             }
         }
-        throw new RuntimeException("no plugin to manage url " + url);
+        throw new RuntimeException("No plugin to manage url " + url
+                + ". Maybe you should add credentials (login/password)");
     }
 
     @Override

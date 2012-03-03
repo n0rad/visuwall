@@ -68,9 +68,8 @@ public class TeamCityPluginTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance()
-            throws SoftwareNotFoundException {
-        new TeamCityPlugin().getSoftwareId(null);
+    public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance() throws SoftwareNotFoundException {
+        new TeamCityPlugin().getSoftwareId(null, null);
     }
 
     @Test
@@ -92,7 +91,7 @@ public class TeamCityPluginTest {
         server.setVersionMinor(0);
         when(genericSoftwareClient.resource(anyString(), any(Class.class))).thenReturn(server);
 
-        SoftwareId softwareId = plugin.getSoftwareId(teamcityUrl);
+        SoftwareId softwareId = plugin.getSoftwareId(teamcityUrl, null);
 
         String name = softwareId.getName();
         String version = softwareId.getVersion();
@@ -108,6 +107,6 @@ public class TeamCityPluginTest {
         Throwable notFound = new ResourceNotFoundException("not found");
         when(genericSoftwareClient.resource(anyString(), any(Class.class))).thenThrow(notFound);
 
-        plugin.getSoftwareId(teamcityUrl);
+        plugin.getSoftwareId(teamcityUrl, null);
     }
 }

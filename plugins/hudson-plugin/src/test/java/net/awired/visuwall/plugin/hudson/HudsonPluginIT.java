@@ -1,24 +1,54 @@
 package net.awired.visuwall.plugin.hudson;
 
-import java.net.URL;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import net.awired.visuwall.api.domain.SoftwareProjectId;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.awired.visuwall.api.domain.SoftwareId;
 
 import org.junit.Test;
 
 public class HudsonPluginIT {
 
-    final HudsonPlugin hudsonPlugin = new HudsonPlugin();
+    HudsonPlugin hudsonPlugin = new HudsonPlugin();
+
+    String url = "http://localhost:8220";
 
     @Test
-    public void should_check_plugin_management() throws Exception {
-        URL hudsonUrl = new URL("http://ci.visuwall.awired.net/");
-        HudsonConnection connection = hudsonPlugin.getConnection(hudsonUrl,
-                hudsonPlugin.getPropertiesWithDefaultValue());
-        SoftwareProjectId projectId = new SoftwareProjectId("struts 2 instable");
-        System.out.println(connection.isBuilding(projectId, "5"));
-        System.out.println(connection.isBuilding(projectId, "4"));
+    public void should_connect_with_fduthu() throws Exception {
+        URL hudsonUrl = new URL(url);
 
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put("login", "fduthu");
+        properties.put("password", "password");
+
+        HudsonConnection connection = hudsonPlugin.getConnection(hudsonUrl, properties);
+        assertNotNull(connection);
+        assertEquals(1, connection.listSoftwareProjectIds().size());
     }
 
+    @Test
+    public void should_connect_with_authenticated() throws Exception {
+        URL hudsonUrl = new URL(url);
+
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put("login", "authenticated");
+        properties.put("password", "password");
+
+        HudsonConnection connection = hudsonPlugin.getConnection(hudsonUrl, properties);
+        assertNotNull(connection);
+        assertEquals(1, connection.listSoftwareProjectIds().size());
+    }
+
+    @Test
+    public void should_connect_with_guest() throws Exception {
+        URL hudsonUrl = new URL(url);
+        SoftwareId softwareId = hudsonPlugin.getSoftwareId(hudsonUrl, null);
+        assertNotNull(softwareId);
+        assertTrue(softwareId.isCompatible());
+    }
 }

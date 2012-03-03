@@ -57,7 +57,7 @@ public class DeployItPlugin implements VisuwallPlugin<DeployItConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
         if (isDeployIt(url.toString())) {
             return createSoftwareId();

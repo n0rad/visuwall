@@ -29,6 +29,9 @@ import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Objects;
 
 public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
@@ -36,6 +39,8 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
     private static final double SONAR_MINIMUM_COMPATIBLE_VERSION = 2.4;
 
     static final String SONAR_CORE_VERSION_KEY = "sonar.core.version";
+
+    private static final Logger LOG = LoggerFactory.getLogger(SonarPlugin.class);
 
     private GenericSoftwareClient client;
 
@@ -51,6 +56,7 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
     public SonarPlugin() {
         client = new GenericSoftwareClient();
         sonarConnectionFactory = new SonarConnectionFactory();
+        LOG.info("Sonar plugin loaded.");
     }
 
     @Override
@@ -77,7 +83,7 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         checkNotNull(url, "url is mandatory");
         if (sonarDetector.isSonarPropertiesPage(url)) {
             return createSoftwareIdFromProperties(url);
