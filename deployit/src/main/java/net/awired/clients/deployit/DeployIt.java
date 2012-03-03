@@ -11,12 +11,8 @@ import net.awired.clients.deployit.resource.ArchivedTasks;
 import net.awired.clients.deployit.resource.RepositoryObjectIds;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class DeployIt {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DeployIt.class);
 
     private GenericSoftwareClient client;
 

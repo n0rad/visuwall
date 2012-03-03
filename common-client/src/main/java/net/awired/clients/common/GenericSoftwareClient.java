@@ -127,4 +127,8 @@ public class GenericSoftwareClient {
         }
     }
 
+    public String download(URL apiUrl) throws ResourceNotFoundException {
+        return resource(apiUrl.toString(), String.class, MediaType.TEXT_PLAIN_TYPE);
+    }
+
 }
