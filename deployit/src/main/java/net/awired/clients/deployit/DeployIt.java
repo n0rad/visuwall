@@ -21,7 +21,11 @@ public class DeployIt {
     public DeployIt(String url, String login, String password) {
         checkNotNull(url, "url is mandatory");
         this.urlBuilder = new DeployItUrlBuilder(url);
-        this.client = new GenericSoftwareClient(login, password);
+        if (login != null && password != null) {
+            this.client = new GenericSoftwareClient(login, password);
+        } else {
+            this.client = new GenericSoftwareClient();
+        }
     }
 
     public ArchivedTasks getArchivedTasks() throws ResourceNotFoundException {
