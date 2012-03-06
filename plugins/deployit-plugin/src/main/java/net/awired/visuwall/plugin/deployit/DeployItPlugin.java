@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.awired.clients.common.GenericSoftwareClient;
+import net.awired.clients.common.GenericSoftwareClientFactory;
 import net.awired.clients.deployit.resource.RepositoryObjectIds;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
@@ -20,10 +21,12 @@ public class DeployItPlugin implements VisuwallPlugin<DeployItConnection> {
 
     private final static Logger LOG = LoggerFactory.getLogger(DeployItPlugin.class);
 
-    private GenericSoftwareClient genericSoftwareClient = new GenericSoftwareClient("admin", "admin");
+    private GenericSoftwareClient client;
+    private GenericSoftwareClientFactory factory;
 
     public DeployItPlugin() {
         LOG.info("DeployIt plugin loaded.");
+        factory = new GenericSoftwareClientFactory();
     }
 
     @Override
@@ -36,8 +39,6 @@ public class DeployItPlugin implements VisuwallPlugin<DeployItConnection> {
     @Override
     public Map<String, String> getPropertiesWithDefaultValue() {
         Map<String, String> properties = new HashMap<String, String>();
-        properties.put("login", "admin");
-        properties.put("password", "admin");
         return properties;
     }
 
@@ -59,6 +60,7 @@ public class DeployItPlugin implements VisuwallPlugin<DeployItConnection> {
     @Override
     public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
+        client = factory.createClient(properties);
         if (isDeployIt(url.toString())) {
             return createSoftwareId();
         }
@@ -75,6 +77,6 @@ public class DeployItPlugin implements VisuwallPlugin<DeployItConnection> {
 
     private boolean isDeployIt(String url) {
         String serverUrl = url + "/deployit/query";
-        return genericSoftwareClient.exist(serverUrl, RepositoryObjectIds.class);
+        return client.exist(serverUrl, RepositoryObjectIds.class);
     }
 }

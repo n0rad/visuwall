@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.awired.clients.common.GenericSoftwareClient;
+import net.awired.clients.common.GenericSoftwareClientFactory;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.SoftwareNotFoundException;
@@ -37,8 +38,11 @@ public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
 
     private static final Logger LOG = LoggerFactory.getLogger(HudsonPlugin.class);
 
+    private GenericSoftwareClientFactory factory;
+
     public HudsonPlugin() {
         LOG.info("Hudson plugin loaded.");
+        factory = new GenericSoftwareClientFactory();
     }
 
     @Override
@@ -72,7 +76,7 @@ public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
             properties = getPropertiesWithDefaultValue();
         }
         try {
-            GenericSoftwareClient client = createClient(properties);
+            GenericSoftwareClient client = factory.createClient(properties);
             URL apiUrl = new URL(url.toString() + "/api/");
             String xml = client.download(apiUrl);
             if (isManageable(xml)) {
@@ -84,18 +88,6 @@ public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
         } catch (ResourceNotFoundException e) {
             throw new SoftwareNotFoundException("Url " + url + " is not compatible with Hudson", e);
         }
-    }
-
-    private GenericSoftwareClient createClient(Map<String, String> properties) {
-        GenericSoftwareClient client;
-        if (properties.containsKey("login") && properties.containsKey("password")) {
-            String login = properties.get("login");
-            String password = properties.get("password");
-            client = new GenericSoftwareClient(login, password);
-        } else {
-            client = new GenericSoftwareClient();
-        }
-        return client;
     }
 
     @Override

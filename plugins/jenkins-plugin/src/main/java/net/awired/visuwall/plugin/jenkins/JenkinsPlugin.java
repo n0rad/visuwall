@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.awired.clients.common.GenericSoftwareClient;
+import net.awired.clients.common.GenericSoftwareClientFactory;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.SoftwareNotFoundException;
@@ -37,8 +38,11 @@ public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
 
+    private GenericSoftwareClientFactory factory;
+
     public JenkinsPlugin() {
         LOG.info("Jenkins plugin loaded.");
+        factory = new GenericSoftwareClientFactory();
     }
 
     @Override
@@ -72,7 +76,7 @@ public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
             properties = getPropertiesWithDefaultValue();
         }
         try {
-            GenericSoftwareClient client = createClient(properties);
+            GenericSoftwareClient client = factory.createClient(properties);
             URL apiUrl = new URL(url.toString() + "/api/");
             String xml = client.download(apiUrl);
             JenkinsVersionPage jenkinsApiPage = new JenkinsVersionPage(xml);
@@ -85,18 +89,6 @@ public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
             throw new SoftwareNotFoundException("Url " + url + " is not compatible with Jenkins", e);
         }
         throw new SoftwareNotFoundException("Url " + url + " is not compatible with Jenkins");
-    }
-
-    private GenericSoftwareClient createClient(Map<String, String> properties) {
-        GenericSoftwareClient client;
-        if (properties.containsKey("login") && properties.containsKey("password")) {
-            String login = properties.get("login");
-            String password = properties.get("password");
-            client = new GenericSoftwareClient(login, password);
-        } else {
-            client = new GenericSoftwareClient();
-        }
-        return client;
     }
 
     @Override
