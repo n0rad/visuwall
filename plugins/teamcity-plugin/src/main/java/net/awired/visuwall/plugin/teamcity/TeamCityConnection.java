@@ -71,6 +71,8 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
 
     private boolean connected;
 
+    private TestResultExtractor testResultExtractor = new TestResultExtractor();
+
     @VisibleForTesting
     TeamCity teamCity;
 
@@ -347,9 +349,9 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
             }
             TeamCityBuild build = teamCity.findBuild(softwareProjectId.getProjectId(), lastBuildId.toString());
             String statusText = build.getStatusText();
-            int failed = TestResultExtractor.extractFailed(statusText);
-            int passed = TestResultExtractor.extractPassed(statusText);
-            int ignored = TestResultExtractor.extractIgnored(statusText);
+            int failed = testResultExtractor.extractFailed(statusText);
+            int passed = testResultExtractor.extractPassed(statusText);
+            int ignored = testResultExtractor.extractIgnored(statusText);
             result.setFailCount(failed);
             result.setPassCount(passed);
             result.setSkipCount(ignored);
