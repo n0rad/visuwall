@@ -8,7 +8,7 @@ define(['jquery', //
         'Ajsl/event', //
         'Ajsl/view', //
         
-        'css!Visuwall/Theme/Global/Navigation/navigation.css', //
+        'css!Visuwall/Theme/Global/Navigation/navigation.css' //
         ], function($, _, visuwallVersion, HelperTemplate, NavigationTemplate, wallFormView, wallService, event, view) {
 	"use strict";
 	
@@ -27,35 +27,30 @@ define(['jquery', //
 			});
 		});
 	};
-	
-	var navigationEvent = new function() {
-		var $this = this;
 
-		this.context;
+	var navigationEvent = {
+			
+		context : 'DIV#navigationContainer',
 
-		$(function() {
-			$this.context = 'DIV#navigationContainer';
-		});
+		'|init' : function() {
+			navigationEvent['|mouseleave']();
+		},
 
-		this['|init'] = function() {
-			$this['|mouseleave']();
-		};
-
-		this['|mouseenter'] = function() {
+		'|mouseenter' : function() {
 			if (toggleFlag == 'wait') {
 				toggleFlag = 'show';
 			} else if (toggleFlag == 'hide') {
 				toggleFlag = 'show';
 				$("#navigation").slideDown("fast");
 			}
-		};
+		},
 
-		this['|mouseleave'] = function() {
+		'|mouseleave' : function() {
 			toggleFlag = 'wait';
 			window.setTimeout(navigationLeaveEvent, 1000);
-		};
+		},
 
-		this['#fontSizeSlider|init'] = function() {
+		'#fontSizeSlider|init' : function() {
 			var slideFunc = function(e, ui) {
 				$('#projectsTable').css({
 					fontSize : ui.value + 'em'
@@ -77,9 +72,9 @@ define(['jquery', //
 				$.cookie('sliderValue', start);
 			}
 			$(this).slider("option", "value", start);
-		};
+		},
 
-		this['#helperimg|init'] = function() {
+		'#helperimg|init' : function() {
 			$("#helperimg").qtip({
 				content : $(HelperTemplate),
 				position : {
@@ -110,56 +105,49 @@ define(['jquery', //
 	               name: 'cream' // Style it according to the preset 'cream' style
 	            }
 			});
-		};
+		},
 
-		this['#wallSelector #wallSelect|init'] = function() {
+		'#wallSelector #wallSelect|init' : function() {
 			wallService.wall(function(wallNameList) {
 				navigationView.replaceWallList(wallNameList);
 			});
-		};
+		},
 
-		this['#wallSelector #wallSelect|change'] = function() {
+		'#wallSelector #wallSelect|change' : function() {
 			$.history.queryBuilder().addController('wall', $('#wallSelector #wallSelect').val()).load();
-		};
+		},
 
-		this['#wallSelector #edit|click'] = function() {
+		'#wallSelector #edit|click' : function() {
 			navigationLeaveEvent();
 			var wallId = $('#wallSelector #wallSelect').val();
 			if (wallId) {
 				$.history.queryBuilder().addController('wall/edit', wallId)
 						.load();
 			}
-		};
+		},
 
-		this['#wallSelector #edit2|click'] = function() {
+		'#wallSelector #edit2|click' : function() {
 			navigationLeaveEvent();
 			var wallId = $('#wallSelector #wallSelect').val();
 			if (wallId) {
 				$.history.queryBuilder().removeController('wall/edit').addController('wall/edit2', wallId)
 						.load();
 			}
-		};
-		this['#wallSelector #add2|click'] = function() {
-			$.history.queryBuilder().removeController('wall/create').addController('wall/create2').load();
-		};
-
-		this['#wallSelector #add|click'] = function() {
-			$.history.queryBuilder().addController('wall/create').load();
-		};
-
-	};
-
-	
-	var navigationView =  new function() {
-		var $this = this;
+		},
 		
-		this.navigation;
-			
-		this.init = function() {
-			this.navigation = $('#navigation');
-		};
+		'#wallSelector #add2|click' : function() {
+			$.history.queryBuilder().removeController('wall/create').addController('wall/create2').load();
+		},
 
-		this.replaceWallList = function(newWallList) {
+		'#wallSelector #add|click' : function() {
+			$.history.queryBuilder().addController('wall/create').load();
+		}
+	};
+	
+	var navigationView = {
+		navigation : $('#navigation'),
+			
+		replaceWallList : function(newWallList) {
 			var select = $('#wallSelect', this.navigation);
 			var selectedValue = select.val();
 			select.children().remove();
@@ -170,9 +158,8 @@ define(['jquery', //
 				select.append(newOption);
 			}
 			select.val(selectedValue);
-		};
+		}
 	};
-
 	event.register(navigationEvent, $('DIV#navigationContainer'));
 	
 	return navigationView;

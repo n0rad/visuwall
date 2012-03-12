@@ -101,19 +101,19 @@ DIV#visuwallForm LABEL.check {
 }
 
 DIV#visuwallForm LABEL.loadingCheck {
-	background: transparent url('../img/ajax-loader.gif') no-repeat;
+	background: transparent url('../WallForm/img/ajax-loader.gif') no-repeat;
 }
 
 DIV#visuwallForm LABEL.successCheck {
-	background: transparent url('../img/tick.png') no-repeat;
+	background: transparent url('../WallForm/img/tick.png') no-repeat;
 }
 
 DIV#visuwallForm LABEL.failureCheck {
-	background: transparent url('../img/tick-no.png') no-repeat;
+	background: transparent url('../WallForm/img/tick-no.png') no-repeat;
 }
 
 DIV#visuwallForm LABEL.warningCheck {
-	background: transparent url('../img/warning.png') no-repeat;
+	background: transparent url('../WallForm/img/warning.png') no-repeat;
 }
 
 DIV#visuwallForm .ui-state-active,

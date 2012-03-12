@@ -1,11 +1,11 @@
 define(['jquery', // 
         'log', //
         'Visuwall/Service/wallService', //
-        'Visuwall/Theme/VisuSpace/Wall/wallView', //
+        'Visuwall/wallView', //
         'Visuwall/Service/projectService' //
         ], function($, log, wallService, wallView, projectService) {
 	"use strict";
-		
+
 	var wallProcess = function(wallName) {
 		var $this = this;
 		

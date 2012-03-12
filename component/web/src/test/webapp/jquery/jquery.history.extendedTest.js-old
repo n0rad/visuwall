@@ -39,6 +39,15 @@ define(['js!Underscore.js!order',
 			
 			expect(parseRequest).toEqual([{ctrlVars : ['toto42'], ctrl : 'wall', vars : {}, forced : true}]);
 		});
+		
+		it('should fail', function() {
+
+			expect('genre style ouda').toBe('genre sstyle ouda');
+		});
+		
+		it('should error', function() {
+			throw 'error';
+		});
 			
 	});
 });

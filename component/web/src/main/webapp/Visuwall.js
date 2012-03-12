@@ -20,7 +20,7 @@ define(['jquery', //
         'Visuwall/Service/wallService', //
         'js!ajsl-utils.js', //
         
-        'css!visuwall.css', //
+        'css!visuwall.css' //
         ], function($, Dispatcher, navigationView, wallService) {
 	"use strict";
 

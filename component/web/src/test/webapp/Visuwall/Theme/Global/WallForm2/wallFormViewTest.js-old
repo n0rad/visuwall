@@ -1,0 +1,48 @@
+define('jquery', ['js!jquery-1.4.3.js!order',
+                  'css!jquery/jquery.marquee.min.css',
+                  'css!jquery/jquery.selectBox.css',
+                  
+                  'js!jquery/jquery.ajsl.js!order',
+                  'js!jquery/jquery.cookie.js!order',
+                  'js!jquery/jquery.marquee.js!order',
+                  'js!jquery/jquery.timeago.js!order',
+                  'js!jquery/jquery.selector.js!order',
+                  'js!jquery/jquery.selectBox.js!order',
+                  'js!jquery/jquery.countdown.js!order',
+                  'js!jquery/jquery.textfill.0.1.js!order',
+                  'js!jquery/jquery.qtip-1.0.0-rc3.js!order',
+                  'js!jquery/jquery.selectbox-0.6.1.js!order',
+                  'js!jquery/jquery.history.js!order',
+                  'js!jquery/jquery.history.extended.js!order'
+                  ], function() {
+	var jquery = $;
+	$.noConflict();
+	return jquery;
+});
+
+define('log', [ 'Ajsl/Log' ], function(log) {
+	return log;
+});
+
+define('underscore', ['js!Underscore.js!order'],  function() {
+//	var underscore = _;
+//	underscore.noConflict();
+//	return _;
+});
+
+define('Visuwall/Service/pluginService', [], function() {
+	
+});
+define('Visuwall/Service/wallService', [], function() {
+	
+});
+
+
+define(['Visuwall/Theme/Global/WallForm2/wallFormView'], function(wallFormView) {
+	describe('wallFormViewTest', function() {
+
+		it('should ', function() {			
+			expect(true).toBe(false);
+		});
+	});
+});
