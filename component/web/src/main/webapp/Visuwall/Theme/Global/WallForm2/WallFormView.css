@@ -128,3 +128,49 @@ DIV#visuwallForm DIV.projects {
 	position: absolute;
 	right: 20px;
 }
+
+DIV#visuwallForm {
+	display: none;
+	position: absolute;
+	width: 100%;
+}
+DIV#over {
+	background: #666 url('../Wall/back-texture.png') 50% 50% repeat;
+	opacity: .50;
+	filter: Alpha(Opacity =     50);
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	display: none;
+}
+DIV#visuwallForm FORM#wallForm {
+	width: 950px;
+	margin: auto;
+}
+DIV#visuwallForm FORM#wallForm INPUT,
+DIV#visuwallForm FORM#wallForm LABEL {
+	display: block;
+	width: 220px;
+}
+/*** sortables ***/
+DIV#visuwallForm FORM#wallForm UL.projectList LI,
+DIV#visuwallForm FORM#wallForm UL.viewList LI,
+DIV#visuwallForm FORM#wallForm UL.projectTabNav LI,
+DIV#visuwallForm FORM#wallForm UL.softwareElementList LI {
+	display: block;
+	height: 1.5em;
+	line-height: 1.5em;
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+}
+DIV#visuwallForm  LI.projectItem {
+	display: block;
+	height: 1.5em;
+	line-height: 1.5em;
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+}
+DIV#visuwallForm  LI.projectItem DIV.addProject {
+	display: inline-block;
+	float: right;
+}

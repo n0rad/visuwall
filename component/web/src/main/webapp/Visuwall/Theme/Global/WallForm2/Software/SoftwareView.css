@@ -27,6 +27,13 @@ FORM#wallForm #softTabs .ui-tabs-nav li a {
 	outline: medium none;
 }
 
+FORM#wallForm #softTabs SPAN.urlDemo {
+	font-size: 0.8em;
+	color: #666;
+	cursor: pointer;
+	padding-left: 10px;
+}
+
 /*** softwareInfo ***/
 FORM#wallForm DIV.softwareInfo {
 	float: left;
@@ -34,7 +41,7 @@ FORM#wallForm DIV.softwareInfo {
 }
 
 FORM#wallForm DIV.softwareInfo INPUT.url {
-	width: 450px;
+	width: 450px !important;
 }
 
 FORM#wallForm DIV.softwareInfo DIV.element {

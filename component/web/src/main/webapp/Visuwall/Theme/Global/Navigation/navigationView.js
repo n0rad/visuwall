@@ -35,7 +35,6 @@ define(['jquery', //
 		'|init' : function() {
 			navigationEvent['|mouseleave']();
 		},
-
 		'|mouseenter' : function() {
 			if (toggleFlag == 'wait') {
 				toggleFlag = 'show';
@@ -44,12 +43,10 @@ define(['jquery', //
 				$("#navigation").slideDown("fast");
 			}
 		},
-
 		'|mouseleave' : function() {
 			toggleFlag = 'wait';
 			window.setTimeout(navigationLeaveEvent, 1000);
 		},
-
 		'#fontSizeSlider|init' : function() {
 			var slideFunc = function(e, ui) {
 				$('#projectsTable').css({
@@ -57,15 +54,7 @@ define(['jquery', //
 				});
 				$.cookie('sliderValue', ui.value);
 			};
-
-			$(this).slider({
-				min : 0.5,
-				max : 1.2,
-				step : 0.01,
-				slide : slideFunc,
-				change : slideFunc
-			});
-			
+			$(this).slider({min : 0.5, max : 1.2, step : 0.01, slide : slideFunc, change : slideFunc});
 			var start = $.cookie('sliderValue');
 			if (!start) {
 				start = 0.6;
@@ -73,32 +62,12 @@ define(['jquery', //
 			}
 			$(this).slider("option", "value", start);
 		},
-
 		'#helperimg|init' : function() {
 			$("#helperimg").qtip({
 				content : $(HelperTemplate),
-				position : {
-					corner : {
-						tooltip : 'topRight',
-						target : 'bottomLeft'
-					}
-				},
-//				show : {
-//					when : 'click',
-//					solo : true
-//				},
-//	            hide: false, // Don't specify a hide event
+				position : {corner : {tooltip : 'topRight', target : 'bottomLeft'}},
 	            style: {
-//	               width: {
-//	            	   min: 300
-//	               },
-//	               height: {
-//	            	   min: 300
-//	               },
-	               border: {
-	                  width: 5,
-	                  radius: 2
-	               },
+	               border: {width: 5, radius: 2},
 	               padding: 10, 
 	               textAlign: 'center',
 	               tip: true, // Give it a speech bubble tip with automatic corner detection
@@ -106,17 +75,14 @@ define(['jquery', //
 	            }
 			});
 		},
-
 		'#wallSelector #wallSelect|init' : function() {
 			wallService.wall(function(wallNameList) {
 				navigationView.replaceWallList(wallNameList);
 			});
 		},
-
 		'#wallSelector #wallSelect|change' : function() {
 			$.history.queryBuilder().addController('wall', $('#wallSelector #wallSelect').val()).load();
 		},
-
 		'#wallSelector #edit|click' : function() {
 			navigationLeaveEvent();
 			var wallId = $('#wallSelector #wallSelect').val();
@@ -125,7 +91,6 @@ define(['jquery', //
 						.load();
 			}
 		},
-
 		'#wallSelector #edit2|click' : function() {
 			navigationLeaveEvent();
 			var wallId = $('#wallSelector #wallSelect').val();
@@ -134,11 +99,9 @@ define(['jquery', //
 						.load();
 			}
 		},
-		
 		'#wallSelector #add2|click' : function() {
 			$.history.queryBuilder().removeController('wall/create').addController('wall/create2').load();
 		},
-
 		'#wallSelector #add|click' : function() {
 			$.history.queryBuilder().addController('wall/create').load();
 		}

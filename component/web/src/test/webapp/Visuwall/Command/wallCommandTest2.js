@@ -1,24 +1,22 @@
+curl.undefine(true);
 var showWall = jasmine.createSpy('wallController.showWall');
 
 define('Visuwall/Controller/wallFormController', function() {
-	alert("wallForm2");
-	return {};
 });
 
 define('Visuwall/Controller/wallController', function() {	
-	alert("wall2");
 	return {showWall : function() {
-		alert("yo");
+		throw "yop";
 	}};
 });
 
 define(['Visuwall/Command/wallCommand'], function(wallCommand) {
-	describe('wallCommandTest', function() {
-		it('should delegate to controller to show wall', function() {			
+	describe('wallCommandTest42', function() {
+		it('should delegate to controller to show wallss', function() {			
 			
 			wallCommand.run(null, 'mywallname');
 			
-//			expect(showWall).toHaveBeenCalledWith('mywallname');
+			expect(showWall).toHaveBeenCalledWith('mywallname');
 		});
 	});
 });

@@ -1,4 +1,5 @@
-define(['jquery', 'Ajsl/event'], 
+define(['jquery', 'Ajsl/event',
+        'jquery-ui'], 
 function($, event) {
 	'use strict';
 
