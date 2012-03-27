@@ -13,7 +13,7 @@ public class DeployItPluginIT {
     @Test
     public void should_get_software_id() throws Exception {
         DeployItPlugin plugin = new DeployItPlugin();
-        SoftwareId softwareId = plugin.getSoftwareId(new URL("http://localhost:4516"));
+        SoftwareId softwareId = plugin.getSoftwareId(new URL("http://localhost:4516"), null);
         assertNotNull(softwareId);
     }
 

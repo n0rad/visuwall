@@ -12,6 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import net.awired.clients.common.GenericSoftwareClient;
+import net.awired.clients.common.GenericSoftwareClientFactory;
 import net.awired.clients.deployit.resource.RepositoryObjectIds;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.SoftwareNotFoundException;
@@ -20,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -27,6 +29,9 @@ public class DeployItPluginTest {
 
     @InjectMocks
     DeployItPlugin plugin;
+
+    @Mock
+    GenericSoftwareClientFactory clientFactory;
 
     @Mock
     GenericSoftwareClient genericSoftwareClient;
@@ -56,20 +61,22 @@ public class DeployItPluginTest {
 
     @Test(expected = NullPointerException.class)
     public void should_get_null_for_null_url() throws SoftwareNotFoundException {
-        assertNull(plugin.getSoftwareId(null));
+        assertNull(plugin.getSoftwareId(null, null));
     }
 
     @Test(expected = SoftwareNotFoundException.class)
     public void should_get_null_for_invalid_url() throws Exception {
-        assertNull(plugin.getSoftwareId(new URL("http://something.else")));
+        when(clientFactory.createClient(Mockito.anyMap())).thenReturn(genericSoftwareClient);
+        assertNull(plugin.getSoftwareId(new URL("http://something.else"), null));
     }
 
     @Test
     public void should_get_software_id_for_valid_url() throws MalformedURLException, SoftwareNotFoundException {
         URL url = new URL("http://deployit:4516");
+        when(clientFactory.createClient(Mockito.anyMap())).thenReturn(genericSoftwareClient);
         when(genericSoftwareClient.exist(anyString(), eq(RepositoryObjectIds.class))).thenReturn(true);
 
-        SoftwareId softwareId = plugin.getSoftwareId(url);
+        SoftwareId softwareId = plugin.getSoftwareId(url, null);
         assertEquals("DeployIt", softwareId.getName());
         assertEquals("unknown", softwareId.getVersion());
         assertEquals("", softwareId.getWarnings());

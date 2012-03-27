@@ -17,9 +17,12 @@
 package net.awired.visuwall.plugin.teamcity;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
 import java.util.Calendar;
 import java.util.Date;
+
 import org.junit.Test;
 
 public class DateAdapterTest {
@@ -27,7 +30,7 @@ public class DateAdapterTest {
     @Test
     public void should_parse_date() {
         // 02/03/2011 17h19mn40 + 0300
-        // equivaut a 
+        // equivaut a
         // 02/03/2011 15h19mn40
         Date date = DateAdapter.parseDate("20110302T171940+0300");
 
@@ -42,14 +45,16 @@ public class DateAdapterTest {
         assertEquals(40, cal.get(Calendar.SECOND));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void cant_pass_null_as_parameter() {
-        DateAdapter.parseDate(null);
+    @Test
+    public void can_pass_null_as_parameter() {
+        Date date = DateAdapter.parseDate(null);
+        assertNotNull(date);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void should_throw_exception_when_parameter_is_not_a_date() {
-        DateAdapter.parseDate("not_a_date");
+        Date date = DateAdapter.parseDate("not_a_date");
+        assertNotNull(date);
     }
 
 }

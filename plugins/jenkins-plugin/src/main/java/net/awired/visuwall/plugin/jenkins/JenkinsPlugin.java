@@ -16,11 +16,14 @@
 
 package net.awired.visuwall.plugin.jenkins;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.awired.clients.common.GenericSoftwareClient;
+import net.awired.clients.common.GenericSoftwareClientFactory;
+import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
@@ -34,6 +37,13 @@ import com.google.common.base.Preconditions;
 public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JenkinsPlugin.class);
+
+    private GenericSoftwareClientFactory factory;
+
+    public JenkinsPlugin() {
+        LOG.info("Jenkins plugin loaded.");
+        factory = new GenericSoftwareClientFactory();
+    }
 
     @Override
     public JenkinsConnection getConnection(URL url, Map<String, String> properties) {
@@ -60,19 +70,23 @@ public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
+        if (properties == null) {
+            properties = getPropertiesWithDefaultValue();
+        }
         try {
-            url = new URL(url.toString() + "/api/");
-            String content = Downloadables.getContent(url);
-            JenkinsVersionPage jenkinsApiPage = new JenkinsVersionPage(content);
+            GenericSoftwareClient client = factory.createClient(properties);
+            URL apiUrl = new URL(url.toString() + "/api/");
+            String xml = client.download(apiUrl);
+            JenkinsVersionPage jenkinsApiPage = new JenkinsVersionPage(xml);
             if (jenkinsApiPage.isJenkinsApiPage()) {
                 return jenkinsApiPage.createSoftwareId();
             }
-        } catch (IOException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Can't get content of " + url, e);
-            }
+        } catch (ResourceNotFoundException e) {
+            throw new SoftwareNotFoundException("Url " + url + " is not compatible with Jenkins", e);
+        } catch (MalformedURLException e) {
+            throw new SoftwareNotFoundException("Url " + url + " is not compatible with Jenkins", e);
         }
         throw new SoftwareNotFoundException("Url " + url + " is not compatible with Jenkins");
     }

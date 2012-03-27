@@ -13,7 +13,6 @@ import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.pluto;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.saturn;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.uranus;
 import static net.awired.visuwall.plugin.demo.SoftwareProjectIds.venus;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
 import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
@@ -41,7 +39,6 @@ import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.MetricCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
-
 import org.joda.time.DateTime;
 
 public class DemoConnection implements BuildCapability, TestCapability, ViewCapability, MetricCapability {
@@ -59,6 +56,8 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     private Integer marsBuildId = 1;
 
     private List<String> marsBuildIds = new ArrayList<String>();
+
+    private ChangeStateProject marsProj = new ChangeStateProject();
 
     public DemoConnection() {
         softwareProjectIds.put(moon, "Moon");
@@ -261,13 +260,7 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
             throws BuildNotFoundException, ProjectNotFoundException {
         List<Commiter> commiters = new ArrayList<Commiter>();
         if (softwareProjectId.equals(mars)) {
-            Commiter jsmadja = new Commiter("jsmadja");
-            jsmadja.setEmail("jsmadja@xebia.fr");
-            commiters.add(jsmadja);
-
-            Commiter alemaire = new Commiter("alemaire");
-            alemaire.setEmail("alemaire@xebia.fr");
-            commiters.add(alemaire);
+            return marsProj.getCommiters(buildId);
         }
         return commiters;
     }
@@ -275,6 +268,9 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     @Override
     public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, String buildId) throws BuildNotFoundException,
             ProjectNotFoundException {
+        if (softwareProjectId.equals(mars)) {
+            return marsProj.getBuildTime(buildId);
+        }
         BuildTime buildTime = new BuildTime();
         int milisDuration = randomDuration();
         buildTime.setDuration(milisDuration);
@@ -296,11 +292,7 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     @Override
     public List<String> getBuildIds(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException {
         if (mars.equals(softwareProjectId)) {
-            int start = marsBuildIds.size() - 5;
-            if (start < 0) {
-                start = 0;
-            }
-            return marsBuildIds.subList(start, marsBuildIds.size());
+            return marsProj.getbuildIds();
         }
         List<String> buildIds = new ArrayList<String>();
         buildIds.add("1");
@@ -315,9 +307,7 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
             throw new ProjectNotFoundException("Cannot find project for " + projectId);
         }
         if (mars.equals(projectId)) {
-            int stateIndex = marsBuildId % BuildState.values().length;
-            BuildState marsState = BuildState.values()[stateIndex];
-            buildState = marsState;
+            return marsProj.getBuildState(buildId);
         }
         return buildState;
     }
@@ -325,6 +315,9 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     @Override
     public Date getEstimatedFinishTime(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException {
+        if (projectId.equals(mars)) {
+            return marsProj.estimatedFinishTime();
+        }
         if (projectId.equals(moon)) {
             Date date = new DateTime().plusHours(8).toDate();
             return date;
@@ -335,6 +328,9 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
     @Override
     public boolean isBuilding(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException {
+        if (projectId.equals(mars)) {
+            return marsProj.isBuilding();
+        }
         if (projectId.equals(moon)) {
             return true;
         }
@@ -346,9 +342,7 @@ public class DemoConnection implements BuildCapability, TestCapability, ViewCapa
             BuildIdNotFoundException {
         String lastBuildId = "1";
         if (softwareProjectId.equals(mars)) {
-            lastBuildId = marsBuildId.toString();
-            marsBuildId++;
-            marsBuildIds.add(marsBuildId.toString());
+            return marsProj.getLastBuildId();
         }
         return lastBuildId;
     }

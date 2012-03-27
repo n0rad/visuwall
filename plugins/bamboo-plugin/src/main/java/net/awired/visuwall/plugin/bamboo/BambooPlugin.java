@@ -24,10 +24,19 @@ import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BambooPlugin.class);
+
+    public BambooPlugin() {
+        LOG.info("Bamboo plugin loaded.");
+    }
 
     @Override
     public BambooConnection getConnection(URL url, Map<String, String> properties) {
@@ -58,7 +67,7 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
             SoftwareId softwareId = new SoftwareId();

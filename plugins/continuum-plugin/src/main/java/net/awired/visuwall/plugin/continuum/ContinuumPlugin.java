@@ -5,12 +5,23 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.awired.clients.common.GenericSoftwareClient;
+import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ContinuumPlugin implements VisuwallPlugin<ContinuumConnection> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ContinuumPlugin.class);
+
+    public ContinuumPlugin() {
+        LOG.info("Continuum plugin loaded.");
+    }
 
     @Override
     public ContinuumConnection getConnection(URL url, Map<String, String> properties) throws ConnectionException {
@@ -40,7 +51,7 @@ public class ContinuumPlugin implements VisuwallPlugin<ContinuumConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         if (isManageable(url)) {
             SoftwareId softwareId = new SoftwareId();
             softwareId.setName("Continuum");
@@ -55,9 +66,11 @@ public class ContinuumPlugin implements VisuwallPlugin<ContinuumConnection> {
         try {
             url = new URL(url.toString() + "/groupSummary.action");
             String content;
-            content = Downloadables.getContent(url);
+            content = new GenericSoftwareClient().download(url);
             return content.contains("Continuum");
         } catch (IOException e) {
+            return false;
+        } catch (ResourceNotFoundException e) {
             return false;
         }
     }

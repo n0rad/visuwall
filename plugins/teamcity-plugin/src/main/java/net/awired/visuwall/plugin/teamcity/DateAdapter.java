@@ -16,13 +16,17 @@
 
 package net.awired.visuwall.plugin.teamcity;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class DateAdapter {
 
     private static final SimpleDateFormat TEAMCITY_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmssZ");
+
+    private static final Logger LOG = LoggerFactory.getLogger(DateAdapter.class);
 
     private DateAdapter() {
     }
@@ -30,8 +34,9 @@ class DateAdapter {
     static Date parseDate(String dateToParse) {
         try {
             return TEAMCITY_DATE_FORMAT.parse(dateToParse);
-        } catch (ParseException e) {
-            throw new IllegalArgumentException(e);
+        } catch (Throwable t) {
+            LOG.warn("Cannot parse date: " + dateToParse, t);
+            return new Date();
         }
     }
 

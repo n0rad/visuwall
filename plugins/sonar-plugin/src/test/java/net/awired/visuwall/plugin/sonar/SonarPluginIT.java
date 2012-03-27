@@ -16,7 +16,7 @@ public class SonarPluginIT {
 
     @Test
     public void should_recognize_sonar_v212() throws Exception {
-        SoftwareId softwareId = plugin.getSoftwareId(new URL("http://localhost:9000"));
+        SoftwareId softwareId = plugin.getSoftwareId(new URL("http://localhost:9000"), null);
         assertEquals("Sonar", softwareId.getName());
         assertEquals("2.12", softwareId.getVersion());
         assertTrue(softwareId.isCompatible());
