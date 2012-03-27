@@ -11,14 +11,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import net.awired.visuwall.api.domain.BuildState;
 import net.awired.visuwall.api.domain.BuildTime;
 import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
@@ -33,7 +30,6 @@ import net.awired.visuwall.api.exception.ConnectionException;
 import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.exception.ViewNotFoundException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -78,7 +74,8 @@ public class DemoConnectionTest {
     }
 
     @Test
-    public void should_get_empty_description_for_everything() throws ProjectNotFoundException, MavenIdNotFoundException {
+    public void should_get_empty_description_for_everything() throws ProjectNotFoundException,
+            MavenIdNotFoundException {
         String description = connection.getDescription(null);
         assertTrue(description.isEmpty());
     }
@@ -138,15 +135,6 @@ public class DemoConnectionTest {
         BuildTime earthBuildTime = connection.getBuildTime(earth, "");
         assertTrue(earthBuildTime.getDuration() > 1000);
         assertNotNull(earthBuildTime.getStartTime());
-    }
-
-    @Test
-    public void should_have_two_commiters_on_mars() throws BuildNotFoundException, ProjectNotFoundException {
-        List<Commiter> commiters = connection.getBuildCommiters(mars, "");
-        Commiter jsmadja = commiters.get(0);
-        Commiter alemaire = commiters.get(1);
-        assertEquals("jsmadja@xebia.fr", jsmadja.getEmail());
-        assertEquals("alemaire@xebia.fr", alemaire.getEmail());
     }
 
     @Test
@@ -221,7 +209,7 @@ public class DemoConnectionTest {
     public void should_have_one_build_id_for_every_project() throws ProjectNotFoundException {
         assertEquals(1, connection.getBuildIds(uranus).size());
         assertEquals(1, connection.getBuildIds(earth).size());
-        assertEquals(1, connection.getBuildIds(mars).size());
+        assertEquals(2, connection.getBuildIds(mars).size());
         assertEquals(1, connection.getBuildIds(moon).size());
         assertEquals(1, connection.getBuildIds(pluto).size());
         assertEquals(1, connection.getBuildIds(neptune).size());
@@ -236,16 +224,4 @@ public class DemoConnectionTest {
         assertEquals(0, testResult.getPassCount());
     }
 
-    @Test
-    public void should_change_mars_state() throws Exception {
-        String lastBuildId = connection.getLastBuildId(mars);
-        assertEquals("1", lastBuildId);
-
-        BuildState oldState = connection.getBuildState(mars, lastBuildId);
-        lastBuildId = connection.getLastBuildId(mars);
-        assertEquals("2", lastBuildId);
-
-        BuildState state = connection.getBuildState(mars, lastBuildId);
-        assertFalse(oldState.equals(state));
-    }
 }

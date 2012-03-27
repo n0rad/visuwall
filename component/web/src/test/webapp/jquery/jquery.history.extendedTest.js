@@ -1,4 +1,3 @@
-curl.undefine(true);
 define(['js!Underscore.js!order',
         'js!jquery-1.4.3.js!order',
         'js!jquery/jquery.history.js!order',
