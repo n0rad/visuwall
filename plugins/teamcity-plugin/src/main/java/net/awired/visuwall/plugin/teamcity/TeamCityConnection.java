@@ -189,9 +189,11 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
             throw new ProjectNotFoundException("Cannot find build type for software project id:" + softwareProjectId, e);
         } catch (TeamCityBuildNotFoundException e) {
             try {
-                TeamCityBuild runningBuild = teamCity.findRunningBuild();
-                if (buildId.equals(runningBuild.getId())) {
-                    return BuildState.UNKNOWN;
+                TeamCityBuilds runningBuilds = teamCity.findRunningBuilds();
+                for (TeamCityBuildItem runningBuild : runningBuilds.getBuilds()) {
+                    if (buildId.equals(runningBuild.getId())) {
+                        return BuildState.UNKNOWN;
+                    }
                 }
             } catch (TeamCityBuildNotFoundException e1) {
             }
@@ -207,13 +209,9 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
         checkSoftwareProjectId(softwareProjectId);
         checkBuildId(buildId);
         try {
-            TeamCityBuild runningBuild = teamCity.findRunningBuild();
-            if (buildId.equals(runningBuild.getId())) {
-                int seconds = runningBuild.getRunningInfo().getEstimatedTotalSeconds();
-                return new DateTime().plusSeconds(seconds).toDate();
-            }
-            throw new BuildNotFoundException("Cannot find build #" + buildId + " for software project id:"
-                    + softwareProjectId);
+            TeamCityBuild runningBuild = teamCity.findBuild(Integer.valueOf(buildId));
+            int seconds = runningBuild.getRunningInfo().getEstimatedTotalSeconds();
+            return new DateTime().plusSeconds(seconds).toDate();
         } catch (TeamCityBuildNotFoundException e) {
             throw new BuildNotFoundException("Cannot find a running build", e);
         }
@@ -225,13 +223,18 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         checkBuildId(buildId);
+        String projectId = softwareProjectId.getProjectId();
         try {
-            TeamCityBuild build = teamCity.findRunningBuild();
-            return softwareProjectId.getProjectId().equals(build.getBuildType().getId())
-                    && buildId.equals(build.getId());
+            List<TeamCityBuildItem> builds = teamCity.findRunningBuilds().getBuilds();
+            for (TeamCityBuildItem build : builds) {
+                if (build.is(projectId, buildId)) {
+                    return true;
+                }
+            }
         } catch (TeamCityBuildNotFoundException e) {
             return false;
         }
+        return false;
     }
 
     @Override
