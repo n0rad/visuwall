@@ -79,4 +79,10 @@ public class TeamCityUrlBuilderTest {
         String pomUrl = builder.getPomUrl(26);
         assertEquals(TEAM_CITY_URL + "/builds/id:26/pom.xml", pomUrl);
     }
+
+    @Test
+    public void should_create_find_running_builds_url() {
+        String runningBuildsUrl = builder.getRunningBuilds();
+        assertEquals(TEAM_CITY_URL + "/app/rest/builds?locator=running:true", runningBuildsUrl);
+    }
 }

@@ -56,4 +56,10 @@ public class TeamCityBuildItem extends TeamCityAbstractBuild {
         this.number = number;
     }
 
+    public boolean is(String projectId, String buildId) {
+        String buildTypeId = getBuildTypeId();
+        String id = getId();
+        return projectId.equals(buildTypeId) && buildId.equals(id);
+    }
+
 }

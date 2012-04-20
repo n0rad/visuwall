@@ -46,8 +46,8 @@ class TeamCityUrlBuilder {
         return build("/builds/id:" + buildId);
     }
 
-    String getRunningBuild() {
-        return build("/builds/running:true");
+    String getRunningBuilds() {
+        return build("/builds?locator=running:true");
     }
 
     String getChanges(int buildId) {

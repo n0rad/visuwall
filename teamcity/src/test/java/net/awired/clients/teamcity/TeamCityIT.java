@@ -16,24 +16,7 @@
 
 package net.awired.clients.teamcity;
 
-import java.util.concurrent.TimeUnit;
-
-import net.awired.clients.teamcity.resource.TeamCityBuild;
-
-import org.junit.Test;
 
 public class TeamCityIT {
-
-    @Test
-    public void test() throws Exception {
-        TeamCity teamcity = new TeamCity("http://localhost:8111", "guest", "");
-        while (true) {
-            System.out.println("last build:" + teamcity.findLastBuild("bt15").getId());
-
-            TeamCityBuild build = teamcity.findRunningBuild();
-            System.out.println(build.getId() + " " + build.isRunning());
-            TimeUnit.SECONDS.sleep(1);
-        }
-    }
 
 }

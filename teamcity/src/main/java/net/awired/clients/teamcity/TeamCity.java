@@ -163,11 +163,11 @@ public class TeamCity {
         return changesList;
     }
 
-    public TeamCityBuild findRunningBuild() throws TeamCityBuildNotFoundException {
-        String runningBuildUrl = urlBuilder.getRunningBuild();
+    public TeamCityBuilds findRunningBuilds() throws TeamCityBuildNotFoundException {
+        String runningBuildUrl = urlBuilder.getRunningBuilds();
         try {
-            TeamCityBuild teamCityBuild = client.resource(runningBuildUrl, TeamCityBuild.class);
-            return teamCityBuild;
+            TeamCityBuilds teamCityBuilds = client.resource(runningBuildUrl, TeamCityBuilds.class);
+            return teamCityBuilds;
         } catch (ResourceNotFoundException e) {
             throw new TeamCityBuildNotFoundException("There is no running build", e);
         }
@@ -192,9 +192,12 @@ public class TeamCity {
 
     public TeamCityAbstractBuild findLastBuild(String projectId) throws TeamCityBuildNotFoundException {
         try {
-            TeamCityBuild runningBuild = findRunningBuild();
-            if (runningBuild.getBuildType().getId().equals(projectId)) {
-                return runningBuild;
+            TeamCityBuilds runningBuilds = findRunningBuilds();
+            List<TeamCityBuildItem> builds = runningBuilds.getBuilds();
+            for (TeamCityBuildItem runningBuild : builds) {
+                if (runningBuild.getBuildTypeId().equals(projectId)) {
+                    return runningBuild;
+                }
             }
         } catch (TeamCityBuildNotFoundException ex) {
         }
