@@ -31,6 +31,7 @@
 		<module>teamcity</module>
 		<module>bamboo</module>
 		<module>deployit</module>
+		<module>bamboo-pre2.3</module>
 	</modules>
 
 	<licenses>
