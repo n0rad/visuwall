@@ -16,22 +16,26 @@
 
 package net.awired.visuwall.core.business.process;
 
+import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
+
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BasicCapability;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.core.business.domain.Project;
+import net.awired.visuwall.core.business.service.NoCompatiblePluginException;
 import net.awired.visuwall.core.business.service.PluginServiceInterface;
 import net.awired.visuwall.core.business.service.ProjectService;
 import net.awired.visuwall.core.business.service.SoftwareAccessService;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,22 +98,26 @@ public class WallProcess {
     }
 
     private void rebuildConnectionPluginsInSoftwareAccess(Wall wall) {
+        LOG.info("-----------------------------------------------------------------------");
+        LOG.info("- Plugin detection starts");
         for (SoftwareAccess softwareAccess : wall.getSoftwareAccesses()) {
-            try {
-                Map<String, String> properties = new HashMap<String, String>(softwareAccess.getProperties());
-                //TODO 
-                if (softwareAccess.getLogin() != null) {
-                    properties.put("login", softwareAccess.getLogin());
-                }
-                if (softwareAccess.getPassword() != null) {
-                    properties.put("password", softwareAccess.getPassword());
-                }
-                BasicCapability connection = pluginService.getPluginConnectionFromUrl(softwareAccess.getUrl(),
-                        properties);
-                softwareAccess.setConnection(connection);
-            } catch (Throwable e) {
-                LOG.warn("Plugin throw an exception", e);
-            }
+            createConnection(wall, softwareAccess);
+        }
+        LOG.info("-----------------------------------------------------------------------");
+    }
+
+    private void createConnection(Wall wall, SoftwareAccess softwareAccess) {
+        try {
+            URL url = softwareAccess.getUrl();
+            Map<String, String> properties = new HashMap<String, String>(softwareAccess.getProperties());
+            properties.put("login", softwareAccess.getLogin());
+            properties.put("password", softwareAccess.getPassword());
+            BasicCapability connection = pluginService.getPluginConnectionFromUrl(url, properties);
+            softwareAccess.setConnection(connection);
+        } catch (NoCompatiblePluginException e) {
+            LOG.warn("Can't configure wall " + wall.getName() + ", " + e.getMessage());
+        } catch (Throwable e) {
+            LOG.error("Plugin throw an exception", e);
         }
     }
 

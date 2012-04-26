@@ -21,15 +21,19 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import net.awired.visuwall.core.business.domain.PluginInfo;
 import net.awired.visuwall.core.business.domain.SoftwareInfo;
+import net.awired.visuwall.core.business.service.NoCompatiblePluginException;
 import net.awired.visuwall.core.business.service.PluginServiceInterface;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.google.common.base.Strings;
 
 @Controller
@@ -47,8 +51,7 @@ public class PluginController {
 
     @RequestMapping(value = "getSoftwareInfo", method = RequestMethod.GET)
     public @ResponseBody
-    SoftwareInfo getSoftwareInfo(@RequestParam String url, String login, String password)
-            throws MalformedURLException {
+    SoftwareInfo getSoftwareInfo(@RequestParam String url, String login, String password) throws MalformedURLException {
         Map<String, String> properties = new HashMap<String, String>();
         if (!Strings.isNullOrEmpty(login)) {
             properties.put("login", login);
@@ -56,8 +59,11 @@ public class PluginController {
         if (!Strings.isNullOrEmpty(password)) {
             properties.put("password", password);
         }
-        SoftwareInfo softwareInfo = pluginService.getSoftwareInfoFromUrl(new URL(url), properties);
-        return softwareInfo;
+        try {
+            return pluginService.getSoftwareInfoFromUrl(new URL(url), properties);
+        } catch (NoCompatiblePluginException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
 }

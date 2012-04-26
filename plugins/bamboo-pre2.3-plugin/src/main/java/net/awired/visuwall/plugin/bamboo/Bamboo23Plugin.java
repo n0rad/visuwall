@@ -24,26 +24,27 @@ import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
-public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
+public class Bamboo23Plugin implements VisuwallPlugin<Bamboo23Connection> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BambooPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Bamboo23Plugin.class);
 
-    public BambooPlugin() {
-        LOG.info("Bamboo plugin loaded.");
+    public Bamboo23Plugin() {
+        LOG.info("Bamboo 23 plugin loaded.");
     }
 
     @Override
-    public BambooConnection getConnection(URL url, Map<String, String> properties) {
-        BambooConnection connection = new BambooConnection();
-        String login = "";
-        String password = "";
-        if (properties != null) {
+    public Bamboo23Connection getConnection(URL url, Map<String, String> properties) {
+        Bamboo23Connection connection = new Bamboo23Connection();
+        String login = getPropertiesWithDefaultValue().get("login");
+        String password = getPropertiesWithDefaultValue().get("password");
+        if (StringUtils.isNotBlank(properties.get("login"))) {
             login = properties.get("login");
             password = properties.get("password");
         }
@@ -52,13 +53,13 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
     }
 
     @Override
-    public Class<BambooConnection> getConnectionClass() {
-        return BambooConnection.class;
+    public Class<Bamboo23Connection> getConnectionClass() {
+        return Bamboo23Connection.class;
     }
 
     @Override
     public String getName() {
-        return "Bamboo Plugin";
+        return "Bamboo 23 Plugin";
     }
 
     @Override
@@ -70,20 +71,19 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
     public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
-            String version = BambooVersionExtractor.extractVersion(url);
+            String version = Bamboo23VersionExtractor.extractVersion(url);
             float versionAsFloat = Float.valueOf(version.replaceFirst("\\.", "#").replaceAll("\\.", "")
                     .replace("#", "."));
-            if (versionAsFloat <= 2.3) {
-                throw new SoftwareNotFoundException("This plugin is not compatible with old versions of Bamboo (< 2.3)");
+            if (versionAsFloat > 2.3) {
+                throw new SoftwareNotFoundException("This plugin is not compatible with Bamboo 23");
             }
             SoftwareId softwareId = new SoftwareId();
             softwareId.setName("Bamboo");
             softwareId.setVersion(version);
+            softwareId.setWarnings("Bamboo with version <= 2.3 has limited features in Visuwall");
             return softwareId;
-        } catch (NumberFormatException e) {
-            throw new SoftwareNotFoundException("Url " + url + " is not compatible with Bamboo");
-        } catch (BambooVersionNotFoundException e) {
-            throw new SoftwareNotFoundException("Url " + url + " is not compatible with Bamboo");
+        } catch (Bamboo23VersionNotFoundException e) {
+            throw new SoftwareNotFoundException("Url " + url + " is not compatible with Bamboo 23");
         }
     }
 
@@ -96,6 +96,9 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
 
     @Override
     public Map<String, String> getPropertiesWithDefaultValue() {
-        return new HashMap<String, String>();
+        HashMap<String, String> properties = new HashMap<String, String>();
+        properties.put("login", "admin");
+        properties.put("password", "password");
+        return properties;
     }
 }

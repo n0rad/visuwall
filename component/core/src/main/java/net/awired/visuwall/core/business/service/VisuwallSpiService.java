@@ -44,7 +44,8 @@ public class VisuwallSpiService implements PluginServiceInterface {
     }
 
     @Override
-    public BasicCapability getPluginConnectionFromUrl(URL url, Map<String, String> properties) {
+    public BasicCapability getPluginConnectionFromUrl(URL url, Map<String, String> properties)
+            throws NoCompatiblePluginException {
         for (VisuwallPlugin<BasicCapability> visuwallPlugin : getPlugins()) {
             try {
                 visuwallPlugin.getSoftwareId(url, properties);
@@ -60,11 +61,12 @@ public class VisuwallSpiService implements PluginServiceInterface {
                 LOG.warn(visuwallPlugin.getName() + " throws exception on url " + url, e);
             }
         }
-        throw new RuntimeException("No plugin to manage url " + url);
+        throw new NoCompatiblePluginException("No plugin to manage url " + url);
     }
 
     @Override
-    public SoftwareInfo getSoftwareInfoFromUrl(URL url, Map<String, String> properties) {
+    public SoftwareInfo getSoftwareInfoFromUrl(URL url, Map<String, String> properties)
+            throws NoCompatiblePluginException {
         for (VisuwallPlugin<BasicCapability> visuwallPlugin : getPlugins()) {
             SoftwareId softwareId = null;
             BasicCapability connectionPlugin = null;
@@ -93,7 +95,7 @@ public class VisuwallSpiService implements PluginServiceInterface {
                 }
             }
         }
-        throw new RuntimeException("No plugin to manage url " + url
+        throw new NoCompatiblePluginException("No plugin to manage url " + url
                 + ". Maybe you should add credentials (login/password)");
     }
 

@@ -36,6 +36,10 @@
 			<artifactId>visuwall-plugin-bamboo</artifactId>
 		</dependency>
 		<dependency>
+                        <groupId>net.awired.visuwall</groupId>
+                        <artifactId>visuwall-plugin-bamboo-pre2.3</artifactId>
+                </dependency>
+		<dependency>
 			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-plugin-sonar</artifactId>
 		</dependency>
