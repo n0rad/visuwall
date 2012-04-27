@@ -6,7 +6,7 @@ import net.awired.visuwall.api.domain.SoftwareProjectId;
 
 import org.junit.Test;
 
-public class Bamboo23ConnectionTest {
+public class Bamboo23ConnectionIT {
 
     @Test
     public void test() throws Exception {
