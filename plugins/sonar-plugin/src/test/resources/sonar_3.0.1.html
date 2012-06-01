@@ -1,0 +1,1061 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="gwt:property" content="locale=en">
+<meta http-equiv="X-UA-Compatible" content="IE=9">
+
+<title>Sonar</title>
+<link href="/stylesheets/sonar.css?1336740832" media="all" rel="stylesheet" type="text/css" /><script src="/javascripts/sonar.js?1336740832" type="text/javascript"></script>
+<!--[if lte IE 6]><link href="/ie6/index" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 8]><script src="/javascripts/protovis-msie.js?1336740830" type="text/javascript"></script><![endif]-->
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?1336740830" />
+<link rel="alternate" title="Sonar Alerts" href="/feeds/projects/Alert" type="application/atom+xml"><script>var baseUrl = '';</script>
+</head><body>
+
+
+
+<div id="container">
+<div id="hd">
+<ol id="crumbs">
+<li><a href="/">Home</a></li>
+
+</ol>
+
+<ol id="nav">
+<li>
+<input type="text" size="15" name="search" id="searchInput" onFocus="autocompleteResources()" value="Search"/>
+<img src="/images/loading-small.gif" id="searchingResources" style="display:none">
+</li>
+<li>
+<a href="javascript:window.print()"><img src="/images/print.gif" alt="Print" title="Print"/></a>
+</li>
+
+<li><a href="/sessions/new?return_to=%2F">Log in</a></li>
+
+<li><a href="/profiles">Configuration</a></li>
+</ol>
+</div>
+<div id="body">
+<div id="searchResourcesResults" class="autocomplete" style="display:none"></div>
+<div id="sb">
+<div id="sidebar">
+<ul>
+
+<li class="selected">
+<a href="/filters/index">Filters</a></li>
+<li class="">
+<a href="/reviews/index">Reviews</a></li>
+<li class="">
+<a href="/dependencies/index">Dependencies</a></li>
+
+
+</ul>
+<div id="logo">
+<center><a href="http://www.sonarsource.org/" target="SonarSource"><img alt="Embrace Quality" class="png" src="/images/sonar.png?1336740830" title="Embrace Quality" /></a></center>
+</div>
+</div>
+
+<div id="sidebarconf" class="hidden"></div>
+
+</div>
+<div id="content" class="with_sidebar">
+
+<div class="error" id="error" style="display:none">
+<span id="errormsg"></span> &nbsp;&nbsp;[<a href="#" onclick="javascript:$('error').hide();return false;">hide</a>]
+</div>
+<div class="notice" id="info" style="display:none">
+<span id="infomsg"></span> &nbsp;&nbsp;[<a href="#" onclick="javascript:$('info').hide();return false;">hide</a>]
+</div>
+<div class="warning" id="warning" style="display:none">
+<span id="warningmsg"></span> &nbsp;&nbsp;[<a href="#" onclick="javascript:$('warning').hide();return false;">hide</a>]
+</div>
+
+
+<ul class="tabs" id="filter-tabs">
+
+<li>
+<a href="/filters/index/1" class="selected">Projects</a>
+</li>
+
+<li>
+<a href="/filters/index/2" class="">Treemap</a>
+</li>
+
+</ul>
+
+
+<div class="tabs-panel">
+
+<div>
+
+<div class="line-block">
+<div class="operations">
+<form action="/" style="display: inline" method="get">
+<select name="period" onchange="submit()" class="small">
+<option value="">Time changes...</option>
+
+<option value="1" >&Delta; since previous analysis</value>
+
+<option value="2" >&Delta; over 5 days</value>
+
+<option value="3" >&Delta; over 30 days</value>
+
+</select>
+</form>
+</div>
+</div>
+
+<table class="data nowrap width100" id="results">
+<thead id="results-head">
+<tr>
+<th width="1%"></th>
+
+<th width=1% nowrap class="right">
+<a href="/?asc=true&amp;sort=1">Alert</a>
+</th>
+
+<th  class="left">
+<a href="/?asc=false&amp;sort=2">Name</a><img alt="Asc12" src="/images/asc12.png?1336740830" />
+</th>
+
+<th  class="right">
+<a href="/?asc=true&amp;sort=3">Lines of code</a>
+</th>
+
+<th  class="right">
+<a href="/?asc=true&amp;sort=4">Duplicated lines (%)</a>
+</th>
+
+<th  class="right">
+<a href="/?asc=true&amp;sort=5">Public documented API (%)</a>
+</th>
+
+<th  class="right">
+<a href="/?asc=true&amp;sort=6">Rules compliance</a>
+</th>
+
+<th  class="right">
+<a href="/?asc=true&amp;sort=7">Build date</a>
+</th>
+
+</tr>
+
+</thead>
+<tfoot>
+<tr>
+<td colspan="8">
+<span id="results_count">14 results</span>
+
+
+&nbsp;&nbsp; <a href="/feeds/projects/Alert" class="nolink"><img alt="Rss-12x12" src="/images/rss-12x12.png?1336740830" /></a>
+<a href="/feeds/projects/Alert" class="action">Alerts feed</a>
+
+</td>
+</tr>
+</tfoot>
+<tbody>
+
+
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/5592" title="com.financeactive:canvasDoc">canvasDoc</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >18,064</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >4.1%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >66.4%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >99.4%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+16 Jan 2012
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/24851" title="com.financeactive.cautions:cautions">Cautions</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >5,394</span>
+<img alt="-2-black-small" src="/images/tendency/-2-black-small.png?1336740830" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >1.4%</span>
+<img alt="1-red-small" src="/images/tendency/1-red-small.png?1336740830" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >2.0%</span>
+<img alt="-1-red-small" src="/images/tendency/-1-red-small.png?1336740830" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >99.8%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+09:56
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/1" title="com.financeactive:FADevResourcesConsole">FADevRessourcesConsole</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >2,112</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >2.3%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >1.7%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >99.8%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+17 Jan 2012
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/5584" title="com.financeactive:faDomain">FaDomain</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >1,519</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >0.0%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >82.4%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >100.0%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+28 Oct 2011
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/63" title="com.financeactive:faFramework">FaFramework</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >15,617</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >1.5%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >68.5%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >99.9%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+16 Jan 2012
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/25006" title="com.financeactive.fxent:fxent">Fx'ent</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >52,661</span>
+<img alt="-2-black-small" src="/images/tendency/-2-black-small.png?1336740830" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >12.5%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >7.7%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >99.2%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+02:02
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/19235" title="com.financeactive.hermes:hermes">Hermes</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >35,764</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >14.3%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >10.0%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >99.2%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+14 Feb 2012
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/2432" title="com.financeactive.insito:insito">Insito</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >380,434</span>
+<img alt="-2-black-small" src="/images/tendency/-2-black-small.png?1336740830" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >7.2%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >55.4%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >97.2%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+15:20
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/5893" title="com.financeactive.inviseo:inviseo">inviseo</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >83,981</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1336740830" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >6.4%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >51.0%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >99.5%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+28 Feb 2011
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/472" title="com.financeactive.marketData:marketData">Market Data</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >48,935</span>
+<img alt="2-black-small" src="/images/tendency/2-black-small.png?1336740830" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >3.5%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >50.1%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >98.7%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+16 Jan 2012
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/12206" title="com.financeactive:flux-export">Module d'export de flux financiers</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >2,580</span>
+<img alt="-2-black-small" src="/images/tendency/-2-black-small.png?1336740830" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >0.0%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >10.4%</span>
+<img alt="1-green-small" src="/images/tendency/1-green-small.png?1336740830" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >100.0%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+30 Jun 2010
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/12671" title="com.financeactive:import-export">Module d'import et d'export</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >3,714</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >0.0%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >19.6%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >99.9%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+10 Feb 2012
+
+</td>
+
+</tr>
+
+<tr class="even">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/9416" title="com.financeactive.profolio:profolio">Profolio</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >89,183</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >5.2%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >54.4%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >99.1%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+03 Jan 2012
+
+</td>
+
+</tr>
+
+<tr class="odd">
+<td></td>
+
+<td class="right">
+
+
+
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="left">
+
+<img alt="" height="16" src="/images/q/TRK.png?1336740830" title="" width="16" /> <a href="/dashboard/index/12497" title="com.financeactive.timeraker:timeRaker">TimeRaker</a>
+
+</td>
+
+<td class="right">
+
+
+<span id='m_ncloc'  >8,571</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_duplicated_lines_density'  >4.2%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_public_documented_api_density'  >44.6%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+
+
+<span id='m_violations_density'  >99.5%</span>
+<img alt="" src="/images/transparent.gif?1336740830" title="" width="16" />
+
+
+</td>
+
+<td class="right">
+10 Feb 2012
+
+</td>
+
+</tr>
+
+
+</tbody>
+</table>
+<br/>
+
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+<div id="footer">
+
+<div id="ftlinks">
+Powered by <a href="http://www.sonarsource.com" target="SonarSource" class="external">SonarSource</a> - Open Source
+<a href="http://www.sonarsource.org/documentation/license/" target="license" class="external">LGPL</a> - v.3.0.1 -
+<a href="http://sonar-plugins.codehaus.org" class="external" target="plugins">Plugins</a> -
+<a href="http://sonar.codehaus.org/documentation" class="external" target="sonar_doc" class="external">Documentation</a> -
+<a href="http://sonar.codehaus.org/support/" target="support" class="external">Ask a question</a>
+
+</div>
+</div>
+
+
+
+</body><script type="text/javascript">
+Event.observe(window, 'load', function(){
+$$('.tipable').each(function(element){
+title = element.readAttribute('title');
+if(!element.rel.blank()) {
+if(title ==null) {
+new Tip(element, element.rel);
+} else {
+new Tip(element, element.rel, {title: title});
+}
+} else if (title!=null && !title.blank()) {
+new Tip(element, title);
+}
+});
+});
+
+
+
+</script>
+</html>
+

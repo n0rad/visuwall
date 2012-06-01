@@ -8,17 +8,28 @@ import java.net.URL;
 
 import net.awired.visuwall.api.domain.SoftwareId;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SonarPluginIT {
 
     SonarPlugin plugin = new SonarPlugin();
 
+    @Ignore
     @Test
     public void should_recognize_sonar_v212() throws Exception {
         SoftwareId softwareId = plugin.getSoftwareId(new URL("http://localhost:9000"), null);
         assertEquals("Sonar", softwareId.getName());
         assertEquals("2.12", softwareId.getVersion());
+        assertTrue(softwareId.isCompatible());
+        assertNull(softwareId.getWarnings());
+    }
+
+    @Test
+    public void should_recognize_sonar_v301() throws Exception {
+        SoftwareId softwareId = plugin.getSoftwareId(new URL("http://hudson"), null);
+        assertEquals("Sonar", softwareId.getName());
+        assertEquals("3.0.1", softwareId.getVersion());
         assertTrue(softwareId.isCompatible());
         assertNull(softwareId.getWarnings());
     }

@@ -40,12 +40,13 @@ public class SonarVersionExtractor {
         try {
             byte[] byteArray = ByteStreams.toByteArray(url.openStream());
             String htmlContent = new String(byteArray);
-            Pattern p = Pattern.compile(".* - v\\.([0-9]\\.[0-9]*.[0-9]*) - .*");
+            Pattern p = Pattern.compile("v\\.([0-9]\\.[0-9]*.[0-9]*) ");
             Matcher m = p.matcher(htmlContent);
             while (m.find()) {
                 return m.group(1);
             }
         } catch (IOException e) {
+            e.printStackTrace();
             return "unknown";
         }
         return "unknown";

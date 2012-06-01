@@ -68,6 +68,15 @@ public class SonarVersionExtractorTest {
         assertEquals("2.12", version);
     }
 
+    @Test
+    public void should_extract_version_from_sonar_welcome_page_v301() {
+        URL resource = classLoader.getResource("sonar_3.0.1.html");
+
+        String version = sve.welcomePageVersion(resource);
+
+        assertEquals("3.0.1", version);
+    }
+
     private Properties loadProperties(InputStream is) {
         try {
             JAXBContext newInstance = JAXBContext.newInstance(Properties.class);
