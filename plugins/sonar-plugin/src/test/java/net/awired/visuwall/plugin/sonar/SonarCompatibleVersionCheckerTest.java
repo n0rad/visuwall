@@ -53,4 +53,9 @@ public class SonarCompatibleVersionCheckerTest {
     public void should_get_compatible_for_2_12_version_as_string() {
         assertTrue(checker.versionIsCompatible("2.12"));
     }
+
+    @Test
+    public void should_get_compatible_for_3_0_1_version_as_string() {
+        assertTrue(checker.versionIsCompatible("3.0.1"));
+    }
 }

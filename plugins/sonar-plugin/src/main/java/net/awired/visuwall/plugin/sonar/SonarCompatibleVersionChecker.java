@@ -12,6 +12,9 @@ public class SonarCompatibleVersionChecker {
 
     public boolean versionIsCompatible(String version) {
         try {
+            if (version.lastIndexOf('.') != version.indexOf('.')) {
+                version = version.substring(0, version.lastIndexOf('.'));
+            }
             double versionAsFloat = Double.valueOf(version);
             return versionIsCompatible(versionAsFloat);
         } catch (Exception e) {

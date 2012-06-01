@@ -46,7 +46,6 @@ public class SonarVersionExtractor {
                 return m.group(1);
             }
         } catch (IOException e) {
-            e.printStackTrace();
             return "unknown";
         }
         return "unknown";
