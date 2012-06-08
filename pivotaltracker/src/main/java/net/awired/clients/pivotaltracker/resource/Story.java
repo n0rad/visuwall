@@ -9,18 +9,37 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Story {
 
+    private Integer id;
+
+    private String name;
+
     @XmlElement(name = "story_type")
-    private String storyType;
+    private StoryType storyType;
 
     @XmlElement(name = "current_state")
-    private String currentState;
+    private CurrentState currentState;
 
-    public String getStoryType() {
+    public Story() {
+    }
+
+    public Story(StoryType storyType, CurrentState currentState) {
+        this.storyType = storyType;
+        this.currentState = currentState;
+    }
+
+    public StoryType getStoryType() {
         return storyType;
     }
 
-    public String getCurrentState() {
+    public CurrentState getCurrentState() {
         return currentState;
+    }
+
+    @Override
+    public String toString() {
+        String storyTypeName = storyType == null ? "" : storyType.name();
+        String currentStateName = currentState == null ? "" : currentState.name();
+        return id + ".[" + storyTypeName + "][" + currentStateName + "] " + name;
     }
 
 }
