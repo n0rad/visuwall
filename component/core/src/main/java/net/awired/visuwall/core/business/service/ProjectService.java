@@ -19,6 +19,7 @@ package net.awired.visuwall.core.business.service;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
+
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.domain.TestResult;
@@ -36,11 +37,13 @@ import net.awired.visuwall.core.business.process.capabilities.BuildCapabilityPro
 import net.awired.visuwall.core.business.process.capabilities.MetricCapabilityProcess;
 import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
 import net.awired.visuwall.core.persistence.entity.Wall;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
+
 import com.google.common.base.Preconditions;
 
 @Service
@@ -149,7 +152,7 @@ public class ProjectService {
                                 buildProcess.updateBuild(project, buildId);
                             }
 
-                            // TODO be sure to not remove a project cause of a capability ProjectNotFoundException 
+                            // TODO be sure to not remove a project cause of a capability ProjectNotFoundException
                         } finally {
                             project.setLastUpdate(new Date());
                         }
@@ -161,7 +164,6 @@ public class ProjectService {
                     LOG.debug("Project not found cause", e);
                     wall.getProjects().deleteAndCleanProject(project.getId());
                 } catch (BuildNotFoundException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } finally {
                     neverRun = false;
@@ -175,7 +177,7 @@ public class ProjectService {
         // update capabilities
         if (project.getLastNotBuildingId() != null) {
             for (SoftwareProjectId softwareProjectId : project.getCapabilities().keySet()) {
-                //TODO we are currently able to manage last build only 
+                // TODO we are currently able to manage last build only
                 if (!project.getLastBuild().getCapabilitiesResults().containsKey(softwareProjectId)) {
                     try {
                         BasicCapability capability = project.getCapabilities().get(softwareProjectId);
