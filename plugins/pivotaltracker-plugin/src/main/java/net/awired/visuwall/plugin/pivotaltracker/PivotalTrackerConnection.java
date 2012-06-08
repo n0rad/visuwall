@@ -40,11 +40,14 @@ public class PivotalTrackerConnection implements BuildCapability {
 
     private Long id = 1L;
 
+    private static final Map<SoftwareProjectId, Long> PROJECT_VERSION = new HashMap<SoftwareProjectId, Long>();
+    private static final Map<SoftwareProjectId, Date> PROJECT_LAST_ACTIVITY = new HashMap<SoftwareProjectId, Date>();
+
     @Override
     public BuildState getBuildState(SoftwareProjectId projectId, String buildId) throws ProjectNotFoundException,
             BuildNotFoundException {
         try {
-            Stories stories = client.getStoriesOf(Integer.valueOf(projectId.getProjectId()));
+            Stories stories = client.getStoriesOf(id(projectId));
             Map<BuildState, Integer> thresholds = new HashMap<BuildState, Integer>();
             thresholds.put(SUCCESS, successThreshold(projectId));
             return pivotalTrackerState.guessState(thresholds, stories);
@@ -95,6 +98,7 @@ public class PivotalTrackerConnection implements BuildCapability {
             for (Project project : client.getProjects()) {
                 SoftwareProjectId softwareProjectId = new SoftwareProjectId(project.getId().toString());
                 softwareProjectIds.put(softwareProjectId, project.getName());
+                PROJECT_VERSION.put(softwareProjectId, 1L);
             }
         } catch (ResourceNotFoundException e) {
             logger.error("Cannot find projects", e);
@@ -125,10 +129,13 @@ public class PivotalTrackerConnection implements BuildCapability {
     @Override
     public BuildTime getBuildTime(SoftwareProjectId softwareProjectId, String buildId) throws BuildNotFoundException,
             ProjectNotFoundException {
-        BuildTime buildTime = new BuildTime();
-        buildTime.setDuration(1L);
-        buildTime.setStartTime(new Date());
-        return buildTime;
+        try {
+            return new BuildTimer(client.getProject(id(softwareProjectId))).build();
+        } catch (NumberFormatException e) {
+            throw new ProjectNotFoundException("Cannot compute build time for " + softwareProjectId, e);
+        } catch (ResourceNotFoundException e) {
+            throw new ProjectNotFoundException("Cannot compute build time for " + softwareProjectId, e);
+        }
     }
 
     @Override
@@ -151,7 +158,24 @@ public class PivotalTrackerConnection implements BuildCapability {
     @Override
     public String getLastBuildId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
             BuildIdNotFoundException {
-        return (id++).toString();
+        try {
+            Date oldActivityDate = PROJECT_LAST_ACTIVITY.get(softwareProjectId);
+            Date lastActivity = client.getProject(id(softwareProjectId)).getLastActivityAt();
+            if (oldActivityDate == null || lastActivity.after(oldActivityDate)) {
+                id++;
+                PROJECT_VERSION.put(softwareProjectId, id);
+                PROJECT_LAST_ACTIVITY.put(softwareProjectId, lastActivity);
+            }
+            return id.toString();
+        } catch (NumberFormatException e) {
+            throw new ProjectNotFoundException("Cannot find project " + softwareProjectId, e);
+        } catch (ResourceNotFoundException e) {
+            throw new ProjectNotFoundException("Cannot find project " + softwareProjectId, e);
+        }
+    }
+
+    private Integer id(SoftwareProjectId softwareProjectId) {
+        return Integer.valueOf(softwareProjectId.getProjectId());
     }
 
     // ----------------------------------------------------------------------------------------------------------- //
@@ -159,7 +183,7 @@ public class PivotalTrackerConnection implements BuildCapability {
     @Override
     public String getMavenId(SoftwareProjectId softwareProjectId) throws ProjectNotFoundException,
             MavenIdNotFoundException {
-        throw new ProjectNotFoundException("Not implemented!");
+        return "";
     }
 
     @Override

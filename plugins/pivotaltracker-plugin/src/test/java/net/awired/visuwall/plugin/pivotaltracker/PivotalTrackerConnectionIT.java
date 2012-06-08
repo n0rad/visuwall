@@ -15,9 +15,10 @@ public class PivotalTrackerConnectionIT {
 
         Map<SoftwareProjectId, String> listSoftwareProjectIds = connection.listSoftwareProjectIds();
         for (SoftwareProjectId softwareProjectId : listSoftwareProjectIds.keySet()) {
-            System.err.println(softwareProjectId.getProjectId());
-            System.err.println(connection.getName(softwareProjectId));
-            System.err.println(connection.getBuildState(softwareProjectId, ""));
+            // System.err.println(softwareProjectId.getProjectId());
+            // System.err.println(connection.getName(softwareProjectId));
+            // System.err.println(connection.getBuildState(softwareProjectId, ""));
+            System.err.println(connection.getBuildTime(softwareProjectId, ""));
         }
 
     }
