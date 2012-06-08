@@ -1,11 +1,11 @@
 package net.awired.clients.pivotaltracker;
 
-public class PivotalTrackerBuilder {
+public class PivotalTrackerUrlBuilder {
 
     private static final String API = "/services/v3";
     private String url;
 
-    public PivotalTrackerBuilder(String url) {
+    public PivotalTrackerUrlBuilder(String url) {
         this.url = url;
     }
 
@@ -19,6 +19,10 @@ public class PivotalTrackerBuilder {
 
     public String getAllStoriesUrl(int projectId) {
         return url + API + "/projects/" + projectId + "/stories";
+    }
+
+    public String getProjectUrl(int projectId) {
+        return url + API + "/projects/" + projectId;
     }
 
 }

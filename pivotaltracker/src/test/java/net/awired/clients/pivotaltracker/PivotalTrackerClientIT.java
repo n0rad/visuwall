@@ -2,6 +2,7 @@ package net.awired.clients.pivotaltracker;
 
 import static org.junit.Assert.assertEquals;
 import net.awired.clients.common.ResourceNotFoundException;
+import net.awired.clients.pivotaltracker.resource.Project;
 import net.awired.clients.pivotaltracker.resource.Projects;
 import net.awired.clients.pivotaltracker.resource.Stories;
 import net.awired.clients.pivotaltracker.resource.Story;
@@ -23,8 +24,12 @@ public class PivotalTrackerClientIT {
         Projects projects = client.getProjects();
 
         assertEquals(1, projects.getProjects().size());
-        assertEquals(506819, projects.getProjects().get(0).getId().intValue());
-        assertEquals("Caution", projects.getProjects().get(0).getName());
+        Project project = projects.getProjects().get(0);
+        assertEquals(506819, project.getId().intValue());
+        assertEquals("Caution", project.getName());
+        System.err.println(project.getWeekStartDay());
+        System.err.println(project.getIterationLength());
+        System.err.println(project.getLastActivityAt());
     }
 
     @Test

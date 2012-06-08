@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class PivotalTrackerBuilderTest {
+public class PivotalTrackerUrlBuilderTest {
 
-    private PivotalTrackerBuilder builder = new PivotalTrackerBuilder("https://www.pivotaltracker.com");
+    private PivotalTrackerUrlBuilder builder = new PivotalTrackerUrlBuilder("https://www.pivotaltracker.com");
 
     @Test
     public void build_authentication_token_url() {
@@ -16,6 +16,11 @@ public class PivotalTrackerBuilderTest {
     @Test
     public void build_all_projects_url() {
         assertEquals("https://www.pivotaltracker.com/services/v3/projects", builder.getAllProjectsUrl());
+    }
+
+    @Test
+    public void build_project_url() {
+        assertEquals("https://www.pivotaltracker.com/services/v3/projects/1234", builder.getProjectUrl(1234));
     }
 
     @Test
