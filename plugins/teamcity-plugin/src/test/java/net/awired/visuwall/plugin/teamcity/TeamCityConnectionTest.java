@@ -23,11 +23,9 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import net.awired.clients.teamcity.TeamCity;
 import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityBuildTypeNotFoundException;
@@ -44,7 +42,6 @@ import net.awired.visuwall.api.domain.Commiter;
 import net.awired.visuwall.api.domain.ProjectKey;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -196,13 +193,16 @@ public class TeamCityConnectionTest {
 
     @Test
     public void should_get_is_building() throws Exception {
-        TeamCityBuild build = new TeamCityBuild();
-        build.setRunning(true);
-        build.setId("1");
-        TeamCityBuildType buildType = new TeamCityBuildType();
-        buildType.setId("projectId");
-        build.setBuildType(buildType);
-        when(teamCity.findRunningBuild()).thenReturn(build);
+        TeamCityBuildItem buildItem = new TeamCityBuildItem();
+        buildItem.setBuildTypeId("projectId");
+        buildItem.setId("1");
+        List<TeamCityBuildItem> runningBuilds = new ArrayList<TeamCityBuildItem>();
+        runningBuilds.add(buildItem);
+
+        TeamCityBuilds builds = new TeamCityBuilds();
+        builds.setBuilds(runningBuilds);
+
+        when(teamCity.findRunningBuilds()).thenReturn(builds);
 
         boolean isBuilding = teamCityConnection.isBuilding(softwareProjectId(), "1");
 
@@ -219,7 +219,7 @@ public class TeamCityConnectionTest {
             buildList.getBuilds().add(item);
         }
         when(teamCity.findBuildList(anyString())).thenReturn(buildList);
-        when(teamCity.findRunningBuild()).thenThrow(new TeamCityBuildNotFoundException(""));
+        when(teamCity.findRunningBuilds()).thenThrow(new TeamCityBuildNotFoundException(""));
 
         TeamCityBuildType buildType = new TeamCityBuildType();
 

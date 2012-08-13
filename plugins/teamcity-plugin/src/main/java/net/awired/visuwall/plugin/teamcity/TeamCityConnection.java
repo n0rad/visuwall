@@ -19,7 +19,6 @@ package net.awired.visuwall.plugin.teamcity;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static org.apache.commons.lang.StringUtils.isBlank;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -28,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
 import net.awired.clients.teamcity.TeamCity;
 import net.awired.clients.teamcity.exception.TeamCityBuildListNotFoundException;
 import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
@@ -57,11 +55,9 @@ import net.awired.visuwall.api.exception.ViewNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
 import net.awired.visuwall.api.plugin.capability.ViewCapability;
-
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 
@@ -125,7 +121,8 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
                 }
             }
         } catch (TeamCityProjectsNotFoundException e) {
-            throw new ProjectNotFoundException("Can't identify software project id with project key: " + projectKey, e);
+            throw new ProjectNotFoundException("Can't identify software project id with project key: " + projectKey,
+                    e);
         }
         throw new ProjectNotFoundException("Can't identify software project id with project key: " + projectKey);
     }
@@ -142,8 +139,8 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
             Collections.sort(arrayList, new BuildIdComparator());
             return arrayList;
         } catch (TeamCityBuildTypeNotFoundException e) {
-            throw new ProjectNotFoundException("Cannot find build numbers of software project id:" + softwareProjectId,
-                    e);
+            throw new ProjectNotFoundException("Cannot find build numbers of software project id:"
+                    + softwareProjectId, e);
         }
     }
 
@@ -186,12 +183,15 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
             String status = build.getStatus();
             return States.asVisuwallState(status);
         } catch (TeamCityBuildTypeNotFoundException e) {
-            throw new ProjectNotFoundException("Cannot find build type for software project id:" + softwareProjectId, e);
+            throw new ProjectNotFoundException("Cannot find build type for software project id:" + softwareProjectId,
+                    e);
         } catch (TeamCityBuildNotFoundException e) {
             try {
-                TeamCityBuild runningBuild = teamCity.findRunningBuild();
-                if (buildId.equals(runningBuild.getId())) {
-                    return BuildState.UNKNOWN;
+                TeamCityBuilds runningBuilds = teamCity.findRunningBuilds();
+                for (TeamCityBuildItem runningBuild : runningBuilds.getBuilds()) {
+                    if (buildId.equals(runningBuild.getId())) {
+                        return BuildState.UNKNOWN;
+                    }
                 }
             } catch (TeamCityBuildNotFoundException e1) {
             }
@@ -207,13 +207,9 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
         checkSoftwareProjectId(softwareProjectId);
         checkBuildId(buildId);
         try {
-            TeamCityBuild runningBuild = teamCity.findRunningBuild();
-            if (buildId.equals(runningBuild.getId())) {
-                int seconds = runningBuild.getRunningInfo().getEstimatedTotalSeconds();
-                return new DateTime().plusSeconds(seconds).toDate();
-            }
-            throw new BuildNotFoundException("Cannot find build #" + buildId + " for software project id:"
-                    + softwareProjectId);
+            TeamCityBuild runningBuild = teamCity.findBuild(Integer.valueOf(buildId));
+            int seconds = runningBuild.getRunningInfo().getEstimatedTotalSeconds();
+            return new DateTime().plusSeconds(seconds).toDate();
         } catch (TeamCityBuildNotFoundException e) {
             throw new BuildNotFoundException("Cannot find a running build", e);
         }
@@ -225,13 +221,18 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
         checkConnected();
         checkSoftwareProjectId(softwareProjectId);
         checkBuildId(buildId);
+        String projectId = softwareProjectId.getProjectId();
         try {
-            TeamCityBuild build = teamCity.findRunningBuild();
-            return softwareProjectId.getProjectId().equals(build.getBuildType().getId())
-                    && buildId.equals(build.getId());
+            List<TeamCityBuildItem> builds = teamCity.findRunningBuilds().getBuilds();
+            for (TeamCityBuildItem build : builds) {
+                if (build.is(projectId, buildId)) {
+                    return true;
+                }
+            }
         } catch (TeamCityBuildNotFoundException e) {
             return false;
         }
+        return false;
     }
 
     @Override
@@ -291,8 +292,8 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
             TeamCityBuild teamcityBuild = teamCity.findBuild(projectId, buildId);
             return BuildTimes.createFrom(teamcityBuild);
         } catch (TeamCityBuildTypeNotFoundException e) {
-            throw new ProjectNotFoundException("Cannot find build type with software project id:" + softwareProjectId,
-                    e);
+            throw new ProjectNotFoundException(
+                    "Cannot find build type with software project id:" + softwareProjectId, e);
         } catch (TeamCityBuildNotFoundException e) {
             throw new BuildNotFoundException("Cannot find build #" + buildId + " for software project id:"
                     + softwareProjectId, e);
