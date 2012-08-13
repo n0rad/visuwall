@@ -2,14 +2,12 @@ package net.awired.clients.pivotaltracker;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
 import net.awired.clients.pivotaltracker.resource.Project;
 import net.awired.clients.pivotaltracker.resource.Projects;
 import net.awired.clients.pivotaltracker.resource.Stories;
 import net.awired.clients.pivotaltracker.resource.Token;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -49,8 +49,8 @@ public class MavenHelper {
     }
 
     private static boolean isMaven(String content) {
-        content = content.toLowerCase();
-        return content.startsWith("<mavenmoduleset>");
+        String content2 = content.toLowerCase();
+        return content2.startsWith("<mavenmoduleset>");
     }
 
     private static void checkProjectUrl(String projectUrl) {

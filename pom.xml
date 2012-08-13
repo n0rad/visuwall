@@ -19,7 +19,7 @@
 
 	<parent>
 		<groupId>net.awired.parent.parent-java</groupId>
-		<artifactId>parent-java-bundle</artifactId>
+		<artifactId>parent-java</artifactId>
 		<version>1.13</version>
 	</parent>
 
