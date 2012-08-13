@@ -3,11 +3,12 @@ package net.awired.visuwall.plugin.pivotaltracker;
 import static org.junit.Assert.assertEquals;
 import net.awired.clients.pivotaltracker.resource.Project;
 import net.awired.visuwall.api.domain.BuildTime;
-
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class BuildTimerTest {
 
+    @Ignore
     @Test
     public void t() {
         Project project = new Project();
