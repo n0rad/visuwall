@@ -1,8 +1,9 @@
-define(['jquery', 'Ajsl/event', 'text!Visuwall/Theme/Global/WallForm2/WallFormView.html',
-        'Visuwall/Theme/Global/WallForm2/Software/SoftwareView',
+define(['jquery', 'Ajsl/event', 'text!./WallFormView.html',
+        './Software/SoftwareView',
+        './Project/ProjectView',
         
-        'css!Visuwall/Theme/Global/WallForm2/WallFormView.css'],
-function($, event, WallFormTemplate, SoftwareView) {
+        'css!./WallFormView.css'],
+function($, event, WallFormTemplate, SoftwareView, ProjectView) {
 
 	function WallFormView(context, closePromise) {
 		this.context = $(context);
@@ -24,7 +25,8 @@ function($, event, WallFormTemplate, SoftwareView) {
 			displayForm : function() {
 				this.context.html(WallFormTemplate).slideDown('slow');
 				event.register(this.events, this.context);
-				this.softwareView = new SoftwareView($('#softTabs', this.context));
+				this.projectView = new ProjectView($('#projectTabs', this.context));
+				this.softwareView = new SoftwareView($('#softTabs', this.context), this.projectView);
 			},
 			hideForm : function() {
 				this.context.slideUp('fast').html("");

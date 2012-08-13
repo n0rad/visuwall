@@ -1,36 +1,23 @@
-define(['jquery', 'Ajsl/event', 'Ajsl/view', 'text!Visuwall/Theme/Global/WallForm2/Software/SoftwareView.html',
-        'Visuwall/Service/pluginService', 'text!Visuwall/Theme/Global/WallForm2/Software/SoftwareInfoView.html',
+define(['jquery', 'Ajsl/event', 'Ajsl/view', 'text!./SoftwareView.html',
+        'Visuwall/Service/pluginService', 'text!./SoftwareInfoView.html',
+        './SoftwareElements',
         
-        'css!Visuwall/Theme/Global/WallForm2/Software/SoftwareView.css'],
-function($, event, viewHelper, SoftwareTemplate, pluginService, SoftwareInfoTemplate) {
+        'css!./SoftwareView.css'],
+function($, event, viewHelper, SoftwareTemplate, pluginService, SoftwareInfoTemplate, SoftwareElements) {
 
 	var urlStatus = [ 'failureCheck', 'successCheck', 'loadingCheck', 'warningCheck' ];
 	
-	function SoftwareView(context) {
+	function SoftwareView(context, projectView) {
 		this.context = $(context);
 		var self = this;
 
 		this.softTabsCount = 1;
 		this.context.html(SoftwareTemplate);
+		this.softwareElements = new SoftwareElements($(".projectsAccordion", context), projectView);
 		
-		$(".projectsAccordion", context).accordion({autoHeight : false, navigation : true});
 		this.tabs = $(context);
-		this.tabs.tabs({
-			tabTemplate : "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>Remove Tab</span></li>",
-			add : addTabElement,
-			select : function(event, ui) {
-				$('LABEL:regex(id,softwareAccesses.*\.urlcheck)').mouseout();
-			},
-			preremove : function(event, ui) {
-				if (self.tabs.tabs('length') > 1) {
-					return false;
-				} else {
-					return true;
-				}
-			}
-		});
 		
-		function addTabElement(event, ui) {
+		var addTabElement = function(event, ui) {
 			var contents = $('div[id^="tabs-"]', this.context);
 
 			// -1 is the last but the last is the current added one, so its -2
@@ -63,6 +50,24 @@ function($, event, viewHelper, SoftwareTemplate, pluginService, SoftwareInfoTemp
 				}
 			}
 		};
+		
+		
+		this.tabs.tabs({
+			tabTemplate : "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>Remove Tab</span></li>",
+			add : addTabElement,
+			select : function(event, ui) {
+				$('LABEL:regex(id,softwareAccesses.*\.urlcheck)').mouseout();
+			},
+			preremove : function(event, ui) {
+				if (self.tabs.tabs('length') > 1) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+		});
+		
+
 				
 		this.events = {
 			'#softAdd|mouseenter' : function() {
@@ -197,6 +202,7 @@ function($, event, viewHelper, SoftwareTemplate, pluginService, SoftwareInfoTemp
 
 			statusDom.switchClasses(urlStatus, 'loadingCheck', 1);
 
+			var self = this;
 			pluginService.manageable(urlObj.val(), loginObj.val(), passObj.val(), function(softwareInfo) {
 				// success
 				if (softwareInfo.softwareId.warnings) {
@@ -226,35 +232,10 @@ function($, event, viewHelper, SoftwareTemplate, pluginService, SoftwareInfoTemp
 //					propertyDiv.append(str);
 //				}
 
-				// project Names
-				var projectNamesFormElem = $('SELECT:regex(id,softwareAccesses.*\.projectNames)', tabContent);
-				var oldVal = projectNamesFormElem.val();
-				if (oldVal == null) {
-					oldVal = $(projectNamesFormElem)
-							.data('newVal');
-				}
-				projectNamesFormElem.empty();
-				for ( var key in softwareInfo.projectNames) {
-					var projectName = softwareInfo.projectNames[key];
-					projectNamesFormElem.append($("<option></option>").attr("value", key).text(projectName));
-				}
-				projectNamesFormElem.val(oldVal);
-
-				// views
-				var projectViewsFormElem = $('SELECT:regex(id,softwareAccesses.*\.viewNames)', tabContent);
-				var oldVal = projectViewsFormElem.val();
-				if (oldVal == null) {
-					oldVal = $(projectViewsFormElem).data('newVal');
-				}
-				projectViewsFormElem.empty();
-				if (softwareInfo.viewNames) {
-					for ( var i = 0; i < softwareInfo.viewNames.length; i++) {
-						var viewName = softwareInfo.viewNames[i];
-						projectViewsFormElem.append($("<option></option>").attr("value", viewName).text(viewName));
-					}
-				}
-				projectViewsFormElem.val(oldVal);
-
+				var viewData = [{name : 'view1', projects : {projectKey1 : 'ProjectName1', projectKey2 : 'ProjectName2'}},
+				                {name : 'view2', projects : {projectKey3 : 'ProjectName3', projectKey4 : 'ProjectName4'}}];
+				
+				self.softwareElements.updateElements(softwareInfo.projectNames, viewData);
 			}, function() {
 				// fail
 				statusDom.switchClasses(urlStatus, 'failureCheck', 1);

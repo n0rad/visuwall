@@ -40,10 +40,27 @@
 		<dependency>
 			<groupId>net.awired.js</groupId>
 			<artifactId>jquery-ui</artifactId>
-			<version>1.8.11</version>
+			<version>1.8.18</version>
 			<type>war</type>
 		</dependency>
-
+		<dependency>
+			<groupId>net.awired.js</groupId>
+			<artifactId>jquery</artifactId>
+			<version>1.7.2</version>
+			<type>war</type>
+		</dependency>	
+		<dependency>
+			<groupId>net.awired.js</groupId>
+			<artifactId>underscore</artifactId>
+			<version>1.1.6</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>net.awired.js</groupId>
+			<artifactId>curl</artifactId>
+			<version>0.6.3-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
 
 
 		<!-- Test -->
@@ -90,6 +107,9 @@
 					</execution>
 				</executions>
 				<configuration>
+					<amdPreloads>
+						<amdPreload>main</amdPreload>
+					</amdPreloads>			
 					<coverage>true</coverage>
 					<runnerType>CURL</runnerType>
 				</configuration>

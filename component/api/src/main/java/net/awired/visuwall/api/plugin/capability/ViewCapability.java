@@ -42,7 +42,10 @@ public interface ViewCapability extends BasicCapability {
      * @param viewName
      * @return List of project names contained in view
      * @throws ViewNotFoundException
+     * @Deprecated not usable as we do not have id
      */
     List<String> findProjectNamesByView(String viewName) throws ViewNotFoundException;
+
+    //    Map<SoftwareProjectId, String> findJobNamesByView(String viewName) throws ViewNotFoundException;
 
 }

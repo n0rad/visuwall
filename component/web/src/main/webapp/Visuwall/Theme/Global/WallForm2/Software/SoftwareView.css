@@ -5,6 +5,15 @@ FORM#wallForm #softTabs {
 	padding: 0 !important;
 }
 
+FORM#wallForm #softTabs li.ui-state-default {
+	padding-bottom: 1px;
+}
+
+
+FORM#wallForm #softTabs li.ui-tabs-selected {
+	padding-bottom: 2px;
+}
+
 FORM#wallForm #softTabs .ui-tabs-panel {
 	background-color: #eee;
 }
@@ -51,7 +60,7 @@ FORM#wallForm DIV.softwareInfo DIV.element {
 
 FORM#wallForm DIV.softwareInfo .slider {
 	margin: 7px 5px;
-	width: 220px;
+	width: 450px;
 	float: left;
 }
 

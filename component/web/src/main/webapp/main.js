@@ -1,8 +1,24 @@
 define(['require', //	
         'js!Underscore.js!order', //
-        'js!jquery-1.4.3.js!order', //
+        'js!jquery-1.7.2.js!order', //
         //'js!Backbone.js!order'
         
+        
+        'css!jquery/jquery.marquee.min.css',
+        'css!jquery/jquery.selectBox.css',
+        
+        'js!jquery/jquery.ajsl.js!order',
+        'js!jquery/jquery.cookie.js!order',
+        'js!jquery/jquery.marquee.js!order',
+        'js!jquery/jquery.timeago.js!order',
+        'js!jquery/jquery.selector.js!order',
+        'js!jquery/jquery.selectBox.js!order',
+        'js!jquery/jquery.countdown.js!order',
+        'js!jquery/jquery.textfill.0.1.js!order',
+        'js!jquery/jquery.qtip-1.0.0-rc3.js!order',
+        'js!jquery/jquery.selectbox-0.6.1.js!order',
+        'js!jquery/jquery.history.js!order',
+        'js!jquery/jquery.history.extended.js!order'
         ], function(require) {
 
 //	define('backbone', function() {
@@ -11,21 +27,7 @@ define(['require', //
 
 	
 	
-	define('jquery', ['css!jquery/jquery.marquee.min.css',
-	                  'css!jquery/jquery.selectBox.css',
-	                  
-	                  'js!jquery/jquery.ajsl.js',
-	                  'js!jquery/jquery.cookie.js',
-	                  'js!jquery/jquery.marquee.js',
-	                  'js!jquery/jquery.timeago.js',
-	                  'js!jquery/jquery.selector.js',
-	                  'js!jquery/jquery.selectBox.js',
-	                  'js!jquery/jquery.countdown.js',
-	                  'js!jquery/jquery.textfill.0.1.js',
-	                  'js!jquery/jquery.qtip-1.0.0-rc3.js',
-	                  'js!jquery/jquery.selectbox-0.6.1.js',
-	                  'js!jquery/jquery.history.js!order',
-	                  'js!jquery/jquery.history.extended.js!order'
+	define('jquery', [
 	                  ], function() {
 		var jquery = $;
 		$.noConflict();
@@ -38,7 +40,23 @@ define(['require', //
 		return _;
 	});
 	
-	define('jqueryui', ['css!jquery/ui/jquery-ui.css', //
+	define('jqueryui', [
+
+'css!jquery/themes/base/jquery.ui.accordion.css',
+'css!jquery/themes/base/jquery.ui.all.css',
+'css!jquery/themes/base/jquery.ui.autocomplete.css',
+'css!jquery/themes/base/jquery.ui.base.css',
+'css!jquery/themes/base/jquery.ui.button.css',
+'css!jquery/themes/base/jquery.ui.core.css',
+'css!jquery/themes/base/jquery.ui.datepicker.css',
+'css!jquery/themes/base/jquery.ui.dialog.css',
+'css!jquery/themes/base/jquery.ui.progressbar.css',
+'css!jquery/themes/base/jquery.ui.resizable.css',
+'css!jquery/themes/base/jquery.ui.selectable.css',
+'css!jquery/themes/base/jquery.ui.slider.css',
+'css!jquery/themes/base/jquery.ui.tabs.css',
+'css!jquery/themes/base/jquery.ui.theme.css',
+
 	                    
 	                    'js!jquery/ui/jquery.ui.core.js!order', //
 	                    'js!jquery/ui/jquery.ui.widget.js!order', //
@@ -50,7 +68,7 @@ define(['require', //
 	                    'js!jquery/ui/jquery.ui.slider.js!order', //
 	                    'js!jquery/ui/jquery.ui.button.js!order', //
 	                    'js!jquery/ui/jquery.ui.position.js!order', //
-	                    'js!jquery/ui/jquery.multiselect.js!order', //
+//	                    'js!jquery/ui/jquery.multiselect.js!order', //
 	                    'js!jquery/ui/jquery.ui.sortable.js!order', //
 	                    'js!jquery/ui/jquery.ui.draggable.js!order', //
 	                    'js!jquery/ui/jquery.ui.resizable.js!order', //
@@ -81,7 +99,7 @@ define(['require', //
 	});
 
 	define('log', [ 'Ajsl/Log' ], function(log) {
-		return log;
+		return window.console;
 	});	
 
 	return {

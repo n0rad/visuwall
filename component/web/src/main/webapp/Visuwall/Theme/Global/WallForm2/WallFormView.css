@@ -56,6 +56,19 @@ FIELDSET.buildField LEGEND {
 	padding: 2px;
 }
 
+#wallForm button.ui-button-icon-only {
+	width: 1.7em;
+	height: 1.7em;
+}
+
+#wallForm .ui-button-text-only .ui-button-text {
+	padding: 0 !important;
+}
+
+#wallForm .ui-widget {
+	font-size: inherit;
+}
+
 DIV#visuwallForm #wallForm .failure {
 	display: inline;
 	color: red;
@@ -92,6 +105,21 @@ DIV#visuwallForm DIV#softAdd {
 	margin: .4em;
 	cursor: pointer;
 }
+
+DIV#visuwallForm LABEL.helper {
+	float:right;
+	width: 16px !important;
+	cursor: pointer;
+}
+
+DIV#visuwallForm DIV.helper {
+	border: solid #BBB 1px;
+	background-color: #F7F7F7;
+	padding: 1em;
+	margin-bottom: 1em;
+	clear: both;
+}
+
 
 DIV#visuwallForm LABEL.check {
 	float:right;

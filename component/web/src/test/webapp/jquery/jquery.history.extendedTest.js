@@ -1,5 +1,8 @@
-define(['js!Underscore.js!order',
-        'js!jquery-1.4.3.js!order',
+define(['curl/tdd/runner', 'require'], function (runner, require) {
+	runner(require).run(function(require) {
+
+require(['js!Underscore.js!order',
+        'js!jquery-1.7.2.js!order',
         'js!jquery/jquery.history.js!order',
         'js!jquery/jquery.history.extended.js!order'], function() {
 	
@@ -39,15 +42,10 @@ define(['js!Underscore.js!order',
 			
 			expect(parseRequest).toEqual([{ctrlVars : ['toto42'], ctrl : 'wall', vars : {}, forced : true}]);
 		});
-		
-//		it('should fail', function() {
-//
-//			expect('genre style ouda').toBe('genre sstyle ouda');
-//		});
-//		
-//		it('should error', function() {
-//			throw 'error';
-//		});
 			
 	});
+});
+
+
+	}).then(loaded);
 });

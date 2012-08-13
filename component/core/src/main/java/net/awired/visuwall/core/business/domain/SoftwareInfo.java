@@ -18,7 +18,6 @@ package net.awired.visuwall.core.business.domain;
 
 import java.util.List;
 import java.util.Map;
-
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.domain.SoftwareProjectId;
 
@@ -26,9 +25,9 @@ public class SoftwareInfo {
     private SoftwareId softwareId;
     private PluginInfo pluginInfo;
 
-    //TODO move to manage also quality
     private Map<SoftwareProjectId, String> projectNames;
     private List<String> viewNames;
+    private Map<String, Map<SoftwareProjectId, String>> viewInfos;
 
     public PluginInfo getPluginInfo() {
         return pluginInfo;
@@ -54,12 +53,12 @@ public class SoftwareInfo {
         this.softwareId = softwareId;
     }
 
-	public void setProjectNames(Map<SoftwareProjectId, String> projectNames) {
-		this.projectNames = projectNames;
-	}
+    public void setProjectNames(Map<SoftwareProjectId, String> projectNames) {
+        this.projectNames = projectNames;
+    }
 
-	public Map<SoftwareProjectId, String> getProjectNames() {
-		return projectNames;
-	}
+    public Map<SoftwareProjectId, String> getProjectNames() {
+        return projectNames;
+    }
 
 }

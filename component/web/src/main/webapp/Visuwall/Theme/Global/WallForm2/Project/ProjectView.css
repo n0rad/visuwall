@@ -1,3 +1,36 @@
+#projectTab #projectTabNav SPAN.ui-icon-close {
+	float:right;
+	margin: 0.4em 0.2em 0 0;
+	cursor: pointer;
+}
+
+#projectTab #projectTabNav DIV.dropzone {
+	width: 50px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+#projectTab #projectTabNav DIV.dropzone.active {
+	border: 1px dashed #c41313; 
+	background-color: #e76d6d;
+	display: block !important;
+}
+
+#projectTab #projectTabNav DIV.dropzone.hovered {
+	border: 1px dashed #425E13; 
+	background-color: #CFC;
+	display: block !important;
+}
+
+
+
+#projectTab #projectTabNav li.ui-tabs-selected {
+	padding-right: 1px;
+}
+
+
 /*** projectTab ***/
 FORM#wallForm DIV#projectTab.ui-tabs-vertical {
 	margin-top: 30px;
@@ -8,7 +41,7 @@ FORM#wallForm DIV#projectTab.ui-tabs-vertical {
 FORM#wallForm DIV#projectTab.ui-tabs-vertical .ui-tabs-nav {
 	padding: .2em .1em .2em .2em;
 	float: left;
-	width: 159px;
+	width: 165px;
 	
 	-moz-border-radius: 4px 0 0 4px;
 	-webkit-border-radius: 4px 0 0 4px;

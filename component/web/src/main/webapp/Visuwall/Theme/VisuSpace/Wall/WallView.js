@@ -8,8 +8,6 @@ function($, log) {
 	    var size = size || 80;
 	    return 'http://www.gravatar.com/avatar/' + MD5(email) + '?s=' + size;
 	}
-
-	
 	
 	var buildVisualDuration = function(duration) {
 		var inst = {

@@ -13,7 +13,7 @@ function(wallFormController, wallController) {
 			wallFormController.create2();
 		},
 		edit : function(vars, wallId) {
-			wallFormController.edit(wallId);		
+			wallFormController.edit(wallId);
 		},
 		edit2 : function(vars, wallId) {
 			wallFormController.edit2(wallId);

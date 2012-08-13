@@ -31,21 +31,19 @@
 		<fieldset class="timerField">
 			<legend>Timers</legend>
 
-			<div class="element">
 				<label for="softwareAccesses0.projectFinderDelaySecond">Software Refresh Time : <span class="bold projectFinderDelaySecond">45s</span></label>
 				<div class="slider projectFinderDelaySecondSlider"></div>
 				<input type="hidden" id="softwareAccesses0.projectFinderDelaySecond" name="softwareAccesses[0].projectFinderDelaySecond"
 					class="ui-widget-content ui-corner-all" value="" />
-			</div>
+				<label class="helper" for="softwareAccesses0.projectFinderDelaySecond.info"><img src="Visuwall/Theme/Global/WallForm2/img/help.png"></label>
+				<div id="softwareAccesses0.projectFinderDelaySecond.info" class="helper">This is an helper for something</div>
 
-			<div class="element">
 				<label for="softwareAccesses0.projectStatusDelaySecond">Project
 					Refresh Time <span class="bold projectStatusDelaySecond">45s</span>
 				</label>
 				<div class="slider projectStatusDelaySecondSlider"></div>
 				<input type="hidden" id="softwareAccesses0.projectStatusDelaySecond"
 					name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value="" />
-			</div>
 		</fieldset>
 		
 		<fieldset>
@@ -62,35 +60,6 @@
 		</fieldset>
 	</div>
 
-	<div class="projectsAccordion">
-		<h3>
-			<a href="#">Projects</a>
-		</h3>
-		<div class="accordionContent">
-			<ul class="projectList">
-<!-- 				<li class="projectItem ui-state-default">Visuwall-develop -->
-<!-- 					<div class="ui-state-default ui-corner-all addProject" -->
-<!-- 						title=".ui-icon-plusthick"> -->
-<!-- 						<span class="ui-icon ui-icon-plusthick"></span> -->
-<!-- 					</div></li> -->
-<!-- 				<li class="ui-state-default">Item 2</li> -->
-<!-- 				<li class="ui-state-default">Item 3</li> -->
-<!-- 				<li class="ui-state-default">Item 4</li> -->
-<!-- 				<li class="ui-state-default">Item 5</li> -->
-			</ul>
-		</div>
-		<h3>
-			<a href="#">Views</a>
-		</h3>
-		<div class="accordionContent">
-			<ul class="viewList">
-<!-- 				<li class="ui-state-highlight">Item 1</li> -->
-<!-- 				<li class="ui-state-highlight">Item 2</li> -->
-<!-- 				<li class="ui-state-highlight">Item 3</li> -->
-<!-- 				<li class="ui-state-highlight">Item 4</li> -->
-<!-- 				<li class="ui-state-highlight">Item 5</li> -->
-			</ul>
-		</div>
-	</div>
+	<div class="projectsAccordion"></div>
 	<div style="clear: both;"></div>
 </div>
