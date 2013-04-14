@@ -228,7 +228,7 @@
 				<version>1.8.0</version>
 				<configuration>
 					<header>/HEADER.txt</header>
-					<strictCheck>true</strictCheck>
+					<strictCheck>false</strictCheck>
 					<useDefaultExcludes>false</useDefaultExcludes>
 					<excludes>
 						<exclude>**/*.png</exclude>
