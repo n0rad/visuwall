@@ -41,6 +41,9 @@ public class JenkinsVersionPage {
     private void addWarnings(SoftwareId softwareInfo, String strVersion) {
         String cleanedVersion = StringUtils.remove(strVersion, ".");
         if (isNumeric(cleanedVersion)) {
+            strVersion = strVersion.replaceFirst("\\.","#");
+            strVersion = StringUtils.remove(strVersion, ".");
+            strVersion = strVersion.replaceFirst("#", ".");
             double version = Double.parseDouble(strVersion);
             if (version < 1.405) {
                 addWarningForVersionBefore1405(softwareInfo);

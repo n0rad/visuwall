@@ -39,10 +39,6 @@
 		</dependency>
 		<dependency>
 			<groupId>net.awired.visuwall</groupId>
-			<artifactId>visuwall-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.awired.visuwall</groupId>
 			<artifactId>visuwall-plugin-teamcity</artifactId>
 		</dependency>
 		<dependency>
@@ -128,11 +124,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.6.1</version>
-		</dependency>
-		<dependency>
-			<groupId>aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>1.5.3</version>
 		</dependency>
 
 		<!-- servlet/jsp -->
