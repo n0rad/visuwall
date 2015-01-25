@@ -63,7 +63,7 @@
                 forward="/welcome.do"/>
 
 
-        <action path="/html-img" forward="/html-img.jsp"/>
+        <action path="/html-img" forward="/html-res.img.jsp"/>
         <!-- :FIXME: ImageAction should compute module prefix -->
         <action path="/html-img-action"
                 actionId="imgAction"

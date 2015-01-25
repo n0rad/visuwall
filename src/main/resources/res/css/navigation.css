@@ -1,0 +1,105 @@
+/**
+ *     Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
+ *
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
+ *
+ *             http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ */
+
+DIV#navigationContainer {
+	height: 26px;
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	z-index: 50;
+}
+
+UL#navigation {
+	background: black url('../img/nav-back4.png') repeat-x;
+	border-bottom: 1px solid white;
+	height: 26px;
+}
+
+UL#navigation SELECT {
+	font-size: 1.3em;
+	font: -webkit-small-control;
+	border-color: grey;
+}
+
+UL#navigation DIV#fontSizeSlider {
+	width: 100px;
+	display: inline-block;
+}
+
+UL#navigation LI {
+	display:table-cell;
+	vertical-align:middle;
+	padding-right: 10px;
+	height: 26px;
+	white-space: nowrap;
+}
+
+LI#name {
+	padding-left: 5px;
+	font-size: 2em;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px white;
+}
+
+LI#helper {
+	width: 100%;
+	text-align: right;
+}
+
+LI#about {
+	font-weight: bold;
+	text-shadow: 1px 1px 1px white;
+}
+
+LI#about A {
+	color: black;
+}
+
+LI#about A:HOVER {
+	text-decoration: underline;
+}
+
+#helperdiv TABLE TH {
+	font-weight: bold;
+}
+
+#helperdiv TABLE {
+	background-color: white;
+	border: 1px solid black;
+	border-collapse: separate;
+	border-spacing: 5px;
+}
+
+
+#helperdiv TD .success-state,
+#helperdiv TD .failure-state,
+#helperdiv TD .new-state,
+#helperdiv TD .aborted-state,
+#helperdiv TD .unstable-state,
+#helperdiv TD .notbuilt-state,
+#helperdiv TD .unknown-state {
+	width: 20px;
+	height: 20px;	
+}
+
+#helperdiv TABLE TR TD {
+	margin: 10px;
+	padding: 2px;
+	text-align: left;
+}
+
+#modal {
+	overflow: hidden;

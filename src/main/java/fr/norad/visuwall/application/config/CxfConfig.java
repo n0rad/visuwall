@@ -24,6 +24,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.interceptor.LoggingInInterceptor;
+import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.beans.BeansException;
@@ -108,8 +110,8 @@ public class CxfConfig {
             jaxrsServerFactoryBean.setStaticSubresourceResolution(true);
             jaxrsServerFactoryBean.setServiceBeans(jaxrsResources);
             jaxrsServerFactoryBean.setProviders(jaxrsProviders);
-//            jaxrsServerFactoryBean.getInInterceptors().add(new LoggingInInterceptor(payloadLoggingLimit));
-//            jaxrsServerFactoryBean.getOutInterceptors().add(new LoggingOutInterceptor(payloadLoggingLimit));
+            jaxrsServerFactoryBean.getInInterceptors().add(new LoggingInInterceptor(payloadLoggingLimit));
+            jaxrsServerFactoryBean.getOutInterceptors().add(new LoggingOutInterceptor(payloadLoggingLimit));
             jaxrsServer = jaxrsServerFactoryBean.create();
         }
 
