@@ -98,7 +98,7 @@ define(['require', //
 		
 	});
 
-	define('log', [ 'ajsl/Log' ], function(log) {
+	define('log', [ 'Ajsl/Log' ], function(log) {
 		return window.console;
 	});	
 

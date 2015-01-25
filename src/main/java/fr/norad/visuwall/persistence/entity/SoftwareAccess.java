@@ -23,29 +23,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.CollectionOfElements;
 import org.springframework.util.AutoPopulatingList;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import fr.norad.visuwall.domain.SoftwareProjectId;
 import fr.norad.visuwall.plugin.capability.BasicCapability;
 
-@Entity
+//@Entity
 public class SoftwareAccess {
 
-    @Id
-    @GeneratedValue
+//    @Id
+//    @GeneratedValue
     private Long id;
 
     private String url;
 
-    @CollectionOfElements
+//    @CollectionOfElements
     private Map<String, String> properties = new HashMap<String, String>();
 
     private String login;
@@ -59,14 +54,14 @@ public class SoftwareAccess {
     @NotNull
     private Integer projectStatusDelaySecond = 10;
 
-    @CollectionOfElements
+//    @CollectionOfElements
     private List<String> projectNames = new AutoPopulatingList<String>(String.class);
-    @CollectionOfElements
+//    @CollectionOfElements
     private List<String> viewNames = new AutoPopulatingList<String>(String.class);
 
-    @Transient
+//    @Transient
     private ScheduledFuture<?> projectFinderTask;
-    @Transient
+//    @Transient
     private BasicCapability connection;
 
     public SoftwareAccess() {

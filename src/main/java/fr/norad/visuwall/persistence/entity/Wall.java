@@ -19,34 +19,20 @@ package fr.norad.visuwall.persistence.entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import org.hibernate.annotations.Cascade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Objects;
 import fr.norad.visuwall.domain.Project;
 import fr.norad.visuwall.domain.ProjectHolder;
 import fr.norad.visuwall.plugin.capability.BasicCapability;
-import net.awired.ajsl.persistence.entity.IdEntityImpl;
 
-@Entity
-@NamedQueries({
-        @NamedQuery(name = Wall.QUERY_NAMES, query = "SELECT name FROM Wall"), //
-        @NamedQuery(name = Wall.QUERY_WALLS, query = "SELECT w FROM Wall AS w"), //
-        @NamedQuery(name = Wall.QUERY_WALLBYNAME, query = "select w FROM Wall AS w where w.name = :"
-                + Wall.QUERY_PARAM_NAME) })
-public final class Wall extends IdEntityImpl<Long> {
+//@Entity
+//@NamedQueries({
+//        @NamedQuery(name = Wall.QUERY_NAMES, query = "SELECT name FROM Wall"), //
+//        @NamedQuery(name = Wall.QUERY_WALLS, query = "SELECT w FROM Wall AS w"), //
+//        @NamedQuery(name = Wall.QUERY_WALLBYNAME, query = "select w FROM Wall AS w where w.name = :"
+//                + Wall.QUERY_PARAM_NAME) })
+public final class Wall {
     public static final String QUERY_NAMES = "wallNames";
     public static final String QUERY_WALLS = "walls";
     public static final String QUERY_WALLBYNAME = "wallByName";
@@ -56,19 +42,19 @@ public final class Wall extends IdEntityImpl<Long> {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull
-    @Size(min = 1)
-    @Column(nullable = false, unique = true)
+//    @NotNull
+//    @Size(min = 1)
+//    @Column(nullable = false, unique = true)
     private String name;
 
-    @Valid
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "WALL_ID", nullable = false)
-    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.EVICT,
-            org.hibernate.annotations.CascadeType.DELETE, org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
+//    @Valid
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinColumn(name = "WALL_ID", nullable = false)
+//    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.EVICT,
+//            org.hibernate.annotations.CascadeType.DELETE, org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
     private List<SoftwareAccess> softwareAccesses = new ArrayList<>(); // new PopulatingShrinkList<SoftwareAccess>(SoftwareAccess.class);
 
-    @Transient
+//    @Transient
     private final ProjectHolder projects = new ProjectHolder();
 
     public Wall() {

@@ -14,22 +14,21 @@
  *     See the License for the specific language governing permissions and
  *     limitations under the License.
  */
-package fr.norad.visuwall.web.model;
+package fr.norad.visuwall.it;
 
-import java.util.Date;
-import fr.norad.visuwall.domain.Project;
-import lombok.Data;
+import org.junit.Test;
+import org.springframework.boot.test.IntegrationTest;
+import fr.norad.visuwall.it.core.VisuwallSpringTest;
 
-@Data
-public final class ProjectStatus {
-    private final String id;
-    private boolean building;
-    private int buildingTimeleftSecond;
-    private String lastBuildId;
-    private Date lastUpdate;
+@IntegrationTest({
+        "server.port:4242",
+})
+public class SimpleScenarioIT extends VisuwallSpringTest {
 
-    public ProjectStatus(Project project) {
-        this.id = project.getId();
+    @Test
+    public void should() throws Exception{
+        while (true) {
+            Thread.sleep(1000);
+        }
     }
-
 }

@@ -22,7 +22,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.Query;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,8 +41,9 @@ public class WallHolderServiceTest {
     public void init() {
         List<Wall> walls = new ArrayList<Wall>();
 
-        Query query = Mockito.mock(Query.class);
-        when(query.getResultList()).thenReturn(walls);
+        // TODO
+//        Query query = Mockito.mock(Query.class);
+//        when(query.getResultList()).thenReturn(walls);
 
         // EntityManager entityManager = Mockito.mock(EntityManager.class);
         // when(entityManager.createNamedQuery(Matchers.anyString())).thenReturn(query);

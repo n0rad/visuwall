@@ -17,17 +17,16 @@
 package fr.norad.visuwall.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import fr.norad.visuwall.service.WallHolderService;
 import fr.norad.visuwall.ProjectService;
 import fr.norad.visuwall.domain.Project;
 import fr.norad.visuwall.persistence.entity.Wall;
+import fr.norad.visuwall.service.WallHolderService;
 
-@Controller
-@RequestMapping("/wall/{wallName}/project")
+//@Controller
+//@RequestMapping("/wall/{wallName}/project")
 public class ProjectController {
 
     @Autowired

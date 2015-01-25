@@ -14,22 +14,17 @@
  *     See the License for the specific language governing permissions and
  *     limitations under the License.
  */
-package fr.norad.visuwall.web.model;
+package fr.norad.visuwall.web.controller;
 
-import java.util.Date;
-import fr.norad.visuwall.domain.Project;
-import lombok.Data;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import org.springframework.stereotype.Controller;
 
-@Data
-public final class ProjectStatus {
-    private final String id;
-    private boolean building;
-    private int buildingTimeleftSecond;
-    private String lastBuildId;
-    private Date lastUpdate;
-
-    public ProjectStatus(Project project) {
-        this.id = project.getId();
+@Controller
+@Path("/")
+public class RootController {
+    @GET
+    public String get() {
+        return "Salut";
     }
-
 }

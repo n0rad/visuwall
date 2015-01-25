@@ -18,8 +18,11 @@ package fr.norad.visuwall.application.cli;
 
 import static fr.norad.visuwall.application.Visuwall.VISUWALL;
 import static fr.norad.visuwall.application.Visuwall.VISUWALL_NAME;
+import java.io.IOException;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import fr.norad.visuwall.application.VisuwallHome;
 import fr.norad.visuwall.application.config.RootConfig;
 
 public class Main {
@@ -67,7 +70,11 @@ public class Main {
 
     private void clearDatabase(ArgumentManager args) {
         if (args.clearDatabase.isSet()) {
-            //TODO needs to be implemented
+            try {
+                FileUtils.deleteDirectory(new VisuwallHome(args.homeFolder.getParamOneValue()).getCassandraEmbeddedDirectory());
+            } catch (IOException e) {
+                throw new IllegalStateException("Cannot clear database", e);
+            }
         }
     }
 

@@ -42,7 +42,7 @@ import com.google.common.base.Strings;
 import fr.norad.visuwall.application.VisuwallHome;
 
 @Configuration
-@ComponentScan(basePackages = "com.blablacar.api.messages")
+@ComponentScan(basePackages = "fr.norad.visuwall")
 @EnableAutoConfiguration
 public class RootConfig {
 
@@ -72,7 +72,7 @@ public class RootConfig {
     public VisuwallHome home() throws IOException {
         String homeProperty = System.getProperty(HOME_SYSTEM_PROPERTY_NAME);
         if (Strings.isNullOrEmpty(homeProperty)) {
-            final File homeFile = Files.createTempDirectory(VISUWALL_NAME).toFile();
+            File homeFile = Files.createTempDirectory(VISUWALL_NAME).toFile();
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
                 public void run() {

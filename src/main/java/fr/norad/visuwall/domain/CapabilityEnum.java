@@ -18,12 +18,12 @@ package fr.norad.visuwall.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import fr.norad.core.lang.reflect.ReflectTools;
 import fr.norad.visuwall.plugin.capability.BasicCapability;
 import fr.norad.visuwall.plugin.capability.BuildCapability;
 import fr.norad.visuwall.plugin.capability.MetricCapability;
 import fr.norad.visuwall.plugin.capability.TestCapability;
 import fr.norad.visuwall.plugin.capability.ViewCapability;
-import net.awired.ajsl.core.lang.reflect.ReflectTool;
 
 public enum CapabilityEnum {
     build(BuildCapability.class), //
@@ -46,7 +46,7 @@ public enum CapabilityEnum {
         List<CapabilityEnum> capabilitiesEnums = new ArrayList<CapabilityEnum>();
         for (CapabilityEnum capabilitiesEnum : values()) {
             //TODO create classImplements with a list of interfaces in params and a list of intefaces in result ?
-            if (ReflectTool.classImplement(pluginConnection, capabilitiesEnum.getCapabilityClass())) {
+            if (ReflectTools.classImplement(pluginConnection, capabilitiesEnum.getCapabilityClass())) {
                 capabilitiesEnums.add(capabilitiesEnum);
             }
         }

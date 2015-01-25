@@ -17,43 +17,32 @@
 package fr.norad.visuwall.providers.common;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.ws.rs.core.MediaType;
-
 import com.google.common.io.ByteStreams;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.WebResource.Builder;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 
 public class GenericSoftwareClient {
 
     private static final HashMap<String, String> EMPTY_MAP = new HashMap<String, String>();
 
-    private Client client;
+//    private Client client;
 
     private static final ResourceCache CACHE = new ResourceCache();
 
     public GenericSoftwareClient() {
-        ClientConfig clientConfig = new DefaultClientConfig();
-        client = Client.create(clientConfig);
+//        ClientConfig clientConfig = new DefaultClientConfig();
+//        client = Client.create(clientConfig);
     }
 
     public GenericSoftwareClient(String login, String password) {
         checkNotNull(login, "login is mandatory");
         checkNotNull(password, "password is mandatory");
-        ClientConfig clientConfig = new DefaultClientConfig();
-        client = Client.create(clientConfig);
-        client.addFilter(new HTTPBasicAuthFilter(login, password));
+//        ClientConfig clientConfig = new DefaultClientConfig();
+//        client = Client.create(clientConfig);
+//        client.addFilter(new HTTPBasicAuthFilter(login, password));
     }
 
     public <T> T resource(String url, Class<T> clazz) throws ResourceNotFoundException {
@@ -63,26 +52,27 @@ public class GenericSoftwareClient {
     protected <T> T resource(String url, Class<T> clazz, Map<String, String> headers) throws ResourceNotFoundException {
         checkUrl(url);
         checkClass(clazz);
-        try {
-            T object = CACHE.get(url, clazz);
-            if (object == null) {
-                WebResource resource = client.resource(url);
-                Builder builder = null;
-                for (Map.Entry<String, String> header : headers.entrySet()) {
-                    builder = resource.header(header.getKey(), header.getValue());
-                }
-                if (builder == null) {
-                    object = resource.get(clazz);
-                } else {
-                    object = builder.get(clazz);
-                }
-                CACHE.put(object, url, clazz);
-            }
-            return object;
-        } catch (Throwable t) {
-            String errorMessage = "Can't get resource of type " + clazz.getName() + " at '" + url + "'";
-            throw new ResourceNotFoundException(errorMessage, t);
-        }
+//        try {
+//            T object = CACHE.get(url, clazz);
+//            if (object == null) {
+//                WebResource resource = client.resource(url);
+//                Builder builder = null;
+//                for (Map.Entry<String, String> header : headers.entrySet()) {
+//                    builder = resource.header(header.getKey(), header.getValue());
+//                }
+//                if (builder == null) {
+//                    object = resource.get(clazz);
+//                } else {
+//                    object = builder.get(clazz);
+//                }
+//                CACHE.put(object, url, clazz);
+//            }
+//            return object;
+//        } catch (Throwable t) {
+//            String errorMessage = "Can't get resource of type " + clazz.getName() + " at '" + url + "'";
+//            throw new ResourceNotFoundException(errorMessage, t);
+//        }
+        return null;
     }
 
     public <T> boolean exist(String url, Class<T> clazz) {
@@ -95,22 +85,23 @@ public class GenericSoftwareClient {
     }
 
     public <T> T resource(String url, Class<T> clazz, MediaType mediaType) throws ResourceNotFoundException {
-        checkUrl(url);
-        checkClass(clazz);
-        checkMediaType(mediaType);
-        try {
-            T object = CACHE.get(url, clazz, mediaType);
-            if (object == null) {
-                WebResource resource = client.resource(url);
-                object = resource.accept(mediaType).get(clazz);
-                CACHE.put(object, url, clazz, mediaType);
-            }
-            return object;
-        } catch (UniformInterfaceException e) {
-            throw new ResourceNotFoundException(e);
-        } catch (ClientHandlerException e) {
-            throw new ResourceNotFoundException(e);
-        }
+//        checkUrl(url);
+//        checkClass(clazz);
+//        checkMediaType(mediaType);
+//        try {
+//            T object = CACHE.get(url, clazz, mediaType);
+//            if (object == null) {
+//                WebResource resource = client.resource(url);
+//                object = resource.accept(mediaType).get(clazz);
+//                CACHE.put(object, url, clazz, mediaType);
+//            }
+//            return object;
+//        } catch (UniformInterfaceException e) {
+//            throw new ResourceNotFoundException(e);
+//        } catch (ClientHandlerException e) {
+//            throw new ResourceNotFoundException(e);
+//        }
+        return null;
     }
 
     public <T> T existingResource(String url, Class<T> clazz, MediaType mediaType) {

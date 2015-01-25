@@ -26,7 +26,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,16 +35,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
-import fr.norad.visuwall.service.WallHolderService;
 import fr.norad.visuwall.PluginServiceInterface;
 import fr.norad.visuwall.domain.Project;
 import fr.norad.visuwall.exception.BuildNotFoundException;
 import fr.norad.visuwall.exception.NotFoundException;
 import fr.norad.visuwall.persistence.entity.Wall;
+import fr.norad.visuwall.service.WallHolderService;
 import fr.norad.visuwall.web.model.ProjectStatus;
 
-@Controller
-@RequestMapping("/wall")
+//@Controller
+//@RequestMapping("/wall")
 public class WallController {
 
     private static final Logger LOG = LoggerFactory.getLogger(WallController.class);

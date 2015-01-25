@@ -14,22 +14,18 @@
  *     See the License for the specific language governing permissions and
  *     limitations under the License.
  */
-package fr.norad.visuwall.web.model;
+package fr.norad.visuwall.it.core;
 
-import java.util.Date;
-import fr.norad.visuwall.domain.Project;
-import lombok.Data;
+import java.lang.management.ManagementFactory;
 
-@Data
-public final class ProjectStatus {
-    private final String id;
-    private boolean building;
-    private int buildingTimeleftSecond;
-    private String lastBuildId;
-    private Date lastUpdate;
+public class DebugUtils {
 
-    public ProjectStatus(Project project) {
-        this.id = project.getId();
+    public static boolean isDebugging() {
+        String jvmArguments = ManagementFactory.getRuntimeMXBean()
+                .getInputArguments().toString();
+        return jvmArguments.contains("-agentlib:jdwp")
+                || jvmArguments.contains("-Xrunjdwp")
+                || jvmArguments.contains("DEBUG=true");
     }
 
 }

@@ -1,5 +1,5 @@
 define(['jquery', //
-        'ajsl/Dispatcher', //
+        'Ajsl/Dispatcher', //
         'Visuwall/Theme/Global/Navigation/navigationView', //
         'Visuwall/Service/wallService', //
         'js!ajsl-utils.js', //

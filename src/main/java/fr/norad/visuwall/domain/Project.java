@@ -23,10 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
-import javax.persistence.Transient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Preconditions;
@@ -51,15 +50,15 @@ public class Project implements Comparable<Project> {
     private String previousCompletedBuildId;
     private Date lastUpdate;
 
-    @Transient
+//    @Transient
     private ProjectKey projectKey;
-    @Transient
+//    @Transient
     private Map<SoftwareProjectId, BasicCapability> capabilities = new HashMap<SoftwareProjectId, BasicCapability>();
-    @Transient
+//    @Transient
     private final BuildCapability buildConnection;
-    @Transient
+//    @Transient
     private final SoftwareProjectId buildProjectId;
-    @Transient
+//    @Transient
     private ScheduledFuture<?> updateProjectTask;
 
     /////////////////////////////////////////////////////////////////////////////////////
