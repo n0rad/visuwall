@@ -213,14 +213,14 @@ define(['jquery', //
 			};
 
 			this.displaySuccess = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._getElement(projectId, 'TABLE').switchClasses(
 						$this.statusClasses, 'success-state', 3000);
 
 				$this._hideCommiters(projectId);
 			};
 
 			this.displayFailure = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._getElement(projectId, 'TABLE').switchClasses(
 						$this.statusClasses, 'failure-state', 3000);
 				$this._getElement(projectId).prependTo($this.table);
 				
@@ -228,7 +228,7 @@ define(['jquery', //
 				$this._showCommiters(projectId);
 			};
 			this.displayUnstable = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._getElement(projectId, 'TABLE').switchClasses(
 						$this.statusClasses, 'unstable-state', 3000);
 				$this._getElement(projectId).prependTo($this.table);
 				
@@ -236,24 +236,24 @@ define(['jquery', //
 			};
 
 			this.displayNew = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._getElement(projectId, 'TABLE').switchClasses(
 						$this.statusClasses, 'new-state', 3000);
 			};
 
 			this.displayAborted = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._getElement(projectId, 'TABLE').switchClasses(
 						$this.statusClasses, 'aborted-state', 3000);
 				$this._getElement(projectId).prependTo($this.table);
 			};
 
 			this.displayNotbuilt = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._getElement(projectId, 'TABLE').switchClasses(
 						$this.statusClasses, 'notbuilt-state', 3000);
 				$this._getElement(projectId).prependTo($this.table);
 			};
 
 			this.displayUnknown = function(projectId) {
-				$this._getElement(projectId, '.projectName').switchClasses(
+				$this._getElement(projectId, 'TABLE').switchClasses(
 						$this.statusClasses, 'unknown-state', 3000);
 				$this._getElement(projectId).prependTo($this.table);
 			};
@@ -417,22 +417,23 @@ define(['jquery', //
 				projectTD.append(projectInnerTable);
 
 				projectInnerTable
-						.append($('<tr><td class="projectName"><span>' + projectName + '</span>'
+						.append($('<tr height="70%"><td class="projectName"><span>' + projectName + '</span>'
 								+ ' <div class="inlineInfo"><abbr class="timeago" title=""></abbr> <span class="duration"></span><div><span class="lastUpdate"></span></td></tr>'));
+				//projectInnerTable
+				//		.append($('<tr style="display:none; height: 80%" class="commitersTR"><td><ul class="commiters marquee" style="height: 100%"></ul></tr></td>'));
+				//projectInnerTable
+				//		.append($('<tr style="display:none" class="qualityTR"><td><ul class="quality marquee"></ul></tr></td>'));
 				projectInnerTable
-						.append($('<tr style="display:none; height: 80%" class="commitersTR"><td><ul class="commiters marquee" style="height: 100%"></ul></tr></td>'));
-				projectInnerTable
-						.append($('<tr style="display:none" class="qualityTR"><td><ul class="quality marquee"></ul></tr></td>'));
-				projectInnerTable
-						.append($('<tr style="display:none" class= "timeleftTR"><td><p class="timeleft"></p></tr></td>'));
-				projectInnerTable
-						.append($('<tr style="display:none" class="iTestTR"><td class="iTestTD"><table class="iTest"><tr><td class="failure"><span class="num"></span><span class="diff"></span></td><td class="ignore"><span class="num"></span><span class="diff"></span></td><td class="success"><span class="num"></span><span class="diff"></span></td></tr></table></tr></td>'));
-				projectInnerTable
-						.append($('<tr style="display:none" class="uTestTR"><td class="uTestTD"><table class="uTest"><tr><td class="failure"><span class="num"></span><span class="diff"></span></td><td class="ignore"><span class="num"></span><span class="diff"></span></td><td class="success"><span class="num"></span><span class="diff"></span></td></tr></table></tr></td>'));
+						.append($('<tr style="display:none;" class= "projectBuild timeleftTR"><td><p class="timeleft"></p></tr></td>'));
+				//projectInnerTable
+				//		.append($('<tr style="display:none" class="iTestTR"><td class="iTestTD"><table class="iTest"><tr><td class="failure"><span class="num"></span><span class="diff"></span></td><td class="ignore"><span class="num"></span><span class="diff"></span></td><td class="success"><span class="num"></span><span class="diff"></span></td></tr></table></tr></td>'));
+				//projectInnerTable
+				//		.append($('<tr style="display:none" class="uTestTR"><td class="uTestTD"><table class="uTest"><tr><td class="failure"><span class="num"></span><span class="diff"></span></td><td class="ignore"><span class="num"></span><span class="diff"></span></td><td class="success"><span class="num"></span><span class="diff"></span></td></tr></table></tr></td>'));
 				return projectTD;
 			};
 
 			this._hideCountDown = function(projectId) {
+				$this._getElement(projectId, 'DIV.inlineInfo').show();
 				$this._getElement(projectId, 'TR.timeleftTR').hide();
 			};
 			this._hideQuality = function(projectId) {
@@ -460,11 +461,10 @@ define(['jquery', //
 				$this._getElement(projectId, "TR.uTestTR").show();
 			};
 			this._showCountdown = function(projectId) {
+				$this._getElement(projectId, 'DIV.inlineInfo').hide();
 				$this._getElement(projectId, "TR.timeleftTR").show();
 			};
-			this._hideCountdown = function(projectId) {
-				$this._getElement(projectId, "TR.timeleftTR").hide();
-			};
+
 		};
 		
 	return wallView;
