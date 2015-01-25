@@ -1,0 +1,189 @@
+
+TABLE.softwareInfo {
+	border-collapse: separate;
+	border-spacing: 1px;
+	width: 100%;
+}
+
+TABLE.softwareInfo TH, TABLE.softwareInfo TD {
+	background-color: #EBE79A;
+	padding: 2px;
+}
+
+TABLE.softwareInfo TH {
+	font-weight: bold;
+	text-align: center;
+}
+
+TABLE.softwareInfo TD {
+	text-align: left;
+}
+
+TABLE.softwareInfo .label {
+	font-weight: bold;
+}
+
+FIELDSET.propertiesField LEGEND {
+	display: none;
+}
+FIELDSET.timerField LEGEND {
+	display: none;
+}
+FIELDSET.buildField LEGEND {
+	display: none;
+}
+
+
+#wallForm .loader {
+	display: inline;
+	float:left;
+	margin: 10px 10px 10px 0px;
+	padding: 2px;
+}
+
+#wallForm button.ui-button-icon-only {
+	width: 1.7em;
+	height: 1.7em;
+}
+
+#wallForm .ui-button-text-only .ui-button-text {
+	padding: 0 !important;
+}
+
+#wallForm .ui-widget {
+	font-size: inherit;
+}
+
+DIV#visuwallForm #wallForm .failure {
+	display: inline;
+	color: red;
+	font-weight: bold;
+	float:left;
+	margin: 10px 10px 10px 0px;
+	padding: 2px;
+}
+
+DIV#visuwallForm #wallForm .success {
+	display: inline;
+	color: green;
+	font-weight: bold;
+	float:left;
+	margin: 10px 10px 10px 0px;
+	padding: 2px;
+}
+
+DIV#visuwallForm #wallForm .submit {
+	float:left;
+	margin: 10px;
+}
+
+DIV#visuwallForm #wallForm .disabled {
+	background-color: #666;
+} 
+
+DIV#visuwallForm INPUT.disabled {
+	color: #666;
+	background-color: #F0F0F0;
+}
+
+DIV#visuwallForm DIV#softAdd {
+	margin: .4em;
+	cursor: pointer;
+}
+
+DIV#visuwallForm LABEL.helper {
+	float:right;
+	width: 16px !important;
+	cursor: pointer;
+}
+
+DIV#visuwallForm DIV.helper {
+	border: solid #BBB 1px;
+	background-color: #F7F7F7;
+	padding: 1em;
+	margin-bottom: 1em;
+	clear: both;
+}
+
+
+DIV#visuwallForm LABEL.check {
+	float:right;
+	width: 16px !important;
+	height: 16px !important;
+	margin: 3px;
+}
+
+DIV#visuwallForm LABEL.loadingCheck {
+	background: transparent url('../WallForm/img/ajax-loader.gif') no-repeat;
+}
+
+DIV#visuwallForm LABEL.successCheck {
+	background: transparent url('../WallForm/img/tick.png') no-repeat;
+}
+
+DIV#visuwallForm LABEL.failureCheck {
+	background: transparent url('../WallForm/img/tick-no.png') no-repeat;
+}
+
+DIV#visuwallForm LABEL.warningCheck {
+	background: transparent url('../WallForm/img/warning.png') no-repeat;
+}
+
+DIV#visuwallForm .ui-state-active,
+DIV#visuwallForm .ui-widget-content .ui-state-active,
+DIV#visuwallForm .ui-widget-header .ui-state-active {
+	background: repeat-x scroll 50% 50% #EEEEEE !important;
+}
+
+DIV#visuwallForm DIV.projects {
+	width: 300px;
+	height: 300px;
+	position: absolute;
+	right: 20px;
+}
+
+DIV#visuwallForm {
+	display: none;
+	position: absolute;
+	width: 100%;
+}
+DIV#over {
+	background: #666 url('../Wall/back-texture.png') 50% 50% repeat;
+	opacity: .50;
+	filter: Alpha(Opacity =     50);
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	display: none;
+}
+DIV#visuwallForm FORM#wallForm {
+	width: 950px;
+	margin: auto;
+}
+DIV#visuwallForm FORM#wallForm INPUT,
+DIV#visuwallForm FORM#wallForm LABEL {
+	display: block;
+	width: 220px;
+}
+/*** sortables ***/
+DIV#visuwallForm FORM#wallForm UL.projectList LI,
+DIV#visuwallForm FORM#wallForm UL.viewList LI,
+DIV#visuwallForm FORM#wallForm UL.projectTabNav LI,
+DIV#visuwallForm FORM#wallForm UL.softwareElementList LI {
+	display: block;
+	height: 1.5em;
+	line-height: 1.5em;
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+}
+DIV#visuwallForm  LI.projectItem {
+	display: block;
+	height: 1.5em;
+	line-height: 1.5em;
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+}
+DIV#visuwallForm  LI.projectItem DIV.addProject {
+	display: inline-block;
+	float: right;
+}

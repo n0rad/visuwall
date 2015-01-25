@@ -1,0 +1,87 @@
+
+DIV#navigationContainer {
+	height: 26px;
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	z-index: 50;
+}
+
+UL#navigation {
+	background: black url('img/nav-back4.png') repeat-x;
+	border-bottom: 1px solid white;
+	height: 26px;
+}
+
+UL#navigation SELECT {
+	font-size: 1.3em;
+	font: -webkit-small-control;
+	border-color: #666;
+}
+
+UL#navigation DIV#fontSizeSlider {
+	width: 100px;
+	display: inline-block;
+}
+
+UL#navigation LI {
+	display:table-cell;
+	vertical-align:middle;
+	padding-right: 10px;
+	height: 26px;
+	white-space: nowrap;
+}
+
+LI#name {
+	padding-left: 5px;
+	font-size: 2em;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px white;
+}
+
+LI#helper {
+	width: 100%;
+	text-align: right;
+}
+
+LI#about {
+	font-weight: bold;
+	text-shadow: 1px 1px 1px white;
+}
+
+LI#about A {
+	color: black;
+}
+
+LI#about A:HOVER {
+	text-decoration: underline;
+}
+
+#helperdiv TABLE TH {
+	font-weight: bold;
+}
+
+#helperdiv TABLE {
+	background-color: white;
+	border: 1px solid black;
+	border-collapse: separate;
+	border-spacing: 5px;
+}
+
+
+#helperdiv TD .success-state,
+#helperdiv TD .failure-state,
+#helperdiv TD .new-state,
+#helperdiv TD .aborted-state,
+#helperdiv TD .unstable-state,
+#helperdiv TD .notbuilt-state,
+#helperdiv TD .unknown-state {
+	width: 20px;
+	height: 20px;	
+}
+
+#helperdiv TABLE TR TD {
+	margin: 10px;
+	padding: 2px;
+	text-align: left;
+}

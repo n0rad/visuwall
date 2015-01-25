@@ -1,0 +1,25 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Visuwall</title>
+<link rel="shortcut icon" href="favicon.ico" />
+
+<script type="text/javascript">curl = {baseUrl: ''};</script>
+<script type="text/javascript" src="curl.js"></script>
+<script type="text/javascript">
+	var require = curl; 
+	require(['bootstrap'], function(main) {
+			main.start({wallNames : []});
+	});
+	</script>
+</head>
+<body class="visuwallBack">
+	<div id="modal" style="display: none"></div>
+	<div id="navigationContainer"></div>
+	<ul id="projectsTable"></ul>
+	<div id="over"></div>
+	<div id="visuwallForm">
+	</div>
+</body>
+</html>

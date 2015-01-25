@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<buildType id="bt297" name="Build" href="/app/rest/buildTypes/id:bt297"
+	webUrl="http://teamcity.jetbrains.com/viewType.html?buildTypeId=bt297"
+	description="" paused="false">
+	<project name="Amazon API client" id="project54"
+		href="/app/rest/projects/id:project54" />
+	<vcs-root>
+		<vcs-root-entry>
+			<checkout-rules></checkout-rules>
+			<vcs-root href="/app/rest/vcs-roots/id:83" name="http://typica.googlecode.com/svn/trunk" />
+		</vcs-root-entry>
+	</vcs-root>
+	<builds href="/app/rest/buildTypes/id:bt297/builds/" />
+	<parameters>
+		<property name="system.rel.version" value="1.7.x" />
+	</parameters>
+	<runParameters>
+		<property name="build-file-path" value="build.xml" />
+		<property name="target" value="dist" />
+		<property name="teamcity.coverage.emma.include.source" value="true" />
+		<property name="teamcity.coverage.emma.instr.parameters"
+			value="-ix -*Test*" />
+		<property name="teamcity.coverage.idea.includePatterns"
+			value="*" />
+	</runParameters>
+</buildType>

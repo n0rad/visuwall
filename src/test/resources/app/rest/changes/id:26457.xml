@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<change username="npryce" date="20100702T021357+0400"
+	webLink="http://teamcity.jetbrains.com/viewModification.html?modId=26457&amp;personal=false"
+	version="1389" id="26457" href="/app/rest/changes/id:26457">
+	<comment>ignoring workspace.xml and dictionaries</comment>
+	<files>
+		<file relative-file=".idea"
+			file="http://svn.codehaus.org:80/jmock/trunk/jmock2/.idea"
+			after-revision="1389" before-revision="1388" />
+	</files>
+</change>

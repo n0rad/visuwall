@@ -1,0 +1,51 @@
+<configuration scan="true" scanPeriod="30 seconds">
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+    <conversionRule conversionWord="colorlevel"
+                    converterClass="fr.norad.logback.prettier.ColorLevelCompositeConverter"/>
+    <conversionRule conversionWord="bold"
+                    converterClass="fr.norad.logback.prettier.BoldCompositeConverter"/>
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+
+    <appender name="FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${VISUWALL_HOME}/logs/visuwall.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern><![CDATA[${VISUWALL_HOME}/logs/visuwall.%d{yyyy-MM-dd}.log]]></fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern><![CDATA[%d{yyyy-MM-dd HH:mm:ss.SSS} [%-10.10thread] %-5level %-45.45(%41C{41}:%L) - %msg%n%wex]]></pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <withJansi>true</withJansi>
+        <encoder>
+            <pattern>
+                <![CDATA[%blue(%d{HH:mm:ss.SSS}) [%-10.10thread] %colorlevel(%-5level) %cyan(%-45.45(%41C{41}:%L)) - %msg%n%wex]]></pattern>
+        </encoder>
+        <filter class="fr.norad.logback.prettier.OutFilter"/>
+    </appender>
+    <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.err</target>
+        <withJansi>true</withJansi>
+        <encoder>
+            <pattern>
+                <![CDATA[%boldBlue(%d{HH:mm:ss.SSS}) %bold([%-10.10thread]) %colorlevel(%-5level) %bold(%cyan(%-45.45(%41C{41}:%L))) - %colorlevel(%msg) %n%wex]]></pattern>
+        </encoder>
+        <filter class="fr.norad.logback.prettier.ErrFilter"/>
+    </appender>
+
+    <logger name="fr.norad" level="${log.visuwall.norad:-DEBUG}"/>
+
+    <root>
+        <level value="${log.visuwall.root:-INFO}"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STDERR"/>
+    </root>
+
+</configuration>

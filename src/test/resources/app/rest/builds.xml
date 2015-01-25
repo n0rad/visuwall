@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<builds nextHref="/app/rest/builds?count=100&amp;start=100"
+	count="100">
+	<build id="51753" number="421" status="ERROR" buildTypeId="bt213"
+		startDate="20110606T120642+0400" href="/app/rest/builds/id:51753"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51753&amp;buildTypeId=bt213" />
+	<build id="51752" number="462" status="ERROR" buildTypeId="bt209"
+		startDate="20110606T120626+0400" href="/app/rest/builds/id:51752"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51752&amp;buildTypeId=bt209" />
+	<build id="51751" number="1502" status="FAILURE" buildTypeId="bt22"
+		startDate="20110606T100008+0400" href="/app/rest/builds/id:51751"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51751&amp;buildTypeId=bt22" />
+	<build id="51750" number="1477" status="FAILURE" buildTypeId="bt24"
+		startDate="20110606T100006+0400" href="/app/rest/builds/id:51750"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51750&amp;buildTypeId=bt24" />
+	<build id="51749" number="934" status="ERROR" buildTypeId="bt185"
+		startDate="20110606T092438+0400" href="/app/rest/builds/id:51749"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51749&amp;buildTypeId=bt185" />
+	<build id="51748" number="2300" status="ERROR" buildTypeId="bt109"
+		startDate="20110606T092316+0400" href="/app/rest/builds/id:51748"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51748&amp;buildTypeId=bt109" />
+	<build id="51747" number="3444" status="ERROR" buildTypeId="bt10"
+		startDate="20110606T092316+0400" href="/app/rest/builds/id:51747"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51747&amp;buildTypeId=bt10" />
+	<build id="51746" number="256" status="SUCCESS" buildTypeId="bt128"
+		startDate="20110606T091256+0400" href="/app/rest/builds/id:51746"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51746&amp;buildTypeId=bt128" />
+	<build id="51744" number="95" status="ERROR" buildTypeId="bt218"
+		startDate="20110606T062101+0400" href="/app/rest/builds/id:51744"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51744&amp;buildTypeId=bt218" />
+	<build id="51742" number="94" status="ERROR" buildTypeId="bt218"
+		startDate="20110606T035504+0400" href="/app/rest/builds/id:51742"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51742&amp;buildTypeId=bt218" />
+	<build id="51741" number="93" status="ERROR" buildTypeId="bt218"
+		startDate="20110606T010759+0400" href="/app/rest/builds/id:51741"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51741&amp;buildTypeId=bt218" />
+	<build id="51740" number="2028" status="FAILURE" buildTypeId="bt41"
+		startDate="20110606T010020+0400" href="/app/rest/builds/id:51740"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51740&amp;buildTypeId=bt41" />
+	<build id="51739" number="1829" status="FAILURE" buildTypeId="bt107"
+		startDate="20110606T010016+0400" href="/app/rest/builds/id:51739"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51739&amp;buildTypeId=bt107" />
+	<build id="51738" number="288" status="ERROR" buildTypeId="bt127"
+		startDate="20110606T001251+0400" href="/app/rest/builds/id:51738"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51738&amp;buildTypeId=bt127" />
+	<build id="51737" number="379" status="SUCCESS" buildTypeId="bt125"
+		startDate="20110605T224740+0400" href="/app/rest/builds/id:51737"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51737&amp;buildTypeId=bt125" />
+	<build id="51736" number="378" status="FAILURE" buildTypeId="bt125"
+		startDate="20110605T212945+0400" href="/app/rest/builds/id:51736"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51736&amp;buildTypeId=bt125" />
+	<build id="51735" number="92" status="ERROR" buildTypeId="bt218"
+		startDate="20110605T175227+0400" href="/app/rest/builds/id:51735"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51735&amp;buildTypeId=bt218" />
+	<build id="51734" number="933" status="ERROR" buildTypeId="bt185"
+		startDate="20110605T143312+0400" href="/app/rest/builds/id:51734"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51734&amp;buildTypeId=bt185" />
+	<build id="51733" number="2299" status="ERROR" buildTypeId="bt109"
+		startDate="20110605T143200+0400" href="/app/rest/builds/id:51733"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51733&amp;buildTypeId=bt109" />
+	<build id="51732" number="3443" status="ERROR" buildTypeId="bt10"
+		startDate="20110605T142542+0400" href="/app/rest/builds/id:51732"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51732&amp;buildTypeId=bt10" />
+	<build id="51730" number="420" status="ERROR" buildTypeId="bt213"
+		startDate="20110605T120543+0400" href="/app/rest/builds/id:51730"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51730&amp;buildTypeId=bt213" />
+	<build id="51729" number="461" status="ERROR" buildTypeId="bt209"
+		startDate="20110605T120539+0400" href="/app/rest/builds/id:51729"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51729&amp;buildTypeId=bt209" />
+	<build id="51728" number="1501" status="FAILURE" buildTypeId="bt22"
+		startDate="20110605T101554+0400" href="/app/rest/builds/id:51728"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51728&amp;buildTypeId=bt22" />
+	<build id="51727" number="1476" status="FAILURE" buildTypeId="bt24"
+		startDate="20110605T101438+0400" href="/app/rest/builds/id:51727"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51727&amp;buildTypeId=bt24" />
+	<build id="51726" number="589" status="FAILURE" buildTypeId="bt184"
+		startDate="20110605T101246+0400" href="/app/rest/builds/id:51726"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51726&amp;buildTypeId=bt184" />
+	<build id="51724" number="2027" status="FAILURE" buildTypeId="bt41"
+		startDate="20110605T031450+0400" href="/app/rest/builds/id:51724"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51724&amp;buildTypeId=bt41" />
+	<build id="51723" number="1828" status="ERROR" buildTypeId="bt107"
+		startDate="20110605T030611+0400" href="/app/rest/builds/id:51723"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51723&amp;buildTypeId=bt107" />
+	<build id="51722" number="2639" status="FAILURE" buildTypeId="bt17"
+		startDate="20110604T192433+0400" href="/app/rest/builds/id:51722"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51722&amp;buildTypeId=bt17" />
+	<build id="51721" number="3780" status="SUCCESS" buildTypeId="bt15"
+		startDate="20110604T184254+0400" href="/app/rest/builds/id:51721"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51721&amp;buildTypeId=bt15" />
+	<build id="51718" number="419" status="ERROR" buildTypeId="bt213"
+		startDate="20110604T120526+0400" href="/app/rest/builds/id:51718"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51718&amp;buildTypeId=bt213" />
+	<build id="51717" number="460" status="ERROR" buildTypeId="bt209"
+		startDate="20110604T120515+0400" href="/app/rest/builds/id:51717"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51717&amp;buildTypeId=bt209" />
+	<build id="51716" number="287" status="ERROR" buildTypeId="bt127"
+		startDate="20110604T120502+0400" href="/app/rest/builds/id:51716"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51716&amp;buildTypeId=bt127" />
+	<build id="51715" number="1500" status="FAILURE" buildTypeId="bt22"
+		startDate="20110604T101551+0400" href="/app/rest/builds/id:51715"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51715&amp;buildTypeId=bt22" />
+	<build id="51714" number="1475" status="FAILURE" buildTypeId="bt24"
+		startDate="20110604T101444+0400" href="/app/rest/builds/id:51714"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51714&amp;buildTypeId=bt24" />
+	<build id="51713" number="588" status="FAILURE" buildTypeId="bt184"
+		startDate="20110604T100017+0400" href="/app/rest/builds/id:51713"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51713&amp;buildTypeId=bt184" />
+	<build id="51712" number="255" status="SUCCESS" buildTypeId="bt128"
+		startDate="20110604T090011+0400" href="/app/rest/builds/id:51712"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51712&amp;buildTypeId=bt128" />
+	<build id="51707" number="2638" status="FAILURE" buildTypeId="bt17"
+		startDate="20110604T064408+0400" href="/app/rest/builds/id:51707"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51707&amp;buildTypeId=bt17" />
+	<build id="51706" number="3779" status="SUCCESS" buildTypeId="bt15"
+		startDate="20110604T062515+0400" href="/app/rest/builds/id:51706"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51706&amp;buildTypeId=bt15" />
+	<build id="51704" number="2637" status="FAILURE" buildTypeId="bt17"
+		startDate="20110604T054403+0400" href="/app/rest/builds/id:51704"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51704&amp;buildTypeId=bt17" />
+	<build id="51703" number="3778" status="SUCCESS" buildTypeId="bt15"
+		startDate="20110604T052508+0400" href="/app/rest/builds/id:51703"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51703&amp;buildTypeId=bt15" />
+	<build id="51701" number="2636" status="FAILURE" buildTypeId="bt17"
+		startDate="20110604T034423+0400" href="/app/rest/builds/id:51701"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51701&amp;buildTypeId=bt17" />
+	<build id="51700" number="418" status="ERROR" buildTypeId="bt213"
+		startDate="20110604T032810+0400" href="/app/rest/builds/id:51700"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51700&amp;buildTypeId=bt213" />
+	<build id="51699" number="459" status="ERROR" buildTypeId="bt209"
+		startDate="20110604T032754+0400" href="/app/rest/builds/id:51699"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51699&amp;buildTypeId=bt209" />
+	<build id="51698" number="3777" status="SUCCESS" buildTypeId="bt15"
+		startDate="20110604T032505+0400" href="/app/rest/builds/id:51698"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51698&amp;buildTypeId=bt15" />
+	<build id="51696" number="2635" status="FAILURE" buildTypeId="bt17"
+		startDate="20110604T015036+0400" href="/app/rest/builds/id:51696"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51696&amp;buildTypeId=bt17" />
+	<build id="51694" number="3776" status="SUCCESS" buildTypeId="bt15"
+		startDate="20110604T012909+0400" href="/app/rest/builds/id:51694"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51694&amp;buildTypeId=bt15" />
+	<build id="51693" number="377" status="FAILURE" buildTypeId="bt125"
+		startDate="20110604T012312+0400" href="/app/rest/builds/id:51693"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51693&amp;buildTypeId=bt125" />
+	<build id="51692" number="2634" status="FAILURE" buildTypeId="bt17"
+		startDate="20110604T010425+0400" href="/app/rest/builds/id:51692"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51692&amp;buildTypeId=bt17" />
+	<build id="51691" number="1827" status="FAILURE" buildTypeId="bt107"
+		startDate="20110604T010405+0400" href="/app/rest/builds/id:51691"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51691&amp;buildTypeId=bt107" />
+	<build id="51690" number="3775" status="SUCCESS" buildTypeId="bt15"
+		startDate="20110604T002424+0400" href="/app/rest/builds/id:51690"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51690&amp;buildTypeId=bt15" />
+	<build id="51689" number="2026" status="FAILURE" buildTypeId="bt41"
+		startDate="20110604T001335+0400" href="/app/rest/builds/id:51689"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51689&amp;buildTypeId=bt41" />
+	<build id="51688" number="1826" status="FAILURE" buildTypeId="bt107"
+		startDate="20110604T000009+0400" href="/app/rest/builds/id:51688"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51688&amp;buildTypeId=bt107" />
+	<build id="51687" number="2633" status="FAILURE" buildTypeId="bt17"
+		startDate="20110603T235947+0400" href="/app/rest/builds/id:51687"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51687&amp;buildTypeId=bt17" />
+	<build id="51686" number="3774" status="SUCCESS" buildTypeId="bt15"
+		startDate="20110603T233718+0400" href="/app/rest/builds/id:51686"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51686&amp;buildTypeId=bt15" />
+	<build id="51685" number="2025" status="FAILURE" buildTypeId="bt41"
+		startDate="20110603T221307+0400" href="/app/rest/builds/id:51685"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51685&amp;buildTypeId=bt41" />
+	<build id="51684" number="1825" status="ERROR" buildTypeId="bt107"
+		startDate="20110603T220705+0400" href="/app/rest/builds/id:51684"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51684&amp;buildTypeId=bt107" />
+	<build id="51683" number="1.5.4476" status="ERROR" buildTypeId="bt40"
+		startDate="20110603T201237+0400" href="/app/rest/builds/id:51683"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51683&amp;buildTypeId=bt40" />
+	<build id="51682" number="1.5.4473" status="ERROR" buildTypeId="bt40"
+		startDate="20110603T191341+0400" href="/app/rest/builds/id:51682"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51682&amp;buildTypeId=bt40" />
+	<build id="51681" number="6.5-1" status="SUCCESS" buildTypeId="bt314"
+		startDate="20110603T184743+0400" href="/app/rest/builds/id:51681"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51681&amp;buildTypeId=bt314" />
+	<build id="51679" number="2024" status="FAILURE" buildTypeId="bt41"
+		startDate="20110603T170015+0400" href="/app/rest/builds/id:51679"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51679&amp;buildTypeId=bt41" />
+	<build id="51678" number="1824" status="FAILURE" buildTypeId="bt107"
+		startDate="20110603T170013+0400" href="/app/rest/builds/id:51678"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51678&amp;buildTypeId=bt107" />
+	<build id="51677" number="30" status="SUCCESS" buildTypeId="bt287"
+		startDate="20110603T162741+0400" href="/app/rest/builds/id:51677"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51677&amp;buildTypeId=bt287" />
+	<build id="51676" number="932" status="ERROR" buildTypeId="bt185"
+		startDate="20110603T162644+0400" href="/app/rest/builds/id:51676"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51676&amp;buildTypeId=bt185" />
+	<build id="51675" number="2298" status="ERROR" buildTypeId="bt109"
+		startDate="20110603T162611+0400" href="/app/rest/builds/id:51675"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51675&amp;buildTypeId=bt109" />
+	<build id="51674" number="3442" status="ERROR" buildTypeId="bt10"
+		startDate="20110603T161838+0400" href="/app/rest/builds/id:51674"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51674&amp;buildTypeId=bt10" />
+	<build id="51662" number="2023" status="FAILURE" buildTypeId="bt41"
+		startDate="20110603T131203+0400" href="/app/rest/builds/id:51662"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51662&amp;buildTypeId=bt41" />
+	<build id="51661" number="1823" status="FAILURE" buildTypeId="bt107"
+		startDate="20110603T130614+0400" href="/app/rest/builds/id:51661"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51661&amp;buildTypeId=bt107" />
+	<build id="51659" number="417" status="ERROR" buildTypeId="bt213"
+		startDate="20110603T120659+0400" href="/app/rest/builds/id:51659"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51659&amp;buildTypeId=bt213" />
+	<build id="51658" number="458" status="ERROR" buildTypeId="bt209"
+		startDate="20110603T120625+0400" href="/app/rest/builds/id:51658"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51658&amp;buildTypeId=bt209" />
+	<build id="51657" number="587" status="FAILURE" buildTypeId="bt184"
+		startDate="20110603T101334+0400" href="/app/rest/builds/id:51657"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51657&amp;buildTypeId=bt184" />
+	<build id="51656" number="1499" status="FAILURE" buildTypeId="bt22"
+		startDate="20110603T101311+0400" href="/app/rest/builds/id:51656"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51656&amp;buildTypeId=bt22" />
+	<build id="51655" number="1474" status="FAILURE" buildTypeId="bt24"
+		startDate="20110603T101220+0400" href="/app/rest/builds/id:51655"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51655&amp;buildTypeId=bt24" />
+	<build id="51654" number="2022" status="FAILURE" buildTypeId="bt41"
+		startDate="20110603T080015+0400" href="/app/rest/builds/id:51654"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51654&amp;buildTypeId=bt41" />
+	<build id="51653" number="1822" status="FAILURE" buildTypeId="bt107"
+		startDate="20110603T080014+0400" href="/app/rest/builds/id:51653"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51653&amp;buildTypeId=bt107" />
+	<build id="51647" number="3773" status="SUCCESS" buildTypeId="bt15"
+		startDate="20110603T025849+0400" href="/app/rest/builds/id:51647"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51647&amp;buildTypeId=bt15" />
+	<build id="51646" number="2631" status="FAILURE" buildTypeId="bt17"
+		startDate="20110603T023724+0400" href="/app/rest/builds/id:51646"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51646&amp;buildTypeId=bt17" />
+	<build id="51645" number="3772" status="SUCCESS" buildTypeId="bt15"
+		startDate="20110603T021855+0400" href="/app/rest/builds/id:51645"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51645&amp;buildTypeId=bt15" />
+	<build id="51644" number="2630" status="FAILURE" buildTypeId="bt17"
+		startDate="20110602T234812+0400" href="/app/rest/builds/id:51644"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51644&amp;buildTypeId=bt17" />
+	<build id="51643" number="1821" status="FAILURE" buildTypeId="bt107"
+		startDate="20110602T234752+0400" href="/app/rest/builds/id:51643"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51643&amp;buildTypeId=bt107" />
+	<build id="51642" number="2021" status="FAILURE" buildTypeId="bt41"
+		startDate="20110602T231039+0400" href="/app/rest/builds/id:51642"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51642&amp;buildTypeId=bt41" />
+	<build id="51641" number="3771" status="SUCCESS" buildTypeId="bt15"
+		startDate="20110602T230613+0400" href="/app/rest/builds/id:51641"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51641&amp;buildTypeId=bt15" />
+	<build id="51640" number="2629" status="FAILURE" buildTypeId="bt17"
+		startDate="20110602T225653+0400" href="/app/rest/builds/id:51640"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51640&amp;buildTypeId=bt17" />
+	<build id="51639" number="3770" status="SUCCESS" buildTypeId="bt15"
+		startDate="20110602T223756+0400" href="/app/rest/builds/id:51639"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51639&amp;buildTypeId=bt15" />
+	<build id="51638" number="951" status="FAILURE" buildTypeId="bt31"
+		startDate="20110602T220140+0400" href="/app/rest/builds/id:51638"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51638&amp;buildTypeId=bt31" />
+	<build id="51624" number="2628" status="FAILURE" buildTypeId="bt17"
+		startDate="20110602T200316+0400" href="/app/rest/builds/id:51624"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51624&amp;buildTypeId=bt17" />
+	<build id="51619" number="3769" status="SUCCESS" buildTypeId="bt15"
+		startDate="20110602T193747+0400" href="/app/rest/builds/id:51619"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51619&amp;buildTypeId=bt15" />
+	<build id="51607" number="416" status="ERROR" buildTypeId="bt213"
+		startDate="20110602T120623+0400" href="/app/rest/builds/id:51607"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51607&amp;buildTypeId=bt213" />
+	<build id="51606" number="457" status="ERROR" buildTypeId="bt209"
+		startDate="20110602T120612+0400" href="/app/rest/builds/id:51606"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51606&amp;buildTypeId=bt209" />
+	<build id="51604" number="1498" status="FAILURE" buildTypeId="bt22"
+		startDate="20110602T100238+0400" href="/app/rest/builds/id:51604"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51604&amp;buildTypeId=bt22" />
+	<build id="51603" number="1473" status="FAILURE" buildTypeId="bt24"
+		startDate="20110602T100018+0400" href="/app/rest/builds/id:51603"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51603&amp;buildTypeId=bt24" />
+	<build id="51602" number="586" status="FAILURE" buildTypeId="bt184"
+		startDate="20110602T100019+0400" href="/app/rest/builds/id:51602"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51602&amp;buildTypeId=bt184" />
+	<build id="51600" number="1820" status="ERROR" buildTypeId="bt107"
+		startDate="20110602T090621+0400" href="/app/rest/builds/id:51600"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51600&amp;buildTypeId=bt107" />
+	<build id="51599" number="2020" status="FAILURE" buildTypeId="bt41"
+		startDate="20110602T090615+0400" href="/app/rest/builds/id:51599"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51599&amp;buildTypeId=bt41" />
+	<build id="51594" number="119" status="SUCCESS" buildTypeId="bt266"
+		startDate="20110602T053007+0400" href="/app/rest/builds/id:51594"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51594&amp;buildTypeId=bt266" />
+	<build id="51593" number="2627" status="FAILURE" buildTypeId="bt17"
+		startDate="20110602T051136+0400" href="/app/rest/builds/id:51593"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51593&amp;buildTypeId=bt17" />
+	<build id="51592" number="91" status="ERROR" buildTypeId="bt218"
+		startDate="20110602T051115+0400" href="/app/rest/builds/id:51592"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51592&amp;buildTypeId=bt218" />
+	<build id="51591" number="126" status="FAILURE" buildTypeId="bt265"
+		startDate="20110602T051100+0400" href="/app/rest/builds/id:51591"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51591&amp;buildTypeId=bt265" />
+	<build id="51590" number="2626" status="FAILURE" buildTypeId="bt17"
+		startDate="20110602T043353+0400" href="/app/rest/builds/id:51590"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51590&amp;buildTypeId=bt17" />
+	<build id="51589" number="3768" status="SUCCESS" buildTypeId="bt15"
+		startDate="20110602T041935+0400" href="/app/rest/builds/id:51589"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51589&amp;buildTypeId=bt15" />
+	<build id="51588" number="2625" status="FAILURE" buildTypeId="bt17"
+		startDate="20110602T034506+0400" href="/app/rest/builds/id:51588"
+		webUrl="http://teamcity.jetbrains.com/viewLog.html?buildId=51588&amp;buildTypeId=bt17" />
+</builds>

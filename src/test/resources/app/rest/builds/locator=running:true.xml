@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<builds count="2">
+	<build id="61" number="???.17" running="true" percentageComplete="54"
+		status="SUCCESS" buildTypeId="bt14" startDate="20120420T083537+0200"
+		href="/app/rest/builds/id:61"
+		webUrl="http://localhost:8111/viewLog.html?buildId=61&amp;buildTypeId=bt14" />
+	<build id="60" number="4" running="true" percentageComplete="6"
+		status="SUCCESS" buildTypeId="bt15" startDate="20120420T083543+0200"
+		href="/app/rest/builds/id:60"
+		webUrl="http://localhost:8111/viewLog.html?buildId=60&amp;buildTypeId=bt15" />
+</builds>

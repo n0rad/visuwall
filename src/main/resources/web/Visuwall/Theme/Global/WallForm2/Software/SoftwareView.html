@@ -1,0 +1,65 @@
+<ul>
+	<li><a href="#tabs-0">New</a> <span class="ui-icon ui-icon-close">Remove Tab</span></li>
+	<li><div id="softAdd" class="ui-state-default ui-corner-all" title=".ui-icon-plusthick">
+			<span class="ui-icon ui-icon-plusthick"></span>
+		</div>
+	</li>
+</ul>
+<div id="tabs-0">
+	<div class="softwareInfo">
+		<input id="softwareAccesses0.id" name="softwareAccesses[0].id" type="hidden" value="" />
+
+		<label for="softwareAccesses0.url" class="urlLabel">Url <span class="urlDemo">demo</span></label>
+		<label id="softwareAccesses0.urlcheck" class="check"></label>
+		<input id="softwareAccesses0.url" name="softwareAccesses[0].url"
+			class="ui-widget-content ui-corner-all url" type="text" value="" />
+
+		<fieldset class="propertiesField">
+			<legend>Properties</legend>
+			<div class="element">
+				<label for="softwareAccesses0.login">Login</label>
+				<input id="softwareAccesses0.login" name="softwareAccesses[0].login"
+					class="ui-widget-content ui-corner-all" type="text" value="" />
+			</div>
+			<div class="element">
+				<label for="softwareAccesses0.password">Password</label>
+				<input id="softwareAccesses0.password" name="softwareAccesses[0].password"
+					class="ui-widget-content ui-corner-all" type="password" value="" />
+			</div>
+		</fieldset>
+
+		<fieldset class="timerField">
+			<legend>Timers</legend>
+
+				<label for="softwareAccesses0.projectFinderDelaySecond">Software Refresh Time : <span class="bold projectFinderDelaySecond">45s</span></label>
+				<div class="slider projectFinderDelaySecondSlider"></div>
+				<input type="hidden" id="softwareAccesses0.projectFinderDelaySecond" name="softwareAccesses[0].projectFinderDelaySecond"
+					class="ui-widget-content ui-corner-all" value="" />
+				<label class="helper" for="softwareAccesses0.projectFinderDelaySecond.info"><img src="Visuwall/Theme/Global/WallForm2/img/help.png"></label>
+				<div id="softwareAccesses0.projectFinderDelaySecond.info" class="helper">This is an helper for something</div>
+
+				<label for="softwareAccesses0.projectStatusDelaySecond">Project
+					Refresh Time <span class="bold projectStatusDelaySecond">45s</span>
+				</label>
+				<div class="slider projectStatusDelaySecondSlider"></div>
+				<input type="hidden" id="softwareAccesses0.projectStatusDelaySecond"
+					name="softwareAccesses[0].projectStatusDelaySecond" class="ui-widget-content ui-corner-all" value="" />
+		</fieldset>
+		
+		<fieldset>
+			<div class="element">
+				<label for="softwareAccesses0.login">Display name</label>
+				<input id="softwareAccesses0.login" name="softwareAccesses[0].login"
+					class="ui-widget-content ui-corner-all" type="text" value="ci.visuwall.awired.net" />						
+			</div>
+			<div class="element">
+				<label>Display</label>
+				<input type="checkbox" id="allProjects" />
+				<label for="allProjects">All Projects</label>
+			</div>
+		</fieldset>
+	</div>
+
+	<div class="projectsAccordion"></div>
+	<div style="clear: both;"></div>
+</div>
