@@ -22,7 +22,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Preconditions;
 import net.awired.clients.bamboo.Bamboo;
 import net.awired.clients.bamboo.exception.BambooBuildNotFoundException;
 import net.awired.clients.bamboo.exception.BambooBuildNumberNotFoundException;
@@ -43,13 +47,6 @@ import net.awired.visuwall.api.exception.MavenIdNotFoundException;
 import net.awired.visuwall.api.exception.ProjectNotFoundException;
 import net.awired.visuwall.api.plugin.capability.BuildCapability;
 import net.awired.visuwall.api.plugin.capability.TestCapability;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
 
 public class BambooConnection implements BuildCapability, TestCapability {
 
@@ -210,7 +207,7 @@ public class BambooConnection implements BuildCapability, TestCapability {
         try {
             String projectKey = softwareProjectId.getProjectId();
             Plan plan = bamboo.findPlan(projectKey);
-            String name = plan.getProjectName();
+            String name = plan.getBuildName();
             return name;
         } catch (BambooPlanNotFoundException e) {
             throw new ProjectNotFoundException("Can't find name of software project id: " + softwareProjectId);

@@ -30,7 +30,7 @@ class BambooUrlBuilder {
     }
 
     String getAllPlansUrl() {
-        return build("/plan");
+        return build("/plan?max-result=1000");
     }
 
     String getAllBuildsUrl() {
@@ -44,6 +44,7 @@ class BambooUrlBuilder {
     String getPlanUrl(String planKey) {
         return build("/plan/" + planKey);
     }
+
 
     String getResultUrl(String planKey, int buildNumber) {
         return build("/result/" + planKey + "-" + buildNumber

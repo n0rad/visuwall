@@ -99,7 +99,7 @@ define(['jquery', //
 			$this._updateBuilding(project.id, lastBuild.building, 0 /* we don't have buildingTimeleftSecond here */);
 			$this._updateTimers(project, lastBuild);
 			wallView.updateCommiters(project.id, lastNotBuild.commiters);
-			if (lastNotBuild.qualityResult) {
+/*			if (lastNotBuild.qualityResult) {
 				wallView.updateQuality(project.id, lastNotBuild.qualityResult.measures);
 			}
 			
@@ -121,7 +121,7 @@ define(['jquery', //
 						lastNotBuild.integrationTestResult.failCount,
 						lastNotBuild.integrationTestResult.passCount,
 						lastNotBuild.integrationTestResult.skipCount);
-			}
+			}*/
 			
 			if (project.previousCompletedBuildId != 0) {
 //				var failDiff = lastBuild.unitTestResult.failCount - previousBuild.unitTestResult.failCount;

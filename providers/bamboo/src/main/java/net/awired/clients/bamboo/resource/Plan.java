@@ -51,6 +51,8 @@ public class Plan {
 
     private double averageBuildTimeInSeconds;
 
+    private String buildName;
+
     private Link link;
 
     @XmlElement(name = "actions")
@@ -172,5 +174,13 @@ public class Plan {
                 .add("project key", projectKey) //
                 .add("link", link) //
                 .toString();
+    }
+
+    public String getBuildName() {
+        return buildName;
+    }
+
+    public void setBuildName(String buildName) {
+        this.buildName = buildName;
     }
 }

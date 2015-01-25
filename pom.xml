@@ -24,6 +24,8 @@
 	</parent>
 
 	<modules>
+		<module>providers/</module>
+
 		<module>plugins/sonar-plugin</module>
 		<module>plugins/hudson-plugin</module>
 		<module>plugins/bamboo-plugin</module>

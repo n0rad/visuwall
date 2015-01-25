@@ -20,7 +20,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.security.cert.X509Certificate;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.ws.rs.core.MediaType;
 
 import com.google.common.io.ByteStreams;
@@ -37,6 +42,23 @@ public class GenericSoftwareClient {
     private Client client;
 
     private static final ResourceCache CACHE = new ResourceCache();
+
+
+    static {
+        TrustManager[] trustAllCerts = new TrustManager[]{
+                new X509TrustManager() {
+                    public X509Certificate[] getAcceptedIssuers() { return null; }
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) { }
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) { }
+                }
+        };
+        try {
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        } catch (Exception e) {
+        }
+    }
 
     public GenericSoftwareClient() {
         ClientConfig clientConfig = new DefaultClientConfig();

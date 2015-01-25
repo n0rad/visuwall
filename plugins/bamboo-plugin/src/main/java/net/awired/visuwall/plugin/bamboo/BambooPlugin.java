@@ -19,13 +19,11 @@ package net.awired.visuwall.plugin.bamboo;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
+import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import net.awired.visuwall.api.domain.SoftwareId;
 import net.awired.visuwall.api.exception.SoftwareNotFoundException;
 import net.awired.visuwall.api.plugin.VisuwallPlugin;
-
-import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
 
 public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
 
@@ -35,8 +33,8 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
         String login = "";
         String password = "";
         if (properties != null) {
-            properties.get("login");
-            properties.get("password");
+            login = properties.get("login");
+            password = properties.get("password");
         }
         connection.connect(url.toString(), login, password);
         return connection;

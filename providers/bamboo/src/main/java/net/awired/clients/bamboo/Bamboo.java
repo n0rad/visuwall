@@ -19,27 +19,22 @@ package net.awired.clients.bamboo;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.google.common.base.Preconditions;
 import net.awired.clients.bamboo.exception.BambooBuildNotFoundException;
 import net.awired.clients.bamboo.exception.BambooBuildNumberNotFoundException;
 import net.awired.clients.bamboo.exception.BambooEstimatedFinishTimeNotFoundException;
 import net.awired.clients.bamboo.exception.BambooPlanNotFoundException;
 import net.awired.clients.bamboo.exception.BambooResultNotFoundException;
 import net.awired.clients.bamboo.exception.BambooStateNotFoundException;
-import net.awired.clients.bamboo.resource.Build;
-import net.awired.clients.bamboo.resource.Builds;
 import net.awired.clients.bamboo.resource.Plan;
 import net.awired.clients.bamboo.resource.Plans;
 import net.awired.clients.bamboo.resource.Result;
 import net.awired.clients.bamboo.resource.Results;
 import net.awired.clients.common.GenericSoftwareClient;
 import net.awired.clients.common.ResourceNotFoundException;
-
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Preconditions;
 
 public class Bamboo {
 
@@ -137,25 +132,11 @@ public class Bamboo {
     public String getState(String projectKey) throws BambooStateNotFoundException {
         checkPlanKey(projectKey);
         try {
-            int lastBuildNumber = getLastResultNumber(projectKey);
-            String lastBuildUrl = bambooUrlBuilder.getAllBuildsUrl();
-            Builds builds = client.resource(lastBuildUrl, Builds.class);
-            List<Builds> subBuilds = builds.builds;
-            if (!subBuilds.isEmpty()) {
-                List<Build> allBuilds = subBuilds.get(0).build;
-                String key = projectKey + "-" + lastBuildNumber;
-                for (Build build : allBuilds) {
-                    if (key.equals(build.key)) {
-                        return build.state;
-                    }
-                }
-            }
-        } catch (ResourceNotFoundException e) {
-            throw new BambooStateNotFoundException("Not state found for projectKey: " + projectKey, e);
-        } catch (BambooBuildNumberNotFoundException e) {
-            throw new BambooStateNotFoundException("Not state found for projectKey: " + projectKey, e);
+            Result lastResult = getLastResult(projectKey);
+            return lastResult.getState();
+        } catch (BambooResultNotFoundException e) {
+            throw new BambooStateNotFoundException("Cannot found result to get state for projectKet: " + projectKey, e);
         }
-        throw new BambooStateNotFoundException("Not state found for projectKey: " + projectKey);
     }
 
     public Date getEstimatedFinishTime(String planKey) throws BambooPlanNotFoundException,
