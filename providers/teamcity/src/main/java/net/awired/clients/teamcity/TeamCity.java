@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.teamcity;
+package fr.norad.visuwall.providers.teamcity;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -24,25 +24,25 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
-import net.awired.clients.common.GenericSoftwareClient;
-import net.awired.clients.common.Maven;
-import net.awired.clients.common.MavenIdNotFoundException;
-import net.awired.clients.common.ResourceNotFoundException;
-import net.awired.clients.teamcity.exception.TeamCityBuildListNotFoundException;
-import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
-import net.awired.clients.teamcity.exception.TeamCityBuildTypeNotFoundException;
-import net.awired.clients.teamcity.exception.TeamCityChangesNotFoundException;
-import net.awired.clients.teamcity.exception.TeamCityProjectNotFoundException;
-import net.awired.clients.teamcity.exception.TeamCityProjectsNotFoundException;
-import net.awired.clients.teamcity.resource.TeamCityAbstractBuild;
-import net.awired.clients.teamcity.resource.TeamCityBuild;
-import net.awired.clients.teamcity.resource.TeamCityBuildItem;
-import net.awired.clients.teamcity.resource.TeamCityBuildType;
-import net.awired.clients.teamcity.resource.TeamCityBuilds;
-import net.awired.clients.teamcity.resource.TeamCityChange;
-import net.awired.clients.teamcity.resource.TeamCityChanges;
-import net.awired.clients.teamcity.resource.TeamCityProject;
-import net.awired.clients.teamcity.resource.TeamCityProjects;
+import fr.norad.visuwall.providers.common.GenericSoftwareClient;
+import fr.norad.visuwall.providers.common.Maven;
+import fr.norad.visuwall.providers.common.MavenIdNotFoundException;
+import fr.norad.visuwall.providers.common.ResourceNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildListNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildTypeNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityChangesNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityProjectNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityProjectsNotFoundException;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityAbstractBuild;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuild;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuildItem;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuildType;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuilds;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityChange;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityChanges;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityProject;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityProjects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson;
+package fr.norad.visuwall.providers.hudson;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

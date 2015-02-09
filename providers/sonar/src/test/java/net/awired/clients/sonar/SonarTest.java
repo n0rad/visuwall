@@ -14,21 +14,21 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.sonar;
+package fr.norad.visuwall.providers.sonar;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import javax.ws.rs.core.MediaType;
-import net.awired.clients.common.GenericSoftwareClient;
-import net.awired.clients.common.ResourceNotFoundException;
-import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
-import net.awired.clients.sonar.exception.SonarMetricsNotFoundException;
-import net.awired.clients.sonar.exception.SonarProjectNotFoundException;
-import net.awired.clients.sonar.exception.SonarProjectsNotFoundException;
-import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
-import net.awired.clients.sonar.resource.Projects;
+import fr.norad.visuwall.providers.common.GenericSoftwareClient;
+import fr.norad.visuwall.providers.common.ResourceNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarMeasureNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarMetricsNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarProjectNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarProjectsNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarResourceNotFoundException;
+import fr.norad.visuwall.providers.sonar.resource.Projects;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.resource;
+package fr.norad.visuwall.providers.hudson.resource;
 
 import java.util.ArrayList;
 import java.util.List;

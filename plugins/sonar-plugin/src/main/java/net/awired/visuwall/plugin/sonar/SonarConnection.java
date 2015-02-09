@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar;
+package fr.norad.visuwall.plugin.sonar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,29 +25,29 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import net.awired.clients.sonar.Sonar;
-import net.awired.clients.sonar.domain.SonarQualityMetric;
-import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
-import net.awired.clients.sonar.exception.SonarMetricsNotFoundException;
-import net.awired.clients.sonar.exception.SonarProjectNotFoundException;
-import net.awired.clients.sonar.exception.SonarProjectsNotFoundException;
-import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
-import net.awired.clients.sonar.resource.Project;
-import net.awired.visuwall.api.domain.BuildState;
-import net.awired.visuwall.api.domain.BuildTime;
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.ProjectKey;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.domain.quality.QualityMeasure;
-import net.awired.visuwall.api.domain.quality.QualityMetric;
-import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.exception.BuildIdNotFoundException;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.MavenIdNotFoundException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.capability.MetricCapability;
-import net.awired.visuwall.api.plugin.capability.TestCapability;
+import fr.norad.visuwall.providers.sonar.Sonar;
+import fr.norad.visuwall.providers.sonar.domain.SonarQualityMetric;
+import fr.norad.visuwall.providers.sonar.exception.SonarMeasureNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarMetricsNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarProjectNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarProjectsNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarResourceNotFoundException;
+import fr.norad.visuwall.providers.sonar.resource.Project;
+import fr.norad.visuwall.api.domain.BuildState;
+import fr.norad.visuwall.api.domain.BuildTime;
+import fr.norad.visuwall.api.domain.Commiter;
+import fr.norad.visuwall.api.domain.ProjectKey;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.domain.TestResult;
+import fr.norad.visuwall.api.domain.quality.QualityMeasure;
+import fr.norad.visuwall.api.domain.quality.QualityMetric;
+import fr.norad.visuwall.api.domain.quality.QualityResult;
+import fr.norad.visuwall.api.exception.BuildIdNotFoundException;
+import fr.norad.visuwall.api.exception.BuildNotFoundException;
+import fr.norad.visuwall.api.exception.MavenIdNotFoundException;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.api.plugin.capability.MetricCapability;
+import fr.norad.visuwall.api.plugin.capability.TestCapability;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

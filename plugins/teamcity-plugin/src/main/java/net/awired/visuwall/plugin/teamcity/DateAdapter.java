@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.teamcity;
+package fr.norad.visuwall.plugin.teamcity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

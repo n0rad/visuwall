@@ -14,9 +14,9 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.jenkins;
+package fr.norad.visuwall.providers.jenkins;
 
-import net.awired.clients.hudson.HudsonUrlBuilder;
+import fr.norad.visuwall.providers.hudson.HudsonUrlBuilder;
 
 public class JenkinsUrlBuilder extends HudsonUrlBuilder {
 

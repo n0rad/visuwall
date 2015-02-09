@@ -14,11 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.jenkins;
+package fr.norad.visuwall.plugin.jenkins;
 
 public aspect Chrono {
 
-    Object around() : execution(public * net.awired.visuwall.plugin.jenkins.JenkinsConnection.* (..)) {
+    Object around() : execution(public * fr.norad.visuwall.plugin.jenkins.JenkinsConnection.* (..)) {
         long start = System.currentTimeMillis();
         try {
             return proceed();

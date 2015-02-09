@@ -14,17 +14,17 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson;
+package fr.norad.visuwall.providers.hudson;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.awired.clients.hudson.domain.HudsonTest;
-import net.awired.clients.hudson.domain.HudsonTestResult;
-import net.awired.clients.hudson.resource.Case;
-import net.awired.clients.hudson.resource.ChildReport;
-import net.awired.clients.hudson.resource.Result;
-import net.awired.clients.hudson.resource.Suite;
-import net.awired.clients.hudson.resource.SurefireAggregatedReport;
+import fr.norad.visuwall.providers.hudson.domain.HudsonTest;
+import fr.norad.visuwall.providers.hudson.domain.HudsonTestResult;
+import fr.norad.visuwall.providers.hudson.resource.Case;
+import fr.norad.visuwall.providers.hudson.resource.ChildReport;
+import fr.norad.visuwall.providers.hudson.resource.Result;
+import fr.norad.visuwall.providers.hudson.resource.Suite;
+import fr.norad.visuwall.providers.hudson.resource.SurefireAggregatedReport;
 
 /**
  * TestResultBuilder is used to manipulate Hudson Test data

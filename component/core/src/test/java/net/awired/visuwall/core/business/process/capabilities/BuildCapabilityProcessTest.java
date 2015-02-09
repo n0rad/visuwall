@@ -14,13 +14,13 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.process.capabilities;
+package fr.norad.visuwall.core.business.process.capabilities;
 
 import java.util.Date;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
-import net.awired.visuwall.core.business.domain.Build;
-import net.awired.visuwall.core.business.domain.Project;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.plugin.capability.BuildCapability;
+import fr.norad.visuwall.core.business.domain.Build;
+import fr.norad.visuwall.core.business.domain.Project;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

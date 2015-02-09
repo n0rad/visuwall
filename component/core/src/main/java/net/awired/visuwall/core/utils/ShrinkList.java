@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.utils;
+package fr.norad.visuwall.core.utils;
 
 import java.util.Iterator;
 import java.util.List;

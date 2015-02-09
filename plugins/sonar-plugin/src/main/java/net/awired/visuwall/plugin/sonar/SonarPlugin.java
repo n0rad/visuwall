@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar;
+package fr.norad.visuwall.plugin.sonar;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML_TYPE;
@@ -23,11 +23,11 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.awired.clients.common.GenericSoftwareClient;
-import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.SoftwareNotFoundException;
-import net.awired.visuwall.api.plugin.VisuwallPlugin;
+import fr.norad.visuwall.providers.common.GenericSoftwareClient;
+import fr.norad.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.exception.ConnectionException;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.api.plugin.VisuwallPlugin;
 
 import com.google.common.base.Objects;
 

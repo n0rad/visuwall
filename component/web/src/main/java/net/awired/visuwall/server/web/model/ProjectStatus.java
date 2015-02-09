@@ -14,10 +14,10 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.server.web.model;
+package fr.norad.visuwall.server.web.model;
 
 import java.util.Date;
-import net.awired.visuwall.core.business.domain.Project;
+import fr.norad.visuwall.core.business.domain.Project;
 import com.google.common.base.Objects;
 
 public final class ProjectStatus {

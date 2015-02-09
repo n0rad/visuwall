@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.bamboo;
+package fr.norad.visuwall.plugin.bamboo;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

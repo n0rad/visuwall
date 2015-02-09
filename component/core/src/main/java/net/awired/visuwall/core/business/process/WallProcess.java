@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.process;
+package fr.norad.visuwall.core.business.process;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -22,16 +22,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
-import net.awired.visuwall.core.business.domain.Project;
-import net.awired.visuwall.core.business.service.PluginServiceInterface;
-import net.awired.visuwall.core.business.service.ProjectService;
-import net.awired.visuwall.core.business.service.SoftwareAccessService;
-import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
-import net.awired.visuwall.core.persistence.entity.Wall;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.api.plugin.capability.BasicCapability;
+import fr.norad.visuwall.api.plugin.capability.BuildCapability;
+import fr.norad.visuwall.core.business.domain.Project;
+import fr.norad.visuwall.core.business.service.PluginServiceInterface;
+import fr.norad.visuwall.core.business.service.ProjectService;
+import fr.norad.visuwall.core.business.service.SoftwareAccessService;
+import fr.norad.visuwall.core.persistence.entity.SoftwareAccess;
+import fr.norad.visuwall.core.persistence.entity.Wall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

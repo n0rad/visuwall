@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.exception;
+package fr.norad.visuwall.api.exception;
 
 public class BuildIdNotFoundException extends Exception {
 

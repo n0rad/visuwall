@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.cli;
+package fr.norad.visuwall.cli;
 
 import java.io.File;
 import net.awired.aclm.argument.CliArgumentManager;
@@ -25,9 +25,9 @@ import net.awired.aclm.param.CliParamEnum;
 import net.awired.aclm.param.CliParamFile;
 import net.awired.aclm.param.CliParamInt;
 import net.awired.aclm.param.CliParamString;
-import net.awired.visuwall.core.application.common.ApplicationHelper;
-import net.awired.visuwall.core.application.enumeration.FileInfoEnum;
-import net.awired.visuwall.core.application.enumeration.LogLevelEnum;
+import fr.norad.visuwall.core.application.common.ApplicationHelper;
+import fr.norad.visuwall.core.application.enumeration.FileInfoEnum;
+import fr.norad.visuwall.core.application.enumeration.LogLevelEnum;
 
 class ArgumentManager extends CliArgumentManager {
 

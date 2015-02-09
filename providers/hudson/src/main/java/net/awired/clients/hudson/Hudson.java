@@ -14,20 +14,20 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson;
+package fr.norad.visuwall.providers.hudson;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.awired.clients.common.Maven;
-import net.awired.clients.common.MavenIdNotFoundException;
-import net.awired.clients.hudson.domain.HudsonBuild;
-import net.awired.clients.hudson.domain.HudsonJob;
-import net.awired.clients.hudson.domain.HudsonTestResult;
-import net.awired.clients.hudson.exception.HudsonBuildNotFoundException;
-import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
-import net.awired.clients.hudson.exception.HudsonViewNotFoundException;
+import fr.norad.visuwall.providers.common.Maven;
+import fr.norad.visuwall.providers.common.MavenIdNotFoundException;
+import fr.norad.visuwall.providers.hudson.domain.HudsonBuild;
+import fr.norad.visuwall.providers.hudson.domain.HudsonJob;
+import fr.norad.visuwall.providers.hudson.domain.HudsonTestResult;
+import fr.norad.visuwall.providers.hudson.exception.HudsonBuildNotFoundException;
+import fr.norad.visuwall.providers.hudson.exception.HudsonJobNotFoundException;
+import fr.norad.visuwall.providers.hudson.exception.HudsonViewNotFoundException;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;

@@ -14,10 +14,10 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.plugin.capability;
+package fr.norad.visuwall.api.plugin.capability;
 
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.TestResult;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.domain.TestResult;
 
 public interface TestCapability extends BasicCapability {
 

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.common;
+package fr.norad.visuwall.providers.common;
 
 public class ResourceNotFoundException extends Exception {
 

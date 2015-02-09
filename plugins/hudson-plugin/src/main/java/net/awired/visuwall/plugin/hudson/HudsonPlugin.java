@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.hudson;
+package fr.norad.visuwall.plugin.hudson;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,9 +23,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.SoftwareNotFoundException;
-import net.awired.visuwall.api.plugin.VisuwallPlugin;
+import fr.norad.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.api.plugin.VisuwallPlugin;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;

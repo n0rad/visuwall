@@ -14,11 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.teamcity;
+package fr.norad.visuwall.plugin.teamcity;
 
 import java.util.Date;
-import net.awired.clients.teamcity.resource.TeamCityBuild;
-import net.awired.visuwall.api.domain.BuildTime;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuild;
+import fr.norad.visuwall.api.domain.BuildTime;
 
 class BuildTimes {
 

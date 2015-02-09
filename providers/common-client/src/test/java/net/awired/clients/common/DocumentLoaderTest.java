@@ -1,5 +1,5 @@
 /**
- *     Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com>
+ *     Copyright (C) 2010 Julien SMADJA <julien dot smadja at gmail dot com> - Arnaud LEMAIRE <alemaire at norad dot fr>
  *
  *     Licensed under the Apache License, Version 2.0 (the "License");
  *     you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.common;
+package fr.norad.visuwall.providers.common;
 
 import static org.junit.Assert.assertNotNull;
 

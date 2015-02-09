@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.teamcity;
+package fr.norad.visuwall.plugin.teamcity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -28,22 +28,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.awired.clients.teamcity.TeamCity;
-import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
-import net.awired.clients.teamcity.exception.TeamCityBuildTypeNotFoundException;
-import net.awired.clients.teamcity.exception.TeamCityProjectsNotFoundException;
-import net.awired.clients.teamcity.resource.TeamCityBuild;
-import net.awired.clients.teamcity.resource.TeamCityBuildItem;
-import net.awired.clients.teamcity.resource.TeamCityBuildType;
-import net.awired.clients.teamcity.resource.TeamCityBuilds;
-import net.awired.clients.teamcity.resource.TeamCityChange;
-import net.awired.clients.teamcity.resource.TeamCityProject;
-import net.awired.visuwall.api.domain.BuildState;
-import net.awired.visuwall.api.domain.BuildTime;
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.ProjectKey;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.providers.teamcity.TeamCity;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildTypeNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityProjectsNotFoundException;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuild;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuildItem;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuildType;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuilds;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityChange;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityProject;
+import fr.norad.visuwall.api.domain.BuildState;
+import fr.norad.visuwall.api.domain.BuildTime;
+import fr.norad.visuwall.api.domain.Commiter;
+import fr.norad.visuwall.api.domain.ProjectKey;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
 
 import org.junit.Before;
 import org.junit.Ignore;

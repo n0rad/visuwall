@@ -14,11 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.teamcity;
+package fr.norad.visuwall.providers.teamcity;
 
 import java.util.concurrent.TimeUnit;
 
-import net.awired.clients.teamcity.resource.TeamCityBuild;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuild;
 
 import org.junit.Test;
 

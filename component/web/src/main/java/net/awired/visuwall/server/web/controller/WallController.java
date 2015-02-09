@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.server.web.controller;
+package fr.norad.visuwall.server.web.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,13 +23,13 @@ import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.core.business.domain.Project;
-import net.awired.visuwall.core.business.service.PluginServiceInterface;
-import net.awired.visuwall.core.business.service.WallHolderService;
-import net.awired.visuwall.core.exception.NotFoundException;
-import net.awired.visuwall.core.persistence.entity.Wall;
-import net.awired.visuwall.server.web.model.ProjectStatus;
+import fr.norad.visuwall.api.exception.BuildNotFoundException;
+import fr.norad.visuwall.core.business.domain.Project;
+import fr.norad.visuwall.core.business.service.PluginServiceInterface;
+import fr.norad.visuwall.core.business.service.WallHolderService;
+import fr.norad.visuwall.core.exception.NotFoundException;
+import fr.norad.visuwall.core.persistence.entity.Wall;
+import fr.norad.visuwall.server.web.model.ProjectStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

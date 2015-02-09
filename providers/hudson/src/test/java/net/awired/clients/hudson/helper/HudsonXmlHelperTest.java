@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.helper;
+package fr.norad.visuwall.providers.hudson.helper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -22,8 +22,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
-import net.awired.clients.hudson.resource.MavenModuleSetBuild;
-import net.awired.clients.hudson.resource.Culprit;
+import fr.norad.visuwall.providers.hudson.resource.MavenModuleSetBuild;
+import fr.norad.visuwall.providers.hudson.resource.Culprit;
 import org.junit.Test;
 
 public class HudsonXmlHelperTest {

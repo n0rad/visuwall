@@ -14,10 +14,10 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.sonar;
+package fr.norad.visuwall.providers.sonar;
 
 import static org.junit.Assert.assertFalse;
-import net.awired.clients.sonar.resource.Projects;
+import fr.norad.visuwall.providers.sonar.resource.Projects;
 
 import org.junit.Test;
 

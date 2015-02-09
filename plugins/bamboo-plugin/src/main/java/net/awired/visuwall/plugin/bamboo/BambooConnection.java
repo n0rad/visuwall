@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.bamboo;
+package fr.norad.visuwall.plugin.bamboo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,26 +27,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
-import net.awired.clients.bamboo.Bamboo;
-import net.awired.clients.bamboo.exception.BambooBuildNotFoundException;
-import net.awired.clients.bamboo.exception.BambooBuildNumberNotFoundException;
-import net.awired.clients.bamboo.exception.BambooEstimatedFinishTimeNotFoundException;
-import net.awired.clients.bamboo.exception.BambooPlanNotFoundException;
-import net.awired.clients.bamboo.exception.BambooStateNotFoundException;
-import net.awired.clients.bamboo.resource.Plan;
-import net.awired.clients.bamboo.resource.Result;
-import net.awired.visuwall.api.domain.BuildState;
-import net.awired.visuwall.api.domain.BuildTime;
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.ProjectKey;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.exception.BuildIdNotFoundException;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.MavenIdNotFoundException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
-import net.awired.visuwall.api.plugin.capability.TestCapability;
+import fr.norad.visuwall.providers.bamboo.Bamboo;
+import fr.norad.visuwall.providers.bamboo.exception.BambooBuildNotFoundException;
+import fr.norad.visuwall.providers.bamboo.exception.BambooBuildNumberNotFoundException;
+import fr.norad.visuwall.providers.bamboo.exception.BambooEstimatedFinishTimeNotFoundException;
+import fr.norad.visuwall.providers.bamboo.exception.BambooPlanNotFoundException;
+import fr.norad.visuwall.providers.bamboo.exception.BambooStateNotFoundException;
+import fr.norad.visuwall.providers.bamboo.resource.Plan;
+import fr.norad.visuwall.providers.bamboo.resource.Result;
+import fr.norad.visuwall.api.domain.BuildState;
+import fr.norad.visuwall.api.domain.BuildTime;
+import fr.norad.visuwall.api.domain.Commiter;
+import fr.norad.visuwall.api.domain.ProjectKey;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.domain.TestResult;
+import fr.norad.visuwall.api.exception.BuildIdNotFoundException;
+import fr.norad.visuwall.api.exception.BuildNotFoundException;
+import fr.norad.visuwall.api.exception.MavenIdNotFoundException;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.api.plugin.capability.BuildCapability;
+import fr.norad.visuwall.api.plugin.capability.TestCapability;
 
 public class BambooConnection implements BuildCapability, TestCapability {
 

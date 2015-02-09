@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.plugin.tck;
+package fr.norad.visuwall.api.plugin.tck;
 
 public interface TestCapabilityTCK {
 

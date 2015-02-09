@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.domain;
+package fr.norad.visuwall.api.domain;
 
 public class SoftwareId {
 

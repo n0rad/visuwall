@@ -14,20 +14,20 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.process.capabilities;
+package fr.norad.visuwall.core.business.process.capabilities;
 
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
-import net.awired.visuwall.api.domain.BuildState;
-import net.awired.visuwall.api.domain.BuildTime;
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.exception.BuildIdNotFoundException;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.core.business.domain.Build;
-import net.awired.visuwall.core.business.domain.Project;
+import fr.norad.visuwall.api.domain.BuildState;
+import fr.norad.visuwall.api.domain.BuildTime;
+import fr.norad.visuwall.api.domain.Commiter;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.exception.BuildIdNotFoundException;
+import fr.norad.visuwall.api.exception.BuildNotFoundException;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.core.business.domain.Build;
+import fr.norad.visuwall.core.business.domain.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

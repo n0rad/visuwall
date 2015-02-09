@@ -20,9 +20,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>net.awired.clients</groupId>
+	<groupId>fr.norad.visuwall.providers</groupId>
 	<artifactId>clients-teamcity</artifactId>
-	<name>Clients - TeamCity</name>
+	<name>Visuwall - Providers - TeamCity</name>
 
 	<parent>
 		<groupId>net.awired</groupId>
@@ -51,7 +51,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.awired.clients</groupId>
+			<groupId>fr.norad.visuwall.providers</groupId>
 			<artifactId>common-client</artifactId>
 		</dependency>
 		<dependency>

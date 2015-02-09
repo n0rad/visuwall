@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.domain;
+package fr.norad.visuwall.providers.hudson.domain;
 
 public class HudsonTest {
 

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.persistence.dao;
+package fr.norad.visuwall.core.persistence.dao;
 
 import java.util.List;
 import java.util.Map;
@@ -23,10 +23,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.core.exception.NotFoundException;
-import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
-import net.awired.visuwall.core.persistence.entity.Wall;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.core.exception.NotFoundException;
+import fr.norad.visuwall.core.persistence.entity.SoftwareAccess;
+import fr.norad.visuwall.core.persistence.entity.Wall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;

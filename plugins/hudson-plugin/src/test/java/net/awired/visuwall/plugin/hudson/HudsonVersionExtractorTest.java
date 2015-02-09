@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.hudson;
+package fr.norad.visuwall.plugin.hudson;
 
 import static org.junit.Assert.assertEquals;
 import java.io.IOException;

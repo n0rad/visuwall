@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.bamboo.resource;
+package fr.norad.visuwall.providers.bamboo.resource;
 
 import java.util.ArrayList;
 import java.util.List;

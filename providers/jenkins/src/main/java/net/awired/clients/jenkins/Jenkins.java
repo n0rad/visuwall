@@ -14,9 +14,9 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.jenkins;
+package fr.norad.visuwall.providers.jenkins;
 
-import net.awired.clients.hudson.Hudson;
+import fr.norad.visuwall.providers.hudson.Hudson;
 
 public class Jenkins extends Hudson {
 

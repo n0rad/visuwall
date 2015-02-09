@@ -14,12 +14,12 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.server.web.controller;
+package fr.norad.visuwall.server.web.controller;
 
-import net.awired.visuwall.core.business.domain.Project;
-import net.awired.visuwall.core.business.service.ProjectService;
-import net.awired.visuwall.core.business.service.WallHolderService;
-import net.awired.visuwall.core.persistence.entity.Wall;
+import fr.norad.visuwall.core.business.domain.Project;
+import fr.norad.visuwall.core.business.service.ProjectService;
+import fr.norad.visuwall.core.business.service.WallHolderService;
+import fr.norad.visuwall.core.persistence.entity.Wall;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

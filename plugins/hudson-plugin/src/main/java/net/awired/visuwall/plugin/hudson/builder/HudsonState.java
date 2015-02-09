@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.hudson.builder;
+package fr.norad.visuwall.plugin.hudson.builder;
 
 public interface HudsonState {
     String SUCCESS = "SUCCESS";

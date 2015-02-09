@@ -14,11 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.bamboo;
+package fr.norad.visuwall.plugin.bamboo;
 
 public aspect Chrono {
 
-    Object around() : execution(public * net.awired.visuwall.plugin.bamboo.BambooConnection.* (..)) {
+    Object around() : execution(public * fr.norad.visuwall.plugin.bamboo.BambooConnection.* (..)) {
         long start = System.currentTimeMillis();
         try {
             return proceed();

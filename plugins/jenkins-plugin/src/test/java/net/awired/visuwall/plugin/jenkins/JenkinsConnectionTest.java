@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.jenkins;
+package fr.norad.visuwall.plugin.jenkins;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.awired.clients.hudson.Hudson;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.providers.hudson.Hudson;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
 
 import org.junit.Before;
 import org.junit.Test;

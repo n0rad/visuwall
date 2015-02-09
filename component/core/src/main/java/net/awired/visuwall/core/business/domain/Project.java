@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.domain;
+package fr.norad.visuwall.core.business.domain;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -24,11 +24,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import javax.persistence.Transient;
-import net.awired.visuwall.api.domain.ProjectKey;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import fr.norad.visuwall.api.domain.ProjectKey;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.exception.BuildNotFoundException;
+import fr.norad.visuwall.api.plugin.capability.BasicCapability;
+import fr.norad.visuwall.api.plugin.capability.BuildCapability;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

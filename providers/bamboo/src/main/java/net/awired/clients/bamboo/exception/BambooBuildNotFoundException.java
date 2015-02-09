@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.bamboo.exception;
+package fr.norad.visuwall.providers.bamboo.exception;
 
 public class BambooBuildNotFoundException extends Exception {
 

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.sonar.resource;
+package fr.norad.visuwall.providers.sonar.resource;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

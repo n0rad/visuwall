@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.jenkins;
+package fr.norad.visuwall.plugin.jenkins;
 
 public interface JenkinsState {
 

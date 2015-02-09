@@ -14,11 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.jenkins;
+package fr.norad.visuwall.plugin.jenkins;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.awired.visuwall.api.domain.BuildState;
+import fr.norad.visuwall.api.domain.BuildState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;

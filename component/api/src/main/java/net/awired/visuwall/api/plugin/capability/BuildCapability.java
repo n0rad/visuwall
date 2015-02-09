@@ -14,17 +14,17 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.plugin.capability;
+package fr.norad.visuwall.api.plugin.capability;
 
 import java.util.Date;
 import java.util.List;
-import net.awired.visuwall.api.domain.BuildTime;
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.BuildState;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.BuildIdNotFoundException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.api.domain.BuildTime;
+import fr.norad.visuwall.api.domain.Commiter;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.domain.BuildState;
+import fr.norad.visuwall.api.exception.BuildNotFoundException;
+import fr.norad.visuwall.api.exception.BuildIdNotFoundException;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
 
 public interface BuildCapability extends BasicCapability {
 

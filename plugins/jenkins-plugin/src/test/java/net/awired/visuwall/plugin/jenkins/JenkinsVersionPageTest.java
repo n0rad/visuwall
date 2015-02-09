@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.jenkins;
+package fr.norad.visuwall.plugin.jenkins;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.awired.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.domain.SoftwareId;
 
 import org.junit.Test;
 

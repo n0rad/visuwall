@@ -14,9 +14,9 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.plugin.tck;
+package fr.norad.visuwall.api.plugin.tck;
 
-import net.awired.visuwall.api.exception.ViewNotFoundException;
+import fr.norad.visuwall.api.exception.ViewNotFoundException;
 
 public interface ViewCapabilityTCK {
 

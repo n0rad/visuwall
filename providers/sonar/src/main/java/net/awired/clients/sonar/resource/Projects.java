@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.sonar.resource;
+package fr.norad.visuwall.providers.sonar.resource;
 
 import java.util.ArrayList;
 import java.util.List;

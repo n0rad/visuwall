@@ -14,10 +14,10 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.hudson;
+package fr.norad.visuwall.plugin.hudson;
 
-import net.awired.clients.hudson.domain.HudsonTestResult;
-import net.awired.visuwall.api.domain.TestResult;
+import fr.norad.visuwall.providers.hudson.domain.HudsonTestResult;
+import fr.norad.visuwall.api.domain.TestResult;
 
 public class TestResults {
 

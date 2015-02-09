@@ -14,18 +14,18 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.teamcity;
+package fr.norad.visuwall.plugin.teamcity;
 
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.awired.clients.common.GenericSoftwareClient;
-import net.awired.clients.common.ResourceNotFoundException;
-import net.awired.clients.teamcity.resource.TeamCityServer;
-import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.SoftwareNotFoundException;
-import net.awired.visuwall.api.plugin.VisuwallPlugin;
+import fr.norad.visuwall.providers.common.GenericSoftwareClient;
+import fr.norad.visuwall.providers.common.ResourceNotFoundException;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityServer;
+import fr.norad.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.api.plugin.VisuwallPlugin;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;

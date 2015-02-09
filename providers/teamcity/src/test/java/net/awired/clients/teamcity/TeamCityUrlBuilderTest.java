@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.teamcity;
+package fr.norad.visuwall.providers.teamcity;
 
 import static org.junit.Assert.assertEquals;
 

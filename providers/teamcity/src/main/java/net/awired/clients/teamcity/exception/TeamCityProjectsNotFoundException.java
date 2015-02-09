@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.teamcity.exception;
+package fr.norad.visuwall.providers.teamcity.exception;
 
 public class TeamCityProjectsNotFoundException extends Exception {
 

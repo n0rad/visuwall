@@ -14,28 +14,28 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.service;
+package fr.norad.visuwall.core.business.service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
-import net.awired.visuwall.api.domain.ProjectKey;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.MavenIdNotFoundException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
-import net.awired.visuwall.api.plugin.capability.MetricCapability;
-import net.awired.visuwall.api.plugin.capability.TestCapability;
-import net.awired.visuwall.core.business.domain.CapabilitiesResult;
-import net.awired.visuwall.core.business.domain.Project;
-import net.awired.visuwall.core.business.process.capabilities.BuildCapabilityProcess;
-import net.awired.visuwall.core.business.process.capabilities.MetricCapabilityProcess;
-import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
-import net.awired.visuwall.core.persistence.entity.Wall;
+import fr.norad.visuwall.api.domain.ProjectKey;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.domain.TestResult;
+import fr.norad.visuwall.api.domain.quality.QualityResult;
+import fr.norad.visuwall.api.exception.BuildNotFoundException;
+import fr.norad.visuwall.api.exception.MavenIdNotFoundException;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.api.plugin.capability.BasicCapability;
+import fr.norad.visuwall.api.plugin.capability.BuildCapability;
+import fr.norad.visuwall.api.plugin.capability.MetricCapability;
+import fr.norad.visuwall.api.plugin.capability.TestCapability;
+import fr.norad.visuwall.core.business.domain.CapabilitiesResult;
+import fr.norad.visuwall.core.business.domain.Project;
+import fr.norad.visuwall.core.business.process.capabilities.BuildCapabilityProcess;
+import fr.norad.visuwall.core.business.process.capabilities.MetricCapabilityProcess;
+import fr.norad.visuwall.core.persistence.entity.SoftwareAccess;
+import fr.norad.visuwall.core.persistence.entity.Wall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

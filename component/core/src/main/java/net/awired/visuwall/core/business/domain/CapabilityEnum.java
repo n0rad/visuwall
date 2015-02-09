@@ -14,16 +14,16 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.domain;
+package fr.norad.visuwall.core.business.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 import net.awired.ajsl.core.lang.reflect.ReflectTool;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
-import net.awired.visuwall.api.plugin.capability.MetricCapability;
-import net.awired.visuwall.api.plugin.capability.TestCapability;
-import net.awired.visuwall.api.plugin.capability.ViewCapability;
+import fr.norad.visuwall.api.plugin.capability.BasicCapability;
+import fr.norad.visuwall.api.plugin.capability.BuildCapability;
+import fr.norad.visuwall.api.plugin.capability.MetricCapability;
+import fr.norad.visuwall.api.plugin.capability.TestCapability;
+import fr.norad.visuwall.api.plugin.capability.ViewCapability;
 
 public enum CapabilityEnum {
     build(BuildCapability.class), //

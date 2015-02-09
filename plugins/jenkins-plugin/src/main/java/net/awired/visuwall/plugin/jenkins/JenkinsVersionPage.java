@@ -14,10 +14,10 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.jenkins;
+package fr.norad.visuwall.plugin.jenkins;
 
 import static org.apache.commons.lang.StringUtils.isNumeric;
-import net.awired.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.domain.SoftwareId;
 
 import org.apache.commons.lang.StringUtils;
 

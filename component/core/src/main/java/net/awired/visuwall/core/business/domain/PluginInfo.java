@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.domain;
+package fr.norad.visuwall.core.business.domain;
 
 import java.util.List;
 import java.util.Map;

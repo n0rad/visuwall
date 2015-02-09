@@ -11,12 +11,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>clients-common</artifactId>
-	<name>Clients - Common</name>
+	<name>Visuwall - Providers - Common</name>
 
 	<parent>
 		<groupId>fr.norad.visuwall.providers</groupId>
 		<artifactId>clients</artifactId>
-		<version>1.1</version>
+        <version>0.3.3-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 

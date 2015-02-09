@@ -1,20 +1,20 @@
-package net.awired.visuwall.plugin.cruisecontrol;
+package fr.norad.visuwall.plugin.cruisecontrol;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import net.awired.visuwall.api.domain.BuildState;
-import net.awired.visuwall.api.domain.BuildTime;
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.ProjectKey;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.exception.BuildIdNotFoundException;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.MavenIdNotFoundException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
+import fr.norad.visuwall.api.domain.BuildState;
+import fr.norad.visuwall.api.domain.BuildTime;
+import fr.norad.visuwall.api.domain.Commiter;
+import fr.norad.visuwall.api.domain.ProjectKey;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.exception.BuildIdNotFoundException;
+import fr.norad.visuwall.api.exception.BuildNotFoundException;
+import fr.norad.visuwall.api.exception.ConnectionException;
+import fr.norad.visuwall.api.exception.MavenIdNotFoundException;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.api.plugin.capability.BuildCapability;
 
 public class CruiseControlConnection implements BuildCapability {
 

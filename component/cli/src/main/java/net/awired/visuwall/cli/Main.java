@@ -14,13 +14,13 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.cli;
+package fr.norad.visuwall.cli;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.security.ProtectionDomain;
-import net.awired.visuwall.core.application.common.ApplicationHelper;
+import fr.norad.visuwall.core.application.common.ApplicationHelper;
 import org.fusesource.jansi.AnsiConsole;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;

@@ -14,11 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar;
+package fr.norad.visuwall.plugin.sonar;
 
 public aspect Chrono {
 
-    Object around() : execution(public * net.awired.visuwall.plugin.sonar.SonarConnection.* (..)) {
+    Object around() : execution(public * fr.norad.visuwall.plugin.sonar.SonarConnection.* (..)) {
         long start = System.currentTimeMillis();
         try {
             return proceed();

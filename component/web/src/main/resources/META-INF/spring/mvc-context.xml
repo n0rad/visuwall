@@ -31,7 +31,7 @@
 	<!-- DispatcherServlet Context: defines this servlet's request-processing 
 		infrastructure -->
 
-	<context:component-scan base-package="net.awired.visuwall.server.web" />
+	<context:component-scan base-package="fr.norad.visuwall.server.web" />
 
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<mvc:annotation-driven />

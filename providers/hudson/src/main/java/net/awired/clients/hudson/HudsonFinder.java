@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson;
+package fr.norad.visuwall.providers.hudson;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,31 +22,31 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import net.awired.clients.common.GenericSoftwareClient;
-import net.awired.clients.common.ResourceNotFoundException;
-import net.awired.clients.hudson.domain.HudsonBuild;
-import net.awired.clients.hudson.domain.HudsonCommiter;
-import net.awired.clients.hudson.domain.HudsonJob;
-import net.awired.clients.hudson.domain.HudsonTestResult;
-import net.awired.clients.hudson.exception.HudsonBuildNotFoundException;
-import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
-import net.awired.clients.hudson.exception.HudsonViewNotFoundException;
-import net.awired.clients.hudson.helper.HudsonXmlHelper;
-import net.awired.clients.hudson.resource.Build;
-import net.awired.clients.hudson.resource.Color;
-import net.awired.clients.hudson.resource.ExternalJob;
-import net.awired.clients.hudson.resource.FreeStyleBuild;
-import net.awired.clients.hudson.resource.FreeStyleProject;
-import net.awired.clients.hudson.resource.Hudson;
-import net.awired.clients.hudson.resource.HudsonUser;
-import net.awired.clients.hudson.resource.Job;
-import net.awired.clients.hudson.resource.ListView;
-import net.awired.clients.hudson.resource.MatrixProject;
-import net.awired.clients.hudson.resource.MavenModuleSet;
-import net.awired.clients.hudson.resource.MavenModuleSetBuild;
-import net.awired.clients.hudson.resource.Project;
-import net.awired.clients.hudson.resource.SurefireAggregatedReport;
-import net.awired.clients.hudson.resource.View;
+import fr.norad.visuwall.providers.common.GenericSoftwareClient;
+import fr.norad.visuwall.providers.common.ResourceNotFoundException;
+import fr.norad.visuwall.providers.hudson.domain.HudsonBuild;
+import fr.norad.visuwall.providers.hudson.domain.HudsonCommiter;
+import fr.norad.visuwall.providers.hudson.domain.HudsonJob;
+import fr.norad.visuwall.providers.hudson.domain.HudsonTestResult;
+import fr.norad.visuwall.providers.hudson.exception.HudsonBuildNotFoundException;
+import fr.norad.visuwall.providers.hudson.exception.HudsonJobNotFoundException;
+import fr.norad.visuwall.providers.hudson.exception.HudsonViewNotFoundException;
+import fr.norad.visuwall.providers.hudson.helper.HudsonXmlHelper;
+import fr.norad.visuwall.providers.hudson.resource.Build;
+import fr.norad.visuwall.providers.hudson.resource.Color;
+import fr.norad.visuwall.providers.hudson.resource.ExternalJob;
+import fr.norad.visuwall.providers.hudson.resource.FreeStyleBuild;
+import fr.norad.visuwall.providers.hudson.resource.FreeStyleProject;
+import fr.norad.visuwall.providers.hudson.resource.Hudson;
+import fr.norad.visuwall.providers.hudson.resource.HudsonUser;
+import fr.norad.visuwall.providers.hudson.resource.Job;
+import fr.norad.visuwall.providers.hudson.resource.ListView;
+import fr.norad.visuwall.providers.hudson.resource.MatrixProject;
+import fr.norad.visuwall.providers.hudson.resource.MavenModuleSet;
+import fr.norad.visuwall.providers.hudson.resource.MavenModuleSetBuild;
+import fr.norad.visuwall.providers.hudson.resource.Project;
+import fr.norad.visuwall.providers.hudson.resource.SurefireAggregatedReport;
+import fr.norad.visuwall.providers.hudson.resource.View;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -14,14 +14,14 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.bamboo;
+package fr.norad.visuwall.providers.bamboo;
 
 import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 
-import net.awired.clients.bamboo.resource.Plan;
-import net.awired.clients.common.ResourceNotFoundException;
+import fr.norad.visuwall.providers.bamboo.resource.Plan;
+import fr.norad.visuwall.providers.common.ResourceNotFoundException;
 
 import org.junit.Test;
 

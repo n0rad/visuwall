@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar;
+package fr.norad.visuwall.plugin.sonar;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_XML_TYPE;
 import static org.junit.Assert.assertEquals;
@@ -28,10 +28,10 @@ import static org.mockito.Mockito.when;
 import java.net.URL;
 import java.util.HashMap;
 
-import net.awired.clients.common.GenericSoftwareClient;
-import net.awired.clients.common.ResourceNotFoundException;
-import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.providers.common.GenericSoftwareClient;
+import fr.norad.visuwall.providers.common.ResourceNotFoundException;
+import fr.norad.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

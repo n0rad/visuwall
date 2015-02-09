@@ -14,12 +14,12 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.process.capabilities;
+package fr.norad.visuwall.core.business.process.capabilities;
 
-import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
-import net.awired.visuwall.core.business.domain.Build;
-import net.awired.visuwall.core.business.domain.Project;
+import fr.norad.visuwall.api.exception.BuildNotFoundException;
+import fr.norad.visuwall.api.plugin.capability.BasicCapability;
+import fr.norad.visuwall.core.business.domain.Build;
+import fr.norad.visuwall.core.business.domain.Project;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -14,11 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.server.application;
+package fr.norad.visuwall.server.application;
 
 import java.util.Properties;
 import javax.servlet.ServletContext;
-import net.awired.visuwall.core.application.common.ApplicationHelper;
+import fr.norad.visuwall.core.application.common.ApplicationHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
 

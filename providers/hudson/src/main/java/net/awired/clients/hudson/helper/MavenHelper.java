@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.helper;
+package fr.norad.visuwall.providers.hudson.helper;
 
 import java.net.URL;
 import org.slf4j.Logger;

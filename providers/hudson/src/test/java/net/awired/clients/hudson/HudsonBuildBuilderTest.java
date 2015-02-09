@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson;
+package fr.norad.visuwall.providers.hudson;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -24,10 +24,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import net.awired.clients.hudson.domain.HudsonBuild;
-import net.awired.clients.hudson.domain.HudsonCommiter;
-import net.awired.clients.hudson.resource.MavenModuleSetBuild;
-import net.awired.clients.hudson.resource.Culprit;
+import fr.norad.visuwall.providers.hudson.domain.HudsonBuild;
+import fr.norad.visuwall.providers.hudson.domain.HudsonCommiter;
+import fr.norad.visuwall.providers.hudson.resource.MavenModuleSetBuild;
+import fr.norad.visuwall.providers.hudson.resource.Culprit;
 import org.junit.Test;
 
 public class HudsonBuildBuilderTest {

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.sonar.exception;
+package fr.norad.visuwall.providers.sonar.exception;
 
 public class SonarProjectsNotFoundException extends Exception {
 

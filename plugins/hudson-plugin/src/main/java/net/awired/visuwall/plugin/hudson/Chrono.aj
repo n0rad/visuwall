@@ -14,11 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.hudson;
+package fr.norad.visuwall.plugin.hudson;
 
 public aspect Chrono {
 
-    Object around() : execution(public * net.awired.visuwall.plugin.hudson.HudsonConnection.* (..)) {
+    Object around() : execution(public * fr.norad.visuwall.plugin.hudson.HudsonConnection.* (..)) {
         long start = System.currentTimeMillis();
         try {
             return proceed();

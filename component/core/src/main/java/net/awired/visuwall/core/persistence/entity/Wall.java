@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.persistence.entity;
+package fr.norad.visuwall.core.persistence.entity;
 
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
@@ -32,9 +32,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import net.awired.ajsl.core.collect.PopulatingShrinkList;
 import net.awired.ajsl.persistence.entity.IdEntityImpl;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
-import net.awired.visuwall.core.business.domain.Project;
-import net.awired.visuwall.core.business.domain.ProjectHolder;
+import fr.norad.visuwall.api.plugin.capability.BasicCapability;
+import fr.norad.visuwall.core.business.domain.Project;
+import fr.norad.visuwall.core.business.domain.ProjectHolder;
 import org.hibernate.annotations.Cascade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

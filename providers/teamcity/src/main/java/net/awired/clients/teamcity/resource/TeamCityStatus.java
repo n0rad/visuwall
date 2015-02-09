@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.teamcity.resource;
+package fr.norad.visuwall.providers.teamcity.resource;
 
 public interface TeamCityStatus {
     String SUCCESS = "SUCCESS";

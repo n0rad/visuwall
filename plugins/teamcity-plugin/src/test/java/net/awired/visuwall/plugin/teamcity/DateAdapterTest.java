@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.teamcity;
+package fr.norad.visuwall.plugin.teamcity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

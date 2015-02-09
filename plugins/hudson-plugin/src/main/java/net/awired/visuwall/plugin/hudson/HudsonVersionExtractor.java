@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.hudson;
+package fr.norad.visuwall.plugin.hudson;
 
 import com.google.common.base.Preconditions;
 

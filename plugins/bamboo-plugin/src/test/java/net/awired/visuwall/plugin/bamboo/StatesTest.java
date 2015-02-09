@@ -14,10 +14,10 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.bamboo;
+package fr.norad.visuwall.plugin.bamboo;
 
 import static org.junit.Assert.assertEquals;
-import net.awired.visuwall.api.domain.BuildState;
+import fr.norad.visuwall.api.domain.BuildState;
 import org.junit.Test;
 
 public class StatesTest {

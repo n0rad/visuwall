@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.common;
+package fr.norad.visuwall.providers.common;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

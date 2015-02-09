@@ -14,13 +14,13 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.common;
+package fr.norad.visuwall.providers.common;
 
 import java.util.Arrays;
 
 public aspect Chrono {
 
-    Object around() : execution(public * net.awired.visuwall.common.client.GenericSoftwareClient.* (..)) {
+    Object around() : execution(public * fr.norad.visuwall.common.client.GenericSoftwareClient.* (..)) {
         long start = System.currentTimeMillis();
         try {
             return proceed();

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.application.common;
+package fr.norad.visuwall.core.application.common;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

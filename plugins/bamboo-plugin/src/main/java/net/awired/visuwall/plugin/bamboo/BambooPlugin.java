@@ -14,16 +14,16 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.bamboo;
+package fr.norad.visuwall.plugin.bamboo;
 
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.SoftwareNotFoundException;
-import net.awired.visuwall.api.plugin.VisuwallPlugin;
+import fr.norad.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.api.plugin.VisuwallPlugin;
 
 public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
 

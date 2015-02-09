@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.exception;
+package fr.norad.visuwall.core.exception;
 
 public class NotFoundException extends Exception {
 

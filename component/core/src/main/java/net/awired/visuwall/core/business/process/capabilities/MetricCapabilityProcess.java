@@ -14,19 +14,19 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.process.capabilities;
+package fr.norad.visuwall.core.business.process.capabilities;
 
 import java.util.Map.Entry;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.domain.quality.QualityMeasure;
-import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
-import net.awired.visuwall.api.plugin.capability.MetricCapability;
-import net.awired.visuwall.api.plugin.capability.TestCapability;
-import net.awired.visuwall.core.business.domain.Build;
-import net.awired.visuwall.core.business.domain.Project;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.domain.TestResult;
+import fr.norad.visuwall.api.domain.quality.QualityMeasure;
+import fr.norad.visuwall.api.domain.quality.QualityResult;
+import fr.norad.visuwall.api.exception.BuildNotFoundException;
+import fr.norad.visuwall.api.plugin.capability.BasicCapability;
+import fr.norad.visuwall.api.plugin.capability.MetricCapability;
+import fr.norad.visuwall.api.plugin.capability.TestCapability;
+import fr.norad.visuwall.core.business.domain.Build;
+import fr.norad.visuwall.core.business.domain.Project;
 import org.springframework.stereotype.Component;
 
 @Component

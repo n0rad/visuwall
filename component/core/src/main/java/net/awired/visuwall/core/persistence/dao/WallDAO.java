@@ -14,11 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.persistence.dao;
+package fr.norad.visuwall.core.persistence.dao;
 
 import java.util.List;
-import net.awired.visuwall.core.exception.NotFoundException;
-import net.awired.visuwall.core.persistence.entity.Wall;
+import fr.norad.visuwall.core.exception.NotFoundException;
+import fr.norad.visuwall.core.persistence.entity.Wall;
 
 public interface WallDAO {
 

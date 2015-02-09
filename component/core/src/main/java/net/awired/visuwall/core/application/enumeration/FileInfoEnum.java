@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.application.enumeration;
+package fr.norad.visuwall.core.application.enumeration;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -14,14 +14,14 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.server.application;
+package fr.norad.visuwall.server.application;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import javax.servlet.ServletContextEvent;
-import net.awired.visuwall.core.application.common.ApplicationHelper;
+import fr.norad.visuwall.core.application.common.ApplicationHelper;
 import org.fusesource.jansi.AnsiConsole;
 import org.springframework.web.context.ContextLoaderListener;
 import com.google.common.base.Charsets;

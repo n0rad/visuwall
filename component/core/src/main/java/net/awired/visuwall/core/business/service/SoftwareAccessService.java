@@ -14,17 +14,17 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.service;
+package fr.norad.visuwall.core.business.service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
-import net.awired.visuwall.api.plugin.capability.ViewCapability;
-import net.awired.visuwall.core.exception.MissingCapacityException;
-import net.awired.visuwall.core.persistence.entity.SoftwareAccess;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.plugin.capability.BuildCapability;
+import fr.norad.visuwall.api.plugin.capability.ViewCapability;
+import fr.norad.visuwall.core.exception.MissingCapacityException;
+import fr.norad.visuwall.core.persistence.entity.SoftwareAccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

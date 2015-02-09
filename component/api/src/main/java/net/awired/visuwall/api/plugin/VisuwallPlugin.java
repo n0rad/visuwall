@@ -14,15 +14,15 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.plugin;
+package fr.norad.visuwall.api.plugin;
 
 import java.net.URL;
 import java.util.Map;
 
-import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.SoftwareNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
+import fr.norad.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.exception.ConnectionException;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.api.plugin.capability.BasicCapability;
 
 public interface VisuwallPlugin<T extends BasicCapability> {
 

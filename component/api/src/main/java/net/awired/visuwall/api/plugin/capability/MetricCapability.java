@@ -14,13 +14,13 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.plugin.capability;
+package fr.norad.visuwall.api.plugin.capability;
 
 import java.util.List;
 import java.util.Map;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.quality.QualityMetric;
-import net.awired.visuwall.api.domain.quality.QualityResult;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.domain.quality.QualityMetric;
+import fr.norad.visuwall.api.domain.quality.QualityResult;
 
 public interface MetricCapability extends BasicCapability {
 

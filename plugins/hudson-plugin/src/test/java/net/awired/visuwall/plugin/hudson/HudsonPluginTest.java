@@ -14,9 +14,9 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.hudson;
+package fr.norad.visuwall.plugin.hudson;
 
-import net.awired.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
 import org.junit.Test;
 
 public class HudsonPluginTest {

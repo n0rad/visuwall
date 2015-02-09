@@ -14,14 +14,14 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.service;
+package fr.norad.visuwall.core.business.service;
 
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
-import net.awired.visuwall.core.persistence.entity.Wall;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.plugin.capability.BasicCapability;
+import fr.norad.visuwall.core.persistence.entity.Wall;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

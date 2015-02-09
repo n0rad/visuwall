@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.server.web.controller;
+package fr.norad.visuwall.server.web.controller;
 
 import java.io.File;
 import java.util.HashMap;
@@ -27,8 +27,8 @@ import net.awired.ajsl.web.domain.JsServiceMap;
 import net.awired.ajsl.web.service.interfaces.CssService;
 import net.awired.ajsl.web.service.interfaces.JsService;
 import net.awired.ajsl.web.service.interfaces.JsonService;
-import net.awired.visuwall.core.business.service.WallHolderService;
-import net.awired.visuwall.server.application.VisuwallApplication;
+import fr.norad.visuwall.core.business.service.WallHolderService;
+import fr.norad.visuwall.server.application.VisuwallApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

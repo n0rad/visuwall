@@ -14,11 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.teamcity;
+package fr.norad.visuwall.plugin.teamcity;
 
 public aspect Chrono {
 
-    Object around() : execution(public * net.awired.visuwall.plugin.teamcity.TeamCityConnection.* (..)) {
+    Object around() : execution(public * fr.norad.visuwall.plugin.teamcity.TeamCityConnection.* (..)) {
         long start = System.currentTimeMillis();
         try {
             return proceed();

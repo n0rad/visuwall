@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.bamboo;
+package fr.norad.visuwall.providers.bamboo;
 
 public interface State {
 

@@ -14,11 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.helper;
+package fr.norad.visuwall.providers.hudson.helper;
 
 import static org.junit.Assert.assertTrue;
-import net.awired.clients.hudson.helper.MavenHelper;
-import net.awired.clients.hudson.util.ClasspathFiles;
+import fr.norad.visuwall.providers.hudson.helper.MavenHelper;
+import fr.norad.visuwall.providers.hudson.util.ClasspathFiles;
 import org.junit.Test;
 
 public class MavenHelperTest {

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar;
+package fr.norad.visuwall.plugin.sonar;
 
 import com.google.common.base.Objects;
 

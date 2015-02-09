@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.persistence.entity;
+package fr.norad.visuwall.core.persistence.entity;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,8 +28,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.plugin.capability.BasicCapability;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.plugin.capability.BasicCapability;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.CollectionOfElements;
 import org.springframework.util.AutoPopulatingList;

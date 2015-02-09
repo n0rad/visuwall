@@ -14,13 +14,13 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.domain;
+package fr.norad.visuwall.core.business.domain;
 
 import static org.junit.Assert.assertEquals;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
-import net.awired.visuwall.core.persistence.entity.Wall;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.api.plugin.capability.BuildCapability;
+import fr.norad.visuwall.core.persistence.entity.Wall;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;

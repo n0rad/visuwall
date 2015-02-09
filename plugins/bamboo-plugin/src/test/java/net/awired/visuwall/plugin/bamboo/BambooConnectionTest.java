@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.bamboo;
+package fr.norad.visuwall.plugin.bamboo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -26,12 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.awired.clients.bamboo.Bamboo;
-import net.awired.clients.bamboo.exception.BambooPlanNotFoundException;
-import net.awired.clients.bamboo.resource.Plan;
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.providers.bamboo.Bamboo;
+import fr.norad.visuwall.providers.bamboo.exception.BambooPlanNotFoundException;
+import fr.norad.visuwall.providers.bamboo.resource.Plan;
+import fr.norad.visuwall.api.domain.Commiter;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;

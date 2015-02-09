@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.application.log;
+package fr.norad.visuwall.core.application.log;
 
 import java.util.Arrays;
 import java.util.List;

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.exception;
+package fr.norad.visuwall.providers.hudson.exception;
 
 public class HudsonJobNotFoundException extends Exception {
 

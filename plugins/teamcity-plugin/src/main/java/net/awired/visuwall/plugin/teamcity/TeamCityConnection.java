@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.teamcity;
+package fr.norad.visuwall.plugin.teamcity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -29,34 +29,34 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import net.awired.clients.teamcity.TeamCity;
-import net.awired.clients.teamcity.exception.TeamCityBuildListNotFoundException;
-import net.awired.clients.teamcity.exception.TeamCityBuildNotFoundException;
-import net.awired.clients.teamcity.exception.TeamCityBuildTypeNotFoundException;
-import net.awired.clients.teamcity.exception.TeamCityChangesNotFoundException;
-import net.awired.clients.teamcity.exception.TeamCityProjectNotFoundException;
-import net.awired.clients.teamcity.exception.TeamCityProjectsNotFoundException;
-import net.awired.clients.teamcity.resource.TeamCityAbstractBuild;
-import net.awired.clients.teamcity.resource.TeamCityBuild;
-import net.awired.clients.teamcity.resource.TeamCityBuildItem;
-import net.awired.clients.teamcity.resource.TeamCityBuildType;
-import net.awired.clients.teamcity.resource.TeamCityBuilds;
-import net.awired.clients.teamcity.resource.TeamCityChange;
-import net.awired.clients.teamcity.resource.TeamCityProject;
-import net.awired.visuwall.api.domain.BuildState;
-import net.awired.visuwall.api.domain.BuildTime;
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.ProjectKey;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.exception.BuildIdNotFoundException;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.MavenIdNotFoundException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.exception.ViewNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
-import net.awired.visuwall.api.plugin.capability.TestCapability;
-import net.awired.visuwall.api.plugin.capability.ViewCapability;
+import fr.norad.visuwall.providers.teamcity.TeamCity;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildListNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildTypeNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityChangesNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityProjectNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityProjectsNotFoundException;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityAbstractBuild;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuild;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuildItem;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuildType;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuilds;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityChange;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityProject;
+import fr.norad.visuwall.api.domain.BuildState;
+import fr.norad.visuwall.api.domain.BuildTime;
+import fr.norad.visuwall.api.domain.Commiter;
+import fr.norad.visuwall.api.domain.ProjectKey;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.domain.TestResult;
+import fr.norad.visuwall.api.exception.BuildIdNotFoundException;
+import fr.norad.visuwall.api.exception.BuildNotFoundException;
+import fr.norad.visuwall.api.exception.MavenIdNotFoundException;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.api.exception.ViewNotFoundException;
+import fr.norad.visuwall.api.plugin.capability.BuildCapability;
+import fr.norad.visuwall.api.plugin.capability.TestCapability;
+import fr.norad.visuwall.api.plugin.capability.ViewCapability;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -254,7 +254,7 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
         String projectId = softwareProjectId.getProjectId();
         try {
             return teamCity.findMavenId(projectId);
-        } catch (net.awired.clients.common.MavenIdNotFoundException e) {
+        } catch (fr.norad.visuwall.providers.common.MavenIdNotFoundException e) {
             throw new MavenIdNotFoundException("Cannot find maven id for " + softwareProjectId, e);
         }
     }

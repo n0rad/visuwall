@@ -28,14 +28,14 @@
 		<encoder>
 			<pattern><![CDATA[%d{HH:mm:ss.SSS} [%-10.10thread] %colorlevel %-45.45(%41C{41}:%L) - %msg%n]]></pattern>
 		</encoder>
-		<filter class="net.awired.visuwall.core.application.log.OutFilter" />
+		<filter class="fr.norad.visuwall.core.application.log.OutFilter" />
 	</appender>
 	<appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
 		<target>System.err</target>
 		<encoder>
 			<pattern><![CDATA[%d{HH:mm:ss.SSS} [%-10.10thread] %colorlevel %-45.45(%41C{41}:%L) - %msg%n]]></pattern>
 		</encoder>
-		<filter class="net.awired.visuwall.core.application.log.ErrFilter" />
+		<filter class="fr.norad.visuwall.core.application.log.ErrFilter" />
 	</appender>
 
 	<logger name="net.awired" level="${log.visuwall.awired:-DEBUG}" />

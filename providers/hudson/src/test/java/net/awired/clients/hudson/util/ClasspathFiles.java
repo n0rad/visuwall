@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.util;
+package fr.norad.visuwall.providers.hudson.util;
 
 import java.net.URI;
 import java.net.URISyntaxException;

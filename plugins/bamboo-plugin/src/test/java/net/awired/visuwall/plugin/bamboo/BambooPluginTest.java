@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.bamboo;
+package fr.norad.visuwall.plugin.bamboo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -22,8 +22,8 @@ import static org.junit.Assert.assertFalse;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;

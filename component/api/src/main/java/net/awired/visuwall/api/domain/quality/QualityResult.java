@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.domain.quality;
+package fr.norad.visuwall.api.domain.quality;
 
 import java.util.HashMap;
 import java.util.Map;

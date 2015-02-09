@@ -14,12 +14,12 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.jenkins;
+package fr.norad.visuwall.plugin.jenkins;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
-import static net.awired.visuwall.api.domain.BuildState.UNKNOWN;
-import static net.awired.visuwall.plugin.jenkins.States.asVisuwallState;
+import static fr.norad.visuwall.api.domain.BuildState.UNKNOWN;
+import static fr.norad.visuwall.plugin.jenkins.States.asVisuwallState;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 import java.util.ArrayList;
@@ -32,28 +32,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.awired.clients.hudson.Hudson;
-import net.awired.clients.hudson.domain.HudsonBuild;
-import net.awired.clients.hudson.domain.HudsonCommiter;
-import net.awired.clients.hudson.domain.HudsonJob;
-import net.awired.clients.hudson.domain.HudsonTestResult;
-import net.awired.clients.hudson.exception.HudsonBuildNotFoundException;
-import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
-import net.awired.clients.hudson.exception.HudsonViewNotFoundException;
-import net.awired.visuwall.api.domain.BuildState;
-import net.awired.visuwall.api.domain.BuildTime;
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.ProjectKey;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.exception.BuildIdNotFoundException;
-import net.awired.visuwall.api.exception.BuildNotFoundException;
-import net.awired.visuwall.api.exception.MavenIdNotFoundException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
-import net.awired.visuwall.api.exception.ViewNotFoundException;
-import net.awired.visuwall.api.plugin.capability.BuildCapability;
-import net.awired.visuwall.api.plugin.capability.TestCapability;
-import net.awired.visuwall.api.plugin.capability.ViewCapability;
+import fr.norad.visuwall.providers.hudson.Hudson;
+import fr.norad.visuwall.providers.hudson.domain.HudsonBuild;
+import fr.norad.visuwall.providers.hudson.domain.HudsonCommiter;
+import fr.norad.visuwall.providers.hudson.domain.HudsonJob;
+import fr.norad.visuwall.providers.hudson.domain.HudsonTestResult;
+import fr.norad.visuwall.providers.hudson.exception.HudsonBuildNotFoundException;
+import fr.norad.visuwall.providers.hudson.exception.HudsonJobNotFoundException;
+import fr.norad.visuwall.providers.hudson.exception.HudsonViewNotFoundException;
+import fr.norad.visuwall.api.domain.BuildState;
+import fr.norad.visuwall.api.domain.BuildTime;
+import fr.norad.visuwall.api.domain.Commiter;
+import fr.norad.visuwall.api.domain.ProjectKey;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.domain.TestResult;
+import fr.norad.visuwall.api.exception.BuildIdNotFoundException;
+import fr.norad.visuwall.api.exception.BuildNotFoundException;
+import fr.norad.visuwall.api.exception.MavenIdNotFoundException;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.api.exception.ViewNotFoundException;
+import fr.norad.visuwall.api.plugin.capability.BuildCapability;
+import fr.norad.visuwall.api.plugin.capability.TestCapability;
+import fr.norad.visuwall.api.plugin.capability.ViewCapability;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -278,7 +278,7 @@ public final class JenkinsConnection implements BuildCapability, ViewCapability,
         String jobName = softwareProjectId.getProjectId();
         try {
             return hudson.findMavenId(jobName);
-        } catch (net.awired.clients.common.MavenIdNotFoundException e) {
+        } catch (fr.norad.visuwall.providers.common.MavenIdNotFoundException e) {
             throw new MavenIdNotFoundException("Can't get maven id of project " + softwareProjectId, e);
         }
     }

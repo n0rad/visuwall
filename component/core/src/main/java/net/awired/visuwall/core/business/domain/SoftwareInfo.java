@@ -14,13 +14,13 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.domain;
+package fr.norad.visuwall.core.business.domain;
 
 import java.util.List;
 import java.util.Map;
 
-import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
 
 public class SoftwareInfo {
     private SoftwareId softwareId;

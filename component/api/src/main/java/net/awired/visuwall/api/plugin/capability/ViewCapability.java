@@ -14,11 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.plugin.capability;
+package fr.norad.visuwall.api.plugin.capability;
 
 import java.util.List;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.exception.ViewNotFoundException;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.exception.ViewNotFoundException;
 
 public interface ViewCapability extends BasicCapability {
 

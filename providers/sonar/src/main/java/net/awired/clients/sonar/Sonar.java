@@ -14,24 +14,24 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.sonar;
+package fr.norad.visuwall.providers.sonar;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ws.rs.core.MediaType;
-import net.awired.clients.common.GenericSoftwareClient;
-import net.awired.clients.common.ResourceNotFoundException;
-import net.awired.clients.sonar.domain.SonarMetrics;
-import net.awired.clients.sonar.domain.SonarQualityMetric;
-import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
-import net.awired.clients.sonar.exception.SonarMetricsNotFoundException;
-import net.awired.clients.sonar.exception.SonarProjectNotFoundException;
-import net.awired.clients.sonar.exception.SonarProjectsNotFoundException;
-import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
-import net.awired.clients.sonar.resource.Project;
-import net.awired.clients.sonar.resource.Projects;
+import fr.norad.visuwall.providers.common.GenericSoftwareClient;
+import fr.norad.visuwall.providers.common.ResourceNotFoundException;
+import fr.norad.visuwall.providers.sonar.domain.SonarMetrics;
+import fr.norad.visuwall.providers.sonar.domain.SonarQualityMetric;
+import fr.norad.visuwall.providers.sonar.exception.SonarMeasureNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarMetricsNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarProjectNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarProjectsNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarResourceNotFoundException;
+import fr.norad.visuwall.providers.sonar.resource.Project;
+import fr.norad.visuwall.providers.sonar.resource.Projects;
 import org.sonar.wsclient.connectors.ConnectionException;
 import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;

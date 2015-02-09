@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.teamcity;
+package fr.norad.visuwall.providers.teamcity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

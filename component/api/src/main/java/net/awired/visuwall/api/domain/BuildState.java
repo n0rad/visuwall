@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.api.domain;
+package fr.norad.visuwall.api.domain;
 
 public enum BuildState {
     SUCCESS, ABORTED, FAILURE, UNSTABLE, UNKNOWN;

@@ -14,16 +14,16 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.server.web.controller;
+package fr.norad.visuwall.server.web.controller;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.awired.visuwall.core.business.domain.PluginInfo;
-import net.awired.visuwall.core.business.domain.SoftwareInfo;
-import net.awired.visuwall.core.business.service.PluginServiceInterface;
+import fr.norad.visuwall.core.business.domain.PluginInfo;
+import fr.norad.visuwall.core.business.domain.SoftwareInfo;
+import fr.norad.visuwall.core.business.service.PluginServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -14,14 +14,14 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson;
+package fr.norad.visuwall.providers.hudson;
 
 import java.util.Date;
 import java.util.Set;
-import net.awired.clients.hudson.domain.HudsonBuild;
-import net.awired.clients.hudson.domain.HudsonCommiter;
-import net.awired.clients.hudson.helper.HudsonXmlHelper;
-import net.awired.clients.hudson.resource.Build;
+import fr.norad.visuwall.providers.hudson.domain.HudsonBuild;
+import fr.norad.visuwall.providers.hudson.domain.HudsonCommiter;
+import fr.norad.visuwall.providers.hudson.helper.HudsonXmlHelper;
+import fr.norad.visuwall.providers.hudson.resource.Build;
 
 class HudsonBuildBuilder {
 

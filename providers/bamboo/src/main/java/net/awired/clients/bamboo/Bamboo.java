@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.bamboo;
+package fr.norad.visuwall.providers.bamboo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,18 +23,18 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
-import net.awired.clients.bamboo.exception.BambooBuildNotFoundException;
-import net.awired.clients.bamboo.exception.BambooBuildNumberNotFoundException;
-import net.awired.clients.bamboo.exception.BambooEstimatedFinishTimeNotFoundException;
-import net.awired.clients.bamboo.exception.BambooPlanNotFoundException;
-import net.awired.clients.bamboo.exception.BambooResultNotFoundException;
-import net.awired.clients.bamboo.exception.BambooStateNotFoundException;
-import net.awired.clients.bamboo.resource.Plan;
-import net.awired.clients.bamboo.resource.Plans;
-import net.awired.clients.bamboo.resource.Result;
-import net.awired.clients.bamboo.resource.Results;
-import net.awired.clients.common.GenericSoftwareClient;
-import net.awired.clients.common.ResourceNotFoundException;
+import fr.norad.visuwall.providers.bamboo.exception.BambooBuildNotFoundException;
+import fr.norad.visuwall.providers.bamboo.exception.BambooBuildNumberNotFoundException;
+import fr.norad.visuwall.providers.bamboo.exception.BambooEstimatedFinishTimeNotFoundException;
+import fr.norad.visuwall.providers.bamboo.exception.BambooPlanNotFoundException;
+import fr.norad.visuwall.providers.bamboo.exception.BambooResultNotFoundException;
+import fr.norad.visuwall.providers.bamboo.exception.BambooStateNotFoundException;
+import fr.norad.visuwall.providers.bamboo.resource.Plan;
+import fr.norad.visuwall.providers.bamboo.resource.Plans;
+import fr.norad.visuwall.providers.bamboo.resource.Result;
+import fr.norad.visuwall.providers.bamboo.resource.Results;
+import fr.norad.visuwall.providers.common.GenericSoftwareClient;
+import fr.norad.visuwall.providers.common.ResourceNotFoundException;
 
 public class Bamboo {
 

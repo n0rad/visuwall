@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.bamboo;
+package fr.norad.visuwall.providers.bamboo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

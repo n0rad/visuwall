@@ -1,11 +1,11 @@
-package net.awired.visuwall.plugin.cruisecontrol;
+package fr.norad.visuwall.plugin.cruisecontrol;
 
 import java.net.URL;
 import java.util.Map;
-import net.awired.visuwall.api.domain.SoftwareId;
-import net.awired.visuwall.api.exception.ConnectionException;
-import net.awired.visuwall.api.exception.SoftwareNotFoundException;
-import net.awired.visuwall.api.plugin.VisuwallPlugin;
+import fr.norad.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.exception.ConnectionException;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.api.plugin.VisuwallPlugin;
 
 public class CruiseControlPlugin implements VisuwallPlugin<CruiseControlConnection> {
 

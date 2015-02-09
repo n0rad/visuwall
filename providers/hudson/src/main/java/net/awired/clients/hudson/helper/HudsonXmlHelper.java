@@ -14,12 +14,12 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson.helper;
+package fr.norad.visuwall.providers.hudson.helper;
 
 import java.util.List;
 
-import net.awired.clients.hudson.resource.Build;
-import net.awired.clients.hudson.resource.Culprit;
+import fr.norad.visuwall.providers.hudson.resource.Build;
+import fr.norad.visuwall.providers.hudson.resource.Culprit;
 
 import com.google.common.base.Preconditions;
 

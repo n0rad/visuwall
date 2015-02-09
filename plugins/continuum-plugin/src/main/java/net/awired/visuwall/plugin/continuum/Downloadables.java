@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.continuum;
+package fr.norad.visuwall.plugin.continuum;
 
 import java.io.IOException;
 import java.io.InputStream;

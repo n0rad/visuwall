@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.hudson;
+package fr.norad.visuwall.providers.hudson;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -28,13 +28,13 @@ import java.util.List;
 import java.util.Set;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
-import net.awired.clients.common.GenericSoftwareClient;
-import net.awired.clients.common.ResourceNotFoundException;
-import net.awired.clients.hudson.domain.HudsonCommiter;
-import net.awired.clients.hudson.resource.Hudson;
-import net.awired.clients.hudson.resource.HudsonUser;
-import net.awired.clients.hudson.resource.ListView;
-import net.awired.clients.hudson.util.ClasspathFiles;
+import fr.norad.visuwall.providers.common.GenericSoftwareClient;
+import fr.norad.visuwall.providers.common.ResourceNotFoundException;
+import fr.norad.visuwall.providers.hudson.domain.HudsonCommiter;
+import fr.norad.visuwall.providers.hudson.resource.Hudson;
+import fr.norad.visuwall.providers.hudson.resource.HudsonUser;
+import fr.norad.visuwall.providers.hudson.resource.ListView;
+import fr.norad.visuwall.providers.hudson.util.ClasspathFiles;
 import org.junit.Before;
 import org.junit.Test;
 

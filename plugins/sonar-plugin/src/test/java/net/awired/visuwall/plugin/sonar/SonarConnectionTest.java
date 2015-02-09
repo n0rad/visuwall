@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.sonar;
+package fr.norad.visuwall.plugin.sonar;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -29,24 +29,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.awired.clients.sonar.Sonar;
-import net.awired.clients.sonar.domain.SonarQualityMetric;
-import net.awired.clients.sonar.exception.SonarMeasureNotFoundException;
-import net.awired.clients.sonar.exception.SonarMetricsNotFoundException;
-import net.awired.clients.sonar.exception.SonarResourceNotFoundException;
-import net.awired.clients.sonar.resource.Project;
-import net.awired.clients.sonar.resource.Projects;
-import net.awired.visuwall.api.domain.BuildState;
-import net.awired.visuwall.api.domain.BuildTime;
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.ProjectKey;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.domain.quality.QualityMetric;
-import net.awired.visuwall.api.domain.quality.QualityResult;
-import net.awired.visuwall.api.exception.SoftwareNotFoundException;
-import net.awired.visuwall.api.exception.MavenIdNotFoundException;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.providers.sonar.Sonar;
+import fr.norad.visuwall.providers.sonar.domain.SonarQualityMetric;
+import fr.norad.visuwall.providers.sonar.exception.SonarMeasureNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarMetricsNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarResourceNotFoundException;
+import fr.norad.visuwall.providers.sonar.resource.Project;
+import fr.norad.visuwall.providers.sonar.resource.Projects;
+import fr.norad.visuwall.api.domain.BuildState;
+import fr.norad.visuwall.api.domain.BuildTime;
+import fr.norad.visuwall.api.domain.Commiter;
+import fr.norad.visuwall.api.domain.ProjectKey;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.domain.TestResult;
+import fr.norad.visuwall.api.domain.quality.QualityMetric;
+import fr.norad.visuwall.api.domain.quality.QualityResult;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.api.exception.MavenIdNotFoundException;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.hudson;
+package fr.norad.visuwall.plugin.hudson;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -27,11 +27,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.awired.clients.hudson.Hudson;
-import net.awired.clients.hudson.domain.HudsonJob;
-import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.exception.ProjectNotFoundException;
+import fr.norad.visuwall.providers.hudson.Hudson;
+import fr.norad.visuwall.providers.hudson.domain.HudsonJob;
+import fr.norad.visuwall.providers.hudson.exception.HudsonJobNotFoundException;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;

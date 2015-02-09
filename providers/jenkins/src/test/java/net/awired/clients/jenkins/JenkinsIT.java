@@ -14,14 +14,14 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.jenkins;
+package fr.norad.visuwall.providers.jenkins;
 
 import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 
-import net.awired.clients.hudson.domain.HudsonJob;
-import net.awired.clients.hudson.exception.HudsonJobNotFoundException;
+import fr.norad.visuwall.providers.hudson.domain.HudsonJob;
+import fr.norad.visuwall.providers.hudson.exception.HudsonJobNotFoundException;
 
 import org.junit.Test;
 

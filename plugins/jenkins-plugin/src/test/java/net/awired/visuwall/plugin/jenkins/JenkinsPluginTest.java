@@ -14,11 +14,11 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.plugin.jenkins;
+package fr.norad.visuwall.plugin.jenkins;
 
 import static org.junit.Assert.assertEquals;
 import java.net.URL;
-import net.awired.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 

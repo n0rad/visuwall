@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.visuwall.core.business.domain;
+package fr.norad.visuwall.core.business.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import net.awired.visuwall.api.domain.Commiter;
-import net.awired.visuwall.api.domain.SoftwareProjectId;
-import net.awired.visuwall.api.domain.BuildState;
-import net.awired.visuwall.api.domain.TestResult;
-import net.awired.visuwall.api.domain.quality.QualityResult;
+import fr.norad.visuwall.api.domain.Commiter;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.domain.BuildState;
+import fr.norad.visuwall.api.domain.TestResult;
+import fr.norad.visuwall.api.domain.quality.QualityResult;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.awired.clients.sonar.domain;
+package fr.norad.visuwall.providers.sonar.domain;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
