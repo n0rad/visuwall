@@ -10,7 +10,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>net.awired.visuwall</groupId>
+	<groupId>fr.norad.visuwall</groupId>
 	<artifactId>visuwall</artifactId>
 	<version>0.3.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -95,101 +95,101 @@
 		<dependencies>
 			<!-- visuwall core modules -->
 			<dependency>
-				<groupId>net.awired.visuwall</groupId>
+				<groupId>fr.norad.visuwall</groupId>
 				<artifactId>visuwall-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.visuwall</groupId>
+				<groupId>fr.norad.visuwall</groupId>
 				<artifactId>visuwall-web</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.visuwall</groupId>
+				<groupId>fr.norad.visuwall</groupId>
 				<artifactId>visuwall-api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.visuwall</groupId>
+				<groupId>fr.norad.visuwall</groupId>
 				<artifactId>visuwall-cli</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.visuwall</groupId>
+				<groupId>fr.norad.visuwall</groupId>
 				<artifactId>visuwall-it</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<!-- plugins -->
 			<dependency>
-				<groupId>net.awired.visuwall</groupId>
+				<groupId>fr.norad.visuwall</groupId>
 				<artifactId>visuwall-plugin-hudson</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.visuwall</groupId>
+				<groupId>fr.norad.visuwall</groupId>
 				<artifactId>visuwall-plugin-sonar</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.visuwall</groupId>
+				<groupId>fr.norad.visuwall</groupId>
 				<artifactId>visuwall-plugin-bamboo</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.visuwall</groupId>
+				<groupId>fr.norad.visuwall</groupId>
 				<artifactId>visuwall-plugin-teamcity</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.visuwall</groupId>
+				<groupId>fr.norad.visuwall</groupId>
 				<artifactId>visuwall-plugin-jenkins</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.visuwall</groupId>
+				<groupId>fr.norad.visuwall</groupId>
 				<artifactId>visuwall-plugin-continuum</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-                                <groupId>net.awired.visuwall</groupId>
+                                <groupId>fr.norad.visuwall</groupId>
                                 <artifactId>visuwall-plugin-cruisecontrol</artifactId>
                                 <version>${project.version}</version>
                         </dependency>
 
 			<!-- clients -->
 			<dependency>
-				<groupId>net.awired.clients</groupId>
+				<groupId>fr.norad.visuwall.providers</groupId>
 				<artifactId>clients-hudson</artifactId>
 				<version>${clients.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.clients</groupId>
+				<groupId>fr.norad.visuwall.providers</groupId>
 				<artifactId>clients-jenkins</artifactId>
 				<version>${clients.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.clients</groupId>
+				<groupId>fr.norad.visuwall.providers</groupId>
 				<artifactId>clients-sonar</artifactId>
 				<version>${clients.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.clients</groupId>
+				<groupId>fr.norad.visuwall.providers</groupId>
 				<artifactId>clients-teamcity</artifactId>
 				<version>${clients.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.clients</groupId>
+				<groupId>fr.norad.visuwall.providers</groupId>
 				<artifactId>clients-bamboo</artifactId>
 				<version>${clients.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.clients</groupId>
+				<groupId>fr.norad.visuwall.providers</groupId>
 				<artifactId>clients-continuum</artifactId>
 				<version>${clients.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>net.awired.clients</groupId>
+				<groupId>fr.norad.visuwall.providers</groupId>
 				<artifactId>clients-cruisecontrol</artifactId>
 				<version>${clients.version}</version>
 			</dependency>

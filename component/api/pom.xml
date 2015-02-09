@@ -14,7 +14,7 @@
 	<name>Visuwall - API</name>
 
 	<parent>
-		<groupId>net.awired.visuwall</groupId>
+		<groupId>fr.norad.visuwall</groupId>
 		<artifactId>visuwall</artifactId>
 		<version>0.3.3-SNAPSHOT</version>
 		<relativePath>../../</relativePath>

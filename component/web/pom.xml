@@ -17,7 +17,7 @@
 	<name>Visuwall - Web</name>
 
 	<parent>
-		<groupId>net.awired.visuwall</groupId>
+		<groupId>fr.norad.visuwall</groupId>
 		<artifactId>visuwall</artifactId>
 		<version>0.3.3-SNAPSHOT</version>
 		<relativePath>../../</relativePath>
@@ -32,31 +32,31 @@
 	
 		<!-- plugins -->
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
+			<groupId>fr.norad.visuwall</groupId>
 			<artifactId>visuwall-plugin-bamboo</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
+			<groupId>fr.norad.visuwall</groupId>
 			<artifactId>visuwall-plugin-sonar</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
+			<groupId>fr.norad.visuwall</groupId>
 			<artifactId>visuwall-plugin-hudson</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
+			<groupId>fr.norad.visuwall</groupId>
 			<artifactId>visuwall-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
+			<groupId>fr.norad.visuwall</groupId>
 			<artifactId>visuwall-plugin-teamcity</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
+			<groupId>fr.norad.visuwall</groupId>
 			<artifactId>visuwall-plugin-jenkins</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
+			<groupId>fr.norad.visuwall</groupId>
 			<artifactId>visuwall-plugin-continuum</artifactId>
 		</dependency>
 
@@ -74,11 +74,11 @@
 		</dependency>
 
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
+			<groupId>fr.norad.visuwall</groupId>
 			<artifactId>visuwall-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
+			<groupId>fr.norad.visuwall</groupId>
 			<artifactId>visuwall-api</artifactId>
 		</dependency>
 
@@ -90,7 +90,7 @@
 
 		<!-- runnable war -->
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
+			<groupId>fr.norad.visuwall</groupId>
 			<artifactId>visuwall-cli</artifactId>
 			<scope>provided</scope>
 		</dependency>
@@ -207,7 +207,7 @@
 							<mainClass>Bootstrap</mainClass>
 						</manifest>
 						<manifestEntries>
-							<Bootstrap-MainClass>net.awired.visuwall.cli.Main</Bootstrap-MainClass>
+							<Bootstrap-MainClass>fr.norad.visuwall.cli.Main</Bootstrap-MainClass>
 							<VisuwallVersion>${project.version}</VisuwallVersion>
 						</manifestEntries>
 					</archive>
@@ -257,7 +257,7 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>net.awired.visuwall</groupId>
+									<groupId>fr.norad.visuwall</groupId>
 									<artifactId>visuwall-cli</artifactId>
 									<version>${project.version}</version>
 									<overWrite>false</overWrite>

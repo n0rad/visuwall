@@ -22,7 +22,7 @@
 	<name>Clients - Hudson</name>
 
 	<parent>
-		<groupId>net.awired.clients</groupId>
+		<groupId>fr.norad.visuwall.providers</groupId>
 		<artifactId>clients</artifactId>
 		<version>1.1</version>
 		<relativePath>..</relativePath>
@@ -53,7 +53,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.awired.clients</groupId>
+			<groupId>fr.norad.visuwall.providers</groupId>
 			<artifactId>clients-common</artifactId>
 		</dependency>
 	</dependencies>

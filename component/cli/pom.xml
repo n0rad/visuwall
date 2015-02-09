@@ -14,7 +14,7 @@
 	<name>Visuwall - Cli</name>
 
 	<parent>
-		<groupId>net.awired.visuwall</groupId>
+		<groupId>fr.norad.visuwall</groupId>
 		<artifactId>visuwall</artifactId>
 		<version>0.3.3-SNAPSHOT</version>
 		<relativePath>../../</relativePath>
@@ -22,7 +22,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>net.awired.visuwall</groupId>
+			<groupId>fr.norad.visuwall</groupId>
 			<artifactId>visuwall-core</artifactId>
 			<scope>provided</scope>
 		</dependency>
