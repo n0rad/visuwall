@@ -26,7 +26,7 @@ public class BambooUrlBuilderTest {
 
     @Test
     public void should_build_all_projects_url() {
-        String expectedUrl = "http://bamboo.visuwall.awired.net/rest/api/latest/plan";
+        String expectedUrl = "http://bamboo.visuwall.awired.net/rest/api/latest/plan?max-result=1000";
         assertEquals(expectedUrl, builder.getAllPlansUrl());
     }
 
