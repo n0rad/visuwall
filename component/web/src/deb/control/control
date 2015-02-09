@@ -1,0 +1,11 @@
+Source: visuwall
+Package: visuwall
+Version: [[version]]
+Maintainer: Arnaud Lemaire <alemaire@norad.fr>
+Section: web
+Priority: optional
+Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 8)
+Architecture: all
+Depends: bash (>=4.0)
+Description: Visual status of your build on a wall

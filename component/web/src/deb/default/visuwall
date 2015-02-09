@@ -1,0 +1,15 @@
+
+# project config
+
+USER=www-data
+GROUP=www-data
+
+NAME="visuwall"
+DESC="Visual status of your build on a wall"
+
+LIB_DIR="/usr/share/$NAME/lib"
+CONFIG_DIR="/etc/$NAME"
+LOG_DIR="/var/log/$NAME"
+
+DAEMON="/usr/bin/java"
+DAEMON_OPTIONS=" -jar ${LIB_DIR}/visuwall.war"

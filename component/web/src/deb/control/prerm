@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+
+if [ -x "/etc/init.d/visuwall" ]; then
+	invoke-rc.d visuwall stop || exit $?
+fi

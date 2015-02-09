@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e
+
+if [ -x "/etc/init.d/visuwall" ]; then
+	invoke-rc.d visuwall start || exit $?
+fi
+
