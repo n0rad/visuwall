@@ -12,7 +12,7 @@
 
 	<groupId>fr.norad.visuwall</groupId>
 	<artifactId>visuwall</artifactId>
-	<version>0.3.3-SNAPSHOT</version>
+	<version>0.3.3</version>
 	<packaging>pom</packaging>
 	<name>Visuwall</name>
 	<description>Web application showing build and quality states of Projects in a very visual Wall</description>
@@ -43,7 +43,7 @@
 	<properties>
 		<bootstrap.version>1.0</bootstrap.version>
 		<ajsl.version>0.4</ajsl.version>
-		<clients.version>0.3.3-SNAPSHOT</clients.version>
+		<clients.version>0.3.3</clients.version>
 
 		<spring.version>3.0.5.RELEASE</spring.version>
 		<spring-security.version>3.0.5.RELEASE</spring-security.version>
@@ -76,7 +76,8 @@
 		<connection>scm:git:git://github.com/n0rad/visuwall.git</connection>
 		<developerConnection>scm:git:git@github.com:n0rad/visuwall.git</developerConnection>
 		<url>http://github.com/n0rad/visuwall</url>
-	</scm>
+	  <tag>visuwall-0.3.3</tag>
+  </scm>
 
 
 	<dependencyManagement>
@@ -184,6 +185,27 @@
 		</dependencies>
 	</dependencyManagement>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -192,61 +214,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.mycila.maven-license-plugin</groupId>
-				<artifactId>maven-license-plugin</artifactId>
-				<version>1.8.0</version>
-				<configuration>
-					<header>src/main/resources/header.txt</header>
-					<strictCheck>true</strictCheck>
-					<useDefaultExcludes>false</useDefaultExcludes>
-					<excludes>
-						<exclude>**/*.png</exclude>
-						<exclude>.metadata/**</exclude>
-						<exclude>.gitignore</exclude>
-						<exclude>.git/**</exclude>
-						<exclude>target/**</exclude>
-						<exclude>.settings/**</exclude>
-						<exclude>.project</exclude>
-						<exclude>.classpath</exclude>
-						<exclude>LICENCE.txt</exclude>
-						<exclude>README.rst</exclude>
-						<exclude>**/MANIFEST.MF</exclude>
-						<exclude>src/main/webapp/WEB-INF/lib/**</exclude>
-						<exclude>src/main/webapp/WEB-INF/classes/**</exclude>
-						<exclude>src/main/webapp/images/**</exclude>
-						<exclude>.externalToolBuilders/**</exclude>
-						<exclude>.pmd/**</exclude>
-						<exclude>src/test/resources/**</exclude>
-						<exclude>src/main/webapp/js/jquery/**</exclude>
-						<exclude>src/main/xsd/**</exclude>
-						<exclude>infinitest.filters</exclude>
-						<exclude>src/main/java/net/awired/visuwall/generated/**</exclude>
-						<exclude>CHANGELOG.txt</exclude>
-						<exclude>INSTALL.txt</exclude>
-					</excludes>
-					<executions>
-						<execution>
-							<goals>
-								<goal>check</goal>
-							</goals>
-						</execution>
-					</executions>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 
 	<!-- plugin repos -->
 	<pluginRepositories>
