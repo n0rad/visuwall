@@ -1,2 +1,0 @@
-mvn clean install -Djacoco.agent.path=/Users/juliensmadja/Desktop/lib/jacocoagent.jar -Djacoco.file.path=dump
-mvn sonar:sonar -Dsonar.jacoco.itReportPath=/Users/juliensmadja/Developpement/workspaces/on/librestry/dump
