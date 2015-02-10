@@ -32,7 +32,6 @@
 
     <properties>
         <bootstrap.version>1.0</bootstrap.version>
-        <ajsl.version>0.4</ajsl.version>
 
         <spring.version>3.0.5.RELEASE</spring.version>
         <spring-security.version>3.0.5.RELEASE</spring-security.version>

@@ -160,7 +160,7 @@
 		<dependency>
 			<groupId>net.awired.ajsl</groupId>
 			<artifactId>ajsl-persistence</artifactId>
-			<version>${ajsl.version}</version>
+			<version>0.4</version>
 		</dependency>
 
 		<dependency>

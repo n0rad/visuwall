@@ -29,30 +29,51 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>net.awired.ajsl</groupId>
-			<artifactId>ajsl-js</artifactId>
-			<version>${ajsl.version}</version>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>net.awired.ajsl</groupId>
-			<artifactId>ajsl-js-jquery</artifactId>
-			<version>${ajsl.version}</version>
-			<type>war</type>
-		</dependency>
+        <dependency>
+            <groupId>com.yahoo.platform.yui</groupId>
+            <artifactId>yuicompressor</artifactId>
+            <version>2.4.6</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>js</artifactId>
+                    <groupId>rhino</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>rhino</groupId>
+            <artifactId>js</artifactId>
+            <!-- <version>1.7R2</version> -->
+            <version>1.6R7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
 		<dependency>
 			<groupId>fr.norad.visuwall</groupId>
 			<artifactId>visuwall-core</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>net.awired.ajsl</groupId>
-			<artifactId>ajsl-web</artifactId>
-			<version>${ajsl.version}</version>
-		</dependency>
-
 		<!-- runnable war -->
 		<dependency>
 			<groupId>fr.norad.visuwall</groupId>
