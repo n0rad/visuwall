@@ -29,37 +29,6 @@
 	</properties>
 
 	<dependencies>
-	
-		<!-- plugins -->
-		<dependency>
-			<groupId>fr.norad.visuwall</groupId>
-			<artifactId>visuwall-plugin-bamboo</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>fr.norad.visuwall</groupId>
-			<artifactId>visuwall-plugin-sonar</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>fr.norad.visuwall</groupId>
-			<artifactId>visuwall-plugin-hudson</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>fr.norad.visuwall</groupId>
-			<artifactId>visuwall-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>fr.norad.visuwall</groupId>
-			<artifactId>visuwall-plugin-teamcity</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>fr.norad.visuwall</groupId>
-			<artifactId>visuwall-plugin-jenkins</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>fr.norad.visuwall</groupId>
-			<artifactId>visuwall-plugin-continuum</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>net.awired.ajsl</groupId>
 			<artifactId>ajsl-js</artifactId>

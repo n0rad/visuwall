@@ -1,0 +1,9 @@
+fr.norad.visuwall.plugin.bamboo.BambooPlugin
+fr.norad.visuwall.plugin.continuum.ContinuumPlugin
+fr.norad.visuwall.plugin.hudson.HudsonPlugin
+fr.norad.visuwall.plugin.jenkins.JenkinsPlugin
+fr.norad.visuwall.plugin.sonar.SonarPlugin
+fr.norad.visuwall.plugin.teamcity.TeamCityPlugin
+fr.norad.visuwall.plugin.cruisecontrol.CruiseControlPlugin
+fr.norad.visuwall.plugin.demo.DemoPlugin
+fr.norad.visuwall.plugin.deployit.DeployItPlugin
