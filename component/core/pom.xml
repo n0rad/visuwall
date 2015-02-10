@@ -22,8 +22,61 @@
 
 	<dependencies>
         <dependency>
-            <groupId>fr.norad.visuwall.providers</groupId>
-            <artifactId>clients-bamboo</artifactId>
+            <groupId>org.codehaus.sonar</groupId>
+            <artifactId>sonar-ws-client</artifactId>
+            <version>2.10</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>1.9.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+            <version>1.9.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-impl</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-core</artifactId>
+            <!-- version 2.4 do not work in osgi container and cause class cast exception on ReadWriteCopyStrategy -->
+            <version>2.3.3</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>r09</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.8.2</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.continuum</groupId>
@@ -71,19 +124,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-
-
-
-
-        <dependency>
-            <groupId>fr.norad.visuwall.providers</groupId>
-            <artifactId>clients-hudson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>fr.norad.visuwall.providers</groupId>
-            <artifactId>clients-jenkins</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.servicemix.bundles</groupId>
             <artifactId>org.apache.servicemix.bundles.aspectj</artifactId>
@@ -92,17 +132,6 @@
             <!-- <artifactId>aspectjrt</artifactId> -->
             <!-- <version>${aspectjrt.version}</version> -->
         </dependency>
-
-        <dependency>
-            <groupId>fr.norad.visuwall.providers</groupId>
-            <artifactId>clients-sonar</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.norad.visuwall.providers</groupId>
-            <artifactId>clients-teamcity</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
@@ -126,11 +155,6 @@
 			<groupId>net.awired.aclm</groupId>
 			<artifactId>aclm</artifactId>
 			<version>0.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>fr.norad.visuwall</groupId>
-			<artifactId>visuwall-api</artifactId>
 		</dependency>
 
 		<dependency>

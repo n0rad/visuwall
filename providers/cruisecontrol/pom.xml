@@ -30,16 +30,7 @@
 	</parent>
 
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.9</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>fr.norad.visuwall.providers</groupId>
-			<artifactId>clients-common</artifactId>
-		</dependency>
+
 	</dependencies>
 
 </project>

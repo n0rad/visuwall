@@ -46,10 +46,6 @@
 			<groupId>fr.norad.visuwall</groupId>
 			<artifactId>visuwall-core</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>fr.norad.visuwall</groupId>
-			<artifactId>visuwall-api</artifactId>
-		</dependency>
 
 		<dependency>
 			<groupId>net.awired.ajsl</groupId>
