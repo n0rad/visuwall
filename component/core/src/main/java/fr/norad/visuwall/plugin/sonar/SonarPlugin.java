@@ -77,7 +77,7 @@ public class SonarPlugin implements VisuwallPlugin<SonarConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         checkNotNull(url, "url is mandatory");
         if (sonarDetector.isSonarPropertiesPage(url)) {
             return createSoftwareIdFromProperties(url);

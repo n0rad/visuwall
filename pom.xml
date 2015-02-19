@@ -43,7 +43,6 @@
         <jersey.client.version>1.4</jersey.client.version>
         <mockito.version>1.9.0-rc1</mockito.version>
         <joda.time.version>1.6.2</joda.time.version>
-        <aspectjrt.version>1.6.10</aspectjrt.version>
     </properties>
 
     <licenses>

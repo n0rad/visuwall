@@ -14,26 +14,14 @@
  *     See the License for the specific language governing permissions and
  *     limitations under the License.
  */
-package net.awired.ajsl.web.service.interfaces;
+package fr.norad.visuwall.providers.teamcity.exception;
 
-import java.io.StringWriter;
-import java.io.Writer;
-import org.codehaus.jackson.type.JavaType;
-import org.codehaus.jackson.type.TypeReference;
+public class TeamCityUserNotFoundException extends Exception {
 
-public interface JsonService {
+    private static final long serialVersionUID = 37900680676102640L;
 
-    Writer serializeFromView(Object object, Class<?> view);
+    public TeamCityUserNotFoundException(String msg, Throwable t) {
+        super(msg, t);
+    }
 
-    void serializeFromView(Object object, Writer writer, Class<?> view);
-
-    StringWriter serialize(Object object);
-
-    void serialize(Object object, Writer writer);
-
-    <E> E deserialize(String datas, TypeReference<E> ref);
-
-    <E> E deserialize(String datas, Class<E> clazz);
-
-    <E> E deserialize(String datas, JavaType javaType);
 }

@@ -56,7 +56,7 @@ public class CruiseControlPlugin implements VisuwallPlugin<CruiseControlConnecti
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         // TODO Auto-generated method stub
         return null;
     }

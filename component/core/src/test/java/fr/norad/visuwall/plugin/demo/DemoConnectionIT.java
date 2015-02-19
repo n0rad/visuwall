@@ -18,12 +18,14 @@ package fr.norad.visuwall.plugin.demo;
 
 import static fr.norad.visuwall.plugin.demo.SoftwareProjectIds.moon;
 import java.util.concurrent.TimeUnit;
+import org.junit.Ignore;
 import org.junit.Test;
 import fr.norad.visuwall.api.domain.BuildTime;
 
 public class DemoConnectionIT {
 
     @Test
+    @Ignore
     public void should_() throws Exception {
 
         DemoConnection connection = new DemoConnection();

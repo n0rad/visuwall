@@ -21,21 +21,18 @@ import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-
-import fr.norad.visuwall.providers.common.GenericSoftwareClient;
-import fr.norad.visuwall.providers.common.ResourceNotFoundException;
-import fr.norad.visuwall.providers.teamcity.resource.TeamCityServer;
-import fr.norad.visuwall.api.domain.SoftwareId;
-import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import fr.norad.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.providers.common.GenericSoftwareClient;
+import fr.norad.visuwall.providers.common.ResourceNotFoundException;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityServer;
 
 public class TeamCityPluginTest {
 
@@ -58,7 +55,6 @@ public class TeamCityPluginTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
         plugin = new TeamCityPlugin();
-        plugin.genericSoftwareClient = genericSoftwareClient;
     }
 
     @Test
@@ -70,7 +66,7 @@ public class TeamCityPluginTest {
     @Test(expected = NullPointerException.class)
     public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance()
             throws SoftwareNotFoundException {
-        new TeamCityPlugin().getSoftwareId(null);
+        new TeamCityPlugin().getSoftwareId(null, null);
     }
 
     @Test
@@ -92,7 +88,7 @@ public class TeamCityPluginTest {
         server.setVersionMinor(0);
         when(genericSoftwareClient.resource(anyString(), any(Class.class))).thenReturn(server);
 
-        SoftwareId softwareId = plugin.getSoftwareId(teamcityUrl);
+        SoftwareId softwareId = plugin.getSoftwareId(teamcityUrl, null);
 
         String name = softwareId.getName();
         String version = softwareId.getVersion();
@@ -108,6 +104,6 @@ public class TeamCityPluginTest {
         Throwable notFound = new ResourceNotFoundException("not found");
         when(genericSoftwareClient.resource(anyString(), any(Class.class))).thenThrow(notFound);
 
-        plugin.getSoftwareId(teamcityUrl);
+        plugin.getSoftwareId(teamcityUrl, null);
     }
 }

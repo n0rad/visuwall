@@ -56,7 +56,7 @@ public class BambooPlugin implements VisuwallPlugin<BambooConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
             SoftwareId softwareId = new SoftwareId();

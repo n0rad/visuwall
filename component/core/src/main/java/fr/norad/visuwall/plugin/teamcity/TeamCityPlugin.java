@@ -19,22 +19,16 @@ package fr.norad.visuwall.plugin.teamcity;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
-import fr.norad.visuwall.providers.common.GenericSoftwareClient;
-import fr.norad.visuwall.providers.common.ResourceNotFoundException;
-import fr.norad.visuwall.providers.teamcity.resource.TeamCityServer;
+import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import fr.norad.visuwall.api.domain.SoftwareId;
 import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
 import fr.norad.visuwall.api.plugin.VisuwallPlugin;
-
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
+import fr.norad.visuwall.providers.common.GenericSoftwareClient;
+import fr.norad.visuwall.providers.common.ResourceNotFoundException;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityServer;
 
 public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
-
-    @VisibleForTesting
-    GenericSoftwareClient genericSoftwareClient = new GenericSoftwareClient("guest", "");
 
     @Override
     public TeamCityConnection getConnection(URL url, Map<String, String> properties) {
@@ -59,10 +53,14 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
-            TeamCityServer teamCityServer = getServer(url.toString());
+            GenericSoftwareClient genericSoftwareClient = new GenericSoftwareClient("guest", "");
+            if (properties.get("login") != null) {
+                genericSoftwareClient = new GenericSoftwareClient(properties.get("login"), properties.get("password"));
+            }
+            TeamCityServer teamCityServer = genericSoftwareClient.resource(url + "/app/rest/server", TeamCityServer.class);
             return createSoftwareId(teamCityServer);
         } catch (ResourceNotFoundException e) {
             throw new SoftwareNotFoundException("Url " + url + " is not compatible with TeamCity", e);
@@ -76,12 +74,6 @@ public class TeamCityPlugin implements VisuwallPlugin<TeamCityConnection> {
         softwareId.setVersion(strVersion);
         softwareId.setWarnings("");
         return softwareId;
-    }
-
-    private TeamCityServer getServer(String url) throws ResourceNotFoundException {
-        String serverUrl = url + "/app/rest/server";
-        TeamCityServer server = genericSoftwareClient.resource(serverUrl, TeamCityServer.class);
-        return server;
     }
 
     private String getVersion(TeamCityServer server) throws ResourceNotFoundException {

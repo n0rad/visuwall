@@ -56,7 +56,7 @@ public class ContinuumPlugin implements VisuwallPlugin<ContinuumConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         if (isManageable(url)) {
             SoftwareId softwareId = new SoftwareId();
             softwareId.setName("Continuum");

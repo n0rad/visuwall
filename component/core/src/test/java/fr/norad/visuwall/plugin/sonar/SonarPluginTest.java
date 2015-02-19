@@ -24,20 +24,18 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
-
 import java.net.URL;
 import java.util.HashMap;
-
-import fr.norad.visuwall.providers.common.GenericSoftwareClient;
-import fr.norad.visuwall.providers.common.ResourceNotFoundException;
-import fr.norad.visuwall.api.domain.SoftwareId;
-import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
-
+import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import fr.norad.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.providers.common.GenericSoftwareClient;
+import fr.norad.visuwall.providers.common.ResourceNotFoundException;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
@@ -57,10 +55,11 @@ public class SonarPluginTest {
 
     @Mock
     SonarDetector sonarDetector;
+    private Map<String, String> properties;
 
     @Test(expected = NullPointerException.class)
     public void should_throw_exception_when_passing_null_to_is_sonar_instance() throws SoftwareNotFoundException {
-        new SonarPlugin().getSoftwareId(null);
+        new SonarPlugin().getSoftwareId(null, properties);
     }
 
     @Test
@@ -86,7 +85,7 @@ public class SonarPluginTest {
         when(sonarDetector.isSonarPropertiesPage(url)).thenReturn(true);
         when(sonarVersionExtractor.propertiesVersion(any(Properties.class))).thenReturn("1.3");
 
-        SoftwareId softwareId = sonar.getSoftwareId(url);
+        SoftwareId softwareId = sonar.getSoftwareId(url, properties);
 
         assertEquals("Sonar", softwareId.getName());
         assertEquals("1.3", softwareId.getVersion());
@@ -97,7 +96,7 @@ public class SonarPluginTest {
         when(client.exist(anyString(), any(Class.class))).thenReturn(false);
 
         URL url = new URL("http://www.google.fr");
-        sonar.getSoftwareId(url);
+        sonar.getSoftwareId(url, properties);
     }
 
     @Test(expected = SoftwareNotFoundException.class)
@@ -107,7 +106,7 @@ public class SonarPluginTest {
         when(resourceCall).thenThrow(new ResourceNotFoundException("not found"));
 
         URL url = new URL("http://www.google.fr");
-        sonar.getSoftwareId(url);
+        sonar.getSoftwareId(url, properties);
     }
 
     @Test
@@ -126,7 +125,7 @@ public class SonarPluginTest {
         when(sonarVersionExtractor.propertiesVersion(any(Properties.class))).thenReturn("1.3");
 
         URL url = new URL("http://sonar.com/v13");
-        SoftwareId softwareId = sonar.getSoftwareId(url);
+        SoftwareId softwareId = sonar.getSoftwareId(url, properties);
 
         assertFalse(softwareId.isCompatible());
         assertEquals("Sonar version 1.3 is not compatible with Visuwall. Please use a version >= 2.4",
@@ -140,7 +139,7 @@ public class SonarPluginTest {
         when(sonarVersionExtractor.welcomePageVersion(any(URL.class))).thenReturn("2.5");
 
         URL url = new URL("http://sonar.com/v25");
-        SoftwareId softwareId = sonar.getSoftwareId(url);
+        SoftwareId softwareId = sonar.getSoftwareId(url, properties);
 
         assertTrue(softwareId.isCompatible());
     }

@@ -58,6 +58,10 @@ class TeamCityUrlBuilder {
         return build("/changes/id:" + changeId);
     }
 
+    String getUserByUsername(String username) {
+        return build("/users/username:" + username);
+    }
+
     String getVersion() {
         return build("/version");
     }

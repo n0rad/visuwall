@@ -16,14 +16,17 @@
  */
 package fr.norad.visuwall.plugin.hudson;
 
-import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
+import java.util.Map;
 import org.junit.Test;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
 
 public class HudsonPluginTest {
 
+    private Map<String, String> properties;
+
     @Test(expected = NullPointerException.class)
     public void should_throw_exception_when_passing_null_to_hudson_instance() throws SoftwareNotFoundException {
-        new HudsonPlugin().getSoftwareId(null);
+        new HudsonPlugin().getSoftwareId(null, properties);
     }
 
 }

@@ -59,7 +59,7 @@ public class HudsonPlugin implements VisuwallPlugin<HudsonConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
             URL apiUrl = new URL(url.toString() + "/api/");

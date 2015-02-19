@@ -18,19 +18,18 @@ package fr.norad.visuwall.plugin.bamboo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import fr.norad.visuwall.api.domain.SoftwareId;
-import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
-
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
+import fr.norad.visuwall.api.domain.SoftwareId;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
 
 public class BambooPluginTest {
 
     BambooPlugin bamboo;
+    private Map<String, String> properties;
 
     @Before
     public void init() {
@@ -55,14 +54,14 @@ public class BambooPluginTest {
     @Test(expected = SoftwareNotFoundException.class)
     public void should_not_get_software_id_without_version() throws Exception {
         URL url = new URL("http://bamboo:8080");
-        SoftwareId softwareId = bamboo.getSoftwareId(url);
+        SoftwareId softwareId = bamboo.getSoftwareId(url, properties);
         assertEquals("Bamboo", softwareId.getName());
         assertEquals("version not found", softwareId.getVersion());
     }
 
     @Test(expected = NullPointerException.class)
     public void cant_pass_null_as_url_parameter() throws SoftwareNotFoundException {
-        bamboo.getSoftwareId(null);
+        bamboo.getSoftwareId(null, properties);
     }
 
     @Test

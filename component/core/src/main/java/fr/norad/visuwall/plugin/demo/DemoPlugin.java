@@ -60,7 +60,7 @@ public class DemoPlugin implements VisuwallPlugin<DemoConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         if (url == null || !DEMO_VISUWALL_CI.equals(url.toString())) {
             throw new SoftwareNotFoundException(getName() + " is not compatible with url : " + url);
         }
