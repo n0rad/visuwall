@@ -18,12 +18,11 @@ package fr.norad.visuwall.providers.teamcity;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.ws.rs.core.MediaType;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import fr.norad.visuwall.providers.common.GenericSoftwareClient;
 import fr.norad.visuwall.providers.common.Maven;
 import fr.norad.visuwall.providers.common.MavenIdNotFoundException;
@@ -34,6 +33,7 @@ import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildTypeNotFoundE
 import fr.norad.visuwall.providers.teamcity.exception.TeamCityChangesNotFoundException;
 import fr.norad.visuwall.providers.teamcity.exception.TeamCityProjectNotFoundException;
 import fr.norad.visuwall.providers.teamcity.exception.TeamCityProjectsNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityUserNotFoundException;
 import fr.norad.visuwall.providers.teamcity.resource.TeamCityAbstractBuild;
 import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuild;
 import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuildItem;
@@ -43,9 +43,7 @@ import fr.norad.visuwall.providers.teamcity.resource.TeamCityChange;
 import fr.norad.visuwall.providers.teamcity.resource.TeamCityChanges;
 import fr.norad.visuwall.providers.teamcity.resource.TeamCityProject;
 import fr.norad.visuwall.providers.teamcity.resource.TeamCityProjects;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityUser;
 
 public class TeamCity {
 
@@ -161,6 +159,16 @@ public class TeamCity {
             }
         }
         return changesList;
+    }
+
+    public TeamCityUser findUserByUsername(String username) throws TeamCityUserNotFoundException {
+        checkNotNull(username, "username is mandatory");
+        try {
+            String userUrl = urlBuilder.getUserByUsername(username);
+            return client.resource(userUrl, TeamCityUser.class);
+        } catch (ResourceNotFoundException e) {
+            throw new TeamCityUserNotFoundException("User with username " + username + " has not been found", e);
+        }
     }
 
     public TeamCityBuild findRunningBuild() throws TeamCityBuildNotFoundException {

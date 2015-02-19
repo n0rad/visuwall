@@ -37,6 +37,6 @@ public interface VisuwallPlugin<T extends BasicCapability> {
 
     String getName();
 
-    SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException;
+    SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException;
 
 }

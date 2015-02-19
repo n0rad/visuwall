@@ -31,6 +31,7 @@ import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
 public class DemoPluginTest {
 
     DemoPlugin plugin = new DemoPlugin();
+    private Map<String, String> properties;
 
     @Test(expected = ConnectionException.class)
     public void should_not_get_a_connection_for_url_other_than_demo() throws Exception {
@@ -70,17 +71,17 @@ public class DemoPluginTest {
 
     @Test(expected = SoftwareNotFoundException.class)
     public void should_get_null_for_null_url() throws SoftwareNotFoundException {
-        assertNull(plugin.getSoftwareId(null));
+        assertNull(plugin.getSoftwareId(null, properties));
     }
 
     @Test(expected = SoftwareNotFoundException.class)
     public void should_get_null_for_invalid_url() throws Exception {
-        assertNull(plugin.getSoftwareId(new URL("http://something.else")));
+        assertNull(plugin.getSoftwareId(new URL("http://something.else"), properties));
     }
 
     @Test
     public void should_get_software_id_for_valid_url() throws MalformedURLException, SoftwareNotFoundException {
-        SoftwareId softwareId = plugin.getSoftwareId(new URL("http://demo.visuwall.ci"));
+        SoftwareId softwareId = plugin.getSoftwareId(new URL("http://demo.visuwall.ci"), properties);
         assertEquals("demo", softwareId.getName());
         assertEquals("1.0", softwareId.getVersion());
         assertEquals("This is a demo plugin", softwareId.getWarnings());

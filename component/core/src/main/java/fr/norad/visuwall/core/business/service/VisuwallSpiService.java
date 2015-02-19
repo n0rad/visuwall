@@ -22,6 +22,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import com.google.common.base.Preconditions;
 import fr.norad.visuwall.api.domain.SoftwareId;
 import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
 import fr.norad.visuwall.api.plugin.VisuwallPlugin;
@@ -30,10 +34,6 @@ import fr.norad.visuwall.api.plugin.capability.ViewCapability;
 import fr.norad.visuwall.core.business.domain.CapabilityEnum;
 import fr.norad.visuwall.core.business.domain.PluginInfo;
 import fr.norad.visuwall.core.business.domain.SoftwareInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import com.google.common.base.Preconditions;
 
 @Service
 public class VisuwallSpiService implements PluginServiceInterface {
@@ -60,7 +60,7 @@ public class VisuwallSpiService implements PluginServiceInterface {
     public BasicCapability getPluginConnectionFromUrl(URL url, Map<String, String> properties) {
         for (VisuwallPlugin<BasicCapability> visuwallPlugin : getPlugins()) {
             try {
-                visuwallPlugin.getSoftwareId(url);
+                visuwallPlugin.getSoftwareId(url, properties);
                 return visuwallPlugin.getConnection(url, properties);
             } catch (SoftwareNotFoundException e) {
                 if (LOG.isInfoEnabled()) {
@@ -79,7 +79,7 @@ public class VisuwallSpiService implements PluginServiceInterface {
             SoftwareId softwareId = null;
             BasicCapability connectionPlugin = null;
             try {
-                softwareId = visuwallPlugin.getSoftwareId(url);
+                softwareId = visuwallPlugin.getSoftwareId(url, properties);
                 Preconditions.checkNotNull(softwareId, "isManageable() should not return null", visuwallPlugin);
 
                 SoftwareInfo softwareInfo = new SoftwareInfo();

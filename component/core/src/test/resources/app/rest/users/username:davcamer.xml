@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<user username="davcamer" name="Dave Cameron" lastLogin="20120218T231857+0400" id="1268" email="dave.bc@gmail.com">
+    <groups>
+        <group href="/app/rest/userGroups/key:ALL_USERS_GROUP" name="All Users" key="ALL_USERS_GROUP"/>
+    </groups>
+    <properties>
+        <property name="plugin:vcs:bzr:anyVcsRoot" value="davcamer"/>
+        <property name="plugin:vcs:clearcase:anyVcsRoot" value="davcamer"/>
+        <property name="plugin:vcs:cvs:anyVcsRoot" value="davcamer"/>
+        <property name="plugin:vcs:jetbrains.git:anyVcsRoot" value="davcamer"/>
+        <property name="plugin:vcs:mercurial:anyVcsRoot" value="davcamer"/>
+        <property name="plugin:vcs:perforce:anyVcsRoot" value="davcamer"/>
+        <property name="plugin:vcs:PersonalBuild:anyVcsRoot" value="davcamer"/>
+        <property name="plugin:vcs:starteam:anyVcsRoot" value="davcamer"/>
+        <property name="plugin:vcs:svn:anyVcsRoot" value="davcamer"/>
+        <property name="plugin:vcs:tfs:anyVcsRoot" value="davcamer"/>
+        <property name="plugin:vcs:vault-vcs:anyVcsRoot" value="davcamer"/>
+        <property name="plugin:vcs:vss:anyVcsRoot" value="davcamer"/>
+    </properties>
+    <roles/>
+</user>

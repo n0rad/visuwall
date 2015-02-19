@@ -23,11 +23,21 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import fr.norad.visuwall.api.domain.BuildState;
+import fr.norad.visuwall.api.domain.BuildTime;
+import fr.norad.visuwall.api.domain.Commiter;
+import fr.norad.visuwall.api.domain.ProjectKey;
+import fr.norad.visuwall.api.domain.SoftwareProjectId;
+import fr.norad.visuwall.api.exception.ProjectNotFoundException;
 import fr.norad.visuwall.providers.teamcity.TeamCity;
 import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildNotFoundException;
 import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildTypeNotFoundException;
@@ -38,19 +48,7 @@ import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuildType;
 import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuilds;
 import fr.norad.visuwall.providers.teamcity.resource.TeamCityChange;
 import fr.norad.visuwall.providers.teamcity.resource.TeamCityProject;
-import fr.norad.visuwall.api.domain.BuildState;
-import fr.norad.visuwall.api.domain.BuildTime;
-import fr.norad.visuwall.api.domain.Commiter;
-import fr.norad.visuwall.api.domain.ProjectKey;
-import fr.norad.visuwall.api.domain.SoftwareProjectId;
-import fr.norad.visuwall.api.exception.ProjectNotFoundException;
-
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityUser;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TeamCityConnectionTest {
@@ -131,11 +129,16 @@ public class TeamCityConnectionTest {
         changes.add(change);
 
         when(teamCity.findChanges(anyInt())).thenReturn(changes);
+        TeamCityUser value = new TeamCityUser();
+        value.setEmail("toto@titi");
+        value.setName("npryce");
+        when(teamCity.findUserByUsername(anyString())).thenReturn(value);
 
         SoftwareProjectId softwareProjectId = new SoftwareProjectId("projectId");
         List<Commiter> commiters = teamCityConnection.getBuildCommiters(softwareProjectId, "1");
         Commiter commiter = commiters.get(0);
         assertEquals("npryce", commiter.getName());
+        assertEquals("toto@titi", commiter.getEmail());
     }
 
     @Test

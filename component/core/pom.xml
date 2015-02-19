@@ -124,19 +124,19 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.apache.servicemix.bundles</groupId>
-            <artifactId>org.apache.servicemix.bundles.aspectj</artifactId>
-            <version>1.6.8_2</version>
-            <!-- <groupId>org.aspectj</groupId> -->
-            <!-- <artifactId>aspectjrt</artifactId> -->
-            <!-- <version>${aspectjrt.version}</version> -->
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>${aspectjrt.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.servicemix.bundles</groupId>-->
+            <!--<artifactId>org.apache.servicemix.bundles.aspectj</artifactId>-->
+            <!--<version>1.6.8_2</version>-->
+            <!--&lt;!&ndash; <groupId>org.aspectj</groupId> &ndash;&gt;-->
+            <!--&lt;!&ndash; <artifactId>aspectjrt</artifactId> &ndash;&gt;-->
+            <!--&lt;!&ndash; <version>${aspectjrt.version}</version> &ndash;&gt;-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.aspectj</groupId>-->
+            <!--<artifactId>aspectjrt</artifactId>-->
+            <!--<version>${aspectjrt.version}</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>commons-lang</groupId>

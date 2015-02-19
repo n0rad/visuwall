@@ -60,7 +60,7 @@ public class JenkinsPlugin implements VisuwallPlugin<JenkinsConnection> {
     }
 
     @Override
-    public SoftwareId getSoftwareId(URL url) throws SoftwareNotFoundException {
+    public SoftwareId getSoftwareId(URL url, Map<String, String> properties) throws SoftwareNotFoundException {
         Preconditions.checkNotNull(url, "url is mandatory");
         try {
             url = new URL(url.toString() + "/api/");

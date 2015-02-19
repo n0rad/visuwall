@@ -22,20 +22,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
-
 import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import fr.norad.visuwall.providers.sonar.Sonar;
-import fr.norad.visuwall.providers.sonar.domain.SonarQualityMetric;
-import fr.norad.visuwall.providers.sonar.exception.SonarMeasureNotFoundException;
-import fr.norad.visuwall.providers.sonar.exception.SonarMetricsNotFoundException;
-import fr.norad.visuwall.providers.sonar.exception.SonarResourceNotFoundException;
-import fr.norad.visuwall.providers.sonar.resource.Project;
-import fr.norad.visuwall.providers.sonar.resource.Projects;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.sonar.wsclient.services.Measure;
+import org.sonar.wsclient.services.Resource;
 import fr.norad.visuwall.api.domain.BuildState;
 import fr.norad.visuwall.api.domain.BuildTime;
 import fr.norad.visuwall.api.domain.Commiter;
@@ -44,16 +41,16 @@ import fr.norad.visuwall.api.domain.SoftwareProjectId;
 import fr.norad.visuwall.api.domain.TestResult;
 import fr.norad.visuwall.api.domain.quality.QualityMetric;
 import fr.norad.visuwall.api.domain.quality.QualityResult;
-import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
 import fr.norad.visuwall.api.exception.MavenIdNotFoundException;
 import fr.norad.visuwall.api.exception.ProjectNotFoundException;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.sonar.wsclient.services.Measure;
-import org.sonar.wsclient.services.Resource;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
+import fr.norad.visuwall.providers.sonar.Sonar;
+import fr.norad.visuwall.providers.sonar.domain.SonarQualityMetric;
+import fr.norad.visuwall.providers.sonar.exception.SonarMeasureNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarMetricsNotFoundException;
+import fr.norad.visuwall.providers.sonar.exception.SonarResourceNotFoundException;
+import fr.norad.visuwall.providers.sonar.resource.Project;
+import fr.norad.visuwall.providers.sonar.resource.Projects;
 
 public class SonarConnectionTest {
 
@@ -63,6 +60,7 @@ public class SonarConnectionTest {
     Sonar sonarClient;
 
     SonarConnection sonar;
+    private Map<String, String> properties;
 
     @Before
     public void init() throws Exception {
@@ -389,7 +387,7 @@ public class SonarConnectionTest {
     public void should_not_fail_if_url_is_not_manageable() throws Exception {
         SonarPlugin sonarPlugin = new SonarPlugin();
         String url = "http://www.google.fr";
-        sonarPlugin.getSoftwareId(new URL(url));
+        sonarPlugin.getSoftwareId(new URL(url), properties);
     }
 
     private Map<String, SonarQualityMetric> createMetricList() {

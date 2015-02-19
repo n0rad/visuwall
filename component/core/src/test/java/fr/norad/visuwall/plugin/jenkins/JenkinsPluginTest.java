@@ -18,13 +18,15 @@ package fr.norad.visuwall.plugin.jenkins;
 
 import static org.junit.Assert.assertEquals;
 import java.net.URL;
-import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
+import fr.norad.visuwall.api.exception.SoftwareNotFoundException;
 
 public class JenkinsPluginTest {
 
     JenkinsPlugin jenkinsPlugin;
+    private Map<String, String> properties;
 
     @Before
     public void init() {
@@ -34,7 +36,7 @@ public class JenkinsPluginTest {
     @Test(expected = NullPointerException.class)
     public void should_thrown_an_exception_when_passing_null_to_is_jenkins_instance()
             throws SoftwareNotFoundException {
-        jenkinsPlugin.getSoftwareId(null);
+        jenkinsPlugin.getSoftwareId(null, properties);
     }
 
     @Test
@@ -47,6 +49,6 @@ public class JenkinsPluginTest {
     @Test(expected = SoftwareNotFoundException.class)
     public void should_throw_exception_when_software_url_cant_be_reached() throws Exception {
         URL url = new URL("http://notfound");
-        jenkinsPlugin.getSoftwareId(url);
+        jenkinsPlugin.getSoftwareId(url, properties);
     }
 }

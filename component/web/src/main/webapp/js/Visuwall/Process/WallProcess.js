@@ -98,7 +98,7 @@ define(['jquery', //
 			
 			$this._updateBuilding(project.id, lastBuild.building, 0 /* we don't have buildingTimeleftSecond here */);
 			$this._updateTimers(project, lastBuild);
-			wallView.updateCommiters(project.id, lastNotBuild.commiters);
+			wallView.updateCommiters(project.id, lastNotBuild.commiters, lastNotBuild.state);
 /*			if (lastNotBuild.qualityResult) {
 				wallView.updateQuality(project.id, lastNotBuild.qualityResult.measures);
 			}

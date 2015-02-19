@@ -75,6 +75,12 @@ public class TeamCityUrlBuilderTest {
     }
 
     @Test
+    public void should_create_valid_username_url() {
+        String usernameUrl = builder.getUserByUsername("davcamer");
+        assertEquals(TEAM_CITY_URL + "/app/rest/users/username:davcamer", usernameUrl);
+    }
+
+    @Test
     public void should_create_pom_url() {
         String pomUrl = builder.getPomUrl(26);
         assertEquals(TEAM_CITY_URL + "/builds/id:26/pom.xml", pomUrl);

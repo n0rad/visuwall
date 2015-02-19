@@ -19,7 +19,6 @@ package fr.norad.visuwall.plugin.teamcity;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static org.apache.commons.lang.StringUtils.isBlank;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -28,21 +27,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import fr.norad.visuwall.providers.teamcity.TeamCity;
-import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildListNotFoundException;
-import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildNotFoundException;
-import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildTypeNotFoundException;
-import fr.norad.visuwall.providers.teamcity.exception.TeamCityChangesNotFoundException;
-import fr.norad.visuwall.providers.teamcity.exception.TeamCityProjectNotFoundException;
-import fr.norad.visuwall.providers.teamcity.exception.TeamCityProjectsNotFoundException;
-import fr.norad.visuwall.providers.teamcity.resource.TeamCityAbstractBuild;
-import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuild;
-import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuildItem;
-import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuildType;
-import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuilds;
-import fr.norad.visuwall.providers.teamcity.resource.TeamCityChange;
-import fr.norad.visuwall.providers.teamcity.resource.TeamCityProject;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Preconditions;
 import fr.norad.visuwall.api.domain.BuildState;
 import fr.norad.visuwall.api.domain.BuildTime;
 import fr.norad.visuwall.api.domain.Commiter;
@@ -57,13 +46,22 @@ import fr.norad.visuwall.api.exception.ViewNotFoundException;
 import fr.norad.visuwall.api.plugin.capability.BuildCapability;
 import fr.norad.visuwall.api.plugin.capability.TestCapability;
 import fr.norad.visuwall.api.plugin.capability.ViewCapability;
-
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
+import fr.norad.visuwall.providers.teamcity.TeamCity;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildListNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityBuildTypeNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityChangesNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityProjectNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityProjectsNotFoundException;
+import fr.norad.visuwall.providers.teamcity.exception.TeamCityUserNotFoundException;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityAbstractBuild;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuild;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuildItem;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuildType;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityBuilds;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityChange;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityProject;
+import fr.norad.visuwall.providers.teamcity.resource.TeamCityUser;
 
 public class TeamCityConnection implements BuildCapability, TestCapability, ViewCapability {
 
@@ -322,12 +320,21 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
             for (TeamCityChange change : changes) {
                 String username = change.getUsername();
                 Commiter commiter = new Commiter(username);
-                commiter.setName(username);
+                try {
+                    TeamCityUser user = teamCity.findUserByUsername(username);
+                    LOG.debug("retrieved user: " + user.toString());
+                    commiter.setName(user.getName());
+                    commiter.setEmail(user.getEmail());
+                } catch (TeamCityUserNotFoundException e) {
+                    LOG.debug("user not found: " + username);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(e.getMessage());
+                    }
+                }
                 if (!commiters.contains(commiter)) {
                     commiters.add(commiter);
                 }
             }
-            return commiters;
         } catch (TeamCityChangesNotFoundException e) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(e.getMessage());
