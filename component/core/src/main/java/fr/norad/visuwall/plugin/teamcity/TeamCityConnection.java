@@ -322,11 +322,11 @@ public class TeamCityConnection implements BuildCapability, TestCapability, View
                 Commiter commiter = new Commiter(username);
                 try {
                     TeamCityUser user = teamCity.findUserByUsername(username);
-                    LOG.info("retrieved user: " + user.toString());
+                    LOG.debug("retrieved user: " + user.toString());
                     commiter.setName(user.getName());
                     commiter.setEmail(user.getEmail());
                 } catch (TeamCityUserNotFoundException e) {
-                    LOG.info("user not found: " + username);
+                    LOG.debug("user not found: " + username);
                     if (LOG.isDebugEnabled()) {
                         LOG.debug(e.getMessage());
                     }

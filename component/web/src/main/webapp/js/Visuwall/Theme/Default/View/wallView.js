@@ -419,8 +419,8 @@ define(['jquery', //
 				projectInnerTable
 						.append($('<tr height="70%"><td class="projectName"><span>' + projectName + '</span>'
 								+ ' <div class="inlineInfo"><abbr class="timeago" title=""></abbr> <span class="duration"></span><div><span class="lastUpdate"></span></td></tr>'));
-				//projectInnerTable
-				//		.append($('<tr style="display:none; height: 80%" class="commitersTR"><td><ul class="commiters marquee" style="height: 100%"></ul></tr></td>'));
+				projectInnerTable
+						.append($('<tr style="display:none; height: 80%" class="commitersTR"><td><ul class="commiters marquee" style="height: 100%"></ul></tr></td>'));
 				//projectInnerTable
 				//		.append($('<tr style="display:none" class="qualityTR"><td><ul class="quality marquee"></ul></tr></td>'));
 				projectInnerTable
