@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/n0rad/visuwall.png)](https://travis-ci.org/n0rad/visuwall)
+[![Maven central](https://maven-badges.herokuapp.com/maven-central/fr.norad.visuwall/visuwall-web/badge.svg)](https://maven-badges.herokuapp.com/maven-central/fr.norad.visuwall/visuwall-web)
+
+
 Visuwall
 ========
 
